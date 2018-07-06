@@ -8,8 +8,8 @@ ENTRY(__begin)
 OUTPUT_FORMAT("elf32-bigmaxis", "elf32-bigmaxis", "elf32-littlemaxis")
 SEARCH_DIR(.)
 
-SECTIONS {	
-	.text ALIGN(4) : {
+SECTIONS {
+	.text 0x00000000 : {
   __text_begin = .;
 		*(.init)
 		*(.init.*)

@@ -8,7 +8,8 @@
 	.section	.text
   .globl  __begin
   .ent    __begin
-__begin:  
+__begin:
+ENTRY(_start)
 	.set 	noreorder
 	la		$gp, _gp
 //	la		$sp, THREAD_STACK_ADDR(0, 0)

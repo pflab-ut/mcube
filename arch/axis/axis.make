@@ -4,14 +4,6 @@
 #  Hiroyuki Chishiro
 #
 
-# text size: 32KB [0x00000000,0x00008000)
-TEXT_ADDR = 0x00000000
-# data size: 16KB [0x00008000,0x0000c000)
-DATA_ADDR = 0x00008000
-# bss size: 64KB [0x0000c000,0x0001c000)
-BSS_ADDR  = 0x0000c000
-
-LDFLAGS += -Ttext=$(TEXT_ADDR) -Tdata=$(DATA_ADDR) -Tbss=$(BSS_ADDR)
 
 ifeq ($(CC), clang)
   CFLAGS += -target maxis
@@ -22,7 +14,7 @@ ifeq ($(CC), clang)
 #  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
   OBJDUMP = $(CROSS_PREFIX)objdump -disassemble-all -print-imm-hex
   OBJCOPY = $(CROSS_PREFIX)objcopy
-  LDFLAGS += -T scripts/linker/axis-elf.ld --Map $(MAP)
+  LDFLAGS += -nostdlib -T scripts/linker/axis-elf.ld --Map $(MAP)
 else
 #  CFLAGS += -falign-functions=8
   CROSS_PREFIX = dom-elf-
@@ -34,6 +26,9 @@ else
   CFLAGS += -G0
   LDFLAGS += -T scripts/linker/dom-elf.ld
 endif
+
+#LDFLAGS += -Ttext=$(TEXT_ADDR) -Tdata=$(DATA_ADDR) -Tbss=$(BSS_ADDR)
+#LDFLAGS += -Ttext=$(TEXT_ADDR)
 
 
 CFLAGS += -fno-strict-aliasing

@@ -9,7 +9,7 @@ OUTPUT_FORMAT("elf32-bigdom", "elf32-bigdom", "elf32-littledom")
 SEARCH_DIR(.)
 
 SECTIONS {	
-	.text ALIGN(4) : {
+	.text 0x00000000 : {
   __text_begin = .;
 		*(.init)
 		*(.init.*)
