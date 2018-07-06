@@ -1,0 +1,154 @@
+#
+#  Mcube
+# 
+#  Hiroyuki Chishiro
+#
+
+menu Architecture
+  type exclusive
+  config CONFIG_ARCH_SIM
+    title Simulator
+    default y
+    aname sim
+    defs -DCONFIG_ARCH_SIM
+  config CONFIG_ARCH_X86
+    title X86
+    default n
+    aname x86
+    defs -DCONFIG_ARCH_X86
+  config CONFIG_ARCH_ARM
+    title ARM
+    default n
+    aname arm
+    defs -DCONFIG_ARCH_ARM
+  config CONFIG_ARCH_AXIS
+    title AXIS
+    default n
+    aname axis
+    defs -DCONFIG_ARCH_AXIS
+endmenu
+
+menu Compiler
+  type exclusive
+  config CONFIG_COMPILER_CLANG
+    title Clang Compiler
+    default y
+    ccname clang
+    defs -DCONFIG_COMPILER_CLANG
+  config CONFIG_COMPILER_GCC
+    title GCC Compiler
+    default n
+    ccname gcc
+    defs -DCONFIG_COMPILER_GCC
+endmenu
+
+menu Algorithm
+  type exclusive
+  config CONFIG_ALGO_FP
+    title Fixed-Priority (FP) FIFO Scheduling
+    default y
+    alname fp
+    defs -DCONFIG_ALGO_FP
+    defs -DSCHED_FP
+  config CONFIG_ALGO_RM
+    title Rate Monotonic (RM) Scheduling
+    default n
+    alname rm
+    defs -DCONFIG_ALGO_RM
+    defs -DSCHED_FP
+  config CONFIG_ALGO_EDF
+    title Earliest Deadline First (EDF) Scheduling
+    default n
+    alname edf
+    defs -DCONFIG_ALGO_EDF
+    defs -DSCHED_DP
+    conflicts CONFIG_TQ_O1
+endmenu
+
+menu Printk
+ 	type exclusive
+	 config	CONFIG_PRINTK2CONSOLE
+		  title Printk to Console
+		  default y
+		  defs	-DCONFIG_PRINTK2CONSOLE
+    conflicts CONFIG_ARCH_ARM
+ 	config	CONFIG_PRINTK2PRINTF
+	  	title Printk to Printf
+		  default n
+		  defs	-DCONFIG_PRINTK2PRINTF
+    depends CONFIG_ARCH_SIM
+ 	config	CONFIG_PRINTK2UART
+	  	title Printk to UART
+	  	default n
+		  defs	-DCONFIG_PRINTK2UART
+    conflicts CONFIG_ARCH_SIM
+    conflicts CONFIG_ARCH_AXIS
+endmenu
+
+menu Task Queue
+  type	exclusive
+  config	CONFIG_TQ_O1
+    title O(1) Scheduler
+    default y
+    cfiles	$(TOP_DIR)/kernel/queue/o1.c
+    defs	-DCONFIG_TQ_O1
+    conflicts SCHED_DP
+  config	CONFIG_TQ_BHEAP
+    title O(log n) Binomial Heap
+    default n
+    cfiles	$(TOP_DIR)/kernel/queue/bheap.c
+    defs	-DCONFIG_TQ_BHEAP
+  config	CONFIG_TQ_DLIST
+    title O(n) Double Circular Linked List
+    default n
+    cfiles	$(TOP_DIR)/kernel/queue/dlist.c
+    defs	-DCONFIG_TQ_DLIST
+endmenu
+
+menu Tie-Break
+  type exclusive
+  config  CONFIG_TIE_BREAK_FIFO
+    title Tie Break by FIFO
+    default y
+    defs -DCONFIG_TIE_BREAK_FIFO
+  config  CONFIG_TIE_BREAK_ID
+    title Tie Break by ID
+    default n
+    defs -DCONFIG_TIE_BREAK_ID
+endmenu
+
+menu Option
+  type none
+  config CONFIG_DEBUG
+    title Debug
+    default y
+    defs -DCONFIG_DEBUG
+  config CONFIG_TRACE
+    title Trace
+    default n
+    defs -DCONFIG_TRACE
+endmenu
+
+menu Memory
+  type exclusive
+  config CONFIG_MEMORY_VARIABLE
+    title Memory Variable
+    default n
+    defs -DCONFIG_MEMORY_VARIABLE
+    conflicts CONFIG_ARCH_AXIS
+  config CONFIG_MEMORY_128KB
+    title Memory 128KB
+    default y
+    defs -DCONFIG_MEMORY_128KB
+    defs -DMEMORY_SIZE=0x00020000
+  config CONFIG_MEMORY_1MB
+    title Memory 1MB
+    default n
+    defs -DCONFIG_MEMORY_1MB
+    defs -DMEMORY_SIZE=0x00100000
+  config CONFIG_MEMORY_8MB
+    title Memory 8MB
+    default n
+    defs -DCONFIG_MEMORY_8MB
+    defs -DMEMORY_SIZE=0x00800000
+endmenu

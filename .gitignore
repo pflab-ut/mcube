@@ -1,0 +1,23 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+
+# dirs
+build/
+INCA_libs/
+testconfig/
+__pycache__/
+
+# files
+irun*
+rom.txt
+
+# suffixes
+*.bak
+*.o
+*.d
+*.dmp
+*.map
+*~
+*.bin
+*.elf
+*.lck
+*.log

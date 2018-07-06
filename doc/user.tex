@@ -1,0 +1,406 @@
+\section{User Manual}
+
+If superuser, the head of command prompt is \verb|#|.
+Otherwise, \verb|$|.
+
+
+\subsection{API}
+
+
+\subsection{Cofigurations}
+
+\subsubsection{CUI}
+
+Input \verb|make configure| and then \verb|make|.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+$ make configure
+$ make
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsubsection{GUI}
+
+
+Install ruby packages in Ubuntu.
+
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install ruby ruby-dev ruby-gtk3 
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+Setup Mcube Kernel in GUI.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+$ make xconfig
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsection{Setup}
+
+Do program user level code in \verb|user| directory.
+
+
+\subsection{How to Execute}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install ccache gcc clang
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsubsection{SIM}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+$ mcube [option]
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsubsection{ARM}
+
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install libx11-dev libxpm-dev
+# apt-get install gcc-aarch64-linux-gnu
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\noindent
+\textbf{SkyEye Simulator}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install skyeye
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsubsection{X86}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install libc6-dev-i386 gcc-multilib
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsubsection*{QEMU}
+
+
+If you would like to use QEMU 2.12 for Raspberry Pi3, please type as follows.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# sudo apt build-dep qemu
+# sudo apt install gcc-aarch64-linux-gnu
+# CFLAGS=''-Wno-format-truncation'' ./configure --audio-drv-list=alsa
+# make
+# make install
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+Otherwise, use apt-get.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install qemu qemu-system
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+If you use VRAM, install VNC.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install gvncviewer vnc4server
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+If you use other architectures except X86, download QEMU from
+\url{http://wiki.qemu.org/Download}.
+Next compile and install QEMU.
+
+
+Execute QEMU emulator.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+$ qemu-system-i386 build/mcube.bin [-smp 1,cores=4]
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+Display Monitor in VNC viewer.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+$ vncviewer 127.0.0.1:5900
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+If you use serial, execute Mcube with below option.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+$ qemu build/mcube.bin -serial stdio
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+
+\subsubsection*{VMWare}
+
+
+\textbf{Guest Machine (Linux)}
+
+First install samba.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install samba
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+Next add samba user.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# smbpasswd -a username
+New SMB password:
+Retype new SMB password:
+Added user username
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\textbf{USB Boot on VMWare}
+
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# dd if=/home/chishiro/mcube/build/mcube-flat.vmdk of=/dev/sdb1
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+
+\textbf{Host Machine (Windows)}
+
+First install VMware player/workstation.
+Next access guest machine's file system and open [mcube/vmdk/mcube.vmx].
+At this time, you can execute Mcube!
+
+
+
+\subsection{Precaution Statement}
+
+\begin{enumerate}
+ \setlength{\parskip}{0cm}
+ \setlength{\itemsep}{0cm}
+ \item Stack size is 0x400 byte and user should not use large size of
+   local variables.
+   User should use global variables.
+   If stack size wants to be changed, edit
+   \verb|#define STACK_SIZE 0x400| \verb|include/mcube/task.h|.
+\end{enumerate}
+
+\subsection{Emacs}
+
+In order to compile Emacs, you must install tex package.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install libncurses5 libncurses5-dev autoconf
+# apt-get install libx11-dev libxpm-dev libjpeg-dev libgif-dev
+# apt-get install libgtk2.0-dev libglib2.0-dev libtiff4-dev
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+% sudo apt-get install "libXpm*" "libpng*" "libgif*" "libungif*" "iibtfff*"
+
+change from "deb http://xxx" to "deb-src http://xxx" in "/etc/apt/source.list".
+
+
+\subsection{LaTeX}
+
+In order to compile LaTeX, you must install tex package.
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install tetex-*
+# apt-get install texlive-latex* texlive-science
+# apt-get install ptex-jtex okumura-clsfiles
+# apt-get install xdvik-ja
+# apt-get install texlive-fonts-recommended
+# apt-get install vfdata-morisawa5 dvi2ps-fontdesc-morisawa5
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsection{Linux Kernel}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install linux-source-X.Y.Z
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+\subsection{Multi-boot Linux}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# emacs /etc/default/grub
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+Edit \verb|GRUB_HIDDEN_TIMEOUT=10| and uncomment
+\verb|GRUB_TERMINAL=console|.
+
+
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# update-grub
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsection{Doxygen}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install doxygen
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+
+\subsection{Change Japanese to English Directory Names}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+$ LANG=C xdg-user-dirs-gtk-update
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+
+
+\subsection{GNOME}
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# apt-get install aptitude
+# aptitude -y install gnome 
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+

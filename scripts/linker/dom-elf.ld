@@ -1,0 +1,57 @@
+/**
+ * @file scripts/linker/dom-elf.ld
+ *
+ * @author Hiroyuki Chishiro
+ */
+
+ENTRY(__begin)
+OUTPUT_FORMAT("elf32-bigdom", "elf32-bigdom", "elf32-littledom")
+SEARCH_DIR(.)
+
+SECTIONS {	
+	.text ALIGN(4) : {
+  __text_begin = .;
+		*(.init)
+		*(.init.*)
+		*(.text)
+		*(.text.*)
+  __text_end = .;
+	}
+  
+	.rodata ALIGN(4) : {
+  __rodata_begin = .;
+		*(.rdata)
+		*(.rdata.*)
+		*(.rodata)
+		*(.rodata.*)
+  __rodata_end = .;
+	}
+
+	.data : {
+  __data_begin = .;
+		*(.data)
+  __data_end = .;
+	}
+
+	_gp = .;
+
+	.lit8 : {
+		*(.lit8)
+	}
+	.lit4 : {
+		*(.lit4)
+	}
+
+	.sdata : {
+		*(.sdata)
+	}
+
+	.bss ALIGN(4) : {
+		__bss_begin = .;
+		*(.sbss)
+		*(.scommon)
+		*(.bss)
+		*(COMMON)
+		__bss_end = .;
+	}
+}

@@ -1,0 +1,36 @@
+/**
+ * @file include/mcube/usb.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef	__MCUBE_MCUBE_USB_H__
+#define	__MCUBE_MCUBE_USB_H__
+
+
+#define USB_REVISION (USB_START + 0x00)
+#define USB_CTRL (USB_START + 0x04)
+#define USB_COMMAND_STATUS (USB_START + 0x08)
+#define USB_INT_STATUS (USB_START + 0x0c)
+#define USB_INT_ENABLE (USB_START + 0x10)
+#define USB_INT_DISABLE (USB_START + 0x14)
+#define USB_HCCA (USB_START + 0x18)
+#define USB_PERIOD_CURRENT_ED (USB_START + 0x1c)
+#define USB_CTRL_HEAD_ED (USB_START + 0x20)
+#define USB_CTRL_CURRENT_ED (USB_START + 0x24)
+#define USB_BULK_HEAD_ED (USB_START + 0x28)
+#define USB_BULK_CURRENT_ED (USB_START + 0x2c)
+#define USB_DONE_HEAD (USB_START + 0x30)
+#define USB_FM_INTERVAL (USB_START + 0x34)
+#define USB_FM_REMAINING (USB_START + 0x38)
+#define USB_HE_FM_NUM (USB_START + 0x3c)
+#define USB_PERIOD_START (USB_START + 0x40)
+#define USB_LST_THRESHOLD (USB_START + 0x44)
+#define USB_RH_DESCRIPTOR_A (USB_START + 0x48)
+#define USB_RH_DESCRIPTOR_B (USB_START + 0x4c)
+#define USB_RH_STATUS (USB_START + 0x50)
+#define USB_RH_PORT_STATUS_HIGH (USB_START + 0x54)
+#define USB_RH_PORT_STATUS_LOW (USB_START + 0x58)
+
+
+#endif	/* __MCUBE_MCUBE_USB_H__ */
+
