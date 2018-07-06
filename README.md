@@ -8,6 +8,7 @@ Mcube Kernel is an operating system for Micro/Monotlithic/MultiKernels.
 ## Supports for Cross Development (Ubuntu 18.04 LTS)
 - LLVM-6.0.0/GCC-7.3.0 for X86 and SIM (user-level)
 - LLVM-6.0.0/GCC-4.8.4 Extension for AXIS ISA
+
       - LLVM's ISA name is MAXIS
       - GCC's ISA name is DOM
 - Python 3.6.5 (Python 3.6 or higher)
