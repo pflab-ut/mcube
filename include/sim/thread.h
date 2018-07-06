@@ -10,6 +10,10 @@
 
 struct cpu_context {
   /* dummy */
+  unsigned long eax;
+  unsigned long ebx;
+  unsigned long ecx;
+  unsigned long edx;
 };
 
 #define INIT_CPU_CONTEXT (struct cpu_context) {0}

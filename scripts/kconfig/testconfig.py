@@ -50,13 +50,13 @@ print(len(cinfo))
 index = 0
 message = ""
 
-def do_testconfig(cinfo, a, b, c, d, e, f, g, h, i):
+def do_testconfig(cinfo, a, b, c, d, e, f, g, h):
   global index
   global message
   print(index, "/", NUM)
   configure_file = open("configure", "w")
   configure_file.write(tools.CONFIG_HEADER)
-  tools.write_config(configure_file, cinfo, a, b, c, d, e, f, g, h, i)
+  tools.write_config(configure_file, cinfo, a, b, c, d, e, f, g, h)
   configure_file.close()
   index += 1
   cmd = "make buildclean"
@@ -102,8 +102,7 @@ for a in range(0, cinfo[0].num):
           for f in range(0, cinfo[5].num):
             for g in range(0, cinfo[6].num):
               for h in range(0, cinfo[7].num):
-                for i in range(0, cinfo[8].num):
-                  do_testconfig(cinfo, a, b, c, d, e, f, g, h, i)
+                do_testconfig(cinfo, a, b, c, d, e, f, g, h)
 
 if message == "":
   message = "Build Test is successful."

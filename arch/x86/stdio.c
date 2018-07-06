@@ -7,7 +7,6 @@
 
 #define TAB_SPACE 2
 
-
 struct cursor_struct cursor = {
 	.x = 0, .y = 0};
 
@@ -52,20 +51,23 @@ void do_scroll(void)
 	cursor.y--;
 	/* do scroll */
 	for (i = CUI_VRAM_START; i < CUI_VRAM_START + CUI_CONSOLE_WIDTH * (CUI_CONSOLE_HEIGHT - 1) * 2; i += 2) {
-		*((uint16_t *) i) = *((uint16_t *) (i + CUI_CONSOLE_WIDTH * 2));
+    //		*((uint16_t *) i) = *((uint16_t *) (i + CUI_CONSOLE_WIDTH * 2));
+		mmio_out16(i, mmio_in16(i + CUI_CONSOLE_WIDTH * 2));
 	}
 	/* fill blank in the last line */
 	for (; i < CUI_VRAM_START + CUI_CONSOLE_WIDTH * CUI_CONSOLE_HEIGHT * 2; i += 2) {
-		*((uint16_t *) i) = (COL8_000000 << 8) | 0x00;
+    //		*((uint16_t *) i) = (COL8_000000 << 8) | 0x00;
+		mmio_out16(i, (COL8_000000 << 8) | 0x00);
 	}
 }
 
 
 void init_console(void)
 {
-	int i;
+	unsigned long i;
 	for (i = CUI_VRAM_START; i < CUI_VRAM_START + CUI_CONSOLE_WIDTH * CUI_CONSOLE_HEIGHT * 2; i += 2) {
-		*((uint16_t *) i) = (COL8_848484 << 8) | 0x00;
+    //		*((uint16_t *) i) = (COL8_848484 << 8) | 0x00;
+		mmio_out16(i, (COL8_848484 << 8) | 0x00);
 		//		*((uint16_t *) i) = (COL8_FF0000 << 8) | 0x00;
 	}
 	cursor.x = 0;
@@ -87,7 +89,8 @@ int putchar(int c)
 		cursor.y++;
 		break;
 	default:
-		*((uint16_t *) CUI_VRAM_ADDR(cursor.x, cursor.y)) = (uint16_t) ((COL8_848484 << 8) | c);
+    //		*((uint16_t *) CUI_VRAM_ADDR(cursor.x, cursor.y)) = (uint16_t) ((COL8_848484 << 8) | c);
+		mmio_out16(CUI_VRAM_ADDR(cursor.x, cursor.y), (uint16_t) ((COL8_848484 << 8) | c));
 		//		*((uint16_t *) cui_vram_addr(&cons)) = (uint16_t) ((COL8_848484 << 8) | c);
 		nextc();
 		break;

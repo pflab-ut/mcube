@@ -16,6 +16,15 @@ extern struct irq_descriptor irq_desc[NR_IRQS];
 #define SCHED_IRQ 0
 
 
+static inline void enable_interrupt(void)
+{
+}
+
+static inline void disable_interrupt(void)
+{
+}
+
+
 
 #endif /* !__ASSEMBLY__ */
 

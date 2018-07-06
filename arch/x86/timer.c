@@ -15,11 +15,11 @@ unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
 #define HPET_TIMER
 #define PIT_TIMER
 
+                         
 static void measure_cpu_frequency(void)
 {
 }
 
-                         
 
 void init_timer(unsigned long tick_us)
 {
@@ -30,6 +30,7 @@ void init_timer(unsigned long tick_us)
 #elif PIT_TIMER
   init_pit_timer(tick_us);
 #endif /* LAPIC_TIMER */
+  measure_cpu_frequency();
 }
 
 void start_timer(unsigned int ch)
@@ -53,4 +54,5 @@ void stop_timer(unsigned int ch)
   stop_pit_timer(ch);
 #endif /* LAPIC_TIMER */
 }
+
 

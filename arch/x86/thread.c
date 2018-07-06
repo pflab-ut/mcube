@@ -61,7 +61,7 @@ void __attribute__((noreturn)) run_user_thread(void)
 
 void wait(unsigned long count)
 {
-  while (current_cpu_time() < count)
+  while (get_current_cpu_time() < count)
     ;
 }
 

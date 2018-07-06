@@ -215,6 +215,17 @@ extern uint32_t system_call;
 
 extern struct irq_descriptor irq_desc[NR_IRQS];
 
+static inline void enable_interrupt(void)
+{
+  sti();
+}
+
+static inline void disable_interrupt(void)
+{
+  cli();
+}
+
+
 static inline uint8_t unmask_irq(uint8_t irq)
 {
   return ~(0x1 << irq) & 0xff;

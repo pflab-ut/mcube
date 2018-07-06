@@ -118,7 +118,7 @@ extern int copy_process(unsigned long func, unsigned long arg);
 extern void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg);
 extern void ret_from_fork(void);
 extern void switch_to(struct task_struct *next_task);
-extern void cpu_switch_to(struct task_struct* prev, struct task_struct* next);
+extern void cpu_switch_to(struct task_struct *prev, struct task_struct *next);
 
 extern int (*task_func[])(void *);
 

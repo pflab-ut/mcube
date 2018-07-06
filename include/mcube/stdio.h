@@ -27,7 +27,7 @@ extern int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)
 
 extern int getc(void);
 extern int putchar(int c);
-extern void puts(const char *s);
+extern int puts(const char *s);
 
 extern int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 

@@ -42,5 +42,5 @@ SRCS += \
  $(TOP_DIR)/arch/sim/simulator.c \
  $(TOP_DIR)/arch/sim/stdio.c \
  $(TOP_DIR)/arch/sim/timer.c \
- $(TOP_DIR)/arch/sim/tlb.c \
+ $(TOP_DIR)/arch/sim/utils.c \
  $(TOP_DIR)/arch/sim/thread.c \

@@ -459,7 +459,7 @@ def write_menu(filename, ci, index):
   else:
     sys.exit("Unknown type " + ci.__type + "\n")
     
-def write_config(filename, cinfo, a, b, c, d, e, f, g, h, i):
+def write_config(filename, cinfo, a, b, c, d, e, f, g, h):
   write_menu(filename, cinfo[0], a)
   write_menu(filename, cinfo[1], b)
   write_menu(filename, cinfo[2], c)
@@ -468,7 +468,6 @@ def write_config(filename, cinfo, a, b, c, d, e, f, g, h, i):
   write_menu(filename, cinfo[5], f)
   write_menu(filename, cinfo[6], g)
   write_menu(filename, cinfo[7], h)
-  write_menu(filename, cinfo[8], i)
   
 def sendmail(to_address, from_address, subject, message):
   msg = MIMEText(message)
