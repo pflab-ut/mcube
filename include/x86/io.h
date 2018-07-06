@@ -1,5 +1,5 @@
 /**
- * @file include/a-x86/io.h
+ * @file include/x86/io.h
  *
  * @author Hiroyuki Chishiro
  */

@@ -1,14 +1,8 @@
-//============================================================================
-/// @file       main.c
-/// @brief      The kernel's main entry point.
-/// @details    This file contains the function kmain(), which is the first
-///             function called by the kernel's start code in start.asm.
-//
-// Copyright 2016 Brett Vickers.
-// Use of this source code is governed by a BSD-style license that can
-// be found in the MonkOS LICENSE file.
-//============================================================================
-
+/**
+ * @file arch/x86/main.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 #include <mcube/mcube.h>
 
 void kmain(void)

@@ -1,10 +1,10 @@
 /**
- * @file include/a-arm/irqflags.h
+ * @file include/arm/irqflags.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __RT_EST_ARM_IRQFLAGS_H__
-#define __RT_EST_ARM_IRQFLAGS_H__
+#ifndef __MCUBE_ARM_IRQFLAGS_H__
+#define __MCUBE_ARM_IRQFLAGS_H__
 
 #ifndef __ASSEMBLY__
 
@@ -35,4 +35,4 @@ static inline void restore_local_irq(uint32_t *flags)
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /* __RT_EST_ARM_IRQFLAGS_H__ */
+#endif /* __MCUBE_ARM_IRQFLAGS_H__ */

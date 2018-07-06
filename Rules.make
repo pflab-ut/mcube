@@ -45,7 +45,7 @@ PYTHON = python3
 DUMPARG = eb
 RM = rm -f
 FIND = find
-CLEANFILES = *.o *~ *.o.* *.log *.pyc __pycache__
+CLEANFILES = *.o *~ *.o.* *.log *.pyc *.tmp __pycache__
 
 
 DUMP = $(TOP_DIR)/scripts/misc/dump.py

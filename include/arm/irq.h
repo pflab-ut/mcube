@@ -1,10 +1,10 @@
 /**
- * @file include/a-arm/irq.h
+ * @file include/arm/irq.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __RT_EST_ARM_IRQ_H__
-#define __RT_EST_ARM_IRQ_H__
+#ifndef __MCUBE_ARM_IRQ_H__
+#define __MCUBE_ARM_IRQ_H__
 
 #define IRQ_BASIC_PENDING	(IRQ_BASIC_BASE + 0x00000000)
 #define IRQ_PENDING1		(IRQ_BASIC_BASE + 0x00000004)
@@ -62,4 +62,4 @@ extern void show_invalid_entry_message(int type, unsigned long esr, unsigned lon
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /* __RT_EST_ARM_IRQ_H__ */
+#endif /* __MCUBE_ARM_IRQ_H__ */

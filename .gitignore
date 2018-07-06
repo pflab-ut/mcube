@@ -5,6 +5,8 @@ build/
 INCA_libs/
 testconfig/
 __pycache__/
+html/
+latex/
 
 # files
 irun*
@@ -15,6 +17,7 @@ rom.txt
 *.o
 *.d
 *.dmp
+*.tmp
 *.map
 *~
 *.bin

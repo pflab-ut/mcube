@@ -1,5 +1,5 @@
 /**
- * @file arch/x86/ucrt.c
+ * @file arch/x86/thread.c
  *
  * @author Hiroyuki Chishiro
  */
