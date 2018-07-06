@@ -320,8 +320,8 @@ def scan_dependencies(filename):
       val = line[index+len(conf_str):len(line)]
       val = val.rstrip("\n").strip()
       val = RE_SPLIT_LINE.split(val)
-#      print(val)
-      if current_config in dependencies:
+#      print("val = ", val)
+      if current_config in conflicts:
         conflicts[current_config] += val
       else:
         conflicts[current_config] = val

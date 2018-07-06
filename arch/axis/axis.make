@@ -11,8 +11,8 @@ ifeq ($(CC), clang)
   CROSS_PREFIX = llvm-
   LD = ld.lld
   AS = $(CROSS_PREFIX)as
-#  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
-  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble-all -print-imm-hex
+  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
+#  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble-all -print-imm-hex
   OBJCOPY = $(CROSS_PREFIX)objcopy
   LDFLAGS += -nostdlib -T scripts/linker/axis-elf.ld --Map $(MAP)
 else

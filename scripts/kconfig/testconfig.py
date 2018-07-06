@@ -94,6 +94,7 @@ def do_testconfig(cinfo, a, b, c, d, e, f, g, h):
       
 
 #for a in range(1, cinfo[0].num-1):
+#for a in range(3, cinfo[0].num):
 for a in range(0, cinfo[0].num):
   for b in range(0, cinfo[1].num):
     for c in range(0, cinfo[2].num):

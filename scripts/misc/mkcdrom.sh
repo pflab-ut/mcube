@@ -16,7 +16,7 @@ cp build/mcube build/iso/mcube.sys
 strip build/iso/mcube.sys
 
 # Generate the ISO file (with a boot catalog)
-genisoimage -R -J \
+genisoimage -quiet -R -J \
 	-c boot/bootcat \
 	-b boot/boot.sys \
 	-no-emul-boot \

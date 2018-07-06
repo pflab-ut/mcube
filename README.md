@@ -22,7 +22,8 @@ Explanations of "configure" file is in "Kconfig".
 
 ## How to Build
 
-If you modify "configure" file, please execute the following command.
+First of all you check and modify "configure" file, and then please
+execute the following command.
 ```
 $ make configure
 ```
