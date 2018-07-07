@@ -39,14 +39,14 @@ level2_pagetable:
   
 ENTRY(configure_mmu_and_cache)  
 clean_and_invalidate_cache:
-disable_l1_cache: 
   mrs x0, sctlr_el3 // read sctlr_el3
   bic x0, x0, #(0x1 << 2) // disable D-cache.
   msr sctlr_el3, x0 // write sctlr_el3
   /*
    * invalidate Data cache to make the code general purpose.
    * Calculate the cache size first and loop through each set + way.
-   */
+  */
+clear_and_invalidate_l1_dcache: 
   mov x0, #0x0 // x0 = cache level
   msr csselr_el1, x0 // 0x0 for L1 D-cache, 0x2 for L2 D-cache.
   
@@ -74,6 +74,35 @@ set_loop:
   add x5, x5, #1 // else, next way.
   cmp x5, x3 // last way reached yet?
   ble way_loop
+
+clear_and_invalidate_l2_dcache: 
+  mov x0, #0x2 // x0 = cache level
+  msr csselr_el1, x0 // 0x0 for L1 D-cache, 0x2 for L2 D-cache.
+  
+  mrs x4, ccsidr_el1 // read cache size ID.
+  and x1, x4, #0x7
+  and x1, x1, #0x4 // x1 = cache line size
+  ldr x3, =0x7fff
+  and x2, x3, x4, lsr #13 // x2 = cache set number - 1
+  ldr x3, =0x3ff
+  and x3, x3, x4, lsr #3 // x3 = cache associativity number - 1
+  clz w4, w3 // x4 = way position in the CISW instruction.
+
+  mov x5, #0 // x5 = way counter way_loop
+way_loop2:
+  mov x6, #0 // x6 = set counter set_loop
+set_loop2:
+  lsl x7, x5, x4
+  orr x7, x0, x7 // set way.
+  lsl x8, x6, x1
+  orr x7, x7, x8
+  dc cisw, x7 // clean and invalidate cache line.
+  add x6, x6, #1 // increment set counter.
+  cmp x6, x2 // last set reached yet?
+  ble set_loop2 // If not, iterate set_loop
+  add x5, x5, #1 // else, next way.
+  cmp x5, x3 // last way reached yet?
+  ble way_loop2
 
 setup_mmu:
   /* initialize translation table control registers. */

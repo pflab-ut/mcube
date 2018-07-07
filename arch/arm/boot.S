@@ -30,6 +30,7 @@ initialize_system_conrol_registers:
   msr sctlr_el2, x1
   msr sctlr_el1, x1
 
+initialize_mmu_and_cache: 
   bl configure_mmu_and_cache
   
   
@@ -41,39 +42,55 @@ enable_neon_and_fp:
   mov x1, #(0x3 << 20) // FPEN disables trapping to EL1.
   msr cpacr_el1, x1
   isb
-change_el3_to_el2:
-  // EL3 to EL2.
-  mov   x2, #0x5b1    // RW=1, HCE=1, SMD=1, RES=1, NS=1
-  msr   scr_el3, x2
-  mov   x2, #0x3c9    // D=1, A=1, I=1, F=1 M=EL2h
-  msr   spsr_el3, x2
-  adr   x2, change_el2_to_el1
-  msr   elr_el3, x2
+
+change_el3_to_el2:  
+  // Initialize SCTLR_EL2 and HCR_EL2 to save values before entering EL2.
+  msr sctlr_el2, xzr
+  msr hcr_el2, xzr
+  // Determine the EL2 Execution state.
+  mrs x0, scr_el3
+  orr x0, x0, #(1<<10) // RW EL2 Execution state is AArch64.
+  orr x0, x0, #(1<<0) // NS EL1 is Non-secure world.
+  msr scr_el3, x0
+  mov x0, #0b01001 // DAIF=0000
+  msr spsr_el3, x0 // M[4:0]=01001 EL2h must match SCR_EL3.RW
+
+  // Determine EL2 entry.
+  adr x0, change_el2_to_el1 // el2_entry points to the first instruction of
+  msr elr_el3, x0 // EL2 code.
+  eret
+  
+change_el2_to_el1:
+  // Initialize the SCTLR_EL1 register before entering EL1.
+  msr sctlr_el1, xzr
+  // Determine the EL1 Execution state.
+  mrs x0, hcr_el2
+  orr x0, x0, #(1<<31) // RW=1 EL1 Execution state is AArch64.
+  msr hcr_el2, x0
+  mov x0, #0b00101 // DAIF=0000
+  msr spsr_el2, x0 // M[4:0]=00101 EL1h must match HCR_EL2.RW.
+  adr x0, start_el1 // el1_entry points to the first instruction of
+  msr elr_el2, x0 // EL1 code.
   eret
 
-change_el2_to_el1:
-  // set sp in EL1.
-  msr   sp_el1, x1
-  // enable AArch64 in EL1.
-  mov   x0, #(1 << 31)      // AArch64
-  orr   x0, x0, #(1 << 1)   // SWIO hardwired on Pi3
-  msr   hcr_el2, x0
-  mrs   x0, hcr_el2
-  // set vector address in EL1.
-//  ldr x0, =vector
-//  msr vbar_el1, x0
-  // change execution level to EL1.
-  mov   x2, #0x3c4         // D=1, A=1, I=1, F=1 M=EL1t
-  msr   spsr_el2, x2
-  adr   x2, start_el1
-  msr   elr_el2, x2
+#if 0
+change_el1_to_el0:
+  // Determine the EL0 Execution state.
+  mov x0, #0b00000 // DAIF=0000 M[4:0]=00000 EL0t.
+  msr spsr_el1, x0
+  adr x0, el0_entry // el1_entry points to the first instruction of
+  msr elr_el1, x0 // EL0 code.
   eret
+el0_entry:  
+#endif
+  
 start_el1:  
   get_cpu_id
   mov x1, #STACK_SIZE
   mul x0, x0, x1
   mov sp, #STACK_ADDR
   sub sp, sp, x0
+  
 clear_bss:  
   cbnz x0, begin_main
   adr     x0, __bss_begin
