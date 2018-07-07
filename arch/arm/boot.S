@@ -21,11 +21,18 @@ initialize_vector_addresses_el3_el2_el1:
   msr vbar_el1, x0
   
 initialize_system_conrol_registers:
-  /* hcr_el2, sctlr_el2, and sctlr_el1 do not have architectural reset values. */
+  /*
+   * hcr_el2, sctlr_el2, and sctlr_el1 do not have architectural reset values.
+   * NOTE: there may be other system control registers, which should be initiailized.
+   */  
   msr hcr_el2, xzr
   ldr x1, =0x30c50838
   msr sctlr_el2, x1
   msr sctlr_el1, x1
+
+  bl configure_mmu_and_cache
+  
+  
 enable_neon_and_fp:
   /* disable trapping of accessing in EL3 and EL2. */
   msr cptr_el3, xzr

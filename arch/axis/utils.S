@@ -11,7 +11,7 @@ ENTRY(cpu_switch_to)
   /* set first argument with offset */
   add $t1, $a0, $t0
   /* save stack pointer */
-  add $t2, $sp, $zero
+  move $t2, $sp
   /* store callee-saved registers */
   sw $ra, 52($t1)
   sw $fp, 48($t1)
@@ -44,5 +44,5 @@ ENTRY(cpu_switch_to)
   lw $sp, 44($t1)
   lw $fp, 48($t1)
   lw $ra, 52($t1)
-  add $sp, $t2, $zero
+  move $sp, $t2
   jr $ra

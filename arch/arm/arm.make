@@ -32,6 +32,7 @@ endif
 ASMS	+=	$(TOP_DIR)/arch/$(ARCH_NAME)/boot.S \
 	$(TOP_DIR)/arch/$(ARCH_NAME)/utils.S \
 	$(TOP_DIR)/arch/$(ARCH_NAME)/vector.S \
+	$(TOP_DIR)/arch/$(ARCH_NAME)/mmu_and_cache.S \
 
 SRCS	+=	$(TOP_DIR)/arch/$(ARCH_NAME)/init.c \
 	$(TOP_DIR)/arch/$(ARCH_NAME)/cpu.c \
