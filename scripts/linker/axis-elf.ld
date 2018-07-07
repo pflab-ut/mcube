@@ -27,9 +27,7 @@ SECTIONS {
 		*(.rodata.*)
   __data_end = .;
 	}
-
 	_gp = .;
-
 	.lit8 : {
 		*(.lit8)
 	}
@@ -40,7 +38,7 @@ SECTIONS {
 	.sdata : {
 		*(.sdata)
 	}
-
+ 
 	.bss ALIGN(4) : {
 		__bss_begin = .;
 		*(.sbss)

@@ -54,3 +54,5 @@ SRCS += $(TOP_DIR)/user/axis/test_integer_instructions.c \
  $(TOP_DIR)/user/axis/test_control_instructions.c \
  $(TOP_DIR)/user/axis/test_special_instructions.c \
  $(TOP_DIR)/user/axis/user_axis.c \
+ $(TOP_DIR)/user/dhrystone/dhry_1.c \
+ $(TOP_DIR)/user/dhrystone/dhry_2.c \

@@ -143,7 +143,7 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
   unsigned long id;
   /* check if this is timer interrupt. */
   status = get_interrupt_status();
-  PDEBUG("get_interrupt_status() = 0x%lx\n", status);
+  printk("get_interrupt_status() = 0x%lx\n", status);
   if (status & (0x1 << 0)) {
     handle_timer_interrupt();
     goto end;
@@ -156,7 +156,7 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 
   /* check if this is software interrupt. */
   status = get_common_interrupt_status();
-  PDEBUG("get_common_interrupt_status() = 0x%lx\n", status);
+  printk("get_common_interrupt_status() = 0x%lx\n", status);
   id = ffb(status);
   if (id > NR_SOFTWARE_INTERRUPTS) {
     printk("Error: unknown id %lu\n", id);

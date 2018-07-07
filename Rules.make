@@ -35,8 +35,8 @@ endif
 CFLAGS += -Iinclude -Wall
 #CFLAGS += -Wextra
 CFLAGS += -O3
-CFLAGS += -nostdlib -fno-builtin -fno-stack-protector -ffreestanding
-
+CFLAGS += -nostdlib -fno-stack-protector -ffreestanding
+#CFLAGS += -fno-builtin 
 
 SIZE = $(CROSS_PREFIX)size
 
