@@ -6,6 +6,8 @@ Mcube Kernel is an operating system for Micro/Monotlithic/MultiKernels.
 Dynamically switchable kernel models avoid unnecessary recompile and
 reboot.
 
+![Mcube Kernel](doc/fig/mcube.jpg "Mcube Kernel")
+
 
 ## Supporting ISAs for Cross Development (Ubuntu 18.04 LTS)
 - LLVM-6.0.0/GCC-7.3.0 for X86, ARM, and SIM (user-level) ISAs (or later)
