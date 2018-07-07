@@ -4,7 +4,6 @@
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
-#include "../dhrystone/dhry.h"
 
 extern void test_integer_instructions(void);
 extern void test_transfer_instructions(void);
