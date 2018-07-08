@@ -43,7 +43,6 @@
 #include <mcube/font.h>
 #include <mcube/fs.h>
 #include <mcube/genasm.h>
-#include <mcube/getopt.h>
 #include <mcube/hardirq.h>
 #include <mcube/io.h>
 #include <mcube/irq.h>

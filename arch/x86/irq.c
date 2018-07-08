@@ -1,5 +1,5 @@
 /**
- * @file arch/x86/interrupt.c
+ * @file arch/x86/irq.c
  *
  * @author Hiroyuki Chishiro
  */

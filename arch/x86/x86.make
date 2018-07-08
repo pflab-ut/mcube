@@ -80,7 +80,7 @@ SRCS += \
  $(TOP_DIR)/arch/x86/cpu.c \
  $(TOP_DIR)/arch/x86/dsctbl.c \
  $(TOP_DIR)/arch/x86/init.c \
- $(TOP_DIR)/arch/x86/interrupt.c \
+ $(TOP_DIR)/arch/x86/irq.c \
  $(TOP_DIR)/arch/x86/thread.c \
  $(TOP_DIR)/arch/x86/key.c \
  $(TOP_DIR)/arch/x86/mmu.c \

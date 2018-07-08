@@ -27,6 +27,7 @@ int user_thread_main(void)
   uint32_t ids[NR_THREADS];
   struct th_attr thas[NR_THREADS] = INIT_THAS;
   sched_time = 5;
+  printk("user_thread_main()\n");
   
   for (i = 0; i < nr_threads; i++) {
     ids[i] = i + 1;

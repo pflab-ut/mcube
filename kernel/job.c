@@ -23,7 +23,6 @@ void end_periodic_job(struct thread_struct *th)
 	deadline_tq[cpu] = dequeue_deadline_thread(deadline_tq[cpu], th);
 
 
-	//	PDEBUG("release = %llu relative_opt_deadline[0] = %llu\n", current_th->sched.release, current_th->sched.relative_opt_deadline[0]);
 	abs_release = th->sched.release + th->sched.period;
 	//	PDEBUG("abs_release = %llu relative_deadline = %llu\n", abs_release, current_th->sched.relative_deadline);
 	th->sched.deadline = abs_release + th->sched.relative_deadline;

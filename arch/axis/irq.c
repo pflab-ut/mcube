@@ -1,5 +1,5 @@
 /**
- * @file arch/axis/interrupt.c
+ * @file arch/axis/irq.c
  *
  * @author Hiroyuki Chishiro
  */
@@ -72,25 +72,30 @@ static void handle_timer_interrupt(void)
   if (current_th[cpu] != &idle_th[cpu]) {
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
+#if 1
+    current_th[cpu]->sched.remaining = 0;
+#else
     current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_timer_period()
                                                           - current_th[cpu]->sched.begin_cpu_time);
+#endif
     if (current_th[cpu]->sched.remaining <= 0) {
       do_end_job(current_th[cpu]);
     }
   }
-  sys_jiffies++;
+  increment_jiffies();
 
   /* clear timer interrupt */
   set_timer_status(1);
   
-  if (sys_jiffies >= sched_time) {
+  if (get_current_jiffies() >= sched_time) {
     printk("sched_time expires!!!!\n");
     sched_end = TRUE;
     disable_timer_interrupt();
     current_th[cpu] = &idle_th[cpu];
   } else {
     do_release();
-    do_sched();
+    do_timer_tick();
+    //    do_sched();
   }
   increment_wait_interrupt_program_counter();
 }
@@ -164,7 +169,7 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
     handle_software_interrupt(id);
   }
  end:
-  do_switch_thread();
+  //  do_switch_thread();
   PDEBUG("get_interrupt_program_counter() = 0x%lx\n", get_interrupt_program_counter());
   //  asm volatile("move %0, $sp" : "=r"(tmp));
   //  printk("sp = 0x%lx\n", tmp);

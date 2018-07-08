@@ -7,7 +7,6 @@
 
 /* task queues */
 struct thread_struct *sleep_tq[NR_INTRA_KERNEL_CPUS];
-struct thread_struct *opt_deadline_tq[NR_INTRA_KERNEL_CPUS];
 struct thread_struct *deadline_tq[NR_INTRA_KERNEL_CPUS];
 struct runqueue run_tq[NR_INTRA_KERNEL_CPUS];
 
@@ -24,7 +23,6 @@ void enqueue_rq(struct runqueue *rq, struct thread_struct *th)
   enqueue_rq_queue(rq, th);
 	th->state = READY;
 }
-
 
 
 struct thread_struct *compare_thread(struct thread_struct *th,

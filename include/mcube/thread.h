@@ -78,10 +78,6 @@ struct thread_struct {
 	struct thread_struct *prev;
 	/** Pointer to next runqueue. */
 	struct thread_struct *next;
-	/** Pointer to previoius opt_deadline queue. */
-	struct thread_struct *oprev;
-	/** Pointer to previous opt_deadline queue. */
-	struct thread_struct *onext;
 	/** Pointer to previous deadline queue. */
 	struct thread_struct *dprev;
 	/** Pointer to next deadline queue. */
@@ -326,8 +322,6 @@ static inline void end_budget(struct thread_struct *th)
 #define INIT_IDLE_THREAD(cpu) (struct thread_struct) {  \
 		.prev = NULL,																				\
 			.next = NULL,																			\
-			.oprev = NULL,																		\
-			.onext = NULL,																		\
 			.dprev = NULL,																		\
 			.dnext = NULL,																		\
 			.state = READY,																		\

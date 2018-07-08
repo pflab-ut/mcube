@@ -29,16 +29,19 @@ else
 endif
 
 
-ASMS	+=	$(TOP_DIR)/arch/$(ARCH_NAME)/boot.S \
-	$(TOP_DIR)/arch/$(ARCH_NAME)/utils.S \
-	$(TOP_DIR)/arch/$(ARCH_NAME)/vector.S \
-	$(TOP_DIR)/arch/$(ARCH_NAME)/mmu_and_cache.S \
+ASMS	+=	$(TOP_DIR)/arch/arm/boot.S \
+	$(TOP_DIR)/arch/arm/utils.S \
+	$(TOP_DIR)/arch/arm/vector.S \
+	$(TOP_DIR)/arch/arm/mmu_and_cache.S \
 
-SRCS	+=	$(TOP_DIR)/arch/$(ARCH_NAME)/init.c \
-	$(TOP_DIR)/arch/$(ARCH_NAME)/cpu.c \
-	$(TOP_DIR)/arch/$(ARCH_NAME)/thread.c \
-	$(TOP_DIR)/arch/$(ARCH_NAME)/timer.c \
-	$(TOP_DIR)/arch/$(ARCH_NAME)/irq.c \
-	$(TOP_DIR)/arch/$(ARCH_NAME)/mm.c \
+SRCS	+=	$(TOP_DIR)/arch/arm/init.c \
+	$(TOP_DIR)/arch/arm/cpu.c \
+	$(TOP_DIR)/arch/arm/thread.c \
+	$(TOP_DIR)/arch/arm/timer.c \
+	$(TOP_DIR)/arch/arm/irq.c \
+	$(TOP_DIR)/arch/arm/mm.c \
  $(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_arm.c \
+
+SRCS += $(TOP_DIR)/user/arm/user_arm.c \
+ \

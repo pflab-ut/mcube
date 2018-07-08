@@ -66,7 +66,6 @@ void init_rq(void)
 {
   unsigned long cpu = get_cpu_id();
 	int i;
-  /* NOTE: other members in run_tq are initialized at compile time.  */
   for (i = 0; i < NR_PRIORITIES; i++) {
     run_tq[cpu].array[i].prev = run_tq[cpu].array[i].next = &run_tq[cpu].array[i];
   }

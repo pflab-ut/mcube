@@ -19,20 +19,19 @@ double CPU_NSEC_PER_CLOCK_MHZ;
 
 int main(int argc, char *argv[])
 {
+  unsigned long cpu = get_cpu_id();
   init_arch();
   //  putchar('b');
   //  console_write("hoge", 4, NULL);
   //  putchar('c');
   printk("main()\n");
-#if 1
-  printk("init_rq()\n");
   init_rq();
-  printk("init_sched()\n");
+  printk("main()2\n");
   init_sched();
+  printk("main()3\n");
+
   
-  printk("user_main()\n");
   user_main();
-#endif
   exit_arch();
   return 0;
 }

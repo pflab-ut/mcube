@@ -31,7 +31,7 @@ void process(char *array)
 {
   while (1) {
     uart_puts(array);
-    delay(1000000);
+    //    delay(100);
   }
 }
 
@@ -44,6 +44,9 @@ void kernel_main(void)
   //  asm volatile("MRC p15,0,reg,c0,c0,5");
   //  asm volatile("mrs %0, MIDR_EL1" : "=r"(reg));
   if (get_cpu_id() == 0) {
+#if 1
+    main(0, NULL);
+#else
     init_arch();
     printk("Hello, kernel World!\n");
     
@@ -70,6 +73,7 @@ void kernel_main(void)
       //      wfi();
       do_sched();
     }
+#endif
   } else {
     for (;;)
       ;

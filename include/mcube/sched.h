@@ -31,6 +31,11 @@ static inline unsigned long get_current_jiffies(void)
   return sys_jiffies;
 }
 
+static inline void increment_jiffies(void)
+{
+  sys_jiffies++;
+}
+
 
 static inline unsigned long get_current_cpu_time(void);
 static inline unsigned long tsc2usec(unsigned long tsc);

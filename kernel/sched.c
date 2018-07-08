@@ -81,7 +81,7 @@ void do_release(void)
   //	unsigned long release_latency = current_jiffies_time();
 	struct thread_struct *th;
   unsigned long cpu = get_cpu_id();
-  
+  pdebug_array(run_tq[cpu].array);
 #if 0
 	PDEBUG("run_tq: bheap\n");
   pdebug_bheap(&run_tq, run_tq[cpu].head);
@@ -111,11 +111,12 @@ void do_release(void)
     th->sched.remaining = th->sched.wcet;
 		//		pdebug_jiffies();
 	}
-  //	pdebug_array(run_tq[cpu].array);
+  pdebug_array(run_tq[cpu].array);
 }
 
 void switch_to(struct task_struct *next_task)
 {
+  printk("switch_to()\n");
   if (current_task == next_task) {
     return;
   }
@@ -125,7 +126,7 @@ void switch_to(struct task_struct *next_task)
 }
 
 
-#if 1
+#if 0
 
 void __do_sched(void)
 {
@@ -183,6 +184,7 @@ void __do_sched(void)
 		prev_th[cpu]->state = READY;
 	}
 
+  //	switch_to(tasks[next]);
 	current_th[cpu]->state = RUNNING;
 
 
@@ -230,12 +232,11 @@ int run(unsigned long nr_threads)
 {
 	unsigned long i;
 	int ret;
-  //  unsigned long cpu = get_cpu_id();
-  //  unsigned long current_fp, current_sp;
   printk("run()\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
   //  printk("current_fp = 0x%x\n", current_fp);
   
+  //  pdebug_array(run_tq[cpu].array);
 #if 1
 	// NOTE: not work if comment the following printk function
   for (i = 0; i < nr_threads; i++) {
@@ -269,14 +270,12 @@ int run(unsigned long nr_threads)
 
   
   //  generate_software_interrupt(0);
-  enable_timer_interrupt();
-  enable_timer();   
   
 	/* idle thread start */
 	while (sched_end == FALSE) {
 		// printk("");
-    printk("get_timer_count() = %lu\n", get_timer_count()); 
-    //    printk("0");
+    //    printk("get_timer_count() = %lu\n", get_timer_count()); 
+    printk("0");
     //    printk("sched_end = %d\n", sched_end);
 		//		printk("idle!");
     //    asm volatile("move %0, $sp" : "=r"(current_fp));
@@ -315,9 +314,6 @@ void init_sched(void)
     run_tq[i].nr_threads = 0;
     for (j = 0; j < NR_PRIORITY_BITMAPS; j++) {
       run_tq[i].bitmap[j] = 0;
-    }
-    for (j = 0; j < NR_PRIORITY_BITMAPS; j++) {
-      run_tq[i].array[j] = INIT_IDLE_THREAD(cpu);
     }
   }
   current_th[cpu] = prev_th[cpu] = &idle_th[cpu];
