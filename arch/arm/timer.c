@@ -25,8 +25,8 @@ void init_timer(unsigned long tick_us)
   mmio_out32(TIMER_LOCAL_TIMER_WRITE_FLAGS, 0x3 << 30);
   /* local timer interrupt goes to Core 0 IRQ */
   mmio_out32(TIMER_LOCAL_INTERRUPT_ROUTING, 0);
-  /* enable interrupt and timer */
-  mmio_out32(TIMER_LOCAL_TIMER_CTRL_STATUS, 0x3 << 28);
+
+  enable_timer_interrupt();
 }
 
 void start_timer(unsigned int ch)

@@ -32,17 +32,18 @@ void do_switch_thread(void)
   unsigned long cpu = get_cpu_id();
   PDEBUG("%s()\n", __func__);
   if (current_th[cpu] != prev_th[cpu]) {
-    /* save program counter and frame/stack pointer */
+    /* save program counter */
     prev_th[cpu]->interrupt_program_counter = get_interrupt_program_counter();
-    /* save and resume $fp for Clang/GCC. */
+    /* save $fp for Clang/GCC. */
     asm volatile("move %0, $fp" : "=r"(prev_th[cpu]->current_fp));
-    /* save and resume $sp for GCC. */
+    /* save $sp for GCC. */
     asm volatile("move %0, $sp" : "=r"(prev_th[cpu]->current_sp));
     printk("cpu = %lu prev_th: id = %lu current_fp = 0x%lx current_sp = 0x%lx\n",
            cpu, prev_th[cpu]->id, prev_th[cpu]->current_fp, prev_th[cpu]->current_sp);
     prev_th[cpu] = current_th[cpu];
 
     if (!(current_th[cpu]->thflags & THFLAGS_START_TH)) {
+      /* start thread */
       current_th[cpu]->thflags |= THFLAGS_START_TH;
       PDEBUG("get_context_top(current_th[%lu])) = 0x%lx\n",
              cpu, (unsigned long) get_context_top(current_th[cpu]));

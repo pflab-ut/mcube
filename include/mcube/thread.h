@@ -121,11 +121,11 @@ struct thread_struct {
 #if CONFIG_ARCH_AXIS
   /** Current frame pointer. */
   unsigned long current_fp;
+#endif /* CONFIG_ARCH_AXIS */
   /** Current stack pointer. */
   unsigned long current_sp;
   /** Interrupt program counter. */
   unsigned long interrupt_program_counter;
-#endif /* CONFIG_ARCH_AXIS */
   
 	/** Number of preemptions per job. */
 	unsigned long preemptions;
