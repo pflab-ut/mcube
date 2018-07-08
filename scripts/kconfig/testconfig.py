@@ -50,13 +50,13 @@ print(len(cinfo))
 index = 0
 message = ""
 
-def do_testconfig(cinfo, a, b, c, d, e, f, g, h):
+def do_testconfig(cinfo, val):
   global index
   global message
   print(index, "/", NUM)
   configure_file = open("configure", "w")
   configure_file.write(tools.CONFIG_HEADER)
-  tools.write_config(configure_file, cinfo, a, b, c, d, e, f, g, h)
+  tools.write_config(configure_file, cinfo, val)
   configure_file.close()
   index += 1
   cmd = "make buildclean"
@@ -92,32 +92,33 @@ def do_testconfig(cinfo, a, b, c, d, e, f, g, h):
     # fw.write(stdout.decode() + "\n" + stderr.decode())
     # fw.close()
 
+val = [0, 0, 0, 0, 0, 0, 0, 0]
+    
 # nested for loop    
 """
 #for a in range(1, cinfo[0].num-1):
 #for a in range(3, cinfo[0].num):
-for a in range(0, cinfo[0].num):
-  for b in range(0, cinfo[1].num):
-    for c in range(0, cinfo[2].num):
-      for d in range(0, cinfo[3].num):
-        for e in range(0, cinfo[4].num):
-          for f in range(0, cinfo[5].num):
-            for g in range(0, cinfo[6].num):
-              for h in range(0, cinfo[7].num):
-                do_testconfig(cinfo, a, b, c, d, e, f, g, h)
+for val[0] in range(0, cinfo[0].num):
+  for val[1] in range(0, cinfo[1].num):
+    for val[2] in range(0, cinfo[2].num):
+      for val[3] in range(0, cinfo[3].num):
+        for val[4] in range(0, cinfo[4].num):
+          for val[5] in range(0, cinfo[5].num):
+            for val[6] in range(0, cinfo[6].num):
+              for val[7]  in range(0, cinfo[7].num):
+                do_testconfig(cinfo, val)
+
+
 """
-
 # recursive for loop
-val = [0, 0, 0, 0, 0, 0, 0, 0]
-
 def recursive_for_loop(index, depth):
   global val
   for val[index] in range(0, cinfo[index].num):
     if depth > 0:
       recursive_for_loop(index + 1, depth - 1)
     else:
-      print(val[0], val[1], val[2], val[3], val[4], val[5], val[6], val[7])
-      do_testconfig(cinfo, val[0], val[1], val[2], val[3], val[4], val[5], val[6], val[7])
+      print(val)
+      do_testconfig(cinfo, val)
       
 recursive_for_loop(0, 7)
 

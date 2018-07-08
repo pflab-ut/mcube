@@ -19,7 +19,6 @@ double CPU_NSEC_PER_CLOCK_MHZ;
 
 int main(int argc, char *argv[])
 {
-  unsigned long cpu = get_cpu_id();
   init_arch();
   //  putchar('b');
   //  console_write("hoge", 4, NULL);

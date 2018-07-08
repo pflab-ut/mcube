@@ -18,7 +18,7 @@
 /** Task Queue. */
 #define CONFIG_TQ_O1 1
 /** Tie-Break. */
-#define CONFIG_TIE_BREAK_FIFO 1
+#define CONFIG_TIE_BREAK_ID 1
 /** Memory. */
-#define CONFIG_MEMORY_1MB 1
+#define CONFIG_MEMORY_128KB 1
 #endif /* __MCUBE_MCUBE_CONFIG_H__ */
