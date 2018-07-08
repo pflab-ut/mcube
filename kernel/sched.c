@@ -84,7 +84,7 @@ void do_release(void)
   
 #if 0
 	PDEBUG("run_tq: bheap\n");
-  pdebug_bheap(&run_tq, run_tq.head);
+  pdebug_bheap(&run_tq, run_tq[cpu].head);
 
 	PDEBUG("cpu_run_tq: bheap\n");
 	pdebug_bheap(&cpu_run_tq.rq, cpu_run_tq.rq.head);
@@ -97,13 +97,12 @@ void do_release(void)
 	//	printk("sleep_tq[cpu]->sched.release = %d\n", sleep_tq[cpu]->sched.release);
 
 #if 0
-	pdebug_bitmap(run_tq.bitmap);
-	pdebug_array(run_tq.array);
+	pdebug_bitmap(run_tq[cpu].bitmap);
 #endif
-	//	pdebug_bheap(&run_tq, run_tq.head);
-	//	pdebug_sleep_tq();
+	//	pdebug_bheap(&run_tq, run_tq[cpu].head);
+  pdebug_sleep_tq();
 
-	while (sleep_tq[cpu]->sched.release <= current_jiffies_time()) {
+	while (sleep_tq[cpu]->sched.release <= get_current_jiffies()) {
 		th = sleep_tq[cpu];
     th->job_id++;
 		sleep_tq[cpu] = dequeue_thread(sleep_tq[cpu], th);
@@ -112,6 +111,7 @@ void do_release(void)
     th->sched.remaining = th->sched.wcet;
 		//		pdebug_jiffies();
 	}
+  //	pdebug_array(run_tq[cpu].array);
 }
 
 void switch_to(struct task_struct *next_task)
@@ -202,8 +202,8 @@ void do_sched(void)
 int check_deadline_miss(void)
 {
   unsigned long cpu = get_cpu_id();
-	if (deadline_tq[cpu]->sched.deadline <= current_jiffies_time()) {
-		PDEBUG("cpu %lu current_jiffies_time() %lu\n", cpu, current_jiffies_time());
+	if (deadline_tq[cpu]->sched.deadline <= get_current_jiffies()) {
+		PDEBUG("cpu %lu get_current_jiffies() %lu\n", cpu, get_current_jiffies());
 		PDEBUG("task %lu missed deadline\n", deadline_tq[cpu]->id);
 		PDEBUG("if the following inequality holds,\n");
 		PDEBUG("then you must adjust parameters:\n");
@@ -249,11 +249,10 @@ int run(unsigned long nr_threads)
   }
 #endif
 
-
 	sys_jiffies = 0;
-
 	sched_end = FALSE;
 
+  printk("run()2\n");
   for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
     current_th[i] = prev_th[i] = &idle_th[i];
     current_th[i]->id = 0;
@@ -261,25 +260,28 @@ int run(unsigned long nr_threads)
   }
   //		printk("current_th[%d] = %x\n", i, current_th[i]);
 
-  //	print_taskset();
-	printk("start_timer()\n");
 	//	inf_loop();
 	//syscall0(SYS_sched);
-  do_release();
-	start_timer(0);
 
-  generate_software_interrupt(0);
+  do_release();
+  init_irq();
+  start_timer(0);
+
   
+  //  generate_software_interrupt(0);
+  enable_timer_interrupt();
+  enable_timer();   
   
 	/* idle thread start */
 	while (sched_end == FALSE) {
 		// printk("");
-    printk("0");
+    printk("get_timer_count() = %lu\n", get_timer_count()); 
+    //    printk("0");
     //    printk("sched_end = %d\n", sched_end);
 		//		printk("idle!");
     //    asm volatile("move %0, $sp" : "=r"(current_fp));
     //    printk("current_fp = 0x%x\n", current_fp);
-    nop();
+    //    nop();
     //    wait_until_next_interrupt();
 	}
 	stop_timer(0);

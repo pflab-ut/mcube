@@ -54,13 +54,13 @@ static inline void restore_local_irq64(uint64_t *flags)
 
 static inline void save_local_irq(uint32_t *flags)
 {
-	enable_interrupt();
+  disable_interrupt();
 }
 
 
 static inline void restore_local_irq(uint32_t *flags)
 {
-	disable_interrupt();
+	enable_interrupt();
 }
 
 #endif /* !__ASSEMBLY__ */

@@ -5,7 +5,8 @@
  */
 #include <mcube/mcube.h>
 
-unsigned int Debug = FALSE;
+//unsigned int Debug = FALSE;
+unsigned int Debug = TRUE;
 
 unsigned long CPU_CLOCK;
 unsigned long CPU_CLOCK_MHZ_PER_USEC;

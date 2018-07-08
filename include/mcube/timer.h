@@ -31,17 +31,15 @@ extern unsigned long sys_tsc;
 // 100us
 //#define TICK_USEC 100
 // 1ms
-//#define TICK_USEC 1000
+#define TICK_USEC 1000
 // 2ms
 //#define TICK_USEC 2000
-// 10ms
 // for evaluation with ID-Cache
 //#define TICK_USEC 10000
-// 100ms
 // for evaluation with No-Cache
 //#define TICK_USEC 100000
 // 1s
-#define TICK_USEC 1000000
+//#define TICK_USEC 1000000
 // 10s
 //#define TICK_USEC 10000000
 

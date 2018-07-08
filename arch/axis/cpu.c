@@ -12,6 +12,6 @@ void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long 
 
 void init_cpu(void)
 {
-  CPU_CLOCK = 333 * 1000 * 1000;
-  CPU_CLOCK_MHZ_PER_USEC = CPU_CLOCK / (1000 * 1000);
+  CPU_CLOCK_MHZ_PER_USEC = 333;
+  CPU_CLOCK = CPU_CLOCK_MHZ_PER_USEC * 1000 * 1000;
 }

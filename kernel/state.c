@@ -51,10 +51,11 @@ int do_activate(struct thread_struct *th)
 	if (!(th->state & UNADMITTED)) {
 		ret = -1;
 	} else {
+    printk("do_activate()\n");
 		set_priority(th);
 		add_thread_to_task(th);
 		ret = activate(th);
-		//		printk("ret = %d\n", ret);
+    printk("ret = %d\n", ret);
 	}
 	return ret;
 }

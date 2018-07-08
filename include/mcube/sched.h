@@ -26,7 +26,7 @@ extern unsigned long exec_jiffies;
 #endif /* CONFIG_ARCH_SIM */
 
 
-static inline unsigned long current_jiffies_time(void)
+static inline unsigned long get_current_jiffies(void)
 {
   return sys_jiffies;
 }

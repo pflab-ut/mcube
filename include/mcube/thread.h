@@ -181,7 +181,7 @@ typedef struct th_attr_strip th_attr_strip;
 
 extern void init_sched_info(struct thread_struct *th, struct th_attr *attr);
 
-static inline unsigned long current_jiffies_time(void);
+static inline unsigned long get_current_jiffies(void);
 
 static inline int is_budget_enforced(struct thread_struct *th)
 {
@@ -201,7 +201,7 @@ static inline int is_budget_exhausted(struct thread_struct *th)
 
 static inline int is_preempted(struct thread_struct *th)
 {
-	return th->sched.release != current_jiffies_time() && !is_budget_exhausted(th)
+	return th->sched.release != get_current_jiffies() && !is_budget_exhausted(th)
 		&& th->sched.remaining != th->sched.exec_cost;
 }
 

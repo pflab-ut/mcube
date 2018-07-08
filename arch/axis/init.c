@@ -9,7 +9,7 @@
 void init_irq(void)
 {
   int i;
-  set_interrupt_vector_base_address((uint32_t) common_interrupt);
+  set_interrupt_vector_base_address((unsigned long) common_interrupt);
 
   for (i = 0; i < NR_SOFTWARE_INTERRUPTS; i++) {
     enable_software_interrupt(i);
@@ -31,6 +31,7 @@ void exit_irq(void)
 void init_arch(void)
 {
   init_irq();
+  init_cpu();
 }
 
 /**

@@ -61,7 +61,8 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
 	if (index < NR_THREADS) {
 		ths[index].id = id;
 		ths[index].state = UNADMITTED;
-		ths[index].tk = current_th[cpu]->tk;
+    //		ths[index].tk = current_th[cpu]->tk;
+		ths[index].tk = current_task;
 		ths[index].type = attr->type;
 		ths[index].thflags = 0;
     ths[index].arg = arg;

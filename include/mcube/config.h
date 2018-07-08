@@ -12,11 +12,11 @@
 /** Compiler. */
 #define CONFIG_COMPILER_CLANG 1
 /** Algorithm. */
-#define CONFIG_ALGO_EDF 1
+#define CONFIG_ALGO_RM 1
 /** Printk. */
 #define CONFIG_PRINTK2CONSOLE 1
 /** Task Queue. */
-#define CONFIG_TQ_DLIST 1
+#define CONFIG_TQ_O1 1
 /** Tie-Break. */
 #define CONFIG_TIE_BREAK_ID 1
 #define CONFIG_DEBUG 1

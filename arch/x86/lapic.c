@@ -26,7 +26,7 @@ irqreturn_t handle_timer_tick(int irq, void *dummy)
 	if (timer_count[cpu] == SU2EU(1)) {
 		//		printk("cpu = %lu\n", cpu);
 		//		*((unsigned long *) 0x10010) = cpu;
-		tcur[cpu] = current_cpu_time();
+		tcur[cpu] = get_current_cpu_time();
 		//		printk("cpu = %lu: tsc %llu: %llu us\n",
 		//					 cpu, tcur[cpu] - tprev[cpu], tsc2usec(tcur[cpu] - tprev[cpu]));
 		tprev[cpu] = tcur[cpu];
