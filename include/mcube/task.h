@@ -44,7 +44,7 @@ typedef struct tlb_info tlb_info;
  */
 struct task_struct {
   /** Context of CPU. */
-  struct cpu_context cpu_context;
+  //  struct cpu_context cpu_context;
 	/** Task ID. */
 	unsigned int id;
 	/** Pointer to top thread. */
@@ -82,7 +82,6 @@ static inline void preempt_enable(void)
 #define INIT_TASK {                             \
     .id		= TASK_ID,                            \
     .top_thread	= &idle_th[0],                  \
-    .cpu_context = INIT_CPU_CONTEXT,            \
     .state		= 0,                              \
     .counter	= 0,                              \
     .priority	= 1,                              \
@@ -117,8 +116,6 @@ extern struct task_struct *do_create_task(struct th_attr *attr);
 extern int copy_process(unsigned long func, unsigned long arg);
 extern void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg);
 extern void ret_from_fork(void);
-extern void switch_to(struct task_struct *next_task);
-extern void cpu_switch_to(struct task_struct *prev, struct task_struct *next);
 
 extern int (*task_func[])(void *);
 

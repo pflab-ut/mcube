@@ -6,6 +6,21 @@
 #ifndef	__MCUBE_MCUBE_MCUBESTD_H__
 #define	__MCUBE_MCUBE_MCUBESTD_H__
 
+
+#define NR_THREADS 16
+
+/* 256 */
+//#define STACK_SIZE 0x100
+/* 1K */
+//#define STACK_SIZE 0x400
+/* 4K */
+#define STACK_SIZE 0x1000
+
+#define NR_PRIORITIES NR_THREADS
+
+/* each bitmap length is 32 bit */
+#define NR_PRIORITY_BITMAPS CEIL(NR_PRIORITIES, 32)
+
 #ifndef	__ASSEMBLY__
 
 

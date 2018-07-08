@@ -6,7 +6,7 @@
 #include <mcube/mcube.h>
 
   
-ENTRY(cpu_switch_to)
+ENTRY(arch_switch_to)
   addi $t0, $0, OFFSET_OF_CPU_CONTEXT
   /* set first argument with offset */
   add $t1, $a0, $t0

@@ -38,8 +38,6 @@ struct full_regs {
 
 typedef struct full_regs full_regs;
 
-#define get_context_top(th) \
-	((struct full_regs *)((th)->stack_top - sizeof(struct full_regs)))
 
 #endif /* !__ASSEMBLY__ */
 

@@ -6,20 +6,6 @@
 #ifndef	__MCUBE_MCUBE_THREAD_H__
 #define	__MCUBE_MCUBE_THREAD_H__
 
-#define NR_THREADS 16
-
-/* 256 */
-//#define STACK_SIZE 0x100
-/* 1K */
-//#define STACK_SIZE 0x400
-/* 4K */
-#define STACK_SIZE 0x1000
-
-
-#define NR_PRIORITIES NR_THREADS
-
-/* each bitmap length is 32 bit */
-#define NR_PRIORITY_BITMAPS CEIL(NR_PRIORITIES, 32)
 
 
 /* -- Thread State --
@@ -74,6 +60,8 @@ struct bheap_node;
  * The thread_struct structure has the sched_info structure to manage scheduling information.
  */
 struct thread_struct {
+  /** Context of CPU. */
+  struct cpu_context cpu_context;
 	/** Pointer to previous runqueue. */
 	struct thread_struct *prev;
 	/** Pointer to next runqueue. */
@@ -320,6 +308,7 @@ static inline void end_budget(struct thread_struct *th)
 
 
 #define INIT_IDLE_THREAD(cpu) (struct thread_struct) {  \
+    .cpu_context = INIT_CPU_CONTEXT,                    \
 		.prev = NULL,																				\
 			.next = NULL,																			\
 			.dprev = NULL,																		\
@@ -354,6 +343,12 @@ extern void set_initial_context(struct thread_struct *th, void (*pc)(void *),
 
 
 extern int get_tq_util(struct thread_struct *head, unsigned long cpu);
+extern void switch_to(struct thread_struct *next_thread);
+extern void arch_switch_to(struct thread_struct *prev, struct thread_struct *next);
+
+#define get_context_top(th) \
+  ((struct full_regs *)((th)->stack_top - sizeof(struct full_regs)))
+
 
 #endif	/* __ASSEMBLY__ */
 #endif	/* __MCUBE_MCUBE_THREAD_H__ */

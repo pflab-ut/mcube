@@ -114,6 +114,20 @@ void do_release(void)
   pdebug_array(run_tq[cpu].array);
 }
 
+#if 1
+void switch_to(struct thread_struct *next_task)
+{
+  unsigned long cpu = get_cpu_id();
+  printk("switch_to()\n");
+  if (current_th[cpu] == prev_th[cpu]) {
+    return;
+  }
+  printk("call arch_switch_to()\n");
+  arch_switch_to(prev_th[cpu], current_th[cpu]);
+  printk("call arch_switch_to()2\n");
+}
+
+#else
 void switch_to(struct task_struct *next_task)
 {
   printk("switch_to()\n");
@@ -122,8 +136,9 @@ void switch_to(struct task_struct *next_task)
   }
   struct task_struct *prev_task = current_task;
   current_task = next_task;
-  cpu_switch_to(prev_task, next_task);
+  arch_switch_to(prev_task, next_task);
 }
+#endif
 
 
 #if 0
@@ -186,7 +201,7 @@ void __do_sched(void)
 
   //	switch_to(tasks[next]);
 	current_th[cpu]->state = RUNNING;
-
+  //  switch_to(current_th[cpu]);
 
 	//	pdebug_jiffies();
 	PDEBUG("do_sched(): end\n");
@@ -196,8 +211,35 @@ void __do_sched(void)
 
 void do_sched(void)
 {
-  current_task->counter = 0;
-  __do_sched();
+  unsigned long cpu = get_cpu_id();
+  printk("do_sched()\n");
+	struct thread_struct *th;
+  pdebug_deadline_tq();
+
+
+	/* jump to algorithm-specific function */
+  //  do_sched_algo();
+
+	/* assign the highest priority task to cpu */
+	th = pick_next_task();
+	if (th) {
+		current_th[cpu] = th;
+	} else {
+		current_th[cpu] = &idle_th[cpu];
+	}
+  printk("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
+
+	if (prev_th[cpu] != &idle_th[cpu] && is_preempted(prev_th[cpu])) {
+		/* preemption occurs */
+		prev_th[cpu]->state = READY;
+	}
+
+  //	switch_to(tasks[next]);
+	current_th[cpu]->state = RUNNING;
+  //  switch_to(current_th[cpu]);
+
+	//	pdebug_jiffies();
+	PDEBUG("do_sched(): end\n");
 }
 
 
@@ -230,7 +272,7 @@ void do_timer_tick(void)
 
 int run(unsigned long nr_threads)
 {
-	unsigned long i;
+	int i;
 	int ret;
   printk("run()\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
@@ -258,6 +300,7 @@ int run(unsigned long nr_threads)
     current_th[i] = prev_th[i] = &idle_th[i];
     current_th[i]->id = 0;
     current_th[i]->stack_top = THREAD_STACK_ADDR(i, 0);
+    printk("current_th[%d]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
   }
   //		printk("current_th[%d] = %x\n", i, current_th[i]);
 
@@ -265,7 +308,6 @@ int run(unsigned long nr_threads)
 	//syscall0(SYS_sched);
 
   do_release();
-  init_irq();
   start_timer(0);
 
   

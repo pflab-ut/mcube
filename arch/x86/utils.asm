@@ -13,6 +13,6 @@ bits 64
 
 section .text
 
-  global cpu_switch_to
+  global arch_switch_to
   
-cpu_switch_to:
+arch_switch_to:

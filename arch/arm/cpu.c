@@ -8,10 +8,11 @@
 
 void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg)
 {
-  p->cpu_context.x19 = func;
-  p->cpu_context.x20 = arg;
-  p->cpu_context.pc = (unsigned long) ret_from_fork;
-  p->cpu_context.sp = (unsigned long) p + THREAD_SIZE;
+  unsigned long cpu = get_cpu_id();
+  current_th[cpu]->cpu_context.x19 = func;
+  current_th[cpu]->cpu_context.x20 = arg;
+  current_th[cpu]->cpu_context.pc = (unsigned long) ret_from_fork;
+  current_th[cpu]->cpu_context.sp = (unsigned long) p + THREAD_SIZE;
 }
 
 

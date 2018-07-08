@@ -10,6 +10,7 @@
 
 #define hw_interrupt_type irq_chip
 
+extern void wait_until_next_interrupt(void);
 
 extern void init_irq(void);
 static void enable_interrupt(void);

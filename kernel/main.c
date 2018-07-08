@@ -5,8 +5,8 @@
  */
 #include <mcube/mcube.h>
 
-//unsigned int Debug = FALSE;
-unsigned int Debug = TRUE;
+unsigned int Debug = FALSE;
+//unsigned int Debug = TRUE;
 
 unsigned long CPU_CLOCK;
 unsigned long CPU_CLOCK_MHZ_PER_USEC;
@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
   printk("main()2\n");
   init_sched();
   printk("main()3\n");
-
   
   user_main();
   exit_arch();

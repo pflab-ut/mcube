@@ -27,6 +27,11 @@ const char *entry_error_messages[] = {
   "ERROR_INVALID_EL0_32"
 };
 
+void wait_until_next_interrupt(void)
+{
+  asm volatile("wfi");
+}
+
 void show_invalid_entry_message(int type, unsigned long esr, unsigned long address)
 {
   printk("%s, ESR: 0x%lx, address: 0x%lx\r\n", entry_error_messages[type], esr, address);
@@ -46,7 +51,8 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
     printk("handler CNTV_TVAL: 0x%lx\n", get_cntvct_el0());
     set_cntv_tval_el0(timer_cntfrq);    // clear cntv interrupt and set next 1sec timer.    
     printk("handler CNTVCT   : 0x%lx\n", get_cntvct_el0());
-    do_timer_tick();
+    //    do_timer_tick();
+    do_sched();
     break;
   case 0x100:
 #if 1

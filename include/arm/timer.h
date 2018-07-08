@@ -180,7 +180,6 @@ static inline void delay(unsigned long us)
   unsigned long now = get_current_cpu_time();
   unsigned long timer_cntfrq = get_cntfrq_el0();
   /* do loop until us elapse. */
-  /* no fpu */
   while (((get_current_cpu_time() - now) * 1000 * 1000) / timer_cntfrq <= us) {
   }
 }

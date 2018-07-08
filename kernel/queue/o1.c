@@ -34,7 +34,7 @@ void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th)
 
 void dequeue_rq_queue(struct runqueue *rq, struct thread_struct *th)
 {
-	//	pdebug_array(rq->array);
+  pdebug_array(rq->array);
   if (rq->array[th->priority].next == th) {
     rq->array[th->priority].next = th->next;
   } else {
@@ -64,9 +64,16 @@ struct thread_struct *pick_next_task(void)
 
 void init_rq(void)
 {
-  unsigned long cpu = get_cpu_id();
-	int i;
-  for (i = 0; i < NR_PRIORITIES; i++) {
-    run_tq[cpu].array[i].prev = run_tq[cpu].array[i].next = &run_tq[cpu].array[i];
+	int i, j;
+  for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
+    run_tq[i].util = 0;
+    run_tq[i].nr_threads = 0;
+    for (j = 0; j < NR_PRIORITY_BITMAPS; j++) {
+      run_tq[i].bitmap[j] = 0;
+    }
+    for (j = 0; j < NR_PRIORITIES; j++) {
+      run_tq[i].array[j] = INIT_IDLE_THREAD(i);
+      run_tq[i].array[j].prev = run_tq[i].array[j].next = &run_tq[i].array[j];
+    }
   }
 }

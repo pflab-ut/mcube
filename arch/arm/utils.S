@@ -16,7 +16,7 @@ ENTRY(get_el)
   ret
 
   
-ENTRY(cpu_switch_to)
+ENTRY(arch_switch_to)
   mov     x10, #OFFSET_OF_CPU_CONTEXT
   /* set first argument with offset */
   add     x8, x0, x10

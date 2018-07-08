@@ -10,7 +10,6 @@
 #ifndef __ASSEMBLY__
 
 
-void wait_until_next_interrupt(void);
 void common_interrupt_handler(void);
 
 

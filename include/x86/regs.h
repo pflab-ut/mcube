@@ -87,12 +87,6 @@ struct full_regs {
 
 typedef struct full_regs full_regs;
 
-/** Context top (Stack top - sizeof(struct full_regs)). */
-static inline struct full_regs *get_context_top(struct thread_struct *th)
-{
-  return (struct full_regs *)(th->stack_top - sizeof(struct full_regs));
-}
-
 
 #endif /* !__ASSEMBLY__ */
 

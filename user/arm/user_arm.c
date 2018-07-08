@@ -41,7 +41,6 @@ int user_thread_main(void)
 
 
 
-
 int user_arch_main(void)
 {
   user_thread_main();

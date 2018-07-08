@@ -63,12 +63,13 @@ void do_switch_thread(void)
 
 static void handle_timer_interrupt(void)
 {
-  size_t cpu = get_cpu_id();
+  unsigned long cpu = get_cpu_id();
   PDEBUG("%s()\n", __func__);
   printk("sys_jiffies = %lu\n", sys_jiffies);
   //    printk("get_interrupt_program_counter() = 0x%lx\n", get_interrupt_program_counter());
   //    printk("__wait_until_next_interrupt = 0x%lx\n", &__wait_until_next_interrupt);
   //  printk("get_timer_count() = %d\n", get_timer_count());
+  pdebug_array(run_tq[cpu].array);
   if (current_th[cpu] != &idle_th[cpu]) {
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
@@ -78,7 +79,7 @@ static void handle_timer_interrupt(void)
     current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_timer_period()
                                                           - current_th[cpu]->sched.begin_cpu_time);
 #endif
-    if (current_th[cpu]->sched.remaining <= 0) {
+    if (current_th[cpu]->sched.remaining <= 0) {      
       do_end_job(current_th[cpu]);
     }
   }
@@ -94,8 +95,8 @@ static void handle_timer_interrupt(void)
     current_th[cpu] = &idle_th[cpu];
   } else {
     do_release();
-    do_timer_tick();
-    //    do_sched();
+    //    do_timer_tick();
+    do_sched();
   }
   increment_wait_interrupt_program_counter();
 }
@@ -146,8 +147,10 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 {
   unsigned long status;
   unsigned long id;
+  disable_interrupt();
   /* check if this is timer interrupt. */
   status = get_interrupt_status();
+  printk("do_IRQ()\n");
   printk("get_interrupt_status() = 0x%lx\n", status);
   if (status & (0x1 << 0)) {
     handle_timer_interrupt();
@@ -169,9 +172,10 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
     handle_software_interrupt(id);
   }
  end:
-  //  do_switch_thread();
+  do_switch_thread();
   PDEBUG("get_interrupt_program_counter() = 0x%lx\n", get_interrupt_program_counter());
   //  asm volatile("move %0, $sp" : "=r"(tmp));
   //  printk("sp = 0x%lx\n", tmp);
+  enable_interrupt();
   return 0;
 }

@@ -20,10 +20,10 @@
 #include <mcube/cpu.h>
 #include <mcube/limits.h>
 #include <mcube/sched.h>
-#include <mcube/thread.h>
 #include <mcube/ascii.h>
 #include <mcube/shell.h>
 #include <mcube/linkage.h>
+#include <mcube/mcubestd.h>
 
 /* alphabetical order */
 #include <mcube/attribute.h>
@@ -39,7 +39,6 @@
 #include <mcube/device.h>
 #include <mcube/errno-base.h>
 #include <mcube/errno.h>
-#include <mcube/mcubestd.h>
 #include <mcube/font.h>
 #include <mcube/fs.h>
 #include <mcube/genasm.h>
@@ -50,7 +49,6 @@
 #include <mcube/metric.h>
 #include <mcube/mm.h>
 #include <mcube/mt.h>
-#include <mcube/queue.h>
 #include <mcube/rand.h>
 #include <mcube/rwlock.h>
 #include <mcube/semaphore.h>
