@@ -5,6 +5,6 @@
  */
 #include <mcube/mcube.h>
 
-void arch_switch_to(struct task_struct *prev, struct task_struct *next)
+void arch_switch_to(struct thread_struct *prev, struct thread_struct *next)
 {
 }

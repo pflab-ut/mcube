@@ -91,8 +91,9 @@ def do_testconfig(cinfo, a, b, c, d, e, f, g, h):
     # fw = open(PATH + str(index) + "_make_configure.log", "w")
     # fw.write(stdout.decode() + "\n" + stderr.decode())
     # fw.close()
-      
 
+# nested for loop    
+"""
 #for a in range(1, cinfo[0].num-1):
 #for a in range(3, cinfo[0].num):
 for a in range(0, cinfo[0].num):
@@ -104,6 +105,22 @@ for a in range(0, cinfo[0].num):
             for g in range(0, cinfo[6].num):
               for h in range(0, cinfo[7].num):
                 do_testconfig(cinfo, a, b, c, d, e, f, g, h)
+"""
+
+# recursive for loop
+val = [0, 0, 0, 0, 0, 0, 0, 0]
+
+def recursive_for_loop(index, depth):
+  global val
+  for val[index] in range(0, cinfo[index].num):
+    if depth > 0:
+      recursive_for_loop(index + 1, depth - 1)
+    else:
+      print(val[0], val[1], val[2], val[3], val[4], val[5], val[6], val[7])
+      do_testconfig(cinfo, val[0], val[1], val[2], val[3], val[4], val[5], val[6], val[7])
+      
+recursive_for_loop(0, 7)
+
 
 if message == "":
   message = "Build Test is successful."
