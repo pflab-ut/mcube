@@ -5,6 +5,10 @@
  */
 #include <mcube/mcube.h>
 
+/* NOTE: current_cpu == get_cpu_id() */
+unsigned long current_cpu = 0;
+
+
 void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg)
 {
 }

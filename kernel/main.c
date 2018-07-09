@@ -19,6 +19,10 @@ double CPU_NSEC_PER_CLOCK_MHZ;
 
 int main(int argc, char *argv[])
 {
+#if 0
+  for (;;)
+    ;
+#endif
   init_arch();
   //  putchar('b');
   //  console_write("hoge", 4, NULL);

@@ -5,12 +5,13 @@
  */
 #include <mcube/mcube.h>
 
+static unsigned long uart_wait_tsc = 0x10000;
 
 uint8_t uart_pol_getc(uint8_t ch)
 {
 	while (!(inb(COM1_LINE_STATUS) & UART_LINE_STATUS_RECV_DATA))
 		;
-	wait(0x10000);
+	wait(uart_wait_tsc);
 	return inb(COM1_START);
 }
 
@@ -18,14 +19,14 @@ void uart_pol_putc(uint8_t c, int32_t ch)
 {
 	while (!(inb(COM1_LINE_STATUS) & UART_LINE_STATUS_SEND_DATA_COMP))
     ;
-	wait(0x10000);
+	wait(uart_wait_tsc);
 	outb(c, COM1_START);
-	wait(0x10000);
+	wait(uart_wait_tsc);
 	/* wait until sending character */
 	while (!(inb(COM1_LINE_STATUS) &
 					 (UART_LINE_STATUS_SEND_DATA_EMPTY | UART_LINE_STATUS_BREAK_RECV)))
 		;
-	wait(0x10000);
+	wait(uart_wait_tsc);
 }
 
 

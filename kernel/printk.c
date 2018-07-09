@@ -314,13 +314,14 @@ skip:
 		case '0':
 			cf.pad = TRUE;
 			fmt++;
+      __attribute__ ((fallthrough));
 		case '1' ... '8':
 			cf.digit = *(fmt - 1) - '0';
 		default:
 			goto skip;
 		}
 	}
-	
+
 out:
 	va_end(ap);
 

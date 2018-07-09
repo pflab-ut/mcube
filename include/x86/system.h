@@ -94,6 +94,7 @@ static inline void store_eflags(uint32_t eflags)
 static inline void generate_software_interrupt(volatile uint32_t id)
 {
   /* TODO: implement */
+  asm volatile("int %0":: "r"(id));
 }
 
 

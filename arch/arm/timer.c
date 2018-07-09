@@ -42,7 +42,3 @@ void stop_timer(unsigned int ch)
 }
 
 
-void update_jiffies(void)
-{
-	sys_jiffies++;
-}

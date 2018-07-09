@@ -194,8 +194,8 @@ unsigned long strtoul(const char *cp, char **endp, int base)
       cp += 2;
 		}
   }
-  while (isxdigit(*cp) && (value = isdigit(*cp) ?
-														*cp - '0' : toupper(*cp)- 'A' + 10) < base) {
+  while (isxdigit(*cp)
+         && (value = isdigit(*cp) ? *cp - '0' : toupper(*cp)- 'A' + 10) < (unsigned long) base) {
 		//		printk("*cp = %c\n", *cp);
     result = result * base + value;
     cp++;

@@ -10,14 +10,14 @@
 #endif /* CONFIG_USER_TASK_PTHREAD */
 
 
-void kwait(uint64_t count)
+void sim_wait(uint64_t count)
 {
 	while (rdtsc() < count)
 		;	
 }
 
 
-void __attribute__((noreturn)) kexit(int status)
+void __attribute__((noreturn)) sim_exit(int status)
 {
 #if CONFIG_USER_TASK_PTHREAD
 	pthread_exit(NULL);
@@ -113,19 +113,5 @@ void __attribute__((noreturn)) run_user_thread(void)
   }
   halt();
   inf_loop();
-}
-
-
-void __attribute__((noreturn)) uexit(int status)
-{
-	fprintf(stderr, "_exit\n");
-	for (;;)
-		;
-}
-
-void uwait(uint64_t count)
-{
-	while (current_count() < count)
-		;
 }
 
