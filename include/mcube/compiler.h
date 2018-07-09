@@ -8,7 +8,13 @@
 
 #ifndef __ASSEMBLY__
 
+#if CONFIG_COMPILER_CLANG
+#include <mcube/compiler/compiler-clang.h>
+#elif CONFIG_COMPILER_GCC
 #include <mcube/compiler/compiler-gcc.h>
+#else
+#error "Unknown Compiler"
+#endif /* CONFIG_COMPILER_CLANG */
 
 #endif /* !__ASSEMBLY__ */
 

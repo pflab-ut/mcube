@@ -6,6 +6,7 @@
 #ifndef	__MCUBE_MCUBE_THREAD_H__
 #define	__MCUBE_MCUBE_THREAD_H__
 
+#define THREAD_SIZE PAGE_SIZE
 
 
 /* -- Thread State --

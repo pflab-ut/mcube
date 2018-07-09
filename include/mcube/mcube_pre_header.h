@@ -35,13 +35,10 @@
 #include <mcube/compiler.h>
 #include <mcube/console.h>
 #include <mcube/ctype.h>
-#include <mcube/curses.h>
 #include <mcube/device.h>
 #include <mcube/errno-base.h>
 #include <mcube/errno.h>
-#include <mcube/font.h>
 #include <mcube/fs.h>
-#include <mcube/genasm.h>
 #include <mcube/hardirq.h>
 #include <mcube/io.h>
 #include <mcube/irq.h>
@@ -53,7 +50,6 @@
 #include <mcube/rwlock.h>
 #include <mcube/semaphore.h>
 #include <mcube/seqlock.h>
-#include <mcube/stat.h>
 #include <mcube/stdalgo.h>
 #include <mcube/stdarg.h>
 #include <mcube/stdlib.h>

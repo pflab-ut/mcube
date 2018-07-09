@@ -301,53 +301,53 @@ static inline uint32_t find_last_bit(uint32_t *b, int nr)
 static inline void set_bit(volatile uint32_t *addr, int nr)
 {
 	int mask;
-  //	uint32_t flags;
+  uint32_t flags;
 
 	addr += nr >> 5;
 	mask = 1 << (nr & 0x1f);
-  //	save_local_irq(&flags);
+  save_local_irq(&flags);
 	//	PDEBUG("addr = %x mask = %x\n", addr, mask);
 	*addr |= mask;
-  //	restore_local_irq(&flags);
+  restore_local_irq(&flags);
 }
 
 
 static inline void clear_bit(volatile uint32_t *addr, int nr)
 {
 	int mask;
-  //	uint32_t flags;
+  uint32_t flags;
 
 	addr += nr >> 5;
 	mask = 1 << (nr & 0x1f);
-  //	save_local_irq(&flags);
+  save_local_irq(&flags);
 	//	PDEBUG("addr = %x mask = %x\n", addr, mask);
 	*addr &= ~mask;
-  //	restore_local_irq(&flags);
+  restore_local_irq(&flags);
 }
 
 static inline void change_bit(volatile uint32_t *addr, int nr)
 {
 	int mask;
-  //	uint32_t flags;
+  uint32_t flags;
 
 	addr += nr >> 5;
 	mask = 1 << (nr & 0x1f);
-  //	save_local_irq(&flags);
+  save_local_irq(&flags);
 	*addr ^= mask;
-  //	restore_local_irq(&flags);
+  restore_local_irq(&flags);
 }
 
 static inline int test_and_set_bit(volatile uint32_t *addr, int nr)
 {
 	int mask, retval;
-  //	uint32_t flags;
+  uint32_t flags;
 
 	addr += nr >> 5;
 	mask = 1 << (nr & 0x1f);
-  //	save_local_irq(&flags);
+  save_local_irq(&flags);
 	retval = (mask & *addr) != 0;
 	*addr |= mask;
-  //	restore_local_irq(&flags);
+  restore_local_irq(&flags);
 
 	return retval;
 }
@@ -355,14 +355,14 @@ static inline int test_and_set_bit(volatile uint32_t *addr, int nr)
 static inline int test_and_clear_bit(volatile uint32_t *addr, int nr)
 {
 	int mask, retval;
-  //	uint32_t flags;
+  uint32_t flags;
 
 	addr += nr >> 5;
 	mask = 1 << (nr & 0x1f);
-  //	save_local_irq(&flags);
+  save_local_irq(&flags);
 	retval = (mask & *addr) != 0;
 	*addr &= ~mask;
-  //	restore_local_irq(&flags);
+  restore_local_irq(&flags);
 
 	return retval;
 }
@@ -370,14 +370,14 @@ static inline int test_and_clear_bit(volatile uint32_t *addr, int nr)
 static inline int test_and_change_bit(volatile uint32_t *addr, int nr)
 {
 	int mask, retval;
-  //	uint32_t flags;
+  uint32_t flags;
 
 	addr += nr >> 5;
 	mask = 1 << (nr & 0x1f);
-  //	save_local_irq(&flags);
+  save_local_irq(&flags);
 	retval = (mask & *addr) != 0;
 	*addr ^= mask;
-  //	restore_local_irq(&flags);
+  restore_local_irq(&flags);
 
 	return retval;
 }

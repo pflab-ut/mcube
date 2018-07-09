@@ -18,15 +18,10 @@
 #define END(name)																\
 	.size name, .-name
 
-#define ENDPROC(name)		 \
-  .type name, %function; \
-  END(name)
 
-#define ALIGNARG(log2) (1 << log2)
 #define ASM_SIZE_DIRECTIVE(name) .size name,.-name;
 
 
-#define THREAD_SIZE PAGE_SIZE
 
 #if CONFIG_ARCH_X86
 #define asmlinkage __attribute__((regparm(0)))
@@ -34,9 +29,6 @@
 #define asmlinkage
 #endif
 
-#define cfi_adjust_cfa_offset(off)    .cfi_adjust_cfa_offset off
-
-#define HIDDEN_JUMPTARGET(name) .__GI_##name
 
 
 #endif /* __MCUBE_MCUBE_LINKAGE_H__ */

@@ -8,7 +8,6 @@ LDFLAGS	+= -lm -lpthread
 
 
 CFLAGS += -g -ggdb
-CFLAGS += -O2
 CFLAGS += -fno-strict-aliasing
 
 TARGET = mcube
@@ -28,11 +27,6 @@ else
   OBJCOPY = $(CROSS_PREFIX)objcopy
 endif
 
-
-
-ifeq ($(ARCH), x86_64)
-CFLAGS += -D__x86_64__ -m64
-endif
 
 CFLAGS += -D__LITTLE_ENDIAN__
 

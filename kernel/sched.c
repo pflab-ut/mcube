@@ -323,7 +323,7 @@ int run(unsigned long nr_threads)
     //    asm volatile("move %0, $sp" : "=r"(current_fp));
     //    printk("current_fp = 0x%x\n", current_fp);
     //    nop();
-    delay(1000);
+    //    delay(1000);
     //    wait_until_next_interrupt();
 	}
 	stop_timer(0);

@@ -314,7 +314,7 @@ skip:
 		case '0':
 			cf.pad = TRUE;
 			fmt++;
-      __attribute__ ((fallthrough));
+      FALLTHROUGH;
 		case '1' ... '8':
 			cf.digit = *(fmt - 1) - '0';
 		default:

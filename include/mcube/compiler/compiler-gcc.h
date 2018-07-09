@@ -50,5 +50,7 @@
 #endif
 #define __attribute_const__		__attribute__((__const__))
 
+#define FALLTHROUGH __attribute__((fallthrough))
+
 #endif /*	__MCUBE_MCUBE_COMPILER_COMPILER_GCC_H__ */
 
