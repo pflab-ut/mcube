@@ -17,7 +17,15 @@ reboot.
 - Python 3.6.5 (or higher)
 
 
+## Set up Build Environment
+
+Please execute the following command.
+```
+$ ./scripts/misc/setup_ubuntu18.04.sh
+```
+
 ## Set up Configuration
+
 Please edit "configure" file.
 Explanations of "configure" file is in "Kconfig".
 
