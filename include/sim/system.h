@@ -8,7 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-#define current_count() rdtsc()
 
 static inline void generate_software_interrupt(volatile uint32_t id)
 {

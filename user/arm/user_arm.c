@@ -41,6 +41,30 @@ int user_thread_main(void)
 }
 
 
+void process(const char *array)
+{
+  while (1) {
+    printk("%s", array);
+    //    delay(100);
+  }
+}
+
+int user_ap_main(void)
+{
+  int ret;
+  ret = copy_process((unsigned long) &process, (unsigned long) "12345");
+  if (ret != 0) {
+    printk("Error while starting process1\n");
+    return 1;
+  }
+  ret = copy_process((unsigned long) &process, (unsigned long) "abcde");
+  if (ret != 0) {
+    printk("Error while starting process 2");
+    return 2;
+  }
+  return 0;
+}
+
 
 int user_arch_main(void)
 {

@@ -11,7 +11,6 @@
 
 #include <x86/addr.h>
 #include <x86/atomic.h>
-#include <x86/cache.h>
 #include <x86/dmac.h>
 #include <x86/dsctbl.h>
 #include <x86/hpet.h>

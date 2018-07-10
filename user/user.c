@@ -7,6 +7,14 @@
 
 extern int user_arch_main(void);
 
+int ap_main(void)
+{
+  printk("ap_main()\n");
+  for (;;)
+    ;
+  return 0;
+}
+
 
 int user_main(void)
 {

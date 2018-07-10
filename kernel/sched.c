@@ -328,7 +328,7 @@ int run(unsigned long nr_threads)
 	}
 	stop_timer(0);
 
-  //  printk("run() end\n");
+  printk("run() end\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
   //  printk("current_fp = 0x%x\n", current_fp);
   //  asm volatile("move %0, $sp" : "=r"(current_sp));

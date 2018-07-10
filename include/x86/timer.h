@@ -37,8 +37,9 @@ static inline unsigned long nsec2tsc(unsigned long nsec)
 static inline void delay(unsigned long us)
 {
   volatile unsigned long cur = rdtsc();
-  while (tsc2usec(rdtsc() - cur) < us)
+  while (tsc2usec(rdtsc() - cur) < us) {
     pause();
+  }
 }
 
 
@@ -58,48 +59,6 @@ extern unsigned long sys_tsc;
 extern unsigned long timer_count[NR_INTRA_KERNEL_CPUS];
 extern unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
 
-#else
-
-/* wait macro */
-.macro  wait time
-_wait:
-   pause
-	 subw $0x1, \time
-	 cmpw $0x0, \time
-	 jne _wait
-.endm
-
-.macro  wait2 time
-_wait2:
-   pause
-	 subw $0x1, \time
-	 cmpw $0x0, \time
-	 jne _wait2
-.endm
-
-.macro  wait3 time
-_wait3:
-   pause
-	 subw $0x1, \time
-	 cmpw $0x0, \time
-	 jne _wait3
-.endm
-
-.macro  wait4 time
-_wait4:
-   pause
-	 subw $0x1, \time
-	 cmpw $0x0, \time
-	 jne _wait4
-.endm
-
-.macro  wait5 time
-_wait5:
-   pause
-	 subw $0x1, \time
-	 cmpw $0x0, \time
-	 jne _wait5
-.endm
 
 #endif	/* !__ASSEMBLY__ */
 

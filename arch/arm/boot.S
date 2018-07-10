@@ -101,7 +101,7 @@ clear_bss:
   sub     x1, x1, x0
   bl      memzero
 begin_main: 
-  bl      kernel_main
+  bl      main
   b       hang               // should never come here
 
 ENTRY(hang)

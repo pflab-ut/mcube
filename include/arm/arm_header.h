@@ -9,10 +9,7 @@
 #include <arm/cpu.h>
 
 #include <arm/atomic.h>
-#include <arm/bitops.h>
-#include <arm/cache.h>
 #include <arm/dmac.h>
-#include <arm/io.h>
 #include <arm/irq.h>
 #include <arm/irqflags.h>
 #include <arm/machine.h>

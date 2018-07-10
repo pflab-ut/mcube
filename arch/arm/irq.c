@@ -91,8 +91,8 @@ static void handle_timer_interrupt(void)
   if (get_current_jiffies() >= sched_time) {
     printk("sched_time expires!!!!\n");
     sched_end = TRUE;
-      disable_timer_interrupt();
-      current_th[cpu] = &idle_th[cpu];
+    disable_timer_interrupt();
+    current_th[cpu] = &idle_th[cpu];
   } else {
     do_release();
     //    do_timer_tick();

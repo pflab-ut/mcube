@@ -9,7 +9,7 @@
 #ifndef __ASSEMBLY__
 #if	CONFIG_DEBUG
 
-extern uint32_t Debug;
+extern unsigned int Debug;
 
 /** The PDEBUG() macro. */
 #define PDEBUG(fmt, args...) do {										\

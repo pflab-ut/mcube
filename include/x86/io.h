@@ -59,6 +59,7 @@ extern void init_mouse(void);
 
 extern void set_cursor(uint16_t cur_pos);
 
+extern void init_console(void);
 
 extern fifo32_struct keycmd;
 extern uint32_t keycmd_buf[KEYCMD_BUFSIZE];
