@@ -8,9 +8,9 @@
 
 #ifndef __ASSEMBLY__
 
-static inline void generate_software_interrupt(volatile uint32_t id)
+static inline void generate_software_interrupt(volatile unsigned long id)
 {
-  /* TODO: implement */
+  svc(id);
 }
 
 static inline unsigned long get_current_el(void)

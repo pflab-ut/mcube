@@ -91,7 +91,7 @@ static inline void store_eflags(uint32_t eflags)
                "popfl" :: "r"(eflags));
 }
 
-static inline void generate_software_interrupt(volatile uint32_t id)
+static inline void generate_software_interrupt(volatile unsigned long id)
 {
   /* TODO: implement */
   asm volatile("int %0":: "r"(id));
