@@ -52,6 +52,5 @@
 #define IOAPIC_START 0xfec00000
 #define LAPIC_START 0xfee00000
 
-#define THREAD_STACK_ADDR(cpu, id) ((unsigned long) &stack[cpu][STACK_SIZE])
 
 #endif /* __MCUBE_X86_ADDR_H__ */

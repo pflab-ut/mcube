@@ -243,9 +243,14 @@ extern void init_ths(struct workload *w);
 
 extern void imprecise_main(struct thread_struct *th);
 
-extern unsigned char stack[NR_INTRA_KERNEL_CPUS][STACK_SIZE];
+extern unsigned char idle_stack[NR_INTRA_KERNEL_CPUS][STACK_SIZE];
+extern unsigned char stack[NR_THREADS][STACK_SIZE];
 
 extern void (*th_mains[NR_THREADS])(void);
+
+
+#define IDLE_THREAD_STACK_ADDR(cpu) ((unsigned long) &idle_stack[cpu][STACK_SIZE])
+#define THREAD_STACK_ADDR(id) ((unsigned long) &stack[id][0])
 
 
 

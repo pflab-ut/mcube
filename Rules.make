@@ -37,6 +37,7 @@ CFLAGS += -Iinclude -Wall
 CFLAGS += -O3
 CFLAGS += -nostdlib -fno-stack-protector -ffreestanding
 CFLAGS += -fno-builtin 
+CFLAGS += -fno-strict-aliasing
 
 SIZE = $(CROSS_PREFIX)size
 

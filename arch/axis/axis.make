@@ -31,9 +31,6 @@ endif
 #LDFLAGS += -Ttext=$(TEXT_ADDR)
 
 
-CFLAGS += -fno-strict-aliasing
-
-
 CFLAGS += -D__BIG_ENDIAN__
 
 ASMS = \

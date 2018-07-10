@@ -6,9 +6,7 @@
 
 LDFLAGS	+= -lm -lpthread
 
-
 CFLAGS += -g -ggdb
-CFLAGS += -fno-strict-aliasing
 
 TARGET = mcube
 
@@ -17,8 +15,8 @@ AS = $(CROSS_PREFIX)as
 
 ifeq ($(CC), clang)
   CROSS_PREFIX = llvm-
-#  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
-  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble-all -print-imm-hex
+  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
+#  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble-all -print-imm-hex
   OBJCOPY = $(CROSS_PREFIX)objcopy
 else
   CROSS_PREFIX = 

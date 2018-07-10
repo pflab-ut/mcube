@@ -10,15 +10,8 @@ struct thread_struct ths[NR_THREADS];
 /* idle should not be in the hash, becuase its const */
 static uint32_t th_id = FIRST_DYNAMIC_THREAD_ID;
 
-/**
- * @brief Kernel stack
- * CPUID=0: Address of stack pointer = kernel_stack + NR_INTRA_KERNEL_CPUS * STACK_SIZE
- * CPUID=1: Address of stack pointer = kernel_stack + (NR_INTRA_KERNEL_CPUS - 1) * STACK_SIZE
- * ...
- * CPUID=NR_INTRA_KERNEL_CPUS-1: Address of stack pointer = kernel_stack + STACK_SIZE
- */
-unsigned char stack[NR_INTRA_KERNEL_CPUS][STACK_SIZE];
-
+unsigned char PAGE_ALIGNMENT idle_stack[NR_INTRA_KERNEL_CPUS][STACK_SIZE];
+unsigned char PAGE_ALIGNMENT stack[NR_THREADS][STACK_SIZE];
 
 int get_tq_util(struct thread_struct *head, unsigned long cpu)
 {
@@ -55,7 +48,6 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
 {
 	unsigned long id;
 	unsigned long index;
-  unsigned long cpu = get_cpu_id();
 	id = alloc_thread_id();
   index = id - 1;
 	if (index < NR_THREADS) {
@@ -73,7 +65,7 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
 		ths[index].sched.deadline = attr->relative_deadline;
 		ths[index].sched.wcet = attr->wcet;
 
-    ths[index].stack_top = THREAD_STACK_ADDR(cpu, ths[index].id);
+    ths[index].stack_top = THREAD_STACK_ADDR(ths[index].id);
     ths[index].run_func = run_user_thread;
     ths[index].run_user_func = func;
     

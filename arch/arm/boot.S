@@ -7,13 +7,14 @@
   .section ".text.boot"
 ENTRY(_start)
   // Setup the stack with CPU ID.
-  // Stack Value is 0x00800000 - CPU_ID * STACK_SIZE
 initialize_stack:  
   get_cpu_id
   mov x1, #STACK_SIZE
   mul x0, x0, x1
-  mov sp, #STACK_ADDR
-  sub sp, sp, x0
+  ldr x1, =idle_stack
+  add x2, x0, x1
+  mov sp, x2
+  
 initialize_vector_addresses_el3_el2_el1:
   ldr x0, =vector
   msr vbar_el3, x0
@@ -84,12 +85,14 @@ change_el1_to_el0:
 el0_entry:  
 #endif
   
-start_el1:  
+start_el1:
+  // set up stack in el1
   get_cpu_id
   mov x1, #STACK_SIZE
   mul x0, x0, x1
-  mov sp, #STACK_ADDR
-  sub sp, sp, x0
+  ldr x1, =idle_stack
+  add x2, x0, x1
+  mov sp, x2
   
 clear_bss:  
   cbnz x0, begin_main

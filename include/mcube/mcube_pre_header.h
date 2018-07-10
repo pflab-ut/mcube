@@ -20,8 +20,6 @@
 #include <mcube/cpu.h>
 #include <mcube/limits.h>
 #include <mcube/sched.h>
-#include <mcube/ascii.h>
-#include <mcube/shell.h>
 #include <mcube/linkage.h>
 #include <mcube/mcubestd.h>
 
@@ -33,7 +31,6 @@
 #include <mcube/byteops.h>
 #include <mcube/cache.h>
 #include <mcube/compiler.h>
-#include <mcube/console.h>
 #include <mcube/ctype.h>
 #include <mcube/device.h>
 #include <mcube/errno-base.h>

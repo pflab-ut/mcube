@@ -14,6 +14,9 @@
 
 #ifndef	__ASSEMBLY__
 
+#define PAGE_ALIGNMENT __attribute__((aligned(PAGE_SIZE)))
+
+
 extern unsigned long LOW_MEMORY;
 extern unsigned long HIGH_MEMORY;
 

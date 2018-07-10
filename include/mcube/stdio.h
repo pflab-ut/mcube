@@ -31,6 +31,8 @@ extern int puts(const char *s);
 
 extern int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 
+extern ssize_t console_write(const void *input_data, size_t length, void *devdata);
+  
 #endif /* CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */

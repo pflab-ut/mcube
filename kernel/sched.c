@@ -299,7 +299,7 @@ int run(unsigned long nr_threads)
   for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
     current_th[i] = prev_th[i] = &idle_th[i];
     current_th[i]->id = 0;
-    current_th[i]->stack_top = THREAD_STACK_ADDR(i, 0);
+    current_th[i]->stack_top = IDLE_THREAD_STACK_ADDR(i);
     printk("current_th[%d]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
   }
   //		printk("current_th[%d] = %x\n", i, current_th[i]);

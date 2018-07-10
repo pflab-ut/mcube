@@ -8,12 +8,14 @@
 	.section	.text
   .globl  __begin
   .ent    __begin
+  .globl idle_stack
 __begin:
 ENTRY(_start)
 	.set 	noreorder
 	la		$gp, _gp
 //	la		$sp, THREAD_STACK_ADDR(0, 0)
-	la		$sp, (MEMORY_BASE + MEMORY_SIZE) 
+//	la		$sp, (MEMORY_BASE + MEMORY_SIZE)
+	la		$sp, idle_stack + STACK_SIZE
 //	move		$fp, $sp
 //	la		$sp, 0x00010000
 //  addi  $t0, $0, 'Z'

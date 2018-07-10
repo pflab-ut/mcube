@@ -8,8 +8,8 @@
 TEXT_ADDR = 0x00007c00
 #TEXT_ADDR = 0x00017c00
 
-DATA_ADDR = 0x00010000
-BSS_ADDR = 0x00018000
+#DATA_ADDR = 0x00010000
+#BSS_ADDR = 0x00018000
 
 #LDFLAGS +=
 
@@ -43,10 +43,6 @@ else
   LDFLAGS += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000 -T scripts/linker/x86-elf.ld
 endif
 
-
-# NOTE: -O1 or more optimize option must be set
-#CFLAGS += -O2
-#CFLAGS += -O3
 
 BOOT_TARGET = build/arch/x86/boot.sys
 LOADER_TARGET = build/arch/x86/loader.sys

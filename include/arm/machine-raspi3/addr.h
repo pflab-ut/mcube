@@ -20,12 +20,5 @@
 #define GENERIC_TIMER_BASE 0x40000000
 
 
-
-#ifndef __ASSEMBLY__
-
-#define THREAD_STACK_ADDR(cpu, id) ((unsigned long) &stack[cpu][STACK_SIZE])
-
-#endif /* !__ASSEMBLY__ */
-
 #endif /* __MCUBE_ARM_MACHINE_RASPI3_ADDR_H__ */
 

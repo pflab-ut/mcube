@@ -15,9 +15,6 @@
 /** Network base address. */
 #define NET_BASE  0x80000000
 
-/* NOTE: SPM_SIZE is defined by "configure". */
-
-
 /** System register size. */
 #define SYS_SIZE  0x20000000
 /** DMAC size. */
@@ -29,10 +26,7 @@
 /** Bank size. */
 #define BANK_SIZE 0x00000800 /* 2KB (maybe) */
 
-/** Memory offset per CPU. */
-#define MEMORY_OFFSET_PER_CPU (MEMORY_SIZE / NR_INTER_KERNEL_CPUS)
 
-#define THREAD_STACK_ADDR(cpu, id) (MEMORY_BASE + MEMORY_SIZE - (cpu) * MEMORY_OFFSET_PER_CPU - (id) * STACK_SIZE)
 
 
 #endif /* __MCUBE_AXIS_ADDR_H__ */

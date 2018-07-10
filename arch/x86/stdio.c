@@ -5,11 +5,6 @@
  */
 #include <mcube/mcube.h>
 
-#define TAB_SPACE 2
-
-struct cursor_struct cursor = {
-	.x = 0, .y = 0};
-
 
 #if CONFIG_PRINTK2CONSOLE
 int getchar(void)
@@ -142,84 +137,4 @@ ssize_t console_write(const void *input_data, size_t length, void *devdata)
 	return 0;
 }
 
-
-void do_fifo32(void)
-{
-	uint32_t data;
-	int keycmd_wait = -1;
-	uint32_t key_shift = 0;
-	uint32_t key_leds = (*((uint8_t *) LEDS_ADDR) >> 4) & 7;
-	char s[FIFO32_BUFSIZE];
-
-	print_shell();
-	while (1) {
-		if (get_fifo32_status(&keycmd) > 0 && keycmd_wait < 0) {
-			keycmd_wait = get_fifo32(&keycmd);
-			wait_KBC();
-			outb(keycmd_wait, PORT_KEYDATA);
-		}
-		//cli();
-		if (get_fifo32_status(&fifo32) == 0) {
-		} else {
-			data = get_fifo32(&fifo32);
-			//sti();
-			if (KEYDATA_OFFSET <= data && data < KEYDATA_OFFSET + NR_KEYS) {
-				if (data < KEYTABLE_SIZE + KEYDATA_OFFSET) {
-					if (key_shift == 0) {
-						s[0] = keytable0[data-KEYDATA_OFFSET];
-					} else {
-						s[0] = keytable1[data-KEYDATA_OFFSET];
-					}
-				} else {
-					s[0] = 0;
-				}
-				if ('A' <= s[0] && s[0] <= 'Z') {
-					if (((key_leds & CAPS_LOCK) == 0 && key_shift == 0) ||
-							((key_leds & CAPS_LOCK) != 0 && key_shift != 0)) {
-						/* upper to lower */
-						s[0] += 0x20;
-					}
-				}
-				if (s[0] != 0) {
-					//					printk("data = %x %c\n", s[0] - KEYDATA_OFFSET, s[0] - KEYDATA_OFFSET);
-					printk("%c", s[0] - KEYDATA_OFFSET);
-					// output data to shell's buffer
-					//					put_fifo32(s[0] + KEYDATA_OFFSET, &keyfifo);
-				}
-				switch(data) {
-				case KEYDATA_OFFSET + 0x2a:
-					key_shift |= LEFT_SHIFT;
-					break;
-				case KEYDATA_OFFSET + 0x36:
-					key_shift |= RIGHT_SHIFT;
-					break;
-				case KEYDATA_OFFSET + 0xaa:
-					key_shift &= ~LEFT_SHIFT;
-					break;
-				case KEYDATA_OFFSET + 0xb6:
-					key_shift &= ~RIGHT_SHIFT;
-					break;
-				case KEYDATA_OFFSET + 0x3a:
-					key_leds ^= CAPS_LOCK;
-					put_fifo32(KEYCMD_LED, &keycmd);
-					put_fifo32(key_leds, &keycmd);
-					break;
-				case KEYDATA_OFFSET + 0x45:
-					key_leds ^= NUM_LOCK;
-					put_fifo32(KEYCMD_LED, &keycmd);
-					put_fifo32(key_leds, &keycmd);
-					break;
-				case KEYDATA_OFFSET + 0xfa:
-					keycmd_wait = -1;
-					break;
-				case KEYDATA_OFFSET + 0xfe:
-					wait_KBC();
-					outb(keycmd_wait, PORT_KEYDATA);
-					break;
-				}
-			}
-		}
-		halt();
-	}	
-}
 
