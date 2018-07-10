@@ -58,7 +58,6 @@
 #include <mcube/uart.h>
 #include <mcube/usb.h>
 #include <mcube/user.h>
-#include <mcube/version.h>
 
 
 #endif /* __MCUBE_MCUBE_MCUBE_PRE_HEADER_H__ */

@@ -58,22 +58,7 @@ typedef struct runqueue runqueue;
 
 #define NR_CPU_BITMAPS (CEIL(NR_INTRA_KERNEL_CPUS, 32))
 
-/**
- * @brief Cpurunqueue information
- *
- * The cpurunqueue structure has cpurunqueue information.
- */
-struct cpurunqueue {
-	/** Runqueue. */
-  struct runqueue rq;
-	/** Bitmap to check if processor is idle. */
-  uint32_t idlebitmap[NR_CPU_BITMAPS];
-};
-
-typedef struct cpurunqueue cpurunqueue;
-
 extern runqueue run_tq[NR_INTRA_KERNEL_CPUS];
-extern struct cpurunqueue cpu_run_tq;
 
 /* partitioned scheduling */
 extern unsigned long nr_ptasks[NR_INTRA_KERNEL_CPUS];
@@ -82,8 +67,6 @@ extern void enqueue_rq_head(struct runqueue *rq, struct thread_struct *th);
 extern void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th);
 extern void enqueue_rq(struct runqueue *rq, struct thread_struct *th);
 extern void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th);
-extern void enqueue_cpu_rq(struct cpurunqueue *rq, struct thread_struct *th, int cpuindex);
-extern void enqueue_cpu_rq_head(struct cpurunqueue *rq, struct thread_struct *th, int cpuindex);
 
 
 extern struct thread_struct *compare_thread(struct thread_struct *th,
@@ -99,7 +82,6 @@ extern struct thread_struct *dequeue_thread(struct thread_struct *head, struct t
 extern struct thread_struct *dequeue_deadline_thread(struct thread_struct *head, struct thread_struct *th);
 extern void dequeue_rq(struct runqueue *rq, struct thread_struct *th);
 extern void dequeue_rq_queue(struct runqueue *rq, struct thread_struct *th);
-extern void dequeue_cpu_rq(struct cpurunqueue *cpu_rq, struct thread_struct *th);
 
 
 extern struct thread_struct *pick_next_task(void);
