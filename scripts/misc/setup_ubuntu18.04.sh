@@ -8,7 +8,7 @@
 prefix="sudo apt-get -y install"
 
 # compiler
-$prefix ccache gcc clang gcc-aarch64-linux-gnu
+$prefix ccache gcc clang gcc-aarch64-linux-gnu nasm
 
 # sendmail
 $prefix sendmail

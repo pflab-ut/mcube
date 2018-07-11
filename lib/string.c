@@ -276,8 +276,11 @@ void *memsetw(void *s, int c, size_t n)
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
-  while (n--) {
+  /* mask lower 1-bit */
+  n &= ~0x1;
+  while (n) {
     *xs++ = c;
+    n -= 2;
   }
   return s;
 
@@ -301,8 +304,11 @@ void *memsetd(void *s, int c, size_t n)
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
-  while (n--) {
+  /* mask lower 2-bit */
+  n &= ~0x3;
+  while (n) {
     *xs++ = c;
+    n -= 4;
   }
   return s;
 }
