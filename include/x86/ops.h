@@ -29,17 +29,17 @@ static inline uint32_t inl(uint32_t port)
 	return value;
 }
 
-static inline void outb(uint8_t value, uint16_t port)
+static inline void outb(uint16_t port, uint8_t value)
 {
-	asm volatile("outb %0, %1" :: "a"(value), "dN"(port));
+  asm volatile("outb %0, %1" :: "a"(value), "dN"(port));
 }
 
-static inline void outw(uint16_t value, uint16_t port)
+static inline void outw(uint16_t port, uint16_t value)
 {
 	asm volatile("outw %0, %1" :: "a" (value), "dN" (port));
 }
 
-static inline void outl(uint32_t value, uint32_t port)
+static inline void outl(uint32_t port, uint32_t value)
 {
 	asm volatile("outl %0, %1" :: "a" (value), "dN" (port));
 }

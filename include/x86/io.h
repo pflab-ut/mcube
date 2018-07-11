@@ -26,6 +26,8 @@ movb $0x0e, %ah
 #else
 
 
+  
+
 /* keyboard and mouse */
 #define PORT_KEYDATA 0x0060
 #define PORT_KEYSTATUS 0x0064
@@ -61,6 +63,7 @@ extern void set_cursor(uint16_t cur_pos);
 
 extern void init_console(void);
 
+
 extern fifo32_struct keycmd;
 extern uint32_t keycmd_buf[KEYCMD_BUFSIZE];
 
@@ -88,6 +91,9 @@ enum make_break {
 };
 
 typedef enum make_break make_break;
+
+
+
 
 #endif
 

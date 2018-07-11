@@ -7,6 +7,7 @@
 
 extern int user_arch_main(void);
 
+#if !CONFIG_ARCH_X86
 int ap_main(void)
 {
   printk("ap_main()\n");
@@ -14,6 +15,7 @@ int ap_main(void)
     ;
   return 0;
 }
+#endif /* !CONFIG_ARCH_X86 */
 
 
 int user_main(void)

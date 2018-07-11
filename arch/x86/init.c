@@ -6,10 +6,16 @@
 #include <mcube/mcube.h>
 
 
+
 void init_arch(void)
 {
+#if 0
+  //  init_tty();
+  
+#else
   //	init_shell();
   init_uart();
+  printk("hoge\n");
 	init_console();
 
 	init_key();
@@ -34,12 +40,11 @@ void init_arch(void)
 	init_apic();
   init_timer(0);
 
-#if CONFIG_ENABLE_CACHE
 	init_cache(); 
-#endif /* CONFIG_ENABLE_CACHE */
 
 	/* enable interrupt */
 	sti();
+#endif
 }
 
 

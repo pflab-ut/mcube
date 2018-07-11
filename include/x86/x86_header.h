@@ -28,6 +28,7 @@
 #include <x86/system.h>
 #include <x86/thread.h>
 #include <x86/timer.h>
+#include <x86/tty.h>
 #include <x86/uart.h>
 
 

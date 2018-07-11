@@ -44,10 +44,10 @@ void wait_KBC(void)
 
 void set_cursor(uint16_t cur_pos)
 {
-	outb(15, 0x03d4);
-	outb(cur_pos, 0x03d5);
-	outb(14, 0x03d4);
-	outb(cur_pos >> 8, 0x03d5);
+	outb(0x03d4, 15);
+	outb(0x03d5, cur_pos);
+	outb(0x03d4, 14);
+	outb(0x03d5, cur_pos >> 8);
 }
 
 
@@ -75,7 +75,7 @@ irqreturn_t handle_key(int irq, void *dummy)
 	}
 #endif
 
-	outb(clear_irq(KEY_IRQ), PIC0_OCW2);
+	outb(PIC0_OCW2, clear_irq(KEY_IRQ));
 	return 0;
 }
 
@@ -88,12 +88,12 @@ static struct irqaction key_irq = {
 
 void enable_key(void)
 {
-	outb(inb(PIC0_IMR) & unmask_irq(KEY_IRQ), PIC0_IMR);
+	outb(PIC0_IMR, inb(PIC0_IMR) & unmask_irq(KEY_IRQ));
 }
 
 void disable_key(void)
 {
-	outb(inb(PIC0_IMR) | mask_irq(KEY_IRQ), PIC0_IMR);
+	outb(PIC0_IMR, inb(PIC0_IMR) | mask_irq(KEY_IRQ));
 }
 
 void init_key(void)

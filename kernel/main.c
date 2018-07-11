@@ -20,10 +20,6 @@ static unsigned int is_initialized = FALSE;
 
 int main(int argc, char *argv[])
 {
-#if 0
-  for (;;)
-    ;
-#endif
   if (get_cpu_id() == 0) {
     init_arch();
     //  putchar('b');

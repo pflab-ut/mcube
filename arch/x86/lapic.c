@@ -35,11 +35,6 @@ irqreturn_t handle_timer_tick(int irq, void *dummy)
 #endif
 	//	printk("handle_LAPIC_timer_tick(): current_th[%d]->id = %llu\n", cpu, current_th[cpu]->id);
 
-#if CONFIG_ASSIGN_GLOBAL
-	if (cpu == 0 && sys_jiffies == 0 && exec_jiffies == 0) {
-		assign_global();
-	}
-#endif /* CONFIG_ASSIGN_GLOBAL */
 
 #if 1
   if (sched_time <= sys_jiffies) {

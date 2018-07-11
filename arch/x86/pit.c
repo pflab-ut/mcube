@@ -24,7 +24,7 @@ irqreturn_t handle_pit_timer_tick(int irq, void *dummy)
     return IRQ_HANDLED;
   } else {
 		/* clear IRQ bit to accept new interrupt */
-		outb(clear_irq(PIT_IRQ), PIC0_OCW2);
+		outb(PIC0_OCW2, clear_irq(PIT_IRQ));
 	}
 #endif
 
@@ -54,11 +54,11 @@ void init_pit_timer(unsigned long tick_us)
 	//	uint16_t cnt = 65535;
 	stop_pit_timer(0);
 	/* change interrupt period */
-	outb(0x34, PIT_CTRL);
+	outb(PIT_CTRL, 0x34);
 	/* lower 8bit of interrupt period */
-	outb(cnt & 0xff, PIT_CNT0);
+	outb(PIT_CNT0, cnt & 0xff);
 	/* upper 8bit of interrupt period */
-	outb(cnt >> 8, PIT_CNT0);
+	outb(PIT_CNT0, cnt >> 8);
 
 #if 0
 	set_idsc(idt_start + IRQ_OFFSET + PIT_IRQ, (uint32_t) &common_interrupt,
@@ -70,14 +70,14 @@ void init_pit_timer(unsigned long tick_us)
 void start_pit_timer(unsigned int ch)
 {
 	/* enable IRQ0 */
-	outb(inb(PIC0_IMR) & unmask_irq(PIT_IRQ), PIC0_IMR);
+	outb(PIC0_IMR, inb(PIC0_IMR) & unmask_irq(PIT_IRQ));
 }
 
 void stop_pit_timer(unsigned int ch)
 {
 	/* disable IRQ0 */
-	outb(inb(PIC0_IMR) | mask_irq(PIT_IRQ), PIC0_IMR);
+	outb(PIC0_IMR, inb(PIC0_IMR) | mask_irq(PIT_IRQ));
 	/* clear PIT flag */
-	outb(clear_irq(PIT_IRQ), PIC0_OCW2);
+	outb(PIC0_OCW2, clear_irq(PIT_IRQ));
 }
 

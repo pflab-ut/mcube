@@ -113,7 +113,7 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 #if 0
 	/* master 8259 */
 	/* set ISR */
-	outb(IS_OCW3 | OCW3_ISR, PIC0_OCW3);
+	outb(PIC0_OCW3, IS_OCW3 | OCW3_ISR);
 	/* read ISR */
 	irq = inb(PIC0_ISR);
 	if (irq) {
@@ -128,7 +128,7 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 	
 	/* slave 8259 */
 	/* set ISR */
-	outb(IS_OCW3 | OCW3_ISR, PIC1_OCW3);
+	outb(PIC1_OCW3, IS_OCW3 | OCW3_ISR);
 	/* read ISR */
 	irq = inb(PIC1_ISR);
 	if (irq) {
@@ -180,30 +180,30 @@ void init_IRQ(void)
 {
   printk("init_IRQ()\n");
 	/* disable PIC0 interrupt */
-	outb(OCW1_DISABLE_ALL_IRQS, PIC0_IMR);
+	outb(PIC0_IMR, OCW1_DISABLE_ALL_IRQS);
 	/* disable PIC1 interrupt */
-	outb(OCW1_DISABLE_ALL_IRQS, PIC1_IMR);
+	outb(PIC1_IMR, OCW1_DISABLE_ALL_IRQS);
 
 	/* edge trigger mode */
-	outb(ICW1_EDGE_TRIGGER, PIC0_ICW1);
+	outb(PIC0_ICW1, ICW1_EDGE_TRIGGER);
 	/* handle IRQ0-7 to INT20-27 */
-	outb(IRQ_OFFSET, PIC0_ICW2);
+	outb(PIC0_ICW2, IRQ_OFFSET);
 	/* connect IRQ2 to PIC1 */
-	outb(0x1 << SLAVE_IRQ, PIC0_ICW3);
+	outb(PIC0_ICW3, 0x1 << SLAVE_IRQ);
 	/* non buffer mode */
-	outb(ICW4_NON_BUFFER, PIC0_ICW4);
+	outb(PIC0_ICW4, ICW4_NON_BUFFER);
 
 	/* edge trigger mode */
-	outb(ICW1_EDGE_TRIGGER, PIC1_ICW1);
+	outb(PIC1_ICW1, ICW1_EDGE_TRIGGER);
 	/* handle IRQ8-15 to INT28-2f */
-	outb(IRQ_OFFSET + NR_MASTER_IRQS, PIC1_ICW2);
+	outb(PIC1_ICW2, IRQ_OFFSET + NR_MASTER_IRQS);
 	/* connect IRQ2 to PIC1 */
-	outb(SLAVE_IRQ, PIC1_ICW3);
+	outb(PIC1_ICW3, SLAVE_IRQ);
 	/* non buffer mode */
-	outb(ICW4_NON_BUFFER, PIC1_ICW4);
+	outb(PIC1_ICW4, ICW4_NON_BUFFER);
 	
 	/* disable all interrupts in PIC0 */
-	outb(OCW1_DISABLE_ALL_IRQS, PIC0_IMR);
+	outb(PIC0_IMR, OCW1_DISABLE_ALL_IRQS);
 	/* disable all interrupts in PIC1 */
-	outb(OCW1_DISABLE_ALL_IRQS, PIC1_IMR);
+	outb(PIC1_IMR, OCW1_DISABLE_ALL_IRQS);
 }

@@ -87,3 +87,5 @@ SRCS += \
  $(TOP_DIR)/arch/x86/pit.c \
 	$(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_x86.c \
+
+#$(TOP_DIR)/arch/x86/tty.c \
