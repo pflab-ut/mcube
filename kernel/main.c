@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     exit_arch();
     printk("main()4\n");
   } else {
-    /* wait until */
+    /* wait until init_arch() is finished. */
     while (is_initialized == FALSE) {
     }
     /* do application processor's specific code. */

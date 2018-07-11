@@ -15,6 +15,7 @@ int getchar(void)
 int putchar(int c)
 {
   tty_printc(TTY_ID, c);
+  return c;
 }
 
 #elif CONFIG_PRINTK2UART

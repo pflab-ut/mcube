@@ -236,7 +236,7 @@ char *strchr(const char *s, int c)
 
 /**
  * The memset() function fills the first @c n bytes of the memory area pointed to
- * by @c s with the constant byte @c c.
+ * by @c s with the constant byte @c c (8-bit value).
  * @param s is a pointer of @c void.
  * @param c is an integer to fill the memory area.
  * @param n is the number of bytes filled by @c c.
@@ -246,9 +246,58 @@ void *memset(void *s, int c, size_t n)
 {
   /* NOTE: volatile is required for -O3 option of GCC. */
 #if CONFIG_COMPILER_GCC
-  volatile char *xs = s;
+  volatile uint8_t *xs = s;
 #elif CONFIG_COMPILER_CLANG
-  char *xs = s;
+  uint8_t *xs = s;
+#else
+#error "Unknown Compiler"
+#endif /* CONFIG_COMPILER_GCC */
+  while (n--) {
+    *xs++ = c;
+  }
+  return s;
+}
+
+/**
+ * The memsetw() function fills the first @c n bytes of the memory area pointed to
+ * by @c s with the constant byte @c c (16-bit value).
+ * @param s is a pointer of @c void.
+ * @param c is an integer to fill the memory area.
+ * @param n is the number of bytes filled by @c c.
+ * @return Pointer to the memory area @c s.
+ */
+void *memsetw(void *s, int c, size_t n)
+{
+  /* NOTE: volatile is required for -O3 option of GCC. */
+#if CONFIG_COMPILER_GCC
+  volatile uint16_t *xs = s;
+#elif CONFIG_COMPILER_CLANG
+  uint16_t *xs = s;
+#else
+#error "Unknown Compiler"
+#endif /* CONFIG_COMPILER_GCC */
+  while (n--) {
+    *xs++ = c;
+  }
+  return s;
+
+}
+
+/**
+ * The memsetd() function fills the first @c n bytes of the memory area pointed to
+ * by @c s with the constant byte @c c (32-bit value).
+ * @param s is a pointer of @c void.
+ * @param c is an integer to fill the memory area.
+ * @param n is the number of bytes filled by @c c.
+ * @return Pointer to the memory area @c s.
+ */
+void *memsetd(void *s, int c, size_t n)
+{
+  /* NOTE: volatile is required for -O3 option of GCC. */
+#if CONFIG_COMPILER_GCC
+  volatile uint32_t *xs = s;
+#elif CONFIG_COMPILER_CLANG
+  uint32_t *xs = s;
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
