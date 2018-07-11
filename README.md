@@ -3,21 +3,20 @@ Operating System Supporting Dynamically Switchable Kernel Models
 
 ## Description
 Mcube Kernel is an operating system for Micro/Monotlithic/MultiKernels.
-Dynamically switchable kernel models avoid unnecessary recompile and
+Dynamically switchable kernel models can avoid unnecessary recompile and
 reboot.
 
 ![Mcube Kernel](doc/fig/mcube.jpg "Mcube Kernel")
 
-
-## Supporting ISAs for Cross Development (Ubuntu 18.04 LTS)
-- LLVM-6.0.0/GCC-7.3.0 for X86, ARM, and SIM (user-level) ISAs (or later)
+## Supporting Compilers and ISAs
+- LLVM-6.0.0/GCC-7.3.0 (or later) for X86, ARM, and SIM (user-level) ISAs
 - LLVM-6.0.0/GCC-4.8.4 Extension for AXIS ISA
-  - LLVM's ISA name is MAXIS (download from https://github.com/pflab-ut/llvm)
+  - LLVM's ISA name is MAXIS (can be downloaded from https://github.com/pflab-ut/llvm)
   - GCC's ISA name is DOM (not open for public)
-- Python 3.6.5 (or higher)
+- Python 3.6.5 (or later)
 
 
-## Set up Build Environment
+## Set up Build Environment (Ubuntu 18.04 LTS)
 
 Please execute the following command (root privilege required).
 ```
