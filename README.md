@@ -26,7 +26,7 @@ $ make setup
 ## Set up Configuration
 
 Please edit "configure" file.
-Explanations of "configure" file is in "Kconfig".
+Details of "configure" file are explained in "Kconfig".
 
 
 ## How to Build
