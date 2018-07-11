@@ -6,16 +6,18 @@
 #include <mcube/mcube.h>
 
 
-
 void init_arch(void)
 {
-#if 0
-  //  init_tty();
+#if 1
+  init_tty();
+  tty_print(0, "hoge\n");
+  tty_print(0, "hehe\n");
   
+  for (;;)
+    ;
 #else
   //	init_shell();
   init_uart();
-  printk("hoge\n");
 	init_console();
 
 	init_key();

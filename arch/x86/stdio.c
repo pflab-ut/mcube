@@ -130,10 +130,14 @@ int puts(const char *s)
 
 ssize_t console_write(const void *input_data, size_t length, void *devdata)
 {
+#if 1
+  tty_print(0, input_data);
+#else
 	int i;
 	for (i = 0; i < length; i++) {
 		putchar(((uint8_t *) input_data)[i]);
 	}
+#endif
 	return 0;
 }
 

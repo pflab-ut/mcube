@@ -53,14 +53,14 @@ update_buffer_offset()
     // buffer.
     int offset = (int)(active_tty->tlcorner - (uint16_t *)SCREEN_BUFFER);
 
-    uint8_t save = io_inb(CRTC_PORT_CMD);
+    uint8_t save = inb(CRTC_PORT_CMD);
 
-    io_outb(CRTC_PORT_CMD, CRTC_CMD_STARTADDR_LO);
-    io_outb(CRTC_PORT_DATA, (uint8_t)offset);
-    io_outb(CRTC_PORT_CMD, CRTC_CMD_STARTADDR_HI);
-    io_outb(CRTC_PORT_DATA, (uint8_t)(offset >> 8));
+    outb(CRTC_PORT_CMD, CRTC_CMD_STARTADDR_LO);
+    outb(CRTC_PORT_DATA, (uint8_t)offset);
+    outb(CRTC_PORT_CMD, CRTC_CMD_STARTADDR_HI);
+    outb(CRTC_PORT_DATA, (uint8_t)(offset >> 8));
 
-    io_outb(CRTC_PORT_CMD, save);
+    outb(CRTC_PORT_CMD, save);
 }
 
 static void
@@ -70,18 +70,17 @@ update_cursor()
     int offset = active_tty->ybuf * SCREEN_COLS + active_tty->pos.x +
                  (int)(active_tty->screen - (uint16_t *)SCREEN_BUFFER);
 
-    uint8_t save = io_inb(CRTC_PORT_CMD);
+    uint8_t save = inb(CRTC_PORT_CMD);
 
-    io_outb(CRTC_PORT_CMD, CRTC_CMD_CURSORADDR_LO);
-    io_outb(CRTC_PORT_DATA, (uint8_t)offset);
-    io_outb(CRTC_PORT_CMD, CRTC_CMD_CURSORADDR_HI);
-    io_outb(CRTC_PORT_DATA, (uint8_t)(offset >> 8));
+    outb(CRTC_PORT_CMD, CRTC_CMD_CURSORADDR_LO);
+    outb(CRTC_PORT_DATA, (uint8_t)offset);
+    outb(CRTC_PORT_CMD, CRTC_CMD_CURSORADDR_HI);
+    outb(CRTC_PORT_DATA, (uint8_t)(offset >> 8));
 
-    io_outb(CRTC_PORT_CMD, save);
+    outb(CRTC_PORT_CMD, save);
 }
 
-void
-tty_init()
+void init_tty()
 {
     uint16_t *screenptr = (uint16_t *)SCREEN_BUFFER;
 
@@ -234,16 +233,16 @@ colorcode(char x, int orig)
 static void
 tty_printchar(tty_t *cons, const char **strptr)
 {
-    bool linefeed = false;
+  int linefeed = FALSE;
 
-    const char *str = *strptr;
-    char        ch  = *str;
+  const char *str = *strptr;
+  char        ch  = *str;
 
     // If the newline character is encountered, do a line feed + carriage
     // return.
     if (ch == '\n') {
         cons->pos.x = 0;
-        linefeed    = true;
+        linefeed    = TRUE;
     }
     // Handle color codes, e.g. "\033[#]".
     else if (ch == '\033') {
@@ -284,7 +283,7 @@ tty_printchar(tty_t *cons, const char **strptr)
         // If the right side of the screen was reached, we need a linefeed.
         if (++cons->pos.x == SCREEN_COLS) {
             cons->pos.x = 0;
-            linefeed    = true;
+            linefeed    = TRUE;
         }
     }
 
@@ -363,19 +362,27 @@ tty_printc(int id, char ch)
         update_cursor();
 }
 
+char buffer[8 * 1024];
+
 int
 tty_printf(int id, const char *format, ...)
 {
-    if ((id < 0) || (id >= MAX_TTYS))
-        id = 0;
+  int result;
+  if ((id < 0) || (id >= MAX_TTYS))
+    id = 0;
 
-    va_list args;
-    va_start(args, format);
-    char buffer[8 * 1024];
-    int  result = vsnprintf(buffer, sizeof(buffer), format, args);
-    va_end(args);
+  va_list args;
+  va_start(args, format);
+#if 1
+  printk(format, args);
+#else
+  result = vsnprintf(buffer, sizeof(buffer), format, args);
+#endif
+  va_end(args);
 
-    tty_print(id, buffer);
-
-    return result;
+#if 0  
+  tty_print(id, buffer);
+#endif
+  
+  return result;
 }
