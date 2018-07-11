@@ -19,9 +19,9 @@ reboot.
 
 ## Set up Build Environment
 
-Please execute the following command.
+Please execute the following command (root privilege required).
 ```
-$ ./scripts/misc/setup_ubuntu18.04.sh
+$ make setup
 ```
 
 ## Set up Configuration

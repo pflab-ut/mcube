@@ -74,6 +74,9 @@ $(BUILD_DIR)/%.o: %.asm
 	$(AS) -D__ASSEMBLY__ $(ASFLAGS) -o $@ -MP -MF $(@:%.o=%.d) $<
 
 
+setup: 
+	@$(TOP_DIR)/scripts/misc/setup_ubuntu18.04.sh
+
 configure: buildclean
 	@$(PYTHON) $(TOP_DIR)/scripts/kconfig/configure.py
 
