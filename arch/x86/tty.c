@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/tty.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 //============================================================================
 /// @file       tty.c
 /// @brief      Teletype (console) screen text manipulation routines.
@@ -40,349 +45,337 @@ typedef struct tty tty_t;
 static tty_t  tty[MAX_TTYS];     ///< All virtual consoles.
 static tty_t *active_tty;        ///< The currently visible console.
 
-static inline uint16_t
-color(textcolor_t fg, textcolor_t bg)
+static inline uint16_t color(textcolor_t fg, textcolor_t bg)
 {
-    return (uint16_t)bg << 12 | (uint16_t)fg << 8;
+  return (uint16_t)bg << 12 | (uint16_t)fg << 8;
 }
 
-static void
-update_buffer_offset()
+static void update_buffer_offset(void)
 {
-    // Calculate top-left corner offset from the start of the first screen
-    // buffer.
-    int offset = (int)(active_tty->tlcorner - (uint16_t *)SCREEN_BUFFER);
+  // Calculate top-left corner offset from the start of the first screen
+  // buffer.
+  int offset = (int)(active_tty->tlcorner - (uint16_t *)SCREEN_BUFFER);
 
-    uint8_t save = inb(CRTC_PORT_CMD);
+  uint8_t save = inb(CRTC_PORT_CMD);
 
-    outb(CRTC_PORT_CMD, CRTC_CMD_STARTADDR_LO);
-    outb(CRTC_PORT_DATA, (uint8_t)offset);
-    outb(CRTC_PORT_CMD, CRTC_CMD_STARTADDR_HI);
-    outb(CRTC_PORT_DATA, (uint8_t)(offset >> 8));
+  outb(CRTC_PORT_CMD, CRTC_CMD_STARTADDR_LO);
+  outb(CRTC_PORT_DATA, (uint8_t)offset);
+  outb(CRTC_PORT_CMD, CRTC_CMD_STARTADDR_HI);
+  outb(CRTC_PORT_DATA, (uint8_t)(offset >> 8));
 
-    outb(CRTC_PORT_CMD, save);
+  outb(CRTC_PORT_CMD, save);
 }
 
-static void
-update_cursor()
+static void update_cursor(void)
 {
-    // Calculate cursor offset from the start of the first screen buffer.
-    int offset = active_tty->ybuf * SCREEN_COLS + active_tty->pos.x +
-                 (int)(active_tty->screen - (uint16_t *)SCREEN_BUFFER);
+  // Calculate cursor offset from the start of the first screen buffer.
+  int offset = active_tty->ybuf * SCREEN_COLS + active_tty->pos.x
+    + (int)(active_tty->screen - (uint16_t *)SCREEN_BUFFER);
 
-    uint8_t save = inb(CRTC_PORT_CMD);
+  uint8_t save = inb(CRTC_PORT_CMD);
 
-    outb(CRTC_PORT_CMD, CRTC_CMD_CURSORADDR_LO);
-    outb(CRTC_PORT_DATA, (uint8_t)offset);
-    outb(CRTC_PORT_CMD, CRTC_CMD_CURSORADDR_HI);
-    outb(CRTC_PORT_DATA, (uint8_t)(offset >> 8));
+  outb(CRTC_PORT_CMD, CRTC_CMD_CURSORADDR_LO);
+  outb(CRTC_PORT_DATA, (uint8_t)offset);
+  outb(CRTC_PORT_CMD, CRTC_CMD_CURSORADDR_HI);
+  outb(CRTC_PORT_DATA, (uint8_t)(offset >> 8));
 
-    outb(CRTC_PORT_CMD, save);
+  outb(CRTC_PORT_CMD, save);
 }
 
 void init_tty()
 {
-    uint16_t *screenptr = (uint16_t *)SCREEN_BUFFER;
+  uint16_t *screenptr = (uint16_t *) SCREEN_BUFFER;
 
-    for (int id = 0; id < MAX_TTYS; id++) {
-        tty[id].textcolor      = color(TEXTCOLOR_WHITE, TEXTCOLOR_BLACK);
-        tty[id].textcolor_orig = tty[id].textcolor;
-        tty[id].pos.x          = 0;
-        tty[id].pos.y          = 0;
-        tty[id].ybuf           = 0;
-        tty[id].screen         = screenptr;
-        tty[id].tlcorner       = screenptr;
-        screenptr             += 0x1000; // each screen is 4K words.
-    }
-    active_tty = &tty[0];
+  for (int id = 0; id < MAX_TTYS; id++) {
+    tty[id].textcolor      = color(TEXTCOLOR_WHITE, TEXTCOLOR_BLACK);
+    tty[id].textcolor_orig = tty[id].textcolor;
+    tty[id].pos.x          = 0;
+    tty[id].pos.y          = 0;
+    tty[id].ybuf           = 0;
+    tty[id].screen         = screenptr;
+    tty[id].tlcorner       = screenptr;
+    screenptr             += 0x1000; // each screen is 4K words.
+  }
+  active_tty = &tty[0];
 }
 
 void
 tty_activate(int id)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
-    if (&tty[id] == active_tty) {
-        return;
-    }
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
+  if (&tty[id] == active_tty) {
+    return;
+  }
 
-    active_tty = &tty[id];
-    update_buffer_offset();
-    update_cursor();
+  active_tty = &tty[id];
+  update_buffer_offset();
+  update_cursor();
 }
 
 void
 tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
 
-    tty[id].textcolor = tty[id].textcolor_orig = color(fg, bg);
+  tty[id].textcolor = tty[id].textcolor_orig = color(fg, bg);
 }
 
 void
 tty_set_textcolor_fg(int id, textcolor_t fg)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
 
-    tty[id].textcolor      = color(fg, tty_get_textcolor_bg(id));
-    tty[id].textcolor_orig = tty[id].textcolor;
+  tty[id].textcolor      = color(fg, tty_get_textcolor_bg(id));
+  tty[id].textcolor_orig = tty[id].textcolor;
 }
 
 void
 tty_set_textcolor_bg(int id, textcolor_t bg)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
 
-    tty[id].textcolor      = color(tty_get_textcolor_fg(id), bg);
-    tty[id].textcolor_orig = tty[id].textcolor;
+  tty[id].textcolor      = color(tty_get_textcolor_fg(id), bg);
+  tty[id].textcolor_orig = tty[id].textcolor;
 }
 
 textcolor_t
 tty_get_textcolor_fg(int id)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
 
-    return (textcolor_t)((tty[id].textcolor_orig >> 8) & 0x0f);
+  return (textcolor_t)((tty[id].textcolor_orig >> 8) & 0x0f);
 }
 
 textcolor_t
 tty_get_textcolor_bg(int id)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
 
-    return (textcolor_t)((tty[id].textcolor_orig >> 12) & 0x0f);
+  return (textcolor_t)((tty[id].textcolor_orig >> 12) & 0x0f);
 }
 
 void
 tty_clear(int id)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
 
-    memsetw(tty[id].screen,
-            tty[id].textcolor | ' ', SCREEN_SIZE * 2);
-    tty[id].pos.x    = 0;
-    tty[id].pos.y    = 0;
-    tty[id].ybuf     = 0;
-    tty[id].tlcorner = tty[id].screen;
+  memsetw(tty[id].screen,
+          tty[id].textcolor | ' ', SCREEN_SIZE * 2);
+  tty[id].pos.x    = 0;
+  tty[id].pos.y    = 0;
+  tty[id].ybuf     = 0;
+  tty[id].tlcorner = tty[id].screen;
 
-    if (active_tty == &tty[id]) {
-        update_buffer_offset();
-        update_cursor();
-    }
+  if (active_tty == &tty[id]) {
+    update_buffer_offset();
+    update_cursor();
+  }
 }
 
 void
 tty_setpos(int id, screenpos_t pos)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
 
-    int diff = (int)pos.y - (int)tty[id].pos.y;
-    tty[id].pos  = pos;
-    tty[id].ybuf = (uint8_t)((int)tty[id].ybuf + diff);
-    if (active_tty == &tty[id]) {
-        update_cursor();
-    }
+  int diff = (int) pos.y - (int) tty[id].pos.y;
+  tty[id].pos  = pos;
+  tty[id].ybuf = (uint8_t)((int) tty[id].ybuf + diff);
+  if (active_tty == &tty[id]) {
+    update_cursor();
+  }
 }
 
-void
-tty_getpos(int id, screenpos_t *pos)
+void tty_getpos(int id, screenpos_t *pos)
 {
-    if ((id < 0) || (id >= MAX_TTYS)) {
-        id = 0;
-    }
-    *pos = tty[id].pos;
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
+  *pos = tty[id].pos;
 }
 
-static int
-colorcode(char x, int orig)
+static int colorcode(char x, int orig)
 {
-    int code = x;
+  int code = x;
 
-    if ((code >= '0') && (code <= '9')) {
-        return code - '0';
-    }
-    else if ((code >= 'a') && (code <= 'f')) {
-        return code - 'a' + 10;
-    }
-    else if ((code >= 'A') && (code <= 'F')) {
-        return code - 'A' + 10;
-    }
-    else if (code == '-') {
-        return orig;
-    }
-    else {
-        return -1;
-    }
+  if ((code >= '0') && (code <= '9')) {
+    return code - '0';
+  }
+  else if ((code >= 'a') && (code <= 'f')) {
+    return code - 'a' + 10;
+  }
+  else if ((code >= 'A') && (code <= 'F')) {
+    return code - 'A' + 10;
+  }
+  else if (code == '-') {
+    return orig;
+  }
+  else {
+    return -1;
+  }
 }
 
-static void
-tty_printchar(tty_t *cons, const char **strptr)
+static void tty_printchar(tty_t *cons, const char **strptr)
 {
   int linefeed = FALSE;
 
   const char *str = *strptr;
   char        ch  = *str;
 
-    // If the newline character is encountered, do a line feed + carriage
-    // return.
-    if (ch == '\n') {
-        cons->pos.x = 0;
-        linefeed    = TRUE;
+  // If the newline character is encountered, do a line feed + carriage
+  // return.
+  if (ch == '\n') {
+    cons->pos.x = 0;
+    linefeed    = TRUE;
+  } else if (ch == '\033') {
+  // Handle color codes, e.g. "\033[#]".
+    if ((str[1] == '[') && str[2] && (str[3] == ']')) {
+      int code = colorcode(str[2], (cons->textcolor_orig >> 8) & 0x0f);
+      if (code != -1) {
+        cons->textcolor = (cons->textcolor & 0xf000) |
+          (uint16_t)(code << 8);
+        *strptr += 3;
+      }
+    } else if ((str[1] == '{') && str[2] && (str[3] == '}')) {
+      int code = colorcode(str[2], (cons->textcolor_orig >> 12));
+      if (code != -1) {
+        cons->textcolor = (cons->textcolor & 0x0f00) |
+          (uint16_t)(code << 12);
+        *strptr += 3;
+      }
     }
-    // Handle color codes, e.g. "\033[#]".
-    else if (ch == '\033') {
-        if ((str[1] == '[') && str[2] && (str[3] == ']')) {
-            int code = colorcode(str[2], (cons->textcolor_orig >> 8) & 0x0f);
-            if (code != -1) {
-                cons->textcolor = (cons->textcolor & 0xf000) |
-                                  (uint16_t)(code << 8);
-                *strptr += 3;
-            }
-        }
-        else if ((str[1] == '{') && str[2] && (str[3] == '}')) {
-            int code = colorcode(str[2], (cons->textcolor_orig >> 12));
-            if (code != -1) {
-                cons->textcolor = (cons->textcolor & 0x0f00) |
-                                  (uint16_t)(code << 12);
-                *strptr += 3;
-            }
-        }
-        return;
+    return;
+  } else if (ch == '\b') {
+    if (cons->pos.x > 0) {
+      int offset = cons->ybuf * SCREEN_COLS + --cons->pos.x;
+      cons->screen[offset] = cons->textcolor | ' ';
     }
-    else if (ch == '\b') {
-        if (cons->pos.x > 0) {
-            int offset = cons->ybuf * SCREEN_COLS + --cons->pos.x;
-            cons->screen[offset] = cons->textcolor | ' ';
-        }
+  } else {
+    // Use the current foreground and background color.
+    uint16_t value = cons->textcolor | ch;
+
+    // Calculate the buffer offset using the virtual row.
+    int offset = cons->ybuf * SCREEN_COLS + cons->pos.x;
+
+    // Update the visible screen buffer.
+    cons->screen[offset] = value;
+
+    // If the right side of the screen was reached, we need a linefeed.
+    if (++cons->pos.x == SCREEN_COLS) {
+      cons->pos.x = 0;
+      linefeed    = TRUE;
     }
-    else {
-        // Use the current foreground and background color.
-        uint16_t value = cons->textcolor | ch;
+  }
 
-        // Calculate the buffer offset using the virtual row.
-        int offset = cons->ybuf * SCREEN_COLS + cons->pos.x;
+  // A linefeed causes a hardware scroll of one row. If we reach the end of
+  // the virtual buffer, wrap it back one screen.
+  if (linefeed) {
 
-        // Update the visible screen buffer.
-        cons->screen[offset] = value;
+    // Copy the last line of the screen to a virtual row one screen
+    // away. This way, when we reach the end of the virtual buffer,
+    // we'll have another shifted copy of the screen ready to display.
+    // This is better than copying the entire screen whenever we reach
+    // the end of the virtual buffer, because it amortizes the cost
+    // of copying.
+    memcpy(cons->screen + cons->ybuf * SCREEN_COLS - SCREEN_SIZE,
+           cons->screen + cons->ybuf * SCREEN_COLS,
+           SCREEN_COLS * sizeof(uint16_t));
 
-        // If the right side of the screen was reached, we need a linefeed.
-        if (++cons->pos.x == SCREEN_COLS) {
-            cons->pos.x = 0;
-            linefeed    = TRUE;
-        }
+    // Increment row (on screen and in the virtual buffer).
+    ++cons->pos.y;
+    ++cons->ybuf;
+
+    // If we're at the bottom of the screen, we need to scroll a line.
+    if (cons->pos.y == SCREEN_ROWS) {
+
+      --cons->pos.y;
+
+      // If we're at the end of the virtual buffer, we need to
+      // wrap back a screen.
+      if (cons->ybuf == SCREEN_ROWS * 2) {
+        cons->ybuf -= SCREEN_ROWS;
+      }
+
+      // Clear the row at the bottom of the screen.
+      memsetw(cons->screen + cons->ybuf * SCREEN_COLS,
+              cons->textcolor | ' ',
+              SCREEN_COLS * sizeof(uint16_t));
+
+      // Adjust the offset of the top-left corner of the screen.
+      cons->tlcorner = cons->screen + (cons->ybuf + 1) * SCREEN_COLS -
+        SCREEN_SIZE;
+
+      // Do a hardware scroll if this console is currently active.
+      if (cons == active_tty) {
+        update_buffer_offset();
+      }
     }
-
-    // A linefeed causes a hardware scroll of one row. If we reach the end of
-    // the virtual buffer, wrap it back one screen.
-    if (linefeed) {
-
-        // Copy the last line of the screen to a virtual row one screen
-        // away. This way, when we reach the end of the virtual buffer,
-        // we'll have another shifted copy of the screen ready to display.
-        // This is better than copying the entire screen whenever we reach
-        // the end of the virtual buffer, because it amortizes the cost
-        // of copying.
-        memcpy(cons->screen + cons->ybuf * SCREEN_COLS - SCREEN_SIZE,
-               cons->screen + cons->ybuf * SCREEN_COLS,
-               SCREEN_COLS * sizeof(uint16_t));
-
-        // Increment row (on screen and in the virtual buffer).
-        ++cons->pos.y;
-        ++cons->ybuf;
-
-        // If we're at the bottom of the screen, we need to scroll a line.
-        if (cons->pos.y == SCREEN_ROWS) {
-
-            --cons->pos.y;
-
-            // If we're at the end of the virtual buffer, we need to
-            // wrap back a screen.
-            if (cons->ybuf == SCREEN_ROWS * 2) {
-                cons->ybuf -= SCREEN_ROWS;
-            }
-
-            // Clear the row at the bottom of the screen.
-            memsetw(cons->screen + cons->ybuf * SCREEN_COLS,
-                    cons->textcolor | ' ',
-                    SCREEN_COLS * sizeof(uint16_t));
-
-            // Adjust the offset of the top-left corner of the screen.
-            cons->tlcorner = cons->screen + (cons->ybuf + 1) * SCREEN_COLS -
-                             SCREEN_SIZE;
-
-            // Do a hardware scroll if this console is currently active.
-            if (cons == active_tty) {
-                update_buffer_offset();
-            }
-        }
-    }
+  }
 }
 
-void
-tty_print(int id, const char *str)
+void tty_print(int id, const char *str)
 {
-    if ((id < 0) || (id >= MAX_TTYS))
-        id = 0;
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
 
-    tty_t *cons = &tty[id];
-    for (; *str; ++str)
-        tty_printchar(cons, &str);
+  tty_t *cons = &tty[id];
+  for (; *str; ++str) {
+    tty_printchar(cons, &str);
+  }
 
-    if (cons == active_tty)
-        update_cursor();
+  if (cons == active_tty) {
+    update_cursor();
+  }
 }
 
-void
-tty_printc(int id, char ch)
+void tty_printc(int id, char ch)
 {
-    if ((id < 0) || (id >= MAX_TTYS))
-        id = 0;
+  if ((id < 0) || (id >= MAX_TTYS)) {
+    id = 0;
+  }
+  
+  const char  str[2] = {ch, 0};
+  const char *ptr    = str;
+  tty_t      *cons   = &tty[id];
+  tty_printchar(cons, &ptr);
 
-    const char  str[2] = { ch, 0 };
-    const char *ptr    = str;
-    tty_t      *cons   = &tty[id];
-    tty_printchar(cons, &ptr);
-
-    if (cons == active_tty)
-        update_cursor();
+  if (cons == active_tty) {
+    update_cursor();
+  }
 }
 
 char buffer[8 * 1024];
 
-int
-tty_printf(int id, const char *format, ...)
+int tty_printf(int id, const char *format, ...)
 {
   int result;
-  if ((id < 0) || (id >= MAX_TTYS))
+  if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;
+  }
 
   va_list args;
   va_start(args, format);
-#if 1
   result = printk(format, args);
-#else
-  result = vsnprintf(buffer, sizeof(buffer), format, args);
-#endif
+  //  result = vsnprintf(buffer, sizeof(buffer), format, args);
   va_end(args);
 
-#if 0  
-  tty_print(id, buffer);
-#endif
+  //  tty_print(id, buffer);
   
   return result;
 }
