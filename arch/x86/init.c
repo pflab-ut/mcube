@@ -10,11 +10,8 @@ void init_arch(void)
 {
 #if 1
   init_tty();
-  tty_print(0, "hoge\n");
-  tty_print(0, "hehe\n");
+  tty_clear(TTY_ID);
   
-  for (;;)
-    ;
 #else
   //	init_shell();
   init_uart();

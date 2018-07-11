@@ -374,7 +374,7 @@ tty_printf(int id, const char *format, ...)
   va_list args;
   va_start(args, format);
 #if 1
-  printk(format, args);
+  result = printk(format, args);
 #else
   result = vsnprintf(buffer, sizeof(buffer), format, args);
 #endif
