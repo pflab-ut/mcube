@@ -50,7 +50,12 @@
 #endif
 #define __attribute_const__		__attribute__((__const__))
 
+#if __GNUC__ >= 7
 #define FALLTHROUGH __attribute__((fallthrough))
+#else
+#define FALLTHROUGH /* fall through */
+#endif
+
 
 #endif /*	__MCUBE_MCUBE_COMPILER_COMPILER_GCC_H__ */
 

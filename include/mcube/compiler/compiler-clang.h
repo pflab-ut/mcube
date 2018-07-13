@@ -50,7 +50,7 @@
 #endif
 #define __attribute_const__		__attribute__((__const__))
 
-#define FALLTHROUGH
+#define FALLTHROUGH /* fall through */
 
 
 #endif /*	__MCUBE_MCUBE_COMPILER_COMPILER_CLANG_H__ */

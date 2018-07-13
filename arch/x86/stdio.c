@@ -23,6 +23,12 @@ int getchar(void)
 {
 	return uart_getc(STDIO_PORT);
 }
+int putchar(int c)
+{
+  uart_putc(c, STDIO_PORT);
+  return c;
+}
+
 #else
 #error "Unknown Printk to Output"
 #endif
