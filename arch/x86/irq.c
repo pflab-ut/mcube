@@ -74,16 +74,16 @@ void do_switch_thread(void)
 	}
 }
 
-asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
+asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
 	unsigned long cpu = get_cpu_id();
   //	uint64_t rsp;
-	printk("do_IRQ(): cpu = %lu sys_jiffies = %lu\n", cpu, sys_jiffies);
+	printk("do_irq(): cpu = %lu sys_jiffies = %lu\n", cpu, sys_jiffies);
 	end_budget(current_th[cpu]);
 
 	//	inf_loop();
 	//	asm volatile("movl %%rsp, %0" :: "r"(rsp));
-	//	printk("do_IRQ(): cpu = %lu start rsp = 0x%x\n", cpu, rsp);
+	//	printk("do_irq(): cpu = %lu start rsp = 0x%x\n", cpu, rsp);
 	//	printk("rdtscp = %lx\n", rdtscp());
 	/* just in case */
 #if 1
@@ -92,22 +92,22 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 		return 0;
 	}
 #endif
-	//	printk("do_IRQ(): smp_barrier(1): cpu = %lu\n", cpu);
+	//	printk("do_irq(): smp_barrier(1): cpu = %lu\n", cpu);
   //	smp_barrier(1);
 	//	pdebug_thread(current_th[cpu]);
 	//	printk("current_th[%lu] = 0x%x id = %lu\n", cpu, current_th[cpu], current_th[cpu]->id);
 	prev_th[cpu] = current_th[cpu];
-	printk("do_IRQ(): cpu = %lu irq = 0x%lx\n", cpu, irq);
+	printk("do_irq(): cpu = %lu irq = 0x%lx\n", cpu, irq);
 	/* dummy interrupt for one-shot timer */
 	if (irq == SCHED_IRQ) {
-		goto __do_IRQ;
+		goto __do_irq;
 	}
 
 	/* LAPIC */
 	/* overwrite irq */
 	if ((irq = find_lapic_first_bit()) != NR_IRQS) {
-		//		printk("do_IRQ(): LAPIC irq = 0x%x\n", irq);
-		goto __do_IRQ;
+		//		printk("do_irq(): LAPIC irq = 0x%x\n", irq);
+		goto __do_irq;
 	}
 
 #if 0
@@ -122,7 +122,7 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 		irq = bsf(irq);
 		//		printk("PIC0 bsf(irq) = %x\n", irq);
 		if (irq != SLAVE_IRQ) {
-			goto __do_IRQ;
+			goto __do_irq;
 		}
 	}
 	
@@ -136,7 +136,7 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 		/* set IRQ bit + # of Master IRQs */
 		irq = bsf(irq) + NR_MASTER_IRQS;
 		//		printk("PIC1 bsf(irq) = %x\n", irq);
-		goto __do_IRQ;
+		goto __do_irq;
 	}
 #endif
 
@@ -145,28 +145,28 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 	goto error;
 
 
- __do_IRQ:
+ __do_irq:
 
-	//	printk("do_IRQ(): cpu = %d irq = %x\n", cpu, irq);
+	//	printk("do_irq(): cpu = %d irq = %x\n", cpu, irq);
 	//	return 0;
-	__do_IRQ(irq);
+	__do_irq(irq);
 
   //	smp_barrier(2);
 	if (cpu == 0) {
 		//		print_overhead();
 	}
-	printk("do_IRQ(): current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
+	printk("do_irq(): current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
   //	smp_barrier(3);
 
 
 	begin_budget(current_th[cpu]);
 
 	//	pdebug_thread(current_th[cpu]);
-	//	printk("do_IRQ(): current_th[%d] = 0x%x\n", cpu, current_th[cpu]);
+	//	printk("do_irq(): current_th[%d] = 0x%x\n", cpu, current_th[cpu]);
 	do_switch_thread();
 	//	printk("LAPIC_CUR_COUNT = %x\n", mmio_in64(LAPIC_CUR_COUNT));
 	//	asm volatile("movl %%rsp, %0" :: "r"(rsp));
-	//	printk("do_IRQ(): cpu = %d end rsp = 0x%x\n", cpu, rsp);
+	//	printk("do_irq(): cpu = %d end rsp = 0x%x\n", cpu, rsp);
 	//	pdebug_thread(current_th[cpu]);
 	return 0;
  error:
@@ -176,9 +176,9 @@ asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
 }
 
 
-void init_IRQ(void)
+void init_irq(void)
 {
-  printk("init_IRQ()\n");
+  printk("init_irq()\n");
 	/* disable PIC0 interrupt */
 	outb(PIC0_IMR, OCW1_DISABLE_ALL_IRQS);
 	/* disable PIC1 interrupt */

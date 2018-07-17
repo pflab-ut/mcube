@@ -16,7 +16,7 @@ void init_ap(void)
 {
 	init_uart();
 	init_dsctbl();
-	init_IRQ();
+	init_irq();
 	init_cpu();
 	init_apic();
 	init_timer(TICK_USEC);

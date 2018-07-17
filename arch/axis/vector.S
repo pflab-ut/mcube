@@ -41,7 +41,7 @@ ENTRY(common_interrupt)
   sw $v0, 8($sp)
   sw $at, 4($sp)
   .set at
-  jal do_IRQ
+  jal do_irq
   /* restore general purpose registers. */
   .set noat
   lw $at, 4($sp)

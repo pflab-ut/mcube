@@ -30,7 +30,7 @@ void init_arch(void)
   //	init_overhead();
 
 	init_dsctbl();
-	init_IRQ();
+	init_irq();
 
 #if CONFIG_DEV_MOUSE
 	init_mouse();

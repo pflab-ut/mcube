@@ -144,14 +144,14 @@ static void handle_software_interrupt(unsigned long id)
  * The common_interrupt_handler() functions handles common interrupt
  * including timer, DMAC, and software interrupts.
  */
-asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
+asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
   unsigned long status;
   unsigned long id;
   disable_interrupt();
   /* check if this is timer interrupt. */
   status = get_interrupt_status();
-  printk("do_IRQ()\n");
+  printk("do_irq()\n");
   printk("get_interrupt_status() = 0x%lx\n", status);
   if (status & (0x1 << 0)) {
     handle_timer_interrupt();

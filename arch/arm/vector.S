@@ -100,7 +100,7 @@ vector_sync_el1t:
   
 vector_irq_el1t:
   kernel_entry
-  bl do_IRQ
+  bl do_irq
   kernel_exit
   
 vector_fiq_el1t:
@@ -114,7 +114,7 @@ vector_sync_el1h:
   
 vector_irq_el1h:
   kernel_entry
-  bl do_IRQ
+  bl do_irq
   kernel_exit
 
 vector_fiq_el1h:

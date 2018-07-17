@@ -121,7 +121,7 @@ typedef struct irq_chip irq_chip;
  * The irq_desc structure has interrupt request descriptor information.
  */
 struct irq_descriptor {
-	/** Highlevel irq-events handler [if NULL, __do_IRQ()]. */
+	/** Highlevel irq-events handler [if NULL, __do_irq()]. */
 	irq_flow_handler_t  handle_irq;
 	/** Low level interrupt hardware access. */
 	struct irq_chip     *chip;
@@ -247,12 +247,9 @@ typedef struct irqaction irqaction;
 
 /* Function Declarations */
 
-extern void request_bottomhalf(unsigned int soft_irq);
 
-extern struct thread_struct *reg_int_handler(unsigned int, struct thread_struct *);
-extern asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs);
-extern unsigned int __do_IRQ(unsigned long irq);
-extern void init_IRQ(void);
+extern asmlinkage int do_irq(unsigned long irq, struct full_regs *regs);
+extern unsigned int __do_irq(unsigned long irq);
 extern int setup_irq(unsigned int irq, struct irqaction *new);
 
 

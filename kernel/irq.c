@@ -9,18 +9,18 @@ struct full_regs *__irq_regs;
 struct irq_descriptor irq_desc[NR_IRQS];
 
 
-irqreturn_t handle_IRQ_event(unsigned long irq, struct irqaction *action)
+irqreturn_t handle_irq_event(unsigned long irq, struct irqaction *action)
 {
 	irqreturn_t ret, retval = IRQ_NONE;
 	unsigned int status = 0;
-	//	printk("handle_IRQ_event(): action = 0x%x irq = %x\n", action, irq);
-	//	printk("handle_IRQ_event(): action->handler = 0x%x\n", action->handler);
+	//	printk("handle_irq_event(): action = 0x%x irq = %x\n", action, irq);
+	//	printk("handle_irq_event(): action->handler = 0x%x\n", action->handler);
 
 	do {
-		printk("handle_IRQ_event(): irq = 0x%lx call action->handler = 0x%lx\n",
+		printk("handle_irq_event(): irq = 0x%lx call action->handler = 0x%lx\n",
            irq, (unsigned long) action->handler);
 		ret = action->handler(irq, action->dev_id);
-		printk("handle_IRQ_event(): irq = 0x%lx return action->handler = 0x%lx\n",
+		printk("handle_irq_event(): irq = 0x%lx return action->handler = 0x%lx\n",
            irq, (unsigned long) action->handler);
 		if (ret == IRQ_HANDLED) {
 			status |= action->flags;
@@ -31,19 +31,19 @@ irqreturn_t handle_IRQ_event(unsigned long irq, struct irqaction *action)
 
 
 	disable_local_irq();
-	//	printk("handle_IRQ_event(): end\n");
+	//	printk("handle_irq_event(): end\n");
 
 	return retval;
 }
 
 
-unsigned int __do_IRQ(unsigned long irq)
+unsigned int __do_irq(unsigned long irq)
 {
 	//	inf_loop();
 	struct irq_descriptor *desc = irq_desc + irq;
   struct irqaction *action;
   unsigned long status;
-	printk("__do_IRQ()\n");
+	printk("__do_irq()\n");
 	
 	//spin_lock(&desc->lock);
 
@@ -77,7 +77,7 @@ unsigned int __do_IRQ(unsigned long irq)
 	}
 
 	if (!action) {
-		printk("__do_IRQ(): action == NULL irq handler %lu is busy\n", irq);
+		printk("__do_irq(): action == NULL irq handler %lu is busy\n", irq);
 		return 1;
 	}
   desc->status = status;
@@ -85,7 +85,7 @@ unsigned int __do_IRQ(unsigned long irq)
   for (;;) {
     irqreturn_t action_ret;
 		//spin_unlock(&desc->lock);
-		action_ret = handle_IRQ_event(irq, action);
+		action_ret = handle_irq_event(irq, action);
 		if (action_ret == IRQ_NONE) {
 			printk("Error: action_ret == IRQ_NONE\n");
 			exit(1);
@@ -100,7 +100,7 @@ unsigned int __do_IRQ(unsigned long irq)
 	desc->status &= ~IRQ_INPROGRESS;
 
 	//	spin_unlock(&desc->lock);
-	//	printk("__do_IRQ() end\n");
+	//	printk("__do_irq() end\n");
 	return 1;
 }
 

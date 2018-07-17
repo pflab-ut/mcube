@@ -110,7 +110,7 @@ static void handle_uart_interrupt(void)
         if (mmio_in32(UART0_MASKED_INTERRUPT_STATUS_REG) & (1 << 4)) {
           c = (unsigned char) mmio_in32(UART0_DATA_REG); // read for clear tx interrupt.
           uart_putc(c, 0);
-          printk("do_IRQ()\n");
+          printk("do_irq()\n");
         }
       }
     }
@@ -120,17 +120,17 @@ static void handle_uart_interrupt(void)
       if (mmio_in32(IRQ_PENDING1) & (1 << 29)) {
         c = (unsigned char) mmio_in32(AUX_MINI_UART_IO_REG); // read for clear tx interrupt.
         uart_putc(c, 0);
-        printk("do_IRQ(): mini uart\n");
+        printk("do_irq(): mini uart\n");
       }
     }
 #endif
 }
 
 
-asmlinkage int do_IRQ(unsigned long irq, struct full_regs *regs)
+asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
   disable_interrupt();
-  printk("do_IRQ()\n");
+  printk("do_irq()\n");
   // check inteerupt source
   irq = mmio_in32(TIMER_CORE0_IRQ_SOURCE);
   switch (irq) {
