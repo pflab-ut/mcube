@@ -251,7 +251,7 @@ extern void init_apic(void);
 extern void init_lapic_timer(unsigned long tick_us);
 extern void start_lapic_timer(unsigned int ch);
 extern void stop_lapic_timer(unsigned int ch);
-extern void init_lapic_timer_irq(uint8_t vector, uint8_t periodic, uint8_t divisor, uint32_t count);
+extern void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, uint32_t count);
 
 
 static inline uint64_t find_lapic_first_bit(void)

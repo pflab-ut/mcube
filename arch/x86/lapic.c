@@ -64,7 +64,7 @@ static struct irqaction LAPIC_timer_irq = {
 };
 
 
-void init_lapic_timer_irq(uint8_t vector, uint8_t periodic, uint8_t divisor, uint32_t count)
+void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, uint32_t count)
 {
 	unsigned long cpu = get_cpu_id();
 	uint8_t div_flag = 0xb;
@@ -99,10 +99,16 @@ void init_lapic_timer_irq(uint8_t vector, uint8_t periodic, uint8_t divisor, uin
 		printk("Error: Unknown divisor %u\n", divisor);
 		break;
 	}
-	if (periodic == TIMER_PERIODIC) {
+	switch (timer_flag) {
+  case TIMER_PERIODIC:
 		mmio_out32(LAPIC_LVT_TIMER, mmio_in32(LAPIC_LVT_TIMER) | LAPIC_LVT_TIMER_PERIODIC | (uint32_t) vector);
-	} else {
+    break;
+  case TIMER_ONESHOT:
 		mmio_out32(LAPIC_LVT_TIMER, mmio_in32(LAPIC_LVT_TIMER) | (uint32_t) vector);
+    break;
+  default:
+    printk("Error: unknown timer flag %u\n", timer_flag);
+    break;
 	}
 	mmio_out32(LAPIC_DIV_CONFIG, div_flag);
 	//	printk("idt_start = %x\n", idt_start);
