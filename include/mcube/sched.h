@@ -62,19 +62,10 @@ extern struct thread_struct *sleep_tq[NR_INTRA_KERNEL_CPUS];
 extern struct thread_struct *deadline_tq[NR_INTRA_KERNEL_CPUS];
 
 extern unsigned long sys_timer_interrupt(void);
-extern void smp_enable_scheduling(void);
 
-
-extern void init_overhead_safe_approx(void);
-
-
-
-extern void prev_sleep(void);
-extern void post_sleep(void);
 
 extern int init_activate(struct thread_struct *th);
 
-extern int lowest_prio_cpu(void);
 extern void init_rq(void);
 
 extern int check_deadline_miss(void);
@@ -84,11 +75,8 @@ extern int check_deadline_miss(void);
 extern void init_sched(void);
 extern void do_sched_algo(void);
 extern void do_sched(void);
-extern void smp_send_reschedule(int cpu);
 
 extern void do_release(void);
-
-extern int start_sched(unsigned long sched_time);
 
 
 extern int wake_up(struct thread_struct *th);
@@ -112,17 +100,6 @@ extern void do_timer_tick(void);
 
 extern int run(unsigned long nr_threads);
 
-extern void claim(struct thread_struct *th);
-
-enum imprecise_part {
-	MANDATORY,
-	PREV_OPTIONAL,
-	OPTIONAL,
-	POST_OPTIONAL,
-	WINDUP
-};
-
-typedef enum imprecise_part imprecise_part;
 
 enum budget_policy {
 	NO_ENFORCEMENT = 1,
