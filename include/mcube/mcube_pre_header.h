@@ -14,14 +14,13 @@
 #include <mcube/stddef.h>
 #include <mcube/irqflags.h>
 #include <mcube/spinlock.h>
-#include <mcube/stdbool.h>
 #include <mcube/math.h>
 #include <mcube/atomic.h>
 #include <mcube/cpu.h>
 #include <mcube/limits.h>
 #include <mcube/sched.h>
 #include <mcube/linkage.h>
-#include <mcube/mcubestd.h>
+#include <mcube/main.h>
 
 /* alphabetical order */
 #include <mcube/attribute.h>
@@ -38,7 +37,6 @@
 #include <mcube/fs.h>
 #include <mcube/io.h>
 #include <mcube/irq.h>
-#include <mcube/main.h>
 #include <mcube/metric.h>
 #include <mcube/mm.h>
 #include <mcube/mt.h>
@@ -50,12 +48,10 @@
 #include <mcube/stdarg.h>
 #include <mcube/stdlib.h>
 #include <mcube/string.h>
-#include <mcube/symbol.h>
 #include <mcube/syscall.h>
 #include <mcube/timer.h>
 #include <mcube/trace.h>
 #include <mcube/uart.h>
-#include <mcube/usb.h>
 #include <mcube/user.h>
 
 

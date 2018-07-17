@@ -229,19 +229,6 @@ extern struct thread_struct *do_create_thread(void *(*func)(void *),
                                               struct th_attr *attr);
 
 
-extern void do_end_mandatory(struct thread_struct *th);
-extern void end_mandatory(struct thread_struct *th);
-extern void do_end_optional(struct thread_struct *th);
-extern void end_optional(struct thread_struct *th);
-extern void exec_windup(struct thread_struct *th);
-
-
-
-
-struct workload;
-extern void init_ths(struct workload *w);
-
-extern void imprecise_main(struct thread_struct *th);
 
 extern unsigned char idle_stack[NR_INTRA_KERNEL_CPUS][STACK_SIZE];
 extern unsigned char stack[NR_THREADS][STACK_SIZE];

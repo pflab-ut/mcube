@@ -24,16 +24,6 @@
 
 #define NR_TASKS 0x10
 
-#define KERNEL_CONTEXT 0
-
-/**
- * @brief TLB information
- *
- * The tlb_info structure has TLB information.
- */
-struct tlb_info {
-	unsigned long tlbstat[1];
-};
 
 typedef struct tlb_info tlb_info;
 
@@ -43,8 +33,6 @@ typedef struct tlb_info tlb_info;
  * The task_struct structure has task information.
  */
 struct task_struct {
-  /** Context of CPU. */
-  //  struct cpu_context cpu_context;
 	/** Task ID. */
 	unsigned int id;
 	/** Pointer to top thread. */
