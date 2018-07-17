@@ -22,9 +22,6 @@ int main(int argc, char *argv[])
 {
   if (get_cpu_id() == 0) {
     init_arch();
-    //  putchar('b');
-    //  console_write("hoge", 4, NULL);
-    //  putchar('c');
     is_initialized = TRUE;
     printk("main()\n");
     init_rq();
