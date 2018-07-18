@@ -23,15 +23,14 @@
 //  @enum       pmemtype
 /// @brief      The types of physical memory.
 //----------------------------------------------------------------------------
-enum pmemtype
-{
-    PMEMTYPE_USABLE   = 1,   ///< Reported usable by the BIOS.
-    PMEMTYPE_RESERVED = 2,   ///< Reported (or inferred) to be reserved.
-    PMEMTYPE_ACPI     = 3,   ///< Used for ACPI tables or code.
-    PMEMTYPE_ACPI_NVS = 4,   ///< Used for ACPI non-volatile storage.
-    PMEMTYPE_BAD      = 5,   ///< Reported as bad memory.
-    PMEMTYPE_UNCACHED = 6,   ///< Marked as uncacheable, usually for I/O.
-    PMEMTYPE_UNMAPPED = 7,   ///< Marked as "do not map".
+enum pmemtype {
+  PMEMTYPE_USABLE   = 1,   ///< Reported usable by the BIOS.
+  PMEMTYPE_RESERVED = 2,   ///< Reported (or inferred) to be reserved.
+  PMEMTYPE_ACPI     = 3,   ///< Used for ACPI tables or code.
+  PMEMTYPE_ACPI_NVS = 4,   ///< Used for ACPI non-volatile storage.
+  PMEMTYPE_BAD      = 5,   ///< Reported as bad memory.
+  PMEMTYPE_UNCACHED = 6,   ///< Marked as uncacheable, usually for I/O.
+  PMEMTYPE_UNMAPPED = 7,   ///< Marked as "do not map".
 };
 
 //----------------------------------------------------------------------------
@@ -39,12 +38,11 @@ enum pmemtype
 /// @brief      A memregion represents and describes a contiguous region of
 ///             physical memory.
 //----------------------------------------------------------------------------
-struct pmapregion
-{
-    uint64_t addr;               ///< base address
-    uint64_t size;               ///< size of memory region
-    int32_t  type;               ///< Memory type (see memtype enum)
-    uint32_t flags;              ///< flags (currently unused)
+struct pmapregion {
+  uint64_t addr;               ///< base address
+  uint64_t size;               ///< size of memory region
+  int32_t  type;               ///< Memory type (see memtype enum)
+  uint32_t flags;              ///< flags (currently unused)
 };
 typedef struct pmapregion pmapregion_t;
 
@@ -54,21 +52,19 @@ typedef struct pmapregion pmapregion_t;
 ///             physical memory.
 /// @details    There are no gaps in a memory map.
 //----------------------------------------------------------------------------
-struct pmap
-{
-    uint64_t     count;          ///< Memory regions in the memory map
-    uint64_t     last_usable;    ///< End of last usable region
-    pmapregion_t region[1];      ///< An array of 'count' memory regions
+struct pmap {
+  uint64_t     count;          ///< Memory regions in the memory map
+  uint64_t     last_usable;    ///< End of last usable region
+  pmapregion_t region[1];      ///< An array of 'count' memory regions
 };
 typedef struct pmap pmap_t;
 
 //----------------------------------------------------------------------------
-//  @function   pmap_init
+//  @function   init_pmap
 /// @brief      Initialize the physical memory map using data installed by the
 ///             BIOS during boot loading.
 //----------------------------------------------------------------------------
-void
-pmap_init();
+void init_pmap(void);
 
 //----------------------------------------------------------------------------
 //  @function   pmap_add

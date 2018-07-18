@@ -51,8 +51,7 @@
 /// @param[inout]   pt  The pagetable structure to hold a description of the
 ///                     kernel's page table.
 //----------------------------------------------------------------------------
-void
-kmem_init(pagetable_t *pt);
+void init_kmem(pagetable_t *pt);
 
 void *memzero(void *dst, size_t num);
 

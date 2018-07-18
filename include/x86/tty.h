@@ -30,22 +30,22 @@
 /// @brief      Color values used for tty text.
 //----------------------------------------------------------------------------
 enum textcolor {
-    TEXTCOLOR_BLACK     = 0,
-    TEXTCOLOR_BLUE      = 1,
-    TEXTCOLOR_GREEN     = 2,
-    TEXTCOLOR_CYAN      = 3,
-    TEXTCOLOR_RED       = 4,
-    TEXTCOLOR_MAGENTA   = 5,
-    TEXTCOLOR_BROWN     = 6,
-    TEXTCOLOR_LTGRAY    = 7,
-    TEXTCOLOR_GRAY      = 8,
-    TEXTCOLOR_LTBLUE    = 9,
-    TEXTCOLOR_LTGREEN   = 10,
-    TEXTCOLOR_LTCYAN    = 11,
-    TEXTCOLOR_LTRED     = 12,
-    TEXTCOLOR_LTMAGENTA = 13,
-    TEXTCOLOR_YELLOW    = 14,
-    TEXTCOLOR_WHITE     = 15,
+  TEXTCOLOR_BLACK     = 0,
+  TEXTCOLOR_BLUE      = 1,
+  TEXTCOLOR_GREEN     = 2,
+  TEXTCOLOR_CYAN      = 3,
+  TEXTCOLOR_RED       = 4,
+  TEXTCOLOR_MAGENTA   = 5,
+  TEXTCOLOR_BROWN     = 6,
+  TEXTCOLOR_LTGRAY    = 7,
+  TEXTCOLOR_GRAY      = 8,
+  TEXTCOLOR_LTBLUE    = 9,
+  TEXTCOLOR_LTGREEN   = 10,
+  TEXTCOLOR_LTCYAN    = 11,
+  TEXTCOLOR_LTRED     = 12,
+  TEXTCOLOR_LTMAGENTA = 13,
+  TEXTCOLOR_YELLOW    = 14,
+  TEXTCOLOR_WHITE     = 15,
 };
 
 typedef enum textcolor textcolor_t;
@@ -106,8 +106,7 @@ void init_tty(void);
 ///             screen.
 /// @param[in]  id      Virtual tty id (0-3).
 //----------------------------------------------------------------------------
-void
-tty_activate(int id);
+void tty_activate(int id);
 
 //----------------------------------------------------------------------------
 //  @function   tty_set_textcolor
@@ -117,8 +116,7 @@ tty_activate(int id);
 /// @param[in]  fg      Foreground color.
 /// @param[in]  bg      Background color.
 //----------------------------------------------------------------------------
-void
-tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg);
+void tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg);
 
 //----------------------------------------------------------------------------
 //  @function   tty_set_textcolor_fg
@@ -127,8 +125,7 @@ tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg);
 /// @param[in]  id      Virtual tty id (0-3).
 /// @param[in]  fg      Foreground color.
 //----------------------------------------------------------------------------
-void
-tty_set_textcolor_fg(int id, textcolor_t fg);
+void tty_set_textcolor_fg(int id, textcolor_t fg);
 
 //----------------------------------------------------------------------------
 //  @function   tty_set_textcolor_bg
@@ -137,8 +134,7 @@ tty_set_textcolor_fg(int id, textcolor_t fg);
 /// @param[in]  id      Virtual tty id (0-3).
 /// @param[in]  bg      Background color.
 //----------------------------------------------------------------------------
-void
-tty_set_textcolor_bg(int id, textcolor_t bg);
+void tty_set_textcolor_bg(int id, textcolor_t bg);
 
 //----------------------------------------------------------------------------
 //  @function   tty_get_textcolor_fg
@@ -147,8 +143,7 @@ tty_set_textcolor_bg(int id, textcolor_t bg);
 /// @param[in]  id      Virtual tty id (0-3).
 /// @returns    Foreground color.
 //----------------------------------------------------------------------------
-textcolor_t
-tty_get_textcolor_fg(int id);
+textcolor_t tty_get_textcolor_fg(int id);
 
 //----------------------------------------------------------------------------
 //  @function   tty_get_textcolor_bg
@@ -157,8 +152,7 @@ tty_get_textcolor_fg(int id);
 /// @param[in]  id      Virtual tty id (0-3).
 /// @returns    Background color.
 //----------------------------------------------------------------------------
-textcolor_t
-tty_get_textcolor_bg(int id);
+textcolor_t tty_get_textcolor_bg(int id);
 
 //----------------------------------------------------------------------------
 //  @function   tty_clear
@@ -166,8 +160,7 @@ tty_get_textcolor_bg(int id);
 ///             text background color.
 /// @param[in]  id      Virtual tty id (0-3).
 //----------------------------------------------------------------------------
-void
-tty_clear(int id);
+void tty_clear(int id);
 
 //----------------------------------------------------------------------------
 //  @function   tty_setpos
@@ -177,8 +170,7 @@ tty_clear(int id);
 /// @param[in]  id      Virtual tty id (0-3).
 /// @param[in]  pos     The screen position of the cursor.
 //----------------------------------------------------------------------------
-void
-tty_setpos(int id, screenpos_t pos);
+void tty_setpos(int id, screenpos_t pos);
 
 //----------------------------------------------------------------------------
 //  @function   tty_getpos
@@ -186,8 +178,7 @@ tty_setpos(int id, screenpos_t pos);
 /// @param[in]  id      Virtual tty id (0-3).
 /// @param[out] pos     A pointer to a screenpos_t to receive the position.
 //----------------------------------------------------------------------------
-void
-tty_getpos(int id, screenpos_t *pos);
+void tty_getpos(int id, screenpos_t *pos);
 
 //----------------------------------------------------------------------------
 //  @function   tty_print
@@ -212,8 +203,7 @@ tty_getpos(int id, screenpos_t *pos);
 /// @param[in]  id      Virtual tty id (0-3).
 /// @param[in]  str     The null-terminated string to be printed.
 //----------------------------------------------------------------------------
-void
-tty_print(int id, const char *str);
+void tty_print(int id, const char *str);
 
 //----------------------------------------------------------------------------
 //  @function   tty_printc
@@ -223,8 +213,7 @@ tty_print(int id, const char *str);
 /// @param[in]  id      Virtual tty id (0-3).
 /// @param[in]  ch      The character to be printed.
 //----------------------------------------------------------------------------
-void
-tty_printc(int id, char ch);
+void tty_printc(int id, char ch);
 
 //----------------------------------------------------------------------------
 //  @function   tty_printf
@@ -238,7 +227,6 @@ tty_printc(int id, char ch);
 ///                     va_start.
 /// @returns    The number of characters written to the console.
 //----------------------------------------------------------------------------
-int
-tty_printf(int id, const char *format, ...);
+int tty_printf(int id, const char *format, ...);
 
 #endif	/* __MCUBE_X86_TTY_H__ */

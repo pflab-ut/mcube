@@ -10,9 +10,9 @@ void init_arch(void)
 {
 #if 1
   init_tty();
+  //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
   tty_clear(TTY_ID);
   init_acpi();
-  //  printk("init_acpi() end\n");
 #else
   //	init_shell();
   init_uart();

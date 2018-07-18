@@ -57,10 +57,9 @@
 /// @details    Contains 512 page table entries if the page holds a page
 ///             table. Otherwise it contains 4096 bytes of memory.
 //----------------------------------------------------------------------------
-typedef union page
-{
-    uint64_t entry[PAGE_SIZE / sizeof(uint64_t)];
-    uint8_t  memory[PAGE_SIZE];
+typedef union page {
+  uint64_t entry[PAGE_SIZE / sizeof(uint64_t)];
+  uint8_t  memory[PAGE_SIZE];
 } page_t;
 
 //----------------------------------------------------------------------------
@@ -69,12 +68,11 @@ typedef union page
 /// @details    Holds all the page table entries that map virtual addresses to
 ///             physical addresses.
 //----------------------------------------------------------------------------
-typedef struct pagetable
-{
-    uint64_t proot;     ///< Physical address of root page table (PML4T) entry
-    uint64_t vroot;     ///< Virtual address of root page table (PML4T) entry
-    uint64_t vnext;     ///< Virtual address to use for table's next page
-    uint64_t vterm;     ///< Boundary of pages used to store the table
+typedef struct pagetable {
+  uint64_t proot;     ///< Physical address of root page table (PML4T) entry
+  uint64_t vroot;     ///< Virtual address of root page table (PML4T) entry
+  uint64_t vnext;     ///< Virtual address to use for table's next page
+  uint64_t vterm;     ///< Boundary of pages used to store the table
 } pagetable_t;
 
 //----------------------------------------------------------------------------
@@ -83,8 +81,7 @@ typedef struct pagetable
 /// @details    The page frame database manages the physical memory used by
 ///             all memory pages known to the kernel.
 //----------------------------------------------------------------------------
-void
-page_init();
+void page_init(void);
 
 //----------------------------------------------------------------------------
 //  @function   pagetable_create
@@ -99,16 +96,14 @@ page_init();
 ///                     multiple of PAGE_SIZE.
 /// @returns    A handle to the created page table.
 //----------------------------------------------------------------------------
-void
-pagetable_create(pagetable_t *pt, void *vaddr, uint64_t size);
+void pagetable_create(pagetable_t *pt, void *vaddr, uint64_t size);
 
 //----------------------------------------------------------------------------
 //  @function   pagetable_destroy
 /// @brief      Destroy a page table.
 /// @param[in]  pt      A handle to the page table to destroy.
 //----------------------------------------------------------------------------
-void
-pagetable_destroy(pagetable_t *pt);
+void pagetable_destroy(pagetable_t *pt);
 
 //----------------------------------------------------------------------------
 //  @function   pagetable_activate
@@ -117,8 +112,7 @@ pagetable_destroy(pagetable_t *pt);
 /// @param[in]  pt      A handle to the activated page table. Pass NULL to
 ///                     activate the kernel page table.
 //----------------------------------------------------------------------------
-void
-pagetable_activate(pagetable_t *pt);
+void pagetable_activate(pagetable_t *pt);
 
 //----------------------------------------------------------------------------
 //  @function   page_alloc
@@ -130,8 +124,7 @@ pagetable_activate(pagetable_t *pt);
 ///                     allocate.
 /// @returns    A virtual memory pointer to the first page allocated.
 //----------------------------------------------------------------------------
-void *
-page_alloc(pagetable_t *pt, void *vaddr, int count);
+void *page_alloc(pagetable_t *pt, void *vaddr, int count);
 
 //----------------------------------------------------------------------------
 //  @function   page_free
@@ -141,8 +134,7 @@ page_alloc(pagetable_t *pt, void *vaddr, int count);
 /// @param[in]  vaddr   The virtual address of the first allocated page.
 /// @param[in]  count   The number of contiguous virtual memory pages to free.
 //----------------------------------------------------------------------------
-void
-page_free(pagetable_t *pt, void *vaddr, int count);
+void page_free(pagetable_t *pt, void *vaddr, int count);
 
 #endif /* !__ASSEMBLY__ */
 
