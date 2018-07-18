@@ -55,9 +55,9 @@ static inline void disable_interrupt(void)
 }
 
 
-extern void init_vector(void);
+void init_vector(void);
 
-extern void show_invalid_entry_message(int type, unsigned long esr, unsigned long address);
+void show_invalid_entry_message(int type, unsigned long esr, unsigned long address);
   
 #endif /* !__ASSEMBLY__ */
 

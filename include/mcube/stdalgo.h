@@ -9,10 +9,10 @@
 #ifndef __ASSEMBLY__
 
 
-extern uint64_t gcd(uint64_t m, uint64_t n);
-extern uint64_t lcm(uint64_t m, uint64_t n);
+uint64_t gcd(uint64_t m, uint64_t n);
+uint64_t lcm(uint64_t m, uint64_t n);
 
-extern int binsearch(char *word, args arg[], int n);
+int binsearch(char *word, args arg[], int n);
 
 #endif /* !__ASSEMBLY__ */
 

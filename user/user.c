@@ -5,7 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-extern int user_arch_main(void);
+int user_arch_main(void);
 
 #if !CONFIG_ARCH_X86
 int ap_main(void)

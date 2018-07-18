@@ -8,9 +8,9 @@
 
 #ifndef __ASSEMBLY__
 
-extern uint32_t gen_rand32(void);
-extern uint64_t gen_rand64(void);
-extern void init_gen_rand(uint32_t seed);
+uint32_t gen_rand32(void);
+uint64_t gen_rand64(void);
+void init_gen_rand(uint32_t seed);
 
 /*------------------------------------------------------
   128-bit SIMD data type for Altivec, SSE2 or standard C

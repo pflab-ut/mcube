@@ -46,18 +46,16 @@ static inline int sem_is_down(struct sem_struct *sem)
 	return (sem->counter <= 0);
 }
 
-extern void __sem_down(struct sem_struct *);
-extern void __sem_up(struct sem_struct *);
-
-
-extern void init_sem(struct sem_struct *, unsigned int, unsigned int);
-extern void sem_down(struct sem_struct *);
-extern void sem_up(struct sem_struct *);
-
-
 extern unsigned int nr_resources;
 
-extern void init_ipc(void);
+void __sem_down(struct sem_struct *);
+void __sem_up(struct sem_struct *);
+
+void init_sem(struct sem_struct *, unsigned int, unsigned int);
+void sem_down(struct sem_struct *);
+void sem_up(struct sem_struct *);
+
+void init_ipc(void);
 
 #endif /* !__ASSEMBLY__ */
 

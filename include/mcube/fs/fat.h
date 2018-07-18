@@ -9,8 +9,8 @@
 #ifndef __ASSEMBLY__
 
 
-extern IO_ERROR write_sector(uint32_t addr, const uint8_t *buf);
-extern IO_ERROR read_sector(uint32_t addr, uint8_t *buf);
+IO_ERROR write_sector(uint32_t addr, const uint8_t *buf);
+IO_ERROR read_sector(uint32_t addr, uint8_t *buf);
 
 
 /* ------------------------------------------------------------------------- */
@@ -193,19 +193,19 @@ struct fat_dirent {
 
 typedef struct fat_dirent fat_dirent;
 
-extern IO_ERROR fat_init(void);
-extern void fat_term(void);
-extern void fat_sync(void);
-extern int fat_mkdir(const char *pathname);
-extern int fat_open(const char *pathname, int flags);
-extern int fat_close(int fd);
-extern int fat_read(int fd, void *buf, int count);
-extern int fat_write(int fd, const void *buf, int count);
-extern int fat_readdir(int fd, struct fat_dirent *dirp);
-extern int fat_opendir(const char *pathname);
-extern int fat_closedir(int fd);
-extern void fat_settime(uint16_t year, uint8_t month, uint8_t day,
-												uint8_t hour, uint8_t min, uint8_t sec);
+IO_ERROR fat_init(void);
+void fat_term(void);
+void fat_sync(void);
+int fat_mkdir(const char *pathname);
+int fat_open(const char *pathname, int flags);
+int fat_close(int fd);
+int fat_read(int fd, void *buf, int count);
+int fat_write(int fd, const void *buf, int count);
+int fat_readdir(int fd, struct fat_dirent *dirp);
+int fat_opendir(const char *pathname);
+int fat_closedir(int fd);
+void fat_settime(uint16_t year, uint8_t month, uint8_t day,
+                 uint8_t hour, uint8_t min, uint8_t sec);
 
 #endif /* !__ASSEMBLY__ */
 

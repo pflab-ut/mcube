@@ -54,17 +54,17 @@
 #define D 4.4544551033807686783083602485579e-6
 
 
-extern double __ieee754_sqrt(double x);
-extern double copysign(double x, double y);
-extern long lpow(long x, long y);
-extern double pow(double x, double y);
+double __ieee754_sqrt(double x);
+double copysign(double x, double y);
+long lpow(long x, long y);
+double pow(double x, double y);
 
-extern double cos(double x);
-extern double sin(double x);
-extern double tan(double x);
+double cos(double x);
+double sin(double x);
+double tan(double x);
 
-extern double sqrt(double x);
-extern double cbrt(double x);
+double sqrt(double x);
+double cbrt(double x);
 
 #elif  CONFIG_ARCH_ARM
 

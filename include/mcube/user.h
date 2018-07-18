@@ -8,7 +8,7 @@
 
 #ifndef __ASSEMBLY__
 
-extern int user_main(void);
+int user_main(void);
 
 #endif /* __ASSEMBLY__ */
 

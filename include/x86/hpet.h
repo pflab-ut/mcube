@@ -343,9 +343,9 @@ static inline uint64_t read_hpet_counter(void)
 	return (uint64_t) low | ((uint64_t) high[1] << 32);
 }
 
-extern void init_hpet_timer(unsigned long tick_us);
-extern void start_hpet_timer(unsigned int ch);
-extern void stop_hpet_timer(unsigned int ch);
+void init_hpet_timer(unsigned long tick_us);
+void start_hpet_timer(unsigned int ch);
+void stop_hpet_timer(unsigned int ch);
 
 #endif /* !__ASSEMBLY__ */
 

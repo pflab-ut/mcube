@@ -21,9 +21,9 @@ extern unsigned long LOW_MEMORY;
 extern unsigned long HIGH_MEMORY;
 
 extern unsigned short *mem_map;
-extern unsigned long get_free_page(void);
-extern void free_page(unsigned long p);
-extern void init_mm(void);
+unsigned long get_free_page(void);
+void free_page(unsigned long p);
+void init_mm(void);
 
 #endif /* !__ASSEMBLY__ */
 

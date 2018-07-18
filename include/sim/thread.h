@@ -40,10 +40,10 @@ struct pthread_arg {
 
 typedef struct pthread_arg pthread_arg;
 
-extern void *pthread_func(void *arg);
+void *pthread_func(void *arg);
 #endif /* CONFIG_USER_TASK_PTHREAD */
 
-extern void exec_thread(void);
+void exec_thread(void);
 
 
 #endif /* !__ASSEMBLY__ */

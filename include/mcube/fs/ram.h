@@ -91,10 +91,10 @@ union RAM_STATUS {
 
 typedef union RAM_STATUS RAM_STATUS;
 
-extern IO_ERROR ram_init(void);
-extern IO_ERROR ram_write_sector(uint32_t addr, const uint8_t *buf);
-extern IO_ERROR ram_read_sector(uint32_t addr, uint8_t *buf);
-extern const RAM_INFO *ram_get_info(void);
-extern uint16_t  ram_get_status(void);
+IO_ERROR ram_init(void);
+IO_ERROR ram_write_sector(uint32_t addr, const uint8_t *buf);
+IO_ERROR ram_read_sector(uint32_t addr, uint8_t *buf);
+const RAM_INFO *ram_get_info(void);
+uint16_t  ram_get_status(void);
 
 #endif /* __MCUBE_MCUBE_FS_RAM_H__ */

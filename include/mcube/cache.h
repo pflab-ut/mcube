@@ -10,19 +10,19 @@
 
 #define	__DCACHE_ALIGNED__
 
-extern void enable_icache(void);
-extern void enable_dcache(void);
-extern void enable_cache(void);
+void enable_icache(void);
+void enable_dcache(void);
+void enable_cache(void);
 
-extern void disable_icache(void);
-extern void disable_dcache(void);
-extern void disable_cache(void);
+void disable_icache(void);
+void disable_dcache(void);
+void disable_cache(void);
 
-extern void reset_icache(void);
-extern void reset_dcache(void);
-extern void reset_cache(void);
+void reset_icache(void);
+void reset_dcache(void);
+void reset_cache(void);
 
-extern void init_cache(void);
+void init_cache(void);
 
 #endif /* !__ASSEMBLY__ */
 

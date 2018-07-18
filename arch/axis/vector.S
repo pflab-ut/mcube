@@ -5,7 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-ENTRY(common_interrupt)
+ENTRY(vector)
   /* save general purpose registers. */
   .set noat
   addi $sp, $sp, -STACK_FRAME_SIZE

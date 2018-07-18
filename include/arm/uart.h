@@ -196,7 +196,6 @@
 #ifndef __ASSEMBLY__
 
 
-
 extern struct uart_devdata uart_data[NR_UART_PORTS];
 
 #endif /* !__ASSEMBLY__ */

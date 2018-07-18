@@ -18,20 +18,20 @@
 #include <unistd.h>
 
 #if CONFIG_PRINTK2CONSOLE || CONFIG_PRINTK2UART || CONFIG_PRINTK2PRINTF
-extern int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
+int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 #else
 #error "Unknown Printk to Output"
 #endif /* CONFIG_PRINTK2NCURSES */
 
 #else
 
-extern int getc(void);
-extern int putchar(int c);
-extern int puts(const char *s);
+int getc(void);
+int putchar(int c);
+int puts(const char *s);
 
-extern int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
+int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 
-extern ssize_t console_write(const void *input_data, size_t length, void *devdata);
+ssize_t console_write(const void *input_data, size_t length, void *devdata);
   
 #endif /* CONFIG_ARCH_SIM */
 

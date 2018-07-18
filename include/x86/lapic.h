@@ -243,15 +243,15 @@ and will always be issued as a 1.) */
 extern unsigned long cpu_bus_freq_mhz;
     
 
-extern void enable_lapic(uint8_t vector);
-extern void disable_lapic(void);
-extern void init_lapic_sipi(void);
+void enable_lapic(uint8_t vector);
+void disable_lapic(void);
+void init_lapic_sipi(void);
 
-extern void init_apic(void);
-extern void init_lapic_timer(unsigned long tick_us);
-extern void start_lapic_timer(unsigned int ch);
-extern void stop_lapic_timer(unsigned int ch);
-extern void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, uint32_t count);
+void init_apic(void);
+void init_lapic_timer(unsigned long tick_us);
+void start_lapic_timer(unsigned int ch);
+void stop_lapic_timer(unsigned int ch);
+void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, uint32_t count);
 
 
 static inline uint64_t find_lapic_first_bit(void)

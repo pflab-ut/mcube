@@ -99,12 +99,12 @@ static inline unsigned long str(void)
 	return tr;
 }
 
-extern void set_gdsc(struct global_descriptor *gd, uint32_t limit,
-										 uint32_t base, uint32_t ar);
-extern void set_idsc(struct interrupt_descriptor *id, uint32_t offset,
-										 uint32_t selector, uint32_t ar);
+void set_gdsc(struct global_descriptor *gd, uint32_t limit,
+              uint32_t base, uint32_t ar);
+void set_idsc(struct interrupt_descriptor *id, uint32_t offset,
+              uint32_t selector, uint32_t ar);
 
-extern void init_dsctbl(void);
+void init_dsctbl(void);
 
 #endif /* !__ASSEMBLY__ */
 

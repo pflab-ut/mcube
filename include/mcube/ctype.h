@@ -29,22 +29,22 @@ extern int _ctype[];
 
 #define __ismask(x) (_ctype[(x)])
 
-extern int isalnum(int c);
-extern int isalpha(int c);
-extern int iscntrl(int c);
-extern int isdigit(int c);
-extern int isgraph(int c);
-extern int islower(int c);
-extern int isprint(int c);
-extern int ispunct(int c);
-extern int isspace(int c);
-extern int isupper(int c);
-extern int isxdigit(int c);
+int isalnum(int c);
+int isalpha(int c);
+int iscntrl(int c);
+int isdigit(int c);
+int isgraph(int c);
+int islower(int c);
+int isprint(int c);
+int ispunct(int c);
+int isspace(int c);
+int isupper(int c);
+int isxdigit(int c);
 
-extern int isascii(int c);
-extern int toascii(int c);
-extern int tolower(int c);
-extern int toupper(int c);
+int isascii(int c);
+int toascii(int c);
+int tolower(int c);
+int toupper(int c);
 
 #endif /* !__ASSEMBLY__ */
 

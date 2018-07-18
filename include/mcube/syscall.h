@@ -22,10 +22,9 @@
 
 #elif CONFIG_ARCH_X86 || CONFIG_ARCH_AXIS
 
-
-extern asmlinkage int syscall0(int number);
-extern asmlinkage int syscall1(int number, int arg1);
-extern asmlinkage int syscall2(int number, int arg1, int arg2);
+asmlinkage int syscall0(int number);
+asmlinkage int syscall1(int number, int arg1);
+asmlinkage int syscall2(int number, int arg1, int arg2);
 
 #endif /* CONFIG_ARCH_SIM */
 

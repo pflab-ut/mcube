@@ -10,9 +10,6 @@
 #ifndef __ASSEMBLY__
 
 
-
-extern void common_interrupt(void);
-
 #endif /* !__ASSEMBLY__ */
 
 #endif /* __MCUBE_AXIS_CPU_H__ */

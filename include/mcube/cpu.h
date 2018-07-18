@@ -41,16 +41,18 @@ extern double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* !CONFIG_ARCH_AXIS */
 
 extern atomic nr_cpus;
-
-extern int ap_main(void);
-extern int ap_usermain(void);
-
-extern void init_fpu(void);
-extern void init_cpu(void);
-extern void init_ap(void);
-extern void init_smp(void);
-
 extern unsigned long ap_start;
+
+int ap_main(void);
+int ap_usermain(void);
+
+void init_fpu(void);
+void init_cpu(void);
+void init_ap(void);
+void init_smp(void);
+
+void vector(void);
+
 
 
 #endif	/* __ASSEMBLY__ */

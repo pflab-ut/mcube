@@ -14,16 +14,16 @@
 
 #elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
 
-extern long strtol(const char *cp, char **endp, int base);
-extern unsigned long strtoul(const char *cp, char **endp, int base);
-extern char *itoa(int val, char *buf, int radix);
-extern char *ltoa(long val, char *buf, int radix);
-extern char *ultoa(unsigned long val, char *buf, int radix);
-extern void exit(int status);
+long strtol(const char *cp, char **endp, int base);
+unsigned long strtoul(const char *cp, char **endp, int base);
+char *itoa(int val, char *buf, int radix);
+char *ltoa(long val, char *buf, int radix);
+char *ultoa(unsigned long val, char *buf, int radix);
+void exit(int status);
 
 
-extern void *malloc(size_t size);
-extern void free(void *objp);
+void *malloc(size_t size);
+void free(void *objp);
 
 #endif /* CONFIG_ARCH_SIM */
 

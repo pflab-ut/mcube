@@ -51,17 +51,17 @@ movb $0x0e, %ah
 #define KEYTABLE_SIZE 128
 #define NR_KEYS (2 * KEYTABLE_SIZE)
 
-extern void enable_key(void);
-extern void disable_key(void);
-extern void init_key(void);
-extern void wait_KBC(void);
-extern void enable_mouse(void);
-extern void disable_mouse(void);
-extern void init_mouse(void);
+void enable_key(void);
+void disable_key(void);
+void init_key(void);
+void wait_KBC(void);
+void enable_mouse(void);
+void disable_mouse(void);
+void init_mouse(void);
 
-extern void set_cursor(uint16_t cur_pos);
+void set_cursor(uint16_t cur_pos);
 
-extern void init_console(void);
+void init_console(void);
 
 
 extern fifo32_struct keycmd;

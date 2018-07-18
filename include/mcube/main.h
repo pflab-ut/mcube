@@ -136,15 +136,15 @@ struct conv_flag {
 
 typedef struct conv_flag conv_flag;
 
-extern void ustart(int id) __attribute__ ((__noreturn__));
-extern void uexit(int status) __attribute__ ((__noreturn__));
+void ustart(int id) __attribute__ ((__noreturn__));
+void uexit(int status) __attribute__ ((__noreturn__));
 
-extern void init(void);
+void init(void);
 
-extern void init_bss(void);
+void init_bss(void);
 
-extern int usermain(void);
-extern int usertask(void *arg);
+int usermain(void);
+int usertask(void *arg);
 
 #define inf_loop() do {																									\
 		printk("%s:%s():%d %s\n", __FILE__, __func__, __LINE__, "inf_loop()"); \
@@ -157,10 +157,10 @@ extern int usertask(void *arg);
 
 extern uint32_t Debug;
 
-extern int main(int argc, char *argv[]);
+int main(int argc, char *argv[]);
 
-extern void init_arch(void);
-extern void exit_arch(void);
+void init_arch(void);
+void exit_arch(void);
 
 
 #endif /* !__ASSEMBLY__ */

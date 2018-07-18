@@ -49,9 +49,9 @@ static inline unsigned long get_current_cpu_time(void)
 	//	return read_HPET_counter();
 }
 
-extern void init_pit_timer(unsigned long tick_us);
-extern void start_pit_timer(unsigned int ch);
-extern void stop_pit_timer(unsigned int ch);
+void init_pit_timer(unsigned long tick_us);
+void start_pit_timer(unsigned int ch);
+void stop_pit_timer(unsigned int ch);
 
 extern unsigned long cpu_bus_freq_mhz;
 extern unsigned long sys_tsc;

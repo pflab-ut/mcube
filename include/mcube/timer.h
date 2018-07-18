@@ -19,11 +19,11 @@ static inline void update_jiffies(void)
 }
 
 
-extern void start_timer(unsigned int ch);
-extern void stop_timer(unsigned int ch);
-extern void init_timer(unsigned long tick_us);
+void start_timer(unsigned int ch);
+void stop_timer(unsigned int ch);
+void init_timer(unsigned long tick_us);
 
-extern irqreturn_t handle_timer_tick(int irq, void *dummy);
+irqreturn_t handle_timer_tick(int irq, void *dummy);
 
 
 extern unsigned long sys_tsc;

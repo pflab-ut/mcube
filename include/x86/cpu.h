@@ -80,16 +80,13 @@ static inline int get_nr_cpu_cores(void)
 }
  
 
-extern void print_vendor_id(void);
-extern void save_cpu_info(void);
-extern unsigned int get_cpu_frequency(void);
-extern void print_cpu_brand(void);
+void print_vendor_id(void);
+void save_cpu_info(void);
+unsigned int get_cpu_frequency(void);
+void print_cpu_brand(void);
 
-
-
-extern int ap_main(void);
-
-extern int ap_usermain(void);
+int ap_main(void);
+int ap_usermain(void);
 
 
 #endif /* __ASSEMBLY__ */

@@ -5,10 +5,10 @@
  */
 #include <mcube/mcube.h>
 
-extern void test_integer_instructions(void);
-extern void test_transfer_instructions(void);
-extern void test_control_instructions(void);
-extern void test_special_instructions(void);
+void test_integer_instructions(void);
+void test_transfer_instructions(void);
+void test_control_instructions(void);
+void test_special_instructions(void);
 
 void *user_func(void *arg)
 {

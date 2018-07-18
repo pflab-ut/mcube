@@ -40,7 +40,7 @@ static inline void delay(unsigned long us)
     pause();
 }
 
-extern void init_tsc(void);
+void init_tsc(void);
 
 extern double clk_per_nsec, nsec_per_clk;
 

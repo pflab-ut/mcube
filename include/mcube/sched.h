@@ -61,44 +61,44 @@ extern volatile uint32_t sched_end;
 extern struct thread_struct *sleep_tq[NR_INTRA_KERNEL_CPUS];
 extern struct thread_struct *deadline_tq[NR_INTRA_KERNEL_CPUS];
 
-extern unsigned long sys_timer_interrupt(void);
+unsigned long sys_timer_interrupt(void);
 
 
-extern int init_activate(struct thread_struct *th);
+int init_activate(struct thread_struct *th);
 
-extern void init_rq(void);
+void init_rq(void);
 
-extern int check_deadline_miss(void);
-
-
-
-extern void init_sched(void);
-extern void do_sched_algo(void);
-extern void do_sched(void);
-
-extern void do_release(void);
+int check_deadline_miss(void);
 
 
-extern int wake_up(struct thread_struct *th);
-extern int sys_wake_up(struct thread_struct *th);
-extern int do_wake_up(struct thread_struct *th);
 
-extern int sleep_for(unsigned int length, unsigned long state);
-extern int sleep_until(unsigned long release, unsigned long state);
+void init_sched(void);
+void do_sched_algo(void);
+void do_sched(void);
 
-extern int activate(struct thread_struct *th);
-extern int sys_activate(struct thread_struct *th);
-extern int do_activate(struct thread_struct *th);
-
-extern int sched_test(int nr_tasks, int nr_cpus);
-
-extern void end_periodic_job(struct thread_struct *th);
-extern void end_aperiodic_job(struct thread_struct *th);
-extern void do_end_job(struct thread_struct *th);
-extern void do_timer_tick(void);
+void do_release(void);
 
 
-extern int run(unsigned long nr_threads);
+int wake_up(struct thread_struct *th);
+int sys_wake_up(struct thread_struct *th);
+int do_wake_up(struct thread_struct *th);
+
+int sleep_for(unsigned int length, unsigned long state);
+int sleep_until(unsigned long release, unsigned long state);
+
+int activate(struct thread_struct *th);
+int sys_activate(struct thread_struct *th);
+int do_activate(struct thread_struct *th);
+
+int sched_test(int nr_tasks, int nr_cpus);
+
+void end_periodic_job(struct thread_struct *th);
+void end_aperiodic_job(struct thread_struct *th);
+void do_end_job(struct thread_struct *th);
+void do_timer_tick(void);
+
+
+int run(unsigned long nr_threads);
 
 
 enum budget_policy {
@@ -173,7 +173,7 @@ struct sched_info {
 
 typedef struct sched_info sched_info;
 
-extern void do_sync(void);
+void do_sync(void);
 
 
 #endif	/* !__ASSEMBLY__ */

@@ -42,12 +42,12 @@ extern fifo32_struct fifo32;
 extern uint32_t fifo32_buf[FIFO32_BUFSIZE];
 
 
-extern void init_fifo32(struct fifo32_struct *fifo, int size, uint32_t *buf);
-extern void put_fifo32(uint32_t data, struct fifo32_struct *fifo);
-extern uint32_t get_fifo32(struct fifo32_struct *fifo);
-extern uint32_t get_fifo32_status(struct fifo32_struct *fifo);
+void init_fifo32(struct fifo32_struct *fifo, int size, uint32_t *buf);
+void put_fifo32(uint32_t data, struct fifo32_struct *fifo);
+uint32_t get_fifo32(struct fifo32_struct *fifo);
+uint32_t get_fifo32_status(struct fifo32_struct *fifo);
 
-extern void init_buffer(void);
+void init_buffer(void);
 
 #endif /* !__ASSEMBLY__ */
 

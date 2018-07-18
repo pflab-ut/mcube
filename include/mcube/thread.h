@@ -164,7 +164,7 @@ typedef struct th_attr th_attr;
 
 typedef struct th_attr_strip th_attr_strip;
 
-extern void init_sched_info(struct thread_struct *th, struct th_attr *attr);
+void init_sched_info(struct thread_struct *th, struct th_attr *attr);
 
 static inline unsigned long get_current_jiffies(void);
 
@@ -197,14 +197,14 @@ static inline unsigned long get_util(struct thread_struct *th)
 	return (th->sched.wcet * 100) / th->sched.period;
 }
 
-extern void __attribute__((noreturn)) run_user_thread(void);
+void __attribute__((noreturn)) run_user_thread(void);
 
 
-extern void set_priority(struct thread_struct *th);
-extern unsigned long get_priority(struct thread_struct *th);
-extern void do_switch_thread_struct(void);
+void set_priority(struct thread_struct *th);
+unsigned long get_priority(struct thread_struct *th);
+void do_switch_thread_struct(void);
 
-extern void thread_main(struct thread_struct *th);
+void thread_main(struct thread_struct *th);
 
 extern struct th_attr thas[NR_THREADS];
 extern struct thread_struct ths[NR_THREADS];
@@ -223,17 +223,16 @@ extern int is_finishing[NR_THREADS];
 
 extern struct thread_struct idle_th[NR_INTRA_KERNEL_CPUS];
 
-extern int alloc_thread_id(void);
-extern struct thread_struct *do_create_thread(void *(*func)(void *),
-                                              void *arg,
-                                              struct th_attr *attr);
-
+int alloc_thread_id(void);
+struct thread_struct *do_create_thread(void *(*func)(void *),
+                                       void *arg,
+                                       struct th_attr *attr);
 
 
 extern unsigned char idle_stack[NR_INTRA_KERNEL_CPUS][STACK_SIZE];
 extern unsigned char stack[NR_THREADS][STACK_SIZE];
 
-extern void (*th_mains[NR_THREADS])(void);
+void (*th_mains[NR_THREADS])(void);
 
 
 #define IDLE_THREAD_STACK_ADDR(cpu) ((unsigned long) &idle_stack[cpu][STACK_SIZE])
@@ -265,7 +264,7 @@ static inline int thread_is_low_prio(struct thread_struct *x, struct thread_stru
 		|| ((x->priority == y->priority) && thread_tie_break(x, y));
 }
 
-extern void wait(unsigned long count);
+void wait(unsigned long count);
 
 static inline void begin_budget(struct thread_struct *th)
 {
@@ -331,13 +330,13 @@ static inline void end_budget(struct thread_struct *th)
 
 /* make the context and allocate a stack:
  * initially, the stack holds one context area for the initial context. */
-extern void set_initial_context(struct thread_struct *th, void (*pc)(void *),
+void set_initial_context(struct thread_struct *th, void (*pc)(void *),
 																void *func, unsigned long bottom);
 
 
-extern int get_tq_util(struct thread_struct *head, unsigned long cpu);
-extern void switch_to(struct thread_struct *next_thread);
-extern void arch_switch_to(struct thread_struct *prev, struct thread_struct *next);
+int get_tq_util(struct thread_struct *head, unsigned long cpu);
+void switch_to(struct thread_struct *next_thread);
+void arch_switch_to(struct thread_struct *prev, struct thread_struct *next);
 
 #define get_context_top(th) \
   ((struct full_regs *)((th)->stack_top - sizeof(struct full_regs)))

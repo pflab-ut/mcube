@@ -37,18 +37,18 @@ typedef struct trace_buffer trace_buffer;
 extern struct trace_buffer ft_buf;
 
 
-extern int init_trace_buffer(struct trace_buffer *buf,
-													unsigned int slot_count,
-													unsigned int slot_size,
-													char *slots,
-													void *buffer_mem);
+int init_trace_buffer(struct trace_buffer *buf,
+                      unsigned int slot_count,
+                      unsigned int slot_size,
+                      char *slots,
+                      void *buffer_mem);
 
-extern int trace_buffer_start_write(struct trace_buffer *buf, void **ptr);
-extern void trace_buffer_finish_write(struct trace_buffer *buf, void *ptr);
-extern int trace_buffer_read(struct trace_buffer *buf, void *dest);
+int trace_buffer_start_write(struct trace_buffer *buf, void **ptr);
+void trace_buffer_finish_write(struct trace_buffer *buf, void *ptr);
+int trace_buffer_read(struct trace_buffer *buf, void *dest);
 
-extern void init_trace(void);
-extern void exit_trace(void);
+void init_trace(void);
+void exit_trace(void);
 
 
 #endif /* !__ASSEMBLY__ */

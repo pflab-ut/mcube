@@ -95,17 +95,15 @@ extern struct emc_req_info emc_req;
 #define	EMC_REQ_INIT	{.sem	= INIT_COUNT_SEM(0), .th = NULL}
 
 
-extern void add_thread_to_task(struct thread_struct *);
-extern void delete_thread_from_task(struct thread_struct *);
-extern int exit_task(void);
+void add_thread_to_task(struct thread_struct *);
+void delete_thread_from_task(struct thread_struct *);
+int exit_task(void);
 
-extern struct task_struct *do_create_task(struct th_attr *attr);
+struct task_struct *do_create_task(struct th_attr *attr);
 
-extern int copy_process(unsigned long func, unsigned long arg);
-extern void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg);
-extern void ret_from_fork(void);
-
-extern int (*task_func[])(void *);
+int copy_process(unsigned long func, unsigned long arg);
+void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg);
+void ret_from_fork(void);
 
 
 

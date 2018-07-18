@@ -10,9 +10,9 @@
 
 #define hw_interrupt_type irq_chip
 
-extern void wait_until_next_interrupt(void);
+void wait_until_next_interrupt(void);
 
-extern void init_irq(void);
+void init_irq(void);
 static void enable_interrupt(void);
 static void disable_interrupt(void);
 
@@ -248,9 +248,9 @@ typedef struct irqaction irqaction;
 /* Function Declarations */
 
 
-extern asmlinkage int do_irq(unsigned long irq, struct full_regs *regs);
-extern unsigned int __do_irq(unsigned long irq);
-extern int setup_irq(unsigned int irq, struct irqaction *new);
+asmlinkage int do_irq(unsigned long irq, struct full_regs *regs);
+unsigned int __do_irq(unsigned long irq);
+int setup_irq(unsigned int irq, struct irqaction *new);
 
 
 

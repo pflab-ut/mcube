@@ -9,8 +9,8 @@
 #ifndef	__ASSEMBLY__
 
 
-extern void smp_barrier(int index);
-extern void init_smp_barrier(void);
+void smp_barrier(int index);
+void init_smp_barrier(void);
 
 #define NR_SMP_SCHED_BARRIERS 16
 extern volatile uint32_t smp_sched_barrier[NR_SMP_SCHED_BARRIERS];

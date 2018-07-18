@@ -20,8 +20,9 @@
 #define DISK_SIZE 0x80000
 
 extern uint8_t user_disk[DISK_SIZE];
-extern void init_fs(void);
-extern void print_disk(void);
+
+void init_fs(void);
+void print_disk(void);
 
 #define FS_NAME_LEN	64
 

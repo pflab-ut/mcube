@@ -9,11 +9,11 @@
 #ifndef __ASSEMBLY__
 
 
-extern void print_overhead(void);
-extern void print_metric(int cutil);
-extern void print_option_usage(void);
-extern void init_metric(void);
-extern void init_overhead(void);
+void print_overhead(void);
+void print_metric(int cutil);
+void print_option_usage(void);
+void init_metric(void);
+void init_overhead(void);
 
 
 /**
@@ -82,10 +82,10 @@ extern uint64_t migrations[NR_THREADS];
 
 extern uint64_t ths_release[NR_THREADS];
 
-extern void print_ovhd(struct overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
+void print_ovhd(struct overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
 
-extern void save_pre_time(overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
-extern void save_post_time(overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
+void save_pre_time(overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
+void save_post_time(overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
 
 
 #endif /* !__ASSEMBLY__ */
