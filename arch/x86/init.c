@@ -17,7 +17,7 @@ void init_arch(void)
   /* initialize memory */
   init_acpi();
   init_pmap();
-  //  init_page();
+  init_page();
   
 #else
   //	init_shell();

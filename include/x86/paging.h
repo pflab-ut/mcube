@@ -76,12 +76,12 @@ typedef struct pagetable {
 } pagetable_t;
 
 //----------------------------------------------------------------------------
-//  @function   page_init
+//  @function   init_page
 /// @brief      Initialize the page frame database.
 /// @details    The page frame database manages the physical memory used by
 ///             all memory pages known to the kernel.
 //----------------------------------------------------------------------------
-void page_init(void);
+void init_page(void);
 
 //----------------------------------------------------------------------------
 //  @function   pagetable_create

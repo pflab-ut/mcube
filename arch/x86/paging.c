@@ -99,7 +99,7 @@ static void *reserve_region(const pmap_t *map, uint64_t size, uint32_t alignshif
   return NULL;
 }
 
-void page_init(void)
+void init_page(void)
 {
   // Retrieve the physical memory map.
   const pmap_t *map = pmap();
@@ -120,7 +120,7 @@ void page_init(void)
 
   // Find a contiguous, 2MiB-aligned region of memory large enough to hold
   // the entire pagedb.
-  pfdb.pf = (pf_t *)reserve_region(map, pfdbsize, PAGE_SHIFT_LARGE);
+  pfdb.pf = (pf_t *) reserve_region(map, pfdbsize, PAGE_SHIFT_LARGE);
   if (pfdb.pf == NULL) {
     fatal();
   }
@@ -135,8 +135,8 @@ void page_init(void)
 
   // Initialize available page frame list.
   pfdb.avail = 0;
-  pfdb.head  = PFN_INVALID;
-  pfdb.tail  = PFN_INVALID;
+  pfdb.head = PFN_INVALID;
+  pfdb.tail = PFN_INVALID;
 
   // Traverse the memory table, adding page frame database entries for each
   // region in the table.
@@ -200,8 +200,9 @@ static pf_t *pfalloc(void)
 
 static void pffree(pf_t *pf)
 {
-  if (pf->type != PFTYPE_ALLOCATED)
+  if (pf->type != PFTYPE_ALLOCATED) {
     fatal();
+  }
 
   // Re-initialize the page frame record.
   memzero(pf, sizeof(pf_t));
@@ -372,8 +373,8 @@ void pagetable_create(pagetable_t *pt, void *vaddr, uint64_t size)
   pt->vterm = (uint64_t) vaddr + size;
 
   // Install the kernel's page table into the created page table.
-  page_t *src = (page_t *)kpt.proot;
-  page_t *dst = (page_t *)pt->proot;
+  page_t *src = (page_t *) kpt.proot;
+  page_t *dst = (page_t *) pt->proot;
   for (int i = 0; i < 512; i++) {
     dst->entry[i] = src->entry[i];
   }
@@ -392,7 +393,7 @@ void pagetable_destroy(pagetable_t *pt)
   if (pt == active_pt) {
     for (uint64_t vaddr = pt->vroot; vaddr < pt->vterm;
          vaddr += PAGE_SIZE) {
-      invalidate_page((void *)vaddr);
+      invalidate_page((void *) vaddr);
     }
   }
 

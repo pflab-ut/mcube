@@ -29,8 +29,8 @@ $prefix doxygen
 
 # LaTeX
 $prefix tetex-* texlive-latex* texlive-science ptex-jtex
-$prefix okumura-clsfiles xdvik-ja texlive-fonts-recommended
-$prefix vfdata-morisawa5 dvi2ps-fontdesc-morisawa5
+$prefix texlive-lang-japanese texlive-fonts-recommended
+$prefix dvi2ps-fontdesc-morisawa5   
 
 # qemu
 $prefix qemu qemu-system
