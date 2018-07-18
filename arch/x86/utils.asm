@@ -13,6 +13,7 @@ bits 64
 
 section .text
 
+  
   global arch_switch_to
   
 arch_switch_to:

@@ -9,10 +9,16 @@
 void init_arch(void)
 {
 #if 1
+  /* initialize console */
   init_tty();
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
   tty_clear(TTY_ID);
+
+  /* initialize memory */
   init_acpi();
+  init_pmap();
+  //  init_page();
+  
 #else
   //	init_shell();
   init_uart();

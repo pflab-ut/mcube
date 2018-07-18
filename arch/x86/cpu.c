@@ -37,10 +37,10 @@ int ap_main(void)
 
 void init_fpu(void)
 {
-	uint32_t val = load_cr0();
+	uint32_t val = get_cr0();
 	val &= ~CR0_EMULATION;
 	val |= CR0_MONITOR_COPROCESSOR;
-	store_cr0(val);
+	set_cr0(val);
 	finit();
 }
 

@@ -61,6 +61,9 @@ typedef enum bool bool;
 /// Forced structure packing (use only when absolutely necessary)
 #define PACKSTRUCT           __attribute__((packed, aligned(1)))
 
+/// Compile-time static assertion
+#define STATIC_ASSERT(a, b)  _Static_assert(a, b)
+
 
 #define __stringify_1(x...)   #x
 #define __stringify(x...)    __stringify_1(x)

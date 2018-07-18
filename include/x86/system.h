@@ -27,65 +27,65 @@
 #ifndef __ASSEMBLY__
 
 
-static inline uint64_t load_cr0(void)
+static inline uint64_t get_cr0(void)
 {
   uint64_t value;
   asm volatile("movq %%cr0, %0" : "=r"(value));
   return value;
 }
 
-static inline void store_cr0(uint64_t value)
+static inline void set_cr0(uint64_t value)
 {
   asm volatile("movq %0, %%cr0" :: "r"(value));
 }
 
 /* reserve cr1 */
 
-static inline uint32_t load_cr2(void)
+static inline uint64_t get_cr2(void)
 {
-  uint32_t value;
+  uint64_t value;
   asm volatile("movq %%cr2, %0" : "=r"(value));
   return value;
 }
 
-static inline void store_cr2(uint32_t value)
+static inline void set_cr2(uint64_t value)
 {
   asm volatile("movq %0, %%cr2" :: "r"(value));
 }
 
-static inline uint32_t load_cr3(void)
+static inline uint64_t get_cr3(void)
 {
-  uint32_t value;
+  uint64_t value;
   asm volatile("movq %%cr3, %0" : "=r"(value));
   return value;
 }
 
-static inline void store_cr3(uint32_t value)
+static inline void set_cr3(uint64_t value)
 {
   asm volatile("movq %0, %%cr3" :: "r"(value));
 }
 
-static inline uint32_t load_cr4(void)
+static inline uint64_t get_cr4(void)
 {
-  uint32_t value;
+  uint64_t value;
   asm volatile("movq %%cr4, %0" : "=r"(value));
   return value;
 }
 
-static inline void store_cr4(uint32_t value)
+static inline void set_cr4(uint64_t value)
 {
   asm volatile("movq %0, %%cr4" :: "r"(value));
 }
 
-static inline uint32_t load_eflags(void)
+static inline uint64_t get_eflags(void)
 {
-  uint32_t eflags;
+  uint64_t eflags;
   asm volatile("pushfl\n\t"
                "popl %0" : "=r"(eflags));
   return eflags;
 }
 
-static inline void store_eflags(uint32_t eflags)
+static inline void set_eflags(uint64_t eflags)
 {
   asm volatile("pushl %0 \n\t"
                "popfl" :: "r"(eflags));

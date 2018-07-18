@@ -48,7 +48,7 @@ static void read_table(const struct acpi_hdr *hdr)
     break;
   default:
     break;
-    }
+  }
 }
 
 static bool is_mapped(btable_t *btable, uint64_t addr)

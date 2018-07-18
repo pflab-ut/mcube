@@ -277,7 +277,7 @@ static void normalize(void)
   update_last_usable();
 }
 
-void pmap_init(void)
+void init_pmap(void)
 {
   // During the boot process, the physical memory map at KMEM_TABLE_BIOS has
   // been updated to include memory regions reported by the BIOS. This

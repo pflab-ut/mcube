@@ -191,19 +191,10 @@ static inline void wrmsr(uint64_t data, uint32_t addr)
 }
 
 
-static inline void set_pagetable(uint64_t paddr)
-{
-  asm volatile ("mov    rdi,    %[paddr]\n"
-                "mov    cr3,    rdi\n"
-                :
-                : [paddr] "m" (paddr)
-                : "rdi");
-}
 
 static inline void invalidate_page(void *vaddr)
 {
-  asm volatile (
-                "invlpg     %[v]\n"
+  asm volatile ("invlpg     %[v]\n"
                 :
                 : [v] "m" (vaddr)
                 : "memory");

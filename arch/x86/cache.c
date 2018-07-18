@@ -55,13 +55,13 @@ void disable_cache(void)
 #if 1
 	disable_l3_cache();
 	reset_cache();
-	store_cr0((load_cr0() | CR0_DISABLE_CACHE) & ~CR0_NOT_WRITE_THROUGH);
+	set_cr0((get_cr0() | CR0_DISABLE_CACHE) & ~CR0_NOT_WRITE_THROUGH);
 	reset_cache();
 	disable_mtrr();
 	set_mtrr_def_type_msr(MSR_MTRR_DEF_TYPE_MEM_TYPE_UNCACHED);
 	reset_cache();
 #else
-	store_cr0(load_cr0() | (CR0_DISABLE_CACHE | CR0_NOT_WRITE_THROUGH));
+	set_cr0(get_cr0() | (CR0_DISABLE_CACHE | CR0_NOT_WRITE_THROUGH));
 #endif
 }
 
@@ -69,7 +69,7 @@ void enable_cache(void)
 {
 	set_mtrr_def_type_msr(MSR_MTRR_DEF_TYPE_MEM_TYPE_WRITE_BACK);
 	enable_mtrr();
-	store_cr0(load_cr0() & ~(CR0_DISABLE_CACHE | CR0_NOT_WRITE_THROUGH));
+	set_cr0(get_cr0() & ~(CR0_DISABLE_CACHE | CR0_NOT_WRITE_THROUGH));
 	enable_l3_cache();
 }
 
