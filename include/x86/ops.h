@@ -29,6 +29,13 @@ static inline uint32_t inl(uint32_t port)
 	return value;
 }
 
+static inline uint32_t ind(uint64_t port)
+{
+	uint64_t value;
+	asm volatile("ind %1, %0" : "=a" (value) : "dN" (port));
+	return value;
+}
+
 static inline void outb(uint16_t port, uint8_t value)
 {
   asm volatile("outb %0, %1" :: "a"(value), "dN"(port));
@@ -42,6 +49,11 @@ static inline void outw(uint16_t port, uint16_t value)
 static inline void outl(uint32_t port, uint32_t value)
 {
 	asm volatile("outl %0, %1" :: "a" (value), "dN" (port));
+}
+
+static inline void outd(uint64_t port, uint64_t value)
+{
+	asm volatile("outd %0, %1" :: "a" (value), "dN" (port));
 }
 
 static inline void finit(void)
@@ -177,6 +189,33 @@ static inline void wrmsr(uint64_t data, uint32_t addr)
 {
 	asm volatile("wrmsr" : "=c"(addr) : "A"(data));
 }
+
+
+static inline void set_pagetable(uint64_t paddr)
+{
+  asm volatile ("mov    rdi,    %[paddr]\n"
+                "mov    cr3,    rdi\n"
+                :
+                : [paddr] "m" (paddr)
+                : "rdi");
+}
+
+static inline void invalidate_page(void *vaddr)
+{
+  asm volatile (
+                "invlpg     %[v]\n"
+                :
+                : [v] "m" (vaddr)
+                : "memory");
+}
+
+
+static inline void fatal(void)
+{
+  //  asm volatile("int 0xff");
+  asm volatile("int %0" :: "i"(0xff));
+}
+
 
 #endif /* !__ASSEMBLY__ */
 

@@ -66,5 +66,6 @@
 #define MEM_LOADER1_SEGMENT (MEM_LOADER1 >> 4)
 #define MEM_LOADER2_SEGMENT (MEM_LOADER2 >> 4)
 
+
 #endif /* __MCUBE_BOOT_MEM_INC__ */
 

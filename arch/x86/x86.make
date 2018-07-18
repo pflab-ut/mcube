@@ -61,16 +61,8 @@ ASMS = \
 
 SRCS += \
  $(TOP_DIR)/arch/x86/main.c \
-
-
-#ASMS += \
-	$(TOP_DIR)/arch/x86/boot.S \
-	$(TOP_DIR)/arch/x86/asmhead.S \
-	$(TOP_DIR)/arch/x86/boot-smp.S \
-	$(TOP_DIR)/arch/x86/startup.S \
-	$(TOP_DIR)/arch/x86/vectors.S \
-
-SRCS += \
+ $(TOP_DIR)/arch/x86/mm.c \
+ $(TOP_DIR)/arch/x86/acpi.c \
  $(TOP_DIR)/arch/x86/apic.c \
  $(TOP_DIR)/arch/x86/cache.c \
  $(TOP_DIR)/arch/x86/cpu.c \
@@ -79,6 +71,7 @@ SRCS += \
  $(TOP_DIR)/arch/x86/irq.c \
  $(TOP_DIR)/arch/x86/thread.c \
  $(TOP_DIR)/arch/x86/key.c \
+ $(TOP_DIR)/arch/x86/pmap.c \
  $(TOP_DIR)/arch/x86/mmu.c \
  $(TOP_DIR)/arch/x86/stdio.c \
  $(TOP_DIR)/arch/x86/timer.c \

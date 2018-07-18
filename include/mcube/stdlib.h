@@ -25,6 +25,10 @@ void exit(int status);
 void *malloc(size_t size);
 void free(void *objp);
 
+typedef int (*sortcmp)(const void *a, const void *b);
+
+void qsort(void *base, size_t num, size_t size, sortcmp cmp);
+  
 #endif /* CONFIG_ARCH_SIM */
 
 #define MALLOC_SIZE 0x1000

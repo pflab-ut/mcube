@@ -9,6 +9,7 @@
 #include <x86/ops.h>
 #include <x86/irq.h>
 
+#include <x86/acpi.h>
 #include <x86/addr.h>
 #include <x86/atomic.h>
 #include <x86/dmac.h>
@@ -18,6 +19,8 @@
 #include <x86/ioapic.h>
 #include <x86/irqflags.h>
 #include <x86/lapic.h>
+#include <x86/paging.h>
+#include <x86/pmap.h>
 #include <x86/mm.h>
 #include <x86/msr.h>
 #include <x86/cpu.h>

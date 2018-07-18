@@ -45,18 +45,21 @@
 
 #else
 
-enum boolean {
+enum bool {
   FALSE = 0,
-          TRUE
+  TRUE
 };
 
-typedef enum boolean boolean;
+typedef enum bool bool;
 
 #endif /* !__ASSEMBLY__ */
 
 
 #define SUCCESS 1
 #define FAILURE 0
+
+/// Forced structure packing (use only when absolutely necessary)
+#define PACKSTRUCT           __attribute__((packed, aligned(1)))
 
 
 #define __stringify_1(x...)   #x
