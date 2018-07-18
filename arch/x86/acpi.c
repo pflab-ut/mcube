@@ -159,7 +159,7 @@ static void read_xsdt(btable_t *btable)
   const struct acpi_xsdt *xsdt = acpi.xsdt;
   const struct acpi_hdr  *xhdr = &xsdt->hdr;
 
-  printk("[acpi] oem='%.6s' tbl='%.8s' rev=%#x creator='%.4s'\n",
+  printk("[acpi] oem='%s' tbl='%s' rev=0x%x creator='%s'\n",
          xhdr->oemid, xhdr->oemtableid, xhdr->oemrevision, xhdr->creatorid);
 
   // Read each of the tables referenced by the XSDT table.
@@ -167,7 +167,7 @@ static void read_xsdt(btable_t *btable)
   for (int i = 0; i < tables; i++) {
     const struct acpi_hdr *hdr = (const struct acpi_hdr *) xsdt->ptr_table[i];
     map_table(btable, hdr);
-    printk("[acpi] Found %.4s table at 0x%lx.\n",
+    printk("[acpi] Found %s table at 0x%lx.\n",
            hdr->signature.bytes, (uint64_t)hdr);
     read_table(hdr);
   }
@@ -178,7 +178,7 @@ static void read_rsdt(btable_t *btable)
   const struct acpi_rsdt *rsdt = acpi.rsdt;
   const struct acpi_hdr  *rhdr = &rsdt->hdr;
 
-  printk("[acpi] oem='%.6s' tbl='%.8s' rev=%#x creator='%.4s'\n",
+  printk("[acpi] oem='%s' tbl='%s' rev=%x creator='%s'\n",
          rhdr->oemid, rhdr->oemtableid, rhdr->oemrevision, rhdr->creatorid);
 
   // Read each of the tables referenced by the RSDT table.
@@ -186,7 +186,7 @@ static void read_rsdt(btable_t *btable)
   for (int i = 0; i < tables; i++) {
     const struct acpi_hdr *hdr = (const struct acpi_hdr *)(uintptr_t) rsdt->ptr_table[i];
     map_table(btable, hdr);
-    printk("[acpi] Found %.4s table at 0x%lx.\n",
+    printk("[acpi] Found %s table at 0x%lx.\n",
            hdr->signature.bytes, (uint64_t) hdr);
     read_table(hdr);
   }
