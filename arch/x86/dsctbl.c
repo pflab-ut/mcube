@@ -80,5 +80,4 @@ void init_dsctbl(void)
 
 	/* register syscall */
   //	set_idsc(idt_start + SYSCALL_IRQ, (uint32_t) &system_call, 2 * 8, AR_INTGATE32);
-
 }

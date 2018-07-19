@@ -16,8 +16,7 @@ bits 64
 
 section .text
 
-  global init_irq
-  
+  global init_irq  
   global isr_set
   global irq_enable
   global irq_disable
@@ -110,6 +109,7 @@ struc IDT.Descriptor
     .Reserved       resd    1
 
 endstruc
+
 
 ; The IDT pointer, which is loaded by the lidt instruction.
 align 8

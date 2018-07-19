@@ -41,7 +41,7 @@ enum pmemtype {
 struct pmapregion {
   uint64_t addr;               ///< base address
   uint64_t size;               ///< size of memory region
-  int32_t  type;               ///< Memory type (see memtype enum)
+  int32_t type;                ///< Memory type (see memtype enum)
   uint32_t flags;              ///< flags (currently unused)
 };
 typedef struct pmapregion pmapregion_t;
@@ -76,11 +76,11 @@ void init_pmap(void);
 void pmap_add(uint64_t addr, uint64_t size, enum pmemtype type);
 
 //----------------------------------------------------------------------------
-//  @function   pmap
+//  @function   get_pmap
 /// @brief      Return a pointer to the current physical memory map.
 /// @returns    A pointer to the physical memory map.
 //----------------------------------------------------------------------------
-const pmap_t *pmap(void);
+const pmap_t *get_pmap(void);
 
 
 void print_pmap(void);

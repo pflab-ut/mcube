@@ -184,7 +184,7 @@ void init_kmem(pagetable_t *pt)
 
   // For each region in the physical memory map, create appropriate page
   // table entries.
-  const pmap_t *map = pmap();
+  const pmap_t *map = get_pmap();
   for (uint64_t r = 0; r < map->count; r++) {
     map_region(pt, map, &map->region[r]);
   }

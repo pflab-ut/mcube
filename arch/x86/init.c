@@ -20,7 +20,7 @@ void init_arch(void)
   init_page();
   //print_pmap();
   init_irq();
-
+  
   
 #else
   //	init_shell();

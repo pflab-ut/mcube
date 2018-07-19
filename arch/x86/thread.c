@@ -6,10 +6,11 @@
 #include <mcube/mcube.h>
 
 void set_initial_context(struct thread_struct *th,
-			 void (*pc)(void *),
-			 void *func,
-			 unsigned long bottom)
+                         void (*pc)(void *),
+                         void *func,
+                         unsigned long bottom)
 {
+#if 0  
 	struct full_regs *fregs;
 	th->stack_top = bottom;
 	fregs = get_context_top(th);
@@ -38,6 +39,7 @@ void set_initial_context(struct thread_struct *th,
 	//	printk("&fregs->cregs.eip = %x fregs->cregs.eip = %x\n", &fregs->cregs.eip, fregs->cregs.eip);
 	set_gdsc(gdt_start + TASK_GDT0 + th->id, sizeof(struct context_regs) - 1,
 					 (uint64_t) &fregs->cregs, AR_TSS32);
+#endif
 }
 
 

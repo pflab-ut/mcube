@@ -303,7 +303,7 @@ void init_pmap(void)
   initialized = TRUE;
 }
 
-const pmap_t *pmap(void)
+const pmap_t *get_pmap(void)
 {
   return map;
 }

@@ -15,7 +15,7 @@ void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long 
 void init_ap(void)
 {
 	init_uart();
-	init_dsctbl();
+  //	init_dsctbl();
   //	init_irq();
 	init_cpu();
 	init_apic();

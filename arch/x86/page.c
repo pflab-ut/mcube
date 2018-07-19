@@ -102,7 +102,7 @@ static void *reserve_region(const pmap_t *map, uint64_t size, uint32_t alignshif
 void init_page(void)
 {
   // Retrieve the physical memory map.
-  const pmap_t *map = pmap();
+  const pmap_t *map = get_pmap();
   if (map->last_usable == 0) {
     fatal();
   }

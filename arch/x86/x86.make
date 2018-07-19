@@ -42,7 +42,14 @@ else
   OBJDUMP = $(CROSS_PREFIX)objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
 #  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
-  LDFLAGS += -g -nostdlib -m64 -mno-red-zone -ffreestanding  -z max-page-size=0x1000
+  LDFLAGS += -nostdlib
+CFLAGS +=  -Qn -g \
+     -m64 -mno-red-zone -mno-mmx -mfpmath=sse  \
+     -ffreestanding -fno-asynchronous-unwind-tables \
+     -Wall  -fPIC
+#CFLAGS += -std=gnu11 -masm=intel
+#LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc \
+     -z max-page-size=0x1000   
   LDFLAGS += -T scripts/linker/x86-elf.ld
 endif
 
@@ -59,7 +66,7 @@ CFLAGS += -D__LITTLE_ENDIAN__
 ASMS = \
 	$(TOP_DIR)/arch/x86/start.asm \
 	$(TOP_DIR)/arch/x86/memzero.asm \
-	$(TOP_DIR)/arch/x86/utils.asm \
+ $(TOP_DIR)/arch/x86/utils.asm \
 
 #$(TOP_DIR)/arch/x86/interrupt.asm \
 
@@ -70,7 +77,6 @@ SRCS += \
  $(TOP_DIR)/arch/x86/page.c \
  $(TOP_DIR)/arch/x86/cache.c \
  $(TOP_DIR)/arch/x86/cpu.c \
- $(TOP_DIR)/arch/x86/dsctbl.c \
  $(TOP_DIR)/arch/x86/init.c \
  $(TOP_DIR)/arch/x86/irq.c \
  $(TOP_DIR)/arch/x86/thread.c \
@@ -86,3 +92,5 @@ SRCS += \
 	$(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_x86.c \
 
+
+# $(TOP_DIR)/arch/x86/dsctbl.c \
