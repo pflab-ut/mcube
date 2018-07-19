@@ -9,6 +9,7 @@
 void init_arch(void)
 {
 #if 1
+  disable_interrupt();
   /* initialize console */
   init_tty();
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
@@ -21,7 +22,9 @@ void init_arch(void)
   //print_pmap();
   init_irq();
   
-  
+  extern unsigned long IDT_Pointer;
+  printk("IDT_Poiner = 0x%lx\n", IDT_Pointer);
+  lidt(&IDT_Pointer);
 #else
   //	init_shell();
   init_uart();

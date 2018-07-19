@@ -8,6 +8,51 @@
 
 #ifndef __ASSEMBLY__
 
+/*
+ * Interrupt memory layout
+ *
+ *   00001000 - 00001fff     4,096 bytes     Interrupt descriptor table (IDT)
+ *   00002000 - 000027ff     2,048 bytes     Kernel-defined ISR table
+ *   00002800 - 00002fff     2,048 bytes     ISR thunk table
+ *
+ * The IDT contains 256 interrupt descriptors, each of which points at one of
+ * the internet service routine (ISR) thunks. The thunks prepare a jump to a
+ * general-purpose ISR dispatcher, which calls the appropriate ISR from the
+ *  kernel-defined ISR table.
+ */
+
+extern unsigned long idt_descriptor_size;
+
+// IDT memory range
+#define MEM_IDT 0x00001000
+#define MEM_IDT_SIZE (IDT_DESCRIPTOR_SIZE * 256)
+
+// Kernel ISR table
+#define MEM_ISR_TABLE 0x00002000
+#define MEM_ISR_TABLE_SIZE (8 * 256) // Pointer per interrupt
+
+// ISR thunks
+#define MEM_ISR_THUNKS 0x00002800
+#define MEM_ISR_THUNKS_SIZE (17 * 256) // 17 bytes of code per interrupt
+
+// Segment selectors
+#define SEGMENT_KERNEL_DATA 0x08
+#define SEGMENT_KERNEL_CODE 0x10
+#define SEGMENT_USER_DATA 0x18
+#define SEGMENT_USER_CODE 0x20
+#define SEGMENT_TSS 0x28
+
+// CPU exception constants used by this code.
+#define EXCEPTION_NMI 0x02
+#define EXCEPTION_DF 0x08
+#define EXCEPTION_TS 0x0a
+#define EXCEPTION_NP 0x0b
+#define EXCEPTION_SS 0x0c
+#define EXCEPTION_GP 0x0d
+#define EXCEPTION_PF 0x0e
+#define EXCEPTION_MC 0x12
+
+
 
 #define PIC0_ICW1 0x0020
 #define PIC0_OCW2 0x0020

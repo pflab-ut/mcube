@@ -30,6 +30,7 @@ ifeq ($(CC), clang)
 #  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
   OBJDUMP = objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
+  CFLAGS += --x86-asm-syntax=intel
   LDFLAGS += -T scripts/linker/x86-elf.ld --Map $(MAP)
 else
   CROSS_PREFIX = 
@@ -43,13 +44,10 @@ else
   OBJCOPY = $(CROSS_PREFIX)objcopy
 #  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
   LDFLAGS += -nostdlib
-CFLAGS +=  -Qn -g \
-     -m64 -mno-red-zone -mno-mmx -mfpmath=sse  \
-     -ffreestanding -fno-asynchronous-unwind-tables \
-     -Wall  -fPIC
-#CFLAGS += -std=gnu11 -masm=intel
-#LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc \
-     -z max-page-size=0x1000   
+#  CFLAGS += -masm=intel
+#CFLAGS +=  -Qn -g  -m64 -mno-red-zone -mno-mmx -mfpmath=sse  \
+#     -ffreestanding -fno-asynchronous-unwind-tables -Wall  -fPIC
+#LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000   
   LDFLAGS += -T scripts/linker/x86-elf.ld
 endif
 
@@ -67,8 +65,7 @@ ASMS = \
 	$(TOP_DIR)/arch/x86/start.asm \
 	$(TOP_DIR)/arch/x86/memzero.asm \
  $(TOP_DIR)/arch/x86/utils.asm \
-
-#$(TOP_DIR)/arch/x86/interrupt.asm \
+$(TOP_DIR)/arch/x86/interrupt.asm \
 
 SRCS += \
  $(TOP_DIR)/arch/x86/mm.c \

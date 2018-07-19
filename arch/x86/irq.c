@@ -178,45 +178,6 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 
 #if 1
 
-void init_pic(void)
-{
-  printk("init_pic()\n");
-
-  /* initialize the master PIC. */
-  /* ICW1: 0x11 = init with 4 ICW's */
-  outb(0x20, 0x11);
-  /* ICW2: 0x20 = interrupt offset 32 */
-  outb(0x21, 0x20);
-  /* ICW3: 0x04 = IRQ2 has a slave */
-  outb(0x21, 0x04);
-  /* ICW4: 0x01 = x86 mode */
-  outb(0x21, 0x01);
-
-  /* initialize the slave PIC. */
-  /* ICW1: 0x11 = init with 4 ICW's */
-  outb(0xa0, 0x11);
-  /* ICW2: 0x28 = interrupt offset 40 */
-  outb(0xa1, 0x28);
-  /* ICW3: 0x02 = attached to master IRQ2. */
-  outb(0xa1, 0x02);
-  /* ICW4: 0x01 = x86 mode */
-  outb(0xa1, 0x01);
-
-  /* Disable all IRQs. The kernel will re-enable the ones it wants to handle later. */
-  outb(0x21, 0xff);
-  outb(0xa1, 0xff);
-}
-
-void init_thunks(void)
-{
-  
-}
-
-void init_irq(void)
-{
-  init_pic();
-  init_thunks();
-}
 
 #else
 void init_irq(void)

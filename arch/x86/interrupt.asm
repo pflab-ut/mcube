@@ -110,10 +110,10 @@ struc IDT.Descriptor
 
 endstruc
 
-
+  global IDT_Pointer
 ; The IDT pointer, which is loaded by the lidt instruction.
 align 8
-IDT.Pointer:
+IDT_Pointer:
     dw  Mem.IDT.Size - 1    ; Limit = offset of last byte in table.
     dq  Mem.IDT             ; Address of table.
 
@@ -452,7 +452,7 @@ init_irq:
 
 ; XXX: not comipled...
             ; Install the IDT
-            lidt    [IDT.Pointer]
+;            lidt    [IDT_Pointer]
 
         ret
 %if 0
