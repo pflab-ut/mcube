@@ -1,12 +1,12 @@
 /**
- * @file include/x86/paging.h
+ * @file include/x86/page.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_X86_PAGING_H__
-#define	__MCUBE_X86_PAGING_H__
+#ifndef __MCUBE_X86_PAGE_H__
+#define	__MCUBE_X86_PAGE_H__
 //============================================================================
-/// @file       paging.h
+/// @file       page.h
 /// @brief      Paged memory management.
 //
 // Copyright 2016 Brett Vickers.
@@ -138,4 +138,4 @@ void page_free(pagetable_t *pt, void *vaddr, int count);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_X86_PAGING_H__ */
+#endif	/* __MCUBE_X86_PAGE_H__ */

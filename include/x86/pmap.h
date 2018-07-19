@@ -82,6 +82,10 @@ void pmap_add(uint64_t addr, uint64_t size, enum pmemtype type);
 //----------------------------------------------------------------------------
 const pmap_t *pmap(void);
 
+
+void print_pmap(void);
+
+
 #endif /* !__ASSEMBLY__ */
 
 #endif	/* __MCUBE_X86_PMAP_H__ */

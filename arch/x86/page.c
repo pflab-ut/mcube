@@ -1,11 +1,11 @@
 /**
- * @file arch/x86/paging.c
+ * @file arch/x86/page.c
  *
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       paging.c
+/// @file       page.c
 /// @brief      Paged memory management.
 //
 // Copyright 2016 Brett Vickers.
@@ -94,7 +94,7 @@ static void *reserve_region(const pmap_t *map, uint64_t size, uint32_t alignshif
 
     // Reserve the aligned memory region and return its address.
     pmap_add(paddr, size, PMEMTYPE_RESERVED);
-    return (void *)paddr;
+    return (void *) paddr;
   }
   return NULL;
 }
@@ -120,8 +120,7 @@ void init_page(void)
 
   // Find a contiguous, 2MiB-aligned region of memory large enough to hold
   // the entire pagedb.
-  pfdb.pf = (pf_t *) reserve_region(map, pfdbsize, PAGE_SHIFT_LARGE);
-  if (pfdb.pf == NULL) {
+  if (!(pfdb.pf = (pf_t *) reserve_region(map, pfdbsize, PAGE_SHIFT_LARGE))) {
     fatal();
   }
 
@@ -164,9 +163,9 @@ void init_page(void)
     } else {
       pfdb.pf[pfdb.tail].next = pfn0;
     }
-    pfdb.pf[pfn0].prev     = pfdb.tail;
+    pfdb.pf[pfn0].prev = pfdb.tail;
     pfdb.pf[pfnN - 1].next = PFN_INVALID;
-    pfdb.tail              = pfnN - 1;
+    pfdb.tail = pfnN - 1;
 
     // Update the total number of available frames.
     pfdb.avail += (uint32_t)(pfnN - pfn0);
@@ -263,7 +262,7 @@ static void pgfree_recurse(page_t *page, int level)
         continue;
       }
       page_t *child = PGPTR(page->entry[e]);
-      if (child == NULL) {
+      if (!child) {
         continue;
       }
       pgfree_recurse(child, level - 1);
@@ -295,7 +294,7 @@ static void add_pte(pagetable_t *pt, uint64_t vaddr, uint64_t paddr, uint32_t pf
   // Follow the page table hierarchy down to the lowest level, creating
   // new pages for tables as needed.
 
-  page_t *pml4t = (page_t *)pt->proot;
+  page_t *pml4t = (page_t *) pt->proot;
   if (pml4t->entry[pml4e] == 0) {
     uint64_t pgaddr = pgalloc();
     added[count++] = pgaddr;
@@ -310,14 +309,14 @@ static void add_pte(pagetable_t *pt, uint64_t vaddr, uint64_t paddr, uint32_t pf
   page_t *pdpt = PGPTR(pml4t->entry[pml4e]);
   if (pdpt->entry[pdpte] == 0) {
     uint64_t pgaddr = pgalloc();
-    added[count++]     = pgaddr;
+    added[count++] = pgaddr;
     pdpt->entry[pdpte] = pgaddr | PF_PRESENT | PF_RW;
   }
 
   page_t *pdt = PGPTR(pdpt->entry[pdpte]);
   if (pdt->entry[pde] == 0) {
     uint64_t pgaddr = pgalloc();
-    added[count++]  = pgaddr;
+    added[count++] = pgaddr;
     pdt->entry[pde] = pgaddr | PF_PRESENT | PF_RW;
   }
 
@@ -391,8 +390,7 @@ void pagetable_destroy(pagetable_t *pt)
 
   // Invalidate TLB entries of all table pages.
   if (pt == active_pt) {
-    for (uint64_t vaddr = pt->vroot; vaddr < pt->vterm;
-         vaddr += PAGE_SIZE) {
+    for (uint64_t vaddr = pt->vroot; vaddr < pt->vterm; vaddr += PAGE_SIZE) {
       invalidate_page((void *) vaddr);
     }
   }
@@ -402,7 +400,7 @@ void pagetable_destroy(pagetable_t *pt)
 
 void pagetable_activate(pagetable_t *pt)
 {
-  if (pt == NULL) {
+  if (!pt) {
     pt = &kpt;
   }
   if (pt->proot == 0) {
@@ -429,3 +427,4 @@ void page_free(pagetable_t *pt, void *vaddr_in, int count)
     pgfree(paddr);
   }
 }
+

@@ -9,7 +9,7 @@
 #include <x86/ops.h>
 #include <x86/irq.h>
 
-#include <x86/paging.h>
+#include <x86/page.h>
 #include <x86/pmap.h>
 #include <x86/acpi.h>
 #include <x86/addr.h>

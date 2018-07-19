@@ -8,7 +8,7 @@
 
 #ifndef __ASSEMBLY__
 
-#define FOUT_SZ 0x200
+#define FOUT_SZ 0x100
 #define MAX_DIGIT 32
 
 

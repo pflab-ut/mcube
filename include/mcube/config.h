@@ -10,7 +10,7 @@
 /** Architecture. */
 #define CONFIG_ARCH_X86 1
 /** Compiler. */
-#define CONFIG_COMPILER_GCC 1
+#define CONFIG_COMPILER_CLANG 1
 /** Printk. */
 #define CONFIG_PRINTK2CONSOLE 1
 /** Algorithm. */

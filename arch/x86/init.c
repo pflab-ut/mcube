@@ -13,11 +13,14 @@ void init_arch(void)
   init_tty();
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
   tty_clear(TTY_ID);
-
+  
   /* initialize memory */
   init_acpi();
   init_pmap();
   init_page();
+  //print_pmap();
+  init_irq();
+
   
 #else
   //	init_shell();

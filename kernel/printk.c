@@ -194,7 +194,8 @@ static inline unsigned int luout(unsigned long lu, int base, char *dst, int n, s
  */
 int printk(const char *fmt, ...)
 {
-	int n = 0, ret;
+	int n = 0;
+  int ret;
 	char buf[FOUT_SZ];
 	va_list ap;
 	int d;
@@ -324,7 +325,8 @@ skip:
 
 out:
 	va_end(ap);
-
+  buf[n] = '\0';
+  
 #if CONFIG_PRINTK2CONSOLE
   console_write(buf, n, NULL);
 #elif CONFIG_PRINTK2PRINTF

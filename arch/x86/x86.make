@@ -16,6 +16,8 @@ TEXT_ADDR = 0x00007c00
 #PRIVATE_LDFLAGS = -Ttext=$(TEXT_ADDR) -N -Bstatic
 
 CFLAGS += -m64
+#CFLAGS += -fPIC
+#LDFLAGS += -fPIC
 #LDFLAGS += -Ttext=$(TEXT_ADDR)
 
 ifeq ($(CC), clang)
@@ -40,7 +42,7 @@ else
   OBJDUMP = $(CROSS_PREFIX)objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
 #  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
-  LDFLAGS += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000 
+  LDFLAGS += -g -nostdlib -m64 -mno-red-zone -ffreestanding  -z max-page-size=0x1000
   LDFLAGS += -T scripts/linker/x86-elf.ld
 endif
 
@@ -59,12 +61,13 @@ ASMS = \
 	$(TOP_DIR)/arch/x86/memzero.asm \
 	$(TOP_DIR)/arch/x86/utils.asm \
 
+#$(TOP_DIR)/arch/x86/interrupt.asm \
 
 SRCS += \
  $(TOP_DIR)/arch/x86/mm.c \
  $(TOP_DIR)/arch/x86/acpi.c \
  $(TOP_DIR)/arch/x86/apic.c \
- $(TOP_DIR)/arch/x86/paging.c \
+ $(TOP_DIR)/arch/x86/page.c \
  $(TOP_DIR)/arch/x86/cache.c \
  $(TOP_DIR)/arch/x86/cpu.c \
  $(TOP_DIR)/arch/x86/dsctbl.c \

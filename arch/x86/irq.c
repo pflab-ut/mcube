@@ -176,6 +176,20 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 }
 
 
+#if 1
+
+void init_pic(void)
+{
+  printk("init_pic()\n");
+}
+
+
+void init_irq(void)
+{
+  init_pic();
+}
+
+#else
 void init_irq(void)
 {
   printk("init_irq()\n");
@@ -207,3 +221,5 @@ void init_irq(void)
 	/* disable all interrupts in PIC1 */
 	outb(PIC1_IMR, OCW1_DISABLE_ALL_IRQS);
 }
+
+#endif

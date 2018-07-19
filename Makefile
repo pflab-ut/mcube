@@ -41,7 +41,7 @@ $(TARGET): $(ASM_OBJS) $(OBJS) $(BOOT_TARGET) $(LOADER_TARGET)
 	$(SIZE) $@
 ifeq ($(ARCH_NAME), x86)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
-	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
+#	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
 	$(TOP_DIR)/scripts/misc/mkcdrom.sh
 else ifeq ($(ARCH_NAME), axis)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)

@@ -48,7 +48,7 @@ void load_idt(uint16_t size, uint32_t addr)
 {
 	idt.size = size;
 	idt.addr = addr;
-	lidt(&idt);
+  lidt(&idt);
 }
 
 
@@ -80,6 +80,5 @@ void init_dsctbl(void)
 
 	/* register syscall */
   //	set_idsc(idt_start + SYSCALL_IRQ, (uint32_t) &system_call, 2 * 8, AR_INTGATE32);
-
 
 }
