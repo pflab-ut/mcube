@@ -5,23 +5,11 @@
  */
 #include <mcube/mcube.h>
 
-int call_sched(void)
-{
-#if CONFIG_ARCH_X86
-	/* interrupt for scheduling */
-	asm volatile("movl %0, %%eax" :: "i"(SCHED_IRQ));
-	asm volatile("int %0" :: "i"(SCHED_IRQ));
-	/* clear timer 0 interrupt status */
-	mmio_out64(GENERAL_INTERRUPT_STATUS_64, GENERAL_INTERRUPT_STATUS_T0_INTERRUPT_STS);
-#endif
-	return 0;
-}
 
 
 asmlinkage int sys_sched(void)
 {
 	printk("sys_sched()\n");
-	call_sched();
 	return 0;
 }
 
@@ -32,7 +20,6 @@ asmlinkage int sys_end_job(unsigned long *id_ptr)
 	printk("id_ptr = %lu\n", *id_ptr);
 	th->sched.remaining = 0;
 	do_end_job(th);
-	call_sched();
 	return 0;
 }
 

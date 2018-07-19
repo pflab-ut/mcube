@@ -14,16 +14,15 @@ void init_arch(void)
   init_tty();
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
   tty_clear(TTY_ID);
-  
   /* initialize memory */
   init_acpi();
   init_pmap();
   init_page();
   //print_pmap();
   init_irq();
-  
-  extern unsigned long IDT_Pointer;
-  printk("IDT_Poiner = 0x%lx\n", IDT_Pointer);
+
+  extern struct desc_ptr IDT_Pointer;
+  printk("IDT_Poiner = 0x%lx\n", (unsigned long) &IDT_Pointer);
   lidt(&IDT_Pointer);
 #else
   //	init_shell();

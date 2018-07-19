@@ -16,6 +16,7 @@ menu Architecture
     default n
     aname x86
     defs -DCONFIG_ARCH_X86
+    depends CONFIG_COMPILER_GCC
   config CONFIG_ARCH_ARM
     title ARM
     default n

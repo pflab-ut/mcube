@@ -11,49 +11,49 @@
 static inline uint8_t inb(uint16_t port)
 {
 	uint8_t value;
-	asm volatile("inb %1, %0" : "=a"(value) : "dN"(port)); 
+  asm volatile ("inb %0, %1" : "=a" (value) : "Nd" (port));
 	return value;
 }
 
 static inline uint16_t inw(uint16_t port)
 {
 	uint16_t value;
-	asm volatile("inw %1, %0" : "=a" (value) : "dN" (port));
+  asm volatile ("inw %0, %1" : "=a" (value) : "Nd" (port));
 	return value;
 }
 
 static inline uint32_t inl(uint32_t port)
 {
 	uint32_t value;
-	asm volatile("inl %1, %0" : "=a" (value) : "dN" (port));
+  asm volatile ("inl %0, %1" : "=a" (value) : "Nd" (port));
 	return value;
 }
 
 static inline uint32_t ind(uint64_t port)
 {
 	uint64_t value;
-	asm volatile("ind %1, %0" : "=a" (value) : "dN" (port));
+  asm volatile ("ind %0, %1" : "=a" (value) : "Nd" (port));
 	return value;
 }
 
 static inline void outb(uint16_t port, uint8_t value)
 {
-  asm volatile("outb %0, %1" :: "a"(value), "dN"(port));
+  asm volatile ("outb %0, %1" :: "Nd"(port), "a"(value));   
 }
 
 static inline void outw(uint16_t port, uint16_t value)
 {
-	asm volatile("outw %0, %1" :: "a" (value), "dN" (port));
+  asm volatile ("outw %0, %1" :: "Nd"(port), "a"(value));   
 }
 
 static inline void outl(uint32_t port, uint32_t value)
 {
-	asm volatile("outl %0, %1" :: "a" (value), "dN" (port));
+  asm volatile ("outl %0, %1" :: "Nd"(port), "a"(value));   
 }
 
 static inline void outd(uint64_t port, uint64_t value)
 {
-	asm volatile("outd %0, %1" :: "a" (value), "dN" (port));
+  asm volatile ("outd %0, %1" :: "Nd"(port), "a"(value));   
 }
 
 static inline void finit(void)
@@ -136,7 +136,7 @@ static inline uint64_t rdtsc(void)
 {
   uint64_t x;
 
-	asm volatile("cpuid" : : : "rax", "rbx", "rcx", "rdx");
+	asm volatile("cpuid" ::: "rax", "rbx", "rcx", "rdx");
 	asm volatile("rdtsc" : "=A" (x));
   return x;
 }
@@ -179,32 +179,32 @@ static inline void wbinvd(void)
 /* read memory specific register */
 static inline uint64_t rdmsr(uint32_t addr)
 {
-	uint64_t x;
-	asm volatile("rdmsr" : "=A"(x) :"c"(addr));
-	return x;
+  uint64_t data;
+  asm volatile ("rdmsr"
+                : "=A" (data)
+                : "c" (addr));
+	return data;
 }
 
 /* write to model specific register */
-static inline void wrmsr(uint64_t data, uint32_t addr)
+static inline void wrmsr(uint32_t addr, uint64_t data)
 {
-	asm volatile("wrmsr" : "=c"(addr) : "A"(data));
+  asm volatile ("wrmsr"
+                :
+                : "c" (addr), "A" (data));
 }
 
 
 
 static inline void invalidate_page(void *vaddr)
 {
-  asm volatile ("invlpg     %[v]\n"
-                :
-                : [v] "m" (vaddr)
-                : "memory");
+  asm volatile ("invlpg %0\n" :: "m" (vaddr) : "memory");
 }
 
 
 static inline void fatal(void)
 {
-  //  asm volatile("int 0xff");
-  asm volatile("int %0" :: "i"(0xff));
+  asm volatile("int 0xff");
 }
 
 

@@ -30,13 +30,13 @@
 static inline uint64_t get_cr0(void)
 {
   uint64_t value;
-  asm volatile("movq %%cr0, %0" : "=r"(value));
+  asm volatile("mov %0, cr0" : "=r"(value));
   return value;
 }
 
 static inline void set_cr0(uint64_t value)
 {
-  asm volatile("movq %0, %%cr0" :: "r"(value));
+  asm volatile("mov cr0, %0" :: "r"(value));
 }
 
 /* reserve cr1 */
@@ -44,37 +44,37 @@ static inline void set_cr0(uint64_t value)
 static inline uint64_t get_cr2(void)
 {
   uint64_t value;
-  asm volatile("movq %%cr2, %0" : "=r"(value));
+  asm volatile("mov %0, cr2" : "=r"(value));
   return value;
 }
 
 static inline void set_cr2(uint64_t value)
 {
-  asm volatile("movq %0, %%cr2" :: "r"(value));
+  asm volatile("mov cr2, %0" :: "r"(value));
 }
 
 static inline uint64_t get_cr3(void)
 {
   uint64_t value;
-  asm volatile("movq %%cr3, %0" : "=r"(value));
+  asm volatile("mov %0, cr3" : "=r"(value));
   return value;
 }
 
 static inline void set_cr3(uint64_t value)
 {
-  asm volatile("movq %0, %%cr3" :: "r"(value));
+  asm volatile("mov cr3, %0" :: "r"(value));
 }
 
 static inline uint64_t get_cr4(void)
 {
   uint64_t value;
-  asm volatile("movq %%cr4, %0" : "=r"(value));
+  asm volatile("mov %0, cr4" : "=r"(value));
   return value;
 }
 
 static inline void set_cr4(uint64_t value)
 {
-  asm volatile("movq %0, %%cr4" :: "r"(value));
+  asm volatile("mov cr4, %0" :: "r"(value));
 }
 
 static inline uint64_t get_eflags(void)

@@ -30,7 +30,7 @@ ifeq ($(CC), clang)
 #  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
   OBJDUMP = objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
-  CFLAGS += --x86-asm-syntax=intel
+  CFLAGS += -masm=intel
   LDFLAGS += -T scripts/linker/x86-elf.ld --Map $(MAP)
 else
   CROSS_PREFIX = 
@@ -44,7 +44,7 @@ else
   OBJCOPY = $(CROSS_PREFIX)objcopy
 #  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
   LDFLAGS += -nostdlib
-#  CFLAGS += -masm=intel
+  CFLAGS += -masm=intel
 #CFLAGS +=  -Qn -g  -m64 -mno-red-zone -mno-mmx -mfpmath=sse  \
 #     -ffreestanding -fno-asynchronous-unwind-tables -Wall  -fPIC
 #LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000   

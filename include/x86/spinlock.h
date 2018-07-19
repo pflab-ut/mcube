@@ -11,6 +11,7 @@
 
 static inline void spin_lock(volatile spinlock *lock)
 {
+#if 0
 	int x = SPIN_LOCKED;
 	volatile uint32_t *addr = &lock->lock;
 	for (;;) {
@@ -21,26 +22,32 @@ static inline void spin_lock(volatile spinlock *lock)
 		}
 		pause();
 	}
+#endif
 }
 
 
 static inline int spin_trylock(volatile spinlock *lock)
 {
+#if 1
+  return 1;
+#else
 	char oldval;
 	asm volatile("xchgb %b0,%1"
 							 :"=q" (oldval), "+m" (lock->lock)
 							 :"0" (0) : "memory");
 	return oldval > 0;
+#endif
 }
 
 
 static inline void spin_unlock(volatile spinlock *lock)
 {
+#if 0
 	char oldval = SPIN_UNLOCKED;
-
 	asm volatile("xchgb %b0, %1"
 							 : "=q" (oldval), "+m" (lock->lock)
 							 : "0" (oldval) : "memory");
+#endif
 }
 
 

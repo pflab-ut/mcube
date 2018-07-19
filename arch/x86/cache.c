@@ -10,7 +10,7 @@ void set_mtrr_def_type_msr(uint8_t mem_type)
 	uint64_t val;
 	val = rdmsr(MSR_MTRR_DEF_TYPE);
 	val = (val & ~0xff) | mem_type;
-	wrmsr(val, MSR_MTRR_DEF_TYPE);
+	wrmsr(MSR_MTRR_DEF_TYPE, val);
 }
 
 
@@ -20,7 +20,7 @@ void disable_mtrr(void)
 	uint64_t val;
 	val = rdmsr(MSR_MTRR_DEF_TYPE);
 	val &= ~MSR_MTRR_DEF_TYPE_ENABLE;
-	wrmsr(val, MSR_MTRR_DEF_TYPE);
+	wrmsr(MSR_MTRR_DEF_TYPE, val);
 }
 
 /* enable memory type range register */
@@ -29,7 +29,7 @@ void enable_mtrr(void)
 	uint64_t val;
 	val = rdmsr(MSR_MTRR_DEF_TYPE);
 	val |= MSR_MTRR_DEF_TYPE_ENABLE;
-	wrmsr(val, MSR_MTRR_DEF_TYPE);
+	wrmsr(MSR_MTRR_DEF_TYPE, val);
 }
 
 void disable_l3_cache(void)
@@ -37,7 +37,7 @@ void disable_l3_cache(void)
 	uint64_t val;
 	val = rdmsr(MSR_IA32_MISC_ENABLE);
 	val |= MSR_IA32_MISC_ENABLE_L3CACHE_DISABLE;
-	wrmsr(val, MSR_IA32_MISC_ENABLE);
+	wrmsr(MSR_IA32_MISC_ENABLE, val);
 }
 
 
@@ -46,7 +46,7 @@ void enable_l3_cache(void)
 	uint64_t val;
 	val = rdmsr(MSR_IA32_MISC_ENABLE);
 	val &= ~MSR_IA32_MISC_ENABLE_L3CACHE_DISABLE;
-	wrmsr(val, MSR_IA32_MISC_ENABLE);
+	wrmsr(MSR_IA32_MISC_ENABLE, val);
 }
 
 
