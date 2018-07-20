@@ -28,7 +28,8 @@ void init_arch(void)
   //  init_keyboard();
   //  enable_interrupt();
   //  print_cpu_brand();
-  print_cpu_frequency();
+  print_simd_info();
+  //  print_cpu_frequency();
   //  print_vendor_id();
   for (;;)
     ;

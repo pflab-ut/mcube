@@ -104,8 +104,8 @@ void syscall_init(void);
 
 
 void print_vendor_id(void);
-void save_cpu_info(void);
-unsigned int get_cpu_frequency(void);
+void print_simd_info(void);
+void print_cpu_frequency(void);
 void print_cpu_brand(void);
 
 int ap_main(void);

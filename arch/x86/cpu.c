@@ -89,10 +89,16 @@ void print_vendor_id(void)
 }
 
 
-void save_cpu_info(void)
+void print_simd_info(void)
 {
   registers4_t regs4;
 	cpuid(0x1, &regs4);
+  printk("MMX:    %s\n", regs4.rdx & 1 << 23 ? "OK" : "NG");
+  printk("SSE:    %s\n", regs4.rdx & 1 << 25 ? "OK" : "NG");
+  printk("AVX:    %s\n", regs4.rcx & 1 << 28 ? "OK" : "NG");
+  printk("FMA:    %s\n", regs4.rcx & 1 << 12 ? "OK" : "NG");
+  cpuid(0x7, &regs4);
+  printk("AVX2:   %s\n", regs4.rbx & 1 <<  5 ? "OK" : "NG");
 }
 
 void print_cpu_frequency(void)
@@ -115,16 +121,9 @@ void print_cpu_frequency(void)
     str[i+12] = get_byte(regs4.rdx, i);
   }
 	str[16] = '\0';
-#if 1 
-  for (i = 0; i < 16; i++) {
-    printk("%d ", str[i]);
-  }
-  printk("\n");
-#endif
 	printk("cpu_frequency = %s\n", str);
   //	CPU_CLOCK = strtoul(str, NULL, 10);
 }
-
 
 
 void print_cpu_brand(void)
