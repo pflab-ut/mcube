@@ -65,27 +65,13 @@ void print_vendor_id(void)
 {
 	char vendor_id[VENDOR_ID_LENGTH+1];
   registers4_t regs4;
-  int i;
 	cpuid(0x0, &regs4);
-	printk("Largest Standard Function Number Supported: %ld\n", regs4.rax);
-  for (i = 0; i < 4; i++) {
-    vendor_id[i] = get_byte(regs4.rbx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    vendor_id[i+4] = get_byte(regs4.rdx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    vendor_id[i+8] = get_byte(regs4.rcx, i);
-  }
-#if 1
+	printk("Largest Standard Function Number Supported: %d\n", regs4.eax);
+  memcpy(&vendor_id[0], &regs4.ebx, 4);
+  memcpy(&vendor_id[4], &regs4.edx, 4);
+  memcpy(&vendor_id[8], &regs4.ecx, 4);
 	vendor_id[VENDOR_ID_LENGTH] = '\0';
 	printk("Vendor ID: %s\n", vendor_id);
-#else
-	puts("Vendor ID: ");
-	vendor_id[VENDOR_ID_LENGTH] = '\0';
-	puts(vendor_id);
-	putchar('\n');
-#endif
 }
 
 
@@ -93,35 +79,22 @@ void print_simd_info(void)
 {
   registers4_t regs4;
 	cpuid(0x1, &regs4);
-  printk("MMX:    %s\n", regs4.rdx & 1 << 23 ? "OK" : "NG");
-  printk("SSE:    %s\n", regs4.rdx & 1 << 25 ? "OK" : "NG");
-  printk("AVX:    %s\n", regs4.rcx & 1 << 28 ? "OK" : "NG");
-  printk("FMA:    %s\n", regs4.rcx & 1 << 12 ? "OK" : "NG");
+  printk("MMX:    %s\n", regs4.edx & 1 << 23 ? "OK" : "NG");
+  printk("SSE:    %s\n", regs4.edx & 1 << 25 ? "OK" : "NG");
+  printk("AVX:    %s\n", regs4.ecx & 1 << 28 ? "OK" : "NG");
+  printk("FMA:    %s\n", regs4.ecx & 1 << 12 ? "OK" : "NG");
   cpuid(0x7, &regs4);
-  printk("AVX2:   %s\n", regs4.rbx & 1 <<  5 ? "OK" : "NG");
+  printk("AVX2:   %s\n", regs4.ebx & 1 <<  5 ? "OK" : "NG");
 }
 
 void print_cpu_frequency(void)
 {
   registers4_t regs4;
 	char str[17];
-  int i;
-  //	cpuid(0x80000004, &regs4);
 	cpuid(0x80000004, &regs4);
-  for (i = 0; i < 4; i++) {
-    str[i] = get_byte(regs4.rax, i);
-  }
-  for (i = 0; i < 4; i++) {
-    str[i+4] = get_byte(regs4.rbx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    str[i+8] = get_byte(regs4.rcx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    str[i+12] = get_byte(regs4.rdx, i);
-  }
+  memcpy(&str[0], &regs4, sizeof(regs4));
 	str[16] = '\0';
-	printk("cpu_frequency = %s\n", str);
+	printk("CPU_FREQUENCY: %s\n", str);
   //	CPU_CLOCK = strtoul(str, NULL, 10);
 }
 
@@ -130,46 +103,12 @@ void print_cpu_brand(void)
 {
   registers4_t regs4;  
 	char cpu_brand[CPU_BRAND_LENGTH+1];
-  int i;
 	cpuid(0x80000002, &regs4);
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i] = get_byte(regs4.rax, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+4] = get_byte(regs4.rbx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+8] = get_byte(regs4.rcx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+12] = get_byte(regs4.rdx, i);
-  }
+  memcpy(&cpu_brand[0], &regs4, sizeof(regs4));
 	cpuid(0x80000003, &regs4);
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+16] = get_byte(regs4.rax, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+20] = get_byte(regs4.rbx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+24] = get_byte(regs4.rcx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+28] = get_byte(regs4.rdx, i);
-  }
+  memcpy(&cpu_brand[16], &regs4, sizeof(regs4));
 	cpuid(0x80000004, &regs4);
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+32] = get_byte(regs4.rax, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+36] = get_byte(regs4.rbx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+40] = get_byte(regs4.rcx, i);
-  }
-  for (i = 0; i < 4; i++) {
-    cpu_brand[i+44] = get_byte(regs4.rdx, i);
-  }
+  memcpy(&cpu_brand[32], &regs4, sizeof(regs4));
 	cpu_brand[CPU_BRAND_LENGTH] = '\0';
 	printk("%s\n", cpu_brand);
 }

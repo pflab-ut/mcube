@@ -72,9 +72,9 @@ static inline unsigned int get_lapic_id(void)
 
 	/* real machine */
 	/* NOTE: omit logical processor id */
-  return (regs4.rbx & 0x0f000000) >> 25;
+  return (regs4.ebx & 0x0f000000) >> 25;
 	/* virtual machine */
-  //  return (ebx & 0x0f000000) >> 24;
+  //  return (regs4.ebx & 0x0f000000) >> 24;
 }
 
 #if 0
@@ -91,11 +91,11 @@ static inline int get_nr_cpu_cores(void)
 {
 	registers4_t regs4;
   cpuid(0x4, &regs4);
-  if (regs4.rax & 0x1f) {
+  if (regs4.eax & 0x1f) {
 		/* omit logical cpu id */
-    return ((regs4.rax >> 27) + 1);
+    return ((regs4.eax >> 27) + 1);
 		/* virtual machine */
-    //    return ((regs4.rax >> 26) + 1);
+    //    return ((regs4.eax >> 26) + 1);
   }
   return 1;
 }

@@ -35,11 +35,11 @@ typedef struct registers {
 /// @brief      A record describing the first 4 general-purpose registers.
 //----------------------------------------------------------------------------
 typedef struct registers4 {
-  uint64_t rax;
-  uint64_t rbx;
-  uint64_t rcx;
-  uint64_t rdx;
-} registers4_t;
+  uint32_t eax;
+  uint32_t ebx;
+  uint32_t ecx;
+  uint32_t edx;
+} __attribute__ ((packed)) registers4_t;
 
 static inline uint8_t inb(uint16_t port)
 {
@@ -151,8 +151,8 @@ static inline void mfence(void)
 static inline void cpuid(uint32_t code, registers4_t *regs)
 {
   asm volatile ("cpuid"
-                : "=a" (regs->rax), "=b" (regs->rbx), "=c" (regs->rcx),
-                  "=d" (regs->rdx)
+                : "=a" (regs->eax), "=b" (regs->ebx), "=c" (regs->ecx),
+                  "=d" (regs->edx)
                 : "0" (code));
 }
 

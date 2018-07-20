@@ -27,12 +27,12 @@ static void syscall_handle(void)
 void init_syscall()
 {
   // Request the CPU's extended features.
-  registers4_t regs;
-  cpuid(0x80000001, &regs);
+  registers4_t regs4;
+  cpuid(0x80000001, &regs4);
 
   // Bit 11 of rdx tells us if the SYSCALL/SYSRET instructions are
   // available. If they're not, raise an invalid opcode exception.
-  if (!(regs.rdx & (1 << 11))) {
+  if (!(regs4.edx & (1 << 11))) {
     invalid_opcode();
   }
 
