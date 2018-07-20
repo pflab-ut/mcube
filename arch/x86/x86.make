@@ -73,6 +73,8 @@ SRCS += \
  $(TOP_DIR)/arch/x86/apic.c \
  $(TOP_DIR)/arch/x86/dump.c \
  $(TOP_DIR)/arch/x86/exception.c \
+ $(TOP_DIR)/arch/x86/syscall.c \
+ $(TOP_DIR)/arch/x86/keyboard.c \
  $(TOP_DIR)/arch/x86/page.c \
  $(TOP_DIR)/arch/x86/cache.c \
  $(TOP_DIR)/arch/x86/cpu.c \

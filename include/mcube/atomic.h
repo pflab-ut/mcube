@@ -8,6 +8,8 @@
 
 #ifndef __ASSEMBLY__
 
+#include <stdatomic.h>
+
 /**
  * @brief Atomic variable
  *

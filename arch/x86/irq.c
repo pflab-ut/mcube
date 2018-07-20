@@ -187,9 +187,10 @@ void init_irq(void)
 {
   extern struct desc_ptr IDT_Pointer;
   init_irq_asm();
-  printk("IDT_Poiner = 0x%lx\n", (unsigned long) &IDT_Pointer);
+  printk("IDT_Pointer = 0x%lx\n", (unsigned long) &IDT_Pointer);
+  printk("IDT_Pointer.size = 0x%x\n", IDT_Pointer.size);
+  printk("IDT_Pointer.addr = 0x%x\n", IDT_Pointer.addr);
   lidt(&IDT_Pointer);
-
 }
 
 

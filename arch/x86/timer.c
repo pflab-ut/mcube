@@ -15,6 +15,64 @@ unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
 #define HPET_TIMER
 #define PIT_TIMER
 
+// 8253 timer ports
+#define TIMER_PORT_DATA_CH0  0x40   ///< Channel 0 data port.
+#define TIMER_PORT_DATA_CH1  0x41   ///< Channel 1 data port.
+#define TIMER_PORT_DATA_CH2  0x42   ///< Channel 2 data port.
+#define TIMER_PORT_CMD       0x43   ///< Timer command port.
+
+// Frequency bounds
+#define MIN_FREQUENCY        19
+#define MAX_FREQUENCY        1193181
+
+static void isr_timer(const interrupt_context_t *context)
+{
+  (void) context;
+  // Do nothing for now.
+  //  printk("isr_timer()\n");
+  
+  // Send the end-of-interrupt signal.
+  outb(PIC_PORT_CMD_MASTER, PIC_CMD_EOI);
+}
+
+void timer_init(uint32_t frequency)
+{
+  // Clamp frequency to allowable range.
+  if (frequency < MIN_FREQUENCY) {
+    frequency = MIN_FREQUENCY;
+  } else if (frequency > MAX_FREQUENCY) {
+    frequency = MAX_FREQUENCY;
+  }
+
+  // Compute the clock count value.
+  uint16_t count = (uint16_t)(MAX_FREQUENCY / frequency);
+
+  // Channel=0, AccessMode=lo/hi, OperatingMode=rate-generator
+  outb(TIMER_PORT_CMD, 0x34);
+
+  // Output the lo/hi count value
+  outb(TIMER_PORT_DATA_CH0, (uint8_t)count);
+  outb(TIMER_PORT_DATA_CH0, (uint8_t)(count >> 8));
+
+  // Assign the interrupt service routine.
+  set_isr(TRAP_IRQ_TIMER, isr_timer);
+
+  // Enable the timer interrupt (IRQ0).
+  enable_irq(IRQ_TIMER);
+}
+
+void timer_enable(void)
+{
+  // Enable the timer interrupt (IRQ0).
+  enable_irq(IRQ_TIMER);
+}
+
+void timer_disable(void)
+{
+  // Disable the timer interrupt (IRQ0).
+  disable_irq(IRQ_TIMER);
+}
+
                          
 static void measure_cpu_frequency(void)
 {

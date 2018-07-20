@@ -21,7 +21,17 @@ void init_arch(void)
   //print_pmap();
   init_irq();
   init_exception();
-  
+
+  //  timer_init(100);
+
+  tty_clear(TTY_ID);
+  //  init_keyboard();
+  //  enable_interrupt();
+  //  print_cpu_brand();
+  print_cpu_frequency();
+  //  print_vendor_id();
+  for (;;)
+    ;
 #else
   //	init_shell();
   init_uart();

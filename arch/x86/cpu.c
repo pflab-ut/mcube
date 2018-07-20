@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 
-cpuid_info cpu_info;
 
 void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg)
 {
@@ -65,10 +64,19 @@ void init_smp(void)
 void print_vendor_id(void)
 {
 	char vendor_id[VENDOR_ID_LENGTH+1];
-	unsigned int num;
-	cpuid(0x0, &num, (unsigned int *) &vendor_id[0],
-				(unsigned int *) &vendor_id[8], (unsigned int *) &vendor_id[4]);
-	printk("Largest Standard Function Number Supported: %d\n", num);
+  registers4_t regs4;
+  int i;
+	cpuid(0x0, &regs4);
+	printk("Largest Standard Function Number Supported: %ld\n", regs4.rax);
+  for (i = 0; i < 4; i++) {
+    vendor_id[i] = get_byte(regs4.rbx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    vendor_id[i+4] = get_byte(regs4.rdx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    vendor_id[i+8] = get_byte(regs4.rcx, i);
+  }
 #if 1
 	vendor_id[VENDOR_ID_LENGTH] = '\0';
 	printk("Vendor ID: %s\n", vendor_id);
@@ -83,41 +91,86 @@ void print_vendor_id(void)
 
 void save_cpu_info(void)
 {
-	cpuid(0x1, &cpu_info.eax, &cpu_info.ebx,
-				&cpu_info.ecx, &cpu_info.edx);
+  registers4_t regs4;
+	cpuid(0x1, &regs4);
 }
 
-void set_cpu_frequency(void)
+void print_cpu_frequency(void)
 {
-	cpuid_info cinfo;
-	char str[5];
-	cpuid(0x80000004, &cinfo.eax, &cinfo.ebx, (uint32_t *) str, &cinfo.edx);
-	str[4] = '\0';
+  registers4_t regs4;
+	char str[17];
+  int i;
+  //	cpuid(0x80000004, &regs4);
+	cpuid(0x80000004, &regs4);
+  for (i = 0; i < 4; i++) {
+    str[i] = get_byte(regs4.rax, i);
+  }
+  for (i = 0; i < 4; i++) {
+    str[i+4] = get_byte(regs4.rbx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    str[i+8] = get_byte(regs4.rcx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    str[i+12] = get_byte(regs4.rdx, i);
+  }
+	str[16] = '\0';
+#if 1 
+  for (i = 0; i < 16; i++) {
+    printk("%d ", str[i]);
+  }
+  printk("\n");
+#endif
 	printk("cpu_frequency = %s\n", str);
-	CPU_CLOCK = strtoul(str, NULL, 10);
+  //	CPU_CLOCK = strtoul(str, NULL, 10);
 }
-
 
 
 
 void print_cpu_brand(void)
 {
+  registers4_t regs4;  
 	char cpu_brand[CPU_BRAND_LENGTH+1];
-	cpuid(0x80000002,
-				(uint32_t *) &cpu_brand[0],
-				(uint32_t *) &cpu_brand[4],
-				(uint32_t *) &cpu_brand[8],
-				(uint32_t *) &cpu_brand[12]);
-	cpuid(0x80000003,
-				(uint32_t *) &cpu_brand[16],
-				(uint32_t *) &cpu_brand[20],
-				(uint32_t *) &cpu_brand[24],
-				(uint32_t *) &cpu_brand[28]);
-	cpuid(0x80000004,
-				(uint32_t *) &cpu_brand[32],
-				(uint32_t *) &cpu_brand[36],
-				(uint32_t *) &cpu_brand[40],
-				(uint32_t *) &cpu_brand[44]);
+  int i;
+	cpuid(0x80000002, &regs4);
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i] = get_byte(regs4.rax, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+4] = get_byte(regs4.rbx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+8] = get_byte(regs4.rcx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+12] = get_byte(regs4.rdx, i);
+  }
+	cpuid(0x80000003, &regs4);
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+16] = get_byte(regs4.rax, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+20] = get_byte(regs4.rbx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+24] = get_byte(regs4.rcx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+28] = get_byte(regs4.rdx, i);
+  }
+	cpuid(0x80000004, &regs4);
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+32] = get_byte(regs4.rax, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+36] = get_byte(regs4.rbx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+40] = get_byte(regs4.rcx, i);
+  }
+  for (i = 0; i < 4; i++) {
+    cpu_brand[i+44] = get_byte(regs4.rdx, i);
+  }
 	cpu_brand[CPU_BRAND_LENGTH] = '\0';
 	printk("%s\n", cpu_brand);
 }

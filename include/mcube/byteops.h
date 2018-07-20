@@ -57,6 +57,11 @@ static inline unsigned long char_to_long(unsigned char c)
 	return (c << CHAR_TO_LONG_SHIFT_WIDTH);
 }
 
+static inline unsigned char get_byte(unsigned long l, unsigned char byte)
+{
+  return (l >> (8 * byte)) & 0xff;
+}
+
 #endif /* !__ASSEMBLY__ */
 
 #endif	/* __MCUBE_MCUBE_BYTEOPS_H__ */

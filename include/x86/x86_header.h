@@ -25,6 +25,7 @@
 #include <x86/io.h>
 #include <x86/ioapic.h>
 #include <x86/irqflags.h>
+#include <x86/keyboard.h>
 #include <x86/lapic.h>
 #include <x86/mm.h>
 #include <x86/msr.h>

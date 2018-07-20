@@ -63,48 +63,16 @@
 
 #define INIT_CPU_EFLAGS (CPU_EFLAGS_IF | CPU_EFLAGS_BIT)
    
-//----------------------------------------------------------------------------
-//  @struct     registers_t
-/// @brief      A record describing all 64-bit general-purpose registers.
-//----------------------------------------------------------------------------
-typedef struct registers {
-   uint64_t rax;
-   uint64_t rbx;
-   uint64_t rcx;
-   uint64_t rdx;
-   uint64_t rsi;
-   uint64_t rdi;
-   uint64_t rbp;
-   uint64_t r8;
-   uint64_t r9;
-   uint64_t r10;
-   uint64_t r11;
-   uint64_t r12;
-   uint64_t r13;
-   uint64_t r14;
-   uint64_t r15;
-} registers_t;
-
-//----------------------------------------------------------------------------
-//  @struct     registers4_t
-/// @brief      A record describing the first 4 general-purpose registers.
-//----------------------------------------------------------------------------
-typedef struct registers4 {
-  uint64_t rax;
-  uint64_t rbx;
-  uint64_t rcx;
-  uint64_t rdx;
-} registers4_t;
 
 
 static inline unsigned int get_lapic_id(void)
 {
-  unsigned int eax, ebx, ecx, edx;
-  cpuid(0x1, &eax, &ebx, &ecx, &edx);
+  registers4_t regs4;
+  cpuid(0x1, &regs4);
 
 	/* real machine */
 	/* NOTE: omit logical processor id */
-  return (ebx & 0x0f000000) >> 25;
+  return (regs4.rbx & 0x0f000000) >> 25;
 	/* virtual machine */
   //  return (ebx & 0x0f000000) >> 24;
 }
@@ -118,41 +86,22 @@ static inline uint32_t get_lapic_id(void)
 
 #define get_cpu_id() get_lapic_id()
 
-   
-/**
- * @brief CPU ID information
- *
- * The cpuid_info structure has CPU ID information.
- */
-struct cpuid_info {
-	/** EAX register. */
-  unsigned int eax;
-	/** EBX register. */
-	unsigned int ebx;
-	/** ECX register. */
-	unsigned int ecx;
-	/** EDX register. */
-	unsigned int edx;
-};
-
-typedef struct cpuid_info cpuid_info;
-
-extern cpuid_info cpu_info;
-
 
 static inline int get_nr_cpu_cores(void)
 {
-	cpuid_info cinfo;
-  cpuid(0x4, &cinfo.eax, &cinfo.ebx, &cinfo.ecx, &cinfo.edx);
-  if (cinfo.eax & 0x1f) {
+	registers4_t regs4;
+  cpuid(0x4, &regs4);
+  if (regs4.rax & 0x1f) {
 		/* omit logical cpu id */
-    return ((cinfo.eax >> 27) + 1);
+    return ((regs4.rax >> 27) + 1);
 		/* virtual machine */
-    //    return ((cinfo.eax >> 26) + 1);
+    //    return ((regs4.rax >> 26) + 1);
   }
   return 1;
 }
- 
+
+void syscall_init(void);
+
 
 void print_vendor_id(void);
 void save_cpu_info(void);
