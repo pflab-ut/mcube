@@ -23,6 +23,80 @@
 
 #else
 
+
+//============================================================================
+/// @file       cpu.h
+/// @brief      x86 CPU-specific function implementations.
+//
+//  Copyright 2016 Brett Vickers.
+//  Use of this source code is governed by a BSD-style license
+//  that can be found in the MonkOS LICENSE file.
+//============================================================================
+
+   
+// CPU EFLAGS register values
+#define CPU_EFLAGS_CARRY       (1 << 0)
+#define CPU_EFLAGS_BIT1        (1 << 1) /* bit1 is always 1 */
+#define CPU_EFLAGS_PARITY      (1 << 2)
+#define CPU_EFLAGS_BIT3        (0 << 3) /* bit3 is always 0 */
+#define CPU_EFLAGS_ADJUST      (1 << 4)
+#define CPU_EFLAGS_BIT5        (0 << 5) /* bit5 is always 0 */
+#define CPU_EFLAGS_ZERO        (1 << 6)
+#define CPU_EFLAGS_SIGN        (1 << 7)
+#define CPU_EFLAGS_TRAP        (1 << 8)
+#define CPU_EFLAGS_INTERRUPT   (1 << 9)
+#define CPU_EFLAGS_DIRECTION   (1 << 10)
+#define CPU_EFLAGS_OVERFLOW    (1 << 11)
+#define CPU_EFLAGS_IOPL1       (1 << 12)
+#define CPU_EFLAGS_IOPL0       (1 << 13)
+#define CPU_EFLAGS_NESTED      (1 << 14)
+#define EFLAGS_BIT15           (0 << 15) /* bit15 is always 0 */
+#define CPU_EFLAGS_RESUME      (1 << 16)
+#define CPU_EFLAGS_V8086       (1 << 17)
+#define CPU_EFLAGS_ALIGNCHECK  (1 << 18)
+#define CPU_EFLAGS_VINTERRUPT  (1 << 19)
+#define CPU_EFLAGS_VPENDING    (1 << 20)
+#define CPU_EFLAGS_CPUID       (1 << 21)
+/* 31-22: reserved */
+
+#define CPU_EFLAGS_BIT (CPU_EFLAGS_BIT1 | CPU_EFLAGS_BIT3 | CPU_EFLAGS_BIT5 | CPU_EFLAGS_BIT15)
+
+#define INIT_CPU_EFLAGS (CPU_EFLAGS_IF | CPU_EFLAGS_BIT)
+   
+//----------------------------------------------------------------------------
+//  @struct     registers_t
+/// @brief      A record describing all 64-bit general-purpose registers.
+//----------------------------------------------------------------------------
+typedef struct registers {
+   uint64_t rax;
+   uint64_t rbx;
+   uint64_t rcx;
+   uint64_t rdx;
+   uint64_t rsi;
+   uint64_t rdi;
+   uint64_t rbp;
+   uint64_t r8;
+   uint64_t r9;
+   uint64_t r10;
+   uint64_t r11;
+   uint64_t r12;
+   uint64_t r13;
+   uint64_t r14;
+   uint64_t r15;
+} registers_t;
+
+//----------------------------------------------------------------------------
+//  @struct     registers4_t
+/// @brief      A record describing the first 4 general-purpose registers.
+//----------------------------------------------------------------------------
+typedef struct registers4 {
+  uint64_t rax;
+  uint64_t rbx;
+  uint64_t rcx;
+  uint64_t rdx;
+} registers4_t;
+
+
 static inline unsigned int get_lapic_id(void)
 {
   unsigned int eax, ebx, ecx, edx;
@@ -94,36 +168,6 @@ int ap_usermain(void);
 #define VENDOR_ID_LENGTH 12
 #define CPU_BRAND_LENGTH 48
 
-
-/* EFLAGS bits */
-/* 31-22: reserved */
-#define EFLAGS_ID (0x1 << 21)
-#define EFLAGS_VIP (0x1 << 20)
-#define EFLAGS_VIF (0x1 << 19)
-#define EFLAGS_AC (0x1 << 18)
-#define EFLAGS_VM (0x1 << 17)
-#define EFLAGS_RF (0x1 << 16)
-#define EFLAGS_BIT15 (0x0 << 15) /* bit15 is always 0 */
-#define EFLAGS_NT (0x1 << 14)
-/* 13: reserved */
-#define EFLAGS_IOPL (0x3 << 12) /* Mask */
-#define EFLAGS_OF (0x1 << 11)
-#define EFLAGS_DF (0x1 << 10)
-#define EFLAGS_IF (0x1 << 9)
-#define EFLAGS_TF (0x1 << 8)
-#define EFLAGS_SF (0x1 << 7)
-#define EFLAGS_ZF (0x1 << 6)
-#define EFLAGS_BIT5 (0x0 << 5) /* bit5 is always 0 */
-#define EFLAGS_AF (0x1 << 4)
-#define EFLAGS_BIT3 (0x0 << 3) /* bit3 is always 0 */
-#define EFLAGS_PF (0x1 << 2)
-#define EFLAGS_BIT1 (0x1 << 1) /* bit1 is always 1 */
-#define EFLAGS_CF (0x1 << 0)
-
-
-#define EFLAGS_BIT (EFLAGS_BIT1 | EFLAGS_BIT3 | EFLAGS_BIT5 | EFLAGS_BIT15)
-
-#define INIT_EFLAGS (EFLAGS_IF | EFLAGS_BIT)
 
 #define REG_LENGTH 64
 

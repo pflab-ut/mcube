@@ -23,6 +23,7 @@
 
 extern unsigned long idt_descriptor_size;
 
+
 // IDT memory range
 #define MEM_IDT 0x00001000
 #define MEM_IDT_SIZE (IDT_DESCRIPTOR_SIZE * 256)

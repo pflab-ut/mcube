@@ -58,4 +58,3 @@ ssize_t console_write(const void *input_data, size_t length, void *devdata)
 	return 0;
 }
 
-

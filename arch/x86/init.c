@@ -20,10 +20,8 @@ void init_arch(void)
   init_page();
   //print_pmap();
   init_irq();
-
-  extern struct desc_ptr IDT_Pointer;
-  printk("IDT_Poiner = 0x%lx\n", (unsigned long) &IDT_Pointer);
-  lidt(&IDT_Pointer);
+  init_exception();
+  
 #else
   //	init_shell();
   init_uart();

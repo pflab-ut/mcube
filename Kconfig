@@ -44,22 +44,22 @@ menu Compiler
 endmenu
 
 menu Printk
- 	type exclusive
-	 config	CONFIG_PRINTK2CONSOLE
-		  title Printk to Console
-		  default y
-		  defs	-DCONFIG_PRINTK2CONSOLE
+  type exclusive
+  config CONFIG_PRINTK2CONSOLE
+    title Printk to Console
+    default y
+    defs -DCONFIG_PRINTK2CONSOLE
     conflicts CONFIG_ARCH_SIM
     conflicts CONFIG_ARCH_ARM
- 	config	CONFIG_PRINTK2PRINTF
-	  	title Printk to Printf
-		  default n
-		  defs	-DCONFIG_PRINTK2PRINTF
+  config CONFIG_PRINTK2PRINTF
+    title Printk to Printf
+    default n
+    defs -DCONFIG_PRINTK2PRINTF
     depends CONFIG_ARCH_SIM
- 	config	CONFIG_PRINTK2UART
-	  	title Printk to UART
-	  	default n
-		  defs	-DCONFIG_PRINTK2UART
+  config CONFIG_PRINTK2UART
+    title Printk to UART
+    default n
+    defs -DCONFIG_PRINTK2UART
     conflicts CONFIG_ARCH_SIM
     conflicts CONFIG_ARCH_AXIS
 endmenu
@@ -88,23 +88,23 @@ menu Algorithm
 endmenu
 
 menu Task Queue
-  type	exclusive
-  config	CONFIG_TQ_O1
+  type exclusive
+  config CONFIG_TQ_O1
     title O(1) Scheduler
     default y
-    cfiles	$(TOP_DIR)/kernel/queue/o1.c
-    defs	-DCONFIG_TQ_O1
+    cfiles $(TOP_DIR)/kernel/queue/o1.c
+    defs -DCONFIG_TQ_O1
     conflicts SCHED_DP
-  config	CONFIG_TQ_BHEAP
+  config CONFIG_TQ_BHEAP
     title O(log n) Binomial Heap
     default n
-    cfiles	$(TOP_DIR)/kernel/queue/bheap.c
-    defs	-DCONFIG_TQ_BHEAP
-  config	CONFIG_TQ_DLIST
+    cfiles $(TOP_DIR)/kernel/queue/bheap.c
+    defs -DCONFIG_TQ_BHEAP
+  config CONFIG_TQ_DLIST
     title O(n) Double Circular Linked List
     default n
-    cfiles	$(TOP_DIR)/kernel/queue/dlist.c
-    defs	-DCONFIG_TQ_DLIST
+    cfiles $(TOP_DIR)/kernel/queue/dlist.c
+    defs -DCONFIG_TQ_DLIST
 endmenu
 
 menu Tie-Break

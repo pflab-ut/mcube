@@ -6,7 +6,6 @@
 #include <mcube/mcube.h>
 
 
-
 asmlinkage int do_syscall(int number)
 {
 	printk("number = %d\n", number);
@@ -183,6 +182,15 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 
 
 #if 1
+
+void init_irq(void)
+{
+  extern struct desc_ptr IDT_Pointer;
+  init_irq_asm();
+  printk("IDT_Poiner = 0x%lx\n", (unsigned long) &IDT_Pointer);
+  lidt(&IDT_Pointer);
+
+}
 
 
 #else

@@ -139,8 +139,7 @@ tty_get_textcolor_bg(int id)
   return (textcolor_t)((tty[id].textcolor_orig >> 12) & 0x0f);
 }
 
-void
-tty_clear(int id)
+void tty_clear(int id)
 {
   if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;
@@ -159,8 +158,7 @@ tty_clear(int id)
   }
 }
 
-void
-tty_setpos(int id, screenpos_t pos)
+void tty_setpos(int id, screenpos_t pos)
 {
   if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;

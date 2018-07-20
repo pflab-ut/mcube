@@ -23,6 +23,7 @@
 
 #ifndef	__ASSEMBLY__
 
+#define arrsize(x)           ((int)(sizeof(x) / sizeof(x[0])))
 
 #undef NULL
 #define NULL ((void *) 0)

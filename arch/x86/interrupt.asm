@@ -16,10 +16,10 @@ bits 64
 
 section .text
 
-  global init_irq  
-  global isr_set
-  global irq_enable
-  global irq_disable
+  global init_irq_asm
+  global set_isr
+  global enable_irq
+  global disable_irq
 
 
 ;-----------------------------------------------------------------------------
@@ -256,9 +256,9 @@ ISR.Dispatcher.Special:
 
 
 ;-----------------------------------------------------------------------------
-; @function init_irq
+; @function init_irq_asm
 ;-----------------------------------------------------------------------------
-init_irq:
+init_irq_asm:
 
     ;-------------------------------------------------------------------------
     ; Set up the 8259 programmable interrupt controller (PIC)
@@ -450,18 +450,17 @@ init_irq:
 
         .loadIDT:
 
-; XXX: not comipled...
+; NOTE: implement 
             ; Install the IDT
 ;            lidt    [IDT_Pointer]
 
         ret
-%if 0
 
 
 ;-----------------------------------------------------------------------------
-; @function isr_set
+; @function set_isr
 ;-----------------------------------------------------------------------------
-isr_set:
+set_isr:
 
     ; Preserve flags before disabling interrupts.
     pushf
@@ -483,9 +482,9 @@ isr_set:
 
 
 ;-----------------------------------------------------------------------------
-; @function irq_enable
+; @function enable_irq
 ;-----------------------------------------------------------------------------
-irq_enable:
+enable_irq:
 
     ; Move IRQ into cl.
     mov     rcx,    rdi
@@ -514,7 +513,7 @@ irq_enable:
 
         ; Recursively enable master IRQ2, or else slave IRQs will not work.
         mov     rdi,    2
-        call    irq_enable
+        call    enable_irq
 
         ; Subtract 8 from the IRQ.
         sub     cl,     8
@@ -535,9 +534,9 @@ irq_enable:
 
 
 ;-----------------------------------------------------------------------------
-; @function irq_disable
+; @function disable_irq
 ;-----------------------------------------------------------------------------
-irq_disable:
+disable_irq:
 
     ; Move IRQ into cl.
     mov     rcx,    rdi
@@ -578,4 +577,3 @@ irq_disable:
         out     0xa1,   al
 
         ret
-%endif
