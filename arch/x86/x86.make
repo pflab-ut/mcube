@@ -66,7 +66,6 @@ ASMS = \
 	$(TOP_DIR)/arch/x86/memzero.asm \
  $(TOP_DIR)/arch/x86/utils.asm \
  $(TOP_DIR)/arch/x86/interrupt.asm \
- $(TOP_DIR)/arch/x86/vector.asm \
 
 SRCS += \
  $(TOP_DIR)/arch/x86/mm.c \
@@ -91,7 +90,6 @@ SRCS += \
  $(TOP_DIR)/arch/x86/hpet.c \
  $(TOP_DIR)/arch/x86/lapic.c \
  $(TOP_DIR)/arch/x86/pit.c \
- $(TOP_DIR)/arch/x86/dsctbl.c \
 	$(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_x86.c \
 

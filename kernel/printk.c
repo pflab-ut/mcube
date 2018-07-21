@@ -185,6 +185,117 @@ static inline unsigned int luout(unsigned long lu, int base, char *dst, int n, s
 }
 
 
+#if !CONFIG_ARCH_AXIS
+static inline int fout(float f, int base, char *dst, int n, struct conv_flag *cf)
+{
+	int i;
+	char tmp[MAX_DIGIT];
+	char pad = ' ';
+	float uf;
+	uint32_t u32;
+	if (base == 10 && f < 0) {
+		dst[n++] = '-';
+		uf = f * -1;
+	} else {
+		uf = f;
+	}
+
+	u32 = uf;
+	for (i = 1; i < MAX_DIGIT; i++) {
+		tmp[i] = u32 % base;
+		if (tmp[i] < 10) {
+			tmp[i] += '0';
+		} else {
+			tmp[i] += 'a' - 10;
+		}
+
+		if ((u32 /= base) == 0) {
+
+			if (cf->pad) {
+				pad = '0';
+			}
+			if (FOUT_SZ < n + cf->digit) {
+				return -1;
+			}
+			while (i < cf->digit) {
+				dst[n++] = pad;
+				cf->digit--;
+			}
+
+			if (FOUT_SZ < n + i) {
+				return -1;
+			}
+			while (i) {
+				dst[n++] = tmp[i--];
+			}
+			break;
+		}
+	}
+	dst[n++] = '.';
+
+	for (i = 0, uf = (uf - (uint32_t) uf) * 10; i < 6; i++) {
+    dst[n++] = (uint32_t) uf % 10 + '0';
+    uf = uf * 10 - (uint32_t) uf * 10;
+  }
+
+	return n;
+}
+
+static inline int lfout(double lf, int base, char *dst, int n, struct conv_flag *cf)
+{
+	int i;
+	char tmp[MAX_DIGIT];
+	char pad = ' ';
+	double ulf;
+	uint64_t u64;
+	if (base == 10 && lf < 0) {
+		dst[n++] = '-';
+		ulf = lf * -1;
+	} else {
+		ulf = lf;
+	}
+	u64 = ulf;
+	for (i = 1; i < MAX_DIGIT; i++) {
+		tmp[i] = u64 % base;
+		if (tmp[i] < 10) {
+			tmp[i] += '0';
+		} else {
+			tmp[i] += 'a' - 10;
+		}
+
+		if ((u64 /= base) == 0) {
+
+			if (cf->pad) {
+				pad = '0';
+			}
+			if (FOUT_SZ < n + cf->digit) {
+				return -1;
+			}
+			while (i < cf->digit) {
+				dst[n++] = pad;
+				cf->digit--;
+			}
+
+			if (FOUT_SZ < n + i) {
+				return -1;
+			}
+			while (i) {
+				dst[n++] = tmp[i--];
+			}
+			break;
+		}
+	}
+	dst[n++] = '.';
+
+	for (i = 0, ulf = (ulf - (uint64_t) ulf) * 10; i < 6; i++) {
+    dst[n++] = (uint64_t) ulf % 10 + '0';
+    ulf = ulf * 10 - (uint64_t) ulf * 10;
+  }
+
+	return n;
+}
+#endif /* !CONFIG_ARCH_AXIS */
+
 
 
 /**
@@ -204,7 +315,11 @@ int printk(const char *fmt, ...)
 	struct conv_flag cf;
 	unsigned long lu;
 	long ld;
-
+#if !CONFIG_ARCH_AXIS
+  float f;
+  double lf;
+#endif /* !CONFIG_ARCH_AXIS */
+  
 	va_start(ap, fmt);
 
 	while (*fmt) {
@@ -258,6 +373,16 @@ skip:
 				}
 				n = ret;
 				break;
+#if !CONFIG_ARCH_AXIS
+      case 'f': /* double */
+        lf = va_arg(ap, double);
+        ret = lfout(lf, 10, buf, n, &cf);
+        if (ret == -1) {
+          goto out;
+        }
+        n = ret;
+        break;
+#endif /* !CONFIG_ARCH_AXIS */
 			case 'x':	/* hex unsigned long */
 				lu = va_arg(ap, unsigned long);
 				ret = luout(lu, 16, buf, n, &cf);
@@ -301,6 +426,16 @@ skip:
 			}
 			n = ret;
 			break;
+#if !CONFIG_ARCH_AXIS
+    case 'f': /* float */
+      f = (float) va_arg(ap, double);
+      ret = fout(f, 10, buf, n, &cf);
+      if (ret == -1) {
+        goto out;
+      }
+      n = ret;
+      break;
+#endif /* !CONFIG_ARCH_AXIS */
 		case 'x':	/* hex unsigned int */
 			u = va_arg(ap, unsigned int);
 			ret = uout(u, 16, buf, n, &cf);

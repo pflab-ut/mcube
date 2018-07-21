@@ -5,80 +5,57 @@
  */
 #include <mcube/mcube.h>
 
-irqreturn_t handle_pit_timer_tick(int irq, void *dummy)
+// 8253 timer ports
+#define TIMER_PORT_DATA_CH0  0x40   ///< Channel 0 data port.
+#define TIMER_PORT_DATA_CH1  0x41   ///< Channel 1 data port.
+#define TIMER_PORT_DATA_CH2  0x42   ///< Channel 2 data port.
+#define TIMER_PORT_CMD       0x43   ///< Timer command port.
+
+void isr_timer(const interrupt_context_t *context)
 {
-  //	unsigned long cpu = get_cpu_id();
-	printk("handle_timer_tick()\n");
-	//	printk("handle_timer_tick(): current_th[0]->id = %llu\n", current_th[0]->id);
-
-  for (;;)
-    ;
-#if 0
-	//	printk("sched_time = %llu sys_jiffies = %llu\n", sched_time, sys_jiffies);  
-  if (sched_time <= SU2EU(sys_jiffies)) {
-		printk("handle_timer_tick(): sched_end\n");
-    sched_end = TRUE;
-		current_th[cpu] = &idle_th[cpu];
-
-		//		stop_pit_timer(0);
-		//		cli();
-    return IRQ_HANDLED;
-  } else {
-		/* clear IRQ bit to accept new interrupt */
-		outb(PIC0_OCW2, clear_irq(PIT_IRQ));
-	}
-#endif
-
-
-	do_sched();
-
-	//	update_jiffies();
-	//	printk("handle_timer_tick() end\n");
-	return IRQ_HANDLED;
+  static int i = 0;
+  i++;
+  if (i % 1000 == 0) {
+    printk("isr_timer()\n");
+  }
+  (void) context;
+  // Do nothing for now.
+  
+  // Send the end-of-interrupt signal.
+  outb(PIC_PORT_CMD_MASTER, PIC_CMD_EOI);
 }
-
-static struct irqaction timer_irq = {
-  .name       = "pit timer",
-  .handler    = handle_pit_timer_tick,
-  .flags      = IRQF_DISABLED | IRQF_TIMER,
-  .mask       = CPU_MASK_NONE,
-};
 
 void init_pit_timer(unsigned long tick_us)
 {
-	/* upper bound of cnt is 65535 */
+  // Compute the clock count value.
+	/* upper bound of count is 65535. */
 	/* 11932 = 100Hz = 10ms */
 	/* 1193 = 1KHz = 1ms */
-	//	uint16_t cnt = (PIT_HZ * tick_us) / 1000000;
-	uint16_t cnt = 1193;
-	//	uint16_t cnt = 11932;
-	//	uint16_t cnt = 65535;
-	stop_pit_timer(0);
-	/* change interrupt period */
-	outb(PIT_CTRL, 0x34);
-	/* lower 8bit of interrupt period */
-	outb(PIT_CNT0, cnt & 0xff);
-	/* upper 8bit of interrupt period */
-	outb(PIT_CNT0, cnt >> 8);
+  //  uint16_t count = (uint16_t)(MAX_FREQUENCY / frequency);
+  uint16_t count = 1193;
 
-#if 1
-	set_idsc(idt_start + IRQ_OFFSET + PIT_IRQ, (unsigned long) &common_interrupt,
-					 2 * 8, AR_INTGATE32);
-#endif
-  setup_irq(PIT_IRQ, &timer_irq);
+  // Channel=0, AccessMode=lo/hi, OperatingMode=rate-generator
+  outb(TIMER_PORT_CMD, 0x34);
+
+  // Output the lo/hi count value
+  outb(TIMER_PORT_DATA_CH0, (uint8_t)count);
+  outb(TIMER_PORT_DATA_CH0, (uint8_t)(count >> 8));
+
+  // Assign the interrupt service routine.
+  set_isr(TRAP_IRQ_TIMER, isr_timer);
+
+  // Enable the timer interrupt (IRQ0).
+  enable_irq(IRQ_TIMER);
 }
 
 void start_pit_timer(unsigned int ch)
 {
-	/* enable IRQ0 */
-	outb(PIC0_IMR, inb(PIC0_IMR) & unmask_irq(PIT_IRQ));
+  // Enable the timer interrupt (IRQ0).
+  enable_irq(IRQ_TIMER);
 }
 
 void stop_pit_timer(unsigned int ch)
 {
-	/* disable IRQ0 */
-	outb(PIC0_IMR, inb(PIC0_IMR) | mask_irq(PIT_IRQ));
-	/* clear PIT flag */
-	outb(PIC0_OCW2, clear_irq(PIT_IRQ));
+  // Disable the timer interrupt (IRQ0).
+  disable_irq(IRQ_TIMER);
 }
-

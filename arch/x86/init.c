@@ -14,25 +14,25 @@ void init_arch(void)
   init_tty();
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
   tty_clear(TTY_ID);
-#if 0  
   /* initialize memory */
   init_acpi();
   init_pmap();
   init_page();
   //  print_pmap();
-#endif
   init_irq();
   init_exception();
+
   
   //  init_syscall();
   
-  timer_init(20);
   //  init_keyboard();
 #if 0
   print_cpu_brand();
   print_simd_info();
   print_vendor_id();
 #endif
+
+  init_pit_timer(TICK_USEC);
  
   //asm volatile("int 0x0");
   enable_interrupt();
