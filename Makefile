@@ -13,8 +13,8 @@ include $(TOP_DIR)/Rules.make
 
 SRCS += \
  $(TOP_DIR)/kernel/main.c \
- $(TOP_DIR)/kernel/printk.c \
- $(TOP_DIR)/kernel/thread.c \
+	$(TOP_DIR)/kernel/printk.c \
+	$(TOP_DIR)/kernel/thread.c \
  $(TOP_DIR)/kernel/task.c \
  $(TOP_DIR)/kernel/sched.c \
  $(TOP_DIR)/kernel/job.c \
@@ -40,7 +40,7 @@ $(TARGET): $(ASM_OBJS) $(OBJS) $(BOOT_TARGET) $(LOADER_TARGET)
 	$(SIZE) $@
 ifeq ($(ARCH_NAME), x86)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
-	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
+#	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
 	$(TOP_DIR)/scripts/misc/mkcdrom.sh
 else ifeq ($(ARCH_NAME), axis)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)

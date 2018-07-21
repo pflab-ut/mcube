@@ -14,7 +14,7 @@
 /** Printk. */
 #define CONFIG_PRINTK2CONSOLE 1
 /** Algorithm. */
-#define CONFIG_ALGO_RM 1
+#define CONFIG_ALGO_FP 1
 /** Task Queue. */
 #define CONFIG_TQ_O1 1
 /** Tie-Break. */

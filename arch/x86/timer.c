@@ -28,8 +28,6 @@ unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
 void isr_timer(const interrupt_context_t *context)
 {
   printk("isr_timer()\n");
-  for (;;)
-    ;
   (void) context;
   // Do nothing for now.
   
