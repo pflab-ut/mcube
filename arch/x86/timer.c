@@ -11,9 +11,9 @@ unsigned long sys_tsc = 0;
 unsigned long timer_count[NR_INTRA_KERNEL_CPUS];
 unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
 
-#define LAPIC_TIMER
-#define HPET_TIMER
-#define PIT_TIMER
+#define LAPIC_TIMER 0
+#define HPET_TIMER 0
+#define PIT_TIMER 1
 
 // 8253 timer ports
 #define TIMER_PORT_DATA_CH0  0x40   ///< Channel 0 data port.
@@ -25,11 +25,13 @@ unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
 #define MIN_FREQUENCY        19
 #define MAX_FREQUENCY        1193181
 
-static void isr_timer(const interrupt_context_t *context)
+void isr_timer(const interrupt_context_t *context)
 {
+  printk("isr_timer()\n");
+  for (;;)
+    ;
   (void) context;
   // Do nothing for now.
-  //  printk("isr_timer()\n");
   
   // Send the end-of-interrupt signal.
   outb(PIC_PORT_CMD_MASTER, PIC_CMD_EOI);

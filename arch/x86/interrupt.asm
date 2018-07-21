@@ -117,7 +117,6 @@ IDT_Pointer:
     dw  Mem.IDT.Size - 1    ; Limit = offset of last byte in table.
     dq  Mem.IDT             ; Address of table.
 
-
 ;-----------------------------------------------------------------------------
 ; ISR.Thunk.Template
 ;
@@ -177,7 +176,6 @@ ISR.Dispatcher:
         ; Preserve the MXCSR register.
         sub     rsp,    8
         stmxcsr [rsp]
-
     .lookup:
 
         ; Look up the kernel-defined ISR in the table.
@@ -450,7 +448,7 @@ init_irq_asm:
 
         .loadIDT:
 
-; NOTE: implement 
+; NOTE: implement this in init_irq()
             ; Install the IDT
 ;            lidt    [IDT_Pointer]
 

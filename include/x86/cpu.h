@@ -100,12 +100,11 @@ static inline int get_nr_cpu_cores(void)
   return 1;
 }
 
-void syscall_init(void);
+void init_syscall(void);
 
 
 void print_vendor_id(void);
 void print_simd_info(void);
-void print_cpu_frequency(void);
 void print_cpu_brand(void);
 
 int ap_main(void);

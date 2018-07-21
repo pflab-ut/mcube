@@ -87,16 +87,6 @@ void print_simd_info(void)
   printk("AVX2:   %s\n", regs4.ebx & 1 <<  5 ? "OK" : "NG");
 }
 
-void print_cpu_frequency(void)
-{
-  registers4_t regs4;
-	char str[17];
-	cpuid(0x80000004, &regs4);
-  memcpy(&str[0], &regs4, sizeof(regs4));
-	str[16] = '\0';
-	printk("CPU_FREQUENCY: %s\n", str);
-  //	CPU_CLOCK = strtoul(str, NULL, 10);
-}
 
 
 void print_cpu_brand(void)

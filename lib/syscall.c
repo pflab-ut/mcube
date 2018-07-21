@@ -6,7 +6,6 @@
 #include <mcube/mcube.h>
 
 
-
 asmlinkage int sys_sched(void)
 {
 	printk("sys_sched()\n");

@@ -14,7 +14,10 @@
 #define MEM_BIOS_IVT                       0x00000000
 #define MEM_BIOS_DATA                      0x00000400
 #define MEM_SECTOR_BUFFER                  0x00000800
+#define MEM_IDT                            0x00001000
+#define MEM_IDT_END                        0x00002000
 #define MEM_GDT                            0x00003000
+#define MEM_GDT_END                        0x00003100
 #define MEM_TSS64                          0x00003100
 #define MEM_GLOBALS                        0x00003200
 #define MEM_STACK_BOTTOM                   0x00004000
@@ -45,6 +48,7 @@
 #define MEM_KERNEL_STACK_TOP               0x00300000
 #define MEM_KERNEL_IMAGE                   0x00300000
 #define MEM_KERNEL_CODE                    0x00301000
+#define MEM_KERNEL_IMAGE_END               0xffffffff
 
 // Layout region sizes
 #define MEM_BIOS_IVT_SIZE                  0x00000400

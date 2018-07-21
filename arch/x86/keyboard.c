@@ -160,6 +160,7 @@ static void addkey(uint8_t brk, uint8_t meta, uint8_t code, uint8_t ch)
 
 static void isr_keyboard(const interrupt_context_t *context)
 {
+  printk("isr_keyboard()\n");
   (void)context;
 
   // Get the scan code and the break state (key up or key down).

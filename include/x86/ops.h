@@ -43,50 +43,50 @@ typedef struct registers4 {
 
 static inline uint8_t inb(uint16_t port)
 {
-	uint8_t value;
-  asm volatile ("inb %0, %1" : "=a" (value) : "Nd" (port));
+  uint8_t value;
+  asm volatile("inb %0, %1" : "=a" (value) : "Nd" (port));
 	return value;
 }
 
 static inline uint16_t inw(uint16_t port)
 {
 	uint16_t value;
-  asm volatile ("inw %0, %1" : "=a" (value) : "Nd" (port));
+  asm volatile("inw %0, %1" : "=a" (value) : "Nd" (port));
 	return value;
 }
 
 static inline uint32_t inl(uint32_t port)
 {
 	uint32_t value;
-  asm volatile ("inl %0, %1" : "=a" (value) : "Nd" (port));
+  asm volatile("inl %0, %1" : "=a" (value) : "Nd" (port));
 	return value;
 }
 
 static inline uint32_t ind(uint64_t port)
 {
 	uint64_t value;
-  asm volatile ("ind %0, %1" : "=a" (value) : "Nd" (port));
+  asm volatile("ind %0, %1" : "=a" (value) : "Nd" (port));
 	return value;
 }
 
 static inline void outb(uint16_t port, uint8_t value)
 {
-  asm volatile ("outb %0, %1" :: "Nd"(port), "a"(value));   
+  asm volatile("outb %0, %1" :: "Nd"(port), "a"(value));
 }
 
 static inline void outw(uint16_t port, uint16_t value)
 {
-  asm volatile ("outw %0, %1" :: "Nd"(port), "a"(value));   
+  asm volatile("outw %0, %1" :: "Nd"(port), "a"(value));   
 }
 
 static inline void outl(uint32_t port, uint32_t value)
 {
-  asm volatile ("outl %0, %1" :: "Nd"(port), "a"(value));   
+  asm volatile("outl %0, %1" :: "Nd"(port), "a"(value));   
 }
 
 static inline void outd(uint64_t port, uint64_t value)
 {
-  asm volatile ("outd %0, %1" :: "Nd"(port), "a"(value));   
+  asm volatile("outd %0, %1" :: "Nd"(port), "a"(value));   
 }
 
 static inline void finit(void)
@@ -150,7 +150,7 @@ static inline void mfence(void)
 
 static inline void cpuid(uint32_t code, registers4_t *regs)
 {
-  asm volatile ("cpuid"
+  asm volatile("cpuid"
                 : "=a" (regs->eax), "=b" (regs->ebx), "=c" (regs->ecx),
                   "=d" (regs->edx)
                 : "0" (code));
@@ -206,7 +206,7 @@ static inline void wbinvd(void)
 static inline uint64_t rdmsr(uint32_t addr)
 {
   uint64_t data;
-  asm volatile ("rdmsr"
+  asm volatile("rdmsr"
                 : "=A" (data)
                 : "c" (addr));
 	return data;
@@ -215,20 +215,20 @@ static inline uint64_t rdmsr(uint32_t addr)
 /* write to model specific register */
 static inline void wrmsr(uint32_t addr, uint64_t data)
 {
-  asm volatile ("wrmsr"
+  asm volatile("wrmsr"
                 :
                 : "c" (addr), "A" (data));
 }
 
 static inline void invalid_opcode(void)
 {
-  asm volatile ("int 6");
+  asm volatile("int 6");
 }
 
 
 static inline void invalidate_page(void *vaddr)
 {
-  asm volatile ("invlpg %0\n" :: "m" (vaddr) : "memory");
+  asm volatile("invlpg %0\n" :: "m" (vaddr) : "memory");
 }
 
 

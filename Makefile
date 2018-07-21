@@ -30,7 +30,6 @@ SRCS += \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/user/user.c \
 
-BFLAGS = -nostdlib
 
 .PHONY: all configure testconfig defaultconfig testpython
 all: $(TARGET)
@@ -102,7 +101,8 @@ else ifeq ($(ARCH_NAME), x86)
 # graphic
 #	qemu-system-x86_64 -cdrom $(TARGET).iso
 # nographic
-	qemu-system-x86_64 -cdrom $(TARGET).iso -nographic -curses
+#	qemu-system-x86_64 -cpu core2duo -cdrom $(TARGET).iso -nographic -curses 
+	qemu-system-x86_64 -cpu qemu64 -cdrom $(TARGET).iso -nographic -curses 
 else ifeq ($(ARCH_NAME), arm)
 # for UART011
 	qemu-system-aarch64 -m 128 -M raspi3 -nographic -kernel $(TARGET)

@@ -17,6 +17,7 @@ vpath %.c $(TOP_DIR)/arch/$(ARCH_NAME) \
  $(TOP_DIR)/user/$(ARCH_NAME)/ \
 
 vpath %.S $(TOP_DIR)/arch/$(ARCH_NAME)
+vpath %.asm $(TOP_DIR)/arch/$(ARCH_NAME)
 
 
 TARGET = $(TOP_DIR)/build/mcube
@@ -34,7 +35,7 @@ endif
 
 CFLAGS += -Iinclude -Wall
 #CFLAGS += -Wextra
-CFLAGS += -O3
+CFLAGS += -O0 -fPIC
 CFLAGS += -std=gnu11
 CFLAGS += -nostdlib -fno-stack-protector -ffreestanding
 CFLAGS += -fno-builtin 

@@ -42,9 +42,9 @@ extern unsigned long sys_tsc;
 // 2ms
 //#define TICK_USEC 2000
 // 10ms
-//#define TICK_USEC 10000
+#define TICK_USEC 10000
 // 100ms
-#define TICK_USEC 100000
+//#define TICK_USEC 100000
 // 1s
 //#define TICK_USEC 1000000
 // 10s

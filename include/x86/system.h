@@ -60,9 +60,9 @@ static inline uint64_t get_cr3(void)
   return value;
 }
 
-static inline void set_cr3(uint64_t value)
+static inline void set_cr3(uint64_t paddr)
 {
-  asm volatile("mov cr3, %0" :: "r"(value));
+  asm volatile("mov cr3, %0" :: "r"(paddr));
 }
 
 static inline uint64_t get_cr4(void)
@@ -93,8 +93,7 @@ static inline void set_eflags(uint64_t eflags)
 
 static inline void generate_software_interrupt(volatile unsigned long id)
 {
-  /* TODO: implement */
-  asm volatile("int %0":: "r"(id));
+  //  asm volatile("int %0" :: "r"(id));
 }
 
 

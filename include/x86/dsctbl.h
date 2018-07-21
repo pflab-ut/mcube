@@ -65,7 +65,7 @@ struct desc_ptr {
 	/** Size. */
 	uint16_t size;
 	/** Address. */
-	uint32_t addr;
+	uint64_t addr;
 } __attribute__((packed));
 
 typedef struct desc_ptr desc_ptr;
@@ -79,7 +79,8 @@ static inline void lgdt(const struct desc_ptr *dtr)
 
 static inline void lidt(const struct desc_ptr *dtr)
 {
-	asm volatile("lidt %0"::"m" (*dtr));
+  asm volatile("lidt %0"::"m" (*dtr));
+  //  asm volatile("lidt [%0]"::"r" (dtr));
 }
 
 static inline void sgdt(struct desc_ptr *dtr)
@@ -101,7 +102,7 @@ static inline unsigned long str(void)
 
 void set_gdsc(struct global_descriptor *gd, uint32_t limit,
               uint32_t base, uint32_t ar);
-void set_idsc(struct interrupt_descriptor *id, uint32_t offset,
+void set_idsc(struct interrupt_descriptor *id, uint64_t offset,
               uint32_t selector, uint32_t ar);
 
 void init_dsctbl(void);

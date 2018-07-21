@@ -18,30 +18,35 @@ void init_arch(void)
   init_acpi();
   init_pmap();
   init_page();
-  //print_pmap();
+  //  print_pmap();
   init_irq();
   init_exception();
-
-  //  timer_init(100);
-
-  tty_clear(TTY_ID);
-  //  init_keyboard();
-  //  enable_interrupt();
+  
+  //  init_syscall();
+  
+  timer_init(20);
+  //init_keyboard();
+#if 0
   print_cpu_brand();
   print_simd_info();
-  print_cpu_frequency();
   print_vendor_id();
+#endif
+  //asm volatile("int 0x0");
+  enable_interrupt();
   for (;;)
     ;
 #else
   //	init_shell();
-  init_uart();
-	init_console();
+  //  init_uart();
+  //	init_console();
+  init_tty();
+  //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
+  tty_clear(TTY_ID);
 
-	init_key();
+  //	init_key();
   //	init_processor();
 
-	init_buffer();
+  //	init_buffer();
 
   //	init_ipc();
 	/* use printk after init_ipc() */
@@ -50,20 +55,21 @@ void init_arch(void)
 
   //	init_overhead();
 
-	init_dsctbl();
-	init_irq();
+  init_irq();
+  init_dsctbl();
 
-#if CONFIG_DEV_MOUSE
-	init_mouse();
-#endif /* CONFIG_DEV_MOUSE */
+  //  timer_init(20);
+  //init_keyboard();
 
-	init_apic();
-  init_timer(0);
-
-	init_cache(); 
+  //	init_apic();
+  init_pit_timer(TICK_USEC);
+  //	init_cache(); 
 
 	/* enable interrupt */
 	sti();
+  start_pit_timer(0);
+  for (;;)
+    ;
 #endif
 }
 

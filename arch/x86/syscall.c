@@ -24,7 +24,7 @@ static void syscall_handle(void)
     // Do nothing for now.
 }
 
-void init_syscall()
+void init_syscall(void)
 {
   // Request the CPU's extended features.
   registers4_t regs4;
@@ -40,12 +40,12 @@ void init_syscall()
   // by SYSCALL and SYSRET.
   uint64_t star = rdmsr(MSR_IA32_STAR);
   star &= 0x00000000ffffffff;
-  star |= (uint64_t)SEGMENT_SELECTOR_KERNEL_CODE << 32;
+  star |= (uint64_t) SEGMENT_SELECTOR_KERNEL_CODE << 32;
   star |= (uint64_t)((SEGMENT_SELECTOR_USER_CODE - 16) | 3) << 48;
   wrmsr(MSR_IA32_STAR, star);
 
   // Write the address of the system call handler used by SYSCALL.
-  wrmsr(MSR_IA32_LSTAR, (uint64_t)syscall_handle);
+  wrmsr(MSR_IA32_LSTAR, (uint64_t) syscall_handle);
 
   // Write the CPU flag mask used during SYSCALL.
   wrmsr(MSR_IA32_FMASK, 0);
