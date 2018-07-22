@@ -14,11 +14,6 @@
 //============================================================================
 
 
-// Model-specific registers used to set up system calls.
-#define MSR_IA32_STAR   0xc0000081
-#define MSR_IA32_LSTAR  0xc0000082
-#define MSR_IA32_FMASK  0xc0000084
-
 static void syscall_handle(void)
 {
     // Do nothing for now.

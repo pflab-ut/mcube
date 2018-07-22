@@ -11,6 +11,11 @@
 #define PIT_CNT0 0x0040
 #define PIT_CTRL 0x0043
 
+/* enable each timer */
+#define LAPIC_TIMER 0
+#define HPET_TIMER 0
+#define PIT_TIMER 1
+
 #ifndef __ASSEMBLY__
 
 //----------------------------------------------------------------------------

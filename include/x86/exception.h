@@ -31,12 +31,21 @@
 #define EXCEPTION_SEGMENT_NOT_PRESENT  0x0b
 #define EXCEPTION_STACK_FAULT          0x0c
 #define EXCEPTION_GENERAL_PROTECTION   0x0d
+/* 0x0f: reserved */
 #define EXCEPTION_PAGE_FAULT           0x0e
 #define EXCEPTION_FPU                  0x10
 #define EXCEPTION_ALIGNMENT            0x11
 #define EXCEPTION_MACHINE_CHECK        0x12
 #define EXCEPTION_SIMD                 0x13
 #define EXCEPTION_VIRTUALIZATION       0x14
+/* 0x15-1d: reserved */
+#define EXCEPTION_SECURITY             0x1e
+/* 0x1f: reserved */
+
+/* 0x20-0xff: maskable interrupts */
+#define SCHED_IRQ 0x20
+#define INTERRUPT_FATAL 0xff
+
 
 
 //----------------------------------------------------------------------------

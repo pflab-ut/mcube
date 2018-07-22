@@ -11,9 +11,6 @@ unsigned long sys_tsc = 0;
 unsigned long timer_count[NR_INTRA_KERNEL_CPUS];
 unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
 
-#define LAPIC_TIMER 0
-#define HPET_TIMER 0
-#define PIT_TIMER 1
 
                          
 static void measure_cpu_frequency(void)
@@ -54,5 +51,4 @@ void stop_timer(unsigned int ch)
   stop_pit_timer(ch);
 #endif /* LAPIC_TIMER */
 }
-
 

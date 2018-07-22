@@ -222,7 +222,7 @@ static inline void wrmsr(uint32_t addr, uint64_t data)
 
 static inline void invalid_opcode(void)
 {
-  asm volatile("int 6");
+  asm volatile("int %0" :: "i"(EXCEPTION_INVALID_OPCODE));
 }
 
 
@@ -234,7 +234,7 @@ static inline void invalidate_page(void *vaddr)
 
 static inline void fatal(void)
 {
-  asm volatile("int 0xff");
+  asm volatile("int %0" :: "i"(INTERRUPT_FATAL));
 }
 
 

@@ -181,7 +181,6 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 }
 
 
-#if 1
 
 void init_irq(void)
 {
@@ -194,38 +193,3 @@ void init_irq(void)
   asm volatile("lidt [%0]" :: "r"(&IDT_Pointer));
 }
 
-
-#else
-void init_irq(void)
-{
-  printk("init_irq()\n");
-	/* disable PIC0 interrupt */
-	outb(PIC0_IMR, OCW1_DISABLE_ALL_IRQS);
-	/* disable PIC1 interrupt */
-	outb(PIC1_IMR, OCW1_DISABLE_ALL_IRQS);
-
-	/* edge trigger mode */
-	outb(PIC0_ICW1, ICW1_EDGE_TRIGGER);
-	/* handle IRQ0-7 to INT20-27 */
-	outb(PIC0_ICW2, IRQ_OFFSET);
-	/* connect IRQ2 to PIC1 */
-	outb(PIC0_ICW3, 0x1 << SLAVE_IRQ);
-	/* non buffer mode */
-	outb(PIC0_ICW4, ICW4_NON_BUFFER);
-
-	/* edge trigger mode */
-	outb(PIC1_ICW1, ICW1_EDGE_TRIGGER);
-	/* handle IRQ8-15 to INT28-2f */
-	outb(PIC1_ICW2, IRQ_OFFSET + NR_MASTER_IRQS);
-	/* connect IRQ2 to PIC1 */
-	outb(PIC1_ICW3, SLAVE_IRQ);
-	/* non buffer mode */
-	outb(PIC1_ICW4, ICW4_NON_BUFFER);
-	
-	/* disable all interrupts in PIC0 */
-	outb(PIC0_IMR, OCW1_DISABLE_ALL_IRQS);
-	/* disable all interrupts in PIC1 */
-	outb(PIC1_IMR, OCW1_DISABLE_ALL_IRQS);
-}
-
-#endif

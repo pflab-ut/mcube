@@ -7,6 +7,7 @@
 #define	__MCUBE_X86_X86_HEADER_H__
 
 
+#include <x86/exception.h>
 #include <x86/ops.h>
 #include <x86/irq.h>
 
@@ -19,7 +20,6 @@
 #include <x86/dmac.h>
 #include <x86/dsctbl.h>
 #include <x86/dump.h>
-#include <x86/exception.h>
 #include <x86/hpet.h>
 #include <x86/interrupt.h>
 #include <x86/io.h>
@@ -30,9 +30,8 @@
 #include <x86/mm.h>
 #include <x86/msr.h>
 #include <x86/regs.h>
-#include <x86/console.h>
-#include <x86/segment.h>
 #include <x86/spinlock.h>
+#include <x86/segment.h>
 #include <x86/system.h>
 #include <x86/thread.h>
 #include <x86/timer.h>
