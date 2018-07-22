@@ -28,10 +28,10 @@
 #include <x86/keyboard.h>
 #include <x86/lapic.h>
 #include <x86/mm.h>
+#include <x86/gdt.h>
 #include <x86/msr.h>
 #include <x86/regs.h>
 #include <x86/spinlock.h>
-#include <x86/segment.h>
 #include <x86/system.h>
 #include <x86/thread.h>
 #include <x86/timer.h>

@@ -11,26 +11,26 @@
 // be found in the LICENSE file.
 //=============================================================================
 
-#ifndef __MCUBE_BOOT_GDT_INC__
-#define __MCUBE_BOOT_GDT_INC__
+#ifndef __MCUBE_BOOT_GDT_H__
+#define __MCUBE_BOOT_GDT_H__
 
 //=============================================================================
 // Constants
 //=============================================================================
 
-// GDT selectors, which should be used in protected mode to set segment
+// GDT segment selectors, which should be used in protected mode to set segment
 // register values. See loader_iso.asm for the descriptors referenced by these
 // selectors.
-#define GDT32_SELECTOR_CODE32       0x08    // 32-bit protected mode (code)
-#define GDT32_SELECTOR_DATA32       0x10    // 32-bit protected mode (data)
-#define GDT32_SELECTOR_CODE16       0x18    // 16-bit protected mode (code)
-#define GDT32_SELECTOR_DATA16       0x20    // 16-bit protected mode (data)
+#define GDT32_SEGMENT_SELECTOR_CODE32       0x08    // 32-bit protected mode (code)
+#define GDT32_SEGMENT_SELECTOR_DATA32       0x10    // 32-bit protected mode (data)
+#define GDT32_SEGMENT_SELECTOR_CODE16       0x18    // 16-bit protected mode (code)
+#define GDT32_SEGMENT_SELECTOR_DATA16       0x20    // 16-bit protected mode (data)
 
-#define GDT64_SELECTOR_KERNEL_DATA  0x08    // 64-bit mode (kernel data)
-#define GDT64_SELECTOR_KERNEL_CODE  0x10    // 64-bit mode (kernel code)
-#define GDT64_SELECTOR_USER_DATA    0x18    // 64-bit mode (user data)
-#define GDT64_SELECTOR_USER_CODE    0x20    // 64-bit mode (user code)
-#define GDT64_SELECTOR_TSS          0x28    // 64-bit task state segment
+#define GDT64_SEGMENT_SELECTOR_KERNEL_DATA  0x08    // 64-bit mode (kernel data)
+#define GDT64_SEGMENT_SELECTOR_KERNEL_CODE  0x10    // 64-bit mode (kernel code)
+#define GDT64_SEGMENT_SELECTOR_USER_DATA    0x18    // 64-bit mode (user data)
+#define GDT64_SEGMENT_SELECTOR_USER_CODE    0x20    // 64-bit mode (user code)
+#define GDT64_SEGMENT_SELECTOR_TSS          0x28    // 64-bit task state segment
 
 
 //=============================================================================
@@ -66,65 +66,6 @@
 //      [56:63]      Base address bits [24:31]
 //
 //=============================================================================
-.struct 0
-GdtDescriptor:
-  .comm GdtDescriptorLimitLow, 2
-  .comm GdtDescriptorBaseLow, 2
-  .comm GdtDescriptorBaseMiddle, 1
-  .comm GdtDescriptorAccess, 1
-  .comm GdtDescriptorLimitHighFlags, 1 // LimitHigh (4 bits) + Flags (4 bits)
-  .comm GdtDescriptorBaseHigh, 1
-GdtDescriptorEnd:
-GdtDescriptorLength = GdtDescriptorEnd - GdtDescriptor:
 
-
-//=============================================================================
-// 64-bit TSS Descriptor
-//
-// Similar layout to GDT.Descriptor, but with two additional dwords, one of
-// which is used to extend the base address.
-//=============================================================================
-.struct 0
-TSS64Descriptor:
-  .comm TSS64DescriptorLimitLow, 2
-  .comm TSS64DescriptorBaseLow, 2
-  .comm TSS64DescriptorBaseMiddle, 1
-  .comm TSS64DescriptorAccess, 1
-  .comm TSS64DescriptorLimitHighFlags, 1 // LimitHigh (4 bits) + Flags (4 bits)
-  .comm TSS64DescriptorBaseHigh, 1
-  .comm TSS64DescriptorBaseHighest, 4
-  .comm TSS64DescriptorReserved, 4
-TSS64DescriptorEnd:
-TSS64DescriptorLength = TSS64DescriptorEnd - TSS64Descriptor:
-
-
-//=============================================================================
-// 64-bit TSS
-//
-// The 64-bit Task State Segment data structure.
-//
-// Contains information used during privilege mode changes.
-//=============================================================================
-.struct 0
-TSS64:
-  .comm TSS64Reserved, 4 // Reserved
-  .comm TSS64RSP0, 8   // Stack pointer (priv 0)
-  .comm TSS64RSP1, 8   // ...
-  .comm TSS64RSP2, 8
-  .comm TSS64Reserved2, 8   // Reserved
-  .comm TSS64IST1, 8   // Interrupt Stack Table pointer 1
-  .comm TSS64IST2, 8   // ...
-  .comm TSS64IST3, 8
-  .comm TSS64IST4, 8
-  .comm TSS64IST5, 8
-  .comm TSS64IST6, 8
-  .comm TSS64IST7, 8
-  .comm TSS64Reserved3, 8   // Reserved
-  .comm TSS64Reserved4, 2   // Reserved
-  .comm TSS64IOPB, 2   // I/O permission bitmap offset
-TSS64End:
-TSS64Legnth = TSS64End - TSS64:
-
-
-#endif /* __MCUBE_BOOT_GDT_INC__ */
+#endif /* __MCUBE_BOOT_GDT_H__ */
     

@@ -31,17 +31,17 @@ void init_syscall(void)
     invalid_opcode();
   }
 
-  // Update the IA32_STAR MSR with the segment selectors that will be used
+  // Update the MSR_STAR with the segment selectors that will be used
   // by SYSCALL and SYSRET.
-  uint64_t star = rdmsr(MSR_IA32_STAR);
+  uint64_t star = rdmsr(MSR_STAR);
   star &= 0x00000000ffffffff;
-  star |= (uint64_t) SEGMENT_SELECTOR_KERNEL_CODE << 32;
-  star |= (uint64_t)((SEGMENT_SELECTOR_USER_CODE - 16) | 3) << 48;
-  wrmsr(MSR_IA32_STAR, star);
+  star |= (uint64_t) GDT64_SEGMENT_SELECTOR_KERNEL_CODE << 32;
+  star |= (uint64_t)((GDT64_SEGMENT_SELECTOR_USER_CODE - 16) | 3) << 48;
+  wrmsr(MSR_STAR, star);
 
   // Write the address of the system call handler used by SYSCALL.
-  wrmsr(MSR_IA32_LSTAR, (uint64_t) syscall_handle);
+  wrmsr(MSR_LSTAR, (uint64_t) syscall_handle);
 
   // Write the CPU flag mask used during SYSCALL.
-  wrmsr(MSR_IA32_FMASK, 0);
+  wrmsr(MSR_SYSCALL_MASK, 0);
 }

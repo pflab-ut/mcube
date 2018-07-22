@@ -11,7 +11,7 @@ latex/
 # files
 irun*
 rom.txt
-\#*
+*\#*
 
 # suffixes
 *.bak
