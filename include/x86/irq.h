@@ -273,7 +273,6 @@ extern unsigned long idt_descriptor_size;
 extern uint32_t common_interrupt;
 extern uint32_t system_call;
 
-extern struct irq_descriptor irq_desc[NR_IRQS];
 
 static inline void enable_interrupt(void)
 {

@@ -5,6 +5,7 @@
 #
 
 CFLAGS += -mcpu=cortex-a53 -fpic -ffreestanding
+CFLAGS += -fPIC
 
 ifeq ($(CC), clang)
   CFLAGS += -target aarch64

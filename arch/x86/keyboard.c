@@ -194,58 +194,52 @@ static void isr_keyboard(const interrupt_context_t *context)
   // Key up?
   if (keyup) {
     switch (keycode) {
-      case KEY_SHIFT:
-        state.meta &= ~META_SHIFT;
-        break;
-
-      case KEY_CTRL:
-        state.meta &= ~META_CTRL;
-        break;
-
-      case KEY_ALT:
-        state.meta &= ~META_ALT;
-        break;
-
-      case KEY_CAPSLOCK:
-        toggle(META_CAPSLOCK);
-        break;
-
-      case KEY_NUMLOCK:
-        toggle(META_NUMLOCK);
-        break;
-
-      case KEY_SCRLOCK:
-        toggle(META_SCRLOCK);
-        break;
-      }
+    case KEY_SHIFT:
+      state.meta &= ~META_SHIFT;
+      break;      
+    case KEY_CTRL:
+      state.meta &= ~META_CTRL;
+      break;      
+    case KEY_ALT:
+      state.meta &= ~META_ALT;
+      break;      
+    case KEY_CAPSLOCK:
+      toggle(META_CAPSLOCK);
+      break;      
+    case KEY_NUMLOCK:
+      toggle(META_NUMLOCK);
+      break;
+    case KEY_SCRLOCK:
+      toggle(META_SCRLOCK);
+      break;
+    }
     addkey(KEYBRK_UP, state.meta, ukeycode, 0);
   } else {
     // Key down?
     switch (keycode) {
-      case KEY_SHIFT:
-        state.meta |= META_SHIFT;
-        break;
-
-      case KEY_CTRL:
-        state.meta |= META_CTRL;
-        break;
-
-      case KEY_ALT:
-        state.meta |= META_ALT;
-        break;
-      }
+    case KEY_SHIFT:
+      state.meta |= META_SHIFT;
+      break;      
+    case KEY_CTRL:
+      state.meta |= META_CTRL;
+      break;
+    case KEY_ALT:
+      state.meta |= META_ALT;
+      break;
+    }
 
     // Convert the key to a character.
     char ch = 0;
     if (keycode < 0x80) {
       switch (state.meta & (META_CTRL | META_ALT)) {
       case 0:
-        ch = (char)keycode;
+        ch = (char) keycode;
         break;
 
       case META_CTRL:
-        if ((ukeycode >= 'a') && (ukeycode <= 'z'))
+        if ((ukeycode >= 'a') && (ukeycode <= 'z')) {
           ch = (char)(ukeycode - 'a' + 1);
+        }
         break;
       }
     }
@@ -287,20 +281,23 @@ char kb_getchar(void)
     // Buffer empty? (state.buf_size == 0?) Check atomically because
     // this function could be interrupted by the keyboard ISR.
     uint8_t size = 0;
-    if (atomic_compare_exchange_strong(&state.buf_size, &size, 0))
+    if (atomic_compare_exchange_strong(&state.buf_size, &size, 0)) {
       return 0;
+    }
 
     // Pull the next character from the head of the buffer.
     char ch = state.buf[state.buf_head++].ch;
-    if (state.buf_head == MAX_BUFSIZ)
+    if (state.buf_head == MAX_BUFSIZ) {
       state.buf_head = 0;
+    }
 
     // state.buf_size--
     atomic_fetch_sub_explicit(&state.buf_size, 1, memory_order_relaxed);
 
     // Valid character?
-    if (ch != 0)
+    if (ch != 0) {
       return ch;
+    }
   }
 }
 
@@ -316,8 +313,9 @@ bool kb_getkey(keyboard_t *key)
 
   // Pull the next character from the head of the buffer.
   *key = state.buf[state.buf_head++];
-  if (state.buf_head == MAX_BUFSIZ)
+  if (state.buf_head == MAX_BUFSIZ) {
     state.buf_head = 0;
+  }
 
   // state.buf_size--
   atomic_fetch_sub_explicit(&state.buf_size, 1, memory_order_relaxed);

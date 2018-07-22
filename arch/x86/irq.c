@@ -6,12 +6,6 @@
 #include <mcube/mcube.h>
 
 
-asmlinkage int do_syscall(int number)
-{
-	printk("number = %d\n", number);
-	return 0;
-}
-
 
 void do_switch_thread(void)
 {
@@ -78,108 +72,6 @@ void do_switch_thread(void)
   	asm volatile("iret");
 	}
 }
-
-asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
-{
-	unsigned long cpu = get_cpu_id();
-  //	uint64_t rsp;
-	printk("do_irq(): cpu = %lu sys_jiffies = %lu\n", cpu, sys_jiffies);
-	end_budget(current_th[cpu]);
-
-	//	inf_loop();
-	//	asm volatile("movl %%rsp, %0" :: "r"(rsp));
-	//	printk("do_irq(): cpu = %lu start rsp = 0x%x\n", cpu, rsp);
-	//	printk("rdtscp = %lx\n", rdtscp());
-	/* just in case */
-#if 1
-	if (sched_end == TRUE) {
-		printk("sched_end == TRUE\n");
-		return 0;
-	}
-#endif
-	//	printk("do_irq(): smp_barrier(1): cpu = %lu\n", cpu);
-  //	smp_barrier(1);
-	//	pdebug_thread(current_th[cpu]);
-	//	printk("current_th[%lu] = 0x%x id = %lu\n", cpu, current_th[cpu], current_th[cpu]->id);
-	prev_th[cpu] = current_th[cpu];
-	printk("do_irq(): cpu = %lu irq = 0x%lx\n", cpu, irq);
-	/* dummy interrupt for one-shot timer */
-	if (irq == SCHED_IRQ) {
-		goto __do_irq;
-	}
-
-	/* LAPIC */
-	/* overwrite irq */
-	if ((irq = find_lapic_first_bit()) != NR_IRQS) {
-		//		printk("do_irq(): LAPIC irq = 0x%x\n", irq);
-		goto __do_irq;
-	}
-
-#if 0
-	/* master 8259 */
-	/* set ISR */
-	outb(PIC0_OCW3, IS_OCW3 | OCW3_ISR);
-	/* read ISR */
-	irq = inb(PIC0_ISR);
-	if (irq) {
-		//		printk("PIC0 irq = %x\n", irq);
-		/* set IRQ bit */
-		irq = bsf(irq);
-		//		printk("PIC0 bsf(irq) = %x\n", irq);
-		if (irq != SLAVE_IRQ) {
-			goto __do_irq;
-		}
-	}
-	
-	/* slave 8259 */
-	/* set ISR */
-	outb(PIC1_OCW3, IS_OCW3 | OCW3_ISR);
-	/* read ISR */
-	irq = inb(PIC1_ISR);
-	if (irq) {
-		//		printk("PIC1 irq = %x\n", irq);
-		/* set IRQ bit + # of Master IRQs */
-		irq = bsf(irq) + NR_MASTER_IRQS;
-		//		printk("PIC1 bsf(irq) = %x\n", irq);
-		goto __do_irq;
-	}
-#endif
-
-
-	printk("%s:%s():%d: unknown IRQ 0x%lx\n", __FILE__, __func__, __LINE__, irq);
-	goto error;
-
-
- __do_irq:
-
-	//	printk("do_irq(): cpu = %d irq = %x\n", cpu, irq);
-	//	return 0;
-	__do_irq(irq);
-
-  //	smp_barrier(2);
-	if (cpu == 0) {
-		//		print_overhead();
-	}
-	printk("do_irq(): current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
-  //	smp_barrier(3);
-
-
-	begin_budget(current_th[cpu]);
-
-	//	pdebug_thread(current_th[cpu]);
-	//	printk("do_irq(): current_th[%d] = 0x%x\n", cpu, current_th[cpu]);
-	do_switch_thread();
-	//	printk("LAPIC_CUR_COUNT = %x\n", mmio_in64(LAPIC_CUR_COUNT));
-	//	asm volatile("movl %%rsp, %0" :: "r"(rsp));
-	//	printk("do_irq(): cpu = %d end rsp = 0x%x\n", cpu, rsp);
-	//	pdebug_thread(current_th[cpu]);
-	return 0;
- error:
-	inf_loop();
-  /* not reached */
-  return -1;
-}
-
 
 
 void init_irq(void)

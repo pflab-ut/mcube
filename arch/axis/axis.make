@@ -43,6 +43,7 @@ SRCS += \
  $(TOP_DIR)/arch/axis/thread.c \
  $(TOP_DIR)/arch/axis/timer.c \
  $(TOP_DIR)/arch/axis/stdio.c \
+ $(TOP_DIR)/arch/axis/mm.c \
  $(TOP_DIR)/arch/axis/init.c \
  $(TOP_DIR)/arch/axis/cpu.c \
 

@@ -6,7 +6,7 @@
 #include <mcube/mcube.h>
 
 
-irqreturn_t handle_timer_tick(int irq, void *dummy)
+int handle_lapic_timer_tick(int irq, void *dummy)
 {
 	unsigned long cpu = get_cpu_id();
 	printk("handle_timer_tick(): cpu = %lu\n", cpu);
@@ -43,7 +43,7 @@ irqreturn_t handle_timer_tick(int irq, void *dummy)
     current_th[cpu] = &idle_th[cpu];
 		//		stop_lapic_timer();
     //    stop_timer(0);
-    return IRQ_HANDLED;
+    return 0;
   }
 #endif
 
@@ -52,16 +52,8 @@ irqreturn_t handle_timer_tick(int irq, void *dummy)
 	do_release();
 	do_sched();
 
-	return IRQ_HANDLED;
+	return 0;
 }
-
-
-static struct irqaction LAPIC_timer_irq = {
-  .name       = "LAPIC_timer",
-  .handler    = handle_timer_tick,
-  .flags      = IRQF_DISABLED | IRQF_TIMER,
-  .mask       = CPU_MASK_NONE,
-};
 
 
 void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, uint32_t count)
@@ -117,8 +109,8 @@ void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, u
   //	set_idsc(idt_start + LAPIC_TIMER_IRQ, (uint32_t) &common_interrupt, 2 * 8, AR_INTGATE32);
 
 
-	printk("LAPIC_timer_irq.handler = %lx\n", (unsigned long) LAPIC_timer_irq.handler);
-	setup_irq(LAPIC_TIMER_IRQ, &LAPIC_timer_irq);
+  printk("handle_lapic_timer_tick = %lx\n", (unsigned long) handle_lapic_timer_tick);
+  //	setup_irq(LAPIC_TIMER_IRQ, &LAPIC_timer_irq);
 
 	printk("count = %u\n", count);
 	mmio_out32(LAPIC_INIT_COUNT, count);

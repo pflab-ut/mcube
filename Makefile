@@ -18,7 +18,6 @@ SRCS += \
  $(TOP_DIR)/kernel/task.c \
  $(TOP_DIR)/kernel/sched.c \
  $(TOP_DIR)/kernel/job.c \
- $(TOP_DIR)/kernel/irq.c \
  $(TOP_DIR)/kernel/state.c \
  $(TOP_DIR)/kernel/queue.c \
  $(TOP_DIR)/lib/ctype.c \
@@ -29,6 +28,7 @@ SRCS += \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/user/user.c \
 
+# $(TOP_DIR)/kernel/irq.c \
 
 .PHONY: all configure testconfig defaultconfig testpython
 all: $(TARGET)

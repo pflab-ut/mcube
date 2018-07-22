@@ -5,7 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-irqreturn_t handle_hpet_timer_tick(int irq, void *dummy)
+int handle_hpet_timer_tick(int irq, void *dummy)
 {
   unsigned long cpu = get_cpu_id();
 	//	printk("handle_timer_tick(): cpu = %d\n", cpu);
@@ -53,22 +53,15 @@ irqreturn_t handle_hpet_timer_tick(int irq, void *dummy)
     sched_end = TRUE;
     current_th[cpu] = &idle_th[cpu];
 		stop_hpet_timer(0);
-    return IRQ_HANDLED;
+    return 0;
   }
 #endif
 
-	return IRQ_HANDLED;
+	return 0;
 }
 
 
-static struct irqaction HPET_periodic_timer_irq = {
-  .name       = "hpet_timer",
-  .handler    = handle_hpet_timer_tick,
-  .flags      = IRQF_DISABLED | IRQF_TIMER,
-  .mask       = CPU_MASK_NONE,
-};
-
-irqreturn_t handle_hpet_one_shot_timer(int irq, void *dummy)
+int handle_hpet_one_shot_timer(int irq, void *dummy)
 {
 	unsigned long cpu = get_cpu_id();
 	printk("handle_one_shot_timer()\n");
@@ -84,16 +77,8 @@ irqreturn_t handle_hpet_one_shot_timer(int irq, void *dummy)
 
 	printk("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
 
-	return IRQ_HANDLED;
+	return 0;
 }
-
-
-static struct irqaction HPET_one_shot_timer_irq = {
-  .name       = "hpet_one_shot_timer",
-  .handler    = handle_hpet_one_shot_timer,
-  .flags      = IRQF_DISABLED | IRQF_TIMER,
-  .mask       = CPU_MASK_NONE,
-};
 
 
 
@@ -145,14 +130,14 @@ void init_hpet_timer_irq(void)
 	set_idsc(idt_start + HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ,
 					 (uint32_t) &common_interrupt, 2 * 8, AR_INTGATE32);
 #endif
-	setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ, &HPET_periodic_timer_irq);
+  //	setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ, &HPET_periodic_timer_irq);
 
 	/* Timer 1 is one-shot */
 #if 0
 	set_idsc(idt_start + HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ,
 					 (uint32_t) &common_interrupt, 2 * 8, AR_INTGATE32);
 #endif
-	setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ, &HPET_one_shot_timer_irq);
+  //	setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ, &HPET_one_shot_timer_irq);
 
 }
 

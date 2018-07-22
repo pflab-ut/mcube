@@ -14,6 +14,7 @@ TEXT_ADDR = 0x00007c00
 
 #PRIVATE_LDFLAGS = -Ttext=$(TEXT_ADDR) -N -Bstatic
 
+CFLAGS += -fPIC
 CFLAGS += -m64
 #LDFLAGS += -Ttext=$(TEXT_ADDR)
 

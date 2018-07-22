@@ -23,7 +23,7 @@ void start_timer(unsigned int ch);
 void stop_timer(unsigned int ch);
 void init_timer(unsigned long tick_us);
 
-irqreturn_t handle_timer_tick(int irq, void *dummy);
+int handle_timer_tick(int irq, void *dummy);
 
 
 extern unsigned long sys_tsc;

@@ -35,7 +35,6 @@
 #include <mcube/errno.h>
 #include <mcube/fs.h>
 #include <mcube/io.h>
-#include <mcube/irq.h>
 #include <mcube/metric.h>
 #include <mcube/mm.h>
 #include <mcube/mt.h>

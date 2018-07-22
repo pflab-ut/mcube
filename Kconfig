@@ -49,13 +49,7 @@ menu Printk
     title Printk to Console
     default y
     defs -DCONFIG_PRINTK2CONSOLE
-    conflicts CONFIG_ARCH_SIM
     conflicts CONFIG_ARCH_ARM
-  config CONFIG_PRINTK2PRINTF
-    title Printk to Printf
-    default n
-    defs -DCONFIG_PRINTK2PRINTF
-    depends CONFIG_ARCH_SIM
   config CONFIG_PRINTK2UART
     title Printk to UART
     default n

@@ -19,8 +19,9 @@
 \begin{itemize}
  \setlength{\parskip}{0cm}
  \setlength{\itemsep}{0cm}
-  \item Qemu curses CUIでキーボード割り込みを発生させる場合，34回くらい
-    任意のキーボードを入力しないと割り込みが発生しない．
+  \item Qemu curses CUIでは，34回キー入力をすると
+    初めて割り込みが発生する．33回目までは無効になる．
+    また，Backspaceが正常に入力できない．
     Qemu GUIは正常に動作したのでcursesの不具合っぽい．
 \end{itemize}
 

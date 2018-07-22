@@ -464,8 +464,6 @@ out:
   
 #if CONFIG_PRINTK2CONSOLE
   console_write(buf, n, NULL);
-#elif CONFIG_PRINTK2PRINTF
-  fprintf(stderr, "%s", buf);
 #elif CONFIG_PRINTK2UART
 	uart_write(buf, n, NULL);
 #else

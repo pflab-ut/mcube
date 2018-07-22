@@ -9,9 +9,6 @@
 
 ssize_t console_write(const void *input_data, size_t length, void *devdata)
 {
-	int i;
-	for (i = 0; i < length; i++) {
-		putchar(((char *) input_data)[i]);
-	}
-	return i;
+  fprintf(stderr, "%s", input_data);
+  return length;
 }
