@@ -14,8 +14,6 @@
 //  that can be found in the MonkOS LICENSE file.
 //============================================================================
 
-#ifndef __ASSEMBLY__
-
 // CPU exception constants
 #define EXCEPTION_DIVBYZERO            0x00
 #define EXCEPTION_DEBUG                0x01
@@ -42,11 +40,7 @@
 #define EXCEPTION_SECURITY             0x1e
 /* 0x1f: reserved */
 
-/* 0x20-0xff: maskable interrupts */
-#define SCHED_IRQ 0x20
-#define INTERRUPT_FATAL 0xff
-
-
+#ifndef __ASSEMBLY__
 
 //----------------------------------------------------------------------------
 //  @function   exceptions_init

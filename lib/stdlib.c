@@ -105,7 +105,7 @@ void free(void *objp)
 	}
 }
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
+#if !CONFIG_ARCH_AXIS
 
 double strtod(const char *nptr, char **endptr)
 {
@@ -172,7 +172,7 @@ double strtod(const char *nptr, char **endptr)
 }
 
 
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+#endif /* !CONFIG_ARCH_AXIS */
 
 unsigned long strtoul(const char *cp, char **endp, int base)
 {

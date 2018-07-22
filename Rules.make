@@ -42,8 +42,6 @@ CFLAGS += -fno-builtin
 CFLAGS += -fno-strict-aliasing
 
 
-
-
 SIZE = $(CROSS_PREFIX)size
 
 DOXYGEN = doxygen

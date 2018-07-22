@@ -55,7 +55,7 @@ static void update_cursor(void)
   outb(CRTC_PORT_CMD, save);
 }
 
-void init_tty()
+void init_tty(void)
 {
   uint16_t *screenptr = (uint16_t *) SCREEN_BUFFER;
 

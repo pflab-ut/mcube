@@ -30,8 +30,7 @@
 #define total_bytes(b)                                          \
   ((b)->size + sizeof(block_header_t) + sizeof(block_footer_t))
 
-struct heap
-{
+struct heap {
   pagetable_t          *pt;           // page table that owns the heap
   void                 *vaddr;        // address of heap start
   uint64_t              pages;        // pages currently alloced to the heap
@@ -40,28 +39,24 @@ struct heap
   uint64_t              reserved;     // pad to a multiple of 16 bytes
 };
 
-typedef struct block_header
-{
+typedef struct block_header {
   uint64_t size;          // size of block in bytes (minus header/footer)
   uint64_t flags;
 } block_header_t;
 
-typedef struct block_footer
-{
+typedef struct block_footer {
   uint64_t size;          // size of the preceding block
 } block_footer_t;
 
-typedef struct fblock_header
-{
+typedef struct fblock_header {
   struct block_header   block;
   struct fblock_header *next_fblock;  // next free block in the heap
   struct fblock_header *prev_fblock;  // prev free block in the heap
 } fblock_header_t;
 
-heap_t *
-heap_create(pagetable_t *pt, void *vaddr, uint64_t maxpages)
+heap_t *heap_create(pagetable_t *pt, void *vaddr, uint64_t maxpages)
 {
-  heap_t *heap = (heap_t *)page_alloc(pt, vaddr, ALLOC_PAGES);
+  heap_t *heap = (heap_t *) page_alloc(pt, vaddr, ALLOC_PAGES);
   heap->pt           = pt;
   heap->vaddr        = vaddr;
   heap->pages        = ALLOC_PAGES;
@@ -69,10 +64,8 @@ heap_create(pagetable_t *pt, void *vaddr, uint64_t maxpages)
   heap->first_fblock = (fblock_header_t *)(heap + 1);
   heap->reserved     = 0;
 
-  uint64_t block_size = heap->pages * PAGE_SIZE -
-    sizeof(heap_t) -
-    sizeof(block_header_t) -
-    sizeof(block_footer_t);
+  uint64_t block_size = heap->pages * PAGE_SIZE
+    - sizeof(heap_t) - sizeof(block_header_t) - sizeof(block_footer_t);
 
   fblock_header_t *fh = heap->first_fblock;
   fh->block.size  = block_size;
@@ -87,8 +80,7 @@ heap_create(pagetable_t *pt, void *vaddr, uint64_t maxpages)
   return heap;
 }
 
-void
-heap_destroy(heap_t *heap)
+void heap_destroy(heap_t *heap)
 {
   page_free(heap->pt, heap->vaddr, heap->pages);
   // The heap pointer now points to unpaged memory.
@@ -96,49 +88,52 @@ heap_destroy(heap_t *heap)
 
 /// Check the next block adjacent to 'b'. If it's free, return a pointer to
 /// it.
-static fblock_header_t *
-next_fblock_adj(heap_t *heap, block_header_t *bh)
+static fblock_header_t *next_fblock_adj(heap_t *heap, block_header_t *bh)
 {
   block_header_t *term = PTR_ADD(block_header_t, heap->vaddr,
                                  heap->pages * PAGE_SIZE);
   block_header_t *next = PTR_ADD(block_header_t, bh, total_bytes(bh));
-  if (next >= term)
+  if (next >= term) {
     return NULL;
-  if ((next->flags & FLAG_ALLOCATED) == 0)
-    return (fblock_header_t *)next;
+  }
+  if ((next->flags & FLAG_ALLOCATED) == 0) {
+    return (fblock_header_t *) next;
+  }
   return NULL;
 }
 
 /// Check the preceding block adjacent to 'b'. If it's free, return a pointer
 /// to it.
-static fblock_header_t *
-prev_fblock_adj(heap_t *heap, block_header_t *bh)
+static fblock_header_t *prev_fblock_adj(heap_t *heap, block_header_t *bh)
 {
   block_header_t *first = PTR_ADD(block_header_t, heap->vaddr,
                                   sizeof(heap_t));
-  if (bh == first)
+  if (bh == first) {
     return NULL;
+  }
   block_footer_t *bf = PTR_SUB(block_footer_t, bh,
                                sizeof(block_footer_t));
   block_header_t *prev = PTR_SUB(block_header_t, bf, total_bytes(bf));
-  if ((prev->flags & FLAG_ALLOCATED) == 0)
-    return (fblock_header_t *)prev;
+  if ((prev->flags & FLAG_ALLOCATED) == 0) {
+    return (fblock_header_t *) prev;
+  }
   return NULL;
 }
 
 /// Scan all blocks after 'b' until a free block is encountered and return it.
 /// If no free blocks are found, return NULL.
-static fblock_header_t *
-next_fblock(heap_t *heap, block_header_t *bh)
+static fblock_header_t *next_fblock(heap_t *heap, block_header_t *bh)
 {
   block_header_t *term = PTR_ADD(block_header_t, heap->vaddr,
                                  heap->pages * PAGE_SIZE);
   for (;;) {
     bh = PTR_ADD(block_header_t, bh, total_bytes(bh));
-    if (bh >= term)
+    if (bh >= term) {
       return NULL;
-    if ((bh->flags & FLAG_ALLOCATED) == 0)
-      return (fblock_header_t *)bh;
+    }
+    if ((bh->flags & FLAG_ALLOCATED) == 0) {
+      return (fblock_header_t *) bh;
+    }
   }
   return NULL;
 }
@@ -151,13 +146,15 @@ prev_fblock(heap_t *heap, block_header_t *bh)
   block_header_t *first = PTR_ADD(block_header_t, heap->vaddr,
                                   sizeof(heap_t));
   for (;;) {
-    if (bh == first)
+    if (bh == first) {
       return NULL;
+    }
     block_footer_t *bf = PTR_SUB(block_footer_t, bh,
                                  sizeof(block_footer_t));
     bh = PTR_SUB(block_header_t, bh, total_bytes(bf));
-    if ((bh->flags & FLAG_ALLOCATED) == 0)
-      return (fblock_header_t *)bh;
+    if ((bh->flags & FLAG_ALLOCATED) == 0) {
+      return (fblock_header_t *) bh;
+    }
   }
   return NULL;
 }
@@ -175,8 +172,9 @@ grow_heap(heap_t *heap, uint64_t minsize)
   // Don't allocate more than maxpages to the heap.
   if (heap->pages + pages > heap->maxpages) {
     pages = heap->maxpages - heap->pages;
-    if (pages * PAGE_SIZE < minsize)
+    if (pages * PAGE_SIZE < minsize) {
       return NULL;
+    }
   }
 
   // Compute the virtual address of the next group of pages and allocate
@@ -201,13 +199,12 @@ grow_heap(heap_t *heap, uint64_t minsize)
     fh->block.flags = 0;
     fh->next_fblock = NULL;
     fh->prev_fblock = prev_fblock(heap, (block_header_t *)vnext);
-    if (fh->prev_fblock == NULL)
+    if (fh->prev_fblock == NULL) {
       heap->first_fblock = fh;
-  }
-
+    }
+  } else {
   // If the last block in the old heap was free, merge it with the newly
   // allocated pages.
-  else {
     fh              = (fblock_header_t *)lh;
     fh->block.size += pages * PAGE_SIZE;
   }
@@ -222,13 +219,13 @@ grow_heap(heap_t *heap, uint64_t minsize)
 
 // Find a free block large enough to hold 'size' bytes. If such a block is not
 // found, grow the heap and try again.
-static fblock_header_t *
-find_fblock(heap_t *heap, uint64_t size)
+static fblock_header_t *find_fblock(heap_t *heap, uint64_t size)
 {
   fblock_header_t *fh = heap->first_fblock;
   while (fh) {
-    if (fh->block.size >= size)
+    if (fh->block.size >= size) {
       return fh;
+    }
     fh = fh->next_fblock;
   }
 
@@ -236,8 +233,7 @@ find_fblock(heap_t *heap, uint64_t size)
   return grow_heap(heap, size);
 }
 
-void *
-heap_alloc(heap_t *heap, uint64_t size)
+void *heap_alloc(heap_t *heap, uint64_t size)
 {
   // Round the size up to the nearest (mod 16) == 8 value. This way all
   // returned pointers will remain aligned on 16-byte boundaries.
@@ -245,8 +241,9 @@ heap_alloc(heap_t *heap, uint64_t size)
 
   // Find a free block big enough to hold the allocation
   fblock_header_t *fh = find_fblock(heap, size);
-  if (fh == NULL)
+  if (fh == NULL) {
     return NULL;
+  }
 
   // Copy the original free block's size and pointers, since we'll be
   // modifying their current storage.
@@ -267,17 +264,17 @@ heap_alloc(heap_t *heap, uint64_t size)
     // unchanged.
 
     // Fix up the free list.
-    if (prev)
+    if (prev) {
       prev->next_fblock = next;
-    else
+    } else {
       heap->first_fblock = next;
-    if (next)
+    }
+    if (next) {
       next->prev_fblock = prev;
-  }
-
+    }
+  } else {
   // Otherwise, split the free block into an allocated block and a smaller
   // free block.
-  else {
 
     // Initialize the allocated block header.
     ah        = &fh->block;
@@ -292,32 +289,33 @@ heap_alloc(heap_t *heap, uint64_t size)
     // Initialize the new free block header, which follows the allocated
     // block.
     fblock_header_t *fh = (fblock_header_t *)(af + 1);
-    fh->block.size = fsize - size - sizeof(block_header_t) -
-      sizeof(block_footer_t);
+    fh->block.size = fsize - size - sizeof(block_header_t)
+      - sizeof(block_footer_t);
     fh->block.flags = 0;
 
     // Initialize the new free block footer.
-    block_footer_t *ff = PTR_ADD(block_footer_t, fh, fh->block.size +
-                                 sizeof(block_header_t));
+    block_footer_t *ff = PTR_ADD(block_footer_t, fh, fh->block.size
+                                 + sizeof(block_header_t));
     ff->size = fh->block.size;
 
     // Fix up the free list.
     fh->prev_fblock = prev;
     fh->next_fblock = next;
-    if (prev)
+    if (prev) {
       prev->next_fblock = fh;
-    else
+    } else {
       heap->first_fblock = fh;
-    if (next)
+    }
+    if (next) {
       next->prev_fblock = fh;
+    }
   }
 
   // Return a pointer just beyond the allocated block header.
   return PTR_ADD(void, ah, sizeof(block_header_t));
 }
 
-void
-heap_free(heap_t *heap, void *ptr)
+void heap_free(heap_t *heap, void *ptr)
 {
   block_header_t *h = PTR_SUB(block_header_t, ptr, sizeof(block_header_t));
 
@@ -328,66 +326,64 @@ heap_free(heap_t *heap, void *ptr)
   // If both adjacent blocks are free, merge all three into a single
   // free block.
   if (fhp && fhn) {
-    fhp->block.size += h->size + 2 * sizeof(block_header_t) +
-      2 * sizeof(block_footer_t) + fhn->block.size;
+    fhp->block.size += h->size + 2 * sizeof(block_header_t)
+      + 2 * sizeof(block_footer_t) + fhn->block.size;
 
     fhp->next_fblock = fhn->next_fblock;
-    if (fhn->next_fblock != NULL)
+    if (fhn->next_fblock != NULL) {
       fhn->next_fblock->prev_fblock = fhp;
+    }
 
     block_footer_t *ffp = PTR_ADD(block_footer_t, fhp, fhp->block.size +
                                   sizeof(block_header_t));
     ffp->size = fhp->block.size;
-  }
-
-  // If only the previous adjacent block is free, merge it with the newly
-  // free block.
-  else if (fhp && !fhn) {
+  } else if (fhp && !fhn) {
+    // If only the previous adjacent block is free, merge it with the newly
+    // free block.
     fhp->block.size += total_bytes(h);
     block_footer_t *ffp = PTR_ADD(block_footer_t, fhp, fhp->block.size +
                                   sizeof(block_header_t));
     ffp->size = fhp->block.size;
-  }
-
-  // If only the next adjacent block is free, merge it with the newly free
-  // block.
-  else if (fhn && !fhp) {
+  } else if (fhn && !fhp) {
+    // If only the next adjacent block is free, merge it with the newly free
+    // block.
     fblock_header_t *fh = (fblock_header_t *)h;
     fh->block.size += total_bytes(&fhn->block);
     fh->block.flags = 0;
 
     fh->prev_fblock = fhn->prev_fblock;
-    if (fh->prev_fblock == NULL)
+    if (fh->prev_fblock == NULL) {
       heap->first_fblock = fh;
-    else
+    } else {
       fh->prev_fblock->next_fblock = fh;
+    }
 
     fh->next_fblock = fhn->next_fblock;
-    if (fh->next_fblock != NULL)
+    if (fh->next_fblock != NULL) {
       fh->next_fblock->prev_fblock = fh;
+    }
 
     block_footer_t *ff = PTR_ADD(block_footer_t, fh, fh->block.size +
                                  sizeof(block_header_t));
     ff->size = fh->block.size;
-  }
-
-  // If neither adjacent block is free, convert the block into a single
-  // free block.
-  else {
+  } else {
+    // If neither adjacent block is free, convert the block into a single
+    // free block.
     fblock_header_t *fh = (fblock_header_t *)h;
     fh->block.flags = 0;
 
     fh->next_fblock = next_fblock(heap, h);
-    if (fh->next_fblock == NULL)
+    if (fh->next_fblock == NULL) {
       fh->prev_fblock = prev_fblock(heap, h);
-    else {
+    } else {
       fh->prev_fblock              = fh->next_fblock->prev_fblock;
       fh->next_fblock->prev_fblock = fh;
     }
 
-    if (fh->prev_fblock == NULL)
+    if (fh->prev_fblock == NULL) {
       heap->first_fblock = fh;
-    else
+    } else {
       fh->prev_fblock->next_fblock = fh;
+    }
   }
 }

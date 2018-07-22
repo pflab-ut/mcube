@@ -54,10 +54,9 @@ typedef enum textcolor textcolor_t;
 //  @struct     screenpos_t
 /// @brief      tty screen text position.
 //----------------------------------------------------------------------------
-struct screenpos
-{
-    uint8_t x;                   ///< x position in range [0:79].
-    uint8_t y;                   ///< y position in range [0:24].
+struct screenpos {
+  uint8_t x;                   ///< x position in range [0:79].
+  uint8_t y;                   ///< y position in range [0:24].
 };
 
 typedef struct screenpos screenpos_t;
@@ -229,4 +228,4 @@ void tty_printc(int id, char ch);
 //----------------------------------------------------------------------------
 int tty_printf(int id, const char *format, ...);
 
-#endif	/* __MCUBE_X86_TTY_H__ */
+#endif /* __MCUBE_X86_TTY_H__ */

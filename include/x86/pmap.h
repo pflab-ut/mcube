@@ -44,6 +44,7 @@ struct pmapregion {
   int32_t type;                ///< Memory type (see memtype enum)
   uint32_t flags;              ///< flags (currently unused)
 };
+
 typedef struct pmapregion pmapregion_t;
 
 //----------------------------------------------------------------------------
@@ -81,7 +82,6 @@ void pmap_add(uint64_t addr, uint64_t size, enum pmemtype type);
 /// @returns    A pointer to the physical memory map.
 //----------------------------------------------------------------------------
 const pmap_t *get_pmap(void);
-
 
 void print_pmap(void);
 

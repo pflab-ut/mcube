@@ -154,7 +154,7 @@ ifneq ($(DEPS),)
 -include $(DEPS)
 endif
 
-# dependencies
+# assembler dependencies
 ifneq ($(ASM_DEPS),)
 -include $(ASM_DEPS)
 endif

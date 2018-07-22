@@ -250,6 +250,7 @@ extern unsigned long idt_descriptor_size;
 #define HDC2_SLAVE_IRQ (HDC2_IRQ - NR_MASTER_IRQS)
 
 
+/* 0x20-0xff: maskable interrupts */
 #define TRAP_IRQ_OFFSET 0x20
 
 // Interrupt vector numbers: hardware IRQ traps
@@ -257,6 +258,7 @@ extern unsigned long idt_descriptor_size;
 #define TRAP_KEYBOARD_IRQ     (KEYBOARD_IRQ + TRAP_IRQ_OFFSET)
 
 #define TRAP_SCHED_IRQ 0x40
+
 
 /* 0x20-0xff: maskable interrupts */
 #define TRAP_INTERRUPT_FATAL_IRQ 0xff
@@ -282,6 +284,19 @@ static inline void enable_interrupt(void)
 static inline void disable_interrupt(void)
 {
   cli();
+}
+
+static inline void invalid_opcode(void)
+{
+  asm volatile("int %0" :: "i"(EXCEPTION_INVALID_OPCODE));
+}
+
+
+
+
+static inline void fatal(void)
+{
+  asm volatile("int %0" :: "i"(TRAP_INTERRUPT_FATAL_IRQ));
 }
 
 
