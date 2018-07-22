@@ -160,7 +160,6 @@ static void addkey(uint8_t brk, uint8_t meta, uint8_t code, uint8_t ch)
 
 static void isr_keyboard(const interrupt_context_t *context)
 {
-  printk("isr_keyboard()\n");
   (void)context;
 
   // Get the scan code and the break state (key up or key down).
@@ -194,8 +193,7 @@ static void isr_keyboard(const interrupt_context_t *context)
 
   // Key up?
   if (keyup) {
-    switch (keycode)
-      {
+    switch (keycode) {
       case KEY_SHIFT:
         state.meta &= ~META_SHIFT;
         break;
@@ -221,11 +219,9 @@ static void isr_keyboard(const interrupt_context_t *context)
         break;
       }
     addkey(KEYBRK_UP, state.meta, ukeycode, 0);
-  }
-  // Key down?
-  else {
-    switch (keycode)
-      {
+  } else {
+    // Key down?
+    switch (keycode) {
       case KEY_SHIFT:
         state.meta |= META_SHIFT;
         break;
@@ -242,17 +238,16 @@ static void isr_keyboard(const interrupt_context_t *context)
     // Convert the key to a character.
     char ch = 0;
     if (keycode < 0x80) {
-      switch (state.meta & (META_CTRL | META_ALT))
-        {
-        case 0:
-          ch = (char)keycode;
-          break;
+      switch (state.meta & (META_CTRL | META_ALT)) {
+      case 0:
+        ch = (char)keycode;
+        break;
 
-        case META_CTRL:
-          if ((ukeycode >= 'a') && (ukeycode <= 'z'))
-            ch = (char)(ukeycode - 'a' + 1);
-          break;
-        }
+      case META_CTRL:
+        if ((ukeycode >= 'a') && (ukeycode <= 'z'))
+          ch = (char)(ukeycode - 'a' + 1);
+        break;
+      }
     }
     addkey(KEYBRK_DOWN, state.meta, ukeycode, ch);
   }

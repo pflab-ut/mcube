@@ -69,7 +69,7 @@ static void isr_fatal(const interrupt_context_t *context)
 {
   int i = context->interrupt;
 
-  const char *exstr = i < arrsize(exceptionstr)
+  const char *exstr = i < ARRSIZE(exceptionstr)
     ? exceptionstr[i] : "Unknown exception.";
 
   tty_activate(0);

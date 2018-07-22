@@ -76,7 +76,7 @@ static int cmp_cmds(const void *c1, const void *c2)
 static bool cmd_display_help(void)
 {
   printk("Available commands:\n");
-  for (int i = 0; i < arrsize(commands); i++) {
+  for (int i = 0; i < ARRSIZE(commands); i++) {
     if (!commands[i].help) {
       continue;
     }
@@ -179,7 +179,7 @@ static bool command_exec(const char *cmd)
     return TRUE;
   }
   
-  for (int i = 0; i < arrsize(commands); i++) {
+  for (int i = 0; i < ARRSIZE(commands); i++) {
     if (!strcmp(commands[i].str, cmd)) {
       return commands[i].run();
     }
@@ -208,7 +208,7 @@ static void command_run(void)
 
       // If a printable character was typed, append it to the command.
       if (key.ch >= 32 && key.ch < 127) {
-        if (cmdlen < arrsize(cmd) - 1) {
+        if (cmdlen < ARRSIZE(cmd) - 1) {
           cmd[cmdlen] = key.ch;
           putchar(cmd[cmdlen]);
           cmdlen++;
@@ -274,7 +274,7 @@ static void keycode_run(void)
 
 void kshell(void)
 {
-  qsort(commands, arrsize(commands), sizeof(struct cmd), cmp_cmds);
+  qsort(commands, ARRSIZE(commands), sizeof(struct cmd), cmp_cmds);
 
   active_mode = &mode_command;
   active_mode->start();

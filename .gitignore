@@ -25,6 +25,7 @@ rom.txt
 *.elf
 *.lck
 *.log
+
 # latex suffixes
 *.aux
 *.dvi

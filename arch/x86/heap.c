@@ -80,7 +80,7 @@ heap_create(pagetable_t *pt, void *vaddr, uint64_t maxpages)
   fh->next_fblock = NULL;
   fh->prev_fblock = NULL;
 
-  block_footer_t *footer = ptr_add(block_footer_t, fh, block_size +
+  block_footer_t *footer = PTR_ADD(block_footer_t, fh, block_size +
                                    sizeof(block_header_t));
   footer->size = block_size;
 
@@ -99,9 +99,9 @@ heap_destroy(heap_t *heap)
 static fblock_header_t *
 next_fblock_adj(heap_t *heap, block_header_t *bh)
 {
-  block_header_t *term = ptr_add(block_header_t, heap->vaddr,
+  block_header_t *term = PTR_ADD(block_header_t, heap->vaddr,
                                  heap->pages * PAGE_SIZE);
-  block_header_t *next = ptr_add(block_header_t, bh, total_bytes(bh));
+  block_header_t *next = PTR_ADD(block_header_t, bh, total_bytes(bh));
   if (next >= term)
     return NULL;
   if ((next->flags & FLAG_ALLOCATED) == 0)
@@ -114,13 +114,13 @@ next_fblock_adj(heap_t *heap, block_header_t *bh)
 static fblock_header_t *
 prev_fblock_adj(heap_t *heap, block_header_t *bh)
 {
-  block_header_t *first = ptr_add(block_header_t, heap->vaddr,
+  block_header_t *first = PTR_ADD(block_header_t, heap->vaddr,
                                   sizeof(heap_t));
   if (bh == first)
     return NULL;
-  block_footer_t *bf = ptr_sub(block_footer_t, bh,
+  block_footer_t *bf = PTR_SUB(block_footer_t, bh,
                                sizeof(block_footer_t));
-  block_header_t *prev = ptr_sub(block_header_t, bf, total_bytes(bf));
+  block_header_t *prev = PTR_SUB(block_header_t, bf, total_bytes(bf));
   if ((prev->flags & FLAG_ALLOCATED) == 0)
     return (fblock_header_t *)prev;
   return NULL;
@@ -131,10 +131,10 @@ prev_fblock_adj(heap_t *heap, block_header_t *bh)
 static fblock_header_t *
 next_fblock(heap_t *heap, block_header_t *bh)
 {
-  block_header_t *term = ptr_add(block_header_t, heap->vaddr,
+  block_header_t *term = PTR_ADD(block_header_t, heap->vaddr,
                                  heap->pages * PAGE_SIZE);
   for (;;) {
-    bh = ptr_add(block_header_t, bh, total_bytes(bh));
+    bh = PTR_ADD(block_header_t, bh, total_bytes(bh));
     if (bh >= term)
       return NULL;
     if ((bh->flags & FLAG_ALLOCATED) == 0)
@@ -148,14 +148,14 @@ next_fblock(heap_t *heap, block_header_t *bh)
 static fblock_header_t *
 prev_fblock(heap_t *heap, block_header_t *bh)
 {
-  block_header_t *first = ptr_add(block_header_t, heap->vaddr,
+  block_header_t *first = PTR_ADD(block_header_t, heap->vaddr,
                                   sizeof(heap_t));
   for (;;) {
     if (bh == first)
       return NULL;
-    block_footer_t *bf = ptr_sub(block_footer_t, bh,
+    block_footer_t *bf = PTR_SUB(block_footer_t, bh,
                                  sizeof(block_footer_t));
-    bh = ptr_sub(block_header_t, bh, total_bytes(bf));
+    bh = PTR_SUB(block_header_t, bh, total_bytes(bf));
     if ((bh->flags & FLAG_ALLOCATED) == 0)
       return (fblock_header_t *)bh;
   }
@@ -170,7 +170,7 @@ grow_heap(heap_t *heap, uint64_t minsize)
 {
   // Account for headers when growing the heap.
   minsize += sizeof(block_header_t) + sizeof(block_footer_t);
-  uint64_t pages = MAX(ALLOC_PAGES, div_up(minsize, PAGE_SIZE));
+  uint64_t pages = MAX(ALLOC_PAGES, DIV_UP(minsize, PAGE_SIZE));
 
   // Don't allocate more than maxpages to the heap.
   if (heap->pages + pages > heap->maxpages) {
@@ -181,14 +181,14 @@ grow_heap(heap_t *heap, uint64_t minsize)
 
   // Compute the virtual address of the next group of pages and allocate
   // them from the page table.
-  void *vnext = ptr_add(void, heap->vaddr, heap->pages * PAGE_SIZE);
+  void *vnext = PTR_ADD(void, heap->vaddr, heap->pages * PAGE_SIZE);
   page_alloc(heap->pt, vnext, pages);
   heap->pages += pages;
 
   // Examine the last block in the heap to see if it's free.
-  block_footer_t *lf = ptr_sub(block_footer_t, vnext,
+  block_footer_t *lf = PTR_SUB(block_footer_t, vnext,
                                sizeof(block_footer_t));
-  block_header_t *lh = ptr_sub(block_header_t, lf, lf->size +
+  block_header_t *lh = PTR_SUB(block_header_t, lf, lf->size +
                                sizeof(block_header_t));
 
   // If the last block in the old heap was in use, mark the newly allocated
@@ -213,7 +213,7 @@ grow_heap(heap_t *heap, uint64_t minsize)
   }
 
   // Update the free block footer.
-  block_footer_t *ff = ptr_add(block_footer_t, fh, fh->block.size +
+  block_footer_t *ff = PTR_ADD(block_footer_t, fh, fh->block.size +
                                sizeof(block_header_t));
   ff->size = fh->block.size;
 
@@ -285,7 +285,7 @@ heap_alloc(heap_t *heap, uint64_t size)
     ah->flags = FLAG_ALLOCATED;
 
     // Initialize the allocated block footer.
-    block_footer_t *af = ptr_add(block_footer_t, ah, size +
+    block_footer_t *af = PTR_ADD(block_footer_t, ah, size +
                                  sizeof(block_header_t));
     af->size = size;
 
@@ -297,7 +297,7 @@ heap_alloc(heap_t *heap, uint64_t size)
     fh->block.flags = 0;
 
     // Initialize the new free block footer.
-    block_footer_t *ff = ptr_add(block_footer_t, fh, fh->block.size +
+    block_footer_t *ff = PTR_ADD(block_footer_t, fh, fh->block.size +
                                  sizeof(block_header_t));
     ff->size = fh->block.size;
 
@@ -313,13 +313,13 @@ heap_alloc(heap_t *heap, uint64_t size)
   }
 
   // Return a pointer just beyond the allocated block header.
-  return ptr_add(void, ah, sizeof(block_header_t));
+  return PTR_ADD(void, ah, sizeof(block_header_t));
 }
 
 void
 heap_free(heap_t *heap, void *ptr)
 {
-  block_header_t *h = ptr_sub(block_header_t, ptr, sizeof(block_header_t));
+  block_header_t *h = PTR_SUB(block_header_t, ptr, sizeof(block_header_t));
 
   // Check if adjacent blocks are free.
   fblock_header_t *fhp = prev_fblock_adj(heap, h);
@@ -335,7 +335,7 @@ heap_free(heap_t *heap, void *ptr)
     if (fhn->next_fblock != NULL)
       fhn->next_fblock->prev_fblock = fhp;
 
-    block_footer_t *ffp = ptr_add(block_footer_t, fhp, fhp->block.size +
+    block_footer_t *ffp = PTR_ADD(block_footer_t, fhp, fhp->block.size +
                                   sizeof(block_header_t));
     ffp->size = fhp->block.size;
   }
@@ -344,7 +344,7 @@ heap_free(heap_t *heap, void *ptr)
   // free block.
   else if (fhp && !fhn) {
     fhp->block.size += total_bytes(h);
-    block_footer_t *ffp = ptr_add(block_footer_t, fhp, fhp->block.size +
+    block_footer_t *ffp = PTR_ADD(block_footer_t, fhp, fhp->block.size +
                                   sizeof(block_header_t));
     ffp->size = fhp->block.size;
   }
@@ -366,7 +366,7 @@ heap_free(heap_t *heap, void *ptr)
     if (fh->next_fblock != NULL)
       fh->next_fblock->prev_fblock = fh;
 
-    block_footer_t *ff = ptr_add(block_footer_t, fh, fh->block.size +
+    block_footer_t *ff = PTR_ADD(block_footer_t, fh, fh->block.size +
                                  sizeof(block_header_t));
     ff->size = fh->block.size;
   }

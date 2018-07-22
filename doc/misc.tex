@@ -10,7 +10,6 @@
    でもキャッシュライン毎にアクセスできるようにする．
  \item CPU周波数を動的に取得する．\verb|CPU_CLOCK_MHZ_PER_USEC|から変
    更する．
- \item x86/ARMでMMU/Cacheを設定する．
  \item Mcube KernelをLinuxに適用することを検討する．
 \end{itemize}
 
@@ -20,10 +19,9 @@
 \begin{itemize}
  \setlength{\parskip}{0cm}
  \setlength{\itemsep}{0cm}
- \item x86 clangで\verb|-O3|でコンパイルすると起動しない．
-   \verb|-O2|以下はOK．
-  \item Qemu ncurses CUIでキーボード割り込みを発生させる場合，34回くらい
-    任意のキーボードを入力しないと割り込みが発生しない
+  \item Qemu curses CUIでキーボード割り込みを発生させる場合，34回くらい
+    任意のキーボードを入力しないと割り込みが発生しない．
+    Qemu GUIは正常に動作したのでcursesの不具合っぽい．
 \end{itemize}
 
 \subsection{Coding Styles}
@@ -34,13 +32,11 @@
  \item 移植性はできる限り高く
  \item マクロは全部大文字にする
  \item プログラム中に参考文献の論文を書く
- \item \verb|a != nullptr -> a|, \verb|a == nullptr -> !a|
+ \item \verb|a != NULL -> a|, \verb|a == NULL -> !a|
  \item 改行する場合，演算子(\verb|+-*/|等)は行の先頭に書く
  \item classの初期化は\verb|{}|を利用
  \item メンバ関数の宣言にはoverride, finalを利用
  \item templateメンバ関数のリンクエラーの場合は定義と宣言を同じにする
  \item Doxygenで変数は@a，予約語は@cを利用
- \item \verb|NULL -> nullptr|
- \item \verb|i++ -> ++i|
  \item グローバル変数は大文字から始める
 \end{itemize}

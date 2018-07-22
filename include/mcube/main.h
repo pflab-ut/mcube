@@ -23,18 +23,18 @@
 
 #ifndef	__ASSEMBLY__
 
-#define arrsize(x)           ((int)(sizeof(x) / sizeof(x[0])))
+#define ARRSIZE(x)           ((int)(sizeof(x) / sizeof(x[0])))
 
 // Division macros, rounding (a/b) up or down
-#define div_dn(a, b)         ((a) / (b))
-#define div_up(a, b)         (((a) + (b) - 1) / (b))
+#define DIV_DN(a, b)         ((a) / (b))
+#define DIV_UP(a, b)         (((a) + (b) - 1) / (b))
 
 // Alignment macros, align a to the nearest multiple of b.
-#define align_dn(a, b)       (div_dn(a, b) * (b))
-#define align_up(a, b)       (div_up(a, b) * (b))
+#define ALIGN_DN(a, b)       (div_dn(a, b) * (b))
+#define ALIGN_UP(a, b)       (div_up(a, b) * (b))
 
-#define ptr_add(t, p, o)     ((t *)((uint8_t *)(p) + (o)))
-#define ptr_sub(t, p, o)     ((t *)((uint8_t *)(p) - (o)))
+#define PTR_ADD(t, p, o)     ((t *)((uint8_t *)(p) + (o)))
+#define PTR_SUB(t, p, o)     ((t *)((uint8_t *)(p) - (o)))
 
 #undef NULL
 #define NULL ((void *) 0)
