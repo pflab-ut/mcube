@@ -25,3 +25,12 @@ rom.txt
 *.elf
 *.lck
 *.log
+# latex suffixes
+*.aux
+*.dvi
+*.out
+*.toc
+*.lot
+*.lof
+*.bbl
+*.blg
