@@ -55,8 +55,6 @@ void init_sem(struct sem_struct *, unsigned int, unsigned int);
 void sem_down(struct sem_struct *);
 void sem_up(struct sem_struct *);
 
-void init_ipc(void);
-
 #endif /* !__ASSEMBLY__ */
 
 #endif /* __MCUBE_MCUBE_SEMAPHORE_H__ */

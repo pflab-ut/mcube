@@ -11,12 +11,22 @@ void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long 
 }
 
 
+void init_fpu(void)
+{
+  uint32_t val = get_cr0();
+  val &= ~CR0_EMULATION;
+  val |= CR0_MONITOR_COPROCESSOR;
+  set_cr0(val);
+  finit();
+}
+
+
 void init_ap(void)
 {
 	init_uart();
   //	init_dsctbl();
   //	init_irq();
-	init_cpu();
+	init_fpu();
 	init_apic();
 	init_timer(TICK_USEC);
 }
@@ -34,20 +44,6 @@ int ap_main(void)
 	return 0;
 }
 
-void init_fpu(void)
-{
-	uint32_t val = get_cr0();
-	val &= ~CR0_EMULATION;
-	val |= CR0_MONITOR_COPROCESSOR;
-	set_cr0(val);
-	finit();
-}
-
-
-void init_cpu(void)
-{
-	init_fpu();
-}
 
 void init_smp(void)
 {

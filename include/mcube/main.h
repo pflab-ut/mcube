@@ -154,13 +154,6 @@ struct conv_flag {
 
 typedef struct conv_flag conv_flag;
 
-void ustart(int id) __attribute__ ((__noreturn__));
-void uexit(int status) __attribute__ ((__noreturn__));
-
-void init(void);
-
-void init_bss(void);
-
 int usermain(void);
 int usertask(void *arg);
 
@@ -170,7 +163,6 @@ int usertask(void *arg);
 		for (;;)																														\
 			;																																	\
   } while (0)
-
 
 
 extern uint32_t Debug;
