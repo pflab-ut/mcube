@@ -275,10 +275,10 @@ void init_keyboard(void)
   memzero(&state.buf, sizeof(state.buf));
 
   // Assign the interrupt service routine.
-  set_isr(TRAP_IRQ_KEYBOARD, isr_keyboard);
+  set_isr(TRAP_KEYBOARD_IRQ, isr_keyboard);
 
   // Enable the keyboard hardware interrupt (IRQ1).
-  enable_irq(IRQ_KEYBOARD);
+  enable_irq(KEYBOARD_IRQ);
 }
 
 void kb_setlayout(keylayout_t *layout)

@@ -51,9 +51,15 @@ $ make clean
 
 ## How to Execute
 
-Please execute the following command.
+Please execute the following command in CUI.
 ```
 $ make run
+```
+
+Please execute the following command in GUI.
+
+```
+$ make grun
 ```
 
 

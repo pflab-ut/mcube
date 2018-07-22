@@ -81,7 +81,6 @@ SRCS += \
  $(TOP_DIR)/arch/x86/init.c \
  $(TOP_DIR)/arch/x86/irq.c \
  $(TOP_DIR)/arch/x86/thread.c \
- $(TOP_DIR)/arch/x86/key.c \
  $(TOP_DIR)/arch/x86/pmap.c \
  $(TOP_DIR)/arch/x86/mmu.c \
  $(TOP_DIR)/arch/x86/stdio.c \

@@ -22,7 +22,6 @@
 #include <x86/dump.h>
 #include <x86/heap.h>
 #include <x86/hpet.h>
-#include <x86/interrupt.h>
 #include <x86/io.h>
 #include <x86/ioapic.h>
 #include <x86/irqflags.h>
@@ -32,6 +31,7 @@
 #include <x86/gdt.h>
 #include <x86/msr.h>
 #include <x86/regs.h>
+#include <x86/shell.h>
 #include <x86/spinlock.h>
 #include <x86/system.h>
 #include <x86/thread.h>

@@ -93,24 +93,33 @@ testpython:
 	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pylint
 
 
-.PHONY: run mrun line size
+.PHONY: run grun mrun line size
+
 run:
 ifeq ($(ARCH_NAME), sim)
 	$(TARGET)
 else ifeq ($(ARCH_NAME), x86)
-# graphic
-#	qemu-system-x86_64 -cdrom $(TARGET).iso
-# nographic
 #	qemu-system-x86_64 -cpu core2duo -cdrom $(TARGET).iso -nographic -curses 
 	qemu-system-x86_64 -cpu qemu64 -cdrom $(TARGET).iso -nographic -curses 
 else ifeq ($(ARCH_NAME), arm)
 # for UART011
-	qemu-system-aarch64 -m 128 -M raspi3 -nographic -kernel $(TARGET)
-#	qemu-system-aarch64 -m 128 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
+	qemu-system-aarch64 -m 128 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
 # for MINI UART
 #	qemu-system-aarch64 -m 128 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET)
 else ifeq ($(ARCH_NAME), axis)
 	$(RUN_AXIS)
+else
+ echo "unknown arch name"
+endif
+
+grun:
+ifeq ($(ARCH_NAME), x86)
+	qemu-system-x86_64 -cdrom $(TARGET).iso
+else ifeq ($(ARCH_NAME), arm)
+# for UART011
+	qemu-system-aarch64 -m 128 -M raspi3 -serial mon:stdio -kernel $(TARGET)
+# for MINI UART
+#	qemu-system-aarch64 -m 128 -M raspi3 -serial null -serial mon:stdio -kernel $(TARGET)
 endif
 
 mrun:

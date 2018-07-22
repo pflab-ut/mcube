@@ -42,20 +42,20 @@ void init_pit_timer(unsigned long tick_us)
   outb(TIMER_PORT_DATA_CH0, (uint8_t)(count >> 8));
 
   // Assign the interrupt service routine.
-  set_isr(TRAP_IRQ_TIMER, isr_timer);
+  set_isr(TRAP_PIT_IRQ, isr_timer);
 
   // Enable the timer interrupt (IRQ0).
-  enable_irq(IRQ_TIMER);
+  enable_irq(PIT_IRQ);
 }
 
 void start_pit_timer(unsigned int ch)
 {
   // Enable the timer interrupt (IRQ0).
-  enable_irq(IRQ_TIMER);
+  enable_irq(PIT_IRQ);
 }
 
 void stop_pit_timer(unsigned int ch)
 {
   // Disable the timer interrupt (IRQ0).
-  disable_irq(IRQ_TIMER);
+  disable_irq(PIT_IRQ);
 }
