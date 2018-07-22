@@ -77,6 +77,7 @@ SRCS += \
  $(TOP_DIR)/arch/x86/page.c \
  $(TOP_DIR)/arch/x86/cache.c \
  $(TOP_DIR)/arch/x86/cpu.c \
+ $(TOP_DIR)/arch/x86/heap.c \
  $(TOP_DIR)/arch/x86/init.c \
  $(TOP_DIR)/arch/x86/irq.c \
  $(TOP_DIR)/arch/x86/thread.c \
@@ -84,6 +85,7 @@ SRCS += \
  $(TOP_DIR)/arch/x86/pmap.c \
  $(TOP_DIR)/arch/x86/mmu.c \
  $(TOP_DIR)/arch/x86/stdio.c \
+ $(TOP_DIR)/arch/x86/shell.c \
  $(TOP_DIR)/arch/x86/timer.c \
 	$(TOP_DIR)/arch/x86/tty.c \
  $(TOP_DIR)/arch/x86/hpet.c \

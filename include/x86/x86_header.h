@@ -20,6 +20,7 @@
 #include <x86/dmac.h>
 #include <x86/dsctbl.h>
 #include <x86/dump.h>
+#include <x86/heap.h>
 #include <x86/hpet.h>
 #include <x86/interrupt.h>
 #include <x86/io.h>

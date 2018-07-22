@@ -151,6 +151,8 @@ bool kb_getkey(keyboard_t *key);
 //----------------------------------------------------------------------------
 uint8_t kb_meta(void);
 
+void kshell();
+
 #endif	/* !__ASSEMBLY__ */
 
 #endif	/* __MCUBE_X86_KEYBOARD_H__ */

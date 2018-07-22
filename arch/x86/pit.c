@@ -13,7 +13,11 @@
 
 void isr_timer(const interrupt_context_t *context)
 {
-  printk("isr_timer()\n");
+  static int i = 0;
+  i++;
+  if (i % 1000 == 0) {
+    printk("isr_timer()\n");
+  }
   (void) context;
   // Do nothing for now.
   

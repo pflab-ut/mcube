@@ -23,19 +23,20 @@ void init_arch(void)
   init_exception();
 
   
-  //  init_syscall();
+  init_syscall();
   
-  // init_keyboard();
+  init_keyboard();
 #if 0
   print_cpu_brand();
   print_simd_info();
   print_vendor_id();
 #endif
 
-  init_pit_timer(TICK_USEC);
+  //  init_pit_timer(TICK_USEC);
  
   //asm volatile("int 0x0");
   enable_interrupt();
+  kshell();
   for (;;)
     ;
 #else
