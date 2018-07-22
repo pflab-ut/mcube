@@ -16,6 +16,8 @@
 #define MEM_SECTOR_BUFFER                  0x00000800
 #define MEM_IDT                            0x00001000
 #define MEM_IDT_END                        0x00002000
+#define KMEM_ISR_TABLE                     0x00002000
+#define MEM_ISR_THUNKS                     0x00002800
 #define MEM_GDT                            0x00003000
 #define MEM_GDT_END                        0x00003100
 #define MEM_TSS64                          0x00003100
@@ -29,10 +31,13 @@
 #define MEM_PAGE_TABLE_PDPT                0x00011000
 #define MEM_PAGE_TABLE_PDT                 0x00012000  // maps first 10MiB
 #define MEM_PAGE_TABLE_PT                  0x00013000  // maps first 2MiB
+#define MEM_PAGE_TABLE_LOADED              0x00014000
 #define MEM_PAGE_TABLE_END                 0x00020000
+#define MEM_KERNEL_PAGE_TABLE              0x00020000
 #define MEM_STACK32_TEMP_BOTTOM            0x0006f000
 #define MEM_STACK32_TEMP_TOP               0x00070000
-#define MEM_TABLE                          0x00070000  // BIOS-derived layout
+#define MEM_KERNEL_PAGE_TABLE_END          0x00070000
+#define MEM_TABLE_BIOS                     0x00070000  // BIOS-derived layout
 #define MEM_KERNEL_LOAD_BUFFER             0x00070000
 #define MEM_KERNEL_STACK_NMI_BOTTOM        0x0008a000  // NMI stack
 #define MEM_KERNEL_STACK_NMI_TOP           0x0008c000
@@ -41,14 +46,16 @@
 #define MEM_KERNEL_STACK_MC_BOTTOM         0x0008e000  // machine-check stack
 #define MEM_KERNEL_STACK_MC_TOP            0x00090000
 #define MEM_BIOS_EBDA                      0x0009e000
+#define MEM_EXTENDED_BIOS                  0x0009f800  
 #define MEM_VIDEO                          0x000a0000
+#define MEM_SYSTEM_ROM                     0x000c0000
 #define MEM_KERNEL_STACK_INTERRUPT_BOTTOM  0x00100000  // PL-change intr stack
 #define MEM_KERNEL_STACK_INTERRUPT_TOP     0x001ff000
 #define MEM_KERNEL_STACK_BOTTOM            0x00200000  // main kernel stack
 #define MEM_KERNEL_STACK_TOP               0x00300000
 #define MEM_KERNEL_IMAGE                   0x00300000
 #define MEM_KERNEL_CODE                    0x00301000
-#define MEM_KERNEL_IMAGE_END               0xffffffff
+#define MEM_KERNEL_IMAGE_END               0x00a00000
 
 // Layout region sizes
 #define MEM_BIOS_IVT_SIZE                  0x00000400
@@ -64,45 +71,10 @@
 #define MEM_LOADER2_SEGMENT (MEM_LOADER2 >> 4)
 
 
-#if 0
-/* upper bound of kernel size including bss is about 600KB */
-/* real kernel address is from 0x7c00
- * but this addr is set to 0x00000000 for gdtr */
-#define KERNEL_START 0x00000000
-#define KERNEL_END   0x000a0000
-
-
-#define CUI_VRAM_START 0x000b8000
-#define CUI_VRAM_END 0x000b8fa0 /* 80 * 25 * 2 = 4000 byte */
-#define GUI_VRAM_START 0x000a0000
-#define GUI_VRAM_END   0x000c0000
-
-
-
-#define EXBIOS_START 0x000e0000
-#define EXBIOS_END   0x000f0000
-#define BIOS_START 0x000f0000
-#define BIOS_END   0x00100000
-
-
-#define IDT_START 0x0026f800
-#define IDT_END 0x00270000
-#define GDT_START 0x00270000
-#define GDT_END 0x00280000
-
-#define IOMAP_START 0x40000000
-
-#define virt_to_phys(addr) (addr)
-#define phys_to_virt(addr) (addr)
-
-#define CYLS_ADDR 0xff0
-#define LEDS_ADDR 0xff1
-#define VMODE_ADDR 0xff2
-#define SCRNX_ADDR 0xff4
-#define SCRNY_ADDR 0xff6
-#define VRAM_ADDR 0xff8
-
-#endif
+#define MEM_EXTENDED_BIOS_SIZE      0x00000800
+#define MEM_VIDEO_SIZE              0x00020000
+#define MEM_SYSTEM_ROM_SIZE         0x00040000
+#define MEM_KERNEL_PAGE_TABLE_SIZE  0x00050000
 
 
 //#define IOREGSEL_START 0xfec00000 // 0xfec0xy00

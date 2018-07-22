@@ -25,7 +25,7 @@ void init_arch(void)
   
   //  init_syscall();
   
-  //  init_keyboard();
+  // init_keyboard();
 #if 0
   print_cpu_brand();
   print_simd_info();
@@ -42,9 +42,6 @@ void init_arch(void)
   //	init_shell();
   //  init_uart();
   //	init_console();
-  init_tty();
-  //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
-  tty_clear(TTY_ID);
 
   //	init_key();
   //	init_processor();
@@ -61,11 +58,9 @@ void init_arch(void)
   init_irq();
   init_dsctbl();
 
-  //  timer_init(20);
   //init_keyboard();
 
   //	init_apic();
-  init_pit_timer(TICK_USEC);
   //	init_cache(); 
 
 	/* enable interrupt */

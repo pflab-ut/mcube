@@ -18,7 +18,7 @@
 //============================================================================
 
 // Pointer to the BIOS-generated memory map.
-static pmap_t *map = (pmap_t *) KMEM_TABLE_BIOS;
+static pmap_t *map = (pmap_t *) MEM_TABLE_BIOS;
 static bool initialized = FALSE;
 
 /// Add a memory region to the end of the memory map.
@@ -281,16 +281,16 @@ void print_pmap(void)
 
 void init_pmap(void)
 {
-  // During the boot process, the physical memory map at KMEM_TABLE_BIOS has
+  // During the boot process, the physical memory map at MEM_TABLE_BIOS has
   // been updated to include memory regions reported by the BIOS. This
   // function cleans up the BIOS memory map (sorts it, removes overlaps,
   // etc.) and adds a few additional memory regions.
 
   // Mark VGA video memory as uncached.
-  add_region(KMEM_VIDEO, KMEM_VIDEO_SIZE, PMEMTYPE_UNCACHED);
+  add_region(MEM_VIDEO, MEM_VIDEO_SIZE, PMEMTYPE_UNCACHED);
 
   // Reserve memory for the kernel and its global data structures.
-  add_region(0, KMEM_KERNEL_IMAGE_END, PMEMTYPE_RESERVED);
+  add_region(0, MEM_KERNEL_IMAGE_END, PMEMTYPE_RESERVED);
 
   // Mark the first page of memory as unmapped so deferencing a null pointer
   // always faults.

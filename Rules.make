@@ -35,7 +35,8 @@ endif
 
 CFLAGS += -Iinclude -Wall
 #CFLAGS += -Wextra
-CFLAGS += -O0 -fPIC
+CFLAGS += -O3
+CFLAGS += -fPIC
 CFLAGS += -std=gnu11
 CFLAGS += -nostdlib -fno-stack-protector -ffreestanding
 CFLAGS += -fno-builtin 

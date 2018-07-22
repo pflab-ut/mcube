@@ -11,13 +11,10 @@ TEXT_ADDR = 0x00007c00
 #DATA_ADDR = 0x00010000
 #BSS_ADDR = 0x00018000
 
-#LDFLAGS +=
 
 #PRIVATE_LDFLAGS = -Ttext=$(TEXT_ADDR) -N -Bstatic
 
 CFLAGS += -m64
-#CFLAGS += -fPIC
-#LDFLAGS += -fPIC
 #LDFLAGS += -Ttext=$(TEXT_ADDR)
 
 ifeq ($(CC), clang)
@@ -45,9 +42,11 @@ else
 #  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
   LDFLAGS += -nostdlib
   CFLAGS += -masm=intel
+# MonkOS's CFLAGS and LDFLAGS
 #CFLAGS +=  -Qn -g  -m64 -mno-red-zone -mno-mmx -mfpmath=sse  \
 #     -ffreestanding -fno-asynchronous-unwind-tables -Wall  -fPIC
-LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000   
+#LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000   
+LDFLAGS  +=  -z max-page-size=0x1000   
   LDFLAGS += -T scripts/linker/x86-elf.ld
 endif
 

@@ -174,13 +174,13 @@ static void map_region(pagetable_t *pt, const pmap_t *map, const pmapregion_t *r
 void init_kmem(pagetable_t *pt)
 {
   // Zero all kernel page table memory.
-  memzero((void *) KMEM_KERNEL_PAGETABLE, KMEM_KERNEL_PAGETABLE_SIZE);
+  memzero((void *) MEM_KERNEL_PAGE_TABLE, MEM_KERNEL_PAGE_TABLE_SIZE);
 
   // Initialize the kernel page table.
-  pt->proot = KMEM_KERNEL_PAGETABLE;
-  pt->vroot = KMEM_KERNEL_PAGETABLE;
-  pt->vnext = KMEM_KERNEL_PAGETABLE + PAGE_SIZE;
-  pt->vterm = KMEM_KERNEL_PAGETABLE_END;
+  pt->proot = MEM_KERNEL_PAGE_TABLE;
+  pt->vroot = MEM_KERNEL_PAGE_TABLE;
+  pt->vnext = MEM_KERNEL_PAGE_TABLE + PAGE_SIZE;
+  pt->vterm = MEM_KERNEL_PAGE_TABLE_END;
 
   // For each region in the physical memory map, create appropriate page
   // table entries.
