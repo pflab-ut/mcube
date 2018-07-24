@@ -5,6 +5,8 @@
  */
 #include <mcube/mcube.h>
 
+static atomic_int printk_lock = SPIN_UNLOCKED;
+
 
 static inline int iout(int d, int base, char *dst, int n, struct conv_flag *cf)
 {
@@ -320,6 +322,7 @@ int printk(const char *fmt, ...)
   double lf;
 #endif /* !CONFIG_ARCH_AXIS */
   
+  spin_lock(&printk_lock);
 	va_start(ap, fmt);
 
 	while (*fmt) {
@@ -469,6 +472,7 @@ out:
 #else
 #error "Unknown Printk to Output"
 #endif
+  spin_unlock(&printk_lock);
 	return n;
 }
 

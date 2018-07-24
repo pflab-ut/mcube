@@ -14,29 +14,13 @@
 #define spin_lock_irqsave(lock, flags)
 #define spin_unlock_irqrestore(lock, flags)
 
-/**
- * @brief Spinlock
- *
- * The spinlock structure has spinlock information.
- */
-struct spinlock {
-	/** Lock counter. */
-	uint32_t lock;
-};
 
-typedef struct spinlock spinlock;
+extern volatile atomic_int smp_sched_lock;
+extern volatile atomic_int sched_lock;
 
-#define INIT_SPINLOCK (struct spinlock) {		\
-		.lock = SPIN_UNLOCKED,									\
-			}
-
-extern volatile spinlock printk_lock;
-extern volatile spinlock smp_sched_lock;
-extern volatile spinlock sched_lock;
-
-static inline void spin_lock(volatile spinlock *lock);
-static inline void spin_unlock(volatile spinlock *lock);
-static inline int spin_trylock(volatile spinlock *lock);
+static inline void spin_lock(volatile atomic_int *lock);
+static inline void spin_unlock(volatile atomic_int *lock);
+static inline int spin_trylock(volatile atomic_int *lock);
 
 void init_spinlock(void);
 

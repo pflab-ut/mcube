@@ -13,9 +13,9 @@
 #include <mcube/stdio.h>
 #include <mcube/stddef.h>
 #include <mcube/irqflags.h>
+#include <mcube/atomic.h>
 #include <mcube/spinlock.h>
 #include <mcube/math.h>
-#include <mcube/atomic.h>
 #include <mcube/cpu.h>
 #include <mcube/limits.h>
 #include <mcube/sched.h>

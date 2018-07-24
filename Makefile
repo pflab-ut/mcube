@@ -123,8 +123,8 @@ else ifeq ($(ARCH_NAME), arm)
 endif
 
 mrun:
-#	$(RUN_AXIS) "+define+MONITOR_ALL +define+PRINT_ALL"
-	$(RUN_AXIS) "+define+MONITOR_ALL"
+	$(RUN_AXIS) "+define+MONITOR_ALL +define+PRINT_ALL"
+#	$(RUN_AXIS) "+define+MONITOR_ALL"
 
 line:
 	@$(PYTHON) $(TOP_DIR)/scripts/misc/line.py

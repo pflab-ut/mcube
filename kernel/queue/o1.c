@@ -72,7 +72,7 @@ void init_rq(void)
       run_tq[i].bitmap[j] = 0;
     }
     for (j = 0; j < NR_PRIORITIES; j++) {
-      run_tq[i].array[j] = INIT_IDLE_THREAD(i);
+      run_tq[i].array[j] = (struct thread_struct) INIT_IDLE_THREAD(i);
       run_tq[i].array[j].prev = run_tq[i].array[j].next = &run_tq[i].array[j];
     }
   }

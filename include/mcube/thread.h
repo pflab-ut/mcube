@@ -299,7 +299,7 @@ static inline void end_budget(struct thread_struct *th)
       }
 
 
-#define INIT_IDLE_THREAD(cpu) (struct thread_struct) {  \
+#define INIT_IDLE_THREAD(cpu) {                         \
     .cpu_context = INIT_CPU_CONTEXT,                    \
 		.prev = NULL,																				\
 			.next = NULL,																			\

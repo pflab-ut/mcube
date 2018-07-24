@@ -12,7 +12,7 @@
 
 #include <axis/cpu.h>
 #include <axis/spinlock.h>
-#include <axis/interrupt.h>
+#include <axis/irq.h>
 #include <axis/ops.h>
 #include <axis/dmac.h>
 #include <axis/irqflags.h>

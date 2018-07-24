@@ -24,7 +24,7 @@ struct uart_devdata {
 
 typedef struct uart_devdata uart_devdata;
 
-extern volatile spinlock uart_getc_lock, uart_putc_lock;
+extern volatile atomic_int uart_getc_lock, uart_putc_lock;
 
 uint8_t uart_getc(uint8_t port);
 void uart_putc(char c, uint8_t port);

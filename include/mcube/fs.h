@@ -259,7 +259,7 @@ struct proc_dir_entry {
 	struct list_head pde_openers;   /* who did ->open, but not ->release */
 #endif
 	/** proc_fops checks and pde_users bumps. */
-	spinlock pde_unload_lock;
+	atomic_int pde_unload_lock;
 	/** Name length. */
 	uint8_t namelen;
 	/** Name. */

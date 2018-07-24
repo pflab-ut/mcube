@@ -8,7 +8,7 @@
 struct thread_struct *current_th[NR_INTRA_KERNEL_CPUS];
 struct thread_struct *prev_th[NR_INTRA_KERNEL_CPUS];
 
-volatile spinlock sched_lock = INIT_SPINLOCK;
+volatile atomic_int sched_lock = SPIN_UNLOCKED;
 
 struct thread_struct idle_th[NR_INTRA_KERNEL_CPUS];
 
@@ -351,7 +351,7 @@ void init_sched(void)
   sys_jiffies = 0;
 
   for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
-    idle_th[i] = INIT_IDLE_THREAD(cpu);
+    idle_th[i] = (struct thread_struct) INIT_IDLE_THREAD(cpu);
     idle_th[i].thflags = THFLAGS_START_TH;
     run_tq[i].util = 0;
     run_tq[i].nr_threads = 0;

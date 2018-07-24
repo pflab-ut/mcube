@@ -17,7 +17,7 @@ struct rwlock {
 	/** Number of readers. */
 	unsigned int nread;
 	/** Writer lock. */
-	spinlock wlock;
+	atomic_int wlock;
 };
 
 typedef struct rwlock rwlock;

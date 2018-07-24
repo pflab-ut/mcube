@@ -17,7 +17,7 @@ struct seqlock_struct {
 	/** Sequence. */
 	unsigned sequence;
 	/** Lock. */
-	spinlock lock;
+	atomic_int lock;
 };
 
 typedef struct seqlock_struct seqlock_struct;

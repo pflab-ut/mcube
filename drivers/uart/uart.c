@@ -5,8 +5,8 @@
  */
 #include <mcube/mcube.h>
 
-volatile spinlock uart_getc_lock = INIT_SPINLOCK;
-volatile spinlock uart_putc_lock = INIT_SPINLOCK;
+volatile atomic_int uart_getc_lock = SPIN_UNLOCKED;
+volatile atomic_int uart_putc_lock = SPIN_UNLOCKED;
 
 struct uart_devdata uart_data[NR_UART_PORTS];
 
