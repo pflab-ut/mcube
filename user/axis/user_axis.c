@@ -97,9 +97,34 @@ int test_main(void)
 
 int user_arch_main(void)
 {
-  user_thread_main();
+  //  user_thread_main();
   //  timer_main();
   //  dmac_main();
   //  test_main();
+#if 1
+  printk("get_cpu_id() = %lu\n", get_cpu_id());
+  set_program_counter(1, 0);
+  start_cpu(1);
+  //  set_program_counter(2, 0);
+  //  start_cpu(2);
+  volatile int i = 0;
+  while (1) {
+    i++;
+  }
+  extern volatile unsigned long cpu_ids[256];
+  while (cpu_ids[1] == 0) {
+  }
+  //  printk("cpu_ids[1] = %lu\n", cpu_ids[1]);
+  
+#else
+  int i = 0;
+  while (1) {
+    printk("get_time_stamp_counter() = %lu\n", get_time_stamp_counter());
+    i++;
+    if (i == 10) {
+      set_time_stamp_counter(0);
+    }
+  }
+#endif
   return 0;
 }

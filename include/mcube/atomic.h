@@ -8,7 +8,10 @@
 
 #ifndef __ASSEMBLY__
 
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
 #include <stdatomic.h>
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+
 
 /**
  * @brief Atomic variable

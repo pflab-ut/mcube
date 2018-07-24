@@ -8,11 +8,16 @@
 int user_arch_main(void);
 
 #if !CONFIG_ARCH_X86
+
+volatile unsigned long cpu_ids[256] = {0};
+
 int ap_main(void)
 {
-  printk("ap_main()\n");
-  for (;;)
-    ;
+  unsigned long cpu = get_cpu_id();
+  putchar(cpu + '0');
+  printk("get_cpu_id() = %lu\n", get_cpu_id());
+  //  printk("ap_main()\n");
+  //  cpu_ids[cpu] = cpu;
   return 0;
 }
 #endif /* !CONFIG_ARCH_X86 */

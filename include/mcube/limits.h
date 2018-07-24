@@ -34,23 +34,30 @@
 #define INT_MIN (-INT_MAX - 1)
 #define UINT_MAX 4294967295U
 
-#if __WORDSIZE == 64
+#if REGISTER_LENGTH == 64
 #define LONG_MAX 9223372036854775807L
 #else
 #define LONG_MAX 2147483647L
 #endif /* __WORD_SIZE == 64 */
 #define LONG_MIN (-LONG_MAX - 1L)
 
-#if __WORDSIZE == 64
+#if REGISTER_LENGTH == 64
 #define ULONG_MAX 18446744073709551615UL
 #else
 #define ULONG_MAX 4294967295UL
-#endif /* __WORDSIZE == 64 */
+#endif /* REGISTER_LENGTH == 64 */
 
 #define LLONG_MAX 9223372036854775807LL
 #define LLONG_MIN (-LLONG_MAX - 1LL)
 
 #define ULLONG_MAX 18446744073709551615ULL
+
+#define DBL_MAX 0x1.fffffffffffffp1023
+
+#ifndef HUGE_VAL
+#define HUGE_VAL DBL_MAX
+#endif /* !HUGE_VAL */
+
 
 #endif /* CONFIG_ARCH_SIM */
 

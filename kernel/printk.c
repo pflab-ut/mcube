@@ -32,7 +32,7 @@ static inline int iout(int d, int base, char *dst, int n, struct conv_flag *cf)
 			if (cf->pad) {
 				pad = '0';
 			}
-			if (FOUT_SZ < n + cf->digit) {
+			if (FOUT_SIZE < n + cf->digit) {
 				return -1;
 			}
 			while (i < cf->digit) {
@@ -40,7 +40,7 @@ static inline int iout(int d, int base, char *dst, int n, struct conv_flag *cf)
 				cf->digit--;
 			}
 
-			if (FOUT_SZ < n + i) {
+			if (FOUT_SIZE < n + i) {
 				return -1;
 			}
 			while (i) {
@@ -82,7 +82,7 @@ static inline int ldout(long ld, int base, char *dst, int n, struct conv_flag *c
 			if (cf->pad) {
 				pad = '0';
 			}
-			if (FOUT_SZ < n + cf->digit) {
+			if (FOUT_SIZE < n + cf->digit) {
 				return -1;
 			}
 			while (i < cf->digit) {
@@ -90,7 +90,7 @@ static inline int ldout(long ld, int base, char *dst, int n, struct conv_flag *c
 				cf->digit--;
 			}
 
-			if (FOUT_SZ < n + i) {
+			if (FOUT_SIZE < n + i) {
 				return -1;
 			}
 			while (i) {
@@ -122,7 +122,7 @@ static inline unsigned int uout(unsigned int u, int base, char *dst, int n, stru
 			if (cf->pad) {
 				pad = '0';
 			}
-			if (FOUT_SZ < n + cf->digit) {
+			if (FOUT_SIZE < n + cf->digit) {
 				return -1;
 			}
 			while (i < cf->digit) {
@@ -130,7 +130,7 @@ static inline unsigned int uout(unsigned int u, int base, char *dst, int n, stru
 				cf->digit--;
 			}
 
-			if (FOUT_SZ < n + i) {
+			if (FOUT_SIZE < n + i) {
 				return -1;
 			}
 			while (i) {
@@ -163,7 +163,7 @@ static inline unsigned int luout(unsigned long lu, int base, char *dst, int n, s
 			if (cf->pad) {
 				pad = '0';
 			}
-			if (FOUT_SZ < n + cf->digit) {
+			if (FOUT_SIZE < n + cf->digit) {
 				return -1;
 			}
 			while (i < cf->digit) {
@@ -171,7 +171,7 @@ static inline unsigned int luout(unsigned long lu, int base, char *dst, int n, s
 				cf->digit--;
 			}
 
-			if (FOUT_SZ < n + i) {
+			if (FOUT_SIZE < n + i) {
 				return -1;
 			}
 			while (i) {
@@ -214,7 +214,7 @@ static inline int fout(float f, int base, char *dst, int n, struct conv_flag *cf
 			if (cf->pad) {
 				pad = '0';
 			}
-			if (FOUT_SZ < n + cf->digit) {
+			if (FOUT_SIZE < n + cf->digit) {
 				return -1;
 			}
 			while (i < cf->digit) {
@@ -222,7 +222,7 @@ static inline int fout(float f, int base, char *dst, int n, struct conv_flag *cf
 				cf->digit--;
 			}
 
-			if (FOUT_SZ < n + i) {
+			if (FOUT_SIZE < n + i) {
 				return -1;
 			}
 			while (i) {
@@ -268,7 +268,7 @@ static inline int lfout(double lf, int base, char *dst, int n, struct conv_flag 
 			if (cf->pad) {
 				pad = '0';
 			}
-			if (FOUT_SZ < n + cf->digit) {
+			if (FOUT_SIZE < n + cf->digit) {
 				return -1;
 			}
 			while (i < cf->digit) {
@@ -276,7 +276,7 @@ static inline int lfout(double lf, int base, char *dst, int n, struct conv_flag 
 				cf->digit--;
 			}
 
-			if (FOUT_SZ < n + i) {
+			if (FOUT_SIZE < n + i) {
 				return -1;
 			}
 			while (i) {
@@ -307,7 +307,7 @@ int printk(const char *fmt, ...)
 {
 	int n = 0;
   int ret;
-	char buf[FOUT_SZ];
+	char buf[FOUT_SIZE];
 	va_list ap;
 	int d;
 	unsigned int u;
@@ -328,7 +328,7 @@ int printk(const char *fmt, ...)
 			while (*p && *p != '%') {
 				p++;
 			}
-			if (FOUT_SZ < n + (int) (p - fmt)) {
+			if (FOUT_SIZE < n + (int) (p - fmt)) {
 				goto out;
 			}
 			while (fmt != p) {
@@ -341,7 +341,7 @@ int printk(const char *fmt, ...)
 		fmt++;
 
 		/* at least one */
-		if (FOUT_SZ < n + 1) {
+		if (FOUT_SIZE < n + 1) {
 			goto out;
 		}
 		cf = (struct conv_flag) {.pad = FALSE, .digit = 0};
@@ -396,7 +396,7 @@ skip:
 		case 's':	/* string */
 			s = va_arg(ap, char *);
 			while (*s) {
-				if (FOUT_SZ < n) {
+				if (FOUT_SIZE < n) {
 					goto out;
 				}
 				buf[n++] = *s++;

@@ -125,20 +125,19 @@ void init_hpet_timer_irq(void)
 	//	printk("IOAPIC_VER = 0x%x\n", mmio_in32(IO_WIN));
 
 	//	printk("&common_interrupt = 0x%x\n", &common_interrupt);
-	/* Timer 0 is periodic */
 #if 0
+	/* Timer 0 is periodic */
 	set_idsc(idt_start + HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ,
 					 (uint32_t) &common_interrupt, 2 * 8, AR_INTGATE32);
-#endif
-  //	setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ, &HPET_periodic_timer_irq);
+  setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ, &HPET_periodic_timer_irq);
 
 	/* Timer 1 is one-shot */
-#if 0
 	set_idsc(idt_start + HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ,
 					 (uint32_t) &common_interrupt, 2 * 8, AR_INTGATE32);
+  setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ, &HPET_one_shot_timer_irq);
 #endif
-  //	setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ, &HPET_one_shot_timer_irq);
-
+  // TODO: implement set_isr() for hpet.
+  //  set_isr();
 }
 
 

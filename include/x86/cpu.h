@@ -65,7 +65,7 @@
    
 
 
-static inline unsigned int get_lapic_id(void)
+static inline unsigned long get_lapic_id(void)
 {
   registers4_t regs4;
   cpuid(0x1, &regs4);

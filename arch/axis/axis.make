@@ -7,7 +7,6 @@
 
 ifeq ($(CC), clang)
   CFLAGS += -target maxis
-  # use release version
   CROSS_PREFIX = llvm-
   LD = ld.lld
   AS = $(CROSS_PREFIX)as

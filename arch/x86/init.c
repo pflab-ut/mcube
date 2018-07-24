@@ -30,7 +30,8 @@ void init_arch(void)
   print_simd_info();
   print_vendor_id();
 #endif
-  init_pit_timer(TICK_USEC);
+  //  init_pit_timer(TICK_USEC);
+  init_hpet_timer(TICK_USEC);
  
   //asm volatile("int 0x0");
   enable_interrupt();

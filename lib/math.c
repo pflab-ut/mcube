@@ -5,8 +5,9 @@
  */
 #include <mcube/mcube.h>
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
- 
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM
+
+
 /**
  * The cos() function returns the cosine of @c x, where @c x is given in radians.
  * @param x is a radian.
@@ -114,7 +115,7 @@ double tan(double x)
     return -1 / t;
 	}
 	/* overflow */
-	return HUGE_VAL;
+  return HUGE_VAL;
 }
 
 
@@ -267,4 +268,4 @@ double cbrt(double x)
 	}
 }
 
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM */

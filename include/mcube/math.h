@@ -27,8 +27,12 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM
+
+#ifndef CONFIG_ARCH_ARM
 #include <math.h>
+#endif /* CONFIG_ARCH_ARM */
+
 
 /**
  * The ABS() macro computes the absolute value of the integer @c x.
@@ -65,8 +69,6 @@ double tan(double x);
 
 double sqrt(double x);
 double cbrt(double x);
-
-#elif  CONFIG_ARCH_ARM
 
 
 #elif CONFIG_ARCH_AXIS

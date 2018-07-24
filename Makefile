@@ -106,7 +106,8 @@ else ifeq ($(ARCH_NAME), arm)
 # for MINI UART
 #	qemu-system-aarch64 -m 128 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET)
 else ifeq ($(ARCH_NAME), axis)
-	$(RUN_AXIS)
+	$(RUN_AXIS) "+define+PRINT_ALL"
+#	$(RUN_AXIS)
 else
  echo "unknown arch name"
 endif
@@ -122,7 +123,8 @@ else ifeq ($(ARCH_NAME), arm)
 endif
 
 mrun:
-	$(RUN_AXIS) "+define+MONITOR_ALL"	
+#	$(RUN_AXIS) "+define+MONITOR_ALL +define+PRINT_ALL"
+	$(RUN_AXIS) "+define+MONITOR_ALL"
 
 line:
 	@$(PYTHON) $(TOP_DIR)/scripts/misc/line.py

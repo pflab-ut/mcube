@@ -8,7 +8,7 @@
 
 #ifndef __ASSEMBLY__
 
-#define FOUT_SZ 0x100
+#define FOUT_SIZE 0x100
 #define MAX_DIGIT 32
 
 ssize_t console_write(const void *input_data, size_t length, void *devdata);

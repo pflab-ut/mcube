@@ -13,9 +13,13 @@ __begin:
 ENTRY(_start)
 	.set 	noreorder
 	la		$gp, _gp
+  mfs $t0, $1
 //	la		$sp, THREAD_STACK_ADDR(0, 0)
-//	la		$sp, (MEMORY_BASE + MEMORY_SIZE)
-	la		$sp, idle_stack + STACK_SIZE
+  //	la		$sp, (MEMORY_BASE + MEMORY_SIZE)
+  // $sp = idle_stack + cpu_id($t0) * STACK_SIZE
+  la $sp, idle_stack
+  muli $t1, $t0, STACK_SIZE
+	add		$sp, $sp, $t1
 //	move		$fp, $sp
 //	la		$sp, 0x00010000
 //  addi  $t0, $0, 'Z'

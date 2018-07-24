@@ -14,7 +14,10 @@
 #include <inttypes.h>
 #include <stdint.h>
 
+
+
 #elif CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
+
 
 /** 8-bit integer data type. */
 typedef signed char int8_t;
@@ -33,7 +36,6 @@ typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 /** 64-bit unsigned integer data type. */
 typedef unsigned long long uint64_t;
-
 
 /** Unsigned integer data type. */
 typedef unsigned int size_t;

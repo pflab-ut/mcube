@@ -16,7 +16,7 @@
 
 static void syscall_handle(void)
 {
-    // Do nothing for now.
+  // Do nothing for now.
 }
 
 void init_syscall(void)

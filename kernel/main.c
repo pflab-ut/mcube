@@ -31,8 +31,9 @@ int main(int argc, char *argv[])
     
     user_main();
     exit_arch();
-    printk("main()4\n");
+    //    printk("main()4\n");
   } else {
+    printk("get_cpu_id() = %lu\n", get_cpu_id());
     /* wait until init_arch() is finished. */
     while (is_initialized == FALSE) {
     }

@@ -6,8 +6,9 @@
 #ifndef	__MCUBE_X86_HPET_H__
 #define	__MCUBE_X86_HPET_H__
 
-#define HPET0_START 0xfed00000
+//#define HPET0_START 0xfed00000
 //#define HPET1_START 0xfed80000
+#define HPET0_START 0x7fe1544
 
 
 /* 0x000-0x007: General Capabilities and ID Register Read Only Offset */
@@ -334,6 +335,11 @@
 	 unless the counter has rolled over and actually reached the same value. */
 static inline uint64_t read_hpet_counter(void)
 {
+#if 1
+  uint64_t count;
+  count = mmio_in64(MAIN_COUNTER_64);
+  return count;
+#else
 	uint32_t low, high[2];
 	do {
 		high[0] = mmio_in32(MAIN_COUNTER_HIGH);
@@ -341,6 +347,7 @@ static inline uint64_t read_hpet_counter(void)
 		high[1] = mmio_in32(MAIN_COUNTER_HIGH);
 	} while (high[0] != high[1]); /* roll over? */
 	return (uint64_t) low | ((uint64_t) high[1] << 32);
+#endif
 }
 
 void init_hpet_timer(unsigned long tick_us);
