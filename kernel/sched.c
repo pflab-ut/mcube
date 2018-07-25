@@ -264,9 +264,9 @@ void do_timer_tick(void)
     return;
   }
   current_task->counter = 0;
-  enable_interrupt();
+  enable_local_irq();
   __do_sched();
-  disable_interrupt();
+  disable_local_irq();
 }
 
 

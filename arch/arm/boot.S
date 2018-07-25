@@ -105,7 +105,7 @@ begin_main:
   b       hang               // should never come here
 
 ENTRY(hang)
-  disable_interrupt
+  disable_irq
   wfi
   b       hang
   

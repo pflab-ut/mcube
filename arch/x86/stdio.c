@@ -5,6 +5,8 @@
  */
 #include <mcube/mcube.h>
 
+volatile atomic_int putchar_lock = SPIN_UNLOCKED;
+
 
 #if CONFIG_PRINTK2CONSOLE
 int getchar(void)
@@ -14,7 +16,12 @@ int getchar(void)
 
 int putchar(int c)
 {
+  unsigned long flags;
+  save_local_irq(&flags);
+  spin_lock(&putchar_lock);
   tty_printc(TTY_ID, c);
+  spin_unlock(&putchar_lock);
+  restore_local_irq(&flags);
   return c;
 }
 
@@ -25,14 +32,18 @@ int getchar(void)
 }
 int putchar(int c)
 {
+  unsigned long flags;
+  save_local_irq(&flags);
+  spin_lock(&putchar_lock);
   uart_putc(c, STDIO_PORT);
+  spin_unlock(&putchar_lock);
+  restore_local_irq(&flags);
   return c;
 }
 
 #else
 #error "Unknown Printk to Output"
 #endif
-
 
 
 int puts(const char *s)
@@ -43,18 +54,5 @@ int puts(const char *s)
 		putchar(s[i]);
 	}
   return 0;
-}
-
-ssize_t console_write(const void *input_data, size_t length, void *devdata)
-{
-#if 1
-  tty_print(TTY_ID, input_data);
-#else
-	int i;
-	for (i = 0; i < length; i++) {
-		putchar(((uint8_t *) input_data)[i]);
-	}
-#endif
-	return 0;
 }
 

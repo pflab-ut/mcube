@@ -33,7 +33,7 @@ void start_timer(unsigned int ch)
 {
   set_cntv_tval_el0(timer_tick);
   enable_cntv_ctl_el0();
-  enable_interrupt();
+  enable_local_irq();
 }
 
 void stop_timer(unsigned int ch)

@@ -8,7 +8,7 @@
 
 void init_arch(void)
 {
-  disable_interrupt();
+  disable_local_irq();
   /* initialize console */
   init_tty();
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
@@ -34,7 +34,7 @@ void init_arch(void)
   init_hpet_timer(TICK_USEC);
  
   //asm volatile("int 0x0");
-  enable_interrupt();
+  enable_local_irq();
   //  kshell();
   //  init_uart();
   //	init_apic();

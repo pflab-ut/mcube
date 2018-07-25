@@ -27,32 +27,70 @@
 
 #ifdef __ASSEMBLY__
 
-.macro enable_interrupt
+.macro enable_irq
   msr daifclr, #AARCH64_DAIF_IRQ
 .endm
 
-.macro disable_interrupt
+.macro disable_irq
   msr   daifset, #AARCH64_DAIF_IRQ
 .endm
 
 #else
 
-static inline uint64_t get_interrupt_disable_flag(void)
+static inline uint64_t get_irq_disable_flag(void)
 {
   uint64_t data; 
   asm volatile("mrs %0, daif\n\t":"=r"(data));
   return data;
 }
 
-static inline void enable_interrupt(void)
+static inline void set_irq_disable_flag(uint64_t *flags)
+{
+  asm volatile("msr daif, %0\n\t":"=r"(flags));
+}
+
+#define PSR_I_BIT     0x00000080
+
+static inline void enable_local_irq(void)
 {
   asm volatile("msr daifclr, %0\n\t" :: "i"(AARCH64_DAIF_IRQ));
 }
 
-static inline void disable_interrupt(void)
+static inline void disable_local_irq(void)
 {
   asm volatile("msr daifset, %0\n\t" :: "i"(AARCH64_DAIF_IRQ));
 }
+
+static inline int is_irq_enabled(unsigned long flags)
+{
+  return !(flags & PSR_I_BIT);
+}
+
+
+static inline void save_local_irq(unsigned long *flags)
+{
+  asm volatile(
+               "mrs    %0, daif\n"
+               "msr    daifset, #2"
+               : "=r" (*flags)
+               :
+               : "memory");
+  if (is_irq_enabled(*flags)) {
+    disable_local_irq();
+  }
+}
+
+static inline void restore_local_irq(unsigned long *flags)
+{
+  asm volatile("msr    daif, %0"
+               :
+               : "r" (*flags)
+               : "memory");
+  if (is_irq_enabled(*flags)) {
+    enable_local_irq();
+  }
+}
+
 
 
 void init_vector(void);

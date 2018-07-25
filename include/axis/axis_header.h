@@ -15,7 +15,6 @@
 #include <axis/irq.h>
 #include <axis/ops.h>
 #include <axis/dmac.h>
-#include <axis/irqflags.h>
 #include <axis/mm.h>
 #include <axis/sys_regs.h>
 #include <axis/thread.h>

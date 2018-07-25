@@ -11,7 +11,6 @@
 #define FOUT_SIZE 0x100
 #define MAX_DIGIT 32
 
-ssize_t console_write(const void *input_data, size_t length, void *devdata);
 int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 
 #if CONFIG_ARCH_SIM

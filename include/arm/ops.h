@@ -33,20 +33,35 @@ static inline void nop(void)
 	asm volatile("nop");
 }
 
+/* instruction synchronization barrier */
 static inline void isb(void)
 {
 	asm volatile("isb");
 }
 
+/* debug */
+static inline void dbg(void)
+{
+	asm volatile("dbg");
+}
+
+/* data synchronization barrier */
 static inline void dsb(void)
 {
 	asm volatile("dsb");
 }
 
+/* data memory barrier */
 static inline void dmb(void)
 {
 	asm volatile("dmb");
 }
+
+static inline void sev(void)
+{
+	asm volatile("sev");
+}
+
 
 
 #endif /* !__ASSEMBLY__ */

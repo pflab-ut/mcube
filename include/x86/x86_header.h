@@ -9,6 +9,7 @@
 
 #include <x86/exception.h>
 #include <x86/ops.h>
+#include <x86/cpu.h>
 #include <x86/irq.h>
 
 #include <x86/page.h>
@@ -16,7 +17,6 @@
 #include <x86/acpi.h>
 #include <x86/addr.h>
 #include <x86/atomic.h>
-#include <x86/cpu.h>
 #include <x86/dmac.h>
 #include <x86/dsctbl.h>
 #include <x86/dump.h>
@@ -24,7 +24,6 @@
 #include <x86/hpet.h>
 #include <x86/io.h>
 #include <x86/ioapic.h>
-#include <x86/irqflags.h>
 #include <x86/keyboard.h>
 #include <x86/lapic.h>
 #include <x86/mm.h>

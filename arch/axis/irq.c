@@ -148,7 +148,7 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
   unsigned long status;
   unsigned long id;
-  disable_interrupt();
+  disable_local_irq();
   /* check if this is timer interrupt. */
   status = get_interrupt_status();
   printk("do_irq()\n");
@@ -177,6 +177,6 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
   PDEBUG("get_interrupt_program_counter() = 0x%lx\n", get_interrupt_program_counter());
   //  asm volatile("move %0, $sp" : "=r"(tmp));
   //  printk("sp = 0x%lx\n", tmp);
-  enable_interrupt();
+  enable_local_irq();
   return 0;
 }

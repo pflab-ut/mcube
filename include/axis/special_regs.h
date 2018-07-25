@@ -11,37 +11,6 @@
 #define NR_SOFTWARE_INTERRUPTS 8UL
 #define SOFTWARE_INTERRUPT_OFFSET 8UL
 
-static inline void enable_interrupt(void)
-{
-  unsigned long data;
-  asm volatile("mfs %0, $0" : "=r"(data));
-  data |= (0x1 << 0);
-  asm volatile("mts $0, %0" :: "r"(data));
-}
-
-static inline void disable_interrupt(void)
-{
-  unsigned long data;
-  asm volatile("mfs %0, $0" : "=r"(data));
-  data &= ~(0x1 << 0);
-  asm volatile("mts $0, %0" :: "r"(data));
-}
-
-static inline void enable_previous_interrupt(void)
-{
-  unsigned long data;
-  asm volatile("mfs %0, $0" : "=r"(data));
-  data |= (0x1 << 1);
-  asm volatile("mts $0, %0" :: "r"(data));
-}
-
-static inline void disable_previous_interrupt(void)
-{
-  unsigned long data;
-  asm volatile("mfs %0, $0" : "=r"(data));
-  data &= ~(0x1 << 1);
-  asm volatile("mts $0, %0" :: "r"(data));
-}
 
 static inline unsigned long get_cpu_id(void)
 {

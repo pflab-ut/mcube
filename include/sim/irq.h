@@ -9,12 +9,25 @@
 #ifndef __ASSEMBLY__
 
 
-
-static inline void enable_interrupt(void)
+static inline void enable_local_irq(void)
 {
 }
 
-static inline void disable_interrupt(void)
+static inline void disable_local_irq(void)
+{
+}
+
+static inline int is_irq_enabled(unsigned long flags)
+{
+  return 1;
+}
+
+static inline void save_local_irq(unsigned long *flags)
+{
+}
+
+
+static inline void restore_local_irq(unsigned long *flags)
 {
 }
 

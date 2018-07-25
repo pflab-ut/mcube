@@ -25,7 +25,7 @@ void __attribute__((noreturn)) run_user_thread(void)
 
 void __attribute__((noreturn)) exit(int status)
 {
-	disable_interrupt();
+	disable_local_irq();
 	stop_cpu(0);
 	inf_loop();
 }

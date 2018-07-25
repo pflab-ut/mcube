@@ -10,7 +10,10 @@
 
 #if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
 #include <stdatomic.h>
+#else
+typedef int atomic_int;
 #endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+
 
 
 /**

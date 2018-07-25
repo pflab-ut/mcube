@@ -10,16 +10,16 @@
 /* early include due to dependency */
 #include <mcube/config.h>
 #include <mcube/types.h>
+#include <mcube/atomic.h>
 #include <mcube/stdio.h>
 #include <mcube/stddef.h>
-#include <mcube/irqflags.h>
-#include <mcube/atomic.h>
+#include <mcube/linkage.h>
+#include <mcube/irq.h>
 #include <mcube/spinlock.h>
 #include <mcube/math.h>
 #include <mcube/cpu.h>
 #include <mcube/limits.h>
 #include <mcube/sched.h>
-#include <mcube/linkage.h>
 #include <mcube/main.h>
 
 /* alphabetical order */

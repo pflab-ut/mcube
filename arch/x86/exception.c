@@ -60,7 +60,7 @@ static void dump_context(int id, const interrupt_context_t *context)
 static void hang(void)
 {
   for (;;) {
-    disable_interrupt();
+    disable_local_irq();
     halt();
   }
 }

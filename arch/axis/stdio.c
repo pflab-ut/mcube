@@ -11,11 +11,10 @@ int putchar(int c)
   return c;
 }
 
-ssize_t console_write(const void *input_data, size_t length, void *devdata)
+int puts(const char *s)
 {
-  size_t i;
-  for (i = 0; i < length; i++) {
-    putchar(((char *) input_data)[i]);
+  while (*s) {
+    putchar(*s++);
   }
   return 0;
 }

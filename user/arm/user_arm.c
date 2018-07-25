@@ -69,5 +69,6 @@ int user_ap_main(void)
 int user_arch_main(void)
 {
   user_thread_main();
+  
   return 0;
 }

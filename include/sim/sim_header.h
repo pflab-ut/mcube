@@ -8,7 +8,6 @@
 
 #include <sim/atomic.h>
 #include <sim/irq.h>
-#include <sim/irqflags.h>
 #include <sim/ops.h>
 #include <sim/cpu.h>
 #include <sim/regs.h>

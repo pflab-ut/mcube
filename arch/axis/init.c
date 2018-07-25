@@ -14,15 +14,15 @@ void init_irq(void)
   for (i = 0; i < NR_SOFTWARE_INTERRUPTS; i++) {
     enable_software_interrupt(i);
   }
-  enable_previous_interrupt();
-  enable_interrupt();
+  enable_previous_irq();
+  enable_local_irq();
 }
 
 
 void exit_irq(void)
 {
-  disable_interrupt();
-  disable_previous_interrupt();
+  disable_local_irq();
+  disable_previous_irq();
 }
 
 /**

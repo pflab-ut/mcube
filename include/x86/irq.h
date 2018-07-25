@@ -276,22 +276,50 @@ extern uint32_t common_interrupt;
 extern uint32_t system_call;
 
 
-static inline void enable_interrupt(void)
+static inline void enable_local_irq(void)
 {
-  sti();
+	sti();
 }
 
-static inline void disable_interrupt(void)
+static inline void disable_local_irq(void)
 {
-  cli();
+	cli();
+}
+
+static inline int is_irq_enabled(unsigned long flags)
+{
+  return flags & CPU_EFLAGS_INTERRUPT;
+}
+
+
+static inline void save_local_irq(unsigned long *flags)
+{
+	asm volatile("# raw_save_flags\n\t"
+							 "pushf ; pop %0"
+							 : "=rm" (*flags)
+							 :
+							 : "memory");
+  if (is_irq_enabled(*flags)) {
+    disable_local_irq();
+  }
+}
+
+
+static inline void restore_local_irq(unsigned long *flags)
+{
+	asm volatile("push %0 ; popf"
+							 :
+							 :"g" (*flags)
+							 :"memory", "cc");
+  if (is_irq_enabled(*flags)) {
+    enable_local_irq();
+  }
 }
 
 static inline void invalid_opcode(void)
 {
   asm volatile("int %0" :: "i"(EXCEPTION_INVALID_OPCODE));
 }
-
-
 
 
 static inline void fatal(void)

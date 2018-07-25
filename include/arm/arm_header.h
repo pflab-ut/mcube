@@ -11,7 +11,6 @@
 #include <arm/atomic.h>
 #include <arm/dmac.h>
 #include <arm/irq.h>
-#include <arm/irqflags.h>
 #include <arm/machine.h>
 #include <arm/mm.h>
 #include <arm/ops.h>

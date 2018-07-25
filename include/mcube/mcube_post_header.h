@@ -6,7 +6,6 @@
 #ifndef	__MCUBE_MCUBE_MCUBE_POST_HEADER_H__
 #define	__MCUBE_MCUBE_MCUBE_POST_HEADER_H__
 
-#include <mcube/irq.h>
 #include <mcube/thread.h>
 #include <mcube/queue.h>
 #include <mcube/task.h>

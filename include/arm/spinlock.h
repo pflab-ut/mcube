@@ -11,17 +11,43 @@
 
 static inline void spin_lock(volatile atomic_int *lock)
 {
+  unsigned int tmp;
+  asm volatile(
+               "sevl\n"
+               "1:wfe\n"
+               "2:ldaxr %w0, [%1]\n"
+               "cbz %w0, 1b\n"
+               "stxr %w0, %w2, [%1]\n"
+               "cbnz %w0, 2b\n"
+               : "=&r" (tmp)
+               : "r" (lock), "r" (SPIN_LOCKED)
+               : "memory");
+  
 }
 
 
 static inline int spin_trylock(volatile atomic_int *lock)
 {
-	return 0;
+  unsigned int tmp;
+
+  asm volatile(
+               "ldaxr %w0, [%1]\n"
+               "cbz %w0, 1f\n"
+               "stxr %w0, %w2, [%1]\n"
+               "1:\n"
+               : "=&r" (tmp)
+               : "r" (lock), "r" (SPIN_LOCKED)
+               : "memory");
+
+  return !tmp;
 }
 
 
 static inline void spin_unlock(volatile atomic_int *lock)
 {
+  asm volatile(
+               "stlr %w1, [%0]\n"
+               : : "r" (lock), "r" (SPIN_UNLOCKED) : "memory");
 }
 
 static inline void lock_scheduler(void)

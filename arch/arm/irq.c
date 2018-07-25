@@ -129,7 +129,7 @@ static void handle_uart_interrupt(void)
 
 asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
-  disable_interrupt();
+  disable_local_irq();
   printk("do_irq()\n");
   // check inteerupt source
   irq = mmio_in32(TIMER_CORE0_IRQ_SOURCE);
@@ -145,7 +145,7 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
     break;
   }
   do_switch_thread();
-  enable_interrupt();
+  enable_local_irq();
   return 0;
 }
 
@@ -154,5 +154,5 @@ void init_irq(void)
   printk("init_irq()\n");
   /* IRQ routing to core 0 */
   mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING, 0x0);
-  enable_interrupt();
+  enable_local_irq();
 }
