@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       exception.c
 /// @brief      CPU exceptions.
 //
 //  Copyright 2016 Brett Vickers.

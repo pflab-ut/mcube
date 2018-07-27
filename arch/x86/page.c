@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       page.c
 /// @brief      Paged memory management.
 //
 // Copyright 2016 Brett Vickers.

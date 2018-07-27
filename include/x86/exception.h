@@ -6,7 +6,6 @@
 #ifndef __MCUBE_X86_EXCEPTION_H__
 #define __MCUBE_X86_EXCEPTION_H__
 //============================================================================
-/// @file       exception.h
 /// @brief      CPU exceptions.
 //
 //  Copyright 2016 Brett Vickers.

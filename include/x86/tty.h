@@ -6,7 +6,6 @@
 #ifndef	__MCUBE_X86_TTY_H__
 #define	__MCUBE_X86_TTY_H__
 //============================================================================
-/// @file       tty.h
 /// @brief      Teletype (console) screen text manipulation routines.
 //
 // Copyright 2016 Brett Vickers.

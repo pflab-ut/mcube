@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       dump.c
 /// @brief      Debugging memory and CPU state dump routines.
 //
 //  Copyright 2016 Brett Vickers.

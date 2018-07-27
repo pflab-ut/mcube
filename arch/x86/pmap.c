@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       pmap.c
 /// @brief      Physical memory map describing usable and reserved regions
 ///             of physical memory.
 /// @details    Before this code is ever executed, the boot code has filled

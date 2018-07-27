@@ -6,7 +6,6 @@
 #ifndef __MCUBE_X86_KEYBOARD_H__
 #define __MCUBE_X86_KEYBOARD_H__
 //============================================================================
-/// @file       keyboard.h
 /// @brief      Keyboard input routines.
 //
 //  Copyright 2016 Brett Vickers.
@@ -41,8 +40,7 @@
 ///             listed here, but they are equal in value to their lowercase
 ///             ASCII representations (e.g., KEY_A = 'a', KEY_1 = '1', etc.).
 //----------------------------------------------------------------------------
-enum keycode
-{
+enum keycode {
     KEY_BACKSPACE = 0x08,
     KEY_TAB       = 0x09,
     KEY_ENTER     = 0x0d,
@@ -103,8 +101,7 @@ typedef struct keyboard keyboard_t;
 //  @struct     keylayout_t
 /// @brief      A map of keyboard scan codes to key codes.
 //----------------------------------------------------------------------------
-struct keylayout
-{
+struct keylayout {
   uint8_t shifted[128];        ///< when shift key is down.
   uint8_t unshifted[128];      ///< when shift key is up.
 };
@@ -151,7 +148,7 @@ bool kb_getkey(keyboard_t *key);
 //----------------------------------------------------------------------------
 uint8_t kb_meta(void);
 
-void kshell();
+void kshell(void);
 
 #endif	/* !__ASSEMBLY__ */
 

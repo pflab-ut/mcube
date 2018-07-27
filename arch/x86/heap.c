@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       heap.c
 /// @brief      A simple heap memory manager
 //
 //  Copyright 2016 Brett Vickers.

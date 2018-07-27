@@ -6,7 +6,6 @@
 #ifndef __MCUBE_X86_ACPI_H__
 #define	__MCUBE_X86_ACPI_H__
 //============================================================================
-/// @file       acpi.h
 /// @brief      Advanced configuration and power interface (ACPI) tables.
 //
 //  Copyright 2016 Brett Vickers.

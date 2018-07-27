@@ -6,7 +6,6 @@
 #ifndef __MCUBE_X86_DUMP_H__
 #define __MCUBE_X86_DUMP_H__
 //============================================================================
-/// @file       dump.h
 /// @brief      Debugging memory and CPU state dump routines.
 //
 //  Copyright 2016 Brett Vickers.

@@ -11,6 +11,7 @@ void init_arch(void)
   disable_local_irq();
   /* initialize console */
   init_tty();
+  //  init_uart();
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
   tty_clear(TTY_ID);
   /* initialize memory */
@@ -20,7 +21,6 @@ void init_arch(void)
   //  print_pmap();
   init_irq();
   init_exception();
-
   
   init_syscall();
   

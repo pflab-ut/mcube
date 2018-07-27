@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       keyboard.c
 /// @brief      Keyboard input routines.
 //
 // Copyright 2016 Brett Vickers.

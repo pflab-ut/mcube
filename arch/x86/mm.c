@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       kmem.c
 /// @brief      Kernel physical (and virtual) memory map.
 //
 // Copyright 2016 Brett Vickers.

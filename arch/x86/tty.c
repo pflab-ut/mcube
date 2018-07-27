@@ -4,7 +4,6 @@
  * @author Hiroyuki Chishiro
  */
 //============================================================================
-/// @file       tty.c
 /// @brief      Teletype (console) screen text manipulation routines.
 //
 // Copyright 2016 Brett Vickers.

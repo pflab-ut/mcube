@@ -7,9 +7,7 @@
 #define	__MCUBE_X86_HEAP_H__
 
 
-
 //============================================================================
-/// @file       heap.h
 /// @brief      A simple heap memory manager
 //
 //  Copyright 2016 Brett Vickers.
@@ -32,16 +30,14 @@ typedef struct heap heap_t;
 ///                         grow to fill.
 /// @returns    A pointer to a the created heap structure.
 //----------------------------------------------------------------------------
-heap_t *
-heap_create(pagetable_t *pt, void *vaddr, uint64_t maxpages);
+heap_t *heap_create(pagetable_t *pt, void *vaddr, uint64_t maxpages);
 
 //----------------------------------------------------------------------------
 //  @function   heap_destroy
 /// @brief      Destroy a heap, returning its memory to page table.
 /// @param[in]  heap        The heap to be destroyed.
 //----------------------------------------------------------------------------
-void
-heap_destroy(heap_t *heap);
+void heap_destroy(heap_t *heap);
 
 //----------------------------------------------------------------------------
 //  @function   heap_alloc
@@ -50,8 +46,7 @@ heap_destroy(heap_t *heap);
 /// @param[in]  size    The size, in bytes, of the allocation.
 /// @returns    A pointer to a the allocated memory.
 //----------------------------------------------------------------------------
-void *
-heap_alloc(heap_t *heap, uint64_t size);
+void *heap_alloc(heap_t *heap, uint64_t size);
 
 //----------------------------------------------------------------------------
 //  @function   heap_free
@@ -59,8 +54,7 @@ heap_alloc(heap_t *heap, uint64_t size);
 /// @param[in]  heap    The heap from which the memory was allocated.
 /// @param[in]  ptr     A pointer to the memory that was allocated.
 //----------------------------------------------------------------------------
-void
-heap_free(heap_t *heap, void *ptr);
+void heap_free(heap_t *heap, void *ptr);
 
 #endif /* !__ASSEMBLY__ */
 

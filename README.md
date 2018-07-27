@@ -78,7 +78,7 @@ Please execute the following command.
 $ make testconfig
 ```
 
-After test configuration, send results of test configuration to your e-mail.
+After configuration test, send the results to your e-mail.
 
 
 ## License

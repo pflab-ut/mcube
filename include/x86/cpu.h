@@ -23,9 +23,7 @@
 
 #else
 
-
 //============================================================================
-/// @file       cpu.h
 /// @brief      x86 CPU-specific function implementations.
 //
 //  Copyright 2016 Brett Vickers.

@@ -37,6 +37,6 @@ ssize_t uart_write(const void *input_data, size_t length, void *devdata)
 
 ssize_t uart_read(void *output_data, size_t length, void *devdata)
 {
-	return uart_pol_getc(((uart_devdata *) devdata)->ch);
+	return uart_getc(((uart_devdata *) devdata)->ch);
 }
 

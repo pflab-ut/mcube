@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       syscall.c
 /// @brief      System call support.
 //
 // Copyright 2016 Brett Vickers.

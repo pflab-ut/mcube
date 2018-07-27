@@ -8,7 +8,6 @@
 
 #ifndef __ASSEMBLY__
 //============================================================================
-/// @file       shell.h
 /// @brief      Simple kernel shell for testing purposes.
 //
 // Copyright 2016 Brett Vickers.

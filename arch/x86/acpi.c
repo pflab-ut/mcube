@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       acpi.c
 /// @brief      Advanced configuration and power interface (ACPI) tables.
 //
 //  Copyright 2016 Brett Vickers.

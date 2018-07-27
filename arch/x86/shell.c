@@ -5,7 +5,6 @@
  */
 #include <mcube/mcube.h>
 //============================================================================
-/// @file       shell.c
 /// @brief      Simple kernel shell for testing purposes.
 //
 // Copyright 2016 Brett Vickers.

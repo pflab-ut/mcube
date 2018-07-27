@@ -6,7 +6,6 @@
 #ifndef __MCUBE_X86_PMAP_H__
 #define	__MCUBE_X86_PMAP_H__
 //============================================================================
-/// @file       pmap.h
 /// @brief      Physical memory map describing usable and reserved regions
 ///             of physical memory.
 /// @details    Most of the map is derived from data provided by the system
