@@ -8,11 +8,11 @@
 /* Don't edit this file.
  * Please edit configure then do make configure. */
 /** Architecture. */
-#define CONFIG_ARCH_X86 1
+#define CONFIG_ARCH_ARM 1
 /** Compiler. */
 #define CONFIG_COMPILER_GCC 1
 /** Printk. */
-#define CONFIG_PRINTK2CONSOLE 1
+#define CONFIG_PRINTK2UART 1
 /** Algorithm. */
 #define CONFIG_ALGO_FP 1
 /** Task Queue. */

@@ -1,5 +1,5 @@
 /**
- * @file include/arm/machine-raspi3/uart.h
+ * @file include/arm/machine_raspi3/uart.h
  *
  * @author Hiroyuki Chishiro
  */

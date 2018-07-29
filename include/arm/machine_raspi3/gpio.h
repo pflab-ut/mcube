@@ -1,5 +1,5 @@
 /**
- * @file include/arm/machine-raspi3/gpio.h
+ * @file include/arm/machine_raspi3/gpio.h
  *
  * @author Hiroyuki Chishiro
  */
