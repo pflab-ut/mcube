@@ -32,9 +32,14 @@ void init_uart(void)
              mmio_in32(UART0_CTRL_REG) | UART_CTRL_REG_UART_ENABLE);
   /* enable UART RX interrupt */
   mmio_out32(UART0_INTERRUPT_MASK_SET_CLEAR_REG, 1 << 4);
+#if CONFIG_ARCH_ARM_RASPI3
   /* set UART interrupt routing */
   mmio_out32(ENABLE_IRQS2, 1 << 25);
-
+#elif CONFIG_ARCH_ARM_SYNQUACER
+  /* TODO: implement */
+#else
+#error "Unknown Machine"
+#endif /* CONFIG_ARCH_ARM_RASPI3 */
 }
 
 #else
@@ -72,3 +77,5 @@ void init_uart(void)
 }
 
 #endif
+
+

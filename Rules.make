@@ -11,6 +11,8 @@ include $(TOP_DIR)/arch/$(ARCH_NAME)/$(ARCH_NAME).make
 
 vpath %.h $(TOP_DIR)/include
 vpath %.c $(TOP_DIR)/arch/$(ARCH_NAME) \
+ $(TOP_DIR)/arch/arm/raspi3 \
+ $(TOP_DIR)/arch/arm/synquacer \
  $(TOP_DIR)/kernel \
  $(TOP_DIR)/kernel/queue \
  $(TOP_DIR)/user \

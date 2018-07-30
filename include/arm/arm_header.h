@@ -6,12 +6,12 @@
 #ifndef	__MCUBE_ARM_ARM_HEADER_H__
 #define	__MCUBE_ARM_ARM_HEADER_H__
 
+#include <arm/machine.h>
 #include <arm/cpu.h>
 
 #include <arm/atomic.h>
 #include <arm/dmac.h>
 #include <arm/irq.h>
-#include <arm/machine.h>
 #include <arm/mm.h>
 #include <arm/ops.h>
 #include <arm/regs.h>

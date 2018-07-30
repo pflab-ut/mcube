@@ -20,7 +20,6 @@ arch = tools.scan_arch_name(kconfig_file)
 compiler = tools.scan_compiler_name(kconfig_file)
 algo = tools.scan_algo_name(kconfig_file)
 machine = tools.scan_machine_name(kconfig_file)
-print(machine)
 
 tools.scan_configs(kconfig_file)
 

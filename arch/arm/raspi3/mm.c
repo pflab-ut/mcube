@@ -1,5 +1,5 @@
 /**
- * @file arch/arm/mm.c
+ * @file arch/arm/raspi3/mm.c
  *
  * @author Hiroyuki Chishiro
  */

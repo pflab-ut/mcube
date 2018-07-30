@@ -1,10 +1,10 @@
 /**
- * @file include/arm/machine_raspi3/gpio.h
+ * @file include/arm/raspi3/gpio.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_MACHINE_RASPI3_GPIO_H__
-#define	__MCUBE_ARM_MACHINE_RASPI3_GPIO_H__
+#ifndef	__MCUBE_ARM_RASPI3_GPIO_H__
+#define	__MCUBE_ARM_RASPI3_GPIO_H__
 
 
 #define GPIO_FSEL1   (PERIPHERAL_BASE + 0x00200004)
@@ -14,5 +14,5 @@
 #define GPIO_PUDCLK0 (PERIPHERAL_BASE + 0x00200098)
 
 
-#endif /*	__MCUBE_ARM_MACHINE_RASPI3_GPIO_H__ */
+#endif /*	__MCUBE_ARM_RASPI3_GPIO_H__ */
 

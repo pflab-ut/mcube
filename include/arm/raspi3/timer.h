@@ -1,10 +1,10 @@
 /**
- * @file include/arm/machine_raspi3/timer.h
+ * @file include/arm/raspi3/timer.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_MACHINE_RASPI3_TIMER_H__
-#define	__MCUBE_ARM_MACHINE_RASPI3_TIMER_H__
+#ifndef	__MCUBE_ARM_RASPI3_TIMER_H__
+#define	__MCUBE_ARM_RASPI3_TIMER_H__
 
 
 #define TIMER_CTRL_REG (GENERIC_TIMER_BASE + 0x0)
@@ -73,5 +73,5 @@
 #define TIMER_CORE3_MAILBOX3_READ_WRITE_HIGH_TO_CLEAR (GENERIC_TIMER_BASE + 0xfc)
 
 
-#endif /*	__MCUBE_ARM_MACHINE_RASPI3_TIMER_H__ */
+#endif /*	__MCUBE_ARM_RASPI3_TIMER_H__ */
 

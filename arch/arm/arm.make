@@ -41,15 +41,16 @@ SRCS	+=	$(TOP_DIR)/arch/arm/init.c \
 	$(TOP_DIR)/arch/arm/timer.c \
 	$(TOP_DIR)/arch/arm/irq.c \
 	$(TOP_DIR)/arch/arm/stdio.c \
-	$(TOP_DIR)/arch/arm/mm.c \
  $(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_arm.c \
 
 ifeq ($(MACHINE_NAME), raspi3)
-		SRCS += 
+		SRCS +=	$(TOP_DIR)/arch/arm/raspi3/mm.c \
+	$(TOP_DIR)/arch/arm/raspi3/timer.c \
 
 else ifeq ($(MACHINE_NAME), synquacer)
-		SRCS += 
+		SRCS +=	$(TOP_DIR)/arch/arm/synquacer/mm.c \
+	$(TOP_DIR)/arch/arm/synquacer/timer.c \
 
 endif
 

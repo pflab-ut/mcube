@@ -121,18 +121,6 @@ static inline void delay(unsigned long us)
 }
 
 
-static inline void enable_timer_interrupt(void)
-{
-  mmio_out32(TIMER_LOCAL_TIMER_CTRL_STATUS,
-             mmio_in32(TIMER_LOCAL_TIMER_CTRL_STATUS) | (0x3 << 28));
-}
-
-static inline void disable_timer_interrupt(void)
-{
-  mmio_out32(TIMER_LOCAL_TIMER_CTRL_STATUS,
-             mmio_in32(TIMER_LOCAL_TIMER_CTRL_STATUS) & ~(0x3 << 28));
-}
-
 
 #endif /* !__ASSEMBLY__ */
 

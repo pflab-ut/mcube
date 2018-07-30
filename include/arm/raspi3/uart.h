@@ -1,10 +1,10 @@
 /**
- * @file include/arm/machine_raspi3/uart.h
+ * @file include/arm/raspi3/uart.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_MACHINE_RASPI3_UART_H__
-#define	__MCUBE_ARM_MACHINE_RASPI3_UART_H__
+#ifndef	__MCUBE_ARM_RASPI3_UART_H__
+#define	__MCUBE_ARM_RASPI3_UART_H__
 
 
 #define AUX_IRQ_REG            (PERIPHERAL_BASE + 0x00215000)
@@ -27,5 +27,5 @@
 
 
 
-#endif /*	__MCUBE_ARM_MACHINE_RASPI3_UART_H__ */
+#endif /*	__MCUBE_ARM_RASPI3_UART_H__ */
 

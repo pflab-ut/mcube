@@ -103,6 +103,7 @@ static void handle_timer_interrupt(void)
 
 static void handle_uart_interrupt(void)
 {
+#if CONFIG_ARCH_ARM_RASPI3
   int c;
 #if 1
     // uart
@@ -125,6 +126,11 @@ static void handle_uart_interrupt(void)
       }
     }
 #endif
+#elif CONFIG_ARCH_ARM_SYNQUACER
+    /* TODO: implement */
+#else
+#error "Unknown Machine"
+#endif /* CONFIG_ARCH_ARM_RASPI3 */
 }
 
 
@@ -132,6 +138,7 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
   disable_local_irq();
   printk("do_irq()\n");
+#if CONFIG_ARCH_ARM_RASPI3  
   // check inteerupt source
   irq = mmio_in32(TIMER_CORE0_IRQ_SOURCE);
   switch (irq) {
@@ -145,6 +152,11 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
     printk("Unknown IRQ 0x%lx\n", irq);
     break;
   }
+#elif CONFIG_ARCH_ARM_SYNQUACER
+    /* TODO: implement */
+#else
+#error "Unknown Machine"
+#endif /* CONFIG_ARCH_ARM_RASPI3 */
   do_switch_thread();
   enable_local_irq();
   return 0;
@@ -153,7 +165,13 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 void init_irq(void)
 {
   printk("init_irq()\n");
+#if CONFIG_ARCH_ARM_RASPI3  
   /* IRQ routing to core 0 */
   mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING, 0x0);
+#elif CONFIG_ARCH_ARM_SYNQUACER
+    /* TODO: implement */
+#else
+#error "Unknown Machine"
+#endif /* CONFIG_ARCH_ARM_RASPI3 */
   enable_local_irq();
 }

@@ -1,10 +1,10 @@
 /**
- * @file include/arm/machine_synquacer/addr.h
+ * @file include/arm/synquacer/addr.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_MACHINE_SYNQUACER_ADDR_H__
-#define	__MCUBE_ARM_MACHINE_SYNQUACER_ADDR_H__
+#ifndef	__MCUBE_ARM_SYNQUACER_ADDR_H__
+#define	__MCUBE_ARM_SYNQUACER_ADDR_H__
 
 
 /*** ADDRESS ***/
@@ -702,5 +702,5 @@
 
 
 
-#endif /* __MCUBE_ARM_MACHINE_SYNQUACER_ADDR_H__ */
+#endif /* __MCUBE_ARM_SYNQUACER_ADDR_H__ */
 
