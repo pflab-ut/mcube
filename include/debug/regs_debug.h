@@ -27,7 +27,7 @@
          regs->rbx, regs->rdi, regs->r12,               \
          regs->rcx, regs->r8, regs->r13,                \
          regs->rdx, regs->r9, regs->r14,                \
-         regs->rbp, regs->r10, regs->r15);
+         regs->rbp, regs->r10, regs->r15);              \
   } while (0)
 
       

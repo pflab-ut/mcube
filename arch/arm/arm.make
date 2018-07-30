@@ -45,5 +45,14 @@ SRCS	+=	$(TOP_DIR)/arch/arm/init.c \
  $(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_arm.c \
 
+ifeq ($(MACHINE_NAME), raspi3)
+		SRCS += 
+
+else ifeq ($(MACHINE_NAME), synquacer)
+		SRCS += 
+
+endif
+
+
 SRCS += $(TOP_DIR)/user/arm/user_arm.c \
  \

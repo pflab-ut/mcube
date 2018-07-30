@@ -7,6 +7,8 @@
 
 #if 1
 
+/* UART PL011 in Raspberry Pi3 and SynQuacer */
+
 uint8_t uart_pol_getc(uint8_t ch)
 {
   // Wait for UART to have received something.
@@ -36,6 +38,8 @@ void init_uart(void)
 }
 
 #else
+
+/* Mini UART in Raspberry Pi3 */
 
 uint8_t uart_pol_getc(uint8_t ch)
 {

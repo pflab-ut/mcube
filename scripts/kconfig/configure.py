@@ -19,6 +19,8 @@ tools.scan_configure(configure_file)
 arch = tools.scan_arch_name(kconfig_file)
 compiler = tools.scan_compiler_name(kconfig_file)
 algo = tools.scan_algo_name(kconfig_file)
+machine = tools.scan_machine_name(kconfig_file)
+print(machine)
 
 tools.scan_configs(kconfig_file)
 
@@ -30,7 +32,6 @@ tools.scan_dependencies(kconfig_file)
 if not tools.check_conflicts_and_dependencies():
   sys.exit("Error: check_conflicts_and_dependencies()")
 
-  
 
 f = open("./.sysconfig", "w")
 
@@ -40,6 +41,14 @@ elif arch == "x86":
   f.write("ARCH_NAME = x86\n")
 elif arch == "arm":
   f.write("ARCH_NAME = arm\n")
+  if machine == "raspi3":
+    f.write("MACHINE_NAME = raspi3\n")
+  elif machine == "synquacer":
+    f.write("MACHINE_NAME = synquacer\n")
+  elif machine == "none":
+    f.write("MACHINE_NAME = none\n")
+  else:
+    print("Unknown Machine")
 elif arch == "axis":
   f.write("ARCH_NAME = axis\n")
 else:

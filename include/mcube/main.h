@@ -165,7 +165,7 @@ int usertask(void *arg);
   } while (0)
 
 
-extern uint32_t Debug;
+extern unsigned int Debug;
 
 int main(int argc, char *argv[]);
 

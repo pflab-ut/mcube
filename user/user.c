@@ -9,7 +9,6 @@ int user_arch_main(void);
 
 #if !CONFIG_ARCH_X86
 
-volatile unsigned long cpu_ids[256] = {0};
 
 int ap_main(void)
 {

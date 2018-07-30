@@ -86,7 +86,8 @@ static void handle_timer_interrupt(void)
     }
   }
   increment_jiffies();
-  set_cntv_tval_el0(timer_cntfrq);    // clear cntv interrupt and set next 1sec timer.    
+  // clear cntv interrupt and set next 1sec timer.
+  set_cntv_tval_el0(timer_cntfrq);
   
   if (get_current_jiffies() >= sched_time) {
     printk("sched_time expires!!!!\n");
@@ -110,7 +111,7 @@ static void handle_uart_interrupt(void)
         if (mmio_in32(UART0_MASKED_INTERRUPT_STATUS_REG) & (1 << 4)) {
           c = (unsigned char) mmio_in32(UART0_DATA_REG); // read for clear tx interrupt.
           uart_putc(c, 0);
-          printk("do_irq()\n");
+          printk("handle_uart_interrupt(): uart\n");
         }
       }
     }
@@ -120,7 +121,7 @@ static void handle_uart_interrupt(void)
       if (mmio_in32(IRQ_PENDING1) & (1 << 29)) {
         c = (unsigned char) mmio_in32(AUX_MINI_UART_IO_REG); // read for clear tx interrupt.
         uart_putc(c, 0);
-        printk("do_irq(): mini uart\n");
+        printk("handle_uart_interrupt(): mini uart\n");
       }
     }
 #endif
