@@ -159,6 +159,7 @@ static void read_xsdt(btable_t *btable)
   const struct acpi_xsdt *xsdt = acpi.xsdt;
   const struct acpi_hdr  *xhdr = &xsdt->hdr;
 
+  printk("read_xsdt()\n");
   printk("[acpi] oem='%s' tbl='%s' rev=0x%x creator='%s'\n",
          xhdr->oemid, xhdr->oemtableid, xhdr->oemrevision, xhdr->creatorid);
 
@@ -169,8 +170,20 @@ static void read_xsdt(btable_t *btable)
     map_table(btable, hdr);
     printk("[acpi] Found %s table at 0x%lx.\n",
            hdr->signature.bytes, (uint64_t) hdr);
+    if (hdr->signature.dword == SIGNATURE_HPET) {
+      /* map HPET address space */
+      printk("HPET\n");
+      printk("sizeof(struct hpet) = %u\n", sizeof(struct hpet));
+      //      struct hpet *addr = (struct hpet *) HPET0_START;
+      struct hpet *addr = (struct hpet *) hdr;
+      printk("address = 0x%lx\n", addr->address.address);
+      pmap_add(PAGE_ALIGN_DOWN(HPET0_START),
+               PAGE_ALIGN_UP(HPET0_START + 0x400) - PAGE_ALIGN_DOWN(HPET0_START),
+               PMEMTYPE_ACPI);
+    }
     read_table(hdr);
   }
+  //  inf_loop();
 }
 
 static void read_rsdt(btable_t *btable)
@@ -178,7 +191,7 @@ static void read_rsdt(btable_t *btable)
   const struct acpi_rsdt *rsdt = acpi.rsdt;
   const struct acpi_hdr  *rhdr = &rsdt->hdr;
   int i;
-  
+  printk("read_rsdt()\n");
   printk("[acpi] oem='%s' tbl='%s' rev=%x creator='%s'\n",
          rhdr->oemid, rhdr->oemtableid, rhdr->oemrevision, rhdr->creatorid);
 
@@ -190,11 +203,13 @@ static void read_rsdt(btable_t *btable)
     printk("[acpi] Found %s table at 0x%lx.\n",
            hdr->signature.bytes, (uint64_t) hdr);
     printk("hdr->length = %u\n", hdr->length);
-    if (hdr->signature.dword ==  SIGNATURE_HPET) {
+    printk("hdr->signature.bytes = %s\n", hdr->signature.bytes);
+    if (hdr->signature.dword == SIGNATURE_HPET) {
+      /* map HPET address space */
       printk("HPET\n");
       printk("sizeof(struct hpet) = %u\n", sizeof(struct hpet));
-      //struct hpet *addr = (struct hpet *) HPET0_START;
-      //printk("address = 0x%lx\n", addr->address.address);
+      struct hpet *addr = (struct hpet *) hdr;
+      printk("address = 0x%lx\n", addr->address.address);
       pmap_add(PAGE_ALIGN_DOWN(HPET0_START),
                PAGE_ALIGN_UP(HPET0_START + 0x400) - PAGE_ALIGN_DOWN(HPET0_START),
                PMEMTYPE_ACPI);

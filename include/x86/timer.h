@@ -12,9 +12,9 @@
 #define PIT_CTRL 0x0043
 
 /* enable each timer */
-#define LAPIC_TIMER 0
+#define LAPIC_TIMER 1
 #define HPET_TIMER 0
-#define PIT_TIMER 1
+#define PIT_TIMER 0
 
 #ifndef __ASSEMBLY__
 
@@ -78,7 +78,8 @@ static inline void delay(unsigned long us)
 
 static inline unsigned long get_current_cpu_time(void)
 {
-	return rdtscp();
+  //	return rdtscp();
+	return rdtsc();
 	//	return read_HPET_counter();
 }
 

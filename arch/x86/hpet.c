@@ -9,7 +9,7 @@ void handle_hpet_timer_tick(const interrupt_context_t *context)
 {
   unsigned long cpu = get_cpu_id();
   printk("handle_hpet_timer_tick(): cpu = %d\n", cpu);
-  inf_loop();
+  //  inf_loop();
 #if 0
 	tick_count++;
 	if (tick_count == 1000) {
@@ -145,7 +145,7 @@ void init_hpet_timer_irq(void)
 void start_hpet_timer(unsigned int ch)
 {
   //  unsigned int tick_interval = HPET_TICK_MS(1000);
-  unsigned int tick_interval = 10000;
+  unsigned int tick_interval = 10000000;
   //  unsigned int tick_interval = HPET_HZ;
   printk("tick_interval = %u\n", tick_interval);
   unsigned long cpu = get_cpu_id();

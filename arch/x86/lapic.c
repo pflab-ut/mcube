@@ -6,11 +6,11 @@
 #include <mcube/mcube.h>
 
 
-int handle_lapic_timer_tick(int irq, void *dummy)
+void handle_lapic_timer_tick(const interrupt_context_t *context)
 {
 	unsigned long cpu = get_cpu_id();
-	printk("handle_timer_tick(): cpu = %lu\n", cpu);
-	//	inf_loop();
+	printk("handle_lapic_timer_tick(): cpu = %lu\n", cpu);
+  //  inf_loop();
 #if 0
 	tick_count++;
 	if (tick_count == 1000) {
@@ -35,24 +35,26 @@ int handle_lapic_timer_tick(int irq, void *dummy)
 #endif
 	//	printk("handle_LAPIC_timer_tick(): current_th[%d]->id = %llu\n", cpu, current_th[cpu]->id);
 
-
+	mmio_out32(LAPIC_EOI, 0x0);
+  update_jiffies();
+  
 #if 1
   if (sched_time <= sys_jiffies) {
 		//    printk("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
     sched_end = TRUE;
     current_th[cpu] = &idle_th[cpu];
-		//		stop_lapic_timer();
-    //    stop_timer(0);
-    return 0;
+    stop_lapic_timer(0);
+    return;
   }
 #endif
 
 	/* decrease remaining of current thread before update it */
 	//	smp_barrier(4);
+#if 0
 	do_release();
 	do_sched();
-
-	return 0;
+#endif
+	return;
 }
 
 
@@ -107,7 +109,7 @@ void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, u
 
 	printk("cpu = %lu\n", cpu);
   //	set_idsc(idt_start + LAPIC_TIMER_IRQ, (uint32_t) &common_interrupt, 2 * 8, AR_INTGATE32);
-
+  set_isr(LAPIC_TIMER_IRQ, handle_lapic_timer_tick);
 
   printk("handle_lapic_timer_tick = %lx\n", (unsigned long) handle_lapic_timer_tick);
   //	setup_irq(LAPIC_TIMER_IRQ, &LAPIC_timer_irq);
@@ -146,6 +148,9 @@ void measure_lapic_timer(void)
 
 void init_lapic_timer(unsigned long tick_us)
 {
+  // Core 2 Duo Value
+  CPU_CLOCK_MHZ_PER_USEC = 2.40e+03;
+
 	//	printk("init_timer()\n");
   //	unsigned long cpu = get_cpu_id();
 	unsigned long cpu_bus;
@@ -156,9 +161,12 @@ void init_lapic_timer(unsigned long tick_us)
 	//init_lapic_timer_irq(LAPIC_TIMER_IRQ, 2, 33000);
 
 	//	sys_tsc = cpu_bus_freq_mhz * TICK_USEC;
-
+  
 	// Corei5 750: cpu bus freqnency = CPU frequency / 20
+  //	cpu_bus = CPU_CLOCK_MHZ_PER_USEC / 20;
 	cpu_bus = CPU_CLOCK_MHZ_PER_USEC / 20;
-	sys_tsc = cpu_bus * tick_us;
+  sys_tsc = cpu_bus * tick_us;
+  //  sys_tsc = 0x10000000;
+  printk("sys_tsc = %lu\n", sys_tsc);
 	init_lapic_timer_irq(LAPIC_TIMER_IRQ, TIMER_PERIODIC, 1, sys_tsc);
 }
