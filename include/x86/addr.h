@@ -16,7 +16,7 @@
 #define MEM_SECTOR_BUFFER                  0x00000800
 #define MEM_IDT                            0x00001000
 #define MEM_IDT_END                        0x00002000
-#define KMEM_ISR_TABLE                     0x00002000
+#define MEM_ISR_TABLE                      0x00002000
 #define MEM_ISR_THUNKS                     0x00002800
 #define MEM_GDT                            0x00003000
 #define MEM_GDT_END                        0x00003100

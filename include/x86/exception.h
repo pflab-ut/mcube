@@ -41,11 +41,8 @@
 
 #ifndef __ASSEMBLY__
 
-//----------------------------------------------------------------------------
-//  @function   exceptions_init
-/// @brief      Initialize all exception handling routines.
-//----------------------------------------------------------------------------
 void init_exception(void);
+
 #endif	/* !__ASSEMBLY__ */
 
 #endif	/* __MCUBE_X86_DUMP_H__ */

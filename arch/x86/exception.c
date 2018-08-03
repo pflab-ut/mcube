@@ -72,7 +72,8 @@ static void isr_fatal(const interrupt_context_t *context)
     ? exceptionstr[i] : "Unknown exception.";
 
   tty_activate(0);
-  tty_set_textcolor(0, TEXTCOLOR_WHITE, TEXTCOLOR_RED);
+  //  tty_set_textcolor(0, TEXTCOLOR_WHITE, TEXTCOLOR_RED);
+  tty_set_textcolor(0, TEXTCOLOR_WHITE, TEXTCOLOR_BLUE);
   tty_clear(0);
   printk("%s\n\n", exstr);
 

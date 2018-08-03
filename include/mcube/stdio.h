@@ -9,7 +9,7 @@
 #ifndef __ASSEMBLY__
 
 #define FOUT_SIZE 0x100
-#define MAX_DIGIT 32
+#define MAX_DIGIT 64
 
 int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 

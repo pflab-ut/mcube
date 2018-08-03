@@ -153,6 +153,7 @@ static void map_table(btable_t *btable, const struct acpi_hdr *hdr)
            PMEMTYPE_ACPI);
 }
 
+
 static void read_xsdt(btable_t *btable)
 {
   const struct acpi_xsdt *xsdt = acpi.xsdt;
@@ -167,7 +168,7 @@ static void read_xsdt(btable_t *btable)
     const struct acpi_hdr *hdr = (const struct acpi_hdr *) xsdt->ptr_table[i];
     map_table(btable, hdr);
     printk("[acpi] Found %s table at 0x%lx.\n",
-           hdr->signature.bytes, (uint64_t)hdr);
+           hdr->signature.bytes, (uint64_t) hdr);
     read_table(hdr);
   }
 }
@@ -176,17 +177,28 @@ static void read_rsdt(btable_t *btable)
 {
   const struct acpi_rsdt *rsdt = acpi.rsdt;
   const struct acpi_hdr  *rhdr = &rsdt->hdr;
-
+  int i;
+  
   printk("[acpi] oem='%s' tbl='%s' rev=%x creator='%s'\n",
          rhdr->oemid, rhdr->oemtableid, rhdr->oemrevision, rhdr->creatorid);
 
   // Read each of the tables referenced by the RSDT table.
   int tables = (int)(rhdr->length - sizeof(*rhdr)) / sizeof(uint32_t);
-  for (int i = 0; i < tables; i++) {
+  for (i = 0; i < tables; i++) {
     const struct acpi_hdr *hdr = (const struct acpi_hdr *)(uintptr_t) rsdt->ptr_table[i];
     map_table(btable, hdr);
     printk("[acpi] Found %s table at 0x%lx.\n",
            hdr->signature.bytes, (uint64_t) hdr);
+    printk("hdr->length = %u\n", hdr->length);
+    if (hdr->signature.dword ==  SIGNATURE_HPET) {
+      printk("HPET\n");
+      printk("sizeof(struct hpet) = %u\n", sizeof(struct hpet));
+      //struct hpet *addr = (struct hpet *) HPET0_START;
+      //printk("address = 0x%lx\n", addr->address.address);
+      pmap_add(PAGE_ALIGN_DOWN(HPET0_START),
+               PAGE_ALIGN_UP(HPET0_START + 0x400) - PAGE_ALIGN_DOWN(HPET0_START),
+               PMEMTYPE_ACPI);
+    }
     read_table(hdr);
   }
 }
@@ -258,6 +270,7 @@ void init_acpi(void)
 
   // Reserve local APIC memory-mapped I/O addresses.
   if (acpi.madt) {
+    //    printk("acpi.madt->ptr_local_apic = 0x%x\n", acpi.madt->ptr_local_apic);
     pmap_add(PAGE_ALIGN_DOWN(acpi.madt->ptr_local_apic), PAGE_SIZE,
              PMEMTYPE_UNCACHED);
   }
@@ -265,6 +278,7 @@ void init_acpi(void)
   // Reserve I/O APIC memory-mapped I/O addresses.
   const struct acpi_madt_io_apic *io = NULL;
   while ((io = acpi_next_io_apic(io))) {
+    //    printk("io->ptr_io_apic = 0x%x\n", io->ptr_io_apic);
     pmap_add(PAGE_ALIGN_DOWN(io->ptr_io_apic), PAGE_SIZE,
              PMEMTYPE_UNCACHED);
   }

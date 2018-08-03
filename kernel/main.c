@@ -20,6 +20,7 @@ static unsigned int is_initialized = FALSE;
 
 int main(int argc, char *argv[])
 {
+  
   if (get_cpu_id() == 0) {
     init_arch();
     is_initialized = TRUE;

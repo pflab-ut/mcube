@@ -105,7 +105,7 @@ static void handle_uart_interrupt(void)
 {
 #if CONFIG_ARCH_ARM_RASPI3
   int c;
-#if 1
+#if PL011_UART
     // uart
     if (mmio_in32(IRQ_BASIC_BASE) & (1 << 9)) {
       if (mmio_in32(IRQ_PENDING2) & (1 << 25)) {
@@ -116,7 +116,7 @@ static void handle_uart_interrupt(void)
         }
       }
     }
-#else
+#elif MINI_UART
     // mini uart
     if (mmio_in32(IRQ_BASIC_BASE) & (1 << 8)) {
       if (mmio_in32(IRQ_PENDING1) & (1 << 29)) {
@@ -125,6 +125,8 @@ static void handle_uart_interrupt(void)
         printk("handle_uart_interrupt(): mini uart\n");
       }
     }
+#else
+#error "Unknown UART"
 #endif
 #elif CONFIG_ARCH_ARM_SYNQUACER
     /* TODO: implement */

@@ -19,7 +19,7 @@ static tty_t *active_tty;        ///< The currently visible console.
 
 static inline uint16_t color(textcolor_t fg, textcolor_t bg)
 {
-  return (uint16_t)bg << 12 | (uint16_t)fg << 8;
+  return (uint16_t) bg << 12 | (uint16_t) fg << 8;
 }
 
 static void update_buffer_offset(void)

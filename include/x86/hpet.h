@@ -6,9 +6,8 @@
 #ifndef	__MCUBE_X86_HPET_H__
 #define	__MCUBE_X86_HPET_H__
 
-//#define HPET0_START 0xfed00000
+#define HPET0_START 0xfed00000
 //#define HPET1_START 0xfed80000
-#define HPET0_START 0x7fe1544
 
 
 /* 0x000-0x007: General Capabilities and ID Register Read Only Offset */
@@ -310,19 +309,26 @@
 /* for 8259 Mapping */
 #define HPET_TIMER0_IRQ 0x2
 #define HPET_TIMER1_IRQ 0x8
-#define HPET_REDIRECTION_OFFSET 0x10
+//#define HPET_REDIRECTION_OFFSET 0x10
+#define HPET_REDIRECTION_OFFSET 0x30
+//#define HPET_REDIRECTION_OFFSET 0x80
 
 
 //#define NR_HPETS 0x10
 #define NR_HPETS 0x20
 
 /* MHz of HPET */
-#define HPET_MHZ 14.31818
+//#define HPET_MHZ 14.31818
+#define HPET_MHZ 100
+#define HPET_HZ (HPET_MHZ * 1000 * 1000)
 
 #define HPET_TICK_MS(x) (HPET_MHZ * 1000 * (x))
 #define HPET_TICK_US(x) (HPET_MHZ * (x))
 
+
 #ifndef __ASSEMBLY__
+
+
 
 /* 1.  The timers are expected to be accurate over any 1 ms period to within 0.05% (500 ppm)of the time 
 	 specified in the timer resolution fields.  

@@ -149,7 +149,7 @@ static inline unsigned int luout(unsigned long lu, int base, char *dst, int n, s
 	int i;
 	char tmp[MAX_DIGIT];
 	char pad = ' ';
-
+  
 	for (i = 1; i < MAX_DIGIT; i++) {
 		tmp[i] = lu % base;
 		if (tmp[i] < 10) {
@@ -460,11 +460,18 @@ skip:
 out:
 	va_end(ap);
   buf[n] = '\0';
-
 #if CONFIG_ARCH_SIM
   fprintf(stderr, "%s", buf);
 #else
+#if 1
   puts(buf);
+#else
+  int i;
+  for (i = 0; i < n; i++) {
+    putchar(buf[i]);
+    //    putchar('_');
+  }
+#endif
 #endif
 	return n;
 }

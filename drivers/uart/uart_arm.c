@@ -5,9 +5,9 @@
  */
 #include <mcube/mcube.h>
 
-#if 1
+#if PL011_UART
 
-/* UART PL011 in Raspberry Pi3 and SynQuacer */
+/* PL011 UART in Raspberry Pi3 and SynQuacer */
 
 uint8_t uart_pol_getc(uint8_t ch)
 {
@@ -42,7 +42,7 @@ void init_uart(void)
 #endif /* CONFIG_ARCH_ARM_RASPI3 */
 }
 
-#else
+#elif MINI_UART
 
 /* Mini UART in Raspberry Pi3 */
 
@@ -76,6 +76,8 @@ void init_uart(void)
   mmio_out32(ENABLE_IRQS1, 1 << 29);
 }
 
+#else
+#error "Unknown UART"
 #endif
 
 

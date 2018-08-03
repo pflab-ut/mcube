@@ -109,7 +109,7 @@ else ifeq ($(ARCH_NAME), axis)
 	$(RUN_AXIS) "+define+PRINT_ALL"
 #	$(RUN_AXIS)
 else
- echo "unknown arch name"
+ echo "Unknown Architecture"
 endif
 
 grun:

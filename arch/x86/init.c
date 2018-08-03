@@ -31,16 +31,31 @@ void init_arch(void)
   print_vendor_id();
 #endif
   //  init_pit_timer(TICK_USEC);
+#if 1
+  //  unsigned long val = 100000000;
+  unsigned long val = 10000000;
+  unsigned int n;
+  n = printk("valx = 0x%lx\n", val);
+  printk("n = %d\n", n);
+  n = printk("val  = %lu\n", val);
+  printk("n = %d\n", n);
+#endif
+  
   init_hpet_timer(TICK_USEC);
- 
-  //asm volatile("int 0x0");
+  sched_time = 5;
   enable_local_irq();
+  start_hpet_timer(0);
+  //asm volatile("int 0x0");
+  //  asm volatile("int 0x12");
+  //  asm volatile("int 0x32");
   //  kshell();
   //  init_uart();
   //	init_apic();
   //	init_cache(); 
-  for (;;)
-    ;
+  for (;;) {
+    //printk("read_hpet_counter() = %lu\n", read_hpet_counter());
+    //    printk("TIMER_COMPARATOR_64(0) = %lu\n", mmio_in64(TIMER_COMPARATOR_64(0)));
+  }
 }
 
 

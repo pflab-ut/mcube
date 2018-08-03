@@ -5,11 +5,11 @@
  */
 #include <mcube/mcube.h>
 
-int handle_hpet_timer_tick(int irq, void *dummy)
+void handle_hpet_timer_tick(const interrupt_context_t *context)
 {
   unsigned long cpu = get_cpu_id();
-	//	printk("handle_timer_tick(): cpu = %d\n", cpu);
-	//	inf_loop();
+  printk("handle_hpet_timer_tick(): cpu = %d\n", cpu);
+  inf_loop();
 #if 0
 	tick_count++;
 	if (tick_count == 1000) {
@@ -40,24 +40,22 @@ int handle_hpet_timer_tick(int irq, void *dummy)
 	/* TODO: precise budget enforcement with high resolution timer */
 
 
-	/* decrease remaining of current thread before update it */
-	//	smp_barrier(4);
+#if 0
 	do_release();
 	do_sched();
-
-  sys_jiffies++;
+#endif
+  
+  update_jiffies();
 
 #if 1
   if (sched_time <= sys_jiffies) {
-		printk("handle_periodic_timer_tick(): sched_end: cpu = %lu\n", cpu);
+		printk("handle_hept_timer_tick(): sched_end: cpu = %lu\n", cpu);
     sched_end = TRUE;
     current_th[cpu] = &idle_th[cpu];
 		stop_hpet_timer(0);
-    return 0;
   }
 #endif
 
-	return 0;
 }
 
 
@@ -85,7 +83,7 @@ int handle_hpet_one_shot_timer(int irq, void *dummy)
 void init_hpet_timer_irq(void)
 {
 	int i;
-	printk("init_HPET_timer()\n");
+	printk("init_hpet_timer_irq()\n");
 	//	printk("GENERAL_CAP_ID_64 = %lx\n", mmio_in64(GENERAL_CAP_ID_64));
 	/* Main counters are halted and zeroed */
 	mmio_out64(MAIN_COUNTER_64, 0x0000000000000000);
@@ -93,7 +91,7 @@ void init_hpet_timer_irq(void)
 	for (i = 0; i < NR_HPETS; i++) {
 		/* Comparator match registers reset to all 1's. */
 		mmio_out64(TIMER_COMPARATOR_64(i), 0xffffffffffffffff);
-		//		printk("TIMER_COMPARATOR(%d) = %lx\n", i, mmio_in64(TIMER_COMPARATOR_64(i)));
+    //    printk("TIMER_COMPARATOR64(%d) = %lx\n", i, mmio_in64(TIMER_COMPARATOR_64(i)));
 		/* All interrupts are disabled 
 			 -  General Configuration and Capability Register [Offset 0x010]<1:0> = 00 
 			 -  Global IRQ Enable bit comes up disabled...no comparators can deliver interrupts 
@@ -119,10 +117,10 @@ void init_hpet_timer_irq(void)
 	printk("mmio_in32(IO_REG_SELECT) = 0x%x\n", mmio_in32(IO_REG_SELECT));
 	printk("mmio_in32(IO_WIN) = 0x%x\n", mmio_in32(IO_WIN));
 #endif
-	mmio_out32(IO_REG_SELECT, IOAPIC_ID_OFFSET);
-	//	printk("IOAPIC_ID = 0x%x\n", mmio_in32(IO_WIN));
-	mmio_out32(IO_REG_SELECT, IOAPIC_VER_OFFSET);
-	//	printk("IOAPIC_VER = 0x%x\n", mmio_in32(IO_WIN));
+	mmio_out64(IO_REG_SELECT, IOAPIC_ID_OFFSET);
+	//	printk("IOAPIC_ID = 0x%x\n", mmio_in64(IO_WIN));
+	mmio_out64(IO_REG_SELECT, IOAPIC_VER_OFFSET);
+	//	printk("IOAPIC_VER = 0x%x\n", mmio_in64(IO_WIN));
 
 	//	printk("&common_interrupt = 0x%x\n", &common_interrupt);
 #if 0
@@ -137,24 +135,31 @@ void init_hpet_timer_irq(void)
   setup_irq(HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ, &HPET_one_shot_timer_irq);
 #endif
   // TODO: implement set_isr() for hpet.
-  //  set_isr();
+  set_isr(HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ, handle_hpet_timer_tick);
+  set_isr(HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ, handle_hpet_timer_tick);
+  unsigned long addr = MEM_ISR_TABLE + 8 * (HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ);
+  printk("addr = 0x%lx\n", *((unsigned long *) addr));
 }
 
 
 void start_hpet_timer(unsigned int ch)
 {
-	unsigned long tick_interval = HPET_TICK_MS(1000);
+  //  unsigned int tick_interval = HPET_TICK_MS(1000);
+  unsigned int tick_interval = 10000;
+  //  unsigned int tick_interval = HPET_HZ;
+  printk("tick_interval = %u\n", tick_interval);
   unsigned long cpu = get_cpu_id();
 	switch (ch) {
 	case 0:
 		/* Route the interrupts.
 			 This includes the LegacyReplacement Route bit, Interrupt Route bit (for each 
 			 timer), interrupt type (to select the edge or level type for each timer).  */
-		//		printk("mmio_in64(TIMER_CONFIG_CAP_64(0)) = %lx\n", mmio_in64(TIMER_CONFIG_CAP_64(ch)));
+    //    printk("mmio_in64(TIMER_CONFIG_CAP_64(0)) = 0x%lx\n", mmio_in64(TIMER_CONFIG_CAP_64(ch)));
 		//		printk("IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER0_IRQ) = 0x%lx\n", mmio_in64(IO_WIN));
-		/* set comparator 0 */
+    //    printk("tick_interval = %lu\n", tick_interval);
+		/* set comparator 0 to tick_interval */
 		mmio_out64(TIMER_COMPARATOR_64(0), tick_interval);
-				
+    
 		/* start timer[ch] periodic interrupt */
 		mmio_out64(TIMER_CONFIG_CAP_64(ch),
                mmio_in64(TIMER_CONFIG_CAP_64(ch))
@@ -167,21 +172,20 @@ void start_hpet_timer(unsigned int ch)
 							 | TIMER_CONFIG_CAP_INTERRUPT_TYPE);
 		
 		/* enable Timer0 IRQ */
-		mmio_out32(IO_REG_SELECT, IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER0_IRQ));
+		mmio_out64(IO_REG_SELECT, IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER0_IRQ));
 		/* edge trigger */
 		mmio_out64(IO_WIN,
                (mmio_in64(IO_WIN)
-								& ~IO_REDIRECTION_TABLE_REG_INTERRUPT_MASK)
-							 //| IO_REDIRECTION_TABLE_REG_TRIGGER_MODE /* level trigger if set */
+                & ~IO_REDIRECTION_TABLE_REG_INTERRUPT_MASK)
+               //| IO_REDIRECTION_TABLE_REG_TRIGGER_MODE /* level trigger if set */
 							 | (HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ));
 		/* save cpu time when starting main counter */
 		//		start_cpu_time = current_cpu_time() + usec2tsc(1000 * 1000);
-		begin_budget(current_th[cpu]);
+    //		begin_budget(current_th[cpu]);
 		/* start main counter */
 		mmio_out64(GENERAL_CONFIG_64,
                GENRAL_CONFIG_LEGACY_REPLACEMENT_ROUTE | GENERAL_CONFIG_ENABLE);
-		/* system call and generate scheduling event */
-    //		syscall0(SYS_sched);
+    //    inf_loop();
 		break;
 	case 1:
 
@@ -196,7 +200,7 @@ void start_hpet_timer(unsigned int ch)
 							 | TIMER_CONFIG_CAP_INTERRUPT_TYPE);
 		
 		/* enable Timer1 IRQ */
-		mmio_out32(IO_REG_SELECT, IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER1_IRQ));
+		mmio_out64(IO_REG_SELECT, IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER1_IRQ));
 		/* edge trigger */
 		mmio_out64(IO_WIN,
                (mmio_in64(IO_WIN)
