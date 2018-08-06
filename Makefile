@@ -98,8 +98,7 @@ run:
 ifeq ($(ARCH_NAME), sim)
 	$(TARGET)
 else ifeq ($(ARCH_NAME), x86)
-	qemu-system-x86_64 -cpu core2duo -cdrom $(TARGET).iso -nographic -curses
-# optoin: -clock hpet
+	qemu-system-x86_64 -cpu core2duo -cdrom $(TARGET).iso -nographic -curses -clock hpet
 #	qemu-system-x86_64 -cpu qemu64 -cdrom $(TARGET).iso -nographic -curses -clock hpet
 else ifeq ($(ARCH_NAME), arm)
 # for UART011

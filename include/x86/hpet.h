@@ -303,14 +303,14 @@
 
 /* 0x118-0x11f: Reserved */
 
-/* Timer 0 will be routed to IRQ0  in Non-APIC or IRQ2  in the I/O APIC 
-   Timer 1 will be routed to IRQ8  in Non-APIC or IRQ8  in the I/O APIC 
+/* Timer 0 will be routed to IRQ0 in Non-APIC or IRQ2 in the I/O APIC 
+   Timer 1 will be routed to IRQ8 in Non-APIC or IRQ8 in the I/O APIC 
    Timer 2-n will be routed as per the routing in the timer n config registers. */
 /* for 8259 Mapping */
 #define HPET_TIMER0_IRQ 0x2
 #define HPET_TIMER1_IRQ 0x8
-//#define HPET_REDIRECTION_OFFSET 0x10
-#define HPET_REDIRECTION_OFFSET 0x30
+#define HPET_REDIRECTION_OFFSET 0x10
+//#define HPET_REDIRECTION_OFFSET 0x30
 //#define HPET_REDIRECTION_OFFSET 0x80
 
 

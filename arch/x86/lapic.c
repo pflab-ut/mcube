@@ -164,9 +164,8 @@ void init_lapic_timer(unsigned long tick_us)
   
 	// Corei5 750: cpu bus freqnency = CPU frequency / 20
   //	cpu_bus = CPU_CLOCK_MHZ_PER_USEC / 20;
-	cpu_bus = CPU_CLOCK_MHZ_PER_USEC / 20;
+	cpu_bus = CPU_CLOCK_MHZ_PER_USEC / 2;
   sys_tsc = cpu_bus * tick_us;
-  //  sys_tsc = 0x10000000;
   printk("sys_tsc = %lu\n", sys_tsc);
 	init_lapic_timer_irq(LAPIC_TIMER_IRQ, TIMER_PERIODIC, 1, sys_tsc);
 }

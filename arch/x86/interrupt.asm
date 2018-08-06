@@ -20,6 +20,7 @@ section .text
   global set_isr
   global enable_irq
   global disable_irq
+  global ISR_Dispatcher
 
 
 ;-----------------------------------------------------------------------------
@@ -138,7 +139,7 @@ ISR.Thunk.Size   equ     ($ - ISR.Thunk.Template)
 
 
 ;-----------------------------------------------------------------------------
-; ISR.Dispatcher
+; ISR_Dispatcher
 ;
 ; A general-purpose ISR dispatch routine that all ISR thunks jump to when an
 ; interrupt arrives. The dispatcher receives from the stack an interrupt
@@ -147,7 +148,7 @@ ISR.Thunk.Size   equ     ($ - ISR.Thunk.Template)
 ; contains the contents on all general-purpose CPU registers, the interrupt
 ; number, and the error code if any.
 ;-----------------------------------------------------------------------------
-ISR.Dispatcher:
+ISR_Dispatcher:
 
     ; Push a dummy error code.
     push    0
@@ -156,7 +157,7 @@ ISR.Dispatcher:
     push    r15
     push    r14
 
-    .specialEntry:          ; Entry for ISR.Dispatcher.Special
+    .specialEntry:          ; Entry for ISR_Dispatcher.Special
 
         ; Preserve the rest of the general-purpose registers.
         push    r13
@@ -227,7 +228,7 @@ ISR.Dispatcher:
 
 
 ;-----------------------------------------------------------------------------
-; ISR.Dispatcher.Special
+; ISR_Dispatcher_Special
 ;
 ; A special dispatcher is used for exceptions 8 and 10 through 14. The CPU
 ; pushes an error code onto the stack before calling these exceptions'
@@ -235,7 +236,7 @@ ISR.Dispatcher:
 ; routine, we need to swap the places of the thunk-placed interrupt number and
 ; the error code on the stack.
 ;-----------------------------------------------------------------------------
-ISR.Dispatcher.Special:
+ISR_Dispatcher_Special:
 
     ; First preserve r14 and r15.
     push    r15
@@ -250,7 +251,7 @@ ISR.Dispatcher.Special:
 
     ; Jump directly to the normal dispatcher, but just beyond the step
     ; that inserts a dummy error code and preserves r14 and r15.
-    jmp     ISR.Dispatcher.specialEntry
+    jmp     ISR_Dispatcher.specialEntry
 
 
 ;-----------------------------------------------------------------------------
@@ -326,7 +327,7 @@ init_irq_asm:
             mov     byte [rdi - ISR.Thunk.Size + 2],  cl
 
             ; By default, all thunks jump to ISR.Dispatcher.
-            mov     r8,     ISR.Dispatcher
+            mov     r8,     ISR_Dispatcher
 
             ; Replace ISR.Dispatcher with ISR.Dispatcher.Special?
 
@@ -345,7 +346,7 @@ init_irq_asm:
 
             ; Use the special dispatcher for exceptions that push an error
             ; code onto the stack.
-            mov     r8,     ISR.Dispatcher.Special
+            mov     r8,     ISR_Dispatcher_Special
 
         .updateDispatcher:
 

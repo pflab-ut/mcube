@@ -48,7 +48,7 @@ void init_arch(void)
   printk("n = %d\n", n);
 #endif
 
-  sched_time = 5;
+  sched_time = 100;
   
 #if 0
   /* use PIT timer */
@@ -56,14 +56,14 @@ void init_arch(void)
   init_pit_timer(TICK_USEC);
 #endif
 
-#if 0
+#if 1
   /* use HPET timer but not work */
   printk("use HPET timer\n");
   init_hpet_timer(TICK_USEC);
   start_hpet_timer(0);
 #endif
 
-#if 1
+#if 0
   /* use LAPIC timer */
   printk("use LAPIC timer\n");
   init_lapic_timer(TICK_USEC);
@@ -79,7 +79,7 @@ void init_arch(void)
   //	init_cache(); 
   for (;;) {
     //    printk("a");
-    //    printk("read_hpet_counter() = %lu\n", read_hpet_counter());
+    //printk("read_hpet_counter() = %lu\n", read_hpet_counter());
     //    printk("TIMER_COMPARATOR_64(0) = %lu\n", mmio_in64(TIMER_COMPARATOR_64(0)));
   }
 }

@@ -173,7 +173,7 @@ static void read_xsdt(btable_t *btable)
     if (hdr->signature.dword == SIGNATURE_HPET) {
       /* map HPET address space */
       printk("HPET\n");
-      printk("sizeof(struct hpet) = %u\n", sizeof(struct hpet));
+      printk("sizeof(struct hpet) = %lu\n", sizeof(struct hpet));
       //      struct hpet *addr = (struct hpet *) HPET0_START;
       struct hpet *addr = (struct hpet *) hdr;
       printk("address = 0x%lx\n", addr->address.address);
@@ -207,7 +207,7 @@ static void read_rsdt(btable_t *btable)
     if (hdr->signature.dword == SIGNATURE_HPET) {
       /* map HPET address space */
       printk("HPET\n");
-      printk("sizeof(struct hpet) = %u\n", sizeof(struct hpet));
+      printk("sizeof(struct hpet) = %lu\n", sizeof(struct hpet));
       struct hpet *addr = (struct hpet *) hdr;
       printk("address = 0x%lx\n", addr->address.address);
       pmap_add(PAGE_ALIGN_DOWN(HPET0_START),

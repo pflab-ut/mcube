@@ -8,7 +8,7 @@
 void handle_hpet_timer_tick(const interrupt_context_t *context)
 {
   unsigned long cpu = get_cpu_id();
-  printk("handle_hpet_timer_tick(): cpu = %d\n", cpu);
+  printk("handle_hpet_timer_tick(): cpu = %lu\n", cpu);
   //  inf_loop();
 #if 0
 	tick_count++;
@@ -105,21 +105,23 @@ void init_hpet_timer_irq(void)
 		/* clear all general interrupt status registers */
 		mmio_out64(GENERAL_INTERRUPT_STATUS_64, 0xffffffffffffffff);
 	}
-#if 0
+#if 1
 	unsigned long data;
+  extern unsigned long ISR_Dispatcher;
 	/* set Timer N FSB Interrupt Route Register */
-	data = (unsigned long) &common_interrupt;
+  //  data = (unsigned long) &common_interrupt;
+	data = (unsigned long) &ISR_Dispatcher;
 	data <<= 32;
 	data |= HPET_TIMER0_IRQ;
 	mmio_out64(TIMER_FSB_INTERRUPT_ROUTE_64(0), data);
 #endif
-#if 0
+#if 1
 	printk("mmio_in32(IO_REG_SELECT) = 0x%x\n", mmio_in32(IO_REG_SELECT));
 	printk("mmio_in32(IO_WIN) = 0x%x\n", mmio_in32(IO_WIN));
 #endif
-	mmio_out64(IO_REG_SELECT, IOAPIC_ID_OFFSET);
+	mmio_out32(IO_REG_SELECT, IOAPIC_ID_OFFSET);
 	//	printk("IOAPIC_ID = 0x%x\n", mmio_in64(IO_WIN));
-	mmio_out64(IO_REG_SELECT, IOAPIC_VER_OFFSET);
+	mmio_out32(IO_REG_SELECT, IOAPIC_VER_OFFSET);
 	//	printk("IOAPIC_VER = 0x%x\n", mmio_in64(IO_WIN));
 
 	//	printk("&common_interrupt = 0x%x\n", &common_interrupt);
@@ -145,10 +147,10 @@ void init_hpet_timer_irq(void)
 void start_hpet_timer(unsigned int ch)
 {
   //  unsigned int tick_interval = HPET_TICK_MS(1000);
-  unsigned int tick_interval = 10000000;
+  unsigned long tick_interval = 10000000;
   //  unsigned int tick_interval = HPET_HZ;
-  printk("tick_interval = %u\n", tick_interval);
-  unsigned long cpu = get_cpu_id();
+  printk("tick_interval = %lu\n", tick_interval);
+  //  unsigned long cpu = get_cpu_id();
 	switch (ch) {
 	case 0:
 		/* Route the interrupts.
@@ -172,7 +174,7 @@ void start_hpet_timer(unsigned int ch)
 							 | TIMER_CONFIG_CAP_INTERRUPT_TYPE);
 		
 		/* enable Timer0 IRQ */
-		mmio_out64(IO_REG_SELECT, IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER0_IRQ));
+		mmio_out32(IO_REG_SELECT, IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER0_IRQ));
 		/* edge trigger */
 		mmio_out64(IO_WIN,
                (mmio_in64(IO_WIN)
