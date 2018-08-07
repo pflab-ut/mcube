@@ -157,7 +157,7 @@ static void addkey(uint8_t brk, uint8_t meta, uint8_t code, uint8_t ch)
   atomic_fetch_add_explicit(&state.buf_size, 1, memory_order_relaxed);
 }
 
-static void isr_keyboard(const interrupt_context_t *context)
+static void isr_keyboard(interrupt_context_t *context)
 {
   (void)context;
 

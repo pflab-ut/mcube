@@ -202,7 +202,7 @@ void __attribute__((noreturn)) run_user_thread(void);
 
 void set_priority(struct thread_struct *th);
 unsigned long get_priority(struct thread_struct *th);
-void do_switch_thread_struct(void);
+void do_switch_thread(void);
 
 void thread_main(struct thread_struct *th);
 

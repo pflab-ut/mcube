@@ -6,7 +6,7 @@
 #include <mcube/mcube.h>
 
 
-void handle_lapic_timer_tick(const interrupt_context_t *context)
+void handle_lapic_timer_tick(interrupt_context_t *context)
 {
 	unsigned long cpu = get_cpu_id();
 	printk("handle_lapic_timer_tick(): cpu = %lu\n", cpu);
@@ -19,10 +19,10 @@ void handle_lapic_timer_tick(const interrupt_context_t *context)
 	}
 #endif
 	//	printk("handle_timer_tick(): cpu = %lu\n", cpu);
+#if 0
 	timer_count[cpu]++;
 	//	printk("timer_count = %d\n", timer_count);x
 	//	printk("timer_count[%d] = %d\n", cpu, timer_count[cpu]);
-#if 0
 	if (timer_count[cpu] == SU2EU(1)) {
 		//		printk("cpu = %lu\n", cpu);
 		//		*((unsigned long *) 0x10010) = cpu;
@@ -33,9 +33,23 @@ void handle_lapic_timer_tick(const interrupt_context_t *context)
 		timer_count[cpu] = 0;
 	}
 #endif
-	//	printk("handle_LAPIC_timer_tick(): current_th[%d]->id = %llu\n", cpu, current_th[cpu]->id);
 
-	mmio_out32(LAPIC_EOI, 0x0);
+	//	printk("handle_LAPIC_timer_tick(): current_th[%d]->id = %llu\n", cpu, current_th[cpu]->id);
+  if (current_th[cpu] != &idle_th[cpu]) {
+    PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
+           current_th[cpu]->id, current_th[cpu]->sched.remaining);
+#if 1
+    current_th[cpu]->sched.remaining = 0;
+#else
+    current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_timer_period()
+                                                          - current_th[cpu]->sched.begin_cpu_time);
+#endif
+    if (current_th[cpu]->sched.remaining <= 0) {
+      do_end_job(current_th[cpu]);
+    }
+  }
+  
+  //	mmio_out32(LAPIC_EOI, 0x0);
   update_jiffies();
   
 #if 1
@@ -50,10 +64,29 @@ void handle_lapic_timer_tick(const interrupt_context_t *context)
 
 	/* decrease remaining of current thread before update it */
 	//	smp_barrier(4);
-#if 0
+#if 1
 	do_release();
 	do_sched();
 #endif
+  //  do_switch_thread();
+  if (current_th[cpu] != prev_th[cpu]) {
+    prev_th[cpu]->current_sp = context->rsp;
+    prev_th[cpu]->interrupt_program_counter = context->retaddr;
+
+    if (!(current_th[cpu]->thflags & THFLAGS_START_TH)) {
+      /* start thread */
+      printk("start thread\n");
+      current_th[cpu]->thflags |= THFLAGS_START_TH;
+      current_th[cpu]->interrupt_program_counter = (uint64_t) run_user_thread;
+      context->retaddr = (uint64_t) run_user_thread;
+      context->rsp = (uint64_t) get_context_top(current_th[cpu]);
+    } else {
+      context->retaddr = current_th[cpu]->interrupt_program_counter;
+      context->rsp = current_th[cpu]->current_sp;
+    }
+
+  }
+  mmio_out64(LAPIC_EOI, 0x0);
 	return;
 }
 

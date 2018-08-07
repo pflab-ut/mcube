@@ -6,8 +6,6 @@
 #ifndef	__MCUBE_ARM_UART_H__
 #define	__MCUBE_ARM_UART_H__
 
-#define PL011_UART 1
-#define MINI_UART 0
 
 
 #if CONFIG_ARCH_ARM_SYNQUACER && MINI_UART

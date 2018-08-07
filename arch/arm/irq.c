@@ -85,7 +85,7 @@ static void handle_timer_interrupt(void)
       do_end_job(current_th[cpu]);
     }
   }
-  increment_jiffies();
+  update_jiffies();
   // clear cntv interrupt and set next 1sec timer.
   set_cntv_tval_el0(timer_cntfrq);
   

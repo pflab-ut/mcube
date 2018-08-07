@@ -8,5 +8,6 @@
 
 #include <arm/synquacer/addr.h>
 #include <arm/synquacer/irq.h>
+#include <arm/synquacer/uart.h>
 
 #endif /*	__MCUBE_ARM_SYNQUACER_SYNQUACER_HEADER_H__ */

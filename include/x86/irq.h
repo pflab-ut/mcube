@@ -367,7 +367,7 @@ void init_irq_asm(void);
 /// @brief      Interrupt service routine called when an interrupt occurs.
 /// @param[in]  context     The CPU state at the time of the interrupt.
 //----------------------------------------------------------------------------
-typedef void (*isr_handler)(const interrupt_context_t *context);
+typedef void (*isr_handler)(interrupt_context_t *context);
 
 //----------------------------------------------------------------------------
 //  @function   set_isr

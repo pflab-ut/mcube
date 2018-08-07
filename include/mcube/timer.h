@@ -10,14 +10,6 @@
 
 extern seqlock_struct xtime_lock;
 
-static inline void update_jiffies(void)
-{
-#if CONFIG_ARCH_SIM
-  exec_jiffies = 0;
-#endif
-	sys_jiffies++;
-}
-
 
 void start_timer(unsigned int ch);
 void stop_timer(unsigned int ch);

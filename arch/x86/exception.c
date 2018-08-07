@@ -64,7 +64,7 @@ static void hang(void)
   }
 }
 
-static void isr_fatal(const interrupt_context_t *context)
+static void isr_fatal(interrupt_context_t *context)
 {
   int i = context->interrupt;
 
@@ -82,7 +82,7 @@ static void isr_fatal(const interrupt_context_t *context)
   hang();
 }
 
-static void isr_breakpoint(const interrupt_context_t *context)
+static void isr_breakpoint(interrupt_context_t *context)
 {
   (void)context;
 

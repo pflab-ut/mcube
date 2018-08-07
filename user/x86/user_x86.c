@@ -1,5 +1,5 @@
 /**
- * @file user/arm/user_arm.c
+ * @file user/x86/user_x86.c
  *
  * @author Hiroyuki Chishiro
  */
@@ -24,7 +24,7 @@ int user_thread_main(void)
   struct th_attr thas[NR_THREADS] = INIT_THAS;
   sched_time = 5;
   printk("user_thread_main()\n");
-  
+
   for (i = 0; i < nr_threads; i++) {
     ids[i] = i + 1;
     thas[i].type = PERIODIC_TH | HARD_REAL_TIME;
@@ -40,30 +40,6 @@ int user_thread_main(void)
   return 0;
 }
 
-
-void process(const char *array)
-{
-  while (1) {
-    printk("%s", array);
-    //    delay(100);
-  }
-}
-
-int user_ap_main(void)
-{
-  int ret;
-  ret = copy_process((unsigned long) &process, (unsigned long) "12345");
-  if (ret != 0) {
-    printk("Error while starting process1\n");
-    return 1;
-  }
-  ret = copy_process((unsigned long) &process, (unsigned long) "abcde");
-  if (ret != 0) {
-    printk("Error while starting process 2");
-    return 2;
-  }
-  return 0;
-}
 
 
 int user_arch_main(void)

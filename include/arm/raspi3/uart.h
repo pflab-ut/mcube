@@ -6,6 +6,9 @@
 #ifndef	__MCUBE_ARM_RASPI3_UART_H__
 #define	__MCUBE_ARM_RASPI3_UART_H__
 
+#define PL011_UART 1
+#define MINI_UART 1
+
 
 #define AUX_IRQ_REG            (PERIPHERAL_BASE + 0x00215000)
 #define AUX_ENABLES            (PERIPHERAL_BASE + 0x00215004)

@@ -56,7 +56,7 @@ void init_arch(void)
   init_pit_timer(TICK_USEC);
 #endif
 
-#if 1
+#if 0
   /* use HPET timer but not work */
   printk("use HPET timer\n");
   init_hpet_timer(TICK_USEC);
@@ -76,12 +76,14 @@ void init_arch(void)
   //  asm volatile("int 0x12");
   //  asm volatile("int 0x32");
   //  kshell();
-  //	init_cache(); 
+  //	init_cache();
+#if 0  
   for (;;) {
     //    printk("a");
     //printk("read_hpet_counter() = %lu\n", read_hpet_counter());
     //    printk("TIMER_COMPARATOR_64(0) = %lu\n", mmio_in64(TIMER_COMPARATOR_64(0)));
   }
+#endif
 }
 
 

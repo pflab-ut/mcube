@@ -5,7 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-void handle_hpet_timer_tick(const interrupt_context_t *context)
+void handle_hpet_timer_tick(interrupt_context_t *context)
 {
   unsigned long cpu = get_cpu_id();
   printk("handle_hpet_timer_tick(): cpu = %lu\n", cpu);
@@ -146,6 +146,7 @@ void init_hpet_timer_irq(void)
 
 void start_hpet_timer(unsigned int ch)
 {
+  printk("start_hpet_timer()\n");
   //  unsigned int tick_interval = HPET_TICK_MS(1000);
   unsigned long tick_interval = 10000000;
   //  unsigned int tick_interval = HPET_HZ;
@@ -156,7 +157,7 @@ void start_hpet_timer(unsigned int ch)
 		/* Route the interrupts.
 			 This includes the LegacyReplacement Route bit, Interrupt Route bit (for each 
 			 timer), interrupt type (to select the edge or level type for each timer).  */
-    //    printk("mmio_in64(TIMER_CONFIG_CAP_64(0)) = 0x%lx\n", mmio_in64(TIMER_CONFIG_CAP_64(ch)));
+    printk("mmio_in64(TIMER_CONFIG_CAP_64(0)) = 0x%lx\n", mmio_in64(TIMER_CONFIG_CAP_64(ch)));
 		//		printk("IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER0_IRQ) = 0x%lx\n", mmio_in64(IO_WIN));
     //    printk("tick_interval = %lu\n", tick_interval);
 		/* set comparator 0 to tick_interval */
@@ -179,7 +180,7 @@ void start_hpet_timer(unsigned int ch)
 		mmio_out64(IO_WIN,
                (mmio_in64(IO_WIN)
                 & ~IO_REDIRECTION_TABLE_REG_INTERRUPT_MASK)
-               //| IO_REDIRECTION_TABLE_REG_TRIGGER_MODE /* level trigger if set */
+               // | IO_REDIRECTION_TABLE_REG_TRIGGER_MODE /* level trigger if set */
 							 | (HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ));
 		/* save cpu time when starting main counter */
 		//		start_cpu_time = current_cpu_time() + usec2tsc(1000 * 1000);
@@ -207,7 +208,7 @@ void start_hpet_timer(unsigned int ch)
 		mmio_out64(IO_WIN,
                (mmio_in64(IO_WIN)
 								& ~IO_REDIRECTION_TABLE_REG_INTERRUPT_MASK)
-							 //| IO_REDIRECTION_TABLE_REG_TRIGGER_MODE /* level trigger if set */
+							 // | IO_REDIRECTION_TABLE_REG_TRIGGER_MODE /* level trigger if set */
 							 | (HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ));
 		break;
 	default:

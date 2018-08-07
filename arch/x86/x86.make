@@ -94,3 +94,6 @@ SRCS += \
 	$(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_x86.c \
 
+
+SRCS += \
+ $(TOP_DIR)/user/x86/user_x86.c \

@@ -5,6 +5,7 @@
  */
 #include <mcube/mcube.h>
 
+
 void set_initial_context(struct thread_struct *th,
                          void (*pc)(void *),
                          void *func,
@@ -50,7 +51,7 @@ void __attribute__((noreturn)) run_user_thread(void)
 {
   size_t cpu = get_cpu_id();
   void *ret = NULL;
-  //  printk("begin_user_thread()\n");
+  printk("run_user_thread()\n");
   if (current_th[cpu]->run_user_func) {
     ret = (*current_th[cpu]->run_user_func)(current_th[cpu]->arg);
   }

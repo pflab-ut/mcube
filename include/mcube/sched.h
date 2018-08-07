@@ -31,9 +31,12 @@ static inline unsigned long get_current_jiffies(void)
   return sys_jiffies;
 }
 
-static inline void increment_jiffies(void)
+static inline void update_jiffies(void)
 {
-  sys_jiffies++;
+#if CONFIG_ARCH_SIM
+  exec_jiffies = 0;
+#endif
+	sys_jiffies++;
 }
 
 

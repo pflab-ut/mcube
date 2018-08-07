@@ -11,7 +11,7 @@
 #define TIMER_PORT_DATA_CH2  0x42   ///< Channel 2 data port.
 #define TIMER_PORT_CMD       0x43   ///< Timer command port.
 
-void isr_timer(const interrupt_context_t *context)
+void isr_timer(interrupt_context_t *context)
 {
   static int i = 0;
   i++;
