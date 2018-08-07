@@ -11,15 +11,42 @@
 #define TIMER_PORT_DATA_CH2  0x42   ///< Channel 2 data port.
 #define TIMER_PORT_CMD       0x43   ///< Timer command port.
 
-void isr_timer(interrupt_context_t *context)
+
+void handle_pit_timer(interrupt_context_t *context)
 {
+  unsigned long cpu = get_cpu_id();
   static int i = 0;
   i++;
   if (i % 1000 == 0) {
-    printk("isr_timer()\n");
+    printk("handle_pit_timer()\n");
+    
+    if (current_th[cpu] != &idle_th[cpu]) {
+      PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
+             current_th[cpu]->id, current_th[cpu]->sched.remaining);
+#if 1
+      current_th[cpu]->sched.remaining = 0;
+#else
+      current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_timer_period()
+                                                            - current_th[cpu]->sched.begin_cpu_time);
+#endif
+      if (current_th[cpu]->sched.remaining <= 0) {
+        do_end_job(current_th[cpu]);
+      }
+    }
+    update_jiffies();
+    if (sched_time <= sys_jiffies) {
+      //    printk("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
+      sched_end = TRUE;
+      current_th[cpu] = &idle_th[cpu];
+      stop_pit_timer(0);
+      outb(PIC_PORT_CMD_MASTER, PIC_CMD_EOI);
+      return;
+    } else {
+      do_release();
+      do_sched();
+    }
+    do_switch_thread_arch(context);
   }
-  (void) context;
-  // Do nothing for now.
   
   // Send the end-of-interrupt signal.
   outb(PIC_PORT_CMD_MASTER, PIC_CMD_EOI);
@@ -27,6 +54,7 @@ void isr_timer(interrupt_context_t *context)
 
 void init_pit_timer(unsigned long tick_us)
 {
+  printk("init_pit_timer()\n");
   // Compute the clock count value.
 	/* upper bound of count is 65535. */
 	/* 11932 = 100Hz = 10ms */
@@ -42,7 +70,7 @@ void init_pit_timer(unsigned long tick_us)
   outb(TIMER_PORT_DATA_CH0, (uint8_t)(count >> 8));
 
   // Assign the interrupt service routine.
-  set_isr(TRAP_PIT_IRQ, isr_timer);
+  set_isr(TRAP_PIT_IRQ, handle_pit_timer);
 
   // Enable the timer interrupt (IRQ0).
   enable_irq(PIT_IRQ);

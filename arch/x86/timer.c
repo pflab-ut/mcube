@@ -20,7 +20,7 @@ static void measure_cpu_frequency(void)
 
 void init_timer(unsigned long tick_us)
 {
-#ifdef LAPIC_TIMER
+#if LAPIC_TIMER
   init_lapic_timer(tick_us);
 #elif HPET_TIMER
   init_hpet_timer(tick_us);
@@ -32,7 +32,7 @@ void init_timer(unsigned long tick_us)
 
 void start_timer(unsigned int ch)
 {
-#ifdef LAPIC_TIMER
+#if LAPIC_TIMER
   start_lapic_timer(ch);
 #elif HPET_TIMER
   start_hpet_timer(ch);
@@ -43,7 +43,7 @@ void start_timer(unsigned int ch)
 
 void stop_timer(unsigned int ch)
 {
-#ifdef LAPIC_TIMER
+#if LAPIC_TIMER
   stop_lapic_timer(ch);
 #elif HPET_TIMER
   stop_hpet_timer(ch);

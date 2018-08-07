@@ -123,6 +123,12 @@ struct thread_struct {
   /** Current frame pointer. */
   unsigned long current_fp;
 #endif /* CONFIG_ARCH_AXIS */
+#if CONFIG_ARCH_X86
+  /* rsp in interrupt_context_t */
+  unsigned long rsp;
+  /* pointer interrupt_context_t */
+  interrupt_context_t *context;
+#endif
   /** Current stack pointer. */
   unsigned long current_sp;
   /** Interrupt program counter. */

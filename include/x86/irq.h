@@ -349,6 +349,8 @@ struct interrupt_context {
 
 typedef struct interrupt_context interrupt_context_t;
 
+void do_switch_thread_arch(interrupt_context_t *context);
+
 //----------------------------------------------------------------------------
 //  @function   init_irq_asm
 /// @brief      Initialize all interrupt tables.

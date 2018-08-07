@@ -64,7 +64,6 @@ CFLAGS += -D__LITTLE_ENDIAN__
 ASMS = \
 	$(TOP_DIR)/arch/x86/start.asm \
 	$(TOP_DIR)/arch/x86/memzero.asm \
- $(TOP_DIR)/arch/x86/utils.asm \
  $(TOP_DIR)/arch/x86/interrupt.asm \
 
 SRCS += \

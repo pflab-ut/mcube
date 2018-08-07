@@ -114,100 +114,6 @@ void do_release(void)
   pdebug_array(run_tq[cpu].array);
 }
 
-#if 1
-void switch_to(struct thread_struct *next_task)
-{
-  unsigned long cpu = get_cpu_id();
-  printk("switch_to()\n");
-  if (current_th[cpu] == prev_th[cpu]) {
-    return;
-  }
-  printk("call arch_switch_to()\n");
-  arch_switch_to(prev_th[cpu], current_th[cpu]);
-  printk("call arch_switch_to()2\n");
-}
-
-#else
-void switch_to(struct task_struct *next_task)
-{
-  printk("switch_to()\n");
-  if (current_task == next_task) {
-    return;
-  }
-  struct task_struct *prev_task = current_task;
-  current_task = next_task;
-  arch_switch_to(prev_task, next_task);
-}
-#endif
-
-
-#if 0
-
-void __do_sched(void)
-{
-	int next, c;
-  int i;
-	struct task_struct *p;
-	preempt_disable();
-	while (1) {
-		c = -1;
-		next = 0;
-		for (i = 0; i < NR_TASKS; i++) {
-			p = tasks[i];
-			if (p && p->state == RUNNING && p->counter > c) {
-				c = p->counter;
-				next = i;
-			}
-		}
-		if (c) {
-			break;
-		}
-		for (i = 0; i < NR_TASKS; i++) {
-			p = tasks[i];
-			if (p) {
-				p->counter = (p->counter >> 1) + p->priority;
-			}
-		}
-	}
-	switch_to(tasks[next]);
-	preempt_enable();
-}
-
-
-#else
-void __do_sched(void)
-{
-  unsigned long cpu = get_cpu_id();
-  PDEBUG("do_sched()\n");
-	struct thread_struct *th;
-  pdebug_deadline_tq();
-
-
-	/* jump to algorithm-specific function */
-  //	do_sched_algo();
-
-	/* assign the highest priority task to cpu */
-	th = pick_next_task();
-	if (th) {
-		current_th[cpu] = th;
-	} else {
-		current_th[cpu] = &idle_th[cpu];
-	}
-
-	if (prev_th[cpu] != &idle_th[cpu] && is_preempted(prev_th[cpu])) {
-		/* preemption occurs */
-		prev_th[cpu]->state = READY;
-	}
-
-  //	switch_to(tasks[next]);
-	current_th[cpu]->state = RUNNING;
-  //  switch_to(current_th[cpu]);
-
-	//	pdebug_jiffies();
-	PDEBUG("do_sched(): end\n");
-}
-#endif
-
 
 void do_sched(void)
 {
@@ -257,18 +163,6 @@ int check_deadline_miss(void)
 	return TRUE;
 }
 
-void do_timer_tick(void)
-{
-  --current_task->counter;
-  if (current_task->counter > 0 || current_task->preempt_count > 0) {
-    return;
-  }
-  current_task->counter = 0;
-  enable_local_irq();
-  __do_sched();
-  disable_local_irq();
-}
-
 
 int run(unsigned long nr_threads)
 {
@@ -315,9 +209,10 @@ int run(unsigned long nr_threads)
   
 	/* idle thread start */
 	while (sched_end == FALSE) {
-		// printk("");
+    //printk("");
     //    printk("get_timer_count() = %lu\n", get_timer_count()); 
-    //    printk("0");
+    printk("0");
+    //    halt();
     //    printk("sched_end = %d\n", sched_end);
 		//		printk("idle!");
     //    asm volatile("move %0, $sp" : "=r"(current_fp));

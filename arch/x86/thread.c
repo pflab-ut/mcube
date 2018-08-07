@@ -51,7 +51,11 @@ void __attribute__((noreturn)) run_user_thread(void)
 {
   size_t cpu = get_cpu_id();
   void *ret = NULL;
+  unsigned long rsp;
   printk("run_user_thread()\n");
+  printk("current_th[cpu]->id = %u\n", current_th[cpu]->id);
+  asm volatile("mov %0, rsp" : "=r"(rsp));
+  printk("rsp = 0x%lx\n", rsp);
   if (current_th[cpu]->run_user_func) {
     ret = (*current_th[cpu]->run_user_func)(current_th[cpu]->arg);
   }

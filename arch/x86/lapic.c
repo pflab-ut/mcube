@@ -6,6 +6,7 @@
 #include <mcube/mcube.h>
 
 
+
 void handle_lapic_timer_tick(interrupt_context_t *context)
 {
 	unsigned long cpu = get_cpu_id();
@@ -52,40 +53,17 @@ void handle_lapic_timer_tick(interrupt_context_t *context)
   //	mmio_out32(LAPIC_EOI, 0x0);
   update_jiffies();
   
-#if 1
   if (sched_time <= sys_jiffies) {
 		//    printk("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
     sched_end = TRUE;
     current_th[cpu] = &idle_th[cpu];
     stop_lapic_timer(0);
-    return;
+    mmio_out64(LAPIC_EOI, 0x0);
+  } else {
+    do_release();
+    do_sched();
   }
-#endif
-
-	/* decrease remaining of current thread before update it */
-	//	smp_barrier(4);
-#if 1
-	do_release();
-	do_sched();
-#endif
-  //  do_switch_thread();
-  if (current_th[cpu] != prev_th[cpu]) {
-    prev_th[cpu]->current_sp = context->rsp;
-    prev_th[cpu]->interrupt_program_counter = context->retaddr;
-
-    if (!(current_th[cpu]->thflags & THFLAGS_START_TH)) {
-      /* start thread */
-      printk("start thread\n");
-      current_th[cpu]->thflags |= THFLAGS_START_TH;
-      current_th[cpu]->interrupt_program_counter = (uint64_t) run_user_thread;
-      context->retaddr = (uint64_t) run_user_thread;
-      context->rsp = (uint64_t) get_context_top(current_th[cpu]);
-    } else {
-      context->retaddr = current_th[cpu]->interrupt_program_counter;
-      context->rsp = current_th[cpu]->current_sp;
-    }
-
-  }
+  do_switch_thread_arch(context);
   mmio_out64(LAPIC_EOI, 0x0);
 	return;
 }
