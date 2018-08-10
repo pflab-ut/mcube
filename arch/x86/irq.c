@@ -5,6 +5,11 @@
  */
 #include <mcube/mcube.h>
 
+void wait_until_next_interrupt(void)
+{
+  halt();
+}
+
 void do_switch_thread_arch(interrupt_context_t *context)
 {
 	unsigned long cpu = get_cpu_id();

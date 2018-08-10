@@ -1,5 +1,5 @@
 /**
- * @file arch/arm/mm.c
+ * @file arch/arm/stdio.c
  *
  * @author Hiroyuki Chishiro
  */

@@ -12,8 +12,8 @@
 #define PIT_CTRL 0x0043
 
 /* enable each timer */
-#define LAPIC_TIMER 0
-#define PIT_TIMER 1
+#define LAPIC_TIMER 1
+#define PIT_TIMER 0
 #define HPET_TIMER 0
 
 #ifndef __ASSEMBLY__
@@ -90,8 +90,8 @@ void stop_pit_timer(unsigned int ch);
 extern unsigned long cpu_bus_freq_mhz;
 extern unsigned long sys_tsc;
 
-extern unsigned long timer_count[NR_INTRA_KERNEL_CPUS];
-extern unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
+//extern unsigned long timer_count[NR_INTRA_KERNEL_CPUS];
+//extern unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
 
 
 #endif	/* !__ASSEMBLY__ */

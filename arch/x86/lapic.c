@@ -12,33 +12,12 @@ void handle_lapic_timer_tick(interrupt_context_t *context)
 	unsigned long cpu = get_cpu_id();
 	printk("handle_lapic_timer_tick(): cpu = %lu\n", cpu);
   //  inf_loop();
-#if 0
-	tick_count++;
-	if (tick_count == 1000) {
-		printk("%d count\n", tick_count);
-		tick_count = 0;
-	}
-#endif
-	//	printk("handle_timer_tick(): cpu = %lu\n", cpu);
-#if 0
-	timer_count[cpu]++;
-	//	printk("timer_count = %d\n", timer_count);x
-	//	printk("timer_count[%d] = %d\n", cpu, timer_count[cpu]);
-	if (timer_count[cpu] == SU2EU(1)) {
-		//		printk("cpu = %lu\n", cpu);
-		//		*((unsigned long *) 0x10010) = cpu;
-		tcur[cpu] = get_current_cpu_time();
-		//		printk("cpu = %lu: tsc %llu: %llu us\n",
-		//					 cpu, tcur[cpu] - tprev[cpu], tsc2usec(tcur[cpu] - tprev[cpu]));
-		tprev[cpu] = tcur[cpu];
-		timer_count[cpu] = 0;
-	}
-#endif
 
 	//	printk("handle_LAPIC_timer_tick(): current_th[%d]->id = %llu\n", cpu, current_th[cpu]->id);
   if (current_th[cpu] != &idle_th[cpu]) {
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
+    
 #if 1
     current_th[cpu]->sched.remaining = 0;
 #else
@@ -50,7 +29,6 @@ void handle_lapic_timer_tick(interrupt_context_t *context)
     }
   }
   
-  //	mmio_out32(LAPIC_EOI, 0x0);
   update_jiffies();
   
   if (sched_time <= sys_jiffies) {
@@ -73,7 +51,6 @@ void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, u
 {
 	unsigned long cpu = get_cpu_id();
 	uint8_t div_flag = 0xb;
-	timer_count[cpu] = 0;
 	// base clock: divisor / count[MHz]
 	switch (divisor) {
 	case 1:
@@ -134,7 +111,6 @@ void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, u
 void start_lapic_timer(unsigned int ch)
 {
 	unsigned long cpu = get_cpu_id();
-	tprev[cpu] = rdtsc();
 	wait(0x10000 * (cpu + 1));
 	mmio_out32(LAPIC_EOI, 0x0);
 	wait(0x10000 * (cpu + 1));
@@ -159,7 +135,7 @@ void measure_lapic_timer(void)
 
 void init_lapic_timer(unsigned long tick_us)
 {
-  // Core 2 Duo Value
+  // Core 2 Duo Clock MHz
   CPU_CLOCK_MHZ_PER_USEC = 2.40e+03;
 
 	//	printk("init_timer()\n");

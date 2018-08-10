@@ -56,6 +56,48 @@ void *heap_alloc(heap_t *heap, uint64_t size);
 //----------------------------------------------------------------------------
 void heap_free(heap_t *heap, void *ptr);
 
+
+// ALLOC_PAGES: The minimum number of pages to allocate each time the heap
+// is grown.
+#define ALLOC_PAGES     16
+
+// block_header flags
+#define FLAG_ALLOCATED  (1 << 0)
+
+// round16 returns the first value x greater than or equal to n that satisfies
+// (x mod 16) = r
+#define round16(n, r)  (((((n) - (r) + 31) >> 4) << 4) + (r) - 16)
+
+// total_bytes returns the total number of bytes contained in the block 'b',
+// including the block header and footer.  'b' may be a pointer to a
+// block_header or a block_footer struct.
+#define total_bytes(b)                                          \
+  ((b)->size + sizeof(block_header_t) + sizeof(block_footer_t))
+
+struct heap {
+  pagetable_t          *pt;           // page table that owns the heap
+  void                 *vaddr;        // address of heap start
+  uint64_t              pages;        // pages currently alloced to the heap
+  uint64_t              maxpages;     // max pages used by the heap
+  struct fblock_header *first_fblock; // first free block in the heap
+  uint64_t              reserved;     // pad to a multiple of 16 bytes
+};
+
+typedef struct block_header {
+  uint64_t size;          // size of block in bytes (minus header/footer)
+  uint64_t flags;
+} block_header_t;
+
+typedef struct block_footer {
+  uint64_t size;          // size of the preceding block
+} block_footer_t;
+
+typedef struct fblock_header {
+  struct block_header   block;
+  struct fblock_header *next_fblock;  // next free block in the heap
+  struct fblock_header *prev_fblock;  // prev free block in the heap
+} fblock_header_t;
+
 #endif /* !__ASSEMBLY__ */
 
 

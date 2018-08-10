@@ -14,11 +14,12 @@
 /** Printk. */
 #define CONFIG_PRINTK2CONSOLE 1
 /** Algorithm. */
-#define CONFIG_ALGO_FP 1
+#define CONFIG_ALGO_RM 1
 /** Task Queue. */
 #define CONFIG_TQ_O1 1
 /** Tie-Break. */
 #define CONFIG_TIE_BREAK_FIFO 1
+#define CONFIG_DEBUG 1
 /** Memory. */
-#define CONFIG_MEMORY_128KB 1
+#define CONFIG_MEMORY_VARIABLE 1
 #endif /* __MCUBE_MCUBE_CONFIG_H__ */

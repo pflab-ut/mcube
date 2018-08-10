@@ -211,7 +211,7 @@ int run(unsigned long nr_threads)
 	while (sched_end == FALSE) {
     //printk("");
     //    printk("get_timer_count() = %lu\n", get_timer_count()); 
-    printk("0");
+    //    printk("0");
     //    halt();
     //    printk("sched_end = %d\n", sched_end);
 		//		printk("idle!");

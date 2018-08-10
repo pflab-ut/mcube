@@ -10,11 +10,11 @@ void *user_func(void *arg)
   unsigned long id = *(int *) arg;
   while (1) {
     printk("%lu", id);
-    delay(1000);
-    //  do_end_job(&ths[id]);
+    wait_until_next_interrupt();
   }
   return NULL;
 }
+
 
 int user_thread_main(void)
 {

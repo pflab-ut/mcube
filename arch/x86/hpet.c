@@ -10,34 +10,9 @@ void handle_hpet_timer_tick(interrupt_context_t *context)
   unsigned long cpu = get_cpu_id();
   printk("handle_hpet_timer_tick(): cpu = %lu\n", cpu);
   //  inf_loop();
-#if 0
-	tick_count++;
-	if (tick_count == 1000) {
-		printk("%d count\n", tick_count);
-		tick_count = 0;
-	}
-#endif
-	//	printk("handle_timer_tick(): cpu = %d\n", cpu);
-	timer_count[cpu]++;
-	//	printk("timer_count = %d\n", timer_count);
-	//	printk("timer_count[%d] = %d\n", cpu, timer_count[cpu]);
-#if 0
-	if (timer_count[cpu] == SU2EU(1)) {
-		//		printk("cpu = %d\n", cpu);
-		//		*((unsigned long *) 0x10010) = cpu;
-		tcur[cpu] = current_cpu_time();
-		//		printk("cpu = %d: tsc %lu: %lu us\n",
-		//					 cpu, tcur[cpu] - tprev[cpu], tsc2usec(tcur[cpu] - tprev[cpu]));
-		tprev[cpu] = tcur[cpu];
-		timer_count[cpu] = 0;
-	}
-#endif
-
 
 	/* clear timer 0 interrupt status */
 	mmio_out64(GENERAL_INTERRUPT_STATUS_64, GENERAL_INTERRUPT_STATUS_T0_INTERRUPT_STS);
-
-	/* TODO: precise budget enforcement with high resolution timer */
 
 
 #if 0
@@ -47,14 +22,12 @@ void handle_hpet_timer_tick(interrupt_context_t *context)
   
   update_jiffies();
 
-#if 1
   if (sched_time <= sys_jiffies) {
 		printk("handle_hept_timer_tick(): sched_end: cpu = %lu\n", cpu);
     sched_end = TRUE;
     current_th[cpu] = &idle_th[cpu];
 		stop_hpet_timer(0);
   }
-#endif
 
 }
 
