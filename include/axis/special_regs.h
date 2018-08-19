@@ -19,6 +19,7 @@ static inline unsigned long get_cpu_id(void)
   return data;
 }
 
+
 static inline unsigned long get_interrupt_vector_base_address(void)
 {
   unsigned long addr;

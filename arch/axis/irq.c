@@ -84,7 +84,7 @@ static void handle_timer_interrupt(void)
       do_end_job(current_th[cpu]);
     }
   }
-  increment_jiffies();
+  update_jiffies();
 
   /* clear timer interrupt */
   set_timer_status(1);
