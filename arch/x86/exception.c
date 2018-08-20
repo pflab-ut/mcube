@@ -40,9 +40,9 @@ static const char *exceptionstr[] = {
 static void dump_context(int id, const interrupt_context_t *context)
 {
   char buf[640];
-  printk("INT: %lx   Error: %lx\n\n",
+  printk("INT: %02lx   Error: %08lx\n\n",
          context->interrupt, context->error);
-  printk("CS:RIP: %lx:%lx             SS:RSP: %lx:%lx\n\n",
+  printk("CS:RIP: %04lx:%016lx             SS:RSP: %04lx:%016lx\n\n",
          context->cs, context->retaddr, context->ss, context->rsp);
 
 

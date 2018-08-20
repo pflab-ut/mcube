@@ -307,12 +307,13 @@ int printk(const char *fmt, ...)
 {
 	int n = 0;
   int ret;
+  unsigned int size;
 	char buf[FOUT_SIZE];
 	va_list ap;
 	int d;
 	unsigned int u;
 	char *p, *s;
-	struct conv_flag cf;
+	struct conv_flag cf = (struct conv_flag) {.pad = FALSE, .digit = 0};
 	unsigned long lu;
 	long ld;
 #if !CONFIG_ARCH_AXIS
@@ -326,7 +327,7 @@ int printk(const char *fmt, ...)
 			p = (char *) fmt + 1;
 			while (*p && *p != '%') {
 				p++;
-			}
+			}      
 			if (FOUT_SIZE < n + (int) (p - fmt)) {
 				goto out;
 			}
@@ -343,7 +344,19 @@ int printk(const char *fmt, ...)
 		if (FOUT_SIZE < n + 1) {
 			goto out;
 		}
-		cf = (struct conv_flag) {.pad = FALSE, .digit = 0};
+    /* check pad */
+    if (*fmt == '0') {
+      cf.pad = TRUE;
+      fmt++;
+    }
+    /* check size */
+    size = 0;
+    while ((*fmt >= '0') && (*fmt <= '9')) {
+      size = size * 10 + (*fmt - '0');
+      fmt++;
+    }
+    cf.digit = size;
+    
 skip:
 		switch (*fmt++) {
 		case 'l':
