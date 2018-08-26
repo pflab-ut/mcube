@@ -64,7 +64,7 @@ void do_switch_thread(void)
 }
 
 
-static void handle_timer_interrupt(void)
+void handle_timer_interrupt(void)
 {
   unsigned long cpu = get_cpu_id();
   // timer tick
@@ -101,7 +101,7 @@ static void handle_timer_interrupt(void)
   } 
 }
 
-static void handle_uart_interrupt(void)
+void handle_uart_interrupt(void)
 {
 #if CONFIG_ARCH_ARM_RASPI3
   int c;

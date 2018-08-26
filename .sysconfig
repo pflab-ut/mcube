@@ -1,3 +1,4 @@
-ARCH_NAME = sim
+ARCH_NAME = arm
+MACHINE_NAME = synquacer
 CC = gcc
 ALGO_NAME = rm
