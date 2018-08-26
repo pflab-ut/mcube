@@ -144,11 +144,11 @@ menu Memory
     default n
     defs -DCONFIG_MEMORY_VARIABLE
     conflicts CONFIG_ARCH_AXIS
-  config CONFIG_MEMORY_128KB
-    title Memory 128KB
+  config CONFIG_MEMORY_256KB
+    title Memory 256KB
     default y
-    defs -DCONFIG_MEMORY_128KB
-    defs -DMEMORY_SIZE=0x00020000
+    defs -DCONFIG_MEMORY_256KB
+    defs -DMEMORY_SIZE=0x00040000
   config CONFIG_MEMORY_1MB
     title Memory 1MB
     default n

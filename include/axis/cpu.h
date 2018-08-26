@@ -9,15 +9,35 @@
 
 #ifndef __ASSEMBLY__
 
-static inline void set_cpu_id(unsigned long *x,
-                              unsigned long *y,
-                              unsigned long *local_cpu_id,
-                              unsigned long cpu_id)
-{
-  *x = (cpu_id >> 24) & 0xff;
-  *y = (cpu_id >> 16) & 0xff;
-  *local_cpu_id = cpu_id & 0x7;
-}
+struct cluster {
+  unsigned long cluster_id;
+  unsigned long x;
+  unsigned long y;
+  unsigned long local_cpu_id;
+};
+
+void read_from_cluster(unsigned long local_cpu_id,
+                       unsigned long high_addr,
+                       unsigned long low_addr,
+                       volatile unsigned long *data,
+                       unsigned long qos);
+
+void write_to_cluster(unsigned long local_cpu_id,
+                      unsigned long high_addr,
+                      unsigned long low_addr,
+                      volatile unsigned long *data,
+                      unsigned long qos);
+
+
+void encode_cluster_address(volatile unsigned long *high_addr,
+                            volatile unsigned long *low_addr,
+                            unsigned long x,
+                            unsigned long y,
+                            unsigned long ofs);
+
+void set_cpu_id(struct cluster *c, unsigned long cpu_id);
+
+void get_cluster_from_index(struct cluster *c, volatile int index, volatile int cpu);
 
 
 

@@ -28,8 +28,8 @@
 
 #ifndef	__ASSEMBLY__
 
-/* CPU clock. */
 
+/* CPU clock. */
 
 /* [usec/clock] */
 extern unsigned long CPU_CLOCK;

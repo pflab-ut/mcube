@@ -4,11 +4,8 @@
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
+#include "user_axis.h"
 
-void test_integer_instructions(void);
-void test_transfer_instructions(void);
-void test_control_instructions(void);
-void test_special_instructions(void);
 
 void *user_func(void *arg)
 {
@@ -94,14 +91,8 @@ int test_main(void)
   return 0;
 }
 
-
-int user_arch_main(void)
+void multi_cpus_main(void)
 {
-  //  user_thread_main();
-  //  timer_main();
-  //  dmac_main();
-  //  test_main();
-#if 1
   printk("get_cpu_id() = %lu\n", get_cpu_id());
   set_program_counter(1, 0);
   start_cpu(1);
@@ -115,8 +106,10 @@ int user_arch_main(void)
   while (cpu_ids[1] == 0) {
   }
   //  printk("cpu_ids[1] = %lu\n", cpu_ids[1]);
-  
-#else
+}
+
+void tsc_main(void)
+{
   int i = 0;
   while (1) {
     printk("get_time_stamp_counter() = %lu\n", get_time_stamp_counter());
@@ -125,6 +118,18 @@ int user_arch_main(void)
       set_time_stamp_counter(0);
     }
   }
-#endif
+}
+
+
+
+int user_arch_main(void)
+{
+  //  user_thread_main();
+  //  timer_main();
+  //  dmac_main();
+  //  test_main();
+  //  multi_cpus_main();
+  //  tsc_main();
+  cluster_main();
   return 0;
 }

@@ -20,8 +20,12 @@ static unsigned int is_initialized = FALSE;
 
 int main(int argc, char *argv[])
 {
-  
-  if (get_cpu_id() == 0) {
+  unsigned long cpu = get_cpu_id();
+#if CONFIG_ARCH_AXIS
+  /* local cpu id is in [0, 7]. */
+  cpu &= 0x7;
+#endif
+  if (cpu == 0) {
     init_arch();
     is_initialized = TRUE;
     printk("main()\n");

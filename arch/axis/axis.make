@@ -46,7 +46,9 @@ SRCS += \
  $(TOP_DIR)/arch/axis/init.c \
  $(TOP_DIR)/arch/axis/cpu.c \
 
-SRCS += $(TOP_DIR)/user/axis/test_integer_instructions.c \
+SRCS += \
+ $(TOP_DIR)/user/axis/cluster.c \
+	$(TOP_DIR)/user/axis/test_integer_instructions.c \
  $(TOP_DIR)/user/axis/test_transfer_instructions.c \
  $(TOP_DIR)/user/axis/test_control_instructions.c \
  $(TOP_DIR)/user/axis/test_special_instructions.c \
