@@ -10,16 +10,17 @@
 /** Architecture. */
 #define CONFIG_ARCH_AXIS 1
 /** Compiler. */
-#define CONFIG_COMPILER_GCC 1
+#define CONFIG_COMPILER_CLANG 1
 /** Printk. */
 #define CONFIG_PRINTK2CONSOLE 1
 /** Algorithm. */
-#define CONFIG_ALGO_RM 1
+#define CONFIG_ALGO_EDF 1
 /** Task Queue. */
-#define CONFIG_TQ_O1 1
+#define CONFIG_TQ_DLIST 1
 /** Tie-Break. */
-#define CONFIG_TIE_BREAK_FIFO 1
+#define CONFIG_TIE_BREAK_ID 1
 #define CONFIG_DEBUG 1
+#define CONFIG_TRACE 1
 /** Memory. */
-#define CONFIG_MEMORY_1MB 1
+#define CONFIG_MEMORY_8MB 1
 #endif /* __MCUBE_MCUBE_CONFIG_H__ */

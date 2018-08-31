@@ -18,7 +18,8 @@ SECTIONS {
   __text_end = .;
 	}
  
-	.data ALIGN(4) : {
+ /* bank size is 0x1000 and text and data regions do not share the same bank. */
+	.data ALIGN(0x1000) : {
   __data_begin = .;
 		*(.data)
 		*(.rdata)

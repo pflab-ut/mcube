@@ -17,8 +17,9 @@ SECTIONS {
 		*(.text.*)
   __text_end = .;
 	}
-  
-	.rodata ALIGN(4) : {
+
+ /* bank size is 0x1000 and text and data regions do not share the same bank. */
+	.rodata ALIGN(0x1000) : {
   __rodata_begin = .;
 		*(.rdata)
 		*(.rdata.*)

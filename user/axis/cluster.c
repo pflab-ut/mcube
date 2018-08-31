@@ -21,21 +21,14 @@
 //#define MAT_SIZE 4
 //#define MAT_SIZE 8
 
-
 struct cluster own;
-
-#define MAX_X 3
-#define MAX_Y 3
-
-
-
 
 volatile unsigned long array[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 
 volatile unsigned long src[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 volatile unsigned long src2[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 
-void print_mat()
+void print_mat(void)
 {
   int i, j, k;
   for (i = 0; i < PARALLEL_NUM; i++) {
@@ -114,10 +107,8 @@ void wait_until_loop_completion(void)
 }
 
 
-// XXX: Pull does not work well if using clang.
-
-#define PUSH_TO_SLAVE_CLUSTERS
-//#define PULL_FROM_MASTER_CLUSTER
+//#define PUSH_TO_SLAVE_CLUSTERS
+#define PULL_FROM_MASTER_CLUSTER
 
 
 
@@ -143,22 +134,21 @@ void do_sequential(void)
   }
 }
 
-void do_callback(int index)
+void do_callback(volatile int index)
 {
-	unsigned long high_addr;
-	unsigned long low_addr;
-  int i, j;
+	volatile unsigned long high_addr;
+	volatile unsigned long low_addr;
+  volatile int i, j;
   
 #if defined(PUSH_TO_SLAVE_CLUSTERS)
   /* set address array[index] in (0, 0) */
-  printk("do %d\n", index);
+  //  printk("do %d\n", index);
   //  printk("do_callback(): do while (%d, %d)\n", own.x, own.y);
   /* wait until array[own.cluster_id] in (own.x, own.y) is INIT_NUM. */
   do {
-    
-    //    read_from_cluster(own.local_cpu_id, high_addr, low_addr, &data, 0);
+    //    read(own.local_cpu_id, high_addr, low_addr, &data, 0);
 #if 0
-    printk("do_callback(): array[%d][%d][%d] = %lu\n",
+    printk("do_callback(): array[%d][%d][%d] = %d\n",
            index, MAT_SIZE - 1, MAT_SIZE - 1, array[index][MAT_SIZE-1][MAT_SIZE-1]);
 #endif
   } while (array[index][MAT_SIZE-1][MAT_SIZE-1] == 0);
@@ -178,20 +168,31 @@ void do_callback(int index)
   }
   //  printk("write end\n");
 #elif defined(PULL_FROM_MASTER_CLUSTER)
+  printk("do %d\n", index);
   
   for (i = 0; i < MAT_SIZE; i++) {
     for (j = 0; j < MAT_SIZE; j++) {
       /* set array[own.cluster_id] in (0, 0) */
       encode_cluster_address(&high_addr, &low_addr,
                              0, 0, (unsigned long) &array[index][i][j]);
+      //      printk("high_addr = 0x%x low_addr = 0x%x\n", high_addr, low_addr);
       /* wait until array[own.cluster_id] is INIT_NUM. */
-      printk("do_callback(): (%lu, %lu)\n", own.x, own.y);
+      //      printk("do_callback(): (%d, %d) %d\n", own.x, own.y, own.local_cpu_id);
       do {
+        // delay
+        // not work well if printk is removed.
+        //        printk("");
+        /*
+        if (index == 6) {
+          //          asm volatile("sync");
+          printk("array[%d][%d][%d] = %d\n", index, i, j, array[index][i][j]);
+        }
+        */
         
         /* read array[index] from (0, 0) */
         read_from_cluster(own.local_cpu_id, high_addr, low_addr, &array[index][i][j], 0);
-        //        printk("array[%d] = %d\n", index, array[index][i][j]);
-      } while (array[index][i][j] != INIT_NUM);
+        //        printk("array[%d][%d][%d] = %d\n", index, i, j, array[index][i][j]);
+      } while (array[index][i][j] == 0);
     }
   }
   //  printk("start (%d, %d)\n", own.x, own.y);
@@ -199,6 +200,9 @@ void do_callback(int index)
   printk("write\n");
   for (i = 0; i < MAT_SIZE; i++) {
     for (j = 0; j < MAT_SIZE; j++) {
+      /* set array[own.cluster_id] in (0, 0) */
+      encode_cluster_address(&high_addr, &low_addr,
+                             0, 0, (unsigned long) &array[index][i][j]);
       /* send array[index] to (0, 0) */
       write_to_cluster(own.local_cpu_id, high_addr, low_addr, &array[index][i][j], 0);
     }
@@ -221,11 +225,8 @@ int is_cluster_active(struct cluster *c)
 void do_parallel(void)
 {
 	unsigned long cpu_id;
-	unsigned long high_addr;
-	unsigned long low_addr;
-  int i, j, k;
+  int i;
   unsigned long begin, end;
-  struct cluster dst;
   cpu_id = get_cpu_id();
   //  printk("cpu_id = 0x%x\n", cpu_id);
 	set_cpu_id(&own, cpu_id);
@@ -233,11 +234,15 @@ void do_parallel(void)
   if (own.x == 0 && own.y == 0) {
     printk("begin\n");
     init_array();
-    /* initialize array data as INIT_NUM. */
+    /* initialize array data as INIT_VAL. */
     begin = get_time_stamp_counter();
 #if defined(PUSH_TO_SLAVE_CLUSTERS)
     /* send data to other clusters (push) */
     for (i = LOOP_PER_CLUSTER; i < PARALLEL_NUM; i++) {
+      unsigned long high_addr;
+      unsigned long low_addr;
+      struct cluster dst;
+      int j, k;
       printk("%d / %d = %d\n", i, LOOP_PER_CLUSTER, i / LOOP_PER_CLUSTER);
       get_cluster_from_index(&dst, i / LOOP_PER_CLUSTER, 0);
       printk("do_parallel(): dst.x = %lu dst.y = %lu\n", dst.x, dst.y);
