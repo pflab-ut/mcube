@@ -107,8 +107,8 @@ void wait_until_loop_completion(void)
 }
 
 
-//#define PUSH_TO_SLAVE_CLUSTERS
-#define PULL_FROM_MASTER_CLUSTER
+#define PUSH_TO_SLAVE_CLUSTERS
+//#define PULL_FROM_MASTER_CLUSTER
 
 
 

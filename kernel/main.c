@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 {
   unsigned long cpu = get_cpu_id();
 #if CONFIG_ARCH_AXIS
-  /* local cpu id is in [0, 7]. */
+  /* local cpu id in AXIS is in [0, 7]. */
   cpu &= 0x7;
 #endif
   if (cpu == 0) {

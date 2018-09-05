@@ -125,11 +125,12 @@ endif
 mrun:
 	$(RUN_AXIS) "+define+MONITOR_ALL +define+PRINT_ALL"
 
+crun:
+	$(RUN_AXIS_CLUSTER) "+define+PRINT_ALL"
+
 cmrun:
 	$(RUN_AXIS_CLUSTER) "+define+MONITOR_ALL +define+PRINT_ALL"
 
-crun:
-	$(RUN_AXIS_CLUSTER) "+define+MONITOR_ALL"
 
 line:
 	@$(PYTHON) $(TOP_DIR)/scripts/misc/line.py
