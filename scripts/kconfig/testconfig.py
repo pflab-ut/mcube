@@ -14,7 +14,6 @@ import subprocess
 import sys
 import multiprocessing
 import datetime
-import time
 import tools
 import errno
 

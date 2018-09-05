@@ -9,7 +9,6 @@ create vmdk file.
 """
 
 import sys
-import binascii
 import struct
 import os
 

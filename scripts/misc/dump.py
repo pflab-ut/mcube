@@ -9,8 +9,6 @@ transform binary file to dump file with considering big/little endian.
 """
 
 import sys
-import binascii
-import struct
 
 argv = sys.argv
 argc = len(argv)
