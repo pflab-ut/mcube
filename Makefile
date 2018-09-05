@@ -30,7 +30,7 @@ SRCS += \
 
 # $(TOP_DIR)/kernel/irq.c \
 
-.PHONY: all configure testconfig defaultconfig testpython
+.PHONY: all configure testconfig defaultconfig pylint pyflakes
 all: $(TARGET)
 
 
@@ -85,11 +85,14 @@ defaultconfig:
 	@$(PYTHON) $(TOP_DIR)/scripts/kconfig/defaultconfig.py
 	@$(MAKE) configure
 
-testpython:
+pylint:
+	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pylint --py3k
+
+pyflakes:
+	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pyflakes
+
 #	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pep8 --ignore=E111
 #	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pychecker
-	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pyflakes
-	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pylint
 
 
 .PHONY: run grun mrun line size

@@ -179,15 +179,6 @@ void do_callback(volatile int index)
       /* wait until array[own.cluster_id] is INIT_NUM. */
       //      printk("do_callback(): (%d, %d) %d\n", own.x, own.y, own.local_cpu_id);
       do {
-        // delay
-        // not work well if printk is removed.
-        //        printk("");
-        /*
-        if (index == 6) {
-          //          asm volatile("sync");
-          printk("array[%d][%d][%d] = %d\n", index, i, j, array[index][i][j]);
-        }
-        */
         
         /* read array[index] from (0, 0) */
         read_from_cluster(own.local_cpu_id, high_addr, low_addr, &array[index][i][j], 0);
