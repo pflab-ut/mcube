@@ -13,8 +13,9 @@ int putchar(int c)
 
 int puts(const char *s)
 {
-  while (*s) {
-    putchar(*s++);
+  const char *t = s;
+  while (*t) {
+    putchar(*t++);
   }
-  return 0;
+  return t - s;
 }

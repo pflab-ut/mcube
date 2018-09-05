@@ -38,6 +38,7 @@ endif
 CFLAGS += -Iinclude -Wall
 #CFLAGS += -Wextra
 CFLAGS += -O3
+#CFLAGS += -O2
 #CFLAGS += -O0
 
 CFLAGS += -std=gnu11
@@ -57,7 +58,8 @@ CLEANFILES = *.o *~ *.o.* *.log *.pyc *.tmp __pycache__
 
 
 DUMP = $(TOP_DIR)/scripts/misc/dump.py
-RUN_AXIS = $(TOP_DIR)/scripts/misc/run.sh
+RUN_AXIS = $(TOP_DIR)/scripts/misc/run_axis.sh
+RUN_AXIS_CLUSTER = $(TOP_DIR)/scripts/misc/run_axis_cluster.sh
 MAKEFLAGS += --no-print-directory -rR
 MAKE = make
 

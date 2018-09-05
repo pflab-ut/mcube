@@ -34,7 +34,7 @@ while True:
   else:
     data = int.from_bytes(data, 'little')
   fout.write("{:08x}".format(data))
-#  fout.write(" // 0x{:08x}".format(addr))
+  fout.write(" // 0x{:08x}".format(addr))
   fout.write('\n')
   addr += 4
 #  print(format(data, "08x"))

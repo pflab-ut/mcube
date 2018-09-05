@@ -25,11 +25,22 @@ void exit_irq(void)
   disable_previous_irq();
 }
 
+int myputs(const char *s)
+{
+  const char *t = s;
+  while (*t) {
+    putchar(*t++);
+  }
+  return t - s;
+}
+
+
+
 /**
  * The init_arch() function initializes architecture-dependent features.
  */
 void init_arch(void)
-{
+{  
   init_irq();
   init_cpu();
 }

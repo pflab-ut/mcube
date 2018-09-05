@@ -18,8 +18,8 @@ SECTIONS {
   __text_end = .;
 	}
  
- /* bank size is 0x1000 and text and data regions do not share the same bank. */
-	.data ALIGN(0x1000) : {
+ /* XXX: Do not align data section because dump.pl does not work well.  */
+	.data /* ALIGN(0x1000) */ : {
   __data_begin = .;
 		*(.data)
 		*(.rdata)

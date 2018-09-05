@@ -22,5 +22,5 @@
 #define CONFIG_DEBUG 1
 #define CONFIG_TRACE 1
 /** Memory. */
-#define CONFIG_MEMORY_8MB 1
+#define CONFIG_MEMORY_256KB 1
 #endif /* __MCUBE_MCUBE_CONFIG_H__ */

@@ -25,6 +25,7 @@ int putchar(int c);
 int puts(const char *s);
 
   
+  
 #endif /* CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */
