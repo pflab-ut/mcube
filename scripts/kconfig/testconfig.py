@@ -116,7 +116,7 @@ def recursive_for_loop(index, depth):
     if depth > 0:
       recursive_for_loop(index + 1, depth - 1)
     else:
-      print(val)
+#      print(val)
       do_testconfig(cinfo, val)
       
 recursive_for_loop(0, 7)

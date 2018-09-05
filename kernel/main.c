@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
     init_sched();
     printk("main()3\n");
     //    printk("%13lx\n", 0x1234);
-    //    volatile int i = 1 / 0;
     
     user_main();
     exit_arch();

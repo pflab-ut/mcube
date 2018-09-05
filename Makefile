@@ -28,7 +28,6 @@ SRCS += \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/user/user.c \
 
-# $(TOP_DIR)/kernel/irq.c \
 
 .PHONY: all configure testconfig defaultconfig pylint pyflakes
 all: $(TARGET)
