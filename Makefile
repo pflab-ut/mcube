@@ -9,8 +9,6 @@
 
 TOP_DIR = .
 
-include $(TOP_DIR)/Rules.make
-
 SRCS += \
  $(TOP_DIR)/kernel/main.c \
 	$(TOP_DIR)/kernel/printk.c \
@@ -27,6 +25,9 @@ SRCS += \
  $(TOP_DIR)/lib/syscall.c \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/user/user.c \
+
+include $(TOP_DIR)/Rules.make
+
 
 
 .PHONY: all configure testconfig defaultconfig pylint pyflakes

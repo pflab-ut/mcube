@@ -144,7 +144,7 @@ void do_callback(volatile int index)
   /* set address array[index] in (0, 0) */
   //  printk("do %d\n", index);
   //  printk("do_callback(): do while (%d, %d)\n", own.x, own.y);
-  /* wait until array[own.cluster_id] in (own.x, own.y) is INIT_NUM. */
+  /* wait until array[own.cluster_id] in (own.x, own.y) becomes zero. */
   do {
     //    read(own.local_cpu_id, high_addr, low_addr, &data, 0);
 #if 0
@@ -176,7 +176,7 @@ void do_callback(volatile int index)
       encode_cluster_address(&high_addr, &low_addr,
                              0, 0, (unsigned long) &array[index][i][j]);
       //      printk("high_addr = 0x%x low_addr = 0x%x\n", high_addr, low_addr);
-      /* wait until array[own.cluster_id] is INIT_NUM. */
+      /* wait until array[own.cluster_id] becomes zero. */
       //      printk("do_callback(): (%d, %d) %d\n", own.x, own.y, own.local_cpu_id);
       do {
         

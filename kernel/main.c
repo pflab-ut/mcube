@@ -5,6 +5,11 @@
  */
 #include <mcube/mcube.h>
 
+#if CONFIG_ARCH_AXIS && CONFIG_COMPILER_CLANG
+/* NOTE: padding to separate banks of text and data. */
+char dummy[0x1000] = {1};
+#endif
+
 unsigned int Debug = FALSE;
 //unsigned int Debug = TRUE;
 
