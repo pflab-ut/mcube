@@ -15,10 +15,15 @@ void handle_hpet_timer_tick(interrupt_context_t *context)
 	mmio_out64(GENERAL_INTERRUPT_STATUS_64, GENERAL_INTERRUPT_STATUS_T0_INTERRUPT_STS);
 
 
-#if 0
-	do_release();
-	do_sched();
-#endif
+  if (current_th[cpu] != &idle_th[cpu]) {
+    PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
+           current_th[cpu]->id, current_th[cpu]->sched.remaining);
+    current_th[cpu]->sched.remaining -=
+      CPU_CLOCK_TO_USEC(get_current_cpu_time() - current_th[cpu]->sched.begin_cpu_time);
+    if (current_th[cpu]->sched.remaining <= 0) {
+      do_end_job(current_th[cpu]);
+    }
+  }
   
   update_jiffies();
 

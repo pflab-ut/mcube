@@ -23,12 +23,8 @@ void handle_pit_timer(interrupt_context_t *context)
     if (current_th[cpu] != &idle_th[cpu]) {
       PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
              current_th[cpu]->id, current_th[cpu]->sched.remaining);
-#if 1
-      current_th[cpu]->sched.remaining = 0;
-#else
-      current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_timer_period()
-                                                            - current_th[cpu]->sched.begin_cpu_time);
-#endif
+      current_th[cpu]->sched.remaining -=
+        CPU_CLOCK_TO_USEC(get_current_cpu_time() - current_th[cpu]->sched.begin_cpu_time);
       if (current_th[cpu]->sched.remaining <= 0) {
         do_end_job(current_th[cpu]);
       }
