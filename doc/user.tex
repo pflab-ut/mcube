@@ -363,3 +363,20 @@ $ LANG=C xdg-user-dirs-gtk-update
 \end{Sbox}
 \fbox{\TheSbox}
 
+
+\subsection{Docker}
+
+Docker is used without "sudo".
+
+\noindent
+\begin{Sbox}
+\begin{minipage}[t]{0.975\linewidth}
+\begin{verbatim}
+# gpasswd -a $(whoami) docker
+# chgrp docker /var/run/docker.sock
+# service docker restart
+\end{verbatim}
+\end{minipage}
+\end{Sbox}
+\fbox{\TheSbox}
+

@@ -41,6 +41,12 @@ Please execute the following command.
 ```
 $ make
 ```
+
+If you would like to use "docker", please execute the following command.
+```
+$ make docker
+```
+
 Then, create "mcube" file in the top directory of "mcube".
 
 

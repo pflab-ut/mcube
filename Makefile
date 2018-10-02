@@ -85,6 +85,9 @@ defaultconfig:
 	@$(PYTHON) $(TOP_DIR)/scripts/kconfig/defaultconfig.py
 	@$(MAKE) configure
 
+docker:
+	@$(TOP_DIR)/scripts/docker/docker.sh
+
 pylint:
 	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pylint --py3k
 

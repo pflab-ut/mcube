@@ -8,24 +8,14 @@
 prefix="sudo apt-get -y install"
 
 # compiler
-$prefix ccache gcc clang gcc-aarch64-linux-gnu nasm
-
-# sendmail
-$prefix sendmail
+$prefix ccache gcc clang llvm gcc-aarch64-linux-gnu nasm
 
 # python
 $prefix python3 python3-pip
 pip3 install pyflakes pylint 
 
-# git
-$prefix git
-
-# samba
-$prefix samba
-
-# Doxygen
-$prefix doxygen
-
+# tool
+$prefix git samba make doxygen sendmail git genisoimage
 
 # LaTeX
 $prefix tetex-* texlive-latex* texlive-science ptex-jtex
