@@ -9,6 +9,7 @@
 void init_arch(void)
 {
   disable_local_irq();
+  init_cpu();
   /* initialize console */
 #if CONFIG_PRINTK2CONSOLE
   init_tty();
@@ -38,6 +39,7 @@ void init_arch(void)
   print_vendor_id();
 #endif
 
+  
 #if 1
   //  unsigned long val = 100000000;
   unsigned long val = 10000000;

@@ -98,3 +98,11 @@ void print_cpu_brand(void)
 	cpu_brand[CPU_BRAND_LENGTH] = '\0';
 	printk("%s\n", cpu_brand);
 }
+
+void init_cpu(void)
+{
+  // TODO: set CPU frequency dynamically.
+  // Core 2 Duo Clock Hz
+  CPU_CLOCK = (unsigned long) 2400 * 1000 * 1000;
+  CPU_CLOCK_MHZ_PER_USEC = CPU_CLOCK / (1000 * 1000);
+}

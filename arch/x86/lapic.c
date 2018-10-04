@@ -17,7 +17,6 @@ void handle_lapic_timer_tick(interrupt_context_t *context)
   if (current_th[cpu] != &idle_th[cpu]) {
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
-    
     current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_current_cpu_time()
                                                           - current_th[cpu]->sched.begin_cpu_time);
     if (current_th[cpu]->sched.remaining <= 0) {
@@ -131,8 +130,6 @@ void measure_lapic_timer(void)
 
 void init_lapic_timer(unsigned long tick_us)
 {
-  // Core 2 Duo Clock MHz
-  CPU_CLOCK_MHZ_PER_USEC = 2.40e+03;
 
 	//	printk("init_timer()\n");
   //	unsigned long cpu = get_cpu_id();
