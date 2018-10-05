@@ -102,6 +102,14 @@ int exit_task(void);
 struct task_struct *do_create_task(struct th_attr *attr);
 
 int copy_process(unsigned long func, unsigned long arg);
+
+/**
+ * @fn   copy_arch_process
+ * @brief      Copy architecture dependent values in process
+ * @param[out] p Pointer to task.
+ * @param[in]  func Pointer to function.
+ * @param[in]  argument
+ */
 void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg);
 void ret_from_fork(void);
 

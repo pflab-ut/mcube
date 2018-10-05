@@ -6,6 +6,10 @@
 #ifndef	__MCUBE_X86_THREAD_H__
 #define	__MCUBE_X86_THREAD_H__
 
+/**
+ * @struct cpu_context
+ * @brief CPU context information.
+ */
 struct cpu_context {
   unsigned long eax;
   unsigned long ebx;

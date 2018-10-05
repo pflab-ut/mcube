@@ -7,53 +7,53 @@
 #define	__MCUBE_X86_HEAP_H__
 
 
-//============================================================================
-/// @brief      A simple heap memory manager
-//
-//  Copyright 2016 Brett Vickers.
-//  Use of this source code is governed by a BSD-style license
-//  that can be found in the MonkOS LICENSE file.
-//============================================================================
+/**
+ * @brief      A simple heap memory manager
+ *
+ *  Copyright 2016 Brett Vickers.
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the MonkOS LICENSE file.
+ */
 
 #ifndef __ASSEMBLY__
 
 typedef struct heap heap_t;
 
-//----------------------------------------------------------------------------
-//  @function   heap_create
-/// @brief      Create a new heap from which to allocate virtual memory.
-/// @param[in]  pt          The page table from which virtual memory is to be
-///                         allocated.
-/// @param[in]  vaddr       The virtual address of the first byte to use for
-///                         the heap.
-/// @param[in]  maxpages    The maximum number of pages that the heap will
-///                         grow to fill.
-/// @returns    A pointer to a the created heap structure.
-//----------------------------------------------------------------------------
+/**
+ *  @function   heap_create
+ *  @brief      Create a new heap from which to allocate virtual memory.
+ *  @param[in]  pt          The page table from which virtual memory is to be
+ *                          allocated.
+ *  @param[in]  vaddr       The virtual address of the first byte to use for
+ *                          the heap.
+ *  @param[in]  maxpages    The maximum number of pages that the heap will
+ *                          grow to fill.
+ *  @returns    A pointer to a the created heap structure.
+ */
 heap_t *heap_create(pagetable_t *pt, void *vaddr, uint64_t maxpages);
 
-//----------------------------------------------------------------------------
-//  @function   heap_destroy
-/// @brief      Destroy a heap, returning its memory to page table.
-/// @param[in]  heap        The heap to be destroyed.
-//----------------------------------------------------------------------------
+/**
+ *  @function   heap_destroy
+ *  @brief      Destroy a heap, returning its memory to page table.
+ *  @param[in]  heap        The heap to be destroyed.
+ */
 void heap_destroy(heap_t *heap);
 
-//----------------------------------------------------------------------------
-//  @function   heap_alloc
-/// @brief      Allocate memory from a heap.
-/// @param[in]  heap    The heap from which to allocate the memory.
-/// @param[in]  size    The size, in bytes, of the allocation.
-/// @returns    A pointer to a the allocated memory.
-//----------------------------------------------------------------------------
+/**
+ *  @function   heap_alloc
+ *  @brief      Allocate memory from a heap.
+ *  @param[in]  heap    The heap from which to allocate the memory.
+ *  @param[in]  size    The size, in bytes, of the allocation.
+ *  @returns    A pointer to a the allocated memory.
+ */
 void *heap_alloc(heap_t *heap, uint64_t size);
 
-//----------------------------------------------------------------------------
-//  @function   heap_free
-/// @brief      Free memory previously allocated with heap_alloc.
-/// @param[in]  heap    The heap from which the memory was allocated.
-/// @param[in]  ptr     A pointer to the memory that was allocated.
-//----------------------------------------------------------------------------
+/**
+ *  @function   heap_free
+ *  @brief      Free memory previously allocated with heap_alloc.
+ *  @param[in]  heap    The heap from which the memory was allocated.
+ *  @param[in]  ptr     A pointer to the memory that was allocated.
+ */
 void heap_free(heap_t *heap, void *ptr);
 
 
@@ -74,6 +74,11 @@ void heap_free(heap_t *heap, void *ptr);
 #define total_bytes(b)                                          \
   ((b)->size + sizeof(block_header_t) + sizeof(block_footer_t))
 
+/**
+ * @struct heap
+ * @brief Heap information.
+ * The heap structure has heap information.
+ */
 struct heap {
   pagetable_t          *pt;           // page table that owns the heap
   void                 *vaddr;        // address of heap start
@@ -83,15 +88,28 @@ struct heap {
   uint64_t              reserved;     // pad to a multiple of 16 bytes
 };
 
+/**
+ * @struct block_header
+ * @brief Block header information.
+ */
 typedef struct block_header {
   uint64_t size;          // size of block in bytes (minus header/footer)
   uint64_t flags;
 } block_header_t;
 
+/**
+ * @struct block_footer
+ * @brief Block footer information.
+ */
 typedef struct block_footer {
   uint64_t size;          // size of the preceding block
 } block_footer_t;
 
+
+/**
+ * @struct fblock_header
+ * @brief Free Block Header information.
+ */
 typedef struct fblock_header {
   struct block_header   block;
   struct fblock_header *next_fblock;  // next free block in the heap

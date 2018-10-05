@@ -8,6 +8,10 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @struct cpu_context
+ * @brief  CPU context information.
+ */
 struct cpu_context {
   /* dummy */
   unsigned long eax;

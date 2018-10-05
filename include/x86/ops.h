@@ -8,10 +8,10 @@
 
 #ifndef __ASSEMBLY__
 
-//----------------------------------------------------------------------------
-//  @struct     registers_t
-/// @brief      A record describing all 64-bit general-purpose registers.
-//----------------------------------------------------------------------------
+/**
+ * @struct registers
+ * @brief  A record describing all 64-bit general-purpose registers.
+ */
 typedef struct registers {
    uint64_t rax;
    uint64_t rbx;
@@ -30,10 +30,10 @@ typedef struct registers {
    uint64_t r15;
 } registers_t;
 
-//----------------------------------------------------------------------------
-//  @struct     registers4_t
-/// @brief      A record describing the first 4 general-purpose registers.
-//----------------------------------------------------------------------------
+/**
+ * @struct registers4
+ * @brief  A record describing the first 4 general-purpose registers.
+ */
 typedef struct registers4 {
   uint32_t eax;
   uint32_t ebx;
@@ -170,9 +170,10 @@ static inline uint64_t rdtsc(void)
 /* read time stamp counter and processor ID */
 static inline uint64_t rdtscp(void)
 {
-	uint32_t high, low;
-	asm volatile("rdtscp" : "=a"(low), "=d"(high));
-	return (uint64_t) low | ((uint64_t) high << 32);
+	uint64_t x;
+	asm volatile("cpuid" ::: "rax", "rbx", "rcx", "rdx");
+	asm volatile("rdtscp" : "=A" (x));
+	return x;
 }
 
 

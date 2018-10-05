@@ -5,13 +5,13 @@
  */
 #ifndef __MCUBE_X86_EXCEPTION_H__
 #define __MCUBE_X86_EXCEPTION_H__
-//============================================================================
-/// @brief      CPU exceptions.
-//
-//  Copyright 2016 Brett Vickers.
-//  Use of this source code is governed by a BSD-style license
-//  that can be found in the MonkOS LICENSE file.
-//============================================================================
+/**
+ * @brief      CPU exceptions.
+ *
+ * Copyright 2016 Brett Vickers.
+ * Use of this source code is governed by a BSD-style license
+ * that can be found in the MonkOS LICENSE file.
+ */
 
 // CPU exception constants
 #define EXCEPTION_DIVBYZERO            0x00

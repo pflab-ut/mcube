@@ -25,7 +25,6 @@ void init_irq(void);
 struct full_regs;
 
 asmlinkage int do_irq(unsigned long irq, struct full_regs *regs);
-unsigned int __do_irq(unsigned long irq);
 
 
 #endif /* !__ASSEMBLY__ */

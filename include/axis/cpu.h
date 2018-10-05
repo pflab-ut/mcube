@@ -6,9 +6,12 @@
 #ifndef	__MCUBE_AXIS_CPU_H__
 #define	__MCUBE_AXIS_CPU_H__
 
-
 #ifndef __ASSEMBLY__
 
+/**
+ * @struct cluster
+ * @brief  AXIS cluster information.
+ */
 struct cluster {
   unsigned long cluster_id;
   unsigned long x;

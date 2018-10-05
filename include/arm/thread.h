@@ -8,6 +8,10 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @struct cpu_context
+ * @brief  CPU context information.
+ */
 struct cpu_context {
   unsigned long x19;
   unsigned long x20;

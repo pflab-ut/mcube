@@ -39,17 +39,6 @@ void init_arch(void)
   print_vendor_id();
 #endif
 
-  
-#if 1
-  //  unsigned long val = 100000000;
-  unsigned long val = 10000000;
-  unsigned int n;
-  n = printk("valx = 0x%lx\n", val);
-  printk("n = %d\n", n);
-  n = printk("val  = %lu\n", val);
-  printk("n = %d\n", n);
-#endif
-
   sched_time = 100;
   
 #if 0

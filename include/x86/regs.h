@@ -14,9 +14,8 @@
 #define	STACK_ALIGN(x)	(((x) + 7) & -8)
 
 /**
- * @brief Context register
- *
- * The context_regs structure has context register information.
+ * @struct context_regs
+ * @brief Context register information.
  */
 struct context_regs {
 	/** Backlink in x86. */
@@ -76,9 +75,8 @@ struct context_regs {
 typedef struct context_regs context_regs;
 
 /**
- * @brief Full register
- *
- * The full_regs structure has full register information.
+ * @struct full_regs
+ * @brief Full register information.
  */
 struct full_regs {
 	/** Context register in x86. */

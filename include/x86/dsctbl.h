@@ -10,9 +10,8 @@
 
 
 /**
- * @brief Descriptor pointer
- *
- * The desc_ptr structure has descriptor pointer information.
+ * @struct desc_ptr
+ * @brief Descriptor pointer information.
  */
 struct desc_ptr {
 	/** Size. */

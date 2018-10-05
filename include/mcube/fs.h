@@ -71,6 +71,7 @@ void print_disk(void);
 
 
 /**
+ * @struct msdos_volume_info
  * @brief MS DOS volume information
  *
  * The msdos_volume_info structure has MS DOS volume information.
@@ -93,6 +94,7 @@ struct msdos_volume_info {
 typedef struct msdos_volume_info msdos_volume_info;
 
 /**
+ * @struct msdos_boot_sector
  * @brief MS DOS boot sector information
  *
  * The msdos_boot_sector structure has MS DOS boot sector information.

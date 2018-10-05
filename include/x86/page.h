@@ -5,13 +5,13 @@
  */
 #ifndef __MCUBE_X86_PAGE_H__
 #define	__MCUBE_X86_PAGE_H__
-//============================================================================
-/// @brief      Paged memory management.
-//
-// Copyright 2016 Brett Vickers.
-// Use of this source code is governed by a BSD-style license that can
-// be found in the MonkOS LICENSE file.
-//============================================================================
+/**
+ * @brief      Paged memory management.
+ *
+ * Copyright 2016 Brett Vickers.
+ * Use of this source code is governed by a BSD-style license that can
+ * be found in the MonkOS LICENSE file.
+ */
 
 #ifndef __ASSEMBLY__
 
@@ -50,23 +50,23 @@
 // Page table entry helpers
 #define PGPTR(pte)       ((page_t *)((pte) & ~PGMASK_OFFSET))
 
-//----------------------------------------------------------------------------
-//  @union      page_t
-/// @brief      A pagetable page record.
-/// @details    Contains 512 page table entries if the page holds a page
-///             table. Otherwise it contains 4096 bytes of memory.
-//----------------------------------------------------------------------------
+/**
+ * @union      page
+ * @brief      A pagetable page record.
+ * @details    Contains 512 page table entries if the page holds a page
+ *             table. Otherwise it contains 4096 bytes of memory.
+ */
 typedef union page {
   uint64_t entry[PAGE_SIZE / sizeof(uint64_t)];
   uint8_t  memory[PAGE_SIZE];
 } page_t;
 
-//----------------------------------------------------------------------------
-//  @struct     pagetable_t
-/// @brief      A pagetable structure.
-/// @details    Holds all the page table entries that map virtual addresses to
-///             physical addresses.
-//----------------------------------------------------------------------------
+/**
+ * @struct     pagetable
+ * @brief      A pagetable structure.
+ * @details    Holds all the page table entries that map virtual addresses to
+ *             physical addresses.
+ */
 typedef struct pagetable {
   uint64_t proot;     ///< Physical address of root page table (PML4T) entry
   uint64_t vroot;     ///< Virtual address of root page table (PML4T) entry
@@ -74,65 +74,64 @@ typedef struct pagetable {
   uint64_t vterm;     ///< Boundary of pages used to store the table
 } pagetable_t;
 
-//----------------------------------------------------------------------------
-//  @function   init_page
-/// @brief      Initialize the page frame database.
-/// @details    The page frame database manages the physical memory used by
-///             all memory pages known to the kernel.
-//----------------------------------------------------------------------------
+/**
+ * @function   init_page
+ * @brief      Initialize the page frame database.
+ * @details    The page frame database manages the physical memory used by
+ *             all memory pages known to the kernel.
+ */
 void init_page(void);
 
-//----------------------------------------------------------------------------
-//  @function   pagetable_create
-/// @brief      Create a new page table that can be used to associate virtual
-///             addresses with physical addresses. The page table includes
-///             protected mappings for kernel memory.
-/// @param[in]  pt      A pointer to the pagetable structure that will hold
-///                     the page table.
-/// @param[in]  vaddr   The virtual address within the new page table where
-///                     the page table will be mapped.
-/// @param[in]  size    Maximum size of the page table in bytes. Must be a
-///                     multiple of PAGE_SIZE.
-/// @returns    A handle to the created page table.
-//----------------------------------------------------------------------------
+/**
+ * @function   pagetable_create
+ * @brief      Create a new page table that can be used to associate virtual
+ *             addresses with physical addresses. The page table includes
+ *             protected mappings for kernel memory.
+ * @param[in]  pt      A pointer to the pagetable structure that will hold
+ *                     the page table.
+ * @param[in]  vaddr   The virtual address within the new page table where
+ *                     the page table will be mapped.
+ * @param[in]  size    Maximum size of the page table in bytes. Must be a
+ *                     multiple of PAGE_SIZE.
+ * @returns    A handle to the created page table.
+ */
 void pagetable_create(pagetable_t *pt, void *vaddr, uint64_t size);
 
-//----------------------------------------------------------------------------
-//  @function   pagetable_destroy
-/// @brief      Destroy a page table.
-/// @param[in]  pt      A handle to the page table to destroy.
-//----------------------------------------------------------------------------
+/**
+ * @function   pagetable_destroy
+ * @brief      Destroy a page table.
+ */
 void pagetable_destroy(pagetable_t *pt);
 
-//----------------------------------------------------------------------------
-//  @function   pagetable_activate
-/// @brief      Activate a page table on the CPU, so all virtual memory
-///             operations are performed relative to the page table.
-/// @param[in]  pt      A handle to the activated page table. Pass NULL to
-///                     activate the kernel page table.
-//----------------------------------------------------------------------------
+/**
+ * @function   pagetable_activate
+ * @brief      Activate a page table on the CPU, so all virtual memory
+ *             operations are performed relative to the page table.
+ * @param[in]  pt      A handle to the activated page table. Pass NULL to
+ *                     activate the kernel page table.
+ */
 void pagetable_activate(pagetable_t *pt);
 
-//----------------------------------------------------------------------------
-//  @function   page_alloc
-/// @brief      Allocate one or more pages contiguous in virtual memory.
-/// @param[in]  pt      Handle to the page table from which to allocate the
-///                     page(s).
-/// @param[in]  vaddr   The virtual address of the first allocated page.
-/// @param[in]  count   The number of contiguous virtual memory pages to
-///                     allocate.
-/// @returns    A virtual memory pointer to the first page allocated.
-//----------------------------------------------------------------------------
+/**
+ * @function   page_alloc
+ * @brief      Allocate one or more pages contiguous in virtual memory.
+ * @param[in]  pt      Handle to the page table from which to allocate the
+ *                     page(s).
+ * @param[in]  vaddr   The virtual address of the first allocated page.
+ * @param[in]  count   The number of contiguous virtual memory pages to
+ *                     allocate.
+ * @returns    A virtual memory pointer to the first page allocated.
+ */
 void *page_alloc(pagetable_t *pt, void *vaddr, int count);
 
-//----------------------------------------------------------------------------
-//  @function   page_free
-/// @brief      Free one or more contiguous pages from virtual memory.
-/// @param[in]  pt      Handle to ehte page table from which to free the
-///                     page(s).
-/// @param[in]  vaddr   The virtual address of the first allocated page.
-/// @param[in]  count   The number of contiguous virtual memory pages to free.
-//----------------------------------------------------------------------------
+/**
+ * @function   page_free
+ * @brief      Free one or more contiguous pages from virtual memory.
+ * @param[in]  pt      Handle to ehte page table from which to free the
+ *                     page(s).
+ * @param[in]  vaddr   The virtual address of the first allocated page.
+ * @param[in]  count   The number of contiguous virtual memory pages to free.
+ */
 void page_free(pagetable_t *pt, void *vaddr, int count);
 
 #endif /* !__ASSEMBLY__ */
