@@ -21,12 +21,11 @@ typedef int atomic_int;
  *
  * The atomic structure has atomic information.
  */
-struct atomic {
+typedef struct atomic {
 	/** Counter. */
   int counter;
-};
+} atomic_t;
 
-typedef struct atomic atomic;
 
 #endif /* !__ASSEMBLY__ */
 

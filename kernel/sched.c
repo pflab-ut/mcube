@@ -166,7 +166,7 @@ int check_deadline_miss(void)
 
 int run(unsigned long nr_threads)
 {
-	int i;
+	size_t i;
 	int ret;
   printk("run()\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
@@ -194,7 +194,7 @@ int run(unsigned long nr_threads)
     current_th[i] = prev_th[i] = &idle_th[i];
     current_th[i]->id = 0;
     current_th[i]->stack_top = IDLE_THREAD_STACK_ADDR(i);
-    printk("current_th[%d]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
+    printk("current_th[%ld]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
   }
   //		printk("current_th[%d] = %x\n", i, current_th[i]);
 

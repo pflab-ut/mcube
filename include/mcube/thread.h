@@ -246,17 +246,7 @@ void (*th_mains[NR_THREADS])(void);
 
 
 
-static inline int thread_tie_break(struct thread_struct *x, struct thread_struct *y)
-{
-#if CONFIG_TIE_BREAK_FIFO
-	/* always false */
-  return 0;
-#elif CONFIG_TIE_BREAK_ID
-	return x->id < y->id;
-#else
-#error "Unknown Thread Tie-Break Policy"
-#endif
-}
+int thread_tie_break(struct thread_struct *x, struct thread_struct *y);
 
 static inline int thread_is_high_prio(struct thread_struct *x, struct thread_struct *y)
 {

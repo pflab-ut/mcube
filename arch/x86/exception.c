@@ -37,7 +37,7 @@ static const char *exceptionstr[] = {
 };
 
 
-static void dump_context(int id, const interrupt_context_t *context)
+static void dump_context(const interrupt_context_t *context)
 {
   char buf[640];
   printk("INT: %02lx   Error: %08lx\n\n",
@@ -77,7 +77,7 @@ static void isr_fatal(interrupt_context_t *context)
   tty_clear(0);
   printk("%s\n\n", exstr);
 
-  dump_context(0, context);
+  dump_context(context);
 
   hang();
 }

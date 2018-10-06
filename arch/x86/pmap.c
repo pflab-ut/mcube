@@ -245,8 +245,9 @@ static void consolidate_neighbors(void)
 
 static void update_last_usable(void)
 {
+  int i;
   map->last_usable = 0;
-  for (int i = map->count - 1; i >= 0; i--) {
+  for (i = map->count - 1; i >= 0; i--) {
     const pmapregion_t *r = &map->region[i];
     if (r->type == PMEMTYPE_USABLE) {
       map->last_usable = r->addr + r->size;
@@ -271,9 +272,9 @@ static void normalize(void)
 
 void print_pmap(void)
 {
-  int i;
+  size_t i;
   for (i = 0; i < map->count; i++) {
-    printk("region[%d]: addr = 0x%lx size = 0x%lx type = 0x%x flags = 0x%x\n",
+    printk("region[%ld]: addr = 0x%lx size = 0x%lx type = 0x%x flags = 0x%x\n",
            i, map->region[i].addr, map->region[i].size, map->region[i].type, map->region[i].flags);
   }
 }

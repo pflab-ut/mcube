@@ -253,8 +253,8 @@ struct proc_dir_entry {
 #endif
 	struct proc_dir_entry *next, *parent, *subdir;
 	void *data;
-	atomic count;         /* use count */
-	atomic in_use;        /* number of callers into module in progress; */
+	atomic_t count;         /* use count */
+	atomic_t in_use;        /* number of callers into module in progress; */
 #if 0
 	/* negative -> it's going away RSN */
 	struct completion *pde_unload_completion;

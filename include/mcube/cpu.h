@@ -40,7 +40,6 @@ extern double CPU_CLOCK_MHZ_PER_NSEC;
 extern double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* !CONFIG_ARCH_AXIS */
 
-extern atomic nr_cpus;
 extern unsigned long ap_start;
 
 int ap_main(void);

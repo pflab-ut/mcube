@@ -11,7 +11,7 @@ unsigned short *mem_map;
 
 unsigned long get_free_page(void)
 {
-  int i;
+  size_t i;
 	for (i = 0; i < PAGING_PAGES; i++) {
 		if (mem_map[i] == 0){
 			mem_map[i] = 1;

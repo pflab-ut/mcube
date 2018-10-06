@@ -93,7 +93,7 @@ static inline void set_eflags(uint64_t eflags)
 
 static inline void generate_software_interrupt(volatile unsigned long id)
 {
-  //  asm volatile("int %0" :: "r"(id));
+  asm volatile("int %0" :: "r"(id));
 }
 
 
