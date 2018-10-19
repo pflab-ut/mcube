@@ -17,13 +17,13 @@
 
 #define LOCK_PREFIX LOCK_PREFIX_HERE "\n\tlock; "
 
-static inline void atomic_inc(atomic *v)
+static inline void atomic_inc(atomic_t *v)
 {
   asm volatile(LOCK_PREFIX "incl %0"
 							 : "+m" (v->counter));
 }
 
-static inline void atomic_dec(atomic *v)
+static inline void atomic_dec(atomic_t *v)
 {
   asm volatile(LOCK_PREFIX "decl %0"
 							 : "+m" (v->counter));

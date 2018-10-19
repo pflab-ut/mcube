@@ -166,7 +166,7 @@ int check_deadline_miss(void)
 
 int run(unsigned long nr_threads)
 {
-	size_t i;
+	unsigned int i;
 	int ret;
   printk("run()\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
@@ -242,7 +242,7 @@ void schedule_tail(void)
 void init_sched(void)
 {
   unsigned long cpu = get_cpu_id();
-  size_t i, j;
+  unsigned int i, j;
   sys_jiffies = 0;
 
   for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
