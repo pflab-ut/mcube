@@ -5,8 +5,8 @@
  */
 #include <mcube/mcube.h>
 
-.macro invalid_entry type
-  kernel_entry
+.macro invalid_entry el, type
+  kernel_entry \el
   mov x0, #\type
   mrs x1, esr_el1
   mrs x2, elr_el1
@@ -19,7 +19,7 @@
   .balign 128
 .endm
 
-.macro kernel_entry
+.macro kernel_entry, el
   sub sp, sp, #S_FRAME_SIZE
   stp x0, x1, [sp, #16 * 0]
   stp x2, x3, [sp, #16 * 1]
@@ -37,9 +37,29 @@
   stp x26, x27, [sp, #16 * 13]
   stp x28, x29, [sp, #16 * 14]
   str x30, [sp, #16 * 15]
+
+  .if     \el == 0
+  mrs     x21, sp_el0
+  .else
+  add     x21, sp, #S_FRAME_SIZE
+  .endif /* \el == 0 */
+  
+  mrs     x22, elr_el1
+  mrs     x23, spsr_el1
+
+  stp     x30, x21, [sp, #16 * 15]
+          stp     x22, x23, [sp, #16 * 16]
 .endm
 
-.macro kernel_exit
+.macro kernel_exit el
+
+  .if \el == 0
+  msr     sp_el0, x21
+  .endif /* \el == 0 */
+  
+  msr     elr_el1, x22
+  msr     spsr_el1, x23
+  
   ldp x0, x1, [sp, #16 * 0]
   ldp x2, x3, [sp, #16 * 1]
   ldp x4, x5, [sp, #16 * 2]
@@ -96,56 +116,56 @@ ENTRY(vector)
   vector_entry vector_error_el0_32
 
 vector_sync_el1t:
-  invalid_entry SYNC_INVALID_EL1t
+  invalid_entry 1, SYNC_INVALID_EL1t
   
 vector_irq_el1t:
-  kernel_entry
+  kernel_entry 1
   bl do_irq
-  kernel_exit
+  kernel_exit 1
   
 vector_fiq_el1t:
-  invalid_entry FIQ_INVALID_EL1t
+  invalid_entry 1, FIQ_INVALID_EL1t
   
 vector_error_el1t:
-  invalid_entry ERROR_INVALID_EL1t
+  invalid_entry 1, ERROR_INVALID_EL1t
   
 vector_sync_el1h:
-  invalid_entry SYNC_INVALID_EL1h
+  invalid_entry 1, SYNC_INVALID_EL1h
   
 vector_irq_el1h:
-  kernel_entry
+  kernel_entry 1
   bl do_irq
-  kernel_exit
+  kernel_exit 1
 
 vector_fiq_el1h:
-  invalid_entry FIQ_INVALID_EL1h
+  invalid_entry 1, FIQ_INVALID_EL1h
   
 vector_error_el1h:
-  invalid_entry ERROR_INVALID_EL1h
+  invalid_entry 1, ERROR_INVALID_EL1h
   
 vector_sync_el0_64:
-  invalid_entry SYNC_INVALID_EL0_64
+  invalid_entry 0, SYNC_INVALID_EL0_64
   
 vector_irq_el0_64:
-  invalid_entry IRQ_INVALID_EL0_64
+  invalid_entry 0, IRQ_INVALID_EL0_64
 
 vector_fiq_el0_64:
-  invalid_entry FIQ_INVALID_EL0_64
+  invalid_entry 0, FIQ_INVALID_EL0_64
   
 vector_error_el0_64:
-  invalid_entry ERROR_INVALID_EL0_64
+  invalid_entry 0, ERROR_INVALID_EL0_64
   
 vector_sync_el0_32:
-  invalid_entry SYNC_INVALID_EL0_32
+  invalid_entry 0, SYNC_INVALID_EL0_32
   
 vector_irq_el0_32:
-  invalid_entry IRQ_INVALID_EL0_32
+  invalid_entry 0, IRQ_INVALID_EL0_32
 
 vector_fiq_el0_32:
-  invalid_entry FIQ_INVALID_EL0_32
+  invalid_entry 0, FIQ_INVALID_EL0_32
   
 vector_error_el0_32:
-  invalid_entry ERROR_INVALID_EL0_32
+  invalid_entry 0, ERROR_INVALID_EL0_32
 
 ENTRY(ret_from_fork)
   bl schedule_tail

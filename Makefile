@@ -64,6 +64,7 @@ $(BUILD_DIR)/%.o: %.c
 # except x86
 $(BUILD_DIR)/%.o: %.S
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
+#	$(CC) -D__ASSEMBLY__ $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
 	$(CC) -D__ASSEMBLY__ $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
 
 # x86

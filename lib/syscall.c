@@ -35,6 +35,10 @@ asmlinkage int sys_get_exec_time(unsigned long *id_ptr, unsigned long *cputime_p
 	return 0;
 }
 
+asmlinkage void sys_write(char *buf)
+{
+  puts(buf);
+}
 
 asmlinkage int sys_bad_syscall(int number)
 {
@@ -43,11 +47,6 @@ asmlinkage int sys_bad_syscall(int number)
 	inf_loop();
 	/* not reached */
 	return -1;
-}
-
-asmlinkage void sys_write(char *buf)
-{
-  puts(buf);
 }
 
 void *const syscall_table[] = {
