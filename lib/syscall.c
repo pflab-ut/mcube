@@ -44,3 +44,16 @@ asmlinkage int sys_bad_syscall(int number)
 	/* not reached */
 	return -1;
 }
+
+asmlinkage void sys_write(char *buf)
+{
+  puts(buf);
+}
+
+void *const syscall_table[] = {
+  sys_sched,
+  sys_end_job,
+  sys_get_exec_time,
+  sys_write,
+  sys_bad_syscall
+};

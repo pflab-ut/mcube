@@ -194,7 +194,7 @@ int run(unsigned long nr_threads)
     current_th[i] = prev_th[i] = &idle_th[i];
     current_th[i]->id = 0;
     current_th[i]->stack_top = IDLE_THREAD_STACK_ADDR(i);
-    printk("current_th[%ld]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
+    printk("current_th[%u]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
   }
   //		printk("current_th[%d] = %x\n", i, current_th[i]);
 

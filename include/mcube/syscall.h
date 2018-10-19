@@ -6,10 +6,12 @@
 #ifndef	__MCUBE_MCUBE_SYSCALLS_H__
 #define	__MCUBE_MCUBE_SYSCALLS_H__
 
+
 #define	SYS_sched 0
 #define SYS_end_job 1
 #define	SYS_get_exec_time 2
-#define	NR_syscalls 3
+#define SYS_write 3
+#define	NR_syscalls 4
 
 #ifndef __ASSEMBLY__
 

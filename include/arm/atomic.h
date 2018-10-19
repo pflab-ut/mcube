@@ -12,13 +12,13 @@
 
 #define LOCK_PREFIX LOCK_PREFIX_HERE
 
-static inline void atomic_inc(atomic *v)
+static inline void atomic_inc(atomic_t *v)
 {
 	/* TODO: use atomic instruction */
 	v->counter++;
 }
 
-static inline void atomic_dec(atomic *v)
+static inline void atomic_dec(atomic_t *v)
 {
 	/* TODO: use atomic instruction */
 	v->counter--;
