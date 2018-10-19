@@ -71,8 +71,7 @@ void init_tty(void)
   active_tty = &tty[0];
 }
 
-void
-tty_activate(int id)
+void tty_activate(int id)
 {
   if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;
@@ -86,8 +85,7 @@ tty_activate(int id)
   update_cursor();
 }
 
-void
-tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg)
+void tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg)
 {
   if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;
@@ -96,8 +94,7 @@ tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg)
   tty[id].textcolor = tty[id].textcolor_orig = color(fg, bg);
 }
 
-void
-tty_set_textcolor_fg(int id, textcolor_t fg)
+void tty_set_textcolor_fg(int id, textcolor_t fg)
 {
   if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;
@@ -107,8 +104,7 @@ tty_set_textcolor_fg(int id, textcolor_t fg)
   tty[id].textcolor_orig = tty[id].textcolor;
 }
 
-void
-tty_set_textcolor_bg(int id, textcolor_t bg)
+void tty_set_textcolor_bg(int id, textcolor_t bg)
 {
   if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;
@@ -118,8 +114,7 @@ tty_set_textcolor_bg(int id, textcolor_t bg)
   tty[id].textcolor_orig = tty[id].textcolor;
 }
 
-textcolor_t
-tty_get_textcolor_fg(int id)
+textcolor_t tty_get_textcolor_fg(int id)
 {
   if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;
@@ -128,8 +123,7 @@ tty_get_textcolor_fg(int id)
   return (textcolor_t)((tty[id].textcolor_orig >> 8) & 0x0f);
 }
 
-textcolor_t
-tty_get_textcolor_bg(int id)
+textcolor_t tty_get_textcolor_bg(int id)
 {
   if ((id < 0) || (id >= MAX_TTYS)) {
     id = 0;
@@ -330,7 +324,7 @@ void tty_printc(int id, char ch)
   }
 }
 
-char buffer[8 * 1024];
+//char buffer[8 * 1024];
 
 int tty_printf(int id, const char *format, ...)
 {
