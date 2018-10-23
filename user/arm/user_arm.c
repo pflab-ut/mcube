@@ -52,6 +52,7 @@ void process(const char *array)
 int user_ap_main(void)
 {
   int ret;
+  printk("user_ap_main()\n");
   ret = copy_process((unsigned long) &process, (unsigned long) "12345");
   if (ret != 0) {
     printk("Error while starting process1\n");
@@ -66,9 +67,29 @@ int user_ap_main(void)
 }
 
 
+
+
+void user_process(void)
+{
+  
+}
+
+int user_mode_main(void)
+{
+  printk("Kernel process started. EL %d\r\n", get_el());
+  move_to_user_mode();
+  call_sys_write("Now process is user mode.\n");
+  for (;;)
+    ;
+  return 0;
+}
+
+
 int user_arch_main(void)
 {
-  user_thread_main();
+  //  user_thread_main();
+  //  user_ap_main();
+  user_mode_main();
   
   return 0;
 }

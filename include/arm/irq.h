@@ -15,11 +15,11 @@
 
 #ifdef __ASSEMBLY__
 
-.macro enable_irq
+.macro enable_local_irq
   msr daifclr, #AARCH64_DAIF_IRQ
 .endm
 
-.macro disable_irq
+.macro disable_local_irq
   msr   daifset, #AARCH64_DAIF_IRQ
 .endm
 

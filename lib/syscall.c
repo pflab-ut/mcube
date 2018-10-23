@@ -35,9 +35,14 @@ asmlinkage int sys_get_exec_time(unsigned long *id_ptr, unsigned long *cputime_p
 	return 0;
 }
 
-asmlinkage void sys_write(char *buf)
+asmlinkage int sys_write(char *buf)
 {
-  puts(buf);
+  return puts(buf);
+}
+
+asmlinkage int sys_get_cpu_id(void)
+{
+  return get_cpu_id();
 }
 
 asmlinkage int sys_bad_syscall(int number)
@@ -49,10 +54,11 @@ asmlinkage int sys_bad_syscall(int number)
 	return -1;
 }
 
-void *const syscall_table[] = {
+void *const sys_call_table[] = {
   sys_sched,
   sys_end_job,
   sys_get_exec_time,
   sys_write,
+  sys_get_cpu_id,
   sys_bad_syscall
 };

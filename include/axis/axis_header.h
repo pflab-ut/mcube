@@ -16,6 +16,7 @@
 #include <axis/dmac.h>
 #include <axis/mm.h>
 #include <axis/sys_regs.h>
+#include <axis/task.h>
 #include <axis/thread.h>
 #include <axis/timer.h>
 #include <axis/regs.h>

@@ -28,6 +28,8 @@ static inline unsigned long get_cpu_id(void)
 }
 
 
+int get_el(void);
+
 #endif /* !__ASSEMBLY__ */
 
 

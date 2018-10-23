@@ -1,5 +1,5 @@
 /**
- * @file kernel/main.c
+82;1;0c * @file kernel/main.c
  *
  * @author Hiroyuki Chishiro
  */
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     exit_arch();
     //    printk("main()4\n");
   } else {
-    printk("get_cpu_id() = %lu\n", get_cpu_id());
+    //    printk("get_cpu_id() = %lu\n", get_cpu_id());
     /* wait until init_arch() is finished. */
     while (is_initialized == FALSE) {
     }

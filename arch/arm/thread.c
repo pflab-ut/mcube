@@ -6,6 +6,9 @@
 #include <mcube/mcube.h>
 
 
+struct pt_regs pt_regs[NR_INTRA_KERNEL_CPUS];
+
+
 /**
  * The run_user_thread() function runs user thread.
  */

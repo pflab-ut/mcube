@@ -4,7 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
-
+  
 .macro invalid_entry el, type
   kernel_entry \el
   mov x0, #\type
@@ -36,7 +36,7 @@
   stp x24, x25, [sp, #16 * 12]
   stp x26, x27, [sp, #16 * 13]
   stp x28, x29, [sp, #16 * 14]
-  str x30, [sp, #16 * 15]
+//  str x30, [sp, #16 * 15]
 
   .if     \el == 0
   mrs     x21, sp_el0
@@ -48,11 +48,13 @@
   mrs     x23, spsr_el1
 
   stp     x30, x21, [sp, #16 * 15]
-          stp     x22, x23, [sp, #16 * 16]
+  stp     x22, x23, [sp, #16 * 16]
 .endm
 
 .macro kernel_exit el
-
+  ldp     x22, x23, [sp, #16 * 16]
+  ldp     x30, x21, [sp, #16 * 15]
+  
   .if \el == 0
   msr     sp_el0, x21
   .endif /* \el == 0 */
@@ -75,7 +77,7 @@
   ldp x24, x25, [sp, #16 * 12]
   ldp x26, x27, [sp, #16 * 13]
   ldp x28, x29, [sp, #16 * 14]
-  ldr x30, [sp, #16 * 15]
+//  ldr x30, [sp, #16 * 15]
   add sp, sp, #S_FRAME_SIZE
   eret
 .endm
@@ -144,8 +146,36 @@ vector_error_el1h:
   invalid_entry 1, ERROR_INVALID_EL1h
   
 vector_sync_el0_64:
-  invalid_entry 0, SYNC_INVALID_EL0_64
-  
+//  invalid_entry 0, SYNC_INVALID_EL0_64
+  kernel_entry 0
+  mrs     x25, esr_el1                            // read the syndrome register
+  lsr     x24, x25, #ESR_ELx_EC_SHIFT             // exception class
+  cmp     x24, #ESR_ELx_EC_SVC64                  // SVC in 64-bit state
+  b.eq    el0_svc
+  invalid_entry 0, SYNC_ERROR
+
+  sc_nr   .req    x25                                     // number of system calls
+  scno    .req    x26                                     // syscall number
+  stbl    .req    x27                                     // syscall table pointer
+
+el0_svc:
+  adr     stbl, sys_call_table                    // load syscall table pointer
+  uxtw    scno, w8                                // syscall number in w8
+  mov     sc_nr, #NR_syscalls
+	enable_local_irq
+  cmp     scno, sc_nr                             // check upper syscall limit
+  b.hs    ni_sys
+
+  ldr     x16, [stbl, scno, lsl #3]               // address in the syscall table
+  blr     x16                                     // call sys_* routine
+  b       ret_from_syscall
+ni_sys:
+  invalid_entry 0, SYSCALL_ERROR
+ret_from_syscall:
+  disable_local_irq
+  str     x0, [sp, #S_X0]                         // returned x0
+  kernel_exit 0
+    
 vector_irq_el0_64:
   invalid_entry 0, IRQ_INVALID_EL0_64
 
@@ -174,3 +204,4 @@ ENTRY(ret_from_fork)
 
 ENTRY(err_hang)
   b err_hang
+

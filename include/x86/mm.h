@@ -19,7 +19,6 @@
  */
 void init_kmem(pagetable_t *pt);
 
-void *memzero(void *dst, size_t num);
 
 
 #endif /* !__ASSEMBLY__ */

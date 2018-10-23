@@ -33,6 +33,7 @@
 #include <x86/shell.h>
 #include <x86/spinlock.h>
 #include <x86/system.h>
+#include <x86/task.h>
 #include <x86/thread.h>
 #include <x86/timer.h>
 #include <x86/tty.h>

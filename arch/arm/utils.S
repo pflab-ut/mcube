@@ -43,3 +43,24 @@ ENTRY(arch_switch_to)
   /* resume stack pointer */
   mov     sp, x9
   ret
+
+ENTRY(move_to_user_mode)
+  // Determine the EL0 Execution state.
+  mov x0, #0b00000 // DAIF=0000 M[4:0]=00000 EL0t.
+  msr spsr_el1, x0
+  adr x0, el0_entry // el1_entry points to the first instruction of
+  msr elr_el1, x0 // EL0 code.
+  eret
+el0_entry:
+  #if 1
+  mov x0, #0
+#else
+  get_cpu_id
+#endif
+  mov x1, #STACK_SIZE
+  mul x0, x0, x1
+  ldr x1, =idle_stack
+  add x2, x0, x1
+  mov sp, x2
+  ret
+

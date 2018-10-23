@@ -34,6 +34,7 @@ ASMS	+=	$(TOP_DIR)/arch/arm/boot.S \
 	$(TOP_DIR)/arch/arm/utils.S \
 	$(TOP_DIR)/arch/arm/vector.S \
 	$(TOP_DIR)/arch/arm/mmu_and_cache.S \
+	$(TOP_DIR)/arch/arm/syscall.S \
 
 SRCS	+=	$(TOP_DIR)/arch/arm/init.c \
 	$(TOP_DIR)/arch/arm/cpu.c \

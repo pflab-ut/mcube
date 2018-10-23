@@ -11,9 +11,15 @@
 #define SYS_end_job 1
 #define	SYS_get_exec_time 2
 #define SYS_write 3
-#define	NR_syscalls 4
+#define SYS_get_cpu_id 4
+#define	NR_syscalls 5
 
 #ifndef __ASSEMBLY__
+
+
+int call_sys_write(char *buf);
+int call_sys_get_cpu_id(void);
+
 
 #if CONFIG_ARCH_SIM
 

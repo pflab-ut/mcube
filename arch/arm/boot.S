@@ -74,16 +74,6 @@ change_el2_to_el1:
   msr elr_el2, x0 // EL1 code.
   eret
 
-#if 0
-change_el1_to_el0:
-  // Determine the EL0 Execution state.
-  mov x0, #0b00000 // DAIF=0000 M[4:0]=00000 EL0t.
-  msr spsr_el1, x0
-  adr x0, el0_entry // el1_entry points to the first instruction of
-  msr elr_el1, x0 // EL0 code.
-  eret
-el0_entry:  
-#endif
   
 start_el1:
   // set up stack in el1
@@ -105,7 +95,7 @@ begin_main:
   b       hang               // should never come here
 
 ENTRY(hang)
-  disable_irq
+  disable_local_irq
   wfi
   b       hang
   

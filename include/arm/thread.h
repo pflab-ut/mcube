@@ -28,6 +28,9 @@ struct cpu_context {
   unsigned long pc;
 };
 
+
+
+
 #define INIT_CPU_CONTEXT (struct cpu_context) {0}
 
 #endif /* !__ASSEMBLY__ */

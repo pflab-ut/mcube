@@ -17,6 +17,8 @@
 #include <arm/regs.h>
 #include <arm/spinlock.h>
 #include <arm/system.h>
+#include <arm/sys_regs.h>
+#include <arm/task.h>
 #include <arm/thread.h>
 #include <arm/timer.h>
 #include <arm/vector.h>
