@@ -77,8 +77,10 @@ void user_process(void)
 int user_mode_main(void)
 {
   printk("Kernel process started. EL %d\r\n", get_el());
+  printf("hoge\n");
   move_to_user_mode();
   call_sys_write("Now process is user mode.\n");
+  printf("hehe\n");
   for (;;)
     ;
   return 0;

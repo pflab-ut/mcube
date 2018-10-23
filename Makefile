@@ -11,7 +11,7 @@ TOP_DIR = .
 
 SRCS += \
  $(TOP_DIR)/kernel/main.c \
-	$(TOP_DIR)/kernel/printk.c \
+	$(TOP_DIR)/kernel/print.c \
 	$(TOP_DIR)/kernel/thread.c \
  $(TOP_DIR)/kernel/task.c \
  $(TOP_DIR)/kernel/sched.c \

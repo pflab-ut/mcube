@@ -132,7 +132,35 @@ vector_error_el1t:
   invalid_entry 1, ERROR_INVALID_EL1t
   
 vector_sync_el1h:
-  invalid_entry 1, SYNC_INVALID_EL1h
+//  invalid_entry 0, SYNC_INVALID_EL0_64
+  kernel_entry 0
+  mrs     x25, esr_el1                            // read the syndrome register
+  lsr     x24, x25, #ESR_ELx_EC_SHIFT             // exception class
+  cmp     x24, #ESR_ELx_EC_SVC64                  // SVC in 64-bit state
+  b.eq    el1h_svc
+  invalid_entry 0, SYNC_ERROR
+
+  sc_nr   .req    x25                                     // number of system calls
+  scno    .req    x26                                     // syscall number
+  stbl    .req    x27                                     // syscall table pointer
+
+el1h_svc:
+  adr     stbl, sys_call_table                    // load syscall table pointer
+  uxtw    scno, w8                                // syscall number in w8
+  mov     sc_nr, #NR_syscalls
+	enable_local_irq
+  cmp     scno, sc_nr                             // check upper syscall limit
+  b.hs    el1h_ni_sys
+
+  ldr     x16, [stbl, scno, lsl #3]               // address in the syscall table
+  blr     x16                                     // call sys_* routine
+  b       el1h_ret_from_syscall
+el1h_ni_sys:
+  invalid_entry 0, SYSCALL_ERROR
+el1h_ret_from_syscall:
+  disable_local_irq
+  str     x0, [sp, #S_X0]                         // returned x0
+  kernel_exit 0
   
 vector_irq_el1h:
   kernel_entry 1
@@ -164,14 +192,14 @@ el0_svc:
   mov     sc_nr, #NR_syscalls
 	enable_local_irq
   cmp     scno, sc_nr                             // check upper syscall limit
-  b.hs    ni_sys
+  b.hs    el0_ni_sys
 
   ldr     x16, [stbl, scno, lsl #3]               // address in the syscall table
   blr     x16                                     // call sys_* routine
-  b       ret_from_syscall
-ni_sys:
+  b       el0_ret_from_syscall
+el0_ni_sys:
   invalid_entry 0, SYSCALL_ERROR
-ret_from_syscall:
+el0_ret_from_syscall:
   disable_local_irq
   str     x0, [sp, #S_X0]                         // returned x0
   kernel_exit 0

@@ -8,10 +8,10 @@
 
 #ifndef __ASSEMBLY__
 
-#define FOUT_SIZE 0x100
+#define FOUT_SIZE 0x200
 #define MAX_DIGIT 64
 
-int printk(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
+int printk(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 
 #if CONFIG_ARCH_SIM
 
@@ -24,6 +24,7 @@ int getc(void);
 int putchar(int c);
 int puts(const char *s);
 
+int printf(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
   
   
 #endif /* CONFIG_ARCH_SIM */

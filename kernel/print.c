@@ -1,5 +1,5 @@
 /**
- * @file kernel/printk.c
+ * @file kernel/print.c
  *
  * @author Hiroyuki Chishiro
  */
@@ -37,7 +37,7 @@ static inline int iout(int d, int base, char *dst, int n, struct conv_flag *cf)
 			}
 			while (i < cf->digit) {
 				dst[n++] = pad;
-				cf->digit--;
+				cf->digit--;        
 			}
 
 			if (FOUT_SIZE < n + i) {
@@ -297,30 +297,21 @@ static inline int lfout(double lf, int base, char *dst, int n, struct conv_flag 
 #endif /* !CONFIG_ARCH_AXIS */
 
 
-
-/**
- * The printk() function produces output according to @b CONSOLE or @b UART.
- * @param fmt specifies how subsequent arguments.
- * @return Number of characters printed.
- */
-int printk(const char *fmt, ...)
+static int vsprint(char *buf, const char *fmt, va_list ap)
 {
-	int n = 0;
   int ret;
   unsigned int size;
-	char buf[FOUT_SIZE];
-	va_list ap;
 	int d;
 	unsigned int u;
 	char *p, *s;
 	struct conv_flag cf = (struct conv_flag) {.pad = FALSE, .digit = 0};
 	unsigned long lu;
 	long ld;
+  int n = 0;
 #if !CONFIG_ARCH_AXIS
   float f;
   double lf;
 #endif /* !CONFIG_ARCH_AXIS */
-	va_start(ap, fmt);
 
 	while (*fmt) {
 		if (*fmt != '%') {
@@ -473,19 +464,44 @@ skip:
 out:
 	va_end(ap);
   buf[n] = '\0';
+  return n;
+}
+
+
+/**
+ * The printk() function produces output according to @b CONSOLE or @b UART.
+ * @param fmt specifies how subsequent arguments.
+ * @return Number of characters printed.
+ */
+int printk(const char *fmt, ...)
+{
+	char buf[FOUT_SIZE];
+  int n;
+	va_list ap;
+	va_start(ap, fmt);
+  n = vsprint(buf, fmt, ap);
+  va_end(ap);
 #if CONFIG_ARCH_SIM
   fprintf(stderr, "%s", buf);
 #else
-#if 1
   puts(buf);
-#else
-  int i;
-  for (i = 0; i < n; i++) {
-    putchar(buf[i]);
-    //    putchar('_');
-  }
-#endif
 #endif
 	return n;
 }
 
+#if !CONFIG_ARCH_SIM
+
+
+int printf(const char *fmt, ...)
+{
+  char buf[FOUT_SIZE];
+  int n;
+	va_list ap;
+	va_start(ap, fmt);
+  n = vsprint(buf, fmt, ap);
+  va_end(ap);
+  call_sys_write(buf);
+	return n;
+}
+
+#endif /* CONFIG_ARCH_SIM */
