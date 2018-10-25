@@ -1,4 +1,4 @@
 ARCH_NAME = arm
 MACHINE_NAME = raspi3
-CC = gcc
+CC = clang
 ALGO_NAME = fp

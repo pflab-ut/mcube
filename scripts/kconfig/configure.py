@@ -92,8 +92,8 @@ for k, v, in tools.configures.items():
       f.write("/** Compiler. */\n")
     elif k.find("CONFIG_ALGO") == 0:
       f.write("/** Algorithm. */\n")
-    elif k.find("CONFIG_PRINTK") == 0:
-      f.write("/** Printk. */\n")
+    elif k.find("CONFIG_PRINT") == 0:
+      f.write("/** Print. */\n")
     elif k.find("CONFIG_TQ") == 0:
       f.write("/** Task Queue. */\n")
     elif k.find("CONFIG_TIE_BREAK") == 0:

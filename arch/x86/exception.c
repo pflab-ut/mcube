@@ -40,9 +40,9 @@ static const char *exceptionstr[] = {
 static void dump_context(const interrupt_context_t *context)
 {
   char buf[640];
-  printk("INT: %02lx   Error: %08lx\n\n",
+  print("INT: %02lx   Error: %08lx\n\n",
          context->interrupt, context->error);
-  printk("CS:RIP: %04lx:%016lx             SS:RSP: %04lx:%016lx\n\n",
+  print("CS:RIP: %04lx:%016lx             SS:RSP: %04lx:%016lx\n\n",
          context->cs, context->retaddr, context->ss, context->rsp);
 
 
@@ -50,10 +50,10 @@ static void dump_context(const interrupt_context_t *context)
 
   dump_cpuflags(context->rflags);
 
-  printk("Stack:\n");
+  print("Stack:\n");
   void *stack = (void *)context->rsp;
   dump_memory(buf, sizeof(buf), stack, 8 * 16, DUMPSTYLE_ADDR);
-  printk("%s", buf);
+  print("%s", buf);
 }
 
 static void hang(void)
@@ -75,7 +75,7 @@ static void isr_fatal(interrupt_context_t *context)
   //  tty_set_textcolor(0, TEXTCOLOR_WHITE, TEXTCOLOR_RED);
   tty_set_textcolor(0, TEXTCOLOR_WHITE, TEXTCOLOR_BLUE);
   tty_clear(0);
-  printk("%s\n\n", exstr);
+  print("%s\n\n", exstr);
 
   dump_context(context);
 
@@ -84,9 +84,9 @@ static void isr_fatal(interrupt_context_t *context)
 
 static void isr_breakpoint(interrupt_context_t *context)
 {
-  (void)context;
+  (void) context;
 
-  printk("Breakpoint hit.\n");
+  print("Breakpoint hit.\n");
 }
 
 void init_exception(void)

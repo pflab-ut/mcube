@@ -14,7 +14,7 @@ extern unsigned int Debug;
 /** The PDEBUG() macro. */
 #define PDEBUG(fmt, args...) do {										\
 	  if (Debug == TRUE) {                            \
-			printk(fmt, ## args);													\
+			print(fmt, ## args);													\
 		}																								\
 	} while (0)
 
@@ -25,7 +25,7 @@ extern unsigned int Debug;
 #define assert(expr) do {                       \
     if (!(expr)) {                              \
       PDEBUG_WHERE();                           \
-      printk("assert() failes\n");              \
+      print("assert() failes\n");               \
       inf_loop();                               \
     }                                           \
   } while (0)

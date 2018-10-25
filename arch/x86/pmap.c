@@ -274,7 +274,7 @@ void print_pmap(void)
 {
   size_t i;
   for (i = 0; i < map->count; i++) {
-    printk("region[%ld]: addr = 0x%lx size = 0x%lx type = 0x%x flags = 0x%x\n",
+    print("region[%ld]: addr = 0x%lx size = 0x%lx type = 0x%x flags = 0x%x\n",
            i, map->region[i].addr, map->region[i].size, map->region[i].type, map->region[i].flags);
   }
 }

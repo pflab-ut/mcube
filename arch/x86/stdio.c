@@ -8,7 +8,7 @@
 volatile atomic_int putchar_lock = SPIN_UNLOCKED;
 
 
-#if CONFIG_PRINTK2CONSOLE
+#if CONFIG_PRINT2CONSOLE
 int getchar(void)
 {
 	return 0;
@@ -25,7 +25,7 @@ int putchar(int c)
   return c;
 }
 
-#elif CONFIG_PRINTK2UART
+#elif CONFIG_PRINT2UART
 int getchar(void)
 {
 	return uart_getc(STDIO_PORT);
@@ -42,7 +42,7 @@ int putchar(int c)
 }
 
 #else
-#error "Unknown Printk to Output"
+#error "Unknown Print to Output"
 #endif
 
 

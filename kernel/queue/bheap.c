@@ -337,7 +337,7 @@ void print_bheap(struct runqueue *rq, struct bheap_node *h)
 	print_bheap(rq, h->child);
 	//      print_bheap(rq, h->next);
 	nr_tabs--;
-	//      printk("\nchild\n");
+	//      print("\nchild\n");
 	//      print_bheap(rq, h->child);
 	print_bheap(rq, h->next);
 }

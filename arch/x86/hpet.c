@@ -8,7 +8,7 @@
 void handle_hpet_timer_tick(interrupt_context_t *context)
 {
   unsigned long cpu = get_cpu_id();
-  printk("handle_hpet_timer_tick(): cpu = %lu\n", cpu);
+  print("handle_hpet_timer_tick(): cpu = %lu\n", cpu);
   //  inf_loop();
 
 	/* clear timer 0 interrupt status */
@@ -28,7 +28,7 @@ void handle_hpet_timer_tick(interrupt_context_t *context)
   update_jiffies();
 
   if (sched_time <= sys_jiffies) {
-		printk("handle_hept_timer_tick(): sched_end: cpu = %lu\n", cpu);
+		print("handle_hept_timer_tick(): sched_end: cpu = %lu\n", cpu);
     sched_end = TRUE;
     current_th[cpu] = &idle_th[cpu];
 		stop_hpet_timer(0);
@@ -40,8 +40,8 @@ void handle_hpet_timer_tick(interrupt_context_t *context)
 int handle_hpet_one_shot_timer(int irq, void *dummy)
 {
 	unsigned long cpu = get_cpu_id();
-	printk("handle_one_shot_timer()\n");
-	//	printk("handle_LAPIC_timer_tick(): current_th[%d]->id = %lu\n", cpu, current_th[cpu]->id);
+	print("handle_one_shot_timer()\n");
+	//	print("handle_LAPIC_timer_tick(): current_th[%d]->id = %lu\n", cpu, current_th[cpu]->id);
 
 
 	/* clear timer 1 interrupt status */
@@ -51,7 +51,7 @@ int handle_hpet_one_shot_timer(int irq, void *dummy)
 	//	smp_barrier(4);
 	do_sched();
 
-	printk("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
+	print("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
 
 	return 0;
 }
@@ -61,20 +61,20 @@ int handle_hpet_one_shot_timer(int irq, void *dummy)
 void init_hpet_timer_irq(void)
 {
 	int i;
-	printk("init_hpet_timer_irq()\n");
-	//	printk("GENERAL_CAP_ID_64 = %lx\n", mmio_in64(GENERAL_CAP_ID_64));
+	print("init_hpet_timer_irq()\n");
+	//	print("GENERAL_CAP_ID_64 = %lx\n", mmio_in64(GENERAL_CAP_ID_64));
 	/* Main counters are halted and zeroed */
 	mmio_out64(MAIN_COUNTER_64, 0x0000000000000000);
 	//	for (i = 0; i < NR_HPETS; i++) {
 	for (i = 0; i < NR_HPETS; i++) {
 		/* Comparator match registers reset to all 1's. */
 		mmio_out64(TIMER_COMPARATOR_64(i), 0xffffffffffffffff);
-    //    printk("TIMER_COMPARATOR64(%d) = %lx\n", i, mmio_in64(TIMER_COMPARATOR_64(i)));
+    //    print("TIMER_COMPARATOR64(%d) = %lx\n", i, mmio_in64(TIMER_COMPARATOR_64(i)));
 		/* All interrupts are disabled 
 			 -  General Configuration and Capability Register [Offset 0x010]<1:0> = 00 
 			 -  Global IRQ Enable bit comes up disabled...no comparators can deliver interrupts 
 			 -  LegacyReplacement IRQ Routing Enable bit comes up disabled...8254 is on IRQ0, RTC is on IRQ8 */
-		//		printk("TIMER_CONFIG_CAP_64 = %lx\n", mmio_in64(TIMER_CONFIG_CAP_64(i)));
+		//		print("TIMER_CONFIG_CAP_64 = %lx\n", mmio_in64(TIMER_CONFIG_CAP_64(i)));
 		mmio_out64(TIMER_CONFIG_CAP_64(i),
                mmio_in64(TIMER_CONFIG_CAP_64(i))
 							 | TIMER_CONFIG_CAP_VAL_SET
@@ -94,15 +94,15 @@ void init_hpet_timer_irq(void)
 	mmio_out64(TIMER_FSB_INTERRUPT_ROUTE_64(0), data);
 #endif
 #if 1
-	printk("mmio_in32(IO_REG_SELECT) = 0x%x\n", mmio_in32(IO_REG_SELECT));
-	printk("mmio_in32(IO_WIN) = 0x%x\n", mmio_in32(IO_WIN));
+	print("mmio_in32(IO_REG_SELECT) = 0x%x\n", mmio_in32(IO_REG_SELECT));
+	print("mmio_in32(IO_WIN) = 0x%x\n", mmio_in32(IO_WIN));
 #endif
 	mmio_out32(IO_REG_SELECT, IOAPIC_ID_OFFSET);
-	//	printk("IOAPIC_ID = 0x%x\n", mmio_in64(IO_WIN));
+	//	print("IOAPIC_ID = 0x%x\n", mmio_in64(IO_WIN));
 	mmio_out32(IO_REG_SELECT, IOAPIC_VER_OFFSET);
-	//	printk("IOAPIC_VER = 0x%x\n", mmio_in64(IO_WIN));
+	//	print("IOAPIC_VER = 0x%x\n", mmio_in64(IO_WIN));
 
-	//	printk("&common_interrupt = 0x%x\n", &common_interrupt);
+	//	print("&common_interrupt = 0x%x\n", &common_interrupt);
 #if 0
 	/* Timer 0 is periodic */
 	set_idsc(idt_start + HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ,
@@ -118,26 +118,26 @@ void init_hpet_timer_irq(void)
   set_isr(HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ, handle_hpet_timer_tick);
   set_isr(HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ, handle_hpet_timer_tick);
   unsigned long addr = MEM_ISR_TABLE + 8 * (HPET_REDIRECTION_OFFSET + HPET_TIMER0_IRQ);
-  printk("addr = 0x%lx\n", *((unsigned long *) addr));
+  print("addr = 0x%lx\n", *((unsigned long *) addr));
 }
 
 
 void start_hpet_timer(unsigned int ch)
 {
-  printk("start_hpet_timer()\n");
+  print("start_hpet_timer()\n");
   //  unsigned int tick_interval = HPET_TICK_MS(1000);
   unsigned long tick_interval = 10000000;
   //  unsigned int tick_interval = HPET_HZ;
-  printk("tick_interval = %lu\n", tick_interval);
+  print("tick_interval = %lu\n", tick_interval);
   //  unsigned long cpu = get_cpu_id();
 	switch (ch) {
 	case 0:
 		/* Route the interrupts.
 			 This includes the LegacyReplacement Route bit, Interrupt Route bit (for each 
 			 timer), interrupt type (to select the edge or level type for each timer).  */
-    printk("mmio_in64(TIMER_CONFIG_CAP_64(0)) = 0x%lx\n", mmio_in64(TIMER_CONFIG_CAP_64(ch)));
-		//		printk("IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER0_IRQ) = 0x%lx\n", mmio_in64(IO_WIN));
-    //    printk("tick_interval = %lu\n", tick_interval);
+    print("mmio_in64(TIMER_CONFIG_CAP_64(0)) = 0x%lx\n", mmio_in64(TIMER_CONFIG_CAP_64(ch)));
+		//		print("IO_REDIRECTION_TABLE_REG_OFFSET(HPET_TIMER0_IRQ) = 0x%lx\n", mmio_in64(IO_WIN));
+    //    print("tick_interval = %lu\n", tick_interval);
 		/* set comparator 0 to tick_interval */
 		mmio_out64(TIMER_COMPARATOR_64(0), tick_interval);
     
@@ -190,7 +190,7 @@ void start_hpet_timer(unsigned int ch)
 							 | (HPET_REDIRECTION_OFFSET + HPET_TIMER1_IRQ));
 		break;
 	default:
-		printk("%s:%s():%d: unknown channel %u\n", __FILE__, __func__, __LINE__, ch);
+		print("%s:%s():%d: unknown channel %u\n", __FILE__, __func__, __LINE__, ch);
 		break;
 	}
 }
@@ -223,7 +223,7 @@ void stop_hpet_timer(unsigned int ch)
 							 & ~TIMER_CONFIG_CAP_INTERRUPT_TYPE);
 		break;
 	default:
-		printk("%s:%s():%d: unknown channel %u\n", __FILE__, __func__, __LINE__, ch);
+		print("%s:%s():%d: unknown channel %u\n", __FILE__, __func__, __LINE__, ch);
 		break;
 	}
 	/* stop main counter */
@@ -240,12 +240,12 @@ void measure_hpet_timer(void)
 
 void init_hpet_timer(unsigned long tick_us)
 {
-	//	printk("init_timer()\n");
+	//	print("init_timer()\n");
 
 	measure_hpet_timer();
 	stop_hpet_timer(0);
 	init_hpet_timer_irq();
 
-	printk("mmio_in64(TIMER_COMPARATOR_64(0)) = %lx\n", mmio_in64(TIMER_COMPARATOR_64(0)));
-	printk("GENERAL_INTERRUPT_STATUS_64 = 0x%lx\n", mmio_in64(GENERAL_INTERRUPT_STATUS_64));
+	print("mmio_in64(TIMER_COMPARATOR_64(0)) = %lx\n", mmio_in64(TIMER_COMPARATOR_64(0)));
+	print("GENERAL_INTERRUPT_STATUS_64 = 0x%lx\n", mmio_in64(GENERAL_INTERRUPT_STATUS_64));
 }

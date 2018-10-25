@@ -63,7 +63,7 @@ void free(void *objp)
 	mem_block *del_mem = (mem_block *)((unsigned long) objp - sizeof(mem_block));
 	int connected = 0;
 	if ((unsigned long) objp < (unsigned long) user_malloc || (unsigned long) objp >= (unsigned long) user_malloc + sizeof(user_malloc)) {
-		//		printk("Invalid address %x\n", objp);
+		//		print("Invalid address %x\n", objp);
 		return;
 	}
 	do {
@@ -196,7 +196,7 @@ unsigned long strtoul(const char *cp, char **endp, int base)
   }
   while (isxdigit(*cp)
          && (value = isdigit(*cp) ? *cp - '0' : toupper(*cp)- 'A' + 10) < (unsigned long) base) {
-		//		printk("*cp = %c\n", *cp);
+		//		print("*cp = %c\n", *cp);
     result = result * base + value;
     cp++;
   }
@@ -204,10 +204,10 @@ unsigned long strtoul(const char *cp, char **endp, int base)
     *endp = (char *) cp;
 	}
 	if (ep != cp) {
-		//		printk("Error!\n");
+		//		print("Error!\n");
 		return ULONG_MAX;
 	}
-	//	printk("result = %d\n", result);
+	//	print("result = %d\n", result);
   return result;
 }
 

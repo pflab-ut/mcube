@@ -34,3 +34,4 @@ SRCS += \
  $(TOP_DIR)/arch/sim/timer.c \
  $(TOP_DIR)/arch/sim/utils.c \
  $(TOP_DIR)/arch/sim/thread.c \
+ $(TOP_DIR)/arch/sim/syscall.c \

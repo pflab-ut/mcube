@@ -33,18 +33,18 @@ int main(int argc, char *argv[])
   if (cpu == 0) {
     init_arch();
     is_initialized = TRUE;
-    printk("main()\n");
+    print("main()\n");
     init_rq();
-    printk("main()2\n");
+    print("main()2\n");
     init_sched();
-    printk("main()3\n");
-    //    printk("%13lx\n", 0x1234);
+    print("main()3\n");
+    //    print("%13lx\n", 0x1234);
     
     user_main();
     exit_arch();
-    //    printk("main()4\n");
+    //    print("main()4\n");
   } else {
-    //    printk("get_cpu_id() = %lu\n", get_cpu_id());
+    //    print("get_cpu_id() = %lu\n", get_cpu_id());
     /* wait until init_arch() is finished. */
     while (is_initialized == FALSE) {
     }

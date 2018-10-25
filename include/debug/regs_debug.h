@@ -20,14 +20,14 @@
 #elif CONFIG_ARCH_X86
 
 #define pdebug_registers(ptr) do {							\
-  printk("RCX: %lx     R8: %lx    R13: %lx\n"  \
-         "RDX: %lx     R9: %lx    R14: %lx\n"  \
-         "RBP: %lx    R10: %lx    R15: %lx\n", \
-         regs->rax, regs->rsi, regs->r11,               \
-         regs->rbx, regs->rdi, regs->r12,               \
-         regs->rcx, regs->r8, regs->r13,                \
-         regs->rdx, regs->r9, regs->r14,                \
-         regs->rbp, regs->r10, regs->r15);              \
+  print("RCX: %lx     R8: %lx    R13: %lx\n"  \
+        "RDX: %lx     R9: %lx    R14: %lx\n"   \
+        "RBP: %lx    R10: %lx    R15: %lx\n",           \
+        regs->rax, regs->rsi, regs->r11,                \
+        regs->rbx, regs->rdi, regs->r12,                \
+        regs->rcx, regs->r8, regs->r13,                 \
+        regs->rdx, regs->r9, regs->r14,                 \
+        regs->rbp, regs->r10, regs->r15);               \
   } while (0)
 
       

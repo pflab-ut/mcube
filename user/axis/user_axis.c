@@ -11,7 +11,7 @@ void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
   while (1) {
-    printk("%lu", id);
+    print("%lu", id);
     //  do_end_job(&ths[id]);
   }
   return NULL;
@@ -24,7 +24,7 @@ int user_thread_main(void)
   uint32_t ids[NR_THREADS];
   struct th_attr thas[NR_THREADS] = INIT_THAS;
   sched_time = 5;
-  printk("user_thread_main()\n");
+  print("user_thread_main()\n");
   
   for (i = 0; i < nr_threads; i++) {
     ids[i] = i + 1;
@@ -36,7 +36,7 @@ int user_thread_main(void)
     do_create_thread(user_func, &ids[i], &thas[i]);
   }
   set_timer_period(USEC_TO_CPU_CLOCK(100));
-  printk("USEC_TO_CPU_CLOCK(100) = %lu\n", USEC_TO_CPU_CLOCK(100));
+  print("USEC_TO_CPU_CLOCK(100) = %lu\n", USEC_TO_CPU_CLOCK(100));
   run(nr_threads);
   return 0;
 }
@@ -45,11 +45,11 @@ int user_thread_main(void)
 int timer_main(void)
 {
   set_timer_period(USEC_TO_CPU_CLOCK(100));
-  printk("USEC_TO_CPU_CLOCK(100) = %lu\n", USEC_TO_CPU_CLOCK(100));
+  print("USEC_TO_CPU_CLOCK(100) = %lu\n", USEC_TO_CPU_CLOCK(100));
   enable_timer_interrupt();
   enable_timer();
   while (1) {
-    printk("get_timer_count() = %lu\n", get_timer_count());
+    print("get_timer_count() = %lu\n", get_timer_count());
     //    wi();
     //    wait_until_next_interrupt();
   }
@@ -68,12 +68,12 @@ int dmac_main(void)
   //  do_local_dmac(dst, src, n, DMAC_SYNC_INTERRUPT);
   do_local_dmac(dst, src, n, DMAC_ASYNC_INTERRUPT);
   for (i = 0; i < n; i += 4) {
-    printk("src 0x%x\n", mmio_in32(i));
-    printk("dst 0x%x\n", mmio_in32(dst + i));
+    print("src 0x%x\n", mmio_in32(i));
+    print("dst 0x%x\n", mmio_in32(dst + i));
   }
   while (1) {
     sync();
-    //printk("hoge\n");
+    //print("hoge\n");
   }
   return 0;
 }
@@ -82,7 +82,7 @@ int dmac_main(void)
 int test_main(void)
 {
 #if CONFIG_ARCH_AXIS
-  printk("test_main()\n");
+  print("test_main()\n");
   test_integer_instructions();
   test_transfer_instructions();
   test_control_instructions();
@@ -93,7 +93,7 @@ int test_main(void)
 
 void multi_cpus_main(void)
 {
-  printk("get_cpu_id() = %lu\n", get_cpu_id());
+  print("get_cpu_id() = %lu\n", get_cpu_id());
   set_program_counter(1, 0);
   start_cpu(1);
   //  set_program_counter(2, 0);
@@ -105,14 +105,14 @@ void multi_cpus_main(void)
   extern volatile unsigned long cpu_ids[256];
   while (cpu_ids[1] == 0) {
   }
-  //  printk("cpu_ids[1] = %lu\n", cpu_ids[1]);
+  //  print("cpu_ids[1] = %lu\n", cpu_ids[1]);
 }
 
 void tsc_main(void)
 {
   int i = 0;
   while (1) {
-    printk("get_time_stamp_counter() = %lu\n", get_time_stamp_counter());
+    print("get_time_stamp_counter() = %lu\n", get_time_stamp_counter());
     i++;
     if (i == 10) {
       set_time_stamp_counter(0);

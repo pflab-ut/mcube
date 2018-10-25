@@ -52,7 +52,7 @@ static inline void trap(uint32_t trap_code)
 
 static inline void __attribute__((__noreturn__)) halt(void)
 {
-	printk("halt\n");
+	print("halt\n");
 	inf_loop();
 }
 

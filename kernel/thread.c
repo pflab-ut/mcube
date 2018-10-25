@@ -17,9 +17,9 @@ int get_tq_util(struct thread_struct *head, unsigned long cpu)
 {
 	struct thread_struct *p;
 	int sum_util = 0;
-	//	printk("get_tq_util()\n");
+	//	print("get_tq_util()\n");
 	for (p = head; p != &idle_th[cpu]; p = p->next) {
-		//		printk("p->id = %llu\n", p->id);
+		//		print("p->id = %llu\n", p->id);
 		sum_util += p->util;
 	}
 	return sum_util;
@@ -83,7 +83,7 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
     
     return &ths[index];
 	} else {
-		printk("do_create_thread(): Error: %lu exceed NR_THREADS %d\n", id, NR_THREADS);
+		print("do_create_thread(): Error: %lu exceed NR_THREADS %d\n", id, NR_THREADS);
     return NULL;
 	}
 }

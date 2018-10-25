@@ -55,17 +55,17 @@ menu Compiler
     defs -DCONFIG_COMPILER_GCC
 endmenu
 
-menu Printk
+menu Print
   type exclusive
-  config CONFIG_PRINTK2CONSOLE
-    title Printk to Console
+  config CONFIG_PRINT2CONSOLE
+    title Print to Console
     default y
-    defs -DCONFIG_PRINTK2CONSOLE
+    defs -DCONFIG_PRINT2CONSOLE
     conflicts CONFIG_ARCH_ARM
-  config CONFIG_PRINTK2UART
-    title Printk to UART
+  config CONFIG_PRINT2UART
+    title Print to UART
     default n
-    defs -DCONFIG_PRINTK2UART
+    defs -DCONFIG_PRINT2UART
     conflicts CONFIG_ARCH_SIM
     conflicts CONFIG_ARCH_AXIS
 endmenu

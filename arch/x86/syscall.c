@@ -12,6 +12,12 @@
 // be found in the MonkOS LICENSE file.
 //============================================================================
 
+int call_sys_write(char *buf)
+{
+  /* TODO: implement system call */
+  return puts(buf);
+}
+
 
 static void syscall_handle(void)
 {

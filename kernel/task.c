@@ -16,7 +16,7 @@ int copy_process(unsigned long func, unsigned long arg)
   
 	preempt_disable();
 	if (!(p = (struct task_struct *) get_free_page())) {
-    printk("Error: cannot create task\n");
+    print("Error: cannot create task\n");
 		return 1;
   }
 	p->priority = current_task->priority;
@@ -68,7 +68,7 @@ struct task_struct *do_create_task(struct th_attr *attr)
   static uint32_t task_index = 0;
 
   if (task_index >= NR_TASKS) {
-    printk("Error: cannot create task\n");
+    print("Error: cannot create task\n");
     return NULL;
   }
   tk = tasks[task_index++];

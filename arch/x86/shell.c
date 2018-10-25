@@ -74,12 +74,12 @@ static int cmp_cmds(const void *c1, const void *c2)
 
 static bool cmd_display_help(void)
 {
-  printk("Available commands:\n");
+  print("Available commands:\n");
   for (int i = 0; i < ARRSIZE(commands); i++) {
     if (!commands[i].help) {
       continue;
     }
-    printk("  %s %s\n",
+    print("  %s %s\n",
            commands[i].str, commands[i].help);
   }
   return TRUE;
@@ -89,22 +89,22 @@ static bool cmd_display_apic(void)
 {
   const struct acpi_madt *madt = acpi_madt();
   if (!madt) {
-    printk("No ACPI MADT detected.\n");
+    print("No ACPI MADT detected.\n");
     return TRUE;
   }
 
-  printk("Local APIC addr: %#x\n", madt->ptr_local_apic);
+  print("Local APIC addr: %#x\n", madt->ptr_local_apic);
 
   const struct acpi_madt_local_apic *local = NULL;
   while ((local = acpi_next_local_apic(local))) {
-    printk("Local APIC id %u: %s\n",
+    print("Local APIC id %u: %s\n",
                local->apicid,
                (local->flags & 1) ? "Usable" : "Unusable");
   }
 
   const struct acpi_madt_io_apic *io = NULL;
   while ((io = acpi_next_io_apic(io))) {
-    printk("I/O APIC id %u: Addr=%#x Base=%u\n",
+    print("I/O APIC id %u: Addr=%#x Base=%u\n",
                io->apicid,
                io->ptr_io_apic,
                io->interrupt_base);
@@ -112,7 +112,7 @@ static bool cmd_display_apic(void)
 
   const struct acpi_madt_iso *iso = NULL;
   while ((iso = acpi_next_iso(iso))) {
-    printk("ISO irq=%-2u int=%-2u flags=0x%04x\n",
+    print("ISO irq=%-2u int=%-2u flags=0x%04x\n",
                iso->source,
                iso->interrupt,
                iso->flags);
@@ -131,12 +131,12 @@ static bool cmd_display_pcie(void)
 {
   const struct acpi_mcfg_addr *addr = acpi_next_mcfg_addr(NULL);
   if (!addr) {
-    printk("No PCIe configuration.\n");
+    print("No PCIe configuration.\n");
     return TRUE;
   }
 
   while (addr) {
-    printk("PCIe addr=0x%lx  grp=%u bus=0x%x..0x%x\n",
+    print("PCIe addr=0x%lx  grp=%u bus=0x%x..0x%x\n",
                addr->base, addr->seg_group, addr->bus_start,
                addr->bus_end);
     addr = acpi_next_mcfg_addr(addr);
@@ -147,7 +147,7 @@ static bool cmd_display_pcie(void)
 
 static bool cmd_switch_to_keycodes(void)
 {
-  printk("Entering keycode mode. Hit Alt-Tab to exit.\n");
+  print("Entering keycode mode. Hit Alt-Tab to exit.\n");
   switch_mode(&mode_keycode);
   return FALSE;
 }
@@ -184,13 +184,13 @@ static bool command_exec(const char *cmd)
     }
   }
 
-  printk("Unknown command: %s\n", cmd);
+  print("Unknown command: %s\n", cmd);
   return TRUE;
 }
 
 static void command_prompt(void)
 {
-  printk("> ");
+  print("> ");
 }
 
 static void command_run(void)
@@ -251,13 +251,13 @@ static void keycode_run(void)
     bool  avail;
     while ((avail = kb_getkey(&key)) != FALSE) {
       if (key.ch) {
-        printk("Keycode: \033[%c]%02x\033[-] meta=%x '%c'\n",
+        print("Keycode: \033[%c]%02x\033[-] meta=%x '%c'\n",
                key.brk == KEYBRK_UP ? 'e' : '2',
                key.code,
                key.meta,
                key.ch);
       } else {
-        printk("Keycode: \033[%c]%02x\033[-] meta=%02x\n",
+        print("Keycode: \033[%c]%02x\033[-] meta=%02x\n",
                key.brk == KEYBRK_UP ? 'e' : '2',
                key.code,
                key.meta);

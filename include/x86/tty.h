@@ -220,7 +220,7 @@ void tty_printc(int id, char ch);
 
 /**
  *  @function   tty_printf
- *  @brief      Output a printf-formatted string to the virtual console using
+ *  @brief      Output a print-formatted string to the virtual console using
  *              the console's current text color and screen position.
  *  @details    See tty_print for further details.
  *  @param[in]  id      Virtual tty id (0-3).

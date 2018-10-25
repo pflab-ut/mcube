@@ -11,7 +11,7 @@ irqreturn_t handle_mouse(int irq, void *dummy)
 {
 	unsigned char data;
 	data = mmio_in8(PORT_KEYDATA);
-	printk("mouse data = %x\n", data);
+	print("mouse data = %x\n", data);
 
 	mmio_out8(PIC0_OCW2, clear_irq(SLAVE_IRQ));
 	mmio_out8(PIC1_OCW2, clear_irq(MOUSE_SLAVE_IRQ));

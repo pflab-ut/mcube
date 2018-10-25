@@ -158,7 +158,7 @@ int usermain(void);
 int usertask(void *arg);
 
 #define inf_loop() do {																									\
-		printk("%s:%s():%d %s\n", __FILE__, __func__, __LINE__, "inf_loop()"); \
+		print("%s:%s():%d %s\n", __FILE__, __func__, __LINE__, "inf_loop()"); \
 		disable_local_irq();																						\
 		for (;;)																														\
 			;																																	\

@@ -186,7 +186,7 @@ vector_sync_el0_64:
   scno    .req    x26                                     // syscall number
   stbl    .req    x27                                     // syscall table pointer
 
-el0_svc:
+el0_svc:  
   adr     stbl, sys_call_table                    // load syscall table pointer
   uxtw    scno, w8                                // syscall number in w8
   mov     sc_nr, #NR_syscalls
@@ -196,8 +196,9 @@ el0_svc:
 
   ldr     x16, [stbl, scno, lsl #3]               // address in the syscall table
   blr     x16                                     // call sys_* routine
+ENTRY(ret_from_sys)
   b       el0_ret_from_syscall
-el0_ni_sys:
+el0_ni_sys: 
   invalid_entry 0, SYSCALL_ERROR
 el0_ret_from_syscall:
   disable_local_irq

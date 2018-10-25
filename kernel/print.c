@@ -469,32 +469,13 @@ out:
 
 
 /**
- * The printk() function produces output according to @b CONSOLE or @b UART.
+ * The print() function produces output according to @b CONSOLE or @b UART.
  * @param fmt specifies how subsequent arguments.
  * @return Number of characters printed.
  */
-int printk(const char *fmt, ...)
+int print(const char *fmt, ...)
 {
 	char buf[FOUT_SIZE];
-  int n;
-	va_list ap;
-	va_start(ap, fmt);
-  n = vsprint(buf, fmt, ap);
-  va_end(ap);
-#if CONFIG_ARCH_SIM
-  fprintf(stderr, "%s", buf);
-#else
-  puts(buf);
-#endif
-	return n;
-}
-
-#if !CONFIG_ARCH_SIM
-
-
-int printf(const char *fmt, ...)
-{
-  char buf[FOUT_SIZE];
   int n;
 	va_list ap;
 	va_start(ap, fmt);
@@ -503,5 +484,3 @@ int printf(const char *fmt, ...)
   call_sys_write(buf);
 	return n;
 }
-
-#endif /* CONFIG_ARCH_SIM */

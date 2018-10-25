@@ -34,7 +34,7 @@ void wait_until_next_interrupt(void)
 
 void show_invalid_entry_message(int type, unsigned long esr, unsigned long address)
 {
-  printk("%s, ESR: 0x%lx, address: 0x%lx\r\n", entry_error_messages[type], esr, address);
+  print("%s, ESR: 0x%lx, address: 0x%lx\r\n", entry_error_messages[type], esr, address);
 }
 
 void do_switch_thread(void)
@@ -68,9 +68,9 @@ void handle_timer_interrupt(void)
 {
   unsigned long cpu = get_cpu_id();
   // timer tick
-  printk("call do_timer_tick()\n");
-  printk("handler CNTV_TVAL: 0x%lx\n", get_cntvct_el0());
-  //  printk("handler CNTVCT   : 0x%lx\n", get_cntvct_el0());
+  print("call do_timer_tick()\n");
+  print("handler CNTV_TVAL: 0x%lx\n", get_cntvct_el0());
+  //  print("handler CNTVCT   : 0x%lx\n", get_cntvct_el0());
   pdebug_array(run_tq[cpu].array);
   if (current_th[cpu] != &idle_th[cpu]) {
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
@@ -90,7 +90,7 @@ void handle_timer_interrupt(void)
   set_cntv_tval_el0(timer_cntfrq);
   
   if (get_current_jiffies() >= sched_time) {
-    printk("sched_time expires!!!!\n");
+    print("sched_time expires!!!!\n");
     sched_end = TRUE;
     disable_timer_interrupt();
     current_th[cpu] = &idle_th[cpu];
@@ -112,7 +112,7 @@ void handle_uart_interrupt(void)
         if (mmio_in32(UART0_MASKED_INTERRUPT_STATUS_REG) & (1 << 4)) {
           c = (unsigned char) mmio_in32(UART0_DATA_REG); // read for clear tx interrupt.
           uart_putc(c, 0);
-          printk("handle_uart_interrupt(): uart\n");
+          print("handle_uart_interrupt(): uart\n");
         }
       }
     }
@@ -122,7 +122,7 @@ void handle_uart_interrupt(void)
       if (mmio_in32(IRQ_PENDING1) & (1 << 29)) {
         c = (unsigned char) mmio_in32(AUX_MINI_UART_IO_REG); // read for clear tx interrupt.
         uart_putc(c, 0);
-        printk("handle_uart_interrupt(): mini uart\n");
+        print("handle_uart_interrupt(): mini uart\n");
       }
     }
 #else
@@ -139,7 +139,7 @@ void handle_uart_interrupt(void)
 asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
   disable_local_irq();
-  printk("do_irq()\n");
+  print("do_irq()\n");
 #if CONFIG_ARCH_ARM_RASPI3  
   // check inteerupt source
   irq = mmio_in32(TIMER_CORE0_IRQ_SOURCE);
@@ -151,7 +151,7 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
     handle_uart_interrupt();
     break;
   default:
-    printk("Unknown IRQ 0x%lx\n", irq);
+    print("Unknown IRQ 0x%lx\n", irq);
     break;
   }
 #elif CONFIG_ARCH_ARM_SYNQUACER
@@ -166,7 +166,7 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 
 void init_irq(void)
 {
-  printk("init_irq()\n");
+  print("init_irq()\n");
 #if CONFIG_ARCH_ARM_RASPI3  
   /* IRQ routing to core 0 */
   mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING, 0x0);

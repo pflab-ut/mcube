@@ -34,7 +34,7 @@ void print_mat(void)
   for (i = 0; i < PARALLEL_NUM; i++) {
     for (j = 0; j < MAT_SIZE; j++) {
       for (k = 0; k < MAT_SIZE; k++) {
-        printk("print_mat() array[%d][%d][%d] = %lu\n", i, j, k, array[i][j][k]);
+        print("print_mat() array[%d][%d][%d] = %lu\n", i, j, k, array[i][j][k]);
       }
     }
   }
@@ -117,10 +117,10 @@ void do_sequential(void)
   int i;
 	unsigned long cpu_id;
   unsigned long begin, end;
-  printk("do_sequential()\n");
+  print("do_sequential()\n");
   cpu_id = get_cpu_id();
 	set_cpu_id(&own, cpu_id);
-  //  printk("own.x = %d own.y = %d\n", own.x, own.y);
+  //  print("own.x = %d own.y = %d\n", own.x, own.y);
   if (own.x == 0 && own.y == 0) {
     init_array();
     begin = get_time_stamp_counter();
@@ -129,7 +129,7 @@ void do_sequential(void)
       mul(array[i], src[i], src2[i]);
     }
     end = get_time_stamp_counter();
-    printk("begin = %lu end = %lu end - begin = %lu\n", begin, end, end - begin);
+    print("begin = %lu end = %lu end - begin = %lu\n", begin, end, end - begin);
     //    print_mat();
   }
 }
@@ -142,53 +142,53 @@ void do_callback(volatile int index)
   
 #if defined(PUSH_TO_SLAVE_CLUSTERS)
   /* set address array[index] in (0, 0) */
-  //  printk("do %d\n", index);
-  //  printk("do_callback(): do while (%d, %d)\n", own.x, own.y);
+  //  print("do %d\n", index);
+  //  print("do_callback(): do while (%d, %d)\n", own.x, own.y);
   /* wait until array[own.cluster_id] in (own.x, own.y) becomes zero. */
   do {
     //    read(own.local_cpu_id, high_addr, low_addr, &data, 0);
 #if 0
-    printk("do_callback(): array[%d][%d][%d] = %d\n",
+    print("do_callback(): array[%d][%d][%d] = %d\n",
            index, MAT_SIZE - 1, MAT_SIZE - 1, array[index][MAT_SIZE-1][MAT_SIZE-1]);
 #endif
   } while (array[index][MAT_SIZE-1][MAT_SIZE-1] == 0);
-  //  printk("start (%d, %d)\n", own.x, own.y);
+  //  print("start (%d, %d)\n", own.x, own.y);
   /* calculate array[own.cluster_id] in (own.x, own.y) */
   mul(array[index], src[index], src2[index]);
-  //  printk("write\n");
+  //  print("write\n");
   for (i = 0; i < MAT_SIZE; i++) {
-    //    printk("i = %d\n", i);
+    //    print("i = %d\n", i);
     for (j = 0; j < MAT_SIZE; j++) {
-      //      printk("j = %d\n", j);
+      //      print("j = %d\n", j);
       /* send array[index] in (own.x, own.y) to that in (0, 0) */
       encode_cluster_address(&high_addr, &low_addr,
                              0, 0, (unsigned long) &array[index][i][j]);
       write_to_cluster(own.local_cpu_id, high_addr, low_addr, &array[index][i][j], 0);
     }
   }
-  //  printk("write end\n");
+  //  print("write end\n");
 #elif defined(PULL_FROM_MASTER_CLUSTER)
-  printk("do %d\n", index);
+  print("do %d\n", index);
   
   for (i = 0; i < MAT_SIZE; i++) {
     for (j = 0; j < MAT_SIZE; j++) {
       /* set array[own.cluster_id] in (0, 0) */
       encode_cluster_address(&high_addr, &low_addr,
                              0, 0, (unsigned long) &array[index][i][j]);
-      //      printk("high_addr = 0x%x low_addr = 0x%x\n", high_addr, low_addr);
+      //      print("high_addr = 0x%x low_addr = 0x%x\n", high_addr, low_addr);
       /* wait until array[own.cluster_id] becomes zero. */
-      //      printk("do_callback(): (%d, %d) %d\n", own.x, own.y, own.local_cpu_id);
+      //      print("do_callback(): (%d, %d) %d\n", own.x, own.y, own.local_cpu_id);
       do {
         
         /* read array[index] from (0, 0) */
         read_from_cluster(own.local_cpu_id, high_addr, low_addr, &array[index][i][j], 0);
-        //        printk("array[%d][%d][%d] = %d\n", index, i, j, array[index][i][j]);
+        //        print("array[%d][%d][%d] = %d\n", index, i, j, array[index][i][j]);
       } while (array[index][i][j] == 0);
     }
   }
-  //  printk("start (%d, %d)\n", own.x, own.y);
+  //  print("start (%d, %d)\n", own.x, own.y);
   mul(array[index], src[index], src2[index]);
-  printk("write\n");
+  print("write\n");
   for (i = 0; i < MAT_SIZE; i++) {
     for (j = 0; j < MAT_SIZE; j++) {
       /* set array[own.cluster_id] in (0, 0) */
@@ -219,11 +219,11 @@ void do_parallel(void)
   int i;
   unsigned long begin, end;
   cpu_id = get_cpu_id();
-  //  printk("cpu_id = 0x%x\n", cpu_id);
+  //  print("cpu_id = 0x%x\n", cpu_id);
 	set_cpu_id(&own, cpu_id);
-  //  printk("own.x = %d own.y = %d\n", own.x, own.y);
+  //  print("own.x = %d own.y = %d\n", own.x, own.y);
   if (own.x == 0 && own.y == 0) {
-    printk("begin\n");
+    print("begin\n");
     init_array();
     /* initialize array data as INIT_VAL. */
     begin = get_time_stamp_counter();
@@ -234,12 +234,12 @@ void do_parallel(void)
       unsigned long low_addr;
       struct cluster dst;
       int j, k;
-      printk("%d / %d = %d\n", i, LOOP_PER_CLUSTER, i / LOOP_PER_CLUSTER);
+      print("%d / %d = %d\n", i, LOOP_PER_CLUSTER, i / LOOP_PER_CLUSTER);
       get_cluster_from_index(&dst, i / LOOP_PER_CLUSTER, 0);
-      printk("do_parallel(): dst.x = %lu dst.y = %lu\n", dst.x, dst.y);
+      print("do_parallel(): dst.x = %lu dst.y = %lu\n", dst.x, dst.y);
       for (j = 0; j < MAT_SIZE; j++) {
         for (k = 0; k < MAT_SIZE; k++) {
-          printk("do_parallel(): array[%d][%d][%d] = %lu\n", i, j, k, array[i][j][k]);
+          print("do_parallel(): array[%d][%d][%d] = %lu\n", i, j, k, array[i][j][k]);
           encode_cluster_address(&high_addr, &low_addr,
                                  dst.x, dst.y, (unsigned long) &array[i][j][k]);
           write_to_cluster(dst.local_cpu_id, high_addr, low_addr, &array[i][j][k], 0);
@@ -248,7 +248,7 @@ void do_parallel(void)
     }
 #endif
 
-    //    printk("mul\n");
+    //    print("mul\n");
     for (i = 0; i < LOOP_PER_CLUSTER; i++) {
       /* increment own array data */
       mul(array[own.cluster_id * LOOP_PER_CLUSTER + i],
@@ -256,14 +256,14 @@ void do_parallel(void)
           src2[own.cluster_id * LOOP_PER_CLUSTER + i]);
     }
     
-    //    printk("do while (0, 0)\n");
+    //    print("do while (0, 0)\n");
     /* wait until all values of array are updated values. */
     wait_until_loop_completion();
     
-    //    printk("end\n");
+    //    print("end\n");
     end = get_time_stamp_counter();
-    printk("begin = %lu end = %lu end - begin = %lu\n", begin, end, end - begin);
-    printk("MAT_SIZE = %d PARALLEL_NUM = %d CLUSTER_NUM = %d\n",
+    print("begin = %lu end = %lu end - begin = %lu\n", begin, end, end - begin);
+    print("MAT_SIZE = %d PARALLEL_NUM = %d CLUSTER_NUM = %d\n",
            MAT_SIZE, PARALLEL_NUM, CLUSTER_NUM);
   } else if (is_cluster_active(&own)) {
     init_src_array();

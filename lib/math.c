@@ -233,7 +233,7 @@ double sqrt(double x)
 		return last;
 	}
 	if (x != 0.0) {
-		printk("ksqrt: domain error\n");
+		print("ksqrt: domain error\n");
 	}
 	return 0;
 }

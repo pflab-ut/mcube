@@ -16,7 +16,7 @@ void end_periodic_job(struct thread_struct *th)
 	PDEBUG("sys_jiffies = %lu\n", sys_jiffies);
 	PDEBUG("->sched.deadline = %lu\n", th->sched.deadline);
 #endif
-	//	printk("end_periodic_job(): current_time() = %llu\n", current_time());
+	//	print("end_periodic_job(): current_time() = %llu\n", current_time());
   //	th->sched.earliness = current_time() + 1 - th->sched.deadline;
 	//	assert(SU2EU(sys_jiffies) < current_th->sched.deadline);
   

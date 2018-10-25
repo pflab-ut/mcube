@@ -27,17 +27,17 @@ int sleep_until(unsigned long release, unsigned long state)
 int activate(struct thread_struct *th)
 {
   unsigned long cpu = get_cpu_id();
-  //  printk("activate()\n");
+  //  print("activate()\n");
 	th->sched.release = 0;
 	th->sched.deadline = th->sched.release + th->sched.relative_deadline;
 	//	PDEBUG("th->cpu = %d\n", th->cpu);
 
 	th->state = NON_INT_SLEEP;
-	//	printk("enqueue th %d to %d\n", th->id, th->cpu);
+	//	print("enqueue th %d to %d\n", th->id, th->cpu);
 	sleep_tq[cpu] = enqueue_thread(sleep_tq[cpu],
                                  th,
                                  offsetof(struct thread_struct, sched.release));
-	//	printk("sleep_tq[%d]->id = %llu\n", th->cpu, sleep_tq[th->cpu]->id);
+	//	print("sleep_tq[%d]->id = %llu\n", th->cpu, sleep_tq[th->cpu]->id);
 	deadline_tq[cpu] = enqueue_deadline_thread(deadline_tq[cpu],
                                              th,
                                              offsetof(struct thread_struct, sched.deadline));
@@ -52,11 +52,11 @@ int do_activate(struct thread_struct *th)
 	if (!(th->state & UNADMITTED)) {
 		ret = -1;
 	} else {
-    printk("do_activate()\n");
+    print("do_activate()\n");
 		set_priority(th);
 		add_thread_to_task(th);
 		ret = activate(th);
-    printk("ret = %d\n", ret);
+    print("ret = %d\n", ret);
 	}
 	return ret;
 }

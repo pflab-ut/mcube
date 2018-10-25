@@ -12,13 +12,18 @@
 #define	SYS_get_exec_time 2
 #define SYS_write 3
 #define SYS_get_cpu_id 4
-#define	NR_syscalls 5
+#define SYS_get_mode_level 5
+#define	NR_syscalls 6
 
 #ifndef __ASSEMBLY__
 
 
+int call_sys_sched(void);
+int call_sys_end_job(void);
+int call_sys_get_exec_time(void);
 int call_sys_write(char *buf);
 int call_sys_get_cpu_id(void);
+int call_sys_get_mode_level(void);
 
 
 #if CONFIG_ARCH_SIM

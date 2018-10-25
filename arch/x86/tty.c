@@ -335,8 +335,8 @@ int tty_printf(int id, const char *format, ...)
 
   va_list args;
   va_start(args, format);
-  result = printk(format, args);
-  //  result = vsnprintf(buffer, sizeof(buffer), format, args);
+  result = print(format, args);
+  //  result = vsnprint(buffer, sizeof(buffer), format, args);
   va_end(args);
 
   //  tty_print(id, buffer);

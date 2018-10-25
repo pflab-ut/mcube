@@ -52,8 +52,8 @@ void set_cpu_id(struct cluster *c, unsigned long cpu_id)
   c->y = (cpu_id >> 16) & 0xff;
   c->local_cpu_id = cpu_id & 0xffff;
 
-  //  printf("c->x = %d c->y = %d\n", c->x, c->y);
-  //  printf("c->x = 0x%x c->y = 0x%x\n", c->x, c->y);
+  //  print("c->x = %d c->y = %d\n", c->x, c->y);
+  //  print("c->x = 0x%x c->y = 0x%x\n", c->x, c->y);
   if (c->x == 0 && c->y == 0) {
     c->cluster_id = 0;
   } else if (c->x == 0 && c->y == 1) {
@@ -71,14 +71,14 @@ void set_cpu_id(struct cluster *c, unsigned long cpu_id)
   } else if (c->x == 2 && c->y == 2) {
     c->cluster_id = 7;
   } else {
-    printk("Error: unknown (x, y) = (%lu, %lu)\n", c->x, c->y);
+    print("Error: unknown (x, y) = (%lu, %lu)\n", c->x, c->y);
     c->cluster_id = 0xffffffff;
   }
 }
 
 void get_cluster_from_index(struct cluster *c, volatile int index, volatile int cpu)
 {
-  //  printf("index = %d cpu = %d\n", index, cpu);
+  //  print("index = %d cpu = %d\n", index, cpu);
   /* NOTE: (x, y) = (1, 1) means gateway and does not implement CPU. */
   if (index == 0) {
     c->x = 0;
@@ -110,7 +110,7 @@ void get_cluster_from_index(struct cluster *c, volatile int index, volatile int 
   }
   c->cluster_id = index;
   c->local_cpu_id = cpu;
-  //  printf("c->x = %d c->y = %d\n", c->x, c->y);
+  //  print("c->x = %d c->y = %d\n", c->x, c->y);
 }
 
 

@@ -9,7 +9,7 @@ void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
   while (1) {
-    printk("%lu", id);
+    print("%lu", id);
     wait_until_next_interrupt();
   }
   return NULL;
@@ -23,7 +23,7 @@ int user_thread_main(void)
   uint32_t ids[NR_THREADS];
   struct th_attr thas[NR_THREADS] = INIT_THAS;
   sched_time = 5;
-  printk("user_thread_main()\n");
+  print("user_thread_main()\n");
 
   for (i = 0; i < nr_threads; i++) {
     ids[i] = i + 1;

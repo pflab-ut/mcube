@@ -56,18 +56,18 @@ void do_sync(void)
 	int i;
 	int cpu = get_cpu_id();
 	for (i = 0; i < nr_resources; i++) {
-		printk("current_th: remaining = %llu wcmt[0] = %llu enter_sem = %llu sem = %u\n",
+		print("current_th: remaining = %llu wcmt[0] = %llu enter_sem = %llu sem = %u\n",
 					 current_th[cpu]->sched.remaining, current_th[cpu]->sched.wcmt[0], current_th[cpu]->sched.enter_sem[i], current_th[cpu]->sched.sem[i]);
 		/* check if current_th enters critical section of sem[j] */
 		if (current_th[cpu]->sched.sem[i] > 0) {
 			if (current_th[cpu]->sched.remaining == current_th[cpu]->sched.enter_sem[i]) {
 				/* Now enter critical section of sem[i] */
-				printk("th->id = %llu enter critical section %d\n", current_th[cpu]->id, i);
+				print("th->id = %llu enter critical section %d\n", current_th[cpu]->id, i);
 				sync_sem_down(&sync_sem[i]);
 			}
 			if (current_th[cpu]->sched.remaining == current_th[cpu]->sched.enter_sem[i] + current_th[cpu]->sched.sem[i]) {
 				/* Now exit critical section of sem[j] */
-				printk("th->id = %llu exit critical section %d\n", current_th[cpu]->id, i);
+				print("th->id = %llu exit critical section %d\n", current_th[cpu]->id, i);
 				sync_sem_up(&sync_sem[i]);
 			}
 		}
@@ -94,7 +94,7 @@ void do_release(void)
 	//	pdebug_thread(current_th);
 
 
-	//	printk("sleep_tq[cpu]->sched.release = %d\n", sleep_tq[cpu]->sched.release);
+	//	print("sleep_tq[cpu]->sched.release = %d\n", sleep_tq[cpu]->sched.release);
 
 #if 0
 	pdebug_bitmap(run_tq[cpu].bitmap);
@@ -118,7 +118,7 @@ void do_release(void)
 void do_sched(void)
 {
   unsigned long cpu = get_cpu_id();
-  printk("do_sched()\n");
+  print("do_sched()\n");
 	struct thread_struct *th;
   pdebug_deadline_tq();
 
@@ -133,7 +133,7 @@ void do_sched(void)
 	} else {
 		current_th[cpu] = &idle_th[cpu];
 	}
-  printk("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
+  print("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
 
 	if (prev_th[cpu] != &idle_th[cpu] && is_preempted(prev_th[cpu])) {
 		/* preemption occurs */
@@ -168,18 +168,18 @@ int run(unsigned long nr_threads)
 {
 	unsigned int i;
 	int ret;
-  printk("run()\n");
+  print("run()\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
-  //  printk("current_fp = 0x%x\n", current_fp);
+  //  print("current_fp = 0x%x\n", current_fp);
   
   //  pdebug_array(run_tq[cpu].array);
 #if 1
-	// NOTE: not work if comment the following printk function
+	// NOTE: not work if comment the following print function
   for (i = 0; i < nr_threads; i++) {
 		//		current_cpu = i;
     /* check feasibility and activate */
     if ((ret = do_activate(&ths[i])) != 0) {
-			printk("Error: do_activate(): %d\n", ret);
+			print("Error: do_activate(): %d\n", ret);
       return 1;
     }
 		//		do_sched_trace_thread_name(&ths[i]);
@@ -189,14 +189,14 @@ int run(unsigned long nr_threads)
 	sys_jiffies = 0;
 	sched_end = FALSE;
 
-  printk("run()2\n");
+  print("run()2\n");
   for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
     current_th[i] = prev_th[i] = &idle_th[i];
     current_th[i]->id = 0;
     current_th[i]->stack_top = IDLE_THREAD_STACK_ADDR(i);
-    printk("current_th[%u]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
+    print("current_th[%u]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
   }
-  //		printk("current_th[%d] = %x\n", i, current_th[i]);
+  //		print("current_th[%d] = %x\n", i, current_th[i]);
 
 	//	inf_loop();
 	//syscall0(SYS_sched);
@@ -209,25 +209,25 @@ int run(unsigned long nr_threads)
   
 	/* idle thread start */
 	while (sched_end == FALSE) {
-    //printk("");
-    //    printk("get_timer_count() = %lu\n", get_timer_count()); 
-    //    printk("0");
+    //print("");
+    //    print("get_timer_count() = %lu\n", get_timer_count()); 
+    //    print("0");
     //    halt();
-    //    printk("sched_end = %d\n", sched_end);
-		//		printk("idle!");
+    //    print("sched_end = %d\n", sched_end);
+		//		print("idle!");
     //    asm volatile("move %0, $sp" : "=r"(current_fp));
-    //    printk("current_fp = 0x%x\n", current_fp);
+    //    print("current_fp = 0x%x\n", current_fp);
     //    nop();
     //    delay(1000);
     //    wait_until_next_interrupt();
 	}
 	stop_timer(0);
 
-  printk("run() end\n");
+  print("run() end\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
-  //  printk("current_fp = 0x%x\n", current_fp);
+  //  print("current_fp = 0x%x\n", current_fp);
   //  asm volatile("move %0, $sp" : "=r"(current_sp));
-  //  printk("current_sp = 0x%x\n", current_sp);
+  //  print("current_sp = 0x%x\n", current_sp);
   
 	return 0;
 }

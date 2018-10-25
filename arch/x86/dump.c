@@ -17,7 +17,7 @@ static const char digit[] = "0123456789abcdef";
 
 void dump_registers(const registers_t *regs)
 {
-  printk("RAX: %lx    RSI: %lx    R11: %lx\n"
+  print("RAX: %lx    RSI: %lx    R11: %lx\n"
          "RBX: %lx    RDI: %lx    R12: %lx\n"
          "RCX: %lx     R8: %lx    R13: %lx\n"
          "RDX: %lx     R9: %lx    R14: %lx\n"
@@ -33,7 +33,7 @@ void dump_cpuflags(uint64_t rflags)
 {
 #define B(F)  ((rflags & F) ? 1 : 0)
 
-  printk("CF=%u   PF=%u   AF=%u   ZF=%u   SF=%u   "
+  print("CF=%u   PF=%u   AF=%u   ZF=%u   SF=%u   "
          "TF=%u   IF=%u   DF=%u   OF=%u   IOPL=%lu\n",
          B(CPU_EFLAGS_CARRY), B(CPU_EFLAGS_PARITY), B(CPU_EFLAGS_ADJUST),
          B(CPU_EFLAGS_ZERO), B(CPU_EFLAGS_SIGN), B(CPU_EFLAGS_TRAP),

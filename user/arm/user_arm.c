@@ -9,7 +9,7 @@ void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
   while (1) {
-    printk("%lu", id);
+    print("%lu", id);
     delay(1000);
     //  do_end_job(&ths[id]);
   }
@@ -23,7 +23,7 @@ int user_thread_main(void)
   uint32_t ids[NR_THREADS];
   struct th_attr thas[NR_THREADS] = INIT_THAS;
   sched_time = 5;
-  printk("user_thread_main()\n");
+  print("user_thread_main()\n");
   
   for (i = 0; i < nr_threads; i++) {
     ids[i] = i + 1;
@@ -44,7 +44,7 @@ int user_thread_main(void)
 void process(const char *array)
 {
   while (1) {
-    printk("%s", array);
+    print("%s", array);
     //    delay(100);
   }
 }
@@ -52,15 +52,15 @@ void process(const char *array)
 int user_ap_main(void)
 {
   int ret;
-  printk("user_ap_main()\n");
+  print("user_ap_main()\n");
   ret = copy_process((unsigned long) &process, (unsigned long) "12345");
   if (ret != 0) {
-    printk("Error while starting process1\n");
+    print("Error while starting process1\n");
     return 1;
   }
   ret = copy_process((unsigned long) &process, (unsigned long) "abcde");
   if (ret != 0) {
-    printk("Error while starting process 2");
+    print("Error while starting process 2");
     return 2;
   }
   return 0;
@@ -76,11 +76,12 @@ void user_process(void)
 
 int user_mode_main(void)
 {
-  printk("Kernel process started. EL %d\r\n", get_el());
-  printf("hoge\n");
+  print("Kernel process started. EL %d\r\n", get_el());
+  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
   move_to_user_mode();
   call_sys_write("Now process is user mode.\n");
-  printf("hehe\n");
+  print("sys_get_cpu_id() = %d\n", call_sys_get_cpu_id());
+  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
   for (;;)
     ;
   return 0;

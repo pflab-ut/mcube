@@ -39,7 +39,7 @@ void set_lapic_int_vector(uint8_t vector_addr)
 
 void init_lapic_sipi(void)
 {
-	//	printk("init_LAPIC_sipi()\n");
+	//	print("init_LAPIC_sipi()\n");
 	mmio_out32(LAPIC_INT_COMMAND_LOW,
              LAPIC_INT_COMMAND_LOW_DESTINATION_ALLBUT |
 						 LAPIC_INT_COMMAND_LOW_LEVEL_ASSERT |
@@ -87,7 +87,7 @@ void init_ioapic(void)
 
 void init_apic(void)
 {
-  printk("init_apic()\n");
+  print("init_apic()\n");
 	init_lapic();
 	init_ioapic();
 }

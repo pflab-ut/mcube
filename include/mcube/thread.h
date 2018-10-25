@@ -276,9 +276,9 @@ static inline void end_budget(struct thread_struct *th)
 	if (th->id > 0) {
 		unsigned long ctime = get_current_cpu_time();
 		unsigned long exec_time = tsc2nsec(ctime - th->sched.begin_cpu_time);
-		printk("end_budget(): th->id = %lu th->sched.remaining = %ld\n", th->id, th->sched.remaining);
+		print("end_budget(): th->id = %lu th->sched.remaining = %ld\n", th->id, th->sched.remaining);
 		th->sched.remaining -= exec_time;
-		printk("end_budget(): th->id = %lu th->sched.remaining = %ld\n", th->id, th->sched.remaining);
+		print("end_budget(): th->id = %lu th->sched.remaining = %ld\n", th->id, th->sched.remaining);
 		th->sched.sum_exec_time += exec_time;
 	}
 }
