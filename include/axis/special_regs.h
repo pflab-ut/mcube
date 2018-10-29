@@ -88,7 +88,7 @@ static inline void enable_software_interrupt(unsigned long id)
 {
   unsigned long data;
   if (id > NR_SOFTWARE_INTERRUPTS) {
-    print("Error: cpu id %lu exceeds %lu\n", id, NR_SOFTWARE_INTERRUPTS);
+    printk("Error: cpu id %lu exceeds %lu\n", id, NR_SOFTWARE_INTERRUPTS);
     return;
   }
   asm volatile("mfs %0, $5" : "=r"(data));
@@ -100,7 +100,7 @@ static inline void disable_software_interrupt(unsigned long id)
 {
   unsigned long data;
   if (id > NR_SOFTWARE_INTERRUPTS) {
-    print("Error: cpu id %lu exceeds %lu\n", id, NR_SOFTWARE_INTERRUPTS);
+    printk("Error: cpu id %lu exceeds %lu\n", id, NR_SOFTWARE_INTERRUPTS);
     return;
   }
   asm volatile("mfs %0, $5" : "=r"(data));

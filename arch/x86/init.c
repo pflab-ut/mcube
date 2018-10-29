@@ -21,15 +21,17 @@ void init_arch(void)
   
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
   tty_clear(TTY_ID);
+
+
   /* initialize memory */
   init_acpi();
   init_pmap();
   init_page();
-  //  print_pmap();
+  
   init_irq();
   init_exception();
-  
   init_syscall();
+  
   
   init_keyboard();
   init_apic();
@@ -43,22 +45,22 @@ void init_arch(void)
   
 #if 0
   /* use PIT timer */
-  print("use PIT timer\n");
+  printk("use PIT timer\n");
   init_pit_timer(TICK_USEC);
 #endif
 
 #if 0
   /* use HPET timer but not work */
-  print("use HPET timer\n");
+  printk("use HPET timer\n");
   init_hpet_timer(TICK_USEC);
   start_hpet_timer(0);
 #endif
 
 #if 0
   /* use LAPIC timer */
-  print("use LAPIC timer\n");
+  printk("use LAPIC timer\n");
   init_lapic_timer(TICK_USEC);
-  print("start_lapic_timer()\n");
+  printk("start_lapic_timer()\n");
   start_lapic_timer(0);
 #endif
   enable_local_irq();
@@ -70,9 +72,9 @@ void init_arch(void)
   //	init_cache();
 #if 0  
   for (;;) {
-    //    print("a");
-    //print("read_hpet_counter() = %lu\n", read_hpet_counter());
-    //    print("TIMER_COMPARATOR_64(0) = %lu\n", mmio_in64(TIMER_COMPARATOR_64(0)));
+    //    printk("a");
+    //printk("read_hpet_counter() = %lu\n", read_hpet_counter());
+    //    printk("TIMER_COMPARATOR_64(0) = %lu\n", mmio_in64(TIMER_COMPARATOR_64(0)));
   }
 #endif
 }

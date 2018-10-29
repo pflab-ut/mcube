@@ -1,5 +1,5 @@
 /**
-82;1;0c * @file kernel/main.c
+ * @file kernel/main.c
  *
  * @author Hiroyuki Chishiro
  */

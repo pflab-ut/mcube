@@ -29,7 +29,7 @@ void do_switch_thread_arch(interrupt_context_t *context)
       context = current_th[cpu]->context;
       context->retaddr = current_th[cpu]->interrupt_program_counter;
       context->rsp = current_th[cpu]->rsp;
-      //      print("context->retaddr = 0x%lx rsp = 0x%lx\n", context->retaddr, context->rsp);
+      //      printk("context->retaddr = 0x%lx rsp = 0x%lx\n", context->retaddr, context->rsp);
       //      inf_loop();
     }
     prev_th[cpu] = current_th[cpu];
@@ -42,9 +42,9 @@ void init_irq(void)
 {
   extern struct desc_ptr IDT_Pointer;
   init_irq_asm();
-  print("IDT_Pointer = 0x%lx\n", (unsigned long) &IDT_Pointer);
-  print("IDT_Pointer.size = 0x%x\n", IDT_Pointer.size);
-  print("IDT_Pointer.addr = 0x%lx\n", IDT_Pointer.addr);
+  //  printk("IDT_Pointer = 0x%lx\n", (unsigned long) &IDT_Pointer);
+  //  printk("IDT_Pointer.size = 0x%x\n", IDT_Pointer.size);
+  //  printk("IDT_Pointer.addr = 0x%lx\n", IDT_Pointer.addr);
   //  lidt(&IDT_Pointer);
   asm volatile("lidt [%0]" :: "r"(&IDT_Pointer));
 }

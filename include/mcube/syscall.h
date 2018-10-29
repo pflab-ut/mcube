@@ -15,6 +15,8 @@
 #define SYS_get_mode_level 5
 #define	NR_syscalls 6
 
+
+
 #ifndef __ASSEMBLY__
 
 
@@ -33,12 +35,16 @@ int call_sys_get_mode_level(void);
 #include <sys/syscall.h>
 
 
-#elif CONFIG_ARCH_X86 || CONFIG_ARCH_AXIS
+#elif CONFIG_ARCH_X86
 
 asmlinkage int syscall0(int number);
-asmlinkage int syscall1(int number, int arg1);
-asmlinkage int syscall2(int number, int arg1, int arg2);
+asmlinkage int syscall1(int number, unsigned long arg1);
+asmlinkage int syscall2(int number, unsigned long arg1, unsigned long arg2);
 
+#elif CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
+
+#else
+#error "Unknown Architecture"
 #endif /* CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */

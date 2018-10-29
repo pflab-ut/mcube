@@ -24,7 +24,11 @@
 #define CR0_ENABLE_PROTECTED_MODE (0x1 << 0)
 
 
+
+
 #ifndef __ASSEMBLY__
+
+
 
 
 static inline uint64_t get_cr0(void)
@@ -91,10 +95,6 @@ static inline void set_eflags(uint64_t eflags)
                "popfl" :: "r"(eflags));
 }
 
-static inline void generate_software_interrupt(volatile unsigned long id)
-{
-  asm volatile("int %0" :: "r"(id));
-}
 
 
 #endif /* !__ASSEMBLY__ */

@@ -159,8 +159,8 @@ static void read_xsdt(btable_t *btable)
   const struct acpi_xsdt *xsdt = acpi.xsdt;
   const struct acpi_hdr  *xhdr = &xsdt->hdr;
 
-  print("read_xsdt()\n");
-  print("[acpi] oem='%s' tbl='%s' rev=0x%x creator='%s'\n",
+  printk("read_xsdt()\n");
+  printk("[acpi] oem='%s' tbl='%s' rev=0x%x creator='%s'\n",
          xhdr->oemid, xhdr->oemtableid, xhdr->oemrevision, xhdr->creatorid);
 
   // Read each of the tables referenced by the XSDT table.
@@ -168,15 +168,15 @@ static void read_xsdt(btable_t *btable)
   for (int i = 0; i < tables; i++) {
     const struct acpi_hdr *hdr = (const struct acpi_hdr *) xsdt->ptr_table[i];
     map_table(btable, hdr);
-    print("[acpi] Found %s table at 0x%lx.\n",
+    printk("[acpi] Found %s table at 0x%lx.\n",
            hdr->signature.bytes, (uint64_t) hdr);
     if (hdr->signature.dword == SIGNATURE_HPET) {
       /* map HPET address space */
-      print("HPET\n");
-      print("sizeof(struct hpet) = %lu\n", sizeof(struct hpet));
+      printk("HPET\n");
+      printk("sizeof(struct hpet) = %lu\n", sizeof(struct hpet));
       //      struct hpet *addr = (struct hpet *) HPET0_START;
       struct hpet *addr = (struct hpet *) hdr;
-      print("address = 0x%lx\n", addr->address.address);
+      printk("address = 0x%lx\n", addr->address.address);
       pmap_add(PAGE_ALIGN_DOWN(HPET0_START),
                PAGE_ALIGN_UP(HPET0_START + 0x400) - PAGE_ALIGN_DOWN(HPET0_START),
                PMEMTYPE_ACPI);
@@ -191,8 +191,8 @@ static void read_rsdt(btable_t *btable)
   const struct acpi_rsdt *rsdt = acpi.rsdt;
   const struct acpi_hdr  *rhdr = &rsdt->hdr;
   int i;
-  print("read_rsdt()\n");
-  print("[acpi] oem='%s' tbl='%s' rev=%x creator='%s'\n",
+  printk("read_rsdt()\n");
+  printk("[acpi] oem='%s' tbl='%s' rev=%x creator='%s'\n",
          rhdr->oemid, rhdr->oemtableid, rhdr->oemrevision, rhdr->creatorid);
 
   // Read each of the tables referenced by the RSDT table.
@@ -200,16 +200,16 @@ static void read_rsdt(btable_t *btable)
   for (i = 0; i < tables; i++) {
     const struct acpi_hdr *hdr = (const struct acpi_hdr *)(uintptr_t) rsdt->ptr_table[i];
     map_table(btable, hdr);
-    print("[acpi] Found %s table at 0x%lx.\n",
+    printk("[acpi] Found %s table at 0x%lx.\n",
            hdr->signature.bytes, (uint64_t) hdr);
-    print("hdr->length = %u\n", hdr->length);
-    print("hdr->signature.bytes = %s\n", hdr->signature.bytes);
+    printk("hdr->length = %u\n", hdr->length);
+    printk("hdr->signature.bytes = %s\n", hdr->signature.bytes);
     if (hdr->signature.dword == SIGNATURE_HPET) {
       /* map HPET address space */
-      print("HPET\n");
-      print("sizeof(struct hpet) = %lu\n", sizeof(struct hpet));
+      printk("HPET\n");
+      printk("sizeof(struct hpet) = %lu\n", sizeof(struct hpet));
       struct hpet *addr = (struct hpet *) hdr;
-      print("address = 0x%lx\n", addr->address.address);
+      printk("address = 0x%lx\n", addr->address.address);
       pmap_add(PAGE_ALIGN_DOWN(HPET0_START),
                PAGE_ALIGN_UP(HPET0_START + 0x400) - PAGE_ALIGN_DOWN(HPET0_START),
                PMEMTYPE_ACPI);
@@ -249,21 +249,21 @@ void init_acpi(void)
   }
   // Fatal out if the ACPI tables could not be found.
   if (!acpi.rsdp) {
-    print("[acpi] No ACPI tables found.\n");
+    printk("[acpi] No ACPI tables found.\n");
     fatal();
   }
 
   acpi.version = acpi.rsdp->revision + 1;
-  print("[acpi] ACPI %d.0 RSDP table found at 0x%lx.\n",
+  printk("[acpi] ACPI %d.0 RSDP table found at 0x%lx.\n",
          acpi.version, (uintptr_t) acpi.rsdp);
 
   // Prefer the ACPI2.0 XSDT table for finding all other tables.
   if (acpi.version > 1) {
     acpi.xsdt = (const struct acpi_xsdt *) acpi.rsdp->ptr_xsdt;
     if (!acpi.xsdt) {
-      print("[acpi] No XSDT table found.\n");
+      printk("[acpi] No XSDT table found.\n");
     } else {
-      print("[acpi] Found XSDT table at 0x%lx.\n",
+      printk("[acpi] Found XSDT table at 0x%lx.\n",
              (uintptr_t) acpi.xsdt);
       map_table(&btable, &acpi.xsdt->hdr);
       read_xsdt(&btable);
@@ -273,10 +273,10 @@ void init_acpi(void)
   // Fall back to the ACPI1.0 RSDT table if XSDT isn't available.
   if (!acpi.xsdt) {
     if (!(acpi.rsdt = (const struct acpi_rsdt *)(uintptr_t) acpi.rsdp->ptr_rsdt)) {
-      print("[acpi] No RSDT table found.\n");
+      printk("[acpi] No RSDT table found.\n");
       fatal();
     } else {
-      print("[acpi] Found RSDT table at 0x%lx.\n",
+      printk("[acpi] Found RSDT table at 0x%lx.\n",
              (uintptr_t) acpi.rsdt);
       map_table(&btable, &acpi.rsdt->hdr);
       read_rsdt(&btable);
@@ -285,7 +285,7 @@ void init_acpi(void)
 
   // Reserve local APIC memory-mapped I/O addresses.
   if (acpi.madt) {
-    //    print("acpi.madt->ptr_local_apic = 0x%x\n", acpi.madt->ptr_local_apic);
+    //    printk("acpi.madt->ptr_local_apic = 0x%x\n", acpi.madt->ptr_local_apic);
     pmap_add(PAGE_ALIGN_DOWN(acpi.madt->ptr_local_apic), PAGE_SIZE,
              PMEMTYPE_UNCACHED);
   }
@@ -293,7 +293,7 @@ void init_acpi(void)
   // Reserve I/O APIC memory-mapped I/O addresses.
   const struct acpi_madt_io_apic *io = NULL;
   while ((io = acpi_next_io_apic(io))) {
-    //    print("io->ptr_io_apic = 0x%x\n", io->ptr_io_apic);
+    //    printk("io->ptr_io_apic = 0x%x\n", io->ptr_io_apic);
     pmap_add(PAGE_ALIGN_DOWN(io->ptr_io_apic), PAGE_SIZE,
              PMEMTYPE_UNCACHED);
   }

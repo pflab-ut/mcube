@@ -1,5 +1,5 @@
 ;
-; @file arch/x86/memzero.asm
+; @file arch/x86/utils.asm
 ;
 ; @author Hiroyuki Chishiro
 ;
@@ -16,8 +16,11 @@ bits 64
 
 section .text
 
-    global memzero
-
+  global memzero
+  global syscall0
+  global syscall1
+  global syscall2
+  global move_to_user_level
 
 ;-----------------------------------------------------------------------------
 ; @function     memzero
@@ -42,3 +45,21 @@ memzero:
     ; Return the original destination address.
     mov     rax,    r8
     ret
+
+
+syscall0:
+  int 0x40 ; SYSCALL_IRQ
+  ret
+
+syscall1:
+  int 0x40 ; SYSCALL_IRQ
+  ret
+
+syscall2:
+  int 0x40 ; SYSCALL_IRQ
+  ret
+
+  
+move_to_user_level:
+  ; TODO: implement
+  ret

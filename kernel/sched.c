@@ -210,7 +210,7 @@ int run(unsigned long nr_threads)
 	/* idle thread start */
 	while (sched_end == FALSE) {
     //print("");
-    //    print("get_timer_count() = %lu\n", get_timer_count()); 
+    //print("get_timer_count() = %lu\n", get_timer_count()); 
     //    print("0");
     //    halt();
     //    print("sched_end = %d\n", sched_end);

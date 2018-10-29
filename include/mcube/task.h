@@ -100,7 +100,7 @@ void add_thread_to_task(struct thread_struct *);
 void delete_thread_from_task(struct thread_struct *);
 int exit_task(void);
 
-int move_to_user_mode(void);
+int move_to_user_level(void (*func)(void));
 
 struct task_struct *do_create_task(struct th_attr *attr);
 

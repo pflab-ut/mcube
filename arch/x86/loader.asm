@@ -313,7 +313,7 @@ load:
     ;-------------------------------------------------------------------------
     .enable64BitMode:
 
-        ; Enable 64-bit mode and syscall/sysret.
+        ; Enable 64-bit mode.
         mov     ecx,    0xc0000080 ; Extended Feature Enable Register (EFER)
         rdmsr
         or      eax,    (1 << 8) | (1 << 0)

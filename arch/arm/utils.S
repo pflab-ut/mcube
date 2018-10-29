@@ -44,7 +44,8 @@ ENTRY(arch_switch_to)
   mov     sp, x9
   ret
 
-ENTRY(move_to_user_mode)
+ENTRY(move_to_user_level)
+  mov x29, x0 // save first argument (x0) to unused register (x29)
   // Determine the EL0 Execution state.
   mov x0, #0b00000 // DAIF=0000 M[4:0]=00000 EL0t.
   msr spsr_el1, x0
@@ -52,7 +53,7 @@ ENTRY(move_to_user_mode)
   msr elr_el1, x0 // EL0 code.
   eret
 el0_entry:
-  #if 1
+#if 1
   mov x0, #0
 #else
   get_cpu_id
@@ -62,5 +63,6 @@ el0_entry:
   ldr x1, =idle_stack
   add x2, x0, x1
   mov sp, x2
-  ret
-
+  blr x29
+//  bl user_mode_main
+  b .

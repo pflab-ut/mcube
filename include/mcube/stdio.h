@@ -11,6 +11,10 @@
 #define FOUT_SIZE 0x200
 #define MAX_DIGIT 64
 
+/* print for only kernel mode. */
+int printk(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+
+/* print for both kernel and user modes. */
 int print(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 
 #if CONFIG_ARCH_SIM
@@ -23,8 +27,8 @@ int print(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 int getc(void);
 int putchar(int c);
 int puts(const char *s);
-  
-  
+
+
 #endif /* CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */

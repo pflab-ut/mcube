@@ -53,6 +53,6 @@ int puts(const char *s)
 	for (i = 0; i < len; i++) {
 		putchar(s[i]);
 	}
-  return 0;
+  return len;
 }
 

@@ -35,7 +35,7 @@ void init_ap(void)
 int ap_main(void)
 {
 	init_ap();
-	//	print("ap_main()\n");
+	//	printk("ap_main()\n");
 #if CONFIG_ENV_SMP
 	ap_usermain();
 #endif /* CONFIG_ENV_SMP */
@@ -62,12 +62,12 @@ void print_vendor_id(void)
 	char vendor_id[VENDOR_ID_LENGTH+1];
   registers4_t regs4;
 	cpuid(0x0, &regs4);
-	print("Largest Standard Function Number Supported: %d\n", regs4.eax);
+	printk("Largest Standard Function Number Supported: %d\n", regs4.eax);
   memcpy(&vendor_id[0], &regs4.ebx, 4);
   memcpy(&vendor_id[4], &regs4.edx, 4);
   memcpy(&vendor_id[8], &regs4.ecx, 4);
 	vendor_id[VENDOR_ID_LENGTH] = '\0';
-	print("Vendor ID: %s\n", vendor_id);
+	printk("Vendor ID: %s\n", vendor_id);
 }
 
 
@@ -75,12 +75,12 @@ void print_simd_info(void)
 {
   registers4_t regs4;
 	cpuid(0x1, &regs4);
-  print("MMX:    %s\n", regs4.edx & 1 << 23 ? "OK" : "NG");
-  print("SSE:    %s\n", regs4.edx & 1 << 25 ? "OK" : "NG");
-  print("AVX:    %s\n", regs4.ecx & 1 << 28 ? "OK" : "NG");
-  print("FMA:    %s\n", regs4.ecx & 1 << 12 ? "OK" : "NG");
+  printk("MMX:    %s\n", regs4.edx & 1 << 23 ? "OK" : "NG");
+  printk("SSE:    %s\n", regs4.edx & 1 << 25 ? "OK" : "NG");
+  printk("AVX:    %s\n", regs4.ecx & 1 << 28 ? "OK" : "NG");
+  printk("FMA:    %s\n", regs4.ecx & 1 << 12 ? "OK" : "NG");
   cpuid(0x7, &regs4);
-  print("AVX2:   %s\n", regs4.ebx & 1 <<  5 ? "OK" : "NG");
+  printk("AVX2:   %s\n", regs4.ebx & 1 <<  5 ? "OK" : "NG");
 }
 
 
@@ -96,7 +96,7 @@ void print_cpu_brand(void)
 	cpuid(0x80000004, &regs4);
   memcpy(&cpu_brand[32], &regs4, sizeof(regs4));
 	cpu_brand[CPU_BRAND_LENGTH] = '\0';
-	print("%s\n", cpu_brand);
+	printk("%s\n", cpu_brand);
 }
 
 void init_cpu(void)

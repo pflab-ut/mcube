@@ -11,11 +11,11 @@ void do_local_dmac(volatile uint32_t dst,
                    enum dmac policy)
 {
   if (policy >= DMAC_END) {
-    print("Error: unknown DMAC transfer policy %d\n", policy);
+    printk("Error: unknown DMAC transfer policy %d\n", policy);
     return;
   }
   if (n == 0) {
-    print("Error: transfer size is zero\n");
+    printk("Error: transfer size is zero\n");
     return;
   }
   set_dmac_destination_address(dst);

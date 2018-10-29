@@ -467,6 +467,22 @@ out:
   return n;
 }
 
+/**
+ * The printk() function produces output according to @b CONSOLE or @b UART.
+ * @param fmt specifies how subsequent arguments.
+ * @return Number of characters printed.
+ */
+int printk(const char *fmt, ...)
+{
+	char buf[FOUT_SIZE];
+  int n;
+	va_list ap;
+	va_start(ap, fmt);
+  n = vsprint(buf, fmt, ap);
+  va_end(ap);
+  puts(buf);
+	return n;
+}
 
 /**
  * The print() function produces output according to @b CONSOLE or @b UART.
@@ -481,6 +497,10 @@ int print(const char *fmt, ...)
 	va_start(ap, fmt);
   n = vsprint(buf, fmt, ap);
   va_end(ap);
-  call_sys_write(buf);
+  if (call_sys_get_mode_level() == USER_LEVEL) {
+    call_sys_write(buf);
+  } else {
+    puts(buf);
+  }
 	return n;
 }

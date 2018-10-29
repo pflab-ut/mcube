@@ -74,16 +74,20 @@ void user_process(void)
   
 }
 
-int user_mode_main(void)
+
+void user_level_main(void)
+{
+  print("Now process is user level.\n");
+  print("sys_get_cpu_id() = %d\n", call_sys_get_cpu_id());
+  print("sys_get_level_level() = %d\n", call_sys_get_mode_level());
+}
+
+
+int kernel_level_main(void)
 {
   print("Kernel process started. EL %d\r\n", get_el());
-  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
-  move_to_user_mode();
-  call_sys_write("Now process is user mode.\n");
-  print("sys_get_cpu_id() = %d\n", call_sys_get_cpu_id());
-  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
-  for (;;)
-    ;
+  print("sys_get_level_level() = %d\n", call_sys_get_mode_level());
+  move_to_user_level(user_level_main);
   return 0;
 }
 
@@ -92,7 +96,9 @@ int user_arch_main(void)
 {
   //  user_thread_main();
   //  user_ap_main();
-  user_mode_main();
-  
+  kernel_level_main();
+  print("hoge\n");
+  for (;;)
+    ;
   return 0;
 }

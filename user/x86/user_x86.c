@@ -40,11 +40,24 @@ int user_thread_main(void)
   return 0;
 }
 
+extern int call_user_sys_write(char *buf);
+
+int user_level_main(void)
+{
+  int ret;
+  print("user_level_main()\n");
+  ret = call_user_sys_write("hoge\n");
+  print("ret = %d\n", ret);
+  //  syscall1(SYS_write, (unsigned long) "hoge\n");
+  //  print("user_level_main() exit\n");
+  return 0;
+}
 
 
 int user_arch_main(void)
 {
-  user_thread_main();
+  //  user_thread_main();
+  user_level_main();
   
   return 0;
 }

@@ -10,10 +10,10 @@
 void handle_lapic_timer_tick(interrupt_context_t *context)
 {
 	unsigned long cpu = get_cpu_id();
-	print("handle_lapic_timer_tick(): cpu = %lu\n", cpu);
+	printk("handle_lapic_timer_tick(): cpu = %lu\n", cpu);
   //  inf_loop();
 
-	//	print("handle_LAPIC_timer_tick(): current_th[%d]->id = %llu\n", cpu, current_th[cpu]->id);
+	//	printk("handle_LAPIC_timer_tick(): current_th[%d]->id = %llu\n", cpu, current_th[cpu]->id);
   if (current_th[cpu] != &idle_th[cpu]) {
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
@@ -27,7 +27,7 @@ void handle_lapic_timer_tick(interrupt_context_t *context)
   update_jiffies();
   
   if (sched_time <= sys_jiffies) {
-		//    print("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
+		//    printk("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
     sched_end = TRUE;
     current_th[cpu] = &idle_th[cpu];
     stop_lapic_timer(0);
@@ -73,7 +73,7 @@ void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, u
 		div_flag = 0xa;
 		break;
   default:
-		print("Error: Unknown divisor %u\n", divisor);
+		printk("Error: Unknown divisor %u\n", divisor);
 		break;
 	}
 	switch (timer_flag) {
@@ -84,22 +84,22 @@ void init_lapic_timer_irq(uint8_t vector, uint8_t timer_flag, uint8_t divisor, u
 		mmio_out32(LAPIC_LVT_TIMER, mmio_in32(LAPIC_LVT_TIMER) | (uint32_t) vector);
     break;
   default:
-    print("Error: unknown timer flag %u\n", timer_flag);
+    printk("Error: unknown timer flag %u\n", timer_flag);
     break;
 	}
 	mmio_out32(LAPIC_DIV_CONFIG, div_flag);
-	//	print("idt_start = %x\n", idt_start);
+	//	printk("idt_start = %x\n", idt_start);
 
-	print("cpu = %lu\n", cpu);
+	printk("cpu = %lu\n", cpu);
   //	set_idsc(idt_start + LAPIC_TIMER_IRQ, (uint32_t) &common_interrupt, 2 * 8, AR_INTGATE32);
   set_isr(LAPIC_TIMER_IRQ, handle_lapic_timer_tick);
 
-  print("handle_lapic_timer_tick = %lx\n", (unsigned long) handle_lapic_timer_tick);
+  printk("handle_lapic_timer_tick = %lx\n", (unsigned long) handle_lapic_timer_tick);
   //	setup_irq(LAPIC_TIMER_IRQ, &LAPIC_timer_irq);
 
-	print("count = %u\n", count);
+	printk("count = %u\n", count);
 	mmio_out32(LAPIC_INIT_COUNT, count);
-	print("LAPIC_LVT_TIMER = %x\n", mmio_in32(LAPIC_LVT_TIMER));
+	printk("LAPIC_LVT_TIMER = %x\n", mmio_in32(LAPIC_LVT_TIMER));
 }
 
 
@@ -117,7 +117,7 @@ void start_lapic_timer(unsigned int ch)
 
 void stop_lapic_timer(unsigned int ch)
 {
-	//	print("stop_timer()\n");
+	//	printk("stop_timer()\n");
 	mmio_out32(LAPIC_LVT_TIMER, mmio_in32(LAPIC_LVT_TIMER) | LAPIC_LVT_ENABLE_MASK);
 }
 
@@ -125,13 +125,13 @@ void measure_lapic_timer(void)
 {
 	// TODO: measure CPU frequency
 	cpu_bus_freq_mhz = CPU_CLOCK_MHZ_PER_USEC;
-	//	print("cpu_bus_freq_mhz = %d\n", cpu_bus_freq_mhz);
+	//	printk("cpu_bus_freq_mhz = %d\n", cpu_bus_freq_mhz);
 }
 
 void init_lapic_timer(unsigned long tick_us)
 {
 
-	//	print("init_timer()\n");
+	//	printk("init_timer()\n");
   //	unsigned long cpu = get_cpu_id();
 	unsigned long cpu_bus;
 	measure_lapic_timer();
@@ -146,6 +146,6 @@ void init_lapic_timer(unsigned long tick_us)
   //	cpu_bus = CPU_CLOCK_MHZ_PER_USEC / 20;
 	cpu_bus = CPU_CLOCK_MHZ_PER_USEC / 2;
   sys_tsc = cpu_bus * tick_us;
-  print("sys_tsc = %lu\n", sys_tsc);
+  printk("sys_tsc = %lu\n", sys_tsc);
 	init_lapic_timer_irq(LAPIC_TIMER_IRQ, TIMER_PERIODIC, 1, sys_tsc);
 }

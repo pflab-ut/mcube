@@ -257,19 +257,12 @@ extern unsigned long idt_descriptor_size;
 #define TRAP_PIT_IRQ          (PIT_IRQ + TRAP_IRQ_OFFSET)
 #define TRAP_KEYBOARD_IRQ     (KEYBOARD_IRQ + TRAP_IRQ_OFFSET)
 
-#define TRAP_SCHED_IRQ 0x40
+
+#define SYSCALL_IRQ 0x40
+#define LAPIC_TIMER_IRQ 0x41
 
 
-/* 0x20-0xff: maskable interrupts */
 #define TRAP_INTERRUPT_FATAL_IRQ 0xff
-
-  
-#define SYSCALL_IRQ 0x80
-
-/* magic number */
-#define LAPIC_TIMER_IRQ 0x3e
-//#define LAPIC_TIMER_IRQ 0x20
-//#define LAPIC_TIMER_IRQ 0x21
 
 
 extern uint32_t common_interrupt;

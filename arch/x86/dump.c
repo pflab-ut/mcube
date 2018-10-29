@@ -17,11 +17,11 @@ static const char digit[] = "0123456789abcdef";
 
 void dump_registers(const registers_t *regs)
 {
-  print("RAX: %lx    RSI: %lx    R11: %lx\n"
-         "RBX: %lx    RDI: %lx    R12: %lx\n"
-         "RCX: %lx     R8: %lx    R13: %lx\n"
-         "RDX: %lx     R9: %lx    R14: %lx\n"
-         "RBP: %lx    R10: %lx    R15: %lx\n",
+  printk("RAX: 0x%lx    RSI: 0x%lx    R11: 0x%lx\n"
+         "RBX: 0x%lx    RDI: 0x%lx    R12: 0x%lx\n"
+         "RCX: 0x%lx     R8: 0x%lx    R13: 0x%lx\n"
+         "RDX: 0x%lx     R9: 0x%lx    R14: 0x%lx\n"
+         "RBP: 0x%lx    R10: 0x%lx    R15: 0x%lx\n",
          regs->rax, regs->rsi, regs->r11,
          regs->rbx, regs->rdi, regs->r12,
          regs->rcx, regs->r8, regs->r13,
@@ -33,7 +33,7 @@ void dump_cpuflags(uint64_t rflags)
 {
 #define B(F)  ((rflags & F) ? 1 : 0)
 
-  print("CF=%u   PF=%u   AF=%u   ZF=%u   SF=%u   "
+  printk("CF=%u   PF=%u   AF=%u   ZF=%u   SF=%u   "
          "TF=%u   IF=%u   DF=%u   OF=%u   IOPL=%lu\n",
          B(CPU_EFLAGS_CARRY), B(CPU_EFLAGS_PARITY), B(CPU_EFLAGS_ADJUST),
          B(CPU_EFLAGS_ZERO), B(CPU_EFLAGS_SIGN), B(CPU_EFLAGS_TRAP),

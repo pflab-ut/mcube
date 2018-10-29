@@ -20,8 +20,3 @@ int puts(const char *s)
   return t - s;
 }
 
-int call_sys_write(char *buf)
-{
-  /* TODO: implement system call */
-  return puts(buf);
-}

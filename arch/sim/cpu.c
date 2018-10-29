@@ -35,8 +35,8 @@ void set_cpu_frequency(void)
   CPU_USEC_PER_CLOCK_MHZ = (1.0 * 1000 * 1000) / CPU_CLOCK;
   CPU_CLOCK_MHZ_PER_NSEC = CPU_CLOCK / (1.0 * 1000 * 1000 * 1000);
   CPU_NSEC_PER_CLOCK_MHZ = (1.0 * 1000 * 1000 * 1000) / CPU_CLOCK;
-  print("CPU_CLOCK = %lu\n", CPU_CLOCK);
-  print("CPU_CLOCK_MHZ_PER_USEC = %lu\n", CPU_CLOCK_MHZ_PER_USEC);
+  printk("CPU_CLOCK = %lu\n", CPU_CLOCK);
+  printk("CPU_CLOCK_MHZ_PER_USEC = %lu\n", CPU_CLOCK_MHZ_PER_USEC);
 }
 
 

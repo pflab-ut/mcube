@@ -6,6 +6,12 @@
 #ifndef	__MCUBE_ARM_CPU_H__
 #define	__MCUBE_ARM_CPU_H__
 
+#define USER_LEVEL 0
+#define KERNEL_LEVEL 1
+#define HYPERVISOR_LEVEL 2
+#define TRUST_ZONE_LEVEL 3
+
+
 #define REG_LENGTH 64
 
 #ifdef __ASSEMBLY__

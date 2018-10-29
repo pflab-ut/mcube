@@ -18,7 +18,7 @@ void handle_pit_timer(interrupt_context_t *context)
   static int i = 0;
   i++;
   if (i % 1000 == 0) {
-    print("handle_pit_timer()\n");
+    printk("handle_pit_timer()\n");
     
     if (current_th[cpu] != &idle_th[cpu]) {
       PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
@@ -31,7 +31,7 @@ void handle_pit_timer(interrupt_context_t *context)
     }
     update_jiffies();
     if (sched_time <= sys_jiffies) {
-      //    print("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
+      //    printk("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
       sched_end = TRUE;
       current_th[cpu] = &idle_th[cpu];
       stop_pit_timer(0);
@@ -50,7 +50,7 @@ void handle_pit_timer(interrupt_context_t *context)
 
 void init_pit_timer(unsigned long tick_us)
 {
-  print("init_pit_timer()\n");
+  printk("init_pit_timer()\n");
   // Compute the clock count value.
 	/* upper bound of count is 65535. */
 	/* 11932 = 100Hz = 10ms */

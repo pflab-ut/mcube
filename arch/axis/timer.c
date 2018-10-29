@@ -10,7 +10,7 @@
  */
 void start_timer(unsigned int ch)
 {
-  print("start_timer()\n");
+  printk("start_timer()\n");
   enable_timer_interrupt();
   enable_timer();
 }

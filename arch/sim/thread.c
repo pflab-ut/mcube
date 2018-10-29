@@ -104,12 +104,12 @@ void __attribute__((noreturn)) run_user_thread(void)
 {
   size_t cpu = get_cpu_id();
   void *ret = NULL;
-  //  print("begin_user_thread()\n");
+  //  printk("begin_user_thread()\n");
   if (current_th[cpu]->run_user_func) {
     ret = (*current_th[cpu]->run_user_func)(current_th[cpu]->arg);
   }
   if (ret) {
-    print("ret = 0x%lx\n", (unsigned long) ret);
+    printk("ret = 0x%lx\n", (unsigned long) ret);
   }
   halt();
   inf_loop();

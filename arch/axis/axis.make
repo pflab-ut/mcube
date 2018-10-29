@@ -45,6 +45,7 @@ SRCS += \
  $(TOP_DIR)/arch/axis/mm.c \
  $(TOP_DIR)/arch/axis/init.c \
  $(TOP_DIR)/arch/axis/cpu.c \
+	$(TOP_DIR)/arch/axis/syscall.c \
 
 SRCS += \
  $(TOP_DIR)/user/axis/cluster.c \

@@ -6,6 +6,10 @@
 #ifndef	__MCUBE_X86_CPU_H__
 #define	__MCUBE_X86_CPU_H__
 
+#define USER_LEVEL 0
+#define KERNEL_LEVEL 3
+
+#define REGISTER_LENGTH 64
 
 #ifdef __ASSEMBLY__
 
