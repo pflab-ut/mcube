@@ -138,7 +138,6 @@ void handle_uart_interrupt(void)
 
 asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
-  disable_local_irq();
   printk("do_irq()\n");
 #if CONFIG_ARCH_ARM_RASPI3  
   // check inteerupt source
@@ -160,7 +159,6 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 #error "Unknown Machine"
 #endif /* CONFIG_ARCH_ARM_RASPI3 */
   do_switch_thread();
-  enable_local_irq();
   return 0;
 }
 

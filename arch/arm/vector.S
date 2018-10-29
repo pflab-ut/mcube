@@ -20,6 +20,7 @@
 .endm
 
 .macro kernel_entry, el
+  disable_local_irq
   sub sp, sp, #S_FRAME_SIZE
   stp x0, x1, [sp, #16 * 0]
   stp x2, x3, [sp, #16 * 1]
@@ -79,6 +80,7 @@
   ldp x28, x29, [sp, #16 * 14]
 //  ldr x30, [sp, #16 * 15]
   add sp, sp, #S_FRAME_SIZE
+  enable_local_irq
   eret
 .endm
     

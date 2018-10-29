@@ -57,9 +57,7 @@ static inline int is_irq_enabled(unsigned long flags)
 
 static inline void save_local_irq(unsigned long *flags)
 {
-  asm volatile(
-               "mrs    %0, daif\n"
-               "msr    daifset, #2"
+  asm volatile("mrs    %0, daif\n"
                : "=r" (*flags)
                :
                : "memory");
