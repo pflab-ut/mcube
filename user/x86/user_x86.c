@@ -56,8 +56,8 @@ int user_level_main(void)
 
 int user_arch_main(void)
 {
-  //  user_thread_main();
-  user_level_main();
+  user_thread_main();
+  //  user_level_main();
   
   return 0;
 }

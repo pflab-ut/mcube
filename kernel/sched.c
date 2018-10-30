@@ -138,12 +138,15 @@ void do_sched(void)
 	if (prev_th[cpu] != &idle_th[cpu] && is_preempted(prev_th[cpu])) {
 		/* preemption occurs */
 		prev_th[cpu]->state = READY;
+    end_budget(prev_th[cpu]);
 	}
 
   //	switch_to(tasks[next]);
 	current_th[cpu]->state = RUNNING;
+  if (prev_th[cpu] != current_th[cpu]) {
+    begin_budget(current_th[cpu]);
+  }
   //  switch_to(current_th[cpu]);
-
 	//	pdebug_jiffies();
 	PDEBUG("do_sched(): end\n");
 }

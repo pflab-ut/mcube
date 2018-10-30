@@ -30,5 +30,5 @@ void set_cpu_frequency(void)
 
 void init_cpu(void)
 {
-  //  set_cpu_frequency();
+  set_cpu_frequency();
 }
