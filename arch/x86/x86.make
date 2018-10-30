@@ -24,7 +24,7 @@ ifeq ($(CC), clang)
   LD = ld.bfd
 #  AS = $(CROSS_PREFIX)as
   AS = nasm
-  ASFLAGS = -f elf64
+#  ASFLAGS = -f elf64
 #  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
   OBJDUMP = objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy

@@ -47,12 +47,13 @@ void init_lapic_sipi(void)
 	//	delay(10 * 1000);
 	wait(10000);
 	/* send startup interprocessor interrupt */
-#if 0
+#if 1
+  unsigned long ap_start = 0x7c00;
 	mmio_out32(LAPIC_INT_COMMAND_LOW,
              LAPIC_INT_COMMAND_LOW_DESTINATION_ALLBUT |
 						 LAPIC_INT_COMMAND_LOW_LEVEL_ASSERT |
 						 LAPIC_INT_COMMAND_LOW_DELIVERY_MODE_SIPI |
-						 (((uint32_t) &ap_start) >> 12));
+						 (((uint32_t) ap_start) >> 12));
 #endif
 	//	delay(200 * 1000);
 	wait(200000);

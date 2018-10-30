@@ -42,35 +42,21 @@ void init_arch(void)
 #endif
 
   sched_time = 100;
+
   
-#if 0
-  /* use PIT timer */
-  printk("use PIT timer\n");
-  init_pit_timer(TICK_USEC);
-#endif
-
-#if 0
-  /* use HPET timer but not work */
-  printk("use HPET timer\n");
-  init_hpet_timer(TICK_USEC);
-  start_hpet_timer(0);
-#endif
-
-#if 0
-  /* use LAPIC timer */
-  printk("use LAPIC timer\n");
-  init_lapic_timer(TICK_USEC);
-  printk("start_lapic_timer()\n");
-  start_lapic_timer(0);
-#endif
+  init_timer(TICK_USEC);
+  
+  
   enable_local_irq();
+
   
   //asm volatile("int 0x0");
   //  asm volatile("int 0x12");
   //  asm volatile("int 0x32");
   //  kshell();
   //	init_cache();
-#if 0  
+  printk("init_end()\n");
+#if 1
   for (;;) {
     //    printk("a");
     //printk("read_hpet_counter() = %lu\n", read_hpet_counter());

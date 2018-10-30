@@ -26,7 +26,7 @@ section .start
     global _start
 
     extern main        ; Exported by main.c
-    extern memzero      ; Exported by strings.asm
+    extern memzero      ; Exported by utils.asm
     extern _BSS_START   ; Linker-generated symbol
     extern _BSS_SIZE    ; Linker-generated symbol
 
@@ -52,10 +52,9 @@ _start:
 
     ; Call the kernel's main entry point. This function should never return.
     call    main               
-  ;;    call    kmain
 
     ; If the function does return for some reason, hang the computer.
-    .hang:
-        cli
-        hlt
-        jmp     .hang
+  .hang:
+    cli
+    hlt
+    jmp     .hang

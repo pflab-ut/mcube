@@ -177,12 +177,11 @@ int run(unsigned long nr_threads)
   
   //  pdebug_array(run_tq[cpu].array);
 #if 1
-	// NOTE: not work if comment the following print function
   for (i = 0; i < nr_threads; i++) {
 		//		current_cpu = i;
     /* check feasibility and activate */
     if ((ret = do_activate(&ths[i])) != 0) {
-			print("Error: do_activate(): %d\n", ret);
+      //			print("Error: do_activate(): %d\n", ret);
       return 1;
     }
 		//		do_sched_trace_thread_name(&ths[i]);
