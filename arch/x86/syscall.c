@@ -13,6 +13,28 @@
 //============================================================================
 
 
+int call_sys_sched(void)
+{
+  syscall0(SYS_sched);
+  return 0;
+}
+
+int call_sys_end_job(void)
+{
+  int cpu = get_cpu_id();
+  syscall1(SYS_end_job, (unsigned long) &current_th[cpu]->id);
+  return 0;
+}
+
+unsigned long call_sys_get_exec_time(void)
+{
+  int cpu = get_cpu_id();
+  unsigned long cpu_time;
+  syscall2(SYS_get_exec_time, (unsigned long) &current_th[cpu]->id, (unsigned long) &cpu_time);
+  return cpu_time;
+}
+
+
 int call_sys_write(char *buf)
 {
   return puts(buf);
@@ -48,6 +70,7 @@ static void handle_syscall(interrupt_context_t *context)
    * R9:  6th Argument
    */
   
+  unsigned long cpu = get_cpu_id();
   //  unsigned long rcx;
   //asm volatile("movq %0, rcx" : "=r"(rcx));
   // Do nothing for now.
@@ -56,10 +79,14 @@ static void handle_syscall(interrupt_context_t *context)
 
   switch (context->regs.rdi) {
   case SYS_sched:
+    do_sched();
     break;
   case SYS_end_job:
+    do_end_job(current_th[cpu]);
     break;
   case SYS_get_exec_time:
+    *((volatile unsigned long *) context->regs.rsi)
+      = current_th[cpu]->sched.wcet - current_th[cpu]->sched.remaining;
     break;
   case SYS_write:
     //    printk("context->regs.rdx = 0x%lx\n", context->regs.rdx);

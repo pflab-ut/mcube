@@ -192,10 +192,8 @@ static inline int is_budget_exhausted(struct thread_struct *th)
 
 static inline int is_preempted(struct thread_struct *th)
 {
-	return th->sched.release != get_current_jiffies() && !is_budget_exhausted(th)
-		&& th->sched.remaining != th->sched.exec_cost;
+	return th->sched.release != get_current_jiffies() && !is_budget_exhausted(th);
 }
-
 
 
 static inline unsigned long get_util(struct thread_struct *th)
@@ -317,7 +315,6 @@ static inline void end_budget(struct thread_struct *th)
 			.period = ULONG_MAX,															\
 			.wcet = ULONG_MAX,                               \
 			.remaining = ULONG_MAX,													\
-			.exec_cost = ULONG_MAX,													\
 			.deadline = ULONG_MAX,														\
 			.release = ULONG_MAX,														\
 		},																									\

@@ -147,8 +147,6 @@ struct sched_info {
 	/** Remaining execution time. */
 	long remaining;
 
-	/** Executing cost in current part. */
-	long exec_cost;
 	/** Sum of execution time in all jobs. */
 	unsigned long sum_exec_time;
 

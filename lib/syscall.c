@@ -56,13 +56,13 @@ asmlinkage int sys_get_mode_level(void)
   if ((unsigned long) &ret_from_sys == addr) {
     /* call from system call in EL0, and hence return value must be 0. */
     //    print("call from system call\n");
-    return 0;
+    return USER_LEVEL;
   } else {
     /* otherwise */
     return get_el();
   }
 #else
-  return 0;
+  return KERNEL_LEVEL;
 #endif
 }
 
