@@ -117,7 +117,7 @@ void handle_uart_interrupt(void)
     // mini uart
     if (mmio_in32(IRQ_BASIC_BASE) & (1 << 8)) {
       if (mmio_in32(IRQ_PENDING1) & (1 << 29)) {
-        c = (unsigned char) mmio_in32(AUX_MINI_UART_IO_REG); // read for clear tx interrupt.
+        c = (unsigned char) mmio_in32(AUX_MU_IO_REG); // read for clear tx interrupt.
         uart_putc(c, 0);
         printk("handle_uart_interrupt(): mini uart\n");
       }
