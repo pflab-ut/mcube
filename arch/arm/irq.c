@@ -102,26 +102,30 @@ void handle_uart_interrupt(void)
 {
 #if CONFIG_ARCH_ARM_RASPI3
   int c;
+  uint32_t irq_bp = mmio_in32(IRQ_BASIC_PENDING);
 #if PL011_UART
-    // uart
-    if (mmio_in32(IRQ_BASIC_BASE) & (1 << 9)) {
-      if (mmio_in32(IRQ_PENDING2) & (1 << 25)) {
-        if (mmio_in32(UART0_MASKED_INTERRUPT_STATUS_REG) & (1 << 4)) {
-          c = (unsigned char) mmio_in32(UART0_DATA_REG); // read for clear tx interrupt.
-          uart_putc(c, 0);
-          printk("handle_uart_interrupt(): uart\n");
-        }
-      }
-    }
-#elif MINI_UART
-    // mini uart
-    if (mmio_in32(IRQ_BASIC_BASE) & (1 << 8)) {
-      if (mmio_in32(IRQ_PENDING1) & (1 << 29)) {
-        c = (unsigned char) mmio_in32(AUX_MU_IO_REG); // read for clear tx interrupt.
+  uint32_t irq_p2 = mmio_in32(IRQ_PENDING2);
+  // uart
+  if (irq_bp & IRQ_BASIC_PENDING_REG2) {
+    if (irq_p2 & IRQ_PENDINGn_SRC(PL011_UART_IRQ)) {
+      if (mmio_in32(UART0_MASKED_INTERRUPT_STATUS_REG)
+          & UART_MIS_REG_RECEIVE_MASKED_INTERRUPT_STATUS) {
+        c = (unsigned char) mmio_in32(UART0_DATA_REG); // read for clear tx interrupt.
         uart_putc(c, 0);
-        printk("handle_uart_interrupt(): mini uart\n");
+        printk("handle_uart_interrupt(): uart\n");
       }
     }
+  }
+#elif MINI_UART
+  uint32_t irq_p1 = mmio_in32(IRQ_PENDING1);
+  // mini uart
+  if (irq_bp & IRQ_BASIC_PENDING_REG1) {
+    if (irq_p1 & IRQ_PENDINGn_SRC(MINI_UART_IRQ)) {
+      c = (unsigned char) mmio_in32(AUX_MU_IO_REG); // read for clear tx interrupt.
+      uart_putc(c, 0);
+      printk("handle_uart_interrupt(): mini uart\n");
+    }
+  }
 #else
 #error "Unknown UART"
 #endif

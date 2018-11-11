@@ -7,6 +7,8 @@
 
 #if PL011_UART
 
+const uint32_t PL011_UART_IRQ = 25;
+
 /* PL011 UART in Raspberry Pi3 and SynQuacer */
 
 uint8_t uart_pol_getc(uint8_t ch)
@@ -34,7 +36,7 @@ void init_uart(void)
   mmio_out32(UART0_INTERRUPT_MASK_SET_CLEAR_REG, UART_IMSC_REG_RECEIVE_INTERRUPT_MASK);
 #if CONFIG_ARCH_ARM_RASPI3
   /* set UART interrupt routing */
-  mmio_out32(ENABLE_IRQS2, 1 << 25);
+  mmio_out32(ENABLE_IRQS2, IRQ_PENDINGn_SRC(PL011_UART_IRQ));
 #elif CONFIG_ARCH_ARM_SYNQUACER
   /* TODO: implement */
 #else
@@ -45,10 +47,11 @@ void init_uart(void)
 #elif MINI_UART
 
 /* Mini UART in Raspberry Pi3 */
+const uint32_t MINI_UART_IRQ = 29;
 
 uint8_t uart_pol_getc(uint8_t ch)
 {
-  while (mmio_in32(IRQ_PENDING1) & (1 << 29))
+  while (mmio_in32(IRQ_PENDING1) & IRQ_PENDINGn_SRC(MINI_UART_IRQ))
     ;
   return mmio_in8(AUX_MU_IO_REG);
 }
@@ -66,28 +69,46 @@ void init_uart(void)
   uint32_t selector = mmio_in32(GPFSEL1);
 
   /* clear gpio14 */
-  selector &= ~(7 << 12);
+  selector &= ~GPFSEL_FSELn4_MASK;
   /* set alt5 for gpio14 */
-  selector |= 2 << 12;
+  selector |= GPIO_PINn_ALT5 << GPFSEL_FSELn4_SHIFT;
   /* clear gpio15 */
-  selector &= ~(7 << 15);
+  selector &= ~GPFSEL_FSELn5_MASK;
   /* set alt5 for gpio15 */
-  selector |= 2 << 15;
+  selector |= GPIO_PINn_ALT5 << GPFSEL_FSELn5_SHIFT;
   
   mmio_out32(GPFSEL1, selector);
 
-  mmio_out32(GPPUD, 0);
+  /* 1. Write to GPPUD to set the required control signal
+   * (i.e. Pull-up or Pull-Down or neither to remove the current Pull-up/down) */
+  /* This implementation disables pull-up and pull-down, and hence 5 is not needed. */
+  mmio_out32(GPPUD, GPPUD_DISABLE_PULL_UP_DOWN);
 
-  delay(1000);
-  mmio_out32(GPPUDCLK0, (1 << 14) | (1 << 15));
-  delay(1000);
+  /* 2. Wait 150 cycles. This provides the required set-up time for the control signal */
+  delay(150);
+
+  /* 3. Write to GPPUDCLK0/1 to clock the control signal into the GPIO pads you wish to
+   * modify.
+   * NOTE only the pads which receive a clock will be modified, all others will
+   * retain their previous state.
+   */
+  /* assert clock on lines 14 and 15 */
+  mmio_out32(GPPUDCLK0, GPPUDCLKn_SET(14) | GPPUDCLKn_SET(15));
+
+  /* 4. Wait 150 cycles. This provides the required set-up time for the control signal */
+  delay(150);
+
+  /* 5. Write to GPPUD to remove the control signal. */
+  /* Nothing */
+  
+  /* 6. Write to GPPUDCLK0/1 to remove the clock */
   mmio_out32(GPPUDCLK0, 0);
-
+  
   /* enable mini UART */
   mmio_out32(AUX_ENABLES, AUX_ENABLES_MINI_UART_ENABLE);
 
   /* disable auto flow control and disable receiver and transmitter (for now) */
-  mmio_out32(AUX_MU_CNTL_REG, 0);
+  mmio_out32(AUX_MU_CTRL_REG, 0);
 
   /* disable receive and transmit interrupts */
   mmio_out32(AUX_MU_IER_REG, 0);
@@ -98,14 +119,15 @@ void init_uart(void)
   /* set RTS line to be always high */
   mmio_out32(AUX_MU_MCR_REG, 0);
 
+  /* TODO: find calculation method. */
   /* set baudrate to 115200 */
   mmio_out32(AUX_MU_BAUD_REG, 270);
 
   /* Finally, enable transmitter and receiver */
-  mmio_out32(AUX_MU_CNTL_REG,
-             mmio_in32(AUX_MU_CNTL_REG)
-             | AUX_MU_CNTL_REG_TRANSMITTER_ENABLE
-             | AUX_MU_CNTL_REG_RECEIVER_ENABLE);
+  mmio_out32(AUX_MU_CTRL_REG,
+             mmio_in32(AUX_MU_CTRL_REG)
+             | AUX_MU_CTRL_REG_TRANSMITTER_ENABLE
+             | AUX_MU_CTRL_REG_RECEIVER_ENABLE);
   
   /* clear transmit/receive FIFOs */
   mmio_out32(AUX_MU_IIR_REG,
@@ -116,7 +138,7 @@ void init_uart(void)
   //  mmio_out32(AUX_MU_IER_REG, AUX_MU_IER_REG_ENABLE_TRANSMIT_INTERRUPTS);
 
   /* set UART interrupt routing */
-  mmio_out32(ENABLE_IRQS1, 1 << 29);
+  mmio_out32(ENABLE_IRQS1, IRQ_PENDINGn_SRC(MINI_UART_IRQ));
 }
 
 #else

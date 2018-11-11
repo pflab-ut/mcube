@@ -23,9 +23,9 @@ void shell(void)
 
 void init_arch(void)
 {
+  init_cpu();
   init_uart();
   init_irq();
-  init_cpu();
   init_timer(TICK_USEC);
   init_mm();
 }

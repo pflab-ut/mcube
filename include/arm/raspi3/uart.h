@@ -20,7 +20,7 @@
 #define AUX_MU_LSR_REG     (PERIPHERAL_BASE + 0x00215054)
 #define AUX_MU_MSR_REG     (PERIPHERAL_BASE + 0x00215058)
 #define AUX_MU_SCRATCH_REG (PERIPHERAL_BASE + 0x0021505c)
-#define AUX_MU_CNTL_REG    (PERIPHERAL_BASE + 0x00215060)
+#define AUX_MU_CTRL_REG    (PERIPHERAL_BASE + 0x00215060)
 #define AUX_MU_STAT_REG    (PERIPHERAL_BASE + 0x00215064)
 #define AUX_MU_BAUD_REG    (PERIPHERAL_BASE + 0x00215068)
 
@@ -215,13 +215,13 @@
  * If set the CTS auto flow assert level is low.
  * If clear the CTS auto flow assert level is high.
  */
-#define AUX_MU_CNTL_REG_CTS_ASSERT_LEVEL (0x1 << 7)
+#define AUX_MU_CTRL_REG_CTS_ASSERT_LEVEL (0x1 << 7)
 /* 6: RTS assert level.
  * This bit allows one to invert the RTS auto flow operation polarity.
  * If set the RTS auto flow assert level is low.
  * If clear the RTS auto flow assert level is high.
  */
-#define AUX_MU_CNTL_REG_RTS_ASSERT_LEVEL (0x1 << 6)
+#define AUX_MU_CTRL_REG_RTS_ASSERT_LEVEL (0x1 << 6)
 /* 5-4: RTS AUTO flow level.
  * These two bits specify at what receiver FIFO level the
  * RTS line is de-asserted in auto-flow mode.
@@ -230,29 +230,29 @@
  * 10 : De-assert RTS when the receive FIFO has 1 empty space left.
  * 11 : De-assert RTS when the receive FIFO has 4 empty spaces left.
  */  
-#define AUX_MU_CNTL_REG_RTS_AUTO_FLOW_LEVEL_MASK (0x3 << 5)
+#define AUX_MU_CTRL_REG_RTS_AUTO_FLOW_LEVEL_MASK (0x3 << 5)
 /* 3: Enable transmit Auto flow-control using CTS.
  * If this bit is set the transmitter will stop if the CTS line is de-asserted.
  * If this bit is clear the transmitter will ignore the status of the CTS line.
  */
-#define AUX_MU_CNTL_REG_ENABLE_TRANSMIT_AUTO_FLOW_CTRL_USING_CTS (0x1 << 3)
+#define AUX_MU_CTRL_REG_ENABLE_TRANSMIT_AUTO_FLOW_CTRL_USING_CTS (0x1 << 3)
 /* 2: Enable receive Auto flow-control using RTS.
  * If this bit is set the RTS line will de-assert if the receive FIFO reaches
  * it 'auto flow' level. In fact the RTS line will behave as an RTR (Ready To Receive)
  * line. If this bit is clear the RTS line is controlled by
  * the AUX_MU_MCR_REG register bit 1.
  */
-#define AUX_MU_CNTL_REG_ENABLE_RECV_AUTO_FLOW_CTRL_USING_RTS (0x1 << 2)
+#define AUX_MU_CTRL_REG_ENABLE_RECV_AUTO_FLOW_CTRL_USING_RTS (0x1 << 2)
 /* 1: Transmitter enable.
  * If this bit is set the mini UART transmitter is enabled.
  * If this bit is clear the mini UART transmitter is disabled.
  */
-#define AUX_MU_CNTL_REG_TRANSMITTER_ENABLE (0x1 << 1)
+#define AUX_MU_CTRL_REG_TRANSMITTER_ENABLE (0x1 << 1)
 /* 0: Receiver enable.
  * If this bit is set the mini UART receiver is enabled.
  * If this bit is clear the mini UART receiver is disabled.
  */  
-#define AUX_MU_CNTL_REG_RECEIVER_ENABLE (0x1 << 0)
+#define AUX_MU_CTRL_REG_RECEIVER_ENABLE (0x1 << 0)
 
 /* 31-28: reserved */
 /* 27-24: Transmit FIFO fill level.
@@ -319,6 +319,27 @@
 /* 15-0: Baudrate.
  * mini UART baudrate counter. */
 #define AUX_MU_BAUD_REG_BAUDRATE_MASK 0xffff
+
+#define BAUDRATE_BPS 115200
+
+#ifndef __ASSEMBLY__
+
+#if PL011_UART
+extern const uint32_t PL011_UART_IRQ;
+#elif MINI_UART
+extern const uint32_t MINI_UART_IRQ;
+#else
+#error "Unknown UART"
+#endif
+
+static inline uint16_t calculate_mini_uart_baudrate_counter(void)
+{
+  return CPU_CLOCK / (8 *  BAUDRATE_BPS) - 1;
+}
+
+
+#endif /* !__ASSEMBLY__ */
+
 
 #endif /*	__MCUBE_ARM_RASPI3_UART_H__ */
 

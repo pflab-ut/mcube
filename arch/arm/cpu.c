@@ -18,13 +18,12 @@ void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long 
 
 void set_cpu_frequency(void)
 {
+  /* Raspberry Pi 3: 1.2 GHz */
   CPU_CLOCK = 1.2 * 1000 * 1000 * 1000;
   CPU_CLOCK_MHZ_PER_USEC = (CPU_CLOCK + 500 * 1000) / (1000 * 1000);
   CPU_USEC_PER_CLOCK_MHZ = (1.0 * 1000 * 1000) / CPU_CLOCK;
   CPU_CLOCK_MHZ_PER_NSEC = CPU_CLOCK / (1.0 * 1000 * 1000 * 1000);
   CPU_NSEC_PER_CLOCK_MHZ = (1.0 * 1000 * 1000 * 1000) / CPU_CLOCK;
-  printk("CPU_CLOCK = %lu\n", CPU_CLOCK);
-  printk("CPU_CLOCK_MHZ_PER_USEC = %lu\n", CPU_CLOCK_MHZ_PER_USEC);
 }
 
 
