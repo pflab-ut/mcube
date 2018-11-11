@@ -77,16 +77,16 @@ void user_process(void)
 
 void user_level_main(void)
 {
-  print("Now process is user level.\n");
+  print("Now this is user level.\n");
   print("sys_get_cpu_id() = %d\n", call_sys_get_cpu_id());
-  print("sys_get_level_level() = %d\n", call_sys_get_mode_level());
+  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
 }
 
 
 int kernel_level_main(void)
 {
-  print("Kernel process started. EL %d\r\n", get_el());
-  print("sys_get_level_level() = %d\n", call_sys_get_mode_level());
+  print("Kernel level started. EL %d\r\n", get_el());
+  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
   move_to_user_level(user_level_main);
   return 0;
 }
@@ -94,8 +94,8 @@ int kernel_level_main(void)
 
 int user_arch_main(void)
 {
-  user_thread_main();
-  //  user_ap_main();
-  //  kernel_level_main();
+  //  user_thread_main();
+  // user_ap_main();
+  kernel_level_main();
   return 0;
 }

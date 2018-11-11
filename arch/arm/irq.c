@@ -165,12 +165,38 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 
 void init_irq(void)
 {
+  unsigned long cpu = get_cpu_id();
   printk("init_irq()\n");
-#if CONFIG_ARCH_ARM_RASPI3  
-  /* IRQ routing to core 0 */
-  mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
-             TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE0
-             | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE0);
+#if CONFIG_ARCH_ARM_RASPI3
+  switch (cpu) {
+  case 0:
+    /* IRQ routing to core 0 */
+    mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
+               TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE0
+               | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE0);
+    break;
+  case 1:
+    /* IRQ routing to core 1 */
+    mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
+               TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE1
+               | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE1);
+    break;
+  case 2:
+    /* IRQ routing to core 2 */
+    mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
+               TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE2
+               | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE2);
+    break;
+  case 3:
+    /* IRQ routing to core 3 */
+    mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
+               TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE3
+               | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE3);
+    break;
+  default:
+    printk("Unknown CPU ID %lu\n", cpu);
+    break;
+  }
 #elif CONFIG_ARCH_ARM_SYNQUACER
   /* TODO: implement */
 #else

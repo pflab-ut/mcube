@@ -44,12 +44,9 @@ void set_initial_context(struct thread_struct *th,
 }
 
 
-
-
-
 void __attribute__((noreturn)) run_user_thread(void)
 {
-  size_t cpu = get_cpu_id();
+  unsigned long cpu = get_cpu_id();
   void *ret = NULL;
   unsigned long rsp;
   printk("run_user_thread()\n");

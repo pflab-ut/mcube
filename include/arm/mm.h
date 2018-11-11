@@ -4,7 +4,9 @@
  * @author Hiroyuki Chishiro
  */
 #ifndef __MCUBE_ARM_MM_H__
-#define	__MCUBE_ARM_MM_H__
+#define __MCUBE_ARM_MM_H__
+
+
 
 #ifndef __ASSEMBLY__
 

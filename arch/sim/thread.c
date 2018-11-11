@@ -102,7 +102,7 @@ asmlinkage int syscall2(int number, int arg1, int arg2)
  */
 void __attribute__((noreturn)) run_user_thread(void)
 {
-  size_t cpu = get_cpu_id();
+  unsigned long cpu = get_cpu_id();
   void *ret = NULL;
   //  printk("begin_user_thread()\n");
   if (current_th[cpu]->run_user_func) {

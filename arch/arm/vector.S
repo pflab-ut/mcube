@@ -138,7 +138,7 @@ vector_sync_el1h:
   kernel_entry 0
   mrs     x25, esr_el1                            // read the syndrome register
   lsr     x24, x25, #ESR_ELx_EC_SHIFT             // exception class
-  cmp     x24, #ESR_ELx_EC_SVC64                  // SVC in 64-bit state
+  cmp     x24, #ESR_ELx_EC_SVC_INSTRUCTION_EXCEPTION64  // SVC in 64-bit state
   b.eq    el1h_svc
   invalid_entry 0, SYNC_ERROR
 
@@ -180,7 +180,7 @@ vector_sync_el0_64:
   kernel_entry 0
   mrs     x25, esr_el1                            // read the syndrome register
   lsr     x24, x25, #ESR_ELx_EC_SHIFT             // exception class
-  cmp     x24, #ESR_ELx_EC_SVC64                  // SVC in 64-bit state
+  cmp     x24, #ESR_ELx_EC_SVC_INSTRUCTION_EXCEPTION64  // SVC in 64-bit state
   b.eq    el0_svc
   invalid_entry 0, SYNC_ERROR
 

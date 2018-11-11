@@ -10,7 +10,7 @@
 
 #define PERIPHERAL_BASE 0x3f000000
 
-/* qemu does not support system timer */
+/* NOTE: qemu does not support system timer */
 #define SYSTEM_TIMER_BASE 0x3f003000
 
 #define IRQ_BASIC_BASE 0x3f00b200

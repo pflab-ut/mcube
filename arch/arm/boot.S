@@ -8,7 +8,7 @@
 ENTRY(_start)
   // Setup the stack with CPU ID.
 initialize_stack:  
-  get_cpu_id
+  get_cpu_id x0, x1
   mov x1, #STACK_SIZE
   mul x0, x0, x1
   ldr x1, =idle_stack
@@ -77,7 +77,7 @@ change_el2_to_el1:
   
 start_el1:
   // set up stack in el1
-  get_cpu_id
+  get_cpu_id x0, x1
   mov x1, #STACK_SIZE
   mul x0, x0, x1
   ldr x1, =idle_stack

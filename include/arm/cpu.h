@@ -16,12 +16,12 @@
 
 #ifdef __ASSEMBLY__
 
-.macro get_cpu_id
-  mrs x1, mpidr_el1
-  lsr x0, x1, #8
-  and x1, x1, #0xffffff
-  and x0, x0, #0xff000000
-  orr x0, x0, x1
+.macro get_cpu_id reg reg2
+  mrs \reg2, mpidr_el1
+  lsr \reg, \reg2, #8
+  and \reg2, \reg2, #0xffffff
+  and \reg, \reg, #0xff000000
+  orr \reg, \reg, \reg2
 .endm
      
 #else

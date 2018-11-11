@@ -6,50 +6,89 @@
 #ifndef __MCUBE_ARM_SYS_REGS_H__
 #define __MCUBE_ARM_SYS_REGS_H__
 
-// ***************************************
-// SCTLR_EL1, System Control Register (EL1), Page 2654 of AArch64-Reference-Manual.
-// ***************************************
 
-#define SCTLR_RESERVED                  (3 << 28) | (3 << 22) | (1 << 20) | (1 << 11)
-#define SCTLR_EE_LITTLE_ENDIAN          (0 << 25)
-#define SCTLR_EOE_LITTLE_ENDIAN         (0 << 24)
-#define SCTLR_I_CACHE_DISABLED          (0 << 12)
-#define SCTLR_D_CACHE_DISABLED          (0 << 2)
-#define SCTLR_MMU_DISABLED              (0 << 0)
-#define SCTLR_MMU_ENABLED               (1 << 0)
+/* ESR_EL1, Exception Syndrome Register (EL1).
+ * Page 1899 of AArch64-Reference-Manual.
+ */
+/* 31-26: Exception Class.
+ * Indicates the reason for the exception that this register holds information about.
+ */
+#define ESR_ELx_EC_SHIFT 26
 
-#define SCTLR_VALUE_MMU_DISABLED	(SCTLR_RESERVED | SCTLR_EE_LITTLE_ENDIAN | SCTLR_I_CACHE_DISABLED | SCTLR_D_CACHE_DISABLED | SCTLR_MMU_DISABLED)
+#define ESR_ELx_EC_UNKNOWN_REASON 0x1
+#define ESR_ELx_EC_WFI_OR_WFE_INSTRUCTION_EXCEPTION 0x2
+#define ESR_ELx_EC_MCR_OR_MRC_ACCESS_TO_CP15 0x3
+#define ESR_ELx_EC_MCRR_OR_MRRC_ACCESS_TO_CP15 0x4
+#define ESR_ELx_EC_MCR_OR_MRC_ACCESS_TO_CP14 0x5
+#define ESR_ELx_EC_LDC_OR_STC_ACCESS_TO_CP14 0x6
+#define ESR_ELx_EC_ACCESS_TO_SIMD_OR_FP_REG 0x7
+#define ESR_ELx_EC_MCR_MRC_ACCESS_TO_CP10 0x8
+/* 0x9-0xb: reserved */
+#define ESR_ELx_EC_MRRC_ACCESS_TO_CP14 0xc
+/* 0xd: reserved */
+#define ESR_ELx_EC_ILLEGAL_EXECUTION_STATE 0xe
+#define ESR_ELx_EC_SVC_INSTRUCTION_EXCEPTION32 0x11
+#define ESR_ELx_EC_HVC_INSTRUCTION_EXCEPTION32 0x12
+#define ESR_ELx_EC_SMC_INSTRUCTION_EXCEPTION32 0x13
+/* 0x14: reserved */
+#define ESR_ELx_EC_SVC_INSTRUCTION_EXCEPTION64 0x15
+#define ESR_ELx_EC_HVC_INSTRUCTION_EXCEPTION64 0x16
+#define ESR_ELx_EC_SMC_INSTRUCTION_EXCEPTION64 0x17
+#define ESR_ELx_EC_MSR_MRS_SYSTEM_EXCEPTION64 0x18
+/* 0x19-0x1f: reserved */
+#define ESR_ELx_EC_INSTRUCTION_ABORT_FROM_LOWER_EXCEPTION_LEVEL 0x20
+#define ESR_ELx_EC_INSTRUCTION_ABORT_TAKEN_WITHOUT_A_CHANGE_IN_EXCEPTION_LEVEL 0x21
+#define ESR_ELx_EC_MISALIGNED_PC_EXCEPTION 0x22
+/* 0x23: reserved */
+#define ESR_ELx_EC_DATA_ABORT_FROM_A_LOWER_EXCEPTION_LEVEL 0x24
+#define ESR_ELx_EC_DATA_ABORT_TAKEN_WITHOUT_A_CHANGE_IN_EXCEPTION_LEVEL 0x25
+#define ESR_ELx_EC_STACK_POINTER_ALIGNMENT_EXCEPTION 0x26
+/* 0x27: reserved */
+#define ESR_ELx_EC_FLOATING_POINT_EXCEPTION32 0x28
+/* 0x29-0x2b: reserved */
+#define ESR_ELx_EC_FLOATING_POINT_EXCEPTION64 0x2c
+/* 0x2d-0x2e: reserved */
+#define ESR_ELx_EC_SERROR_INTERRUPT 0x2f
+#define ESR_ELx_EC_BREAKPOINT_EXCEPTION_FROM_A_LOWER_EXCEPTION_LEVEL 0x30
+#define ESR_ELx_EC_BREAKPOINT_EXCEPTION_WITHOUT_A_CHANGE_IN_EXCEPTION_LEVEL 0x31
+#define ESR_ELx_EC_SOFTWARE_STEP_EXCEPTION_FROM_A_LOWER_EXCEPTION_LEVEL 0x32
+#define ESR_ELx_EC_SOFTWARE_STEP_EXCEPTION_TAKEN_WITHOUT_A_CHANGE_IN_EXCEPTION_LEVEL 0x33
+#define ESR_ELx_EC_WATCHPOINT_EXCEPTION_FROM_A_LOWER_EXCEPTION_LEVEL 0x34
+#define ESR_ELx_EC_WATCHPOINT_EXCEPTION_WITHOUT_A_CHANGE_IN_EXCEPTION_LEVEL 0x35
+/* 0x36-0x37: reserved */
+#define ESR_ELx_EC_BKPT_INSTRUCTION_EXCEPTION 0x38
+/* 0x39: reserved */
+#define ESR_ELx_EC_VECTOR_CATCH_EXCEPTION_FROM_AARCH32_STATE 0x3a
+/* 0x3b: reserved */
+#define ESR_ELx_EC_BRK_INSTRUCTION_EXCEPTION 0x3c
+/* 0x3d-0x3f: reserved */
 
-// ***************************************
-// HCR_EL2, Hypervisor Configuration Register (EL2), Page 2487 of AArch64-Reference-Manual.
-// ***************************************
 
-#define HCR_RW	    			(1 << 31)
-#define HCR_VALUE			HCR_RW
+/* 25: Instruction Length for synchronous exceptions. Possible values of this bit are:
+ * 0 16-bit instruction trapped.
+ * 1 32-bit instruction trapped. This value also applies to the following exceptions:
+ ** An SError interrupt.
+ ** An Instruction Abort exception.
+ ** A Misaligned PC exception.
+ ** A Misaligned Stack Pointer exception.
+ ** A Data Abort for which the value of the ISV bit is 0.
+ ** An Illegal Execution State exception.
+ ** Any debug exception except for Software Breakpoint Instruction exceptions.
+ ** For Software Breakpoint Instruction exceptions, this bit has its standard meaning:
+ ** 0 : 16-bit T32 BKPT instruction.
+ ** 1 : 32-bit A32 BKPT instruction or A64 BRK instruction.
+ ** An exception reported using EC value 0b000000.
+ */
+#define ESR_ELx_IL_16BIT_INSTRUCTION_TRAPPED (0x0 << 25)
+#define ESR_ELx_IL_32BIT_INSTRUCTION_TRAPPED (0x1 << 25)
+/* 24-0: Instruction Specific Syndrome.
+ * Architecturally, this field can be defined independently for each defined 
+ * Exception class. However, in practice, some ISS encodings are used for more than
+ * one Exception class. See the description of the EC field for more information
+ * about the ISS formats.
+ */
 
-// ***************************************
-// SCR_EL3, Secure Configuration Register (EL3), Page 2648 of AArch64-Reference-Manual.
-// ***************************************
 
-#define SCR_RESERVED	    	(3 << 4)
-#define SCR_RW				(1 << 10)
-#define SCR_NS				(1 << 0)
-#define SCR_VALUE	    	    	(SCR_RESERVED | SCR_RW | SCR_NS)
-
-// ***************************************
-// SPSR_EL3, Saved Program Status Register (EL3) Page 389 of AArch64-Reference-Manual.
-// ***************************************
-
-#define SPSR_MASK_ALL 			(7 << 6)
-#define SPSR_EL1h			(5 << 0)
-#define SPSR_VALUE			(SPSR_MASK_ALL | SPSR_EL1h)
-
-// ***************************************
-// ESR_EL1, Exception Syndrome Register (EL1). Page 2431 of AArch64-Reference-Manual.
-// ***************************************
-
-#define ESR_ELx_EC_SHIFT		26
-#define ESR_ELx_EC_SVC64		0x15
 
 
 #endif /* __MCUBE_ARM_SYS_REGS_H__ */
