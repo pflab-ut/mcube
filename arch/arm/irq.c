@@ -142,7 +142,7 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
   printk("do_irq()\n");
 #if CONFIG_ARCH_ARM_RASPI3  
   // check inteerupt source
-  irq = mmio_in32(TIMER_CORE0_IRQ_SOURCE);
+  irq = mmio_in32(TIMER_CORE0_IRQ_SRC);
   switch (irq) {
   case 0x8:
     handle_timer_interrupt();
@@ -168,9 +168,11 @@ void init_irq(void)
   printk("init_irq()\n");
 #if CONFIG_ARCH_ARM_RASPI3  
   /* IRQ routing to core 0 */
-  mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING, 0x0);
+  mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
+             TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE0
+             | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE0);
 #elif CONFIG_ARCH_ARM_SYNQUACER
-    /* TODO: implement */
+  /* TODO: implement */
 #else
 #error "Unknown Machine"
 #endif /* CONFIG_ARCH_ARM_RASPI3 */

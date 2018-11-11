@@ -20,5 +20,5 @@
 /** Tie-Break. */
 #define CONFIG_TIE_BREAK_FIFO 1
 /** Memory. */
-#define CONFIG_MEMORY_VARIABLE 1
+#define CONFIG_MEMORY_256KB 1
 #endif /* __MCUBE_MCUBE_CONFIG_H__ */
