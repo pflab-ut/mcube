@@ -80,9 +80,13 @@ static inline void restore_local_irq(unsigned long *flags)
 
 
 void init_vector(void);
-
 void show_invalid_entry_message(int type, unsigned long esr, unsigned long address);
-  
+
+
+int handle_uart_interrupt(void);
+int handle_timer_interrupt(void);
+
+
 #endif /* !__ASSEMBLY__ */
 
 
