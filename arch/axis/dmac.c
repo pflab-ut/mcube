@@ -5,9 +5,10 @@
  */
 #include <mcube/mcube.h>
 
-void do_local_dmac(volatile uint32_t dst,
-                   volatile uint32_t src,
-                   volatile size_t n,
+void do_local_dmac(uint32_t dst,
+                   uint32_t src,
+                   size_t n,
+                   unsigned int ch,
                    enum dmac policy)
 {
   if (policy >= DMAC_END) {

@@ -10,23 +10,24 @@
 #define MINI_UART 1
 
 
-#define AUX_IRQ_REG        (PERIPHERAL_BASE + 0x00215000)
-#define AUX_ENABLES        (PERIPHERAL_BASE + 0x00215004)
-#define AUX_MU_IO_REG      (PERIPHERAL_BASE + 0x00215040)
-#define AUX_MU_IER_REG     (PERIPHERAL_BASE + 0x00215044)
-#define AUX_MU_IIR_REG     (PERIPHERAL_BASE + 0x00215048)
-#define AUX_MU_LCR_REG     (PERIPHERAL_BASE + 0x0021504c)
-#define AUX_MU_MCR_REG     (PERIPHERAL_BASE + 0x00215050)
-#define AUX_MU_LSR_REG     (PERIPHERAL_BASE + 0x00215054)
-#define AUX_MU_MSR_REG     (PERIPHERAL_BASE + 0x00215058)
-#define AUX_MU_SCRATCH_REG (PERIPHERAL_BASE + 0x0021505c)
-#define AUX_MU_CTRL_REG    (PERIPHERAL_BASE + 0x00215060)
-#define AUX_MU_STAT_REG    (PERIPHERAL_BASE + 0x00215064)
-#define AUX_MU_BAUD_REG    (PERIPHERAL_BASE + 0x00215068)
+#define AUX_IRQ_REG        (GPU_PERIPHERAL_BASE + 0x00215000)
+#define AUX_ENABLES        (GPU_PERIPHERAL_BASE + 0x00215004)
+#define AUX_MU_IO_REG      (GPU_PERIPHERAL_BASE + 0x00215040)
+#define AUX_MU_IER_REG     (GPU_PERIPHERAL_BASE + 0x00215044)
+#define AUX_MU_IIR_REG     (GPU_PERIPHERAL_BASE + 0x00215048)
+#define AUX_MU_LCR_REG     (GPU_PERIPHERAL_BASE + 0x0021504c)
+#define AUX_MU_MCR_REG     (GPU_PERIPHERAL_BASE + 0x00215050)
+#define AUX_MU_LSR_REG     (GPU_PERIPHERAL_BASE + 0x00215054)
+#define AUX_MU_MSR_REG     (GPU_PERIPHERAL_BASE + 0x00215058)
+#define AUX_MU_SCRATCH_REG (GPU_PERIPHERAL_BASE + 0x0021505c)
+#define AUX_MU_CTRL_REG    (GPU_PERIPHERAL_BASE + 0x00215060)
+#define AUX_MU_STAT_REG    (GPU_PERIPHERAL_BASE + 0x00215064)
+#define AUX_MU_BAUD_REG    (GPU_PERIPHERAL_BASE + 0x00215068)
 
   
-// The base address for UART.
-#define UART0_BASE (PERIPHERAL_BASE + 0x00201000) // for raspi2 & 3, 0x20201000 for raspi1
+/* The base address for UART. */
+/* for raspi2 & 3, 0x20201000 for raspi1 */
+#define UART0_BASE (GPU_PERIPHERAL_BASE + 0x00201000)
 
 
 /* AUX IRQ Register */
@@ -117,10 +118,10 @@
  * READ: Interrupt ID bits
  * WRITE: FIFO clear bits
  * On read this register shows the interrupt ID bit.
- * 00 : No interrupts
- * 01 : Transmit holding register empty
- * 10 : Receiver holds valid byte
- * 11 : <Not possible>
+ * 00 = No interrupts
+ * 01 = Transmit holding register empty
+ * 10 = Receiver holds valid byte
+ * 11 = <Not possible>
  * On write:
  * Writing with bit 1 set will clear the receive FIFO.
  * Writing with bit 2 set will clear the transmit FIFO.
@@ -225,10 +226,10 @@
 /* 5-4: RTS AUTO flow level.
  * These two bits specify at what receiver FIFO level the
  * RTS line is de-asserted in auto-flow mode.
- * 00 : De-assert RTS when the receive FIFO has 3 empty spaces left.
- * 01 : De-assert RTS when the receive FIFO has 2 empty spaces left.
- * 10 : De-assert RTS when the receive FIFO has 1 empty space left.
- * 11 : De-assert RTS when the receive FIFO has 4 empty spaces left.
+ * 00 = De-assert RTS when the receive FIFO has 3 empty spaces left.
+ * 01 = De-assert RTS when the receive FIFO has 2 empty spaces left.
+ * 10 = De-assert RTS when the receive FIFO has 1 empty space left.
+ * 11 = De-assert RTS when the receive FIFO has 4 empty spaces left.
  */  
 #define AUX_MU_CTRL_REG_RTS_AUTO_FLOW_LEVEL_MASK (0x3 << 5)
 /* 3: Enable transmit Auto flow-control using CTS.
@@ -325,9 +326,9 @@
 #ifndef __ASSEMBLY__
 
 #if PL011_UART
-extern const uint32_t PL011_UART_IRQ;
+#define PL011_UART_IRQ 25
 #elif MINI_UART
-extern const uint32_t MINI_UART_IRQ;
+#define MINI_UART_IRQ 29
 #else
 #error "Unknown UART"
 #endif

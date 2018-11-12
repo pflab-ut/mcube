@@ -1,0 +1,19 @@
+/**
+ * @file arch/arm/synquacer/dmac.c
+ *
+ * @author Hiroyuki Chishiro
+ */
+#include <mcube/mcube.h>
+
+
+void init_dmac(void)
+{
+}
+
+void do_local_dmac(uint32_t dst,
+                   uint32_t src,
+                   size_t n,
+                   unsigned int ch,
+                   enum dmac policy)
+{
+}

@@ -115,18 +115,6 @@ static inline void set_dmac_net_ctrl(volatile uint32_t data)
   mmio_out32(DMAC_NET_CTRL, data);
 }
 
-enum dmac {
-  DMAC_POLLING,
-  DMAC_SYNC_INTERRUPT,
-  DMAC_ASYNC_INTERRUPT,
-  DMAC_END
-};
-
-void do_local_dmac(volatile uint32_t dst,
-                   volatile uint32_t src,
-                   volatile size_t n,
-                   enum dmac policy);
-
 
 #endif /* !__ASSEMBLY__ */
 

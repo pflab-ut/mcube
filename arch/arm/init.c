@@ -26,7 +26,7 @@ void init_arch(void)
   init_cpu();
   init_uart();
   init_timer(TICK_USEC);
-  init_mm();
+  init_dmac();
   init_irq();
 }
 

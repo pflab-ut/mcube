@@ -64,9 +64,9 @@ int dmac_main(void)
   uint32_t n = 16;
   uint32_t i;
   
-  //  do_local_dmac(dst, src, n, DMAC_POLLING);
-  //  do_local_dmac(dst, src, n, DMAC_SYNC_INTERRUPT);
-  do_local_dmac(dst, src, n, DMAC_ASYNC_INTERRUPT);
+  //  do_local_dmac(dst, src, n, 0, DMAC_POLLING);
+  //  do_local_dmac(dst, src, n, 0, DMAC_SYNC_INTERRUPT);
+  do_local_dmac(dst, src, n, 0, DMAC_ASYNC_INTERRUPT);
   for (i = 0; i < n; i += 4) {
     print("src 0x%x\n", mmio_in32(i));
     print("dst 0x%x\n", mmio_in32(dst + i));

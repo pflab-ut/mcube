@@ -10,7 +10,7 @@
 #define IRQ_BASIC_PENDING  (IRQ_BASIC_BASE + 0x00000000)
 #define IRQ_PENDING1       (IRQ_BASIC_BASE + 0x00000004)
 #define IRQ_PENDING2       (IRQ_BASIC_BASE + 0x00000008)
-#define FIQ_CTRL        (IRQ_BASIC_BASE + 0x0000000c)
+#define FIQ_CTRL           (IRQ_BASIC_BASE + 0x0000000c)
 #define ENABLE_IRQS1       (IRQ_BASIC_BASE + 0x00000010)
 #define ENABLE_IRQS2       (IRQ_BASIC_BASE + 0x00000014)
 #define ENABLE_BASIC_IRQS  (IRQ_BASIC_BASE + 0x00000018)
@@ -96,7 +96,7 @@
 /* Interrupt Enable Register 2
  * 63-32: Set to enable IRQ source 63-32
  */
-#define ENABLE_IRQSn_SET(x) (0x1 << ((x & 0x1f))
+#define ENABLE_IRQSn_SET(x) (0x1 << ((x) & 0x1f))
 
 
 /* Basic Interrupt enable register */
@@ -160,17 +160,20 @@
 #ifndef __ASSEMBLY__
 
 
-
 static inline void enable_timer_interrupt(void)
 {
-  mmio_out32(TIMER_LOCAL_TIMER_CTRL_STATUS,
-             mmio_in32(TIMER_LOCAL_TIMER_CTRL_STATUS) | (0x3 << 28));
+  mmio_out32(LP_LOCAL_TIMER_CTRL_STATUS,
+             mmio_in32(LP_LOCAL_TIMER_CTRL_STATUS)
+             | LP_LOCAL_TIMER_CTRL_STATUS_INTERRUPT_ENABLE
+             | LP_LOCAL_TIMER_CTRL_STATUS_TIMER_ENABLE);
 }
 
 static inline void disable_timer_interrupt(void)
 {
-  mmio_out32(TIMER_LOCAL_TIMER_CTRL_STATUS,
-             mmio_in32(TIMER_LOCAL_TIMER_CTRL_STATUS) & ~(0x3 << 28));
+  mmio_out32(LP_LOCAL_TIMER_CTRL_STATUS,
+             mmio_in32(LP_LOCAL_TIMER_CTRL_STATUS)
+             & ~(LP_LOCAL_TIMER_CTRL_STATUS_INTERRUPT_ENABLE
+                 | LP_LOCAL_TIMER_CTRL_STATUS_TIMER_ENABLE));
 }
 
 

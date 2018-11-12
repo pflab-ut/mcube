@@ -7,8 +7,6 @@
 
 #if PL011_UART
 
-const uint32_t PL011_UART_IRQ = 25;
-
 /* PL011 UART in Raspberry Pi3 and SynQuacer */
 
 uint8_t uart_pol_getc(uint8_t ch)
@@ -47,7 +45,6 @@ void init_uart(void)
 #elif MINI_UART
 
 /* Mini UART in Raspberry Pi3 */
-const uint32_t MINI_UART_IRQ = 29;
 
 uint8_t uart_pol_getc(uint8_t ch)
 {
@@ -134,11 +131,12 @@ void init_uart(void)
              AUX_MU_IIR_REG_CLEAR_TRANSMIT_FIFO
              | AUX_MU_IIR_REG_CLEAR_RECV_FIFO);
 
-  /* enable transmit interrupt */
-  //  mmio_out32(AUX_MU_IER_REG, AUX_MU_IER_REG_ENABLE_TRANSMIT_INTERRUPTS);
+  /* enable receive interrupt */
+  mmio_out32(AUX_MU_IER_REG, AUX_MU_IER_REG_ENABLE_RECV_INTERRUPTS);
 
   /* set UART interrupt routing */
   mmio_out32(ENABLE_IRQS1, IRQ_PENDINGn_SRC(MINI_UART_IRQ));
+
 }
 
 #else

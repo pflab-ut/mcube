@@ -6,10 +6,14 @@
 #ifndef __MCUBE_MCUBE_IRQ_H__
 #define __MCUBE_MCUBE_IRQ_H__
 
-#ifndef __ASSEMBLY__
-
 #define LOCAL_IRQ_ENABLED 1
 #define LOCAL_IRQ_DISABLED 0
+
+
+#define IRQ_HANDLED 1
+#define IRQ_UNHANDLED 0
+
+#ifndef __ASSEMBLY__
 
 static inline void enable_local_irq(void);
 static inline void disable_local_irq(void);

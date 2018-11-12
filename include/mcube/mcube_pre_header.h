@@ -31,6 +31,7 @@
 #include <mcube/cache.h>
 #include <mcube/compiler.h>
 #include <mcube/ctype.h>
+#include <mcube/dmac.h>
 #include <mcube/errno-base.h>
 #include <mcube/errno.h>
 #include <mcube/fs.h>

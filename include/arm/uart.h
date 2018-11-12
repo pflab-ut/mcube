@@ -179,10 +179,10 @@
 /* 6-5: Word length.
  * These bits indicate the number of data bits transmitted or received
  * in a frame as follows:
- * b11 = 8 bits
- * b10 = 7 bits
- * b01 = 6 bits
- * b00 = 5 bits.
+ * 11 = 8 bits
+ * 10 = 7 bits
+ * 01 = 6 bits
+ * 00 = 5 bits.
  */  
 #define UART_LINE_CTRL_REG_WORD_LENGTH_MASK (0x3 << 5)
 /* 4: Enable FIFOs.
@@ -281,22 +281,22 @@
 #define UART_INTERRUPT_FIFO_LEVEL_SELECT_REG_TXIFPSEL_MASK (0x7 << 6)
 /* 5-3: Receive interrupt FIFO level select.
  * The trigger points for the receive interrupt are as follows:
- * b000 = Receive FIFO becomes 1/8 full
- * b001 = Receive FIFO becomes 1/4 full
- * b010 = Receive FIFO becomes 1/2 full
- * b011 = Receive FIFO becomes 3/4 full
- * b100 = Receive FIFO becomes 7/8 full
- * b101-b111 = reserved.
+ * 000 = Receive FIFO becomes 1/8 full
+ * 001 = Receive FIFO becomes 1/4 full
+ * 010 = Receive FIFO becomes 1/2 full
+ * 011 = Receive FIFO becomes 3/4 full
+ * 100 = Receive FIFO becomes 7/8 full
+ * 101-111 = reserved.
  */
 #define UART_INTERRUPT_FIFO_LEVEL_SELECT_REG_RXIFLSEL_MASK (0x7 << 3)
 /* 2-0: Transmit interrupt FIFO level select.
  * The trigger points for the transmit interrupt are as follows:
- * b000 = Transmit FIFO becomes 1/8 full
- * b001 = Transmit FIFO becomes 1/4 full
- * b010 = Transmit FIFO becomes 1/2 full
- * b011 = Transmit FIFO becomes 3/4 full
- * b100 = Transmit FIFO becomes 7/8 full
- * b101-b111 = reserved.
+ * 000 = Transmit FIFO becomes 1/8 full
+ * 001 = Transmit FIFO becomes 1/4 full
+ * 010 = Transmit FIFO becomes 1/2 full
+ * 011 = Transmit FIFO becomes 3/4 full
+ * 100 = Transmit FIFO becomes 7/8 full
+ * 101-111 = reserved.
  */
 #define UART_INTERRUPT_FIFO_LEVEL_SELECT_REG_TXIFLSEL_MASK (0x7 << 0)
 

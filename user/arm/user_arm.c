@@ -66,6 +66,28 @@ int user_ap_main(void)
   return 0;
 }
 
+#define BUFSIZE 32
+
+uint8_t src[BUFSIZE] = "hello world\n";
+uint8_t dst[BUFSIZE] = {0};
+
+int user_dmac_main(void)
+{
+  print("user_dmac_main()\n");
+  print("dst = 0x%lx\n", (unsigned long) dst);
+#if 1
+  do_local_dmac((unsigned long) dst, (unsigned long) src, sizeof(dst),
+                0, DMAC_SYNC_INTERRUPT);
+#else
+  do_local_dmac((unsigned long) dst, (unsigned long) src, sizeof(dst),
+                0, DMAC_POLLING);
+#endif
+  while (1) {
+    print("dst = %s\n", dst);
+    wfi();
+  }
+  return 0;
+}
 
 
 
@@ -94,8 +116,9 @@ int kernel_level_main(void)
 
 int user_arch_main(void)
 {
-  user_thread_main();
+  // user_thread_main();
   // user_ap_main();
+  user_dmac_main();
   //  kernel_level_main();
   return 0;
 }
