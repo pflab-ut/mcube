@@ -243,9 +243,8 @@
 /* 31: Interrupt flag clear when written as 1 (write-only) */
 #define TIMER_LOCAL_TIMER_WRITE_FLAGS_INTERRUPT_FLAG_CLEAR (0x1 << 31)
 /* 30: Local timer-reloaded when written as 1 (write only) */
-#define TIMER_LOCAL_TIMER_WRITE_FLAGS_INTERRUPT_FLAG_CLEAR (0x1 << 31)
+#define TIMER_LOCAL_TIMER_WRITE_FLAGS_LOCAL_TIMER_RELOADED (0x1 << 30)
 /* 29-0: reserved */  
-
 
 
 /* Core Timers Interrupt Control Registers */
@@ -255,42 +254,50 @@
  * 0 : FIQ disabled
  * 1 : FIQ Enabled
  */
+#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_CNTVIRQ_FIQ_CTRL (0x1 << 7)
 /* 6: nCNTHPIRQ FIQ control.
  * If set, this bit overrides the IRQ bit (2).
  * 0 : FIQ disabled
  * 1 : FIQ Enabled
  */
+#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_CNTHPIRQ_FIQ_CTRL (0x1 << 6)
 /* 5: nCNTPNSIRQ FIQ control.
  * If set, this bit overrides the IRQ bit (1).
  * 0 : FIQ disabled
  * 1 : FIQ Enabled
  */
+#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_CNTPNSIRQ_FIQ_CTRL (0x1 << 5)
 /* 4: nCNTPSIRQ FIQ control.
  * If set, this bit overrides the IRQ bit (0).
  * 0 : FIQ disabled
  * 1 : FIQ Enabled
  */
+#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_CNTPSIRQ_FIQ_CTRL (0x1 << 4)
 /* 3: nCNTVIRQ IRQ control.
  * This bit is only valid if bit 7 is clear otherwise it is ignored.
  * 0 : IRQ disabled
  * 1 : IRQ Enabled
  */
+#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_CNTVIRQ_IRQ_CTRL (0x1 << 3)
 /* 2: nCNTHPIRQ IRQ control.
  * This bit is only valid if bit 6 is clear otherwise it is ignored.
  * 0 : IRQ disabled
  * 1 : IRQ Enabled
  */
+#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_CNTHPIRQ_IRQ_CTRL (0x1 << 2)
 /* 1: nCNTPNSIRQ IRQ control.
  * This bit is only valid if bit 5 is clear otherwise it is ignored.
  * 0 : IRQ disabled
  * 1 : IRQ Enabled
  */
+#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_CNTPNSIRQ_IRQ_CTRL (0x1 << 1)
 /* 0: nCNTPSIRQ IRQ control.
  * This bit is only valid if bit 4 is clear otherwise it is ignored.
  * 0 : IRQ disabled
  * 1 : IRQ Enabled
  */
-#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_ENABLE(x) (0x1 << (x))
+#define TIMER_CORE_TIMERS_INTERRUPT_CTRL_CNTPSIRQ_IRQ_CTRL (0x1 << 0)
+
 
 /* Core Mailboxes Interrupt Control Registers */
 /* 31-8: reserved */

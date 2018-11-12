@@ -13,7 +13,6 @@
 extern unsigned long timer_cntfrq;
 extern unsigned long timer_tick;
 
-void timer_init(void);
 void handle_timer_irq(void);
 
 static inline unsigned long get_cntvct_el0(void)
@@ -81,15 +80,12 @@ static inline void set_cntv_tval_el0(unsigned long data)
 
 static inline void enable_cntv_ctl_el0(void)
 {
-  unsigned long cntv_ctl = 1;
-  cntv_ctl = 1;
-  asm volatile ("msr cntv_ctl_el0, %0" :: "r" (cntv_ctl));
+  asm volatile ("msr cntv_ctl_el0, %0" :: "r" (CNTV_CTL_EL0_ENABLE));
 }
 
 static inline void disable_cntv_ctl_el0(void)
 {
-  unsigned long cntv_ctl = 0;
-  asm volatile ("msr cntv_ctl_el0, %0" :: "r" (cntv_ctl));
+  asm volatile ("msr cntv_ctl_el0, %0" :: "r" (CNTV_CTL_EL0_DISABLE));
 }
 
 

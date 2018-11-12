@@ -94,8 +94,8 @@ int kernel_level_main(void)
 
 int user_arch_main(void)
 {
-  //  user_thread_main();
+  user_thread_main();
   // user_ap_main();
-  kernel_level_main();
+  //  kernel_level_main();
   return 0;
 }

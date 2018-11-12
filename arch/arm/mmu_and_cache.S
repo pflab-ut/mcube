@@ -16,23 +16,23 @@
   .endm
   // Create an entry for a 1GB block.
   .macro BLOCK_1GB PA, ATTR_HI, ATTR_LO
-  PUT_64B \ATTR_HI, ((\PA) & 0xC0000000) | \ATTR_LO | 0x1
+  PUT_64B \ATTR_HI, ((\PA) & 0xc0000000) | \ATTR_LO | 0x1
   .endm
   // Create an entry for a 2MB block.
   .macro BLOCK_2MB PA, ATTR_HI, ATTR_LO
-  PUT_64B \ATTR_HI, ((\PA) & 0xFFE00000) | \ATTR_LO | 0x1
+  PUT_64B \ATTR_HI, ((\PA) & 0xffe00000) | \ATTR_LO | 0x1
   .endm
   .align 12 // 12 for 4KB granule.
 ttb0_base:
   TABLE_ENTRY level2_pagetable, 0
   BLOCK_1GB 0x40000000, 0, 0x740
   BLOCK_1GB 0x80000000, 0, 0x740
-  BLOCK_1GB 0xC0000000, 0, 0x740
+  BLOCK_1GB 0xc0000000, 0, 0x740
   .align 12 // 12 for 4KB granule.
 level2_pagetable:
   .set ADDR, 0x000 // The current page address.
   .rept 0x200
-  BLOCK_2MB (ADDR << 20), 0, 0x74C
+  BLOCK_2MB (ADDR << 20), 0, 0x74c
   .set ADDR, ADDR+2
   .endr
 
@@ -45,7 +45,7 @@ clean_and_invalidate_cache:
   /*
    * invalidate Data cache to make the code general purpose.
    * Calculate the cache size first and loop through each set + way.
-  */
+   */
 clear_and_invalidate_l1_dcache: 
   mov x0, #0x0 // x0 = cache level
   msr csselr_el1, x0 // 0x0 for L1 D-cache, 0x2 for L2 D-cache.
@@ -125,14 +125,14 @@ setup_mmu:
   and x2, x1, x2 // NSTable=0 APTable=0 XNTable=0 PXNTable=0.
   orr x2, x2, 0x3
   str x2, [x0], #8
-  // The second entry is 1GB block from 0x40000000 to 0x7FFFFFFF.
+  // The second entry is 1GB block from 0x40000000 to 0x7fffffff.
   ldr x2, =0x40000741 // Executable Inner and Outer Shareable.
   str x2, [x0], #8 // R/W at all ELs secure memory
   // AttrIdx=000 Device-nGnRnE.
-  // The third entry is 1GB block from 0x80000000 to 0xBFFFFFFF.
+  // The third entry is 1GB block from 0x80000000 to 0xbfffffff.
   ldr x2, =0x80000741
   str x2, [x0], #8
-  // The fourth entry is 1GB block from 0xC0000000 to 0xFFFFFFFF.
+  // The fourth entry is 1GB block from 0xc0000000 to 0xffffffff.
   ldr x2, =0xc0000741
   str x2, [x0], #8
   // Set level 2 translation table.

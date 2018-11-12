@@ -7,9 +7,9 @@
 #define	__MCUBE_MCUBE_CPU_H__
 
 /* Number of intra-kernel CPUs in monolithic/micro kernel */
-#define NR_INTRA_KERNEL_CPUS 2
+#define NR_INTRA_KERNEL_CPUS 4
 /* Number of intra-kernel CPUs in multikernel */
-#define NR_INTER_KERNEL_CPUS 2
+#define NR_INTER_KERNEL_CPUS 1
 
 
 /** CPU clock to second. */

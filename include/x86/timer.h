@@ -18,20 +18,6 @@
 
 #ifndef __ASSEMBLY__
 
-/**
- * @function   timer_init
- * @brief      Initialize the timer controller so that it interrupts the
- *             kernel at the requested frequency.
- * @details    Interrupts are enabled at the end of the function, so
- *             timer_enable does not need to be called after timer_init.
- *
- *             Due to the clock granularity (1193181Hz), the requested
- *             frequency may not be perfectly met.
- *
- * @param[in]  frequency The interrupt frequency in Hz. Clamped to the
- *                       range [19:1193181].
- */
-void timer_init(uint32_t frequency);
 
 /**
  * @function timer_enable

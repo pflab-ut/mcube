@@ -7,7 +7,7 @@
 
 #if CONFIG_ARCH_AXIS && CONFIG_COMPILER_CLANG
 /* NOTE: padding to separate banks of text and data. */
-char padding[0x1000] = {1};
+char PADDING[0x1000] = {0xff};
 #endif
 
 unsigned int Debug = FALSE;

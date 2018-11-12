@@ -6,6 +6,38 @@
 #ifndef __MCUBE_ARM_SYS_REGS_H__
 #define __MCUBE_ARM_SYS_REGS_H__
 
+/* CNTV_CTL_EL0, Counter-timer Virtual Timer Control register
+ * Page 2188 of AArch64-Reference-Manual.
+ */
+/* 31-3: reserved */
+/* 2: ISTATUS
+ * The status of the timer interrupt. This bit is read-only. Permitted values are:
+ * 0 : Interrupt not asserted.
+ * 1 : Interrupt asserted.
+ * A register write that sets IMASK to 1 latches this bit to reflect the status
+ * of the interrupt immediately before that write.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define CNTV_CTL_EL0_ISTATUS_NOT_ASSERTED (0x0 << 2)
+#define CNTV_CTL_EL0_ISTATUS_ASSERTED (0x1 << 2)
+/* 1: IMASK
+ * Timer interrupt mask bit. Permitted values are:
+ * 0 : Timer interrupt is not masked.
+ * 1 : Timer interrupt is masked.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define CNTV_CTL_EL0_IMASK_NOT_MASKED (0x0 << 1)
+#define CNTV_CTL_EL0_IMASK_MASKED (0x1 << 1)
+/* 0: ENABLE
+ * Enables the timer. Permitted values are:
+ * 0 : Timer disabled.
+ * 1 : Timer enabled.
+ * Disabling the timer masks the timer interrupt, but the timer value
+ * continues to count down. Resets to 0.
+ */
+#define CNTV_CTL_EL0_DISABLE (0x0 << 0)
+#define CNTV_CTL_EL0_ENABLE (0x1 << 0)
+
 
 /* ESR_EL1, Exception Syndrome Register (EL1).
  * Page 1899 of AArch64-Reference-Manual.

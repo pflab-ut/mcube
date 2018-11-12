@@ -12,14 +12,13 @@ unsigned long timer_tick = 0;
 
 void start_timer(unsigned int ch)
 {
+  printk("timer_tick = %lu\n", timer_tick);
   set_cntv_tval_el0(timer_tick);
   enable_cntv_ctl_el0();
-  enable_local_irq();
 }
 
 void stop_timer(unsigned int ch)
 {
   disable_cntv_ctl_el0();
 }
-
 

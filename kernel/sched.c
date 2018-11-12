@@ -82,13 +82,11 @@ void do_release(void)
 	struct thread_struct *th;
   unsigned long cpu = get_cpu_id();
   pdebug_array(run_tq[cpu].array);
-#if 0
 	PDEBUG("run_tq: bheap\n");
   pdebug_bheap(&run_tq, run_tq[cpu].head);
 
 	PDEBUG("cpu_run_tq: bheap\n");
 	pdebug_bheap(&cpu_run_tq.rq, cpu_run_tq.rq.head);
-#endif
 
 	//pdebug_jiffies();
 	//	pdebug_thread(current_th);
@@ -96,9 +94,7 @@ void do_release(void)
 
 	//	print("sleep_tq[cpu]->sched.release = %d\n", sleep_tq[cpu]->sched.release);
 
-#if 0
 	pdebug_bitmap(run_tq[cpu].bitmap);
-#endif
 	//	pdebug_bheap(&run_tq, run_tq[cpu].head);
   pdebug_sleep_tq();
 
@@ -212,7 +208,8 @@ int run(unsigned long nr_threads)
 	/* idle thread start */
 	while (sched_end == FALSE) {
     //print("");
-    //print("get_timer_count() = %lu\n", get_timer_count()); 
+    // print("get_timer_count() = %lu\n", get_timer_count());
+    // printk("handler CNTV_TVAL: %lu\n", get_cntvct_el0()); 
     //    print("0");
     //    halt();
     //    print("sched_end = %d\n", sched_end);

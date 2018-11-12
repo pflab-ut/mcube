@@ -25,9 +25,9 @@ void init_arch(void)
 {
   init_cpu();
   init_uart();
-  init_irq();
   init_timer(TICK_USEC);
   init_mm();
+  init_irq();
 }
 
 void exit_arch(void)

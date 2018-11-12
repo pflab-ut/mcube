@@ -63,27 +63,28 @@ void do_switch_thread(void)
   }
 }
 
-
 void handle_timer_interrupt(void)
 {
   unsigned long cpu = get_cpu_id();
   // timer tick
   printk("call do_timer_tick()\n");
-  printk("handler CNTV_TVAL: 0x%lx\n", get_cntvct_el0());
+  printk("handler CNTV_TVAL: %lu\n", get_cntvct_el0());
   //  printk("handler CNTVCT   : 0x%lx\n", get_cntvct_el0());
   pdebug_array(run_tq[cpu].array);
   if (current_th[cpu] != &idle_th[cpu]) {
     printk("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
-    current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_current_cpu_time()
-                                                          - current_th[cpu]->sched.begin_cpu_time);
-    printk("current_th[%lu]->sched.remaining = %ld\n", cpu, current_th[cpu]->sched.remaining);
+    current_th[cpu]->sched.remaining
+      -= CPU_CLOCK_TO_USEC(get_current_cpu_time()
+                           - current_th[cpu]->sched.begin_cpu_time);
+    printk("current_th[%lu]->sched.remaining = %ld\n",
+           cpu, current_th[cpu]->sched.remaining);
     if (current_th[cpu]->sched.remaining <= 0) {
       do_end_job(current_th[cpu]);
     }
   }
   update_jiffies();
-  // clear cntv interrupt and set next 1sec timer.
+  // clear cntv interrupt and set next timer.
   set_cntv_tval_el0(timer_cntfrq);
   
   if (get_current_jiffies() >= sched_time) {
@@ -141,17 +142,48 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 {
   printk("do_irq()\n");
 #if CONFIG_ARCH_ARM_RASPI3  
-  // check inteerupt source
-  irq = mmio_in32(TIMER_CORE0_IRQ_SRC);
-  switch (irq) {
-  case 0x8:
+  unsigned long cpu = get_cpu_id();
+  switch (cpu) {
+  case 0:
+    irq = mmio_in32(TIMER_CORE0_IRQ_SRC);
+    break;
+  case 1:
+    irq = mmio_in32(TIMER_CORE1_IRQ_SRC);
+    break;
+  case 2:
+    irq = mmio_in32(TIMER_CORE2_IRQ_SRC);
+    break;
+  case 3:
+    irq = mmio_in32(TIMER_CORE3_IRQ_SRC);
+    break;    
+  default:
+    printk("Unknown CPU 0x%lx\n", cpu);
+    return 1;
+    break;
+  }
+  
+  /* check inteerupt source */
+  switch (irq) {    
+  case TIMER_CORE_IRQ_SRC_CNTVIRQ_INTERRUPT:
     handle_timer_interrupt();
     break;
-  case 0x100:
+  case TIMER_CORE_IRQ_SRC_GPU_INTERRUPT:
     handle_uart_interrupt();
     break;
+  case TIMER_CORE_IRQ_SRC_CNTPSIRQ_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_CNTPNSIRQ_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_CNTHPIRQ_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_MAILBOX0_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_MAILBOX1_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_MAILBOX2_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_MAILBOX3_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_PMU_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_AXI_OUTSTANDING_INTERRUPT:
+  case TIMER_CORE_IRQ_SRC_LOCAL_TIMER_INTERRUPT:
+    /* TIMER_CORE_IRQ_SRC_PERIPHERAL(x) not used */
   default:
     printk("Unknown IRQ 0x%lx\n", irq);
+    return 2;
     break;
   }
 #elif CONFIG_ARCH_ARM_SYNQUACER
@@ -165,42 +197,6 @@ asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
 
 void init_irq(void)
 {
-  unsigned long cpu = get_cpu_id();
   printk("init_irq()\n");
-#if CONFIG_ARCH_ARM_RASPI3
-  switch (cpu) {
-  case 0:
-    /* IRQ routing to core 0 */
-    mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
-               TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE0
-               | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE0);
-    break;
-  case 1:
-    /* IRQ routing to core 1 */
-    mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
-               TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE1
-               | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE1);
-    break;
-  case 2:
-    /* IRQ routing to core 2 */
-    mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
-               TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE2
-               | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE2);
-    break;
-  case 3:
-    /* IRQ routing to core 3 */
-    mmio_out32(TIMER_GPU_INTERRUPTS_ROUTING,
-               TIMER_GPU_INTERRUPT_ROUTING_FIQ_CORE3
-               | TIMER_GPU_INTERRUPT_ROUTING_IRQ_CORE3);
-    break;
-  default:
-    printk("Unknown CPU ID %lu\n", cpu);
-    break;
-  }
-#elif CONFIG_ARCH_ARM_SYNQUACER
-  /* TODO: implement */
-#else
-#error "Unknown Machine"
-#endif /* CONFIG_ARCH_ARM_RASPI3 */
   enable_local_irq();
 }
