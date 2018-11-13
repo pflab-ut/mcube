@@ -83,10 +83,8 @@ void do_release(void)
   unsigned long cpu = get_cpu_id();
   pdebug_array(run_tq[cpu].array);
 	PDEBUG("run_tq: bheap\n");
-  pdebug_bheap(&run_tq, run_tq[cpu].head);
+  pdebug_bheap(&run_tq[cpu], run_tq[cpu].head);
 
-	PDEBUG("cpu_run_tq: bheap\n");
-	pdebug_bheap(&cpu_run_tq.rq, cpu_run_tq.rq.head);
 
 	//pdebug_jiffies();
 	//	pdebug_thread(current_th);

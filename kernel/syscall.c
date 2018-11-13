@@ -1,5 +1,5 @@
 /**
- * @file lib/syscall.c
+ * @file kernel/syscall.c
  *
  * @author Hiroyuki Chishiro
  */
@@ -9,6 +9,7 @@
 asmlinkage int sys_sched(void)
 {
 	print("sys_sched()\n");
+  do_sched();
 	return 0;
 }
 

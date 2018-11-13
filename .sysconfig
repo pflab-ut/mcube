@@ -1,4 +1,4 @@
 ARCH_NAME = arm
-MACHINE_NAME = raspi3
-CC = gcc
-ALGO_NAME = fp
+MACHINE_NAME = synquacer
+CC = clang
+ALGO_NAME = edf

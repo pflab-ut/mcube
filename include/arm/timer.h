@@ -80,12 +80,14 @@ static inline void set_cntv_tval_el0(unsigned long data)
 
 static inline void enable_cntv_ctl_el0(void)
 {
-  asm volatile ("msr cntv_ctl_el0, %0" :: "r" (CNTV_CTL_EL0_ENABLE));
+  unsigned long reg = CNTV_CTL_EL0_ENABLE;
+  asm volatile ("msr cntv_ctl_el0, %0" :: "r" (reg));
 }
 
 static inline void disable_cntv_ctl_el0(void)
 {
-  asm volatile ("msr cntv_ctl_el0, %0" :: "r" (CNTV_CTL_EL0_DISABLE));
+  unsigned long reg = CNTV_CTL_EL0_DISABLE;
+  asm volatile ("msr cntv_ctl_el0, %0" :: "r" (reg));
 }
 
 

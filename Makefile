@@ -17,12 +17,12 @@ SRCS += \
  $(TOP_DIR)/kernel/sched.c \
  $(TOP_DIR)/kernel/job.c \
  $(TOP_DIR)/kernel/state.c \
+ $(TOP_DIR)/kernel/syscall.c \
  $(TOP_DIR)/kernel/queue.c \
  $(TOP_DIR)/lib/ctype.c \
  $(TOP_DIR)/lib/math.c \
  $(TOP_DIR)/lib/stdlib.c \
  $(TOP_DIR)/lib/string.c \
- $(TOP_DIR)/lib/syscall.c \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/user/user.c \
 
