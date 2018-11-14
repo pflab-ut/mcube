@@ -9,10 +9,10 @@
 void init_timer(unsigned long tick_us)
 {
   timer_cntfrq = get_cntfrq_el0();
-  printk("get_timer_frequency() = %lu\n", timer_cntfrq);
+  //  printk("get_timer_frequency() = %lu\n", timer_cntfrq);
   
   timer_tick = (timer_cntfrq * TICK_USEC) / (1000 * 1000);
-  printk("timer_tick = %lu\n", timer_tick);
+  //  printk("timer_tick = %lu\n", timer_tick);
 #if 0
   /* route cor0cntv to core0 irq */
   mmio_out64(TIMER_CORE0_TIMERS_INTERRUPT_CTRL, 1 << 3);

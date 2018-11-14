@@ -104,6 +104,6 @@ int handle_timer_interrupt(void)
 
 void init_irq(void)
 {
-  printk("init_irq()\n");
+  //  printk("init_irq()\n");
   enable_local_irq();
 }

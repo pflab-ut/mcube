@@ -45,10 +45,19 @@ void init_arch(void)
   init_cpu();
 }
 
+void init_arch_ap(void)
+{  
+}
+
 /**
  * The exit_arch() function exits architecture-dependent features.
  */
 void exit_arch(void)
+{
+  exit_irq();
+}
+
+void exit_arch_ap(void)
 {
   exit_irq();
 }

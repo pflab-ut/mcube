@@ -65,6 +65,10 @@ void init_arch(void)
 #endif
 }
 
+void init_arch_ap(void)
+{
+}
+
 
 void exit_arch(void)
 {

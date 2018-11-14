@@ -8,7 +8,7 @@
 
 void init_dmac(void)
 {
-  printk("init_dmac()\n");
+  //  printk("init_dmac()\n");
   /* clear interrupt status */
   mmio_out32(DMAC_INT_STATUS, 0);
   

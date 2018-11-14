@@ -114,11 +114,27 @@ int kernel_level_main(void)
 }
 
 
+
+void user_mailbox_main(void)
+{
+  print("get_serial_number() = 0x%016lu\n", get_serial_number());
+}
+
+int ap_main(void)
+{
+  delay(10000);
+  print("ap_main()\n");
+  
+  return 0;
+}
+
+
 int user_arch_main(void)
 {
   // user_thread_main();
   // user_ap_main();
-  user_dmac_main();
+  //  user_dmac_main();
   //  kernel_level_main();
+  user_mailbox_main();
   return 0;
 }

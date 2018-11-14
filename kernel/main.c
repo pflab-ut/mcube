@@ -45,11 +45,13 @@ int main(int argc, char *argv[])
     //    print("main()4\n");
   } else {
     //    print("get_cpu_id() = %lu\n", get_cpu_id());
+    init_arch_ap();
     /* wait until init_arch() is finished. */
     while (is_initialized == FALSE) {
     }
     /* do application processor's specific code. */
     ap_main();
+    exit_arch_ap();
   }
   return 0;
 }

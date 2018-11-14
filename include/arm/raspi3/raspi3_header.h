@@ -13,6 +13,7 @@
 #include <arm/raspi3/dmac.h>
 #include <arm/raspi3/gpio.h>
 #include <arm/raspi3/irq.h>
+#include <arm/raspi3/mailbox.h>
 #include <arm/raspi3/uart.h>
 
 #endif /* __MCUBE_ARM_RASPI3_RASPI3_HEADER_H__ */

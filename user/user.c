@@ -7,8 +7,7 @@
 
 int user_arch_main(void);
 
-#if !CONFIG_ARCH_X86
-
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
 
 int ap_main(void)
 {
@@ -20,7 +19,7 @@ int ap_main(void)
   //  cpu_ids[cpu] = cpu;
   return 0;
 }
-#endif /* !CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS */
 
 
 int user_main(void)

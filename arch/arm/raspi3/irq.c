@@ -15,7 +15,7 @@ int handle_uart_interrupt(void)
   // uart
   if ((irq_bp & IRQ_BASIC_PENDING_REG2)
       && (irq_p2 & IRQ_PENDINGn_SRC(PL011_UART_IRQ))
-      && (mmio_in32(UART0_MASKED_INTERRUPT_STATUS_REG)
+      && (mmio_in32(UART0_MIS_REG)
           & UART_MIS_REG_RECEIVE_MASKED_INTERRUPT_STATUS)) {
     c = (unsigned char) mmio_in32(UART0_DATA_REG); // read for clear tx interrupt.
     uart_putc(c, 0);

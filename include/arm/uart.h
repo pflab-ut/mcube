@@ -18,23 +18,23 @@
   
 // The offsets for reach register for the UART.
 #define UART0_DATA_REG (UART0_BASE + 0x00)
-#define UART0_RECEIVE_STATUS_REG_ERROR_CLEAR_REG (UART0_BASE + 0x04)
+#define UART0_RSRECR_REG (UART0_BASE + 0x04)
 #define UART0_FLAG_REG (UART0_BASE + 0x18)
 #define UART0_ILPR_REG (UART0_BASE + 0x20) /* not in use */
-#define UART0_INTEGER_BAUD_RATE_DIVISOR (UART0_BASE + 0x24)
-#define UART0_FRACTIONAL_BAUD_RATE_DIVISOR (UART0_BASE + 0x28)
-#define UART0_LINE_CTRL_REG (UART0_BASE + 0x2c)
+#define UART0_IBRD_REG (UART0_BASE + 0x24)
+#define UART0_FBRD_REG (UART0_BASE + 0x28)
+#define UART0_LCRH_REG (UART0_BASE + 0x2c)
 #define UART0_CTRL_REG (UART0_BASE + 0x30)
-#define UART0_INTERRUPT_FIFO_LEVEL_SELECT_REG (UART0_BASE + 0x34)
-#define UART0_INTERRUPT_MASK_SET_CLEAR_REG (UART0_BASE + 0x38)
-#define UART0_RAW_INTERRUPT_STATUS_REG (UART0_BASE + 0x3c)
-#define UART0_MASKED_INTERRUPT_STATUS_REG (UART0_BASE + 0x40)
-#define UART0_INTERRUPT_CLEAR_REG (UART0_BASE + 0x44)
+#define UART0_IFLS_REG (UART0_BASE + 0x34)
+#define UART0_IMSC_REG (UART0_BASE + 0x38)
+#define UART0_RIS_REG (UART0_BASE + 0x3c)
+#define UART0_MIS_REG (UART0_BASE + 0x40)
+#define UART0_ICR_REG (UART0_BASE + 0x44)
 #define UART0_DMA_CTRL_REG (UART0_BASE + 0x48)
-#define UART0_INTEGRATION_TEST_CTRL_REG (UART0_BASE + 0x80)
-#define UART0_INTEGRATION_TEST_INPUT_REG (UART0_BASE + 0x84)
-#define UART0_INTEGRATION_TEST_OUTPUT_REG (UART0_BASE + 0x88)
-#define UART0_TEST_DATA_REG (UART0_BASE + 0x8c)
+#define UART0_ITCR_REG (UART0_BASE + 0x80)
+#define UART0_ITIP_REG (UART0_BASE + 0x84)
+#define UART0_ITOP_REG (UART0_BASE + 0x88)
+#define UART0_TDR_REG (UART0_BASE + 0x8c)
 
 /* UART Data Register */
 /* 31-12: reserved */
@@ -160,12 +160,12 @@
 /* UART Integer Baud Rate Divisor */
 /* 31-16: reserved */
 /* 15-0: The integer baud rate divisor. */
-#define UART_INTEGER_BAUD_RATE_DIVISOR_MASK 0xffff
+#define UART_IBRD_MASK 0xffff
 
 /* UART Fractional Baud Rate Divisor */
 /* 31-6: reserved */
 /* 5-0: The fractional baud rate divisor. */
-#define UART_FRACTIONAL_BAUD_RATE_DIVISOR_MASK 0x3f
+#define UART_FBRD_MASK 0x3f
 
 /* UART Line Control Register */
 /* 31-8: reserved */
@@ -175,7 +175,7 @@
  * if the EPS bit is 0 then the parity bit is transmitted and checked as a 1.
  * if the EPS bit is 1 then the parity bit is transmitted and checked as a 0.
  */
-#define UART_LINE_CTRL_REG_STICK_PARITY_SELECT (0x1 << 7)
+#define UART_LCRH_REG_STICK_PARITY_SELECT (0x1 << 7)
 /* 6-5: Word length.
  * These bits indicate the number of data bits transmitted or received
  * in a frame as follows:
@@ -184,18 +184,18 @@
  * 01 = 6 bits
  * 00 = 5 bits.
  */  
-#define UART_LINE_CTRL_REG_WORD_LENGTH_MASK (0x3 << 5)
+#define UART_LCRH_REG_WORD_LENGTH_MASK (0x3 << 5)
 /* 4: Enable FIFOs.
  * 0 = FIFOs are disabled (character mode) that is, the FIFOs become 1-byte-deep
  * holding registers.
  * 1 = transmit and receive FIFO buffers are enabled (FIFO mode).
  */
-#define UART_LINE_CTRL_REG_ENABLE_FIFO (0x1 << 4)
+#define UART_LCRH_REG_ENABLE_FIFO (0x1 << 4)
 /* 3: Two stop bits select.
  * If this bit is set to 1, two stop bits are transmitted at the end of
  * the frame. The receive logic does not check for two stop bits being received.
  */
-#define UART_LINE_CTRL_REG_TWO_STOP_BITS_SELECT (0x1 << 3)
+#define UART_LCRH_REG_TWO_STOP_BITS_SELECT (0x1 << 3)
 /* 2: Even parity select.
  * Controls the type of parity the UART uses during transmission and reception:
  * 0 = odd parity. The UART generates or checks for an odd number of 1s
@@ -204,17 +204,17 @@
  * data and parity bits.
  * This bit has no effect when the PEN bit disables parity checking and generation.
  */
-#define UART_LINE_CTRL_REG_EVEN_PARITY_SELECT (0x1 << 2)
+#define UART_LCRH_REG_EVEN_PARITY_SELECT (0x1 << 2)
 /* 1: Parity enable.
  * 0 = parity is disabled and no parity bit added to the data frame.
  * 1 = parity checking and generation is enabled.
  */
-#define UART_LINE_CTRL_REG_PARITY_ENABLE (0x1 << 1)
+#define UART_LCRH_REG_PARITY_ENABLE (0x1 << 1)
 /* 0: Send break.
  * If this bit is set to 1, a low-level is continually output on the TXD output,
  * after completing transmission of the current character.
  */
-#define UART_LINE_CTRL_REG_SEND_BREAK (0x1 << 0)
+#define UART_LCRH_REG_SEND_BREAK (0x1 << 0)
 
 /* UART Control Register */
 /* 31-16: reserved */
@@ -276,9 +276,9 @@
 /* UART Interrupt FIFO Level Select Register */
 /* 31-12: reserved */
 /* 11-9: Unsupported */
-#define UART_INTERRUPT_FIFO_LEVEL_SELECT_REG_RXIFPSEL_MASK (0x7 << 9)
+#define UART_IFLS_REG_RXIFPSEL_MASK (0x7 << 9)
 /* 8-6: Unsupported */
-#define UART_INTERRUPT_FIFO_LEVEL_SELECT_REG_TXIFPSEL_MASK (0x7 << 6)
+#define UART_IFLS_REG_TXIFPSEL_MASK (0x7 << 6)
 /* 5-3: Receive interrupt FIFO level select.
  * The trigger points for the receive interrupt are as follows:
  * 000 = Receive FIFO becomes 1/8 full
@@ -288,7 +288,7 @@
  * 100 = Receive FIFO becomes 7/8 full
  * 101-111 = reserved.
  */
-#define UART_INTERRUPT_FIFO_LEVEL_SELECT_REG_RXIFLSEL_MASK (0x7 << 3)
+#define UART_IFLS_REG_RXIFLSEL_MASK (0x7 << 3)
 /* 2-0: Transmit interrupt FIFO level select.
  * The trigger points for the transmit interrupt are as follows:
  * 000 = Transmit FIFO becomes 1/8 full
@@ -298,7 +298,7 @@
  * 100 = Transmit FIFO becomes 7/8 full
  * 101-111 = reserved.
  */
-#define UART_INTERRUPT_FIFO_LEVEL_SELECT_REG_TXIFLSEL_MASK (0x7 << 0)
+#define UART_IFLS_REG_TXIFLSEL_MASK (0x7 << 0)
 
 /* UART Interrupt Mask Set Clear Register */
 /* 31-11: reserved */
@@ -561,7 +561,7 @@
 /* 10-0: When the ITCR1 bit is set to 1, data is written into the receive FIFO
  * and read out of the transmit FIFO.
  */
-#define UART_TEST_DATA_REG_MASK 0x3ff
+#define UART_TDR_MASK 0x3ff
 
 
 #ifndef __ASSEMBLY__

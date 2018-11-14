@@ -30,6 +30,16 @@ void init_arch(void)
   init_irq();
 }
 
+void init_arch_ap(void)
+{
+  init_timer(TICK_USEC);
+  init_irq();
+}
+
 void exit_arch(void)
+{
+}
+
+void exit_arch_ap(void)
 {
 }
