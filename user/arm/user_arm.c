@@ -118,6 +118,7 @@ int kernel_level_main(void)
 void user_mailbox_main(void)
 {
   print("get_serial_number() = 0x%016lu\n", get_serial_number());
+  print("random number = %u\n", rand_raspi3(0, UINT_MAX));
 }
 
 int ap_main(void)

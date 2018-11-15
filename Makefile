@@ -109,9 +109,9 @@ else ifeq ($(ARCH_NAME), x86)
 	qemu-system-x86_64 -cpu qemu64 -cdrom $(TARGET).iso -nographic -curses
 else ifeq ($(ARCH_NAME), arm)
 # for UART011
-	qemu-system-aarch64 -m 128 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
+	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
 # for MINI UART
-#	qemu-system-aarch64 -m 128 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET)
+#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET)
 else ifeq ($(ARCH_NAME), axis)
 	$(RUN_AXIS) "+define+PRINT_ALL"
 #	$(RUN_AXIS)
@@ -124,9 +124,9 @@ ifeq ($(ARCH_NAME), x86)
 	qemu-system-x86_64 -cdrom $(TARGET).iso
 else ifeq ($(ARCH_NAME), arm)
 # for UART011
-	qemu-system-aarch64 -m 128 -M raspi3 -serial mon:stdio -kernel $(TARGET)
+	qemu-system-aarch64 -M raspi3 -serial mon:stdio -kernel $(TARGET)
 # for MINI UART
-#	qemu-system-aarch64 -m 128 -M raspi3 -serial null -serial mon:stdio -kernel $(TARGET)
+#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -kernel $(TARGET)
 endif
 
 mrun:
