@@ -50,6 +50,7 @@ SRCS +=	$(TOP_DIR)/arch/arm/raspi3/dmac.c \
 	$(TOP_DIR)/arch/arm/raspi3/mailbox.c \
 	$(TOP_DIR)/arch/arm/raspi3/irq.c \
 	$(TOP_DIR)/arch/arm/raspi3/mm.c \
+	$(TOP_DIR)/arch/arm/raspi3/power.c \
 	$(TOP_DIR)/arch/arm/raspi3/rand.c \
 	$(TOP_DIR)/arch/arm/raspi3/timer.c \
 

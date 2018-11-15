@@ -109,15 +109,79 @@ void setup_pl011_uart(void)
    ** b31 set: response
    ** b30-b0: value length in bytes        
    */
-  mbox[4] = 8;
+  mbox[4] = 0;
   /* UART clock ID */
   mbox[5] = CLOCK_ID_UART;
-  /* 4MHz: Rate (in Hz) */
-  mbox[6] = 4 * 1000 * 1000;
+  /* Rate (in Hz) */
+  mbox[6] = PL011_UART_HZ;
   /* skip setting turbo */
   mbox[7] = 0;           
   mbox[8] = VIDEOCORE_MAILBOX_TAG_LAST;
   call_mbox(VIDEOCORE_MAILBOX_CH_PROPERTY_TAGS_ARM_TO_VC);
 
   //  print("mbox[5] = %u mbox[6] = %u\n", mbox[5], mbox[6]);
+}
+
+
+/* shutdown */
+void power_off(void)
+{
+  unsigned long r;
+
+  // power off devices one by one
+  for (r = 0; r < 16; r++) {
+    /* buffer size in bytes (including the header values, the end tag and padding) */
+    mbox[0] = VIDEOCORE_MAILBOX_SIZE;
+    /* buffer request/response code
+     * Request codes:
+     ** 0x00000000: process request
+     ** All other values reserved
+     * Response codes:
+     ** 0x80000000: request successful
+     ** 0x80000001: error parsing request buffer (partial response)
+     ** All other values reserved
+     */
+    mbox[1] = VIDEOCORE_MAILBOX_REQUEST;
+    /* tag ID */
+    mbox[2] = VIDEOCORE_MAILBOX_TAG_SET_POWER_STATE;
+    /* value buffer size in bytes */
+    mbox[3] = 8;
+    /* Request codes:
+    ** b31 clear: request
+    ** b30-b0: reserved
+    * Response codes:
+    ** b31 set: response
+    ** b30-b0: value length in bytes        
+    */
+    mbox[4] = 8;
+    /* device id */
+    mbox[5] = (unsigned int) r;
+    /* bit 0: off, bit 1: no wait */
+    mbox[6] = 0;
+    mbox[7] = VIDEOCORE_MAILBOX_TAG_LAST;
+    call_mbox(VIDEOCORE_MAILBOX_CH_PROPERTY_TAGS_ARM_TO_VC);
+  }
+  // power off gpio pins (but not VCC pins)
+  mmio_out32(GPFSEL0, 0);
+  mmio_out32(GPFSEL1, 0);
+  mmio_out32(GPFSEL2, 0);
+  mmio_out32(GPFSEL3, 0);
+  mmio_out32(GPFSEL4, 0);
+  mmio_out32(GPFSEL5, 0);
+  mmio_out32(GPPUD, 0);
+  delay(150);
+  mmio_out32(GPPUDCLK0, 0xffffffff);
+  mmio_out32(GPPUDCLK1, 0xffffffff);
+  delay(150);
+  mmio_out32(GPPUDCLK0, 0);
+  /* flush GPIO setup */
+  mmio_out32(GPPUDCLK1, 0);
+
+  // power off the SoC (GPU + CPU)
+  r = mmio_in32(POWER_MANAGEMENT_RSTS);
+  r &= ~0xfffffaaa;
+  r |= 0x555;    // partition 63 used to indicate halt
+  mmio_out32(POWER_MANAGEMENT_RSTS, POWER_MANAGEMENT_WDOG_MAGIC | r);
+  mmio_out32(POWER_MANAGEMENT_WDOG, POWER_MANAGEMENT_WDOG_MAGIC | 10);
+  mmio_out32(POWER_MANAGEMENT_RSTC, POWER_MANAGEMENT_WDOG_MAGIC | POWER_MANAGEMENT_RSTC_FULLRST);
 }

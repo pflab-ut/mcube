@@ -15,6 +15,9 @@
 /* PL011 UART and Mini UART */
 #define NR_UART_PORTS 2
 
+
+#define PL011_UART_HZ (4 * 1000 * 1000)
+
   
 // The offsets for reach register for the UART.
 #define UART0_DATA_REG (UART0_BASE + 0x00)

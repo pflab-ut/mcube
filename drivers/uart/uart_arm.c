@@ -5,8 +5,6 @@
  */
 #include <mcube/mcube.h>
 
-static const unsigned int dcount = 150;
-
 #if PL011_UART
 
 /* PL011 UART in Raspberry Pi3 and SynQuacer */
@@ -29,16 +27,19 @@ void uart_pol_putc(uint8_t c, int32_t ch)
 
 void init_uart(void)
 {
-  /* disable uart */
-  mmio_out32(UART0_CTRL_REG, 0);
 
 #if CONFIG_ARCH_ARM_RASPI3
+  const unsigned int dcount = 150;
   /* get GPFSEL1 to selector */
-  uint32_t selector = mmio_in32(GPFSEL1);
+  uint32_t selector;
+
+  /* disable uart */
+  mmio_out32(UART0_CTRL_REG, 0);
   
   /* setup pl011 uart by mailbox */
   setup_pl011_uart();
 
+  selector = mmio_in32(GPFSEL1);
   /* clear gpio14 */
   selector &= ~GPFSEL_FSELn4_MASK;
   /* set alt0 for gpio14 */
@@ -116,6 +117,7 @@ void uart_pol_putc(uint8_t c, int32_t ch)
 
 void init_uart(void)
 {
+  const unsigned int dcount = 150;
   uint32_t selector = mmio_in32(GPFSEL1);
 
   /* clear gpio14 */
