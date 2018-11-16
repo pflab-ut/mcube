@@ -54,8 +54,7 @@ SRCS +=	$(TOP_DIR)/arch/arm/raspi3/dmac.c \
 	$(TOP_DIR)/arch/arm/raspi3/rand.c \
 	$(TOP_DIR)/arch/arm/raspi3/timer.c \
 
-SRCS += $(TOP_DIR)/user/arm/raspi3/homer.c \
- $(TOP_DIR)/user/arm/raspi3/mailbox.c \
+SRCS += $(TOP_DIR)/user/arm/raspi3/mailbox.c \
 
 else ifeq ($(MACHINE_NAME), synquacer)
 SRCS +=	$(TOP_DIR)/arch/arm/synquacer/dmac.c \
@@ -67,4 +66,5 @@ endif
 
 
 SRCS += $(TOP_DIR)/user/arm/user_arm.c \
- \
+
+

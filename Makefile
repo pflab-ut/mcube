@@ -26,16 +26,25 @@ SRCS += \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/user/user.c \
 
+
 include $(TOP_DIR)/Rules.make
 
+
+ifeq ($(ARCH_NAME), arm)
+FONT_PSF = $(TOP_DIR)/lib/font.psf
+FONT_OBJ = $(TOP_DIR)/build/$(FONT_PSF:.psf=.o)
+else
+FONT_PSF =
+FONT_OBJ =
+endif
 
 
 .PHONY: all configure testconfig defaultconfig pylint pyflakes
 all: $(TARGET)
 
 
-$(TARGET): $(ASM_OBJS) $(OBJS) $(BOOT_TARGET) $(LOADER_TARGET)
-	$(LD) -o $@ $(ASM_OBJS) $(OBJS) $(LDFLAGS)
+$(TARGET): $(ASM_OBJS) $(OBJS) $(BOOT_TARGET) $(LOADER_TARGET) $(FONT_OBJ)
+	$(LD) -o $@ $(ASM_OBJS) $(FONT_OBJ) $(OBJS) $(LDFLAGS)
 	$(SIZE) $@
 ifeq ($(ARCH_NAME), x86)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
@@ -57,6 +66,15 @@ $(BOOT_TARGET): # do nothing
 $(LOADER_TARGET): # do nothing
 endif
 
+
+ifeq ($(ARCH_NAME), arm)
+$(FONT_OBJ): $(FONT_PSF)
+	$(LD) -r -b binary -o $@ $(FONT_PSF)
+else
+$(FONT_OBJ):
+endif
+
+
 $(BUILD_DIR)/%.o: %.c
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 	$(CC) $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
@@ -71,6 +89,7 @@ $(BUILD_DIR)/%.o: %.S
 $(BUILD_DIR)/%.o: %.asm
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 	$(AS) -D__ASSEMBLY__ $(ASFLAGS) -o $@ -MP -MF $(@:%.o=%.d) $<
+
 
 
 setup: 
@@ -107,7 +126,7 @@ ifeq ($(ARCH_NAME), sim)
 else ifeq ($(ARCH_NAME), x86)
 #	qemu-system-x86_64 -cpu core2duo -cdrom $(TARGET).iso -nographic -curses -clock hpet
 	qemu-system-x86_64 -cpu qemu64 -cdrom $(TARGET).iso -nographic -curses
-else ifeq ($(ARCH_NAME), arm)
+else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
 	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
 # for MINI UART
@@ -116,13 +135,13 @@ else ifeq ($(ARCH_NAME), axis)
 	$(RUN_AXIS) "+define+PRINT_ALL"
 #	$(RUN_AXIS)
 else
- echo "Unknown Architecture"
+	echo "Unknown Architecture"
 endif
 
 grun:
 ifeq ($(ARCH_NAME), x86)
 	qemu-system-x86_64 -cdrom $(TARGET).iso
-else ifeq ($(ARCH_NAME), arm)
+else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
 	qemu-system-aarch64 -M raspi3 -serial mon:stdio -kernel $(TARGET)
 # for MINI UART
@@ -152,7 +171,8 @@ doxy: doxyclean
 
 clean: doxyclean buildclean docclean
 	@for file in $(CLEANFILES); do $(FIND) . -name $$file -delete || exit 1; done
-	@$(RM) $(TARGET) $(TARGET).elf $(OBJS) $(DEPS) $(DMPFILE) $(MAP) $(ROMFILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
+	@$(RM) $(TARGET) $(TARGET).elf $(OBJS) $(DEPS) $(DMPFILE) $(MAP)
+	@$(RM) $(ROMFILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
 	@$(RM) -r INCA_libs testconfig
 
 buildclean:

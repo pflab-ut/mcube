@@ -6,11 +6,11 @@
 
 /* GIMP header image file format (RGB)  */
 
-static unsigned int homer_width = 96;
-static unsigned int homer_height = 64;
+unsigned int homer_width = 96;
+unsigned int homer_height = 64;
 
 
-static char *homer_data =
+char *homer_data =
 	"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	"!!!!!!!!!!!!!!!!!1)$!Q5*$2=C$\"9B#!U5%BUM'3R((#Z-%S%T#!Y7!A-&!!!!"

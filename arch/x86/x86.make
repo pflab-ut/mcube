@@ -47,7 +47,7 @@ else
 #CFLAGS +=  -Qn -g  -m64 -mno-red-zone -mno-mmx -mfpmath=sse  \
 #     -ffreestanding -fno-asynchronous-unwind-tables -Wall  -fPIC
 #LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000   
-LDFLAGS  +=  -z max-page-size=0x1000   
+		LDFLAGS  +=  -z max-page-size=0x1000   
   LDFLAGS += -T scripts/linker/x86-elf.ld
 endif
 

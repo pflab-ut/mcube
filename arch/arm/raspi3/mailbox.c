@@ -13,7 +13,7 @@ volatile unsigned int __attribute__((aligned(32))) mbox[VIDEOCORE_MAILBOX_SIZE];
  */
 static int call_mbox(unsigned char ch)
 {
-  unsigned int r = (((unsigned int)((unsigned long)&mbox) & ~0xf) | (ch & 0xf));
+  unsigned int r = (((unsigned int)((unsigned long) &mbox) & ~0xf) | (ch & 0xf));
   /* wait until we can write to the mailbox */
   do {
     nop();
@@ -41,7 +41,7 @@ unsigned long get_serial_number(void)
   unsigned long serial_number;
 
   /* buffer size in bytes (including the header values, the end tag and padding) */
-  mbox[0] = VIDEOCORE_MAILBOX_SIZE;
+  mbox[0] = 8 * sizeof(unsigned int);
   /* buffer request/response code
    * Request codes:
    ** 0x00000000: process request
@@ -85,7 +85,7 @@ unsigned long get_serial_number(void)
 void setup_pl011_uart(void)
 {
   /* buffer size in bytes (including the header values, the end tag and padding) */
-  mbox[0] = VIDEOCORE_MAILBOX_SIZE;
+  mbox[0] = 9 * sizeof(unsigned int);
   /* buffer request/response code
    * Request codes:
    ** 0x00000000: process request
@@ -129,7 +129,7 @@ void power_off(void)
   // power off devices one by one
   for (r = 0; r < 16; r++) {
     /* buffer size in bytes (including the header values, the end tag and padding) */
-    mbox[0] = VIDEOCORE_MAILBOX_SIZE;
+    mbox[0] = 8 * sizeof(unsigned int);
     /* buffer request/response code
      * Request codes:
      ** 0x00000000: process request
@@ -219,7 +219,7 @@ unsigned char *fb_ptr;
 void init_frame_buffer(struct frame_buffer *fb)
 {
   /* buffer size in bytes (including the header values, the end tag and padding) */
-  mbox[0] = VIDEOCORE_MAILBOX_SIZE;
+  mbox[0] = 35 * sizeof(unsigned int);
   /* buffer request/response code
    * Request codes:
    ** 0x00000000: process request
@@ -301,7 +301,7 @@ void fb_show_picture(char *data, int width, int height)
   int x, y;
   char pixel[4];
   
-  fb_ptr += (fb_height - height) / (2 * fb_pitch) + (fb_width - width) * 2;
+  fb_ptr += (fb_height - height) / 2 * fb_pitch + (fb_width - width) * 2;
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
       HEADER_PIXEL(data, pixel);
@@ -309,5 +309,70 @@ void fb_show_picture(char *data, int width, int height)
       fb_ptr += 4;
     }
     fb_ptr += fb_pitch - width * 4;
+  }
+}
+
+/* PC Screen Font as used by Linux Console */
+typedef struct {
+  unsigned int magic;
+  unsigned int version;
+  unsigned int headersize;
+  unsigned int flags;
+  unsigned int numglyph;
+  unsigned int bytesperglyph;
+  unsigned int height;
+  unsigned int width;
+  unsigned char glyphs;
+} __attribute__((packed)) psf_t;
+
+extern volatile unsigned char _binary___lib_font_psf_start;
+
+
+/**
+ * Display a string
+ */
+void fb_print(int x, int y, char *s)
+{
+  // get our font
+  psf_t *font = (psf_t *) &_binary___lib_font_psf_start;
+  //  psf_t *font = (psf_t *) &_binary_font_psf_start;
+  // draw next character if it's not zero
+  while (*s) {
+    // get the offset of the glyph. Need to adjust this to support unicode table
+    unsigned char *glyph = (unsigned char*) &_binary___lib_font_psf_start
+      + font->headersize + (*((unsigned char*) s) < font->numglyph ? *s : 0)
+      * font->bytesperglyph;
+    // calculate the offset on screen
+    int offs = (y * font->height * fb_pitch) + (x * (font->width + 1) * 4);
+    // variables
+    int i,j, line, mask, bytesperline = (font->width + 7) / 8;
+    // handle carrige return
+    if (*s == '\r') {
+      x = 0;
+    } else
+      // new line
+      if (*s == '\n') {
+        x = 0;
+        y++;
+      } else {
+        // display a character
+        for (j = 0; j < font->height; j++) {
+          // display one row
+          line = offs;
+          mask = 1 << (font->width - 1);
+          for (i = 0; i < font->width; i++) {
+            // if bit set, we use white color, otherwise black
+            *((unsigned int*)(fb_ptr + line)) = ((int) *glyph) & mask ? 0xffffff : 0;
+            mask >>= 1;
+            line += 4;
+          }
+          // adjust to next line
+          glyph += bytesperline;
+          offs += fb_pitch;
+        }
+        x++;
+      }
+    // next character
+    s++;
   }
 }

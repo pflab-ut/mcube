@@ -168,8 +168,10 @@ struct frame_buffer {
 unsigned long get_serial_number(void);
 void setup_pl011_uart(void);
 void fb_show_picture(char *data, int width, int height);
+void fb_print(int x, int y, char *s);
 
 void init_frame_buffer(struct frame_buffer *fb);
+
 
 #endif /* !__ASSEMBLY__ */
 

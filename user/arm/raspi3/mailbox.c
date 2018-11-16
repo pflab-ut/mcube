@@ -29,7 +29,8 @@ void raspi3_frame_buffer_main(void)
   };
   print("raspi3_frame_buffer_main()\n");
   init_frame_buffer(&fb);
-  fb_show_picture(homer_data, homer_width, homer_height);
+  //  fb_show_picture(homer_data, homer_width, homer_height);
+  fb_print(10, 5, "Hello World!");
 }
 
 
