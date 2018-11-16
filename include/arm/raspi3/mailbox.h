@@ -14,7 +14,7 @@
 #define VIDEOCORE_MAILBOX_WRITE  (VIDEOCORE_MAILBOX_BASE + 0x20)
 
 
-#define VIDEOCORE_MAILBOX_SIZE       36
+#define VIDEOCORE_MAILBOX_SIZE       140
 #define VIDEOCORE_MAILBOX_REQUEST    0
 
 /* channels */
@@ -137,12 +137,39 @@
 #define VOLTAGE_ID_SDRAM_P 0x3
 #define VOLTAGE_ID_SDRAM_I 0x4
 
+/* pixel order state */
+#define PIXEL_ORDER_STATE_BGR 0x0
+#define PIXEL_ORDER_STATE_RGB 0x1
 
 
 #ifndef __ASSEMBLY__
 
+struct frame_buffer {
+  unsigned int width;
+  unsigned int height;
+
+  unsigned int virtual_width;
+  unsigned int virtual_height;
+
+  unsigned int x_offset;
+  unsigned int y_offset;
+
+  unsigned int depth;
+
+  unsigned int state;
+  
+  unsigned int pointer;
+  unsigned int size;
+
+  unsigned int pitch;
+};
+
+
 unsigned long get_serial_number(void);
 void setup_pl011_uart(void);
+void fb_show_picture(char *data, int width, int height);
+
+void init_frame_buffer(struct frame_buffer *fb);
 
 #endif /* !__ASSEMBLY__ */
 

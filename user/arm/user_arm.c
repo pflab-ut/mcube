@@ -5,6 +5,7 @@
  */
 #include <mcube/mcube.h>
 
+
 void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
@@ -115,14 +116,6 @@ int kernel_level_main(void)
 
 
 
-void user_mailbox_main(void)
-{
-#if CONFIG_ARCH_ARM_RASPI3
-  print("get_serial_number() = 0x%016lu\n", get_serial_number());
-  print("random number = %u\n", rand_raspi3(0, UINT_MAX));
-#endif /* CONFIG_ARCH_ARM_RASPI3 */
-}
-
 int ap_main(void)
 {
   delay(10000);
@@ -132,12 +125,17 @@ int ap_main(void)
 }
 
 
+void user_raspi3_main(void);
+
 int user_arch_main(void)
 {
+  print("user_arch_main()\n");
   // user_thread_main();
   // user_ap_main();
   //  user_dmac_main();
   //  kernel_level_main();
-  user_mailbox_main();
+#if CONFIG_ARCH_ARM_RASPI3
+  user_raspi3_main();
+#endif /* CONFIG_ARCH_ARM_RASPI3 */
   return 0;
 }

@@ -5,10 +5,8 @@
  */
 #include <mcube/mcube.h>
 
-
 /* mailbox message buffer */
-volatile unsigned int  __attribute__((aligned(16))) mbox[VIDEOCORE_MAILBOX_SIZE];
-
+volatile unsigned int __attribute__((aligned(32))) mbox[VIDEOCORE_MAILBOX_SIZE];
 
 /**
  * call a mailbox. Returns 0 on failure, non-zero on success
@@ -184,4 +182,132 @@ void power_off(void)
   mmio_out32(POWER_MANAGEMENT_RSTS, POWER_MANAGEMENT_WDOG_MAGIC | r);
   mmio_out32(POWER_MANAGEMENT_WDOG, POWER_MANAGEMENT_WDOG_MAGIC | 10);
   mmio_out32(POWER_MANAGEMENT_RSTC, POWER_MANAGEMENT_WDOG_MAGIC | POWER_MANAGEMENT_RSTC_FULLRST);
+}
+
+
+/*
+ * Copyright (C) 2018 bzt (bztsrc@github)
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ */
+
+unsigned int fb_width, fb_height, fb_pitch;
+unsigned char *fb_ptr;
+
+/**
+ * Set screen resolution to 1024x768
+ */
+void init_frame_buffer(struct frame_buffer *fb)
+{
+  /* buffer size in bytes (including the header values, the end tag and padding) */
+  mbox[0] = VIDEOCORE_MAILBOX_SIZE;
+  /* buffer request/response code
+   * Request codes:
+   ** 0x00000000: process request
+   ** All other values reserved
+   * Response codes:
+   ** 0x80000000: request successful
+   ** 0x80000001: error parsing request buffer (partial response)
+   ** All other values reserved
+   */
+  mbox[1] = VIDEOCORE_MAILBOX_REQUEST;
+
+  mbox[2] = VIDEOCORE_MAILBOX_TAG_SET_PHYSICAL_DISPLAY_WIDTH_HEIGHT;  //set phy wh
+  mbox[3] = 8;
+  mbox[4] = 8;
+  mbox[5] = fb->width;         //FrameBufferInfo.width
+  mbox[6] = fb->height;          //FrameBufferInfo.height
+
+  mbox[7] = VIDEOCORE_MAILBOX_TAG_SET_VIRTUAL_BUFFER_WIDTH_HEIGHT;  //set virt wh
+  mbox[8] = 8;
+  mbox[9] = 8;
+  mbox[10] = fb->virtual_width;        //FrameBufferInfo.virtual_width
+  mbox[11] = fb->virtual_height;         //FrameBufferInfo.virtual_height
+    
+  mbox[12] = VIDEOCORE_MAILBOX_TAG_SET_VIRTUAL_OFFSET; //set virt offset
+  mbox[13] = 8;
+  mbox[14] = 8;
+  mbox[15] = fb->x_offset;           //FrameBufferInfo.x_offset
+  mbox[16] = fb->y_offset;           //FrameBufferInfo.y_offset
+    
+  mbox[17] = VIDEOCORE_MAILBOX_TAG_SET_DEPTH; //set depth
+  mbox[18] = 4;
+  mbox[19] = 4;
+  mbox[20] = fb->depth;          //FrameBufferInfo.depth
+
+  mbox[21] = VIDEOCORE_MAILBOX_TAG_SET_PIXEL_ORDER; //set pixel order
+  mbox[22] = 4;
+  mbox[23] = 4;
+  mbox[24] = fb->state;           //RGB, not BGR preferably
+
+  mbox[25] = VIDEOCORE_MAILBOX_TAG_ALLOCATE_BUFFER; //get framebuffer, gets alignment on request
+  mbox[26] = 8;
+  mbox[27] = 8;
+  mbox[28] = fb->pointer;        //FrameBufferInfo.pointer
+  mbox[29] = fb->size;           //FrameBufferInfo.size
+
+  mbox[30] = VIDEOCORE_MAILBOX_TAG_GET_PITCH; //get pitch
+  mbox[31] = 4;
+  mbox[32] = 4;
+  mbox[33] = fb->pitch;           //FrameBufferInfo.pitch
+
+  mbox[34] = VIDEOCORE_MAILBOX_TAG_LAST;
+
+  if (call_mbox(VIDEOCORE_MAILBOX_CH_PROPERTY_TAGS_ARM_TO_VC)
+      && mbox[20] == fb->depth && mbox[28] != 0) {
+    mbox[28] &= 0x3fffffff;
+    fb_width = mbox[5];
+    fb_height = mbox[6];
+    fb_pitch = mbox[33];
+    fb_ptr = (void*)((unsigned long) mbox[28]);
+  } else {
+    printk("Unable to set screen resolution to 1024x768x32\n");
+  }
+}
+
+/* Call this macro repeatedly.  After each use, the pixel data can be extracted  */
+
+#define HEADER_PIXEL(data, pixel) do {                                  \
+    pixel[0] = (((data[0] - 33) << 2) | ((data[1] - 33) >> 4));         \
+    pixel[1] = ((((data[1] - 33) & 0xf) << 4) | ((data[2] - 33) >> 2)); \
+    pixel[2] = ((((data[2] - 33) & 0x3) << 6) | ((data[3] - 33)));      \
+    data += 4;                                                          \
+  } while (0)
+
+/**
+ * Show a picture
+ */
+void fb_show_picture(char *data, int width, int height)
+{
+  int x, y;
+  char pixel[4];
+  
+  fb_ptr += (fb_height - height) / (2 * fb_pitch) + (fb_width - width) * 2;
+  for (y = 0; y < height; y++) {
+    for (x = 0; x < width; x++) {
+      HEADER_PIXEL(data, pixel);
+      *((unsigned int *) fb_ptr) = *((unsigned int *) &pixel);
+      fb_ptr += 4;
+    }
+    fb_ptr += fb_pitch - width * 4;
+  }
 }
