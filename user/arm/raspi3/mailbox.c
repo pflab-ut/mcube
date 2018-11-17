@@ -33,10 +33,24 @@ void raspi3_frame_buffer_main(void)
   fb_print(10, 5, "Hello World!");
 }
 
+void raspi3_sd_main(void)
+{
+  extern unsigned long __end;
+  // initialize EMMC and detect SD card type
+  if (init_sd() == SD_OK) {
+    // read the master boot record after our bss segment
+    if (sd_readblock(0, (unsigned char *) &__end, 1)) {
+      // dump it to serial console
+      memdump(&__end, 512);
+    }
+  }
+}
+
 
 int user_raspi3_main(void)
 {
   //  raspi3_mailbox_main();
-  raspi3_frame_buffer_main();
+  //  raspi3_frame_buffer_main();
+  raspi3_sd_main();
   return 0;
 }

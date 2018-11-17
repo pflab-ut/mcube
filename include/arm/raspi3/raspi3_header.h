@@ -11,6 +11,7 @@
 #include <arm/raspi3/addr.h>
 #include <arm/raspi3/cpu.h>
 #include <arm/raspi3/dmac.h>
+#include <arm/raspi3/emmc.h>
 #include <arm/raspi3/gpio.h>
 #include <arm/raspi3/irq.h>
 #include <arm/raspi3/mailbox.h>

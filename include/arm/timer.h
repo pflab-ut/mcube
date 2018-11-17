@@ -118,6 +118,14 @@ static inline void delay(unsigned long us)
   }
 }
 
+static inline void delay_cycles(unsigned int n)
+{
+  unsigned int i;
+  for (i = 0; i < n; i++) {
+    nop();
+  }
+}
+
 
 
 #endif /* !__ASSEMBLY__ */

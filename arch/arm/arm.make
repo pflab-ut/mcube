@@ -47,6 +47,7 @@ SRCS	+=	$(TOP_DIR)/arch/arm/init.c \
 
 ifeq ($(MACHINE_NAME), raspi3)
 SRCS +=	$(TOP_DIR)/arch/arm/raspi3/dmac.c \
+	$(TOP_DIR)/arch/arm/raspi3/emmc.c \
 	$(TOP_DIR)/arch/arm/raspi3/mailbox.c \
 	$(TOP_DIR)/arch/arm/raspi3/irq.c \
 	$(TOP_DIR)/arch/arm/raspi3/mm.c \

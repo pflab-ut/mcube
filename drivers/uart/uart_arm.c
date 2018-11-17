@@ -58,7 +58,7 @@ void init_uart(void)
   mmio_out32(GPPUD, GPPUD_DISABLE_PULL_UP_DOWN);
 
   /* 2. Wait 150 cycles. This provides the required set-up time for the control signal */
-  delay(dcount);
+  delay_cycles(dcount);
 
   /* 3. Write to GPPUDCLK0/1 to clock the control signal into the GPIO pads you wish to
    * modify.
@@ -69,7 +69,7 @@ void init_uart(void)
   mmio_out32(GPPUDCLK0, GPPUDCLKn_SET(14) | GPPUDCLKn_SET(15));
 
   /* 4. Wait 150 cycles. This provides the required set-up time for the control signal */
-  delay(dcount);
+  delay_cycles(dcount);
 
   /* 5. Write to GPPUD to remove the control signal. */
   /* Nothing */
@@ -137,7 +137,7 @@ void init_uart(void)
   mmio_out32(GPPUD, GPPUD_DISABLE_PULL_UP_DOWN);
 
   /* 2. Wait 150 cycles. This provides the required set-up time for the control signal */
-  delay(dcount);
+  delay_cycles(dcount);
 
   /* 3. Write to GPPUDCLK0/1 to clock the control signal into the GPIO pads you wish to
    * modify.
@@ -148,7 +148,7 @@ void init_uart(void)
   mmio_out32(GPPUDCLK0, GPPUDCLKn_SET(14) | GPPUDCLKn_SET(15));
 
   /* 4. Wait 150 cycles. This provides the required set-up time for the control signal */
-  delay(dcount);
+  delay_cycles(dcount);
 
   /* 5. Write to GPPUD to remove the control signal. */
   /* Nothing */

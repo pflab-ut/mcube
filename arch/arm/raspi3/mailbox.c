@@ -301,7 +301,7 @@ void fb_show_picture(char *data, int width, int height)
   int x, y;
   char pixel[4];
   
-  fb_ptr += (fb_height - height) / 2 * fb_pitch + (fb_width - width) * 2;
+  fb_ptr += ((fb_height - height) / 2) * fb_pitch + (fb_width - width) * 2;
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
       HEADER_PIXEL(data, pixel);

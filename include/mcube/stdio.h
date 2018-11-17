@@ -12,10 +12,11 @@
 #define MAX_DIGIT 64
 
 /* print for only kernel mode. */
-int printk(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+//int printk(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+int printk(const char *fmt, ...);
 
 /* print for both kernel and user modes. */
-int print(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+int print(const char *fmt, ...);
 
 #if CONFIG_ARCH_SIM
 

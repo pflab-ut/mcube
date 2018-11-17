@@ -25,6 +25,7 @@ unsigned long get_free_page(void);
 void free_page(unsigned long p);
 void init_mm(void);
 
+void memdump(void *ptr, size_t n);
 void *memzero(void *dst, size_t num);
 
 #endif /* !__ASSEMBLY__ */

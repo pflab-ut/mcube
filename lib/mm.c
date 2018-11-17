@@ -25,3 +25,26 @@ void free_page(unsigned long p)
 {
 	mem_map[(p - LOW_MEMORY) / PAGE_SIZE] = 0;
 }
+
+
+void memdump(void *ptr, size_t n)
+{
+  unsigned long a, b;
+  unsigned char c;
+  for (a = (unsigned long) ptr; a < (unsigned long) ptr + n; a += 16) {
+    printk("%lx: ", a);
+    for (b = 0; b < 16; b++) {
+      //      printk("%02b ", *((unsigned char *)(a + b)));
+      printk("%02b ", mmio_in8(a + b));
+      if (b % 4 == 3) {
+        putchar(' ');
+      }
+    }
+    for (b = 0; b < 16; b++) {
+      c = mmio_in8(a + b);
+      putchar(c < 32 || c >= 127 ? '.' : c);
+    }
+    putchar('\r');
+    putchar('\n');
+  }
+}
