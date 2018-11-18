@@ -8,6 +8,7 @@
 
 #ifndef __ASSEMBLY__
 
+
 static inline void svc(unsigned long id)
 {
   asm volatile("svc %0" :: "r"(id));

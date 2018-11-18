@@ -50,6 +50,8 @@
 
   stp     x30, x21, [sp, #16 * 15]
   stp     x22, x23, [sp, #16 * 16]
+  /* set the first argument to sp for accessing full registers */
+  mov     x0, sp
 .endm
 
 .macro kernel_exit el

@@ -66,8 +66,10 @@ void handle_gpu_interrupt(void)
 }
 
 
-asmlinkage int do_irq(unsigned long irq, struct full_regs *regs)
+
+asmlinkage int do_irq(struct full_regs *regs)
 {
+  unsigned int irq;
   printk("do_irq()\n");
   unsigned long cpu = get_cpu_id();
   switch (cpu) {

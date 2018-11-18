@@ -130,12 +130,12 @@ void user_raspi3_main(void);
 int user_arch_main(void)
 {
   print("user_arch_main()\n");
-  // user_thread_main();
+  //  user_thread_main();
   // user_ap_main();
-  //  user_dmac_main();
+  user_dmac_main();
   //  kernel_level_main();
 #if CONFIG_ARCH_ARM_RASPI3
-  user_raspi3_main();
+  //  user_raspi3_main();
 #endif /* CONFIG_ARCH_ARM_RASPI3 */
   return 0;
 }

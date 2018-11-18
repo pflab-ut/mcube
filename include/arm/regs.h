@@ -20,7 +20,7 @@
  */
 struct context_regs {
 	/** General purpose registers in ARM. */
-	uint64_t gpr[16];
+	uint64_t gpr[32];
 };
 
 typedef struct context_regs context_regs;
@@ -37,6 +37,8 @@ struct full_regs {
 };
 
 typedef struct full_regs full_regs;
+
+void dump_registers(struct full_regs *regs);
 
 
 #endif /* !__ASSEMBLY__ */
