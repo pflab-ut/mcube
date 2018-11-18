@@ -15,6 +15,8 @@ vpath %.c $(TOP_DIR)/arch/$(ARCH_NAME) \
  $(TOP_DIR)/arch/arm/synquacer \
  $(TOP_DIR)/kernel \
  $(TOP_DIR)/kernel/queue \
+ $(TOP_DIR)/lib \
+ $(TOP_DIR)/fs \
  $(TOP_DIR)/user \
  $(TOP_DIR)/user/$(ARCH_NAME)/ \
 

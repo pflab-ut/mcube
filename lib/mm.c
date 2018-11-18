@@ -34,8 +34,7 @@ void memdump(void *ptr, size_t n)
   for (a = (unsigned long) ptr; a < (unsigned long) ptr + n; a += 16) {
     printk("%lx: ", a);
     for (b = 0; b < 16; b++) {
-      //      printk("%02b ", *((unsigned char *)(a + b)));
-      printk("%02b ", mmio_in8(a + b));
+      printk("%02x ", mmio_in8(a + b));
       if (b % 4 == 3) {
         putchar(' ');
       }

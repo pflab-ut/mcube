@@ -35,13 +35,20 @@ void raspi3_frame_buffer_main(void)
 
 void raspi3_sd_main(void)
 {
-  extern unsigned long __end;
+  extern unsigned char __end;
   // initialize EMMC and detect SD card type
   if (init_sd() == SD_OK) {
     // read the master boot record after our bss segment
-    if (sd_readblock(0, (unsigned char *) &__end, 1)) {
+    if (sd_readblock(0, &__end, 1)) {
       // dump it to serial console
       memdump(&__end, 512);
+    }
+    // read the master boot record and find our partition
+    if (fat_getpartition()) {
+      // list root directory entries
+      fat_listdirectory();
+    } else {
+      printk("FAT partition not found???\n");
     }
   }
 }

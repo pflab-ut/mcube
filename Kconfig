@@ -135,6 +135,12 @@ menu Option
     title Trace
     default n
     defs -DCONFIG_TRACE
+  config CONFIG_FS_FAT
+    title Fat File System
+    default n
+    cfiles $(TOP_DIR)/fs/fat.c
+    defs -DCONFIG_FS_FAT
+    depends CONFIG_ARCH_ARM_RASPI3
 endmenu
 
 menu Memory
