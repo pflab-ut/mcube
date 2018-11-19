@@ -103,14 +103,21 @@ void user_level_main(void)
   print("Now this is user level.\n");
   print("sys_get_cpu_id() = %d\n", call_sys_get_cpu_id());
   print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
+  
 }
 
+char str[] = "hoge";
 
 int kernel_level_main(void)
 {
-  print("Kernel level started. EL %d\r\n", get_el());
+  unsigned long ret;
+  asm volatile("mov %0, x30" : "=r"(ret));
+  print("ret = 0x%x\n", ret);
+  print("Kernel level started. EL %d\n", get_el());
   print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
   move_to_user_level(user_level_main);
+  for (;;)
+    ;
   return 0;
 }
 
@@ -129,11 +136,11 @@ void user_raspi3_main(void);
 
 int user_arch_main(void)
 {
-  print("user_arch_main()\n");
+  //  print("user_arch_main()\n");
   //  user_thread_main();
   // user_ap_main();
-  user_dmac_main();
-  //  kernel_level_main();
+  //  user_dmac_main();
+  kernel_level_main();
 #if CONFIG_ARCH_ARM_RASPI3
   //  user_raspi3_main();
 #endif /* CONFIG_ARCH_ARM_RASPI3 */

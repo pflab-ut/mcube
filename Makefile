@@ -69,7 +69,11 @@ endif
 
 ifeq ($(ARCH_NAME), arm)
 $(FONT_OBJ): $(FONT_PSF)
+ifeq ($(CC), gcc)
 	$(LD) -r -b binary -o $@ $(FONT_PSF)
+else
+	$(LD) --format=binary -r -o $@ $(FONT_PSF) -m aarch64elf
+endif
 else
 $(FONT_OBJ):
 endif
@@ -128,9 +132,9 @@ else ifeq ($(ARCH_NAME), x86)
 #	qemu-system-x86_64 -cpu qemu64 -cdrom $(TARGET).iso -nographic -curses
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
-#	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
+	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
 # with dd file
-	qemu-system-aarch64 -M raspi3 -drive file=test.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET)
+#	qemu-system-aarch64 -M raspi3 -drive file=test.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET)
 # for MINI UART
 #	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET)
 else ifeq ($(ARCH_NAME), axis)

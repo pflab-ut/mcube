@@ -10,7 +10,7 @@
 /** Architecture. */
 #define CONFIG_ARCH_ARM_RASPI3 1
 /** Compiler. */
-#define CONFIG_COMPILER_GCC 1
+#define CONFIG_COMPILER_CLANG 1
 /** Print. */
 #define CONFIG_PRINT2UART 1
 /** Algorithm. */
