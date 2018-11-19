@@ -504,3 +504,23 @@ int print(const char *fmt, ...)
   }
 	return n;
 }
+
+/**
+ * The prinft() function produces output according to @b CONSOLE or @b UART.
+ * @param fmt specifies how subsequent arguments.
+ * @return Number of characters printed.
+ */
+int printf(const char *fmt, ...)
+{
+	char buf[FOUT_SIZE];
+  int n;
+  unsigned long ret;
+  unsigned long sp;
+	va_list ap;
+	va_start(ap, fmt);
+  n = vsprint(buf, fmt, ap);  
+  call_sys_write(buf);
+  va_end(ap);
+  
+	return n;
+}

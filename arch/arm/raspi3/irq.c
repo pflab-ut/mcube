@@ -71,6 +71,7 @@ asmlinkage int do_irq(struct full_regs *regs)
 {
   unsigned int irq;
   printk("do_irq()\n");
+  //  dump_registers(regs);
   unsigned long cpu = get_cpu_id();
   switch (cpu) {
   case 0:

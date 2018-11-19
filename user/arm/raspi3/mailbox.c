@@ -35,6 +35,7 @@ void raspi3_frame_buffer_main(void)
 
 void raspi3_sd_main(void)
 {
+#if CONFIG_FS_FAT
   unsigned int cluster;
   // initialize EMMC and detect SD card type
   if (init_sd() == SD_OK) {
@@ -61,6 +62,7 @@ void raspi3_sd_main(void)
       printk("FAT partition not found???\n");
     }
   }
+#endif /* CONFIG_FS_FAT */
 }
 
 

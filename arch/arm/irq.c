@@ -35,9 +35,12 @@ void wait_until_next_interrupt(void)
   asm volatile("wfi");
 }
 
-void show_invalid_entry_message(int type, unsigned long esr, unsigned long address)
+void show_invalid_entry_message(int type, unsigned long esr,
+                                unsigned long address, struct full_regs *regs)
 {
-  printk("%s, ESR: 0x%lx, address: 0x%lx\r\n", entry_error_messages[type], esr, address);
+  printk("%s, ESR: 0x%lx, EC: 0x%lx, address: 0x%lx\r\n",
+         entry_error_messages[type], esr, esr >> ESR_ELx_EC_SHIFT, address);
+  dump_registers(regs);
 }
 
 void do_switch_thread(void)

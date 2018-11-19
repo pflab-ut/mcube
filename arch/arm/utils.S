@@ -46,9 +46,9 @@ ENTRY(arch_switch_to)
 
 ENTRY(move_to_user_level)
   mov x29, x0 // save first argument (x0) to unused register (x29)
-#if 0  
-  mov x26, x30 // save ret addr
-  mov x25, sp // save sp
+#if 0
+  mov x26, x30 // save ret addr (x30) to x26
+  mov x25, sp // save sp (x31)
 #endif
   get_cpu_id x28, x27 // save CPU ID to x28
   // Determine the EL0 Execution state.
@@ -58,9 +58,9 @@ ENTRY(move_to_user_level)
   msr elr_el1, x0 // EL0 code.
   eret
 el0_entry:
-#if 0  
-  mov x30, x26 // resume ret addr
-  mov sp, x25 // resume sp
+#if 0
+  mov x30, x26 // resume ret addr (x30) from x26
+  mov sp, x25 // resume sp (x31)
   ret
 #endif  
   mov x0, x28 // move CPU ID (x28) to x0

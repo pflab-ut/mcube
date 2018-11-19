@@ -106,16 +106,23 @@ void user_level_main(void)
   
 }
 
-char str[] = "hoge";
-
 int kernel_level_main(void)
 {
-  unsigned long ret;
-  asm volatile("mov %0, x30" : "=r"(ret));
-  print("ret = 0x%x\n", ret);
+  unsigned long sp, ret;
+  asm volatile("mov %0, sp" : "=r"(sp));
+  print("sp = 0x%x\n", sp);
   print("Kernel level started. EL %d\n", get_el());
   print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
   move_to_user_level(user_level_main);
+  print("kernel_level_main(): EL = %d\n", call_sys_get_mode_level());
+  call_sys_write("call_sys_write()\n");
+#if 0
+  //  call_sys_write("hehe");
+  asm volatile("mov %0, x30" : "=r"(ret));
+  printf("ret = 0x%x\n", ret);
+  asm volatile("mov %0, sp" : "=r"(sp));
+  print("sp = 0x%x\n", sp);
+#endif
   for (;;)
     ;
   return 0;
@@ -126,7 +133,7 @@ int kernel_level_main(void)
 int ap_main(void)
 {
   delay(10000);
-  print("ap_main()\n");
+  //  print("ap_main()\n");
   
   return 0;
 }
@@ -139,7 +146,7 @@ int user_arch_main(void)
   //  print("user_arch_main()\n");
   //  user_thread_main();
   // user_ap_main();
-  //  user_dmac_main();
+  // user_dmac_main();
   kernel_level_main();
 #if CONFIG_ARCH_ARM_RASPI3
   //  user_raspi3_main();

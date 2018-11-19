@@ -29,6 +29,10 @@ int getc(void);
 int putchar(int c);
 int puts(const char *s);
 
+/* print for user mode. */
+int printf(const char *fmt, ...);
+
+
 
 #endif /* CONFIG_ARCH_SIM */
 

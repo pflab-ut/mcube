@@ -10,6 +10,7 @@
   mov x0, #\type
   mrs x1, esr_el1
   mrs x2, elr_el1
+  mov x3, sp
   bl show_invalid_entry_message
   b err_hang
 .endm
@@ -51,7 +52,6 @@
   stp     x30, x21, [sp, #16 * 15]
   stp     x22, x23, [sp, #16 * 16]
   /* set the first argument to sp for accessing full registers */
-  mov     x0, sp
 .endm
 
 .macro kernel_exit el
@@ -122,17 +122,21 @@ ENTRY(vector)
   vector_entry vector_error_el0_32
 
 vector_sync_el1t:
+  kernel_entry 1
   invalid_entry 1, SYNC_INVALID_EL1t
   
 vector_irq_el1t:
   kernel_entry 1
+  mov     x0, sp
   bl do_irq
   kernel_exit 1
   
 vector_fiq_el1t:
+  kernel_entry 1
   invalid_entry 1, FIQ_INVALID_EL1t
   
 vector_error_el1t:
+  kernel_entry 1
   invalid_entry 1, ERROR_INVALID_EL1t
   
 vector_sync_el1h:
@@ -168,6 +172,7 @@ el1h_ret_from_syscall:
   
 vector_irq_el1h:
   kernel_entry 1
+  mov     x0, sp
   bl do_irq
   kernel_exit 1
 
@@ -178,7 +183,6 @@ vector_error_el1h:
   invalid_entry 1, ERROR_INVALID_EL1h
   
 vector_sync_el0_64:
-//  invalid_entry 0, SYNC_INVALID_EL0_64
   kernel_entry 0
   mrs     x25, esr_el1                            // read the syndrome register
   lsr     x24, x25, #ESR_ELx_EC_SHIFT             // exception class
@@ -210,24 +214,31 @@ el0_ret_from_syscall:
   kernel_exit 0
     
 vector_irq_el0_64:
+  kernel_entry 0
   invalid_entry 0, IRQ_INVALID_EL0_64
 
 vector_fiq_el0_64:
+  kernel_entry 0
   invalid_entry 0, FIQ_INVALID_EL0_64
   
 vector_error_el0_64:
+  kernel_entry 0
   invalid_entry 0, ERROR_INVALID_EL0_64
   
 vector_sync_el0_32:
+  kernel_entry 0
   invalid_entry 0, SYNC_INVALID_EL0_32
   
 vector_irq_el0_32:
+  kernel_entry 0
   invalid_entry 0, IRQ_INVALID_EL0_32
 
 vector_fiq_el0_32:
+  kernel_entry 0
   invalid_entry 0, FIQ_INVALID_EL0_32
   
 vector_error_el0_32:
+  kernel_entry 0
   invalid_entry 0, ERROR_INVALID_EL0_32
 
 ENTRY(ret_from_fork)

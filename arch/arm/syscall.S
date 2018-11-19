@@ -1,5 +1,5 @@
 /**
- * @file arch/arm/vector.S
+ * @file arch/arm/syscall.S
  *
  * @author Hiroyuki Chishiro
  */

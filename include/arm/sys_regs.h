@@ -119,8 +119,32 @@
  * one Exception class. See the description of the EC field for more information
  * about the ISS formats.
  */
-
-
+#define ESR_ELx_ISS_MASK 0x1ffffff
+/* 24-10: reserved. */
+/* 9: EA, External abort type.
+ * This bit can provide an IMPLEMENTATION DEFINED classification of synchronous external aborts.
+ * For any abort other than a synchronous external abort this bit returns a value of 0.
+ */
+#define ESR_ELx_ISS_EA (0x1 << 9)
+/* 8: reserved. */
+#define ESR_ELx_ISS_S1PTW_FAULT_ON_THE_STAGE2 (0x1 << 7)
+#define ESR_ELx_ISS_S1PTW_FAULT_NOT_ON_THE_STAGE2 (0x0 << 7)
+/* 6: reserved */
+/* 5-0: IFSC, Instruction fault status code. Indicates the fault that caused the exception */
+#define ESR_ELx_ISS_IFSC_MASK 0x3f
+/* 0b0000LL: Address Size fault. The LL bits indicate the level at which the fault occurred.
+ * 0b0001LL: Translation fault. The LL bits indicate the level at which the fault occurred.
+ * 0b0010LL: Access Flag fault. The LL bits indicate the level at which the fault occurred.
+ * 0b0011LL: Permission fault. The LL bits indicate the level at which the fault occurred.
+ * 0b010000: Synchronous External abort.
+ * 0b011000: Synchronous Parity error on a memory access.
+ * 0b0101LL: Synchronous External abort on a translation table walk.
+ *           The LL bits indicate the level at which the fault occurred.
+ * 0b0111LL: Synchronous Parity error on a memory access on a translation table walk.
+ *           The LL bits indicate the level at which the fault occurred.
+ * 0b100001: Alignment fault.
+ * 0b110000: TLB Conflict fault.
+ */
 
 
 #endif /* __MCUBE_ARM_SYS_REGS_H__ */

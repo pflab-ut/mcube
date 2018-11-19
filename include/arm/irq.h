@@ -80,7 +80,8 @@ static inline void restore_local_irq(unsigned long *flags)
 
 
 void init_vector(void);
-void show_invalid_entry_message(int type, unsigned long esr, unsigned long address);
+void show_invalid_entry_message(int type, unsigned long esr,
+                                unsigned long address, struct full_regs *regs);
 
 
 int handle_uart_interrupt(void);
