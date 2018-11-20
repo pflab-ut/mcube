@@ -41,31 +41,42 @@ ENTRY(arch_switch_to)
   ret
 
 ENTRY(move_to_user_level)
-  mov x29, x0 // save first argument (x0) to unused register (x29)
-#if 0
-  mov x26, x30 // save ret addr (x30) to x26
-  mov x25, sp // save sp (x31)
+#if 1
+  sub sp, sp, 48
+  stp x25, x26, [sp, #16 * 0]
+  stp x27, x28, [sp, #16 * 1]
+  stp x29, x30, [sp, #16 * 2]
+#endif
+//  mov x29, x0 // save first argument (x0) to unused register (x29)
+#if 1
+  mov x26, x30 // save ret addr
+  mov x25, sp // save sp
 #endif
   get_cpu_id x28, x27 // save CPU ID to x28
   // Determine the EL0 Execution state.
-  mov x0, #0b00000 // DAIF=0000 M[4:0]=00000 EL0t.
-  msr spsr_el1, x0
-  adr x0, el0_entry // el1_entry points to the first instruction of
-  msr elr_el1, x0 // EL0 code.
+  mov x29, #0b00000 // DAIF=0000 M[4:0]=00000 EL0t.
+  msr spsr_el1, x29
+  adr x29, el0_entry // el1_entry points to the first instruction of
+  msr elr_el1, x29 // EL0 code.
   eret
 el0_entry:
-#if 0
-  mov x30, x26 // resume ret addr (x30) from x26
-  mov sp, x25 // resume sp (x31)
+  mov x30, x26 // resume ret addr
+  mov sp, x25 // resume sp
+  ldp x25, x26, [sp, #16 * 0]
+  ldp x27, x28, [sp, #16 * 1]
+  ldp x29, x30, [sp, #16 * 2]
+  add sp, sp, 48
+  
+  cmp x0, #PROGRAM_FLOW_NEW_FUNC
+  b.eq el0_new_func
+el0_ret_to: 
   ret
-#endif  
-  mov x0, x28 // move CPU ID (x28) to x0
-  mov x1, #STACK_SIZE
-  mul x0, x0, x1
-  ldr x1, =idle_stack
-  add x2, x0, x1
-  mov sp, x2
-  blr x29 // jump to first argument
-//  bl user_mode_main
+el0_new_func:
+  mov x3, x28 // move CPU ID (x28) to x0
+  mov x4, #STACK_SIZE
+  mul x3, x3, x4
+  ldr x4, =idle_stack
+  add x5, x3, x4
+  mov sp, x5
+  blr x1 // jump to first argument
   b . // infinite loop
-

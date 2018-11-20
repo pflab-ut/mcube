@@ -506,7 +506,7 @@ int print(const char *fmt, ...)
 }
 
 /**
- * The prinft() function produces output according to @b CONSOLE or @b UART.
+ * The printf() function produces output according to @b CONSOLE or @b UART.
  * @param fmt specifies how subsequent arguments.
  * @return Number of characters printed.
  */

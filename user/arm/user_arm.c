@@ -108,21 +108,12 @@ void user_level_main(void)
 
 int kernel_level_main(void)
 {
-  unsigned long sp, ret;
-  asm volatile("mov %0, sp" : "=r"(sp));
-  print("sp = 0x%x\n", sp);
   print("Kernel level started. EL %d\n", get_el());
   print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
-  move_to_user_level(user_level_main);
-  print("kernel_level_main(): EL = %d\n", call_sys_get_mode_level());
-  call_sys_write("call_sys_write()\n");
-#if 0
-  //  call_sys_write("hehe");
-  asm volatile("mov %0, x30" : "=r"(ret));
-  printf("ret = 0x%x\n", ret);
-  asm volatile("mov %0, sp" : "=r"(sp));
-  print("sp = 0x%x\n", sp);
-#endif
+  move_to_user_level(PROGRAM_FLOW_RET_TO, user_level_main);
+  //  move_to_user_level(PROGRAM_FLOW_NEW_FUNC, user_level_main);
+  printf("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
+
   for (;;)
     ;
   return 0;
