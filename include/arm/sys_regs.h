@@ -39,7 +39,7 @@
 #define CNTV_CTL_EL0_ENABLE (0x1 << 0)
 
 
-/* ESR_EL1, Exception Syndrome Register (EL1).
+/* ESR_ELx, Exception Syndrome Registers (EL1-3).
  * Page 1899 of AArch64-Reference-Manual.
  */
 /* 31-26: Exception Class.
@@ -145,6 +145,61 @@
  * 0b100001: Alignment fault.
  * 0b110000: TLB Conflict fault.
  */
+
+
+/* SPSR_ELx, Saved Program Status Registers (EL1-3)
+ * Page 1417 of AArch64-Reference-Manual.
+ */
+/* 31-28: Condition flags
+ * Shows the values of the condition flags immediately before the exception was taken:
+ * N, bit[31] Negative condition flag.
+ * Z, bit[30] Zero condition flag.
+ * C, bit[29] Carry condition flag.
+ * V, bit[28] Overflow condition flag.
+ */
+#define SPSR_ELx_NEGATIVE_CONDITION_FLAG (0x1 << 31)
+#define SPSR_ELx_ZERO_CONDITION_FLAG (0x1 << 30)
+#define SPSR_ELx_CARRY_CONDITION_FLAG (0x1 << 29)
+#define SPSR_ELx_OVERFLOW_CONDITION_FLAG (0x1 << 28)
+/* 27-22: reserved */
+/* 21: Software Step bit */
+#define SPSR_ELx_SOFTWARE_STEP_BIT (0x1 << 21)
+/* 20: Illegal Execution State bit */
+#define SPSR_ELx_ILLEGAL_EXCEPTION_STATE_BIT (0x1 << 20)
+/* 19-10: reserved */
+/* 9: Debug exception mask bit */
+#define SPSR_ELx_DEBUG_EXCEPTION_MASK_BIT (0x1 << 9)
+/* 8-6: Interrupt mask bits
+ * Shows the values of the interrupt mask bits immediately before the exception was taken:
+ * A, bit[8] SError interrupt mask bit.
+ * I, bit[7] IRQ mask bit.
+ * F, bit[6] FIQ mask bit.
+ */
+#define SPSR_ELx_SERROR_INTERRUPT_MASK_BIT (0x1 << 8)
+#define SPSR_ELx_IRQ_MASK_BIT (0x1 << 7)
+#define SPSR_ELx_FIQ_MASK_BIT (0x1 << 6)
+/* 5: reserved */
+/* 4-0: Mode field
+ * For exceptions taken from AArch64 state:
+ * M[4] The value of this is 0. M[4] encodes the value of PSTATE.nRW.
+ * M[3:0] Encodes the Exception level and the stack pointer register selection.
+ * 0b1101 EL3h
+ * 0b1100 EL3t
+ * 0b1001 EL2h
+ * 0b1000 EL2t
+ * 0b0101 EL1h
+ * 0b0100 EL1t
+ * 0b0000 EL0t
+ */
+#define SPSR_ELx_MODE_FIELD_MASK 0x1f
+#define SPSR_ELx_MODE_FIELD_EL0t 0x0
+/* 0x1-0x3: reserved */
+#define SPSR_ELx_MODE_FIELD_EL1t 0x4
+#define SPSR_ELx_MODE_FIELD_EL1h 0x5
+#define SPSR_ELx_MODE_FIELD_EL2t 0x8
+#define SPSR_ELx_MODE_FIELD_EL2h 0x9
+#define SPSR_ELx_MODE_FIELD_EL3t 0xa
+#define SPSR_ELx_MODE_FIELD_EL3h 0xb
 
 
 #endif /* __MCUBE_ARM_SYS_REGS_H__ */

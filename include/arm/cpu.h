@@ -23,7 +23,13 @@
   and \reg, \reg, #0xff000000
   orr \reg, \reg, \reg2
 .endm
-     
+
+.macro get_el
+  mrs x0, CurrentEL
+  lsr x0, x0, #2
+  ret
+.endm
+   
 #else
 static inline unsigned long get_cpu_id(void)
 {
@@ -34,7 +40,13 @@ static inline unsigned long get_cpu_id(void)
 }
 
 
-int get_el(void);
+static inline unsigned long get_el(void)
+{
+  unsigned long el;
+  asm volatile("mrs %0, CurrentEL" : "=r"(el));
+  return el >> 2;
+}
+
 
 #endif /* !__ASSEMBLY__ */
 

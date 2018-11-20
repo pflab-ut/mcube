@@ -49,19 +49,15 @@ asmlinkage int sys_get_cpu_id(void)
 asmlinkage int sys_get_mode_level(void)
 {
 #if CONFIG_ARCH_ARM
-  extern unsigned long ret_from_sys;
-  unsigned long addr;
-  asm volatile("mov %0, X30" : "=r"(addr));
-  //  print("el0_ni_sys = 0x%lx\n", (unsigned long) &ret_from_sys);
-  //  print("addr = 0x%lx\n", addr);
-  if ((unsigned long) &ret_from_sys == addr) {
-    /* call from system call in EL0, and hence return value must be 0. */
-    //    print("call from system call\n");
+  unsigned long spsr;
+  asm volatile("mrs %0, spsr_el1" : "=r"(spsr));
+  //  printk("spsr_el1 = 0x%lx\n", spsr);
+  if ((spsr & SPSR_ELx_MODE_FIELD_MASK) == SPSR_ELx_MODE_FIELD_EL0t) {
     return USER_LEVEL;
   } else {
-    /* otherwise */
-    return get_el();
+    return KERNEL_LEVEL;
   }
+  
 #else
   return KERNEL_LEVEL;
 #endif

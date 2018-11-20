@@ -167,10 +167,10 @@ void power_off(void)
   mmio_out32(GPFSEL4, 0);
   mmio_out32(GPFSEL5, 0);
   mmio_out32(GPPUD, 0);
-  delay(150);
+  delay_cycles(150);
   mmio_out32(GPPUDCLK0, 0xffffffff);
   mmio_out32(GPPUDCLK1, 0xffffffff);
-  delay(150);
+  delay_cycles(150);
   mmio_out32(GPPUDCLK0, 0);
   /* flush GPIO setup */
   mmio_out32(GPPUDCLK1, 0);

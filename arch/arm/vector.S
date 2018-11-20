@@ -46,8 +46,8 @@
   add     x21, sp, #S_FRAME_SIZE
   .endif /* \el == 0 */
   
-  mrs     x22, elr_el1
-  mrs     x23, spsr_el1
+  mrs     x22, elr_el1 // save exception link register
+  mrs     x23, spsr_el1 // save saved program status register
 
   stp     x30, x21, [sp, #16 * 15]
   stp     x22, x23, [sp, #16 * 16]
@@ -62,8 +62,8 @@
   msr     sp_el0, x21
   .endif /* \el == 0 */
   
-  msr     elr_el1, x22
-  msr     spsr_el1, x23
+  msr     elr_el1, x22 // restore exception link register
+  msr     spsr_el1, x23 // restore saved program status register
   
   ldp x0, x1, [sp, #16 * 0]
   ldp x2, x3, [sp, #16 * 1]
@@ -204,7 +204,6 @@ el0_svc:
 
   ldr     x16, [stbl, scno, lsl #3]               // address in the syscall table
   blr     x16                                     // call sys_* routine
-ENTRY(ret_from_sys)
   b       el0_ret_from_syscall
 el0_ni_sys: 
   invalid_entry 0, SYSCALL_ERROR

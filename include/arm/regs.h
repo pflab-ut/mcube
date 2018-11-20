@@ -21,7 +21,7 @@
 struct context_regs {
 	/** General purpose registers in ARM. */
 	uint64_t gpr[32];
-};
+} __attribute__ ((packed));
 
 typedef struct context_regs context_regs;
 
@@ -34,7 +34,11 @@ typedef struct context_regs context_regs;
 struct full_regs {
 	/** General purpose registers in ARM. */
 	struct context_regs cregs;
-};
+  /** Exception link register */
+  uint64_t elr;
+  /** Saved program status register */
+  uint64_t spsr;
+} __attribute__ ((packed));
 
 typedef struct full_regs full_regs;
 
