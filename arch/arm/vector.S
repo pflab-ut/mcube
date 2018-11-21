@@ -54,7 +54,7 @@
   /* set the first argument to sp for accessing full registers */
 .endm
 
-.macro kernel_exit el
+.macro kernel_exit el, type
   ldp     x22, x23, [sp, #16 * 16]
   ldp     x30, x21, [sp, #16 * 15]
   
@@ -83,7 +83,11 @@
 //  ldr x30, [sp, #16 * 15]
   add sp, sp, #S_FRAME_SIZE
   enable_local_irq
+  .if \type == 0
   eret
+  .else
+  ret
+  .endif
 .endm
     
 .balign 2048
@@ -129,7 +133,7 @@ vector_irq_el1t:
   kernel_entry 1
   mov     x0, sp
   bl do_irq
-  kernel_exit 1
+  kernel_exit 1, 0
   
 vector_fiq_el1t:
   kernel_entry 1
@@ -168,13 +172,13 @@ el1h_ni_sys:
 el1h_ret_from_syscall:
 //  disable_local_irq
   str     x0, [sp, #S_X0]                         // returned x0
-  kernel_exit 0
+  kernel_exit 0, 0
   
 vector_irq_el1h:
   kernel_entry 1
   mov     x0, sp
   bl do_irq
-  kernel_exit 1
+  kernel_exit 1, 0
 
 vector_fiq_el1h:
   invalid_entry 1, FIQ_INVALID_EL1h
@@ -210,7 +214,11 @@ el0_ni_sys:
 el0_ret_from_syscall:
 //  disable_local_irq
   str     x0, [sp, #S_X0]                         // returned x0
-  kernel_exit 0
+  cmp scno, #SYS_move_to_kernel_level
+  b.eq el0_ret
+  kernel_exit 0, 0
+el0_ret:
+  kernel_exit 0, 1
     
 vector_irq_el0_64:
   kernel_entry 0

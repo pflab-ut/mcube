@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     
     user_main();
     exit_arch();
-    //    print("main()4\n");
+    print("main() end\n");
   } else {
     //    print("get_cpu_id() = %lu\n", get_cpu_id());
     init_arch_ap();

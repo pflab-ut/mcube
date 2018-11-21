@@ -514,8 +514,6 @@ int printf(const char *fmt, ...)
 {
 	char buf[FOUT_SIZE];
   int n;
-  unsigned long ret;
-  unsigned long sp;
 	va_list ap;
 	va_start(ap, fmt);
   n = vsprint(buf, fmt, ap);  

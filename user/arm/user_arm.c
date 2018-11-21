@@ -100,22 +100,45 @@ void user_process(void)
 
 void user_level_main(void)
 {
+  unsigned long sp;
   print("Now this is user level.\n");
+  asm volatile("mov %0, x30" : "=r"(sp));
+  print("sp = 0x%lx\n", sp);
   print("sys_get_cpu_id() = %d\n", call_sys_get_cpu_id());
   print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
+  call_sys_move_to_kernel_level();
+  asm volatile("mov %0, x30" : "=r"(sp));
+  print("sp = 0x%lx\n", sp);
+  /*
+  unsigned long spsr;
+  asm volatile("mrs %0, spsr_el1" : "=r"(spsr));
+  printf("spsr = 0x%lx\n", spsr);
+  */
   
+  print("user_level_main(): sys_get_mode_level() = %d\n", call_sys_get_mode_level());
+  /* NOTE: return does not work well if calling call_sys_move_to_kernel_level() */
+  //  print("Kernel level started. EL %d\n", get_el());
 }
 
 int kernel_level_main(void)
 {
+  unsigned long sp;
+  asm volatile("mov %0, x30" : "=r"(sp));
+  print("sp = 0x%lx\n", sp);
   print("Kernel level started. EL %d\n", get_el());
   print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
-  move_to_user_level(PROGRAM_FLOW_RET_TO, user_level_main);
-  //  move_to_user_level(PROGRAM_FLOW_NEW_FUNC, user_level_main);
+  //  call_sys_move_to_kernel_level();
+  //  move_to_user_level(PROGRAM_FLOW_RET_TO, user_level_main);
+  move_to_user_level(PROGRAM_FLOW_NEW_FUNC, user_level_main);
   printf("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
+  asm volatile("mov %0, x30" : "=r"(sp));
+  print("sp = 0x%lx\n", sp);
+  //  call_sys_move_to_kernel_level();
+  print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
+  asm volatile("mov %0, x30" : "=r"(sp));
+  print("sp = 0x%lx\n", sp);
 
-  for (;;)
-    ;
+  /* NOTE: return does not work well if calling call_sys_move_to_kernel_level() */
   return 0;
 }
 

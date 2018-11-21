@@ -95,7 +95,8 @@ begin_main:
   b       hang               // should never come here
 
 ENTRY(hang)
-  disable_local_irq
-  wfi
+// NOTE: check if this is EL1 or EL0  
+//  disable_local_irq
+//  wfi
   b       hang
   

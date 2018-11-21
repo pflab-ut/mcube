@@ -63,6 +63,24 @@ asmlinkage int sys_get_mode_level(void)
 #endif
 }
 
+asmlinkage int sys_move_to_kernel_level(void)
+{
+#if 0
+  unsigned long spsr;
+  unsigned long elr;
+  printk("sys_move_to_kernel_level()\n");
+  asm volatile("mrs %0, spsr_el1" : "=r"(spsr));
+  printk("spsr = 0x%lx\n", spsr);
+  spsr |= (spsr & SPSR_ELx_MODE_FIELD_MASK) | SPSR_ELx_MODE_FIELD_EL1h;
+  asm volatile("msr spsr_el1, %0" :: "r"(spsr));
+  printk("spsr = 0x%lx\n", spsr);
+  asm volatile("mrs %0, elr_el1" : "=r"(elr));
+  printk("elr = 0x%x\n", elr);
+  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
+#endif
+  return 0;
+}
+
 asmlinkage int sys_bad_syscall(int number)
 {
 	print("sys_bad_syscall()\n");
@@ -79,5 +97,6 @@ void *const sys_call_table[] = {
   sys_write,
   sys_get_cpu_id,
   sys_get_mode_level,
+  sys_move_to_kernel_level,
   sys_bad_syscall
 };

@@ -35,3 +35,8 @@ ENTRY(call_sys_get_mode_level)
   svc #0
   ret
   
+ENTRY(call_sys_move_to_kernel_level)
+  mov w8, #SYS_move_to_kernel_level
+  svc #0
+  ret
+  
