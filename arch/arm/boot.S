@@ -92,11 +92,12 @@ clear_bss:
   bl      memzero
 begin_main: 
   bl      main
-  b       hang               // should never come here
 
-ENTRY(hang)
-// NOTE: check if this is EL1 or EL0  
-//  disable_local_irq
-//  wfi
-  b       hang
+hang: 
+  bl call_sys_get_mode_level
+  cmp x0, #USER_LEVEL
+  b.eq hang
+  disable_local_irq
+  wfi
+  b .
   

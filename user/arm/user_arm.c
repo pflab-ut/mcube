@@ -118,6 +118,7 @@ void user_level_main(void)
   print("user_level_main(): sys_get_mode_level() = %d\n", call_sys_get_mode_level());
   /* NOTE: return does not work well if calling call_sys_move_to_kernel_level() */
   //  print("Kernel level started. EL %d\n", get_el());
+  inf_loop();
 }
 
 int kernel_level_main(void)
@@ -128,8 +129,8 @@ int kernel_level_main(void)
   print("Kernel level started. EL %d\n", get_el());
   print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
   //  call_sys_move_to_kernel_level();
-  //  move_to_user_level(PROGRAM_FLOW_RET_TO, user_level_main);
-  move_to_user_level(PROGRAM_FLOW_NEW_FUNC, user_level_main);
+  move_to_user_level(PROGRAM_FLOW_RET_TO, user_level_main);
+  //  move_to_user_level(PROGRAM_FLOW_NEW_FUNC, user_level_main);
   printf("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
   asm volatile("mov %0, x30" : "=r"(sp));
   print("sp = 0x%lx\n", sp);
