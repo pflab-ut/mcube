@@ -16,9 +16,36 @@ void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long 
 }
 
 
+
+void enable_pmu(void)
+{
+  unsigned long val = 0;
+  
+  /* Enable user-mode access to counters. */
+  asm volatile("msr pmuserenr_el0, %0" :: "r"
+               ((unsigned long) PMUSERENR_EN | PMUSERENR_ER | PMUSERENR_CR));
+
+  /* Performance Monitors Count Enable Set register bit 30:0 disable, 31 enable.
+   * Can also enable other event counters here. */
+  asm volatile("msr pmcntenset_el0, %0" : : "r" (PMCNTENSET_C));
+
+  /* Enable counters */
+  asm volatile("mrs %0, pmcr_el0" : "=r" (val));
+  asm volatile("msr pmcr_el0, %0" : : "r" (val | PMCR_E));
+}
+
+
 void set_cpu_frequency(void)
 {
   /* Raspberry Pi 3: 1.2 GHz */
+  unsigned long freq = get_cntfrq_el0();
+  unsigned long begin = get_cntvct_el0();
+  unsigned long cpu_freq = get_pmccntr_el0();
+  /* wait for 1s */
+  while (get_cntvct_el0() - begin <= freq) {
+  }
+  printk("CPU Freq = %lu\n", get_pmccntr_el0() - cpu_freq);
+  
   CPU_CLOCK = 1.2 * 1000 * 1000 * 1000;
   CPU_CLOCK_MHZ_PER_USEC = (CPU_CLOCK + 500 * 1000) / (1000 * 1000);
   CPU_USEC_PER_CLOCK_MHZ = (1.0 * 1000 * 1000) / CPU_CLOCK;
@@ -29,5 +56,6 @@ void set_cpu_frequency(void)
 
 void init_cpu(void)
 {
+  enable_pmu();  
   set_cpu_frequency();
 }

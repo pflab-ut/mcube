@@ -263,8 +263,7 @@ void wait(unsigned long count);
 static inline void begin_budget(struct thread_struct *th)
 {
 	if (th->id > 0) {
-		unsigned long ctime = get_current_cpu_time();
-		th->sched.begin_cpu_time = ctime;
+		th->sched.begin_cpu_time = get_current_cpu_time();
 	}
 }
 

@@ -179,6 +179,6 @@ int user_arch_main(void)
 #if CONFIG_ARCH_ARM_RASPI3
   user_raspi3_main();
 #endif /* CONFIG_ARCH_ARM_RASPI3 */
-  print("user_arch_main(): end\n");
+  //  print("user_arch_main(): end\n");
   return 0;
 }

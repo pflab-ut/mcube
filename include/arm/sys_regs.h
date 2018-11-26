@@ -202,4 +202,157 @@
 #define SPSR_ELx_MODE_FIELD_EL3h 0xb
 
 
+
+/* PMUSERENR_EL0, Performance Monitors User Enable Register */
+/* 31-4: reserved */
+/* 3: Event counter read enable.
+ * The possible values of this bit are:
+ * 0 : EL0 read access to PMXEVCNTR_EL0 / PMEVCNTR<n>_EL0 and read/write access
+ * to PMSELR_EL0 disabled if PMUSERENR_EL0.EN is also 0.
+ * 1 : EL0 read access to PMXEVCNTR_EL0 / PMEVCNTR<n>_EL0 and read/write access
+ * to PMSELR_EL0 enabled.
+ * On Warm reset, the field reset value is architecturally UNKNOWN.
+ */
+#define PMUSERENR_ER (0x1 << 3)
+/* 2: Cycle counter read enable.
+ * The possible values of this bit are:
+ * 0 : EL0 read access to PMCCNTR_EL0 disabled if PMUSERENR_EL0.EN is also 0.
+ * 1 : EL0 read access to PMCCNTR_EL0 enabled.
+ * On Warm reset, the field reset value is architecturally UNKNOWN.
+ */
+#define PMUSERENR_CR (0x1 << 2)
+/* 1: Software Increment write enable.
+ * The possible values of this bit are:
+ * 0 : EL0 write access to PMSWINC_EL0 disabled if PMUSERENR_EL0.EN is also 0.
+ * 1 : EL0 write access to PMSWINC_EL0 enabled.
+ * On Warm reset, the field reset value is architecturally UNKNOWN.
+ */
+#define PMUSERENR_SW (0x1 << 1)
+/* 0: EL0 access enable bit. The possible values of this bit are:
+ * 0 : EL0 access to the Performance Monitors disabled.
+ * 1 : EL0 access to the Performance Monitors enabled. Can access all PMU registers at EL0,
+ * except for writes to PMUSERENR_EL0 and reads/writes of PMINTENSET_EL1 and PMINTENCLR_EL1.
+ * On Warm reset, the field reset value is architecturally UNKNOWN.
+ */
+#define PMUSERENR_EN (0x1 << 0)
+
+
+/* PMCNTENSET, Performance Monitors Count Enable Set register */
+/* 31: PMCCNTR enable bit.
+ * Enables the cycle counter register. Possible values are:
+ * 0 : When read, means the cycle counter is disabled. When written, has no effect.
+ * 1 : When read, means the cycle counter is enabled. When written, enables the cycle counter.
+ * On Warm reset, the field reset value is architecturally UNKNOWN.
+ */
+#define PMCNTENSET_C (0x1 << 31)
+/* 30-0: P<x>, bit [x] for x = 0 to (N - 1)
+ * Event counter enable bit for PMEVCNTR<x>.
+ * * When EL2 is implemented, in Non-secure EL1 and EL0, N is the value in HDCR.HPMN.
+ * Otherwise, N is the value in PMCR.N.
+ * Bits [30:N] are RAZ/WI.
+ * Possible values of each bit are:
+ * 0 : When read, means that PMEVCNTR<x> is disabled. When written, has no effect.
+ * 1 : When read, means that PMEVCNTR<x> event counter is enabled. When written,
+ * enables PMEVCNTR<x>.
+ */
+#define PMCNTENSET_P(x) (0x1 << (x))
+
+
+/* PMCR, Performance Monitors Control Register */
+/* 31-24: Implementer code.
+ * This field is RO with an IMPLEMENTATION DEFINED value.
+ * The implementer codes are allocated by ARM. Values have the same interpretation
+ * as bits [31:24] of the MIDR.
+ */
+#define PMCR_IMP_MASK (0xff << 24)
+/* 23-16: Identification code.
+ * This field is RO with an IMPLEMENTATION DEFINED value.
+ * Each implementer must maintain a list of identification codes that is specific
+ * to the implementer. A specific implementation is identified by the combination
+ * of the implementer code and the identification code.
+ */
+#define PMCR_IDCODE_MASK (0xff << 16)
+/* 15-11: Number of event counters.
+ * This field is RO with an IMPLEMENTATION DEFINED value that indicates the number
+ * of counters implemented.
+ * The value of this field is the number of counters implemented, from 0b00000
+ * for no counters to 0b11111 for 31 counters.
+ * An implementation can implement only the Cycle Count Register, PMCCNTR.
+ * This is indicated by a value of 0b00000 for the N field.
+ */
+#define PMCR_N_MASK (0xf << 11)
+/* 10-7: reserved */
+/* 6: Long cycle counter enable.
+ * Determines which PMCCNTR bit generates an overflow recorded by PMOVSR[31].
+ * 0 : Cycle counter overflow on increment that changes PMCCNTR[31] from 1 to 0.
+ * 1 : Cycle counter overflow on increment that changes PMCCNTR[63] from 1 to 0.
+ * ARM deprecates use of PMCR.LC = 0.
+ * On Warm reset, the field reset value is architecturally UNKNOWN.
+ */
+#define PMCR_LC (0x1 << 6)
+/* 5: Disable cycle counter when event counting is prohibited.
+ * The possible values of this bit are:
+ * 0 PMCCNTR, if enabled, counts when event counting is prohibited.
+ * 1 PMCCNTR does not count when event counting is prohibited.
+ * Event counting is prohibited when ProfilingProhibited(IsSecure(),PSTATE.EL) == TRUE.
+ * This bit is RW.
+ * On Warm reset, the field resets to 0.
+ */
+#define PMCR_DP (0x1 << 5)
+/* 4: Enable export of events in an IMPLEMENTATION DEFINED event stream.
+ * The possible values of this bit are:
+ * 0 : Do not export events.
+ * 1 : Export events where not prohibited.
+ * This bit is used to permit events to be exported to another debug device,
+ * such as an OPTIONAL trace extension, over an event bus.
+ * If the implementation does not include such an event bus, this bit is RAZ/WI.
+ * This bit does not affect the generation of Performance Monitors overflow
+ * interrupt requests or signaling to a cross-trigger interface (CTI) that can be
+ * implemented as signals exported from the processor.
+ * If the implementation does not include an exported event stream, this bit is RAZ/WI.
+ * Otherwise this bit is RW.
+ * On Warm reset, the field resets to 0.
+ */
+#define PMCR_X (0x1 << 4)
+/* 3: Clock divider.
+ * The possible values of this bit are:
+ * 0 : When enabled, PMCCNTR counts every clock cycle.
+ * 1 : When enabled, PMCCNTR counts once every 64 clock cycles.
+ * This bit is RW.
+ * If PMCR.LC == 1, this bit is ignored and the cycle counter counts every clock cycle.
+ * ARM deprecates use of PMCR.D = 1.
+ * On Warm reset, the field resets to 0.
+ */
+#define PMCR_D (0x1 << 3)
+/* 2: Cycle counter reset.
+ * This bit is WO. The effects of writing to this bit are:
+ * 0 : No action.
+ * 1 : Reset PMCCNTR to zero.
+ * This bit is always RAZ.
+ * Resetting PMCCNTR does not clear the PMCCNTR overflow bit to 0.
+ * On Warm reset, the field reset value is architecturally UNKNOWN.
+ */
+/* 1: Event counter reset.
+ * This bit is WO.
+ * The effects of writing to this bit are:
+ * 0 : No action.
+ * 1 : Reset all event counters accessible in the current EL, not including PMCCNTR, to zero.
+ * This bit is always RAZ.
+ * In Non-secure EL0 and EL1, if EL2 is implemented, a write of 1 to this bit does not reset event
+ * counters that HDCR.HPMN reserves for EL2 use.
+ * In EL2 and EL3, a write of 1 to this bit resets all the event counters.
+ * Resetting the event counters does not clear any overflow bits to 0.
+ * On Warm reset, the field reset value is architecturally UNKNOWN.
+ */
+#define PMCR_P (0x1 << 1)
+/* 0: Enable. The possible values of this bit are:
+ * 0 : All counters, including PMCCNTR, are disabled.
+ * 1 : All counters are enabled by PMCNTENSET.
+ * This bit is RW.
+ * In Non-secure EL0 and EL1, if EL2 is implemented, this bit does not affect
+ * the operation of event counters that HDCR.HPMN reserves for EL2 use.
+ * On Warm reset, the field resets to 0.
+ */
+#define PMCR_E (0x1 << 0)
+
 #endif /* __MCUBE_ARM_SYS_REGS_H__ */

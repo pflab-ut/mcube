@@ -207,7 +207,7 @@ int run(unsigned long nr_threads)
 	while (sched_end == FALSE) {
     //print("");
     // print("get_timer_count() = %lu\n", get_timer_count());
-    // printk("handler CNTV_TVAL: %lu\n", get_cntvct_el0()); 
+    // printk("CNTV_TVAL: %lu\n", get_cntvct_el0()); 
     //    print("0");
     //    halt();
     //    print("sched_end = %d\n", sched_end);
