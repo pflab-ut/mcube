@@ -14,6 +14,10 @@ initialize_stack:
   ldr x1, =idle_stack
   add x2, x0, x1
   mov sp, x2
+
+use_sp_el0_at_all_exception_levels: 
+  mov x0, 0x0
+  msr spsel, x0
   
 initialize_vector_addresses_el3_el2_el1:
   ldr x0, =vector

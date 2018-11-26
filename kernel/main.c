@@ -21,7 +21,7 @@ double CPU_CLOCK_MHZ_PER_NSEC;
 double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* !CONFIG_ARCH_AXIS */
 
-static unsigned int is_initialized = FALSE;
+volatile static unsigned int is_initialized = FALSE;
 
 int main(int argc, char *argv[])
 {

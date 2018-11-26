@@ -65,18 +65,22 @@ asmlinkage int sys_get_mode_level(void)
 
 asmlinkage int sys_move_to_kernel_level(void)
 {
-#if 0
+#if 1
+  /* NOTE: this implementation does not work well and this problem may depend on Qemu. */
   unsigned long spsr;
   unsigned long elr;
-  printk("sys_move_to_kernel_level()\n");
+  //  printk("sys_move_to_kernel_level()\n");
   asm volatile("mrs %0, spsr_el1" : "=r"(spsr));
   printk("spsr = 0x%lx\n", spsr);
   spsr |= (spsr & SPSR_ELx_MODE_FIELD_MASK) | SPSR_ELx_MODE_FIELD_EL1h;
+  //  spsr = 0x60000005;
+  //  spsr = 0x60000015;
+  //  spsr = 0x15;
   asm volatile("msr spsr_el1, %0" :: "r"(spsr));
   printk("spsr = 0x%lx\n", spsr);
   asm volatile("mrs %0, elr_el1" : "=r"(elr));
   printk("elr = 0x%x\n", elr);
-  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
+  //  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
 #endif
   return 0;
 }

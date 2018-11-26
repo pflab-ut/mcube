@@ -40,11 +40,13 @@
   stp x28, x29, [sp, #16 * 14]
 //  str x30, [sp, #16 * 15]
 
+#if 0  
   .if     \el == 0
   mrs     x21, sp_el0
   .else
   add     x21, sp, #S_FRAME_SIZE
   .endif /* \el == 0 */
+#endif
   
   mrs     x22, elr_el1 // save exception link register
   mrs     x23, spsr_el1 // save saved program status register
@@ -57,11 +59,12 @@
 .macro kernel_exit el, type
   ldp     x22, x23, [sp, #16 * 16]
   ldp     x30, x21, [sp, #16 * 15]
-  
+
+#if 0  
   .if \el == 0
   msr     sp_el0, x21
   .endif /* \el == 0 */
-  
+#endif
   msr     elr_el1, x22 // restore exception link register
   msr     spsr_el1, x23 // restore saved program status register
   
@@ -86,6 +89,10 @@
   .if \type == 0
   eret
   .else
+//  eret
+// NOTE: 48 (112) means margin of ret against eret
+//  add sp, sp, 48
+  add sp, sp, 112
   ret
   .endif
 .endm
