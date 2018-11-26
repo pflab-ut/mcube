@@ -21,7 +21,7 @@ double CPU_CLOCK_MHZ_PER_NSEC;
 double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* !CONFIG_ARCH_AXIS */
 
-volatile static unsigned int is_initialized = FALSE;
+volatile static unsigned int IsInitialized = FALSE;
 
 int main(int argc, char *argv[])
 {
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 #endif
   if (cpu == 0) {
     init_arch();
-    is_initialized = TRUE;
+    IsInitialized = TRUE;
     print("main()\n");
     init_rq();
     print("main()2\n");
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     //    print("get_cpu_id() = %lu\n", get_cpu_id());
     init_arch_ap();
     /* wait until init_arch() is finished. */
-    while (is_initialized == FALSE) {
+    while (IsInitialized == FALSE) {
     }
     /* do application processor's specific code. */
     ap_main();

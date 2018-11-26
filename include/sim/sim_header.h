@@ -8,8 +8,8 @@
 
 #include <sim/atomic.h>
 #include <sim/irq.h>
-#include <sim/ops.h>
 #include <sim/cpu.h>
+#include <sim/ops.h>
 #include <sim/regs.h>
 #include <sim/spinlock.h>
 #include <sim/system.h>

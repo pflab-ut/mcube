@@ -65,7 +65,7 @@ asmlinkage int sys_get_mode_level(void)
 
 asmlinkage int sys_move_to_kernel_level(void)
 {
-#if 1
+#if CONFIG_ARCH_ARM
   /* NOTE: this implementation does not work well and this problem may depend on Qemu. */
   unsigned long spsr;
   unsigned long elr;

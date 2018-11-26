@@ -468,7 +468,8 @@ out:
 }
 
 /**
- * The printk() function produces output according to @b CONSOLE or @b UART.
+ * The printk() function produces output according to @b CONSOLE or @b UART
+ * for kernel level.
  * @param fmt specifies how subsequent arguments.
  * @return Number of characters printed.
  */
@@ -485,7 +486,8 @@ int printk(const char *fmt, ...)
 }
 
 /**
- * The print() function produces output according to @b CONSOLE or @b UART.
+ * The print() function produces output according to @b CONSOLE or @b UART
+ * for kernel or user level.
  * @param fmt specifies how subsequent arguments.
  * @return Number of characters printed.
  */
@@ -506,7 +508,8 @@ int print(const char *fmt, ...)
 }
 
 /**
- * The printf() function produces output according to @b CONSOLE or @b UART.
+ * The printf() function produces output according to @b CONSOLE or @b UART
+ * for user level.
  * @param fmt specifies how subsequent arguments.
  * @return Number of characters printed.
  */

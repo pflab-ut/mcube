@@ -72,8 +72,8 @@ void raspi3_int_main(void)
   printk("cpu = %d\n", cpu);
 
 
-  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(1, 0), LP_MAILBOX0_INTERRUPT_DEBUG);
   //  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(1, 0), LP_MAILBOX0_INTERRUPT_DEBUG);
+  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(0, 0), LP_MAILBOX0_INTERRUPT_SCHED);
 
   //disable_mailbox_interrupt();
 }

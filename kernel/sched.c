@@ -112,7 +112,7 @@ void do_release(void)
 void do_sched(void)
 {
   unsigned long cpu = get_cpu_id();
-  print("do_sched()\n");
+  printk("do_sched()\n");
 	struct thread_struct *th;
   pdebug_deadline_tq();
 
@@ -127,7 +127,7 @@ void do_sched(void)
 	} else {
 		current_th[cpu] = &idle_th[cpu];
 	}
-  print("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
+  printk("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
 
 	if (prev_th[cpu] != &idle_th[cpu] && is_preempted(prev_th[cpu])) {
 		/* preemption occurs */
@@ -142,7 +142,7 @@ void do_sched(void)
   }
   //  switch_to(current_th[cpu]);
 	//	pdebug_jiffies();
-	PDEBUG("do_sched(): end\n");
+	printk("do_sched(): end\n");
 }
 
 
