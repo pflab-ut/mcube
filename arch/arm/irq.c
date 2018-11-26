@@ -112,4 +112,8 @@ void init_irq(void)
 {
   //  printk("init_irq()\n");
   enable_local_irq();
+
+#if CONFIG_ARCH_ARM_RASPI3
+  enable_mailbox_interrupt();
+#endif /* CONFIG_ARCH_ARM_RASPI3 */
 }

@@ -1,5 +1,5 @@
 /**
- * @file arch/arm/raspi3/mailbox.c
+ * @file arch/arm/raspi3/videocore_mailbox.c
  *
  * @author Hiroyuki Chishiro
  */

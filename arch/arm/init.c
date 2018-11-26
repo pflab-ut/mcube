@@ -6,7 +6,6 @@
 #include <mcube/mcube.h>
 
 
-
 void shell(void)
 {
   int c;

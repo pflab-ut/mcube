@@ -339,5 +339,32 @@
 #define LP_CORE_FIQ_SRC_CNTPSIRQ_INTERRUPT (0x1 << 0)
 
 
+/* Core [cpu] Mailbox [mb] Write-Set Registers */
+#define LP_MAILBOX0_INTERRUPT_DEBUG (0x1 << 0)
+#define LP_MAILBOX0_INTERRUPT_SCHED (0x1 << 1)
+
+
+#ifndef __ASSEMBLY__
+
+static inline void enable_mailbox_interrupt(void)
+{
+  int i;
+  for (i = 0; i < 4; i++) {
+    mmio_out32(LP_CORE_MAILBOXES_INTERRUPT_CTRL(i), 0xf);
+  }
+}
+
+static inline void disable_mailbox_interrupt(void)
+{
+  int i;
+  for (i = 0; i < 4; i++) {
+    mmio_out32(LP_CORE_MAILBOXES_INTERRUPT_CTRL(i), 0x0);
+  }
+}
+
+
+#endif /* !__ASSEMBLY__ */
+
+
 #endif /*	__MCUBE_ARM_RASPI3_LOCAL_PERIPHERAL_H__ */
 

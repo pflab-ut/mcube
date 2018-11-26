@@ -68,23 +68,14 @@ void raspi3_sd_main(void)
 void raspi3_int_main(void)
 {
   unsigned long cpu = get_cpu_id();
-  int i;
   printk("raspi3_int_main()\n");
   printk("cpu = %d\n", cpu);
 
-  for (i = 0; i < 4; i++) {
-    mmio_out32(LP_CORE_MAILBOXES_INTERRUPT_CTRL(i), 0xf);
-  }
 
-  //  mmio_out32(LP_CORE0_MAILBOX0_WRITE_SET, 0x1);
-  //  mmio_out32(LP_CORE0_MAILBOX1_WRITE_SET, 0x1);
-  //  mmio_out32(LP_CORE0_MAILBOX2_WRITE_SET, 0x1);
-  //  mmio_out32(LP_CORE0_MAILBOX3_WRITE_SET, 0x1);
+  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(1, 0), LP_MAILBOX0_INTERRUPT_DEBUG);
+  //  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(1, 0), LP_MAILBOX0_INTERRUPT_DEBUG);
 
-  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(1, 0), 0x1);
-  //  mmio_out32(LP_CORE1_MAILBOX1_WRITE_SET, 0x1);
-  //  mmio_out32(LP_CORE1_MAILBOX2_WRITE_SET, 0x1);
-  //  mmio_out32(LP_CORE1_MAILBOX3_WRITE_SET, 0x1);
+  //disable_mailbox_interrupt();
 }
 
 

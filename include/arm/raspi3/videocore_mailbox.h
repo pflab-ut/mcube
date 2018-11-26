@@ -1,10 +1,10 @@
 /**
- * @file include/arm/raspi3/mailbox.h
+ * @file include/arm/raspi3/videocore_mailbox.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_MAILBOX_H__
-#define	__MCUBE_ARM_RASPI3_MAILBOX_H__
+#ifndef	__MCUBE_ARM_RASPI3_VIDEOCORE_MAILBOX_H__
+#define	__MCUBE_ARM_RASPI3_VIDEOCORE_MAILBOX_H__
 
 #define VIDEOCORE_MAILBOX_READ   (VIDEOCORE_MAILBOX_BASE + 0x00)
 #define VIDEOCORE_MAILBOX_POLL   (VIDEOCORE_MAILBOX_BASE + 0x10)
@@ -175,5 +175,5 @@ void init_frame_buffer(struct frame_buffer *fb);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /*	__MCUBE_ARM_RASPI3_MAILBOX_H__ */
+#endif /*	__MCUBE_ARM_RASPI3_VIDEOCORE_MAILBOX_H__ */
 

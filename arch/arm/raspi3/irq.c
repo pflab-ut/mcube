@@ -66,6 +66,70 @@ void handle_gpu_interrupt(void)
 }
 
 
+void handle_mailbox_interrupt(unsigned int cpu, unsigned int mb)
+{
+  switch (mb) {
+  case 0:
+    switch (mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb))) {
+    case LP_MAILBOX0_INTERRUPT_DEBUG:
+      printk("DEBUG: CPU %u Mailbox %u\n", cpu, mb);
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_DEBUG);
+      break;
+    case LP_MAILBOX0_INTERRUPT_SCHED:
+      do_sched();
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_SCHED);
+      break;
+    default:
+      printk("Error: Unknown Interrupt 0x%x\n",
+             mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb)));
+    }
+    break;
+  case 1:
+    switch (mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb))) {
+    default:
+      printk("Error: Unknown Interrupt 0x%x\n",
+             mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb)));
+    }
+    break;
+  case 2:
+    switch (mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb))) {
+    default:
+      printk("Error: Unknown Interrupt 0x%x\n",
+             mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb)));
+    }
+    break;
+  case 3:
+    switch (mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb))) {
+    default:
+      printk("Error: Unknown Interrupt 0x%x\n",
+             mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb)));
+    }
+    break;
+  default:
+    printk("Error: Unknown Mailbox %u\n", mb);
+    break;
+  }  
+}
+
+
+void do_irq_mailbox(unsigned int cpu, unsigned int mb)
+{
+  switch (cpu) {
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+    handle_mailbox_interrupt(cpu, mb);
+    break;
+  default:
+    printk("Error: Unknown CPU %u\n", cpu);
+    return;
+    break;
+  }
+}
+
 
 asmlinkage int do_irq(struct full_regs *regs)
 {
@@ -84,16 +148,16 @@ asmlinkage int do_irq(struct full_regs *regs)
     handle_gpu_interrupt();
     break;
   case LP_CORE_IRQ_SRC_MAILBOX_INTERRUPT(0):
-    mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, 0), 0xffffffff);
+    do_irq_mailbox(cpu, 0);
     break;
   case LP_CORE_IRQ_SRC_MAILBOX_INTERRUPT(1):
-    mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, 1), 0xffffffff);
+    do_irq_mailbox(cpu, 1);
     break;
   case LP_CORE_IRQ_SRC_MAILBOX_INTERRUPT(2):
-    mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, 2), 0xffffffff);
+    do_irq_mailbox(cpu, 2);
     break;
   case LP_CORE_IRQ_SRC_MAILBOX_INTERRUPT(3):
-    mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, 3), 0xffffffff);
+    do_irq_mailbox(cpu, 3);
     break;
   case LP_CORE_IRQ_SRC_CNTPSIRQ_INTERRUPT:
   case LP_CORE_IRQ_SRC_CNTPNSIRQ_INTERRUPT:
@@ -103,7 +167,7 @@ asmlinkage int do_irq(struct full_regs *regs)
   case LP_CORE_IRQ_SRC_LOCAL_TIMER_INTERRUPT:
     /* LP_CORE_IRQ_SRC_PERIPHERAL(x) not used */
   default:
-    printk("Unknown IRQ 0x%lx\n", irq);
+    printk("Error: Unknown IRQ 0x%lx\n", irq);
     return 2;
     break;
   }
