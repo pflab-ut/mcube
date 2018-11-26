@@ -35,20 +35,7 @@ struct cpuid_info {
 
 typedef struct cpuid_info cpuid_info;
 
-static void cpuid(unsigned int op,
-                  unsigned int *eax, unsigned int *ebx,
-                  unsigned int *ecx, unsigned int *edx);
-
-static inline int get_nr_cpu_cores(void)
-{
-  cpuid_info cinfo;
-  cpuid(0x4, &cinfo.eax, &cinfo.ebx, &cinfo.ecx, &cinfo.edx);
-  if (cinfo.eax & 0x1f) {
-    return ((cinfo.eax >> 26) + 1);
-  }
-  return 1;
-}
-
+int get_nr_cpu_cores(void);
 
 
 #define get_cpu_id() current_cpu

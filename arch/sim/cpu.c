@@ -8,6 +8,16 @@
 /* NOTE: current_cpu == get_cpu_id() */
 unsigned long current_cpu = 0;
 
+int get_nr_cpu_cores(void)
+{
+  cpuid_info cinfo;
+  cpuid(0x4, &cinfo.eax, &cinfo.ebx, &cinfo.ecx, &cinfo.edx);
+  if (cinfo.eax & 0x1f) {
+    return ((cinfo.eax >> 26) + 1);
+  }
+  return 1;
+}
+
 
 void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg)
 {
