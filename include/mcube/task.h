@@ -19,9 +19,6 @@
 
 #define OFFSET_OF_CPU_CONTEXT 0
 
-#define PROGRAM_FLOW_NEW_FUNC 0x0
-#define PROGRAM_FLOW_RET_TO 0x1
-
 
 #define NR_TASKS 0x10
 
@@ -74,13 +71,13 @@ static inline void preempt_enable(void)
 
 #define	TASK_ID 1
 
-#define INIT_TASK {                             \
-    .id		= TASK_ID,                            \
-    .top_thread	= &idle_th[0],                  \
-    .state		= 0,                              \
-    .counter	= 0,                              \
-    .priority	= 1,                              \
-    .preempt_count = 0                          \
+#define INIT_TASK {                                 \
+    .id		= TASK_ID,                                \
+    .top_thread	= &kernel_th[0],                    \
+    .state		= 0,                                  \
+    .counter	= 0,                                  \
+    .priority	= 1,                                  \
+    .preempt_count = 0                              \
   }
 
 
@@ -106,7 +103,7 @@ void add_thread_to_task(struct thread_struct *);
 void delete_thread_from_task(struct thread_struct *);
 int exit_task(void);
 
-int move_to_user_level(unsigned int program_flow, void (*func)(void));
+int move_to_user_level(void);
 
 struct task_struct *do_create_task(struct th_attr *attr);
 

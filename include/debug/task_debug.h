@@ -41,7 +41,7 @@ static inline void print_task_bythid(int thid)
 	struct thread_struct *th;
   unsigned long cpu = get_cpu_id();
 	if (thid == 0) {
-		th = &idle_th[cpu];
+		th = &kernel_th[cpu];
 	} else {
 		th = &ths[thid];
 	}

@@ -35,18 +35,19 @@ void enable_pmu(void)
 }
 
 
-void set_cpu_frequency(void)
+void set_cpu_clock(void)
 {
   /* Raspberry Pi 3: 1.2 GHz */
-  unsigned long freq = get_cntfrq_el0();
+  unsigned long clock = get_cntfrq_el0();
   unsigned long begin = get_cntvct_el0();
-  unsigned long cpu_freq = get_pmccntr_el0();
+  unsigned long cpu_clock = get_pmccntr_el0();
   /* wait for 1s */
-  while (get_cntvct_el0() - begin <= freq) {
+  while (get_cntvct_el0() - begin <= clock) {
   }
-  printk("CPU Freq = %lu\n", get_pmccntr_el0() - cpu_freq);
+  cpu_clock = get_pmccntr_el0() - cpu_clock;
+  printk("CPU Clock = %lu\n", cpu_clock);
   
-  CPU_CLOCK = 1.2 * 1000 * 1000 * 1000;
+  CPU_CLOCK = cpu_clock;
   CPU_CLOCK_MHZ_PER_USEC = (CPU_CLOCK + 500 * 1000) / (1000 * 1000);
   CPU_USEC_PER_CLOCK_MHZ = (1.0 * 1000 * 1000) / CPU_CLOCK;
   CPU_CLOCK_MHZ_PER_NSEC = CPU_CLOCK / (1.0 * 1000 * 1000 * 1000);
@@ -57,5 +58,5 @@ void set_cpu_frequency(void)
 void init_cpu(void)
 {
   enable_pmu();  
-  set_cpu_frequency();
+  set_cpu_clock();
 }

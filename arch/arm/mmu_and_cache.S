@@ -40,7 +40,7 @@ level2_pagetable:
 ENTRY(configure_mmu_and_cache)  
 clean_and_invalidate_cache:
   mrs x0, sctlr_el3 // read sctlr_el3
-  bic x0, x0, #(0x1 << 2) // disable D-cache.
+  bic x0, x0, #SCTLR_ELx_C // disable D-cache.
   msr sctlr_el3, x0 // write sctlr_el3
   /*
    * invalidate Data cache to make the code general purpose.

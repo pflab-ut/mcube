@@ -6,13 +6,40 @@
 #include <mcube/mcube.h>
 
 
+void kernel_level_main(void)
+{
+  unsigned long ret;
+  unsigned long sp;
+  asm volatile("mov %0, x30" : "=r"(ret));
+  print("ret = 0x%lx\n", ret);
+  asm volatile("mov %0, sp" : "=r"(sp));
+  print("sp = 0x%x\n", sp);
+  //  print("Kernel level started. EL %d\n", get_el());
+  print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
+  //  call_sys_move_to_kernel_level();
+  move_to_user_level();
+  printf("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
+  asm volatile("mov %0, x30" : "=r"(ret));
+  print("ret = 0x%lx\n", ret);
+  asm volatile("mov %0, sp" : "=r"(sp));
+  print("sp = 0x%x\n", sp);
+  call_sys_move_to_kernel_level();
+  print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
+  asm volatile("mov %0, x30" : "=r"(ret));
+  print("ret = 0x%lx\n", ret);
+  asm volatile("mov %0, sp" : "=r"(sp));
+  print("sp = 0x%x\n", sp);
+  
+}
+
+
 void *user_func(void *arg)
 {
-  unsigned long id = *(int *) arg;
+  unsigned long id = *(int *) arg; 
+
   while (1) {
-    print("%lu", id);
-    delay(1000);
-    //  do_end_job(&ths[id]);
+    print("%lu\n", id);
+    //    delay(1000);
   }
   return NULL;
 }
@@ -20,7 +47,7 @@ void *user_func(void *arg)
 int user_thread_main(void)
 {
   int i;
-  int nr_threads = 3;
+  int nr_threads = 1;
   uint32_t ids[NR_THREADS];
   struct th_attr thas[NR_THREADS] = INIT_THAS;
   sched_time = 5;
@@ -98,71 +125,15 @@ void user_process(void)
 }
 
 
-void user_level_main(void)
-{
-  unsigned long sp;
-  print("Now this is user level.\n");
-  asm volatile("mov %0, sp" : "=r"(sp));
-  print("sp = 0x%lx\n", sp);
-  print("sys_get_cpu_id() = %d\n", call_sys_get_cpu_id());
-  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
-  call_sys_move_to_kernel_level();
-  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
-  asm volatile("mov %0, sp" : "=r"(sp));
-  print("sp = 0x%lx\n", sp);
-  /*
-  unsigned long spsr;
-  asm volatile("mrs %0, spsr_el1" : "=r"(spsr));
-  printf("spsr = 0x%lx\n", spsr);
-  */
-  
-  /* NOTE: return does not work well if calling call_sys_move_to_kernel_level() */
-  //  print("Kernel level started. EL %d\n", get_el());
-  //  inf_loop();
-}
-
-int kernel_level_main(void)
-{
-  unsigned long ret;
-  unsigned long sp;
-  asm volatile("mov %0, x30" : "=r"(ret));
-  print("ret = 0x%lx\n", ret);
-  asm volatile("mov %0, sp" : "=r"(sp));
-  print("sp = 0x%x\n", sp);
-  //  print("Kernel level started. EL %d\n", get_el());
-  print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
-  //  call_sys_move_to_kernel_level();
-  //  move_to_user_level(PROGRAM_FLOW_RET_TO, user_level_main);
-  move_to_user_level(PROGRAM_FLOW_NEW_FUNC, user_level_main);
-  printf("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
-  asm volatile("mov %0, x30" : "=r"(ret));
-  print("ret = 0x%lx\n", ret);
-  asm volatile("mov %0, sp" : "=r"(sp));
-  print("sp = 0x%x\n", sp);
-  call_sys_move_to_kernel_level();
-  print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
-  asm volatile("mov %0, x30" : "=r"(ret));
-  print("ret = 0x%lx\n", ret);
-  asm volatile("mov %0, sp" : "=r"(sp));
-  print("sp = 0x%x\n", sp);
-  
-  /* NOTE: return does not work well if calling call_sys_move_to_kernel_level() */
-  int i;
-  for (i = 0; i < 32; i++) {
-    print("sp[%d] = 0x%lx\n", i, *((unsigned long *) (sp + 8 * i)));
-  }
-  return 0;
-}
-
-
-
 int ap_main(void)
 {
   unsigned long cpu = get_cpu_id();
-  delay(10000 * cpu);
+  delay(100000 * cpu);
   printk("ap_main()\n");
+#if 1
   for (;;)
     ;
+#endif
   return 0;
 }
 
@@ -175,10 +146,10 @@ int user_arch_main(void)
   //  user_thread_main();
   // user_ap_main();
   // user_dmac_main();
-  //  kernel_level_main();
+  kernel_level_main();
 #if CONFIG_ARCH_ARM_RASPI3
-  user_raspi3_main();
+  //  user_raspi3_main();
 #endif /* CONFIG_ARCH_ARM_RASPI3 */
-  //  print("user_arch_main(): end\n");
+  print("user_arch_main(): end\n");
   return 0;
 }

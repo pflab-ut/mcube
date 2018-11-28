@@ -11,7 +11,6 @@
 /* Number of intra-kernel CPUs in multikernel */
 #define NR_INTER_KERNEL_CPUS 1
 
-
 /** CPU clock to second. */
 #define CPU_CLOCK_TO_SEC(clock) ((clock) / CPU_CLOCK)
 /** CPU clock to millisecond. */

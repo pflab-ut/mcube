@@ -41,6 +41,7 @@ void show_invalid_entry_message(int type, unsigned long esr,
   printk("%s, ESR: 0x%lx, EC: 0x%lx, address: 0x%lx\r\n",
          entry_error_messages[type], esr, esr >> ESR_ELx_EC_SHIFT, address);
   dump_registers(regs);
+  
 }
 
 void do_switch_thread(void)
@@ -77,7 +78,7 @@ int handle_timer_interrupt(void)
   printk("handler CNTV_TVAL: %lu\n", get_cntvct_el0());
   //  printk("handler CNTVCT   : 0x%lx\n", get_cntvct_el0());
   pdebug_array(run_tq[cpu].array);
-  if (current_th[cpu] != &idle_th[cpu]) {
+  if (current_th[cpu] != &kernel_th[cpu]) {
     printk("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
     current_th[cpu]->sched.remaining
@@ -97,7 +98,7 @@ int handle_timer_interrupt(void)
     printk("sched_time expires!!!!\n");
     sched_end = TRUE;
     disable_timer_interrupt();
-    current_th[cpu] = &idle_th[cpu];
+    current_th[cpu] = &kernel_th[cpu];
   } else {
     do_release();
     //    do_timer_tick();

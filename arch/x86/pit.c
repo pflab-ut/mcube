@@ -20,7 +20,7 @@ void handle_pit_timer(interrupt_context_t *context)
   if (i % 1000 == 0) {
     printk("handle_pit_timer()\n");
     
-    if (current_th[cpu] != &idle_th[cpu]) {
+    if (current_th[cpu] != &kernel_th[cpu]) {
       PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
              current_th[cpu]->id, current_th[cpu]->sched.remaining);
       current_th[cpu]->sched.remaining -=
@@ -33,7 +33,7 @@ void handle_pit_timer(interrupt_context_t *context)
     if (sched_time <= sys_jiffies) {
       //    printk("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
       sched_end = TRUE;
-      current_th[cpu] = &idle_th[cpu];
+      current_th[cpu] = &kernel_th[cpu];
       stop_pit_timer(0);
       outb(PIC_PORT_CMD_MASTER, PIC_CMD_EOI);
       return;

@@ -68,44 +68,25 @@ void handle_gpu_interrupt(void)
 
 void handle_mailbox_interrupt(unsigned int cpu, unsigned int mb)
 {
+  unsigned long data = mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb));
   switch (mb) {
   case 0:
-    switch (mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb))) {
-    case LP_MAILBOX0_INTERRUPT_DEBUG:
+    if (data & LP_MAILBOX0_INTERRUPT_DEBUG) {
       printk("DEBUG: CPU %u Mailbox %u\n", cpu, mb);
       mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
                  LP_MAILBOX0_INTERRUPT_DEBUG);
-      break;
-    case LP_MAILBOX0_INTERRUPT_SCHED:
+    }
+    if (data & LP_MAILBOX0_INTERRUPT_SCHED) {
       do_sched();
       mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
                  LP_MAILBOX0_INTERRUPT_SCHED);
-      break;
-    default:
-      printk("Error: Unknown Interrupt 0x%x\n",
-             mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb)));
     }
     break;
   case 1:
-    switch (mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb))) {
-    default:
-      printk("Error: Unknown Interrupt 0x%x\n",
-             mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb)));
-    }
     break;
   case 2:
-    switch (mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb))) {
-    default:
-      printk("Error: Unknown Interrupt 0x%x\n",
-             mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb)));
-    }
     break;
   case 3:
-    switch (mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb))) {
-    default:
-      printk("Error: Unknown Interrupt 0x%x\n",
-             mmio_in32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb)));
-    }
     break;
   default:
     printk("Error: Unknown Mailbox %u\n", mb);

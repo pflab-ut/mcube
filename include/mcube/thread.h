@@ -220,12 +220,12 @@ extern int is_finishing[NR_THREADS];
 #define TH_LOWEST_PRIORITY ((unsigned long) ~0x0)
 
 /* idle thread ID */
-#define	IDLE_THREAD_ID 0
+#define	KERNEL_THREAD_ID 0
 
 /* first dynamically created thread */
 #define	FIRST_DYNAMIC_THREAD_ID 1
 
-extern struct thread_struct idle_th[NR_INTRA_KERNEL_CPUS];
+extern struct thread_struct kernel_th[NR_INTRA_KERNEL_CPUS];
 
 int alloc_thread_id(void);
 struct thread_struct *do_create_thread(void *(*func)(void *),
@@ -233,15 +233,14 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
                                        struct th_attr *attr);
 
 
-extern unsigned char idle_stack[NR_INTRA_KERNEL_CPUS][STACK_SIZE];
-extern unsigned char stack[NR_THREADS][STACK_SIZE];
+extern unsigned char kernel_stack[NR_INTRA_KERNEL_CPUS][KERNEL_STACK_SIZE];
+extern unsigned char user_stack[NR_THREADS][USER_STACK_SIZE];
 
 void (*th_mains[NR_THREADS])(void);
 
 
-#define IDLE_THREAD_STACK_ADDR(cpu) ((unsigned long) &idle_stack[cpu][STACK_SIZE])
-#define THREAD_STACK_ADDR(id) ((unsigned long) &stack[id][0])
-
+#define KERNEL_THREAD_STACK_ADDR(cpu) ((unsigned long) &kernel_stack[cpu][KERNEL_STACK_SIZE])
+#define USER_THREAD_STACK_ADDR(id) ((unsigned long) &user_stack[id][USER_STACK_SIZE])
 
 
 int thread_tie_break(struct thread_struct *x, struct thread_struct *y);
@@ -292,7 +291,7 @@ static inline void end_budget(struct thread_struct *th)
       }
 
 
-#define INIT_IDLE_THREAD(cpu) {                         \
+#define INIT_KERNEL_THREAD(cpu) {                         \
     .cpu_context = INIT_CPU_CONTEXT,                    \
 		.prev = NULL,																				\
 			.next = NULL,																			\
@@ -301,14 +300,14 @@ static inline void end_budget(struct thread_struct *th)
 			.state = READY,																		\
 			.type = APERIODIC_TH | NON_REAL_TIME,							\
 			.thflags = 0,																			\
-			.id = IDLE_THREAD_ID,															\
+			.id = KERNEL_THREAD_ID,															\
 			.tk = NULL,                                       \
 			.line = NULL,																			\
 			.sig_port = NULL,																	\
 			.evmsg_port = NULL,																\
 			.nr_resources = 0,																\
 			.priority = ULONG_MAX,														\
-			.stack_top = (unsigned long) &stack[cpu][NR_INTRA_KERNEL_CPUS],	\
+			.stack_top = (unsigned long) &kernel_stack[cpu][NR_INTRA_KERNEL_CPUS],	\
 			.sched = {																				\
 			.relative_deadline = ULONG_MAX,									\
 			.period = ULONG_MAX,															\

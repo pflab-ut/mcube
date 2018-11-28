@@ -40,18 +40,23 @@ ENTRY(arch_switch_to)
   mov     sp, x9
   ret
 
+#define STACK_OFFSET 48
+  
 ENTRY(move_to_user_level)
 #if 1
-  sub sp, sp, 48
+  sub sp, sp, #STACK_OFFSET
   stp x25, x26, [sp, #16 * 0]
   stp x27, x28, [sp, #16 * 1]
   stp x29, x30, [sp, #16 * 2]
 #endif
-//  mov x29, x0 // save first argument (x0) to unused register (x29)
-#if 1
   mov x26, x30 // save ret addr
   mov x25, sp // save sp
-#endif
+
+  // NOTE: add stack pointer of EL1 to change eret to ret
+  add sp, sp, #STACK_OFFSET
+
+  msr sp_el0, x25
+  
   get_cpu_id x28, x27 // save CPU ID to x28
   // Determine the EL0 Execution state.
   mov x29, #0b00000 // DAIF=0000 M[4:0]=00000 EL0t.
@@ -65,18 +70,6 @@ el0_entry:
   ldp x25, x26, [sp, #16 * 0]
   ldp x27, x28, [sp, #16 * 1]
   ldp x29, x30, [sp, #16 * 2]
-  add sp, sp, 48
+  add sp, sp, #STACK_OFFSET
   
-  cmp x0, #PROGRAM_FLOW_NEW_FUNC
-  b.eq el0_new_func
-el0_ret_to: 
   ret
-el0_new_func:
-  mov x3, x28 // move CPU ID (x28) to x0
-  mov x4, #STACK_SIZE
-  mul x3, x3, x4
-  ldr x4, =idle_stack
-  add x5, x3, x4
-  mov sp, x5
-  blr x1 // jump to first argument
-  b . // infinite loop

@@ -10,15 +10,15 @@ struct thread_struct ths[NR_THREADS];
 /* idle should not be in the hash, becuase its const */
 static uint32_t th_id = FIRST_DYNAMIC_THREAD_ID;
 
-unsigned char PAGE_ALIGNMENT idle_stack[NR_INTRA_KERNEL_CPUS][STACK_SIZE];
-unsigned char PAGE_ALIGNMENT stack[NR_THREADS][STACK_SIZE];
+unsigned char PAGE_ALIGNMENT kernel_stack[NR_INTRA_KERNEL_CPUS][KERNEL_STACK_SIZE];
+unsigned char PAGE_ALIGNMENT user_stack[NR_THREADS][USER_STACK_SIZE];
 
 int get_tq_util(struct thread_struct *head, unsigned long cpu)
 {
 	struct thread_struct *p;
 	int sum_util = 0;
 	//	print("get_tq_util()\n");
-	for (p = head; p != &idle_th[cpu]; p = p->next) {
+	for (p = head; p != &kernel_th[cpu]; p = p->next) {
 		//		print("p->id = %llu\n", p->id);
 		sum_util += p->util;
 	}
@@ -77,7 +77,7 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
 		ths[index].sched.deadline = attr->relative_deadline;
 		ths[index].sched.wcet = attr->wcet;
 
-    ths[index].stack_top = THREAD_STACK_ADDR(ths[index].id);
+    ths[index].stack_top = USER_THREAD_STACK_ADDR(ths[index].id);
     ths[index].run_func = run_user_thread;
     ths[index].run_user_func = func;
     

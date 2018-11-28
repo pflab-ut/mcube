@@ -71,7 +71,7 @@ static void handle_timer_interrupt(void)
   //    printk("__wait_until_next_interrupt = 0x%lx\n", &__wait_until_next_interrupt);
   //  printk("get_timer_count() = %d\n", get_timer_count());
   pdebug_array(run_tq[cpu].array);
-  if (current_th[cpu] != &idle_th[cpu]) {
+  if (current_th[cpu] != &kernel_th[cpu]) {
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
 #if 1
@@ -93,7 +93,7 @@ static void handle_timer_interrupt(void)
     printk("sched_time expires!!!!\n");
     sched_end = TRUE;
     disable_timer_interrupt();
-    current_th[cpu] = &idle_th[cpu];
+    current_th[cpu] = &kernel_th[cpu];
   } else {
     do_release();
     //    do_timer_tick();
@@ -120,11 +120,11 @@ static void handle_software_interrupt(unsigned long id)
   switch (id) {
   case 0:
     current_timer_count = get_timer_count();
-    if (current_th[cpu] != &idle_th[cpu]) {
+    if (current_th[cpu] != &kernel_th[cpu]) {
       current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(current_timer_count
                                                             - current_th[cpu]->sched.begin_cpu_time);
     }
-    if (current_th[cpu] != &idle_th[cpu]) {
+    if (current_th[cpu] != &kernel_th[cpu]) {
       /* end current_th and call do_sched() */
       do_end_job(current_th[cpu]);
     }

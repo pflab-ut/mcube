@@ -29,12 +29,12 @@ struct sem_struct {
 
 typedef struct sem_struct sem_struct;
 
-#define	INIT_COUNT_SEM(nres) {                      \
-		.counter	= nres,																\
-			.ceil	= 0,																		\
-			.ewq		= &idle_th[0],												\
-			.owner		= NULL,															\
-			.org_prio	= 0,																\
+#define	INIT_COUNT_SEM(nres, cpu) {                     \
+		.counter	= nres,                                   \
+			.ceil	= 0,                                        \
+			.ewq		= &kernel_th[cpu],												\
+			.owner		= NULL,                                 \
+			.org_prio	= 0,                                    \
 			}
 
 #define	INIT_SEM_MUTEX	INIT_COUNT_SEM(1)

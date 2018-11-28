@@ -6,9 +6,7 @@
 #ifndef __MCUBE_ARM_SYS_REGS_H__
 #define __MCUBE_ARM_SYS_REGS_H__
 
-/* CNTV_CTL_EL0, Counter-timer Virtual Timer Control register
- * Page 2188 of AArch64-Reference-Manual.
- */
+/* CNTV_CTL_EL0, Counter-timer Virtual Timer Control register */
 /* 31-3: reserved */
 /* 2: ISTATUS
  * The status of the timer interrupt. This bit is read-only. Permitted values are:
@@ -39,9 +37,7 @@
 #define CNTV_CTL_EL0_ENABLE (0x1 << 0)
 
 
-/* ESR_ELx, Exception Syndrome Registers (EL1-3).
- * Page 1899 of AArch64-Reference-Manual.
- */
+/* ESR_ELx, Exception Syndrome Registers (EL1-3). */
 /* 31-26: Exception Class.
  * Indicates the reason for the exception that this register holds information about.
  */
@@ -147,9 +143,7 @@
  */
 
 
-/* SPSR_ELx, Saved Program Status Registers (EL1-3)
- * Page 1417 of AArch64-Reference-Manual.
- */
+/* SPSR_ELx, Saved Program Status Registers (EL1-3) */
 /* 31-28: Condition flags
  * Shows the values of the condition flags immediately before the exception was taken:
  * N, bit[31] Negative condition flag.
@@ -354,5 +348,241 @@
  * On Warm reset, the field resets to 0.
  */
 #define PMCR_E (0x1 << 0)
+
+
+/* SCTLR_EL1, System Control Register (EL1-3) */
+/* 31-30: reserved */
+/* 29-28: always 1 */
+/* 27: reserved */
+/* 26: When set, enables EL0 access in AArch64 for DC CVAU, DC CIVAC, DC CVAC,
+ * and IC IVAU instructions.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_UCI (0x1 << 26)
+
+/* 25: Exception Endianness. This bit controls the endianness for:
+ ** Explicit data accesses at EL1.
+ ** Stage 1 translation table walks at EL1 and EL0.
+ * The possible values of this bit are:
+ * 0 : Little-endian.
+ * 1 : Big-endian.
+ * If an implementation does not provide Big-endian support, this bit is RES0.
+ * If it does not provide Little-endian support, this bit is RES1.
+ * The EE bit is permitted to be cached in a TLB.
+ * If this register is at the highest exception level implemented, field resets to
+ * an IMPLEMENTATION DEFINED value. Otherwise, its reset value is UNKNOWN.
+ */
+#define SCTLR_El1_EE (0x1 << 25)
+/* 24: Endianness of explicit data accesses at EL0. The possible values of this bit are:
+ * 0 : Explicit data accesses at EL0 are little-endian.
+ * 1 : Explicit data accesses at EL0 are big-endian.
+ * If an implementation only supports Little-endian accesses at EL0 then this bit is RES0.
+ * If an implementation only supports Big-endian accesses at EL0 then this bit is RES1.
+ * This bit has no effect on the endianness of LDTR* and STTR* instructions executed at EL1.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_E0E (0x1 << 24)
+/* 23-22: always 1 */
+/* 21: reserved */
+/* 20: always 1 */
+/* 19: Write permission implies XN (Execute Never).
+ * This bit can be used to require all memory regions with write permission
+ * to be treated as XN. The possible values of this bit are:
+ * 0 : Regions with write permission are not forced to XN.
+ * 1 : Regions with write permission are forced to XN.
+ * The WXN bit is permitted to be cached in a TLB.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_WXN (0x1 << 19)
+/* 18: Not trap WFE. Possible values of this bit are:
+ * 0 : If a WFE instruction executed at EL0 would cause execution to be suspended, such as
+ * if the event register is not set and there is not a pending WFE wakeup event, it is taken
+ * as an exception to EL1 using the 0x1 ESR code.
+ * 1 : WFE instructions are executed as normal.
+ * Conditional WFE instructions that fail their condition do not cause an exception
+ * if this bit is 0.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_nTWE (0x1 << 18)
+/* 17: reserved */
+/* 16: Not trap WFI. Possible values of this bit are:
+ * 0 : If a WFI instruction executed at EL0 would cause execution to be suspended,
+ * such as if there is not a pending WFI wakeup event, it is taken as an exception
+ * to EL1 using the 0x1 ESR code.
+ * 1 : WFI instructions are executed as normal.
+ * Conditional WFI instructions that fail their condition do not cause an exception
+ * if this bit is 0.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_nTWI (0x1 << 16)
+/* 15: When set, enables EL0 access in AArch64 to the CTR_EL0 register.
+ * Reset value is architecturally UNKNOWN.
+ */  
+#define SCTLR_ELx_UCT (0x1 << 15)
+/* 14: Access to DC ZVA instruction at EL0. The possible values of this bit are:
+ * 0 : Execution of the DC ZVA instruction is prohibited at EL0, and it is treated as
+ * UNDEFINED at EL0.
+ * 1 : Execution of the DC ZVA instruction is allowed at EL0.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_DZE (0x1 << 14)
+/* 13: reserved */
+/* 12: Instruction cache enable.
+ * This is an enable bit for instruction caches at EL0 and EL1:
+ * 0 : Instruction caches disabled at EL0 and EL1. If SCTLR_EL1.M is set to 0, instruction
+ * accesses from stage 1 of the EL1&0 translation regime are to Normal memory, Outer
+ * Shareable, Inner Non-cacheable, Outer Non-cacheable.
+ * 1 : Instruction caches enabled at EL0 and EL1. If SCTLR_EL1.M is set to 0, instruction
+ * accesses from stage 1 of the EL1&0 translation regime are to Normal memory, Outer
+ * Shareable, Inner Write-Through, Outer Write-Through.
+ * When this bit is 0, all EL1 and EL0 Normal memory instruction accesses are Non-cacheable.
+ * If the HCR_EL2.DC bit is set to 1, then the Non-secure stage 1 EL1&0 translation regime is
+ * Cacheable regardless of the value of this bit.
+ * If this register is at the highest exception level implemented, field resets to 0.
+ * Otherwise, its reset value is UNKNOWN.
+ */
+#define SCTLR_ELx_I (0x1 << 12)
+/* 11: always 1 */
+/* 10: reserved */
+/* 9: User Mask Access.
+ * Controls access to interrupt masks from EL0, when EL0 is using AArch64.
+ * The possible values of this bit are:
+ * 0 : Disable access to the interrupt masks from EL0.
+ * 1 : Enable access to the interrupt masks from EL0.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_UMA (0x1 << 9)
+/* 8: SETEND Disable. The possible values of this bit are:
+ * 0 : The SETEND instruction is available.
+ * 1 : The SETEND instruction is UNALLOCATED.
+ * If an implementation does not support mixed endian operation, this bit is RES1.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_SED (0x1 << 8)
+/* 7: IT Disable. The possible values of this bit are:
+ * 0 : The IT instruction functionality is available.
+ * 1 : It is IMPLEMENTATION DEFINED whether the IT instruction is treated as either:
+ ** A 16-bit instruction, which can only be followed by another 16-bit instruction.
+ ** The first half of a 32-bit instruction.
+ ** An implementation might vary dynamically as to whether IT is treated as a 16-bit
+ ** instruction or the first half of a 32-bit instruction.
+ ** All encodings of the IT instruction with hw1[3:0]!=1000 are UNDEFINED and treated as
+ ** unallocated.
+ ** All encodings of the subsequent instruction with the following values for hw1 are
+ ** UNDEFINED (and treated as unallocated):
+ ** 11xxxxxxxxxxxxxx
+ *** All 32-bit instructions, B(2), B(1), Undefined, SVC, Load/Store multiple
+ ** 1x11xxxxxxxxxxxx
+ *** Miscellaneous 16-bit instructions
+ ** 1x100xxxxxxxxxxx
+ *** ADD Rd, PC, #imm
+ ** 01001xxxxxxxxxxx
+ *** LDR Rd, [PC, #imm]
+ ** 0100x1xxx1111xxx
+ *** ADD(4),CMP(3), MOV, BX pc, BLX pc
+ ** 010001xx1xxxx111
+ *** ADD(4),CMP(3), MOV (Note: this pattern also covers UNPREDICTABLE cases with BLX Rn)
+ ** Contrary to the standard treatment of conditional UNDEFINED instructions in the ARM
+ ** architecture, in this case these instructions are always treated as UNDEFINED, regardless
+ ** of whether the instruction would pass or fail its condition codes as a result of being in
+ ** an IT block.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_ITD (0x1 << 7)
+/* 6: T32EE enable. The possible values of this bit are:
+ * 0 : T32EE is disabled.
+ * 1 : T32EE is enabled.
+ * If T32EE is not implemented, this bit is RES0.
+ * Reset value is architecturally UNKNOWN.
+ */  
+#define SCTLR_ELx_THEE (0x1 << 6)
+/* 5: CP15 barrier enable.
+ * If implemented, this is an enable bit for the AArch32 CP15 DMB, DSB, and
+ * ISB barrier operations:
+ * 0 : AArch32 CP15 barrier operations disabled. Their encodings are UNDEFINED.
+ * 1 : AArch32 CP15 barrier operations enabled.
+ * If an implementation does not support the CP15 barrier operations, this bit is RES0.
+ * Reset value is architecturally UNKNOWN
+ */
+#define SCTLR_ELx_CP15BEN (0x1 << 5)
+/* 4: Stack Alignment Check Enable for EL0.
+ * When set, use of the stack pointer as the base address in a load/store instruction
+ * at EL0 must be aligned to a 16-byte boundary, or a Stack Alignment Fault
+ * exception will be raised.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_SA0 (0x1 << 4)
+/* 3: Stack Alignment Check Enable.
+ * When set, use of the stack pointer as the base address in a load/store instruction
+ * at this register's exception level must be aligned to a 16-byte boundary, or a Stack
+ * Alignment Fault exception will be raised.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_SA (0x1 << 3)
+/* 2: Cache enable. This is an enable bit for data and unified caches at EL0 and EL1:
+ * 0 : Data and unified caches disabled.
+ * 1 : Data and unified caches enabled.
+ * When this bit is 0, all EL0 and EL1 Normal memory data accesses and all accesses
+ * to the EL1&0 stage 1 translation tables are Non-cacheable.
+ * If the HCR_EL2.DC bit is set to 1, then the Non-secure stage 1 EL1&0 translation regime
+ * is Cacheable regardless of the value of the SCTLR_EL1.C bit.
+ * If this register is at the highest exception level implemented, field resets to 0.
+ * Otherwise, its reset value is UNKNOWN.
+ */
+#define SCTLR_ELx_C (0x1 << 2)
+/* 1: Alignment check enable. This is the enable bit for Alignment fault checking:
+ * 0 : Alignment fault checking disabled.
+ ** Instructions that load or store one or more registers, other than load/store exclusive and
+ ** load-acquire/store-release, do not check that the address being accessed is aligned to the
+ ** size of the data element(s) being accessed.
+ * 1 Alignment fault checking enabled.
+ ** All instructions that load or store one or more registers have an alignment check that the
+ ** address being accessed is aligned to the size of the data element(s) being accessed. If
+ ** this check fails it causes an Alignment fault, which is taken as a Data Abort exception.
+ * Load/store exclusive and load-acquire/store-release instructions have an alignment check
+ * regardless of the value of the A bit.
+ * Reset value is architecturally UNKNOWN.
+ */
+#define SCTLR_ELx_A (0x1 < 1)
+/* 0: MMU enable for EL1 and EL0 stage 1 address translation.
+ * Possible values of this bit are:
+ * 0 EL1 and EL0 stage 1 address translation disabled.
+ * 1 EL1 and EL0 stage 1 address translation enabled.
+ * If this register is at the highest exception level implemented, field resets to 0.
+ * Otherwise, its reset value is UNKNOWN.
+ */
+#define SCTLR_ELx_M (0x1 << 0)
+
+
+/* CPACR_EL1, Architectural Feature Access Control Register */
+/* 31-29: reserved */
+/* 28: Causes access to the Trace functionality to trap to EL1 when executed from EL0 or EL1.
+ * 0 : Does not cause System register access to the Trace functionality to be trapped.
+ * 1 : Causes System register access to the Trace functionality to be trapped.
+ * If system register access to trace functionality is not implemented, this bit is RES0.
+ */
+#define CPACR_EL1_TTA (0x1 << 28)
+/* 27-22: reserved */
+/* 21-20: Causes instructions that access the registers associated with Floating Point
+ * and Advanced SIMD execution to trap to EL1 when executed from EL0 or EL1.
+ * 00 : Causes any instructions in EL0 or EL1 that use the registers associated with Floating
+ *      Point and Advanced SIMD execution to be trapped.
+ * 01 : Causes any instructions in EL0 that use the registers associated with Floating Point and
+ *      Advanced SIMD execution to be trapped, but does not cause any instruction in EL1 to
+ *      be trapped.
+ * 10 : Causes any instructions in EL0 or EL1 that use the registers associated with Floating
+ *      Point and Advanced SIMD execution to be trapped.
+ * 11 : Does not cause any instruction to be trapped.
+ */
+/* NOTE: 00 and 10 are the same... */
+#define CPACR_EL1_FPEN_MASK (0x3 << 20)
+#define CPACR_EL1_FPEN_CAUSE_EL0_EL1 (0x0 << 20)
+#define CPACR_EL1_FPEN_CAUSE_EL0 (0x1 << 20)
+#define CPACR_EL1_FPEN_CAUSE_EL0_EL1_2 (0x2 << 20)
+#define CPACR_EL1_FPEN_NOT_CAUSE (0x3 << 20)
+
+/* 19-0: reserved */
+
+
 
 #endif /* __MCUBE_ARM_SYS_REGS_H__ */

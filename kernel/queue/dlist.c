@@ -28,7 +28,7 @@ static void enqueue_rq_dlist(struct runqueue *rq,
 	th->next = n;
 
 	/* head == ready_tq */
-	if (((th->state & (READY | RUNNING)) || n != &idle_th[cpu]) && n) {
+	if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
 		n->prev = th;
 	}
 

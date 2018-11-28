@@ -39,7 +39,7 @@ static inline void print_thread_by_id(int id)
 {
 	struct thread_struct *th;
 	if (id == 0) {
-		th = &idle_th[0];
+		th = &kernel_th[0];
 	} else {
 		th = &ths[id-1];
 	}

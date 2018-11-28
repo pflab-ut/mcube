@@ -10,7 +10,7 @@ struct thread_struct *prev_th[NR_INTRA_KERNEL_CPUS];
 
 volatile atomic_int sched_lock = SPIN_UNLOCKED;
 
-struct thread_struct idle_th[NR_INTRA_KERNEL_CPUS];
+struct thread_struct kernel_th[NR_INTRA_KERNEL_CPUS];
 
 
 unsigned long sys_jiffies = 0;
@@ -125,11 +125,11 @@ void do_sched(void)
 	if (th) {
 		current_th[cpu] = th;
 	} else {
-		current_th[cpu] = &idle_th[cpu];
+		current_th[cpu] = &kernel_th[cpu];
 	}
   printk("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
 
-	if (prev_th[cpu] != &idle_th[cpu] && is_preempted(prev_th[cpu])) {
+	if (prev_th[cpu] != &kernel_th[cpu] && is_preempted(prev_th[cpu])) {
 		/* preemption occurs */
 		prev_th[cpu]->state = READY;
     end_budget(prev_th[cpu]);
@@ -187,9 +187,9 @@ int run(unsigned long nr_threads)
 
   print("run()2\n");
   for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
-    current_th[i] = prev_th[i] = &idle_th[i];
+    current_th[i] = prev_th[i] = &kernel_th[i];
     current_th[i]->id = 0;
-    current_th[i]->stack_top = IDLE_THREAD_STACK_ADDR(i);
+    current_th[i]->stack_top = KERNEL_THREAD_STACK_ADDR(i);
     print("current_th[%u]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
   }
   //		print("current_th[%d] = %x\n", i, current_th[i]);
@@ -243,16 +243,16 @@ void init_sched(void)
   sys_jiffies = 0;
 
   for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
-    idle_th[i] = (struct thread_struct) INIT_IDLE_THREAD(cpu);
-    idle_th[i].thflags = THFLAGS_START_TH;
+    kernel_th[i] = (struct thread_struct) INIT_KERNEL_THREAD(cpu);
+    kernel_th[i].thflags = THFLAGS_START_TH;
     run_tq[i].util = 0;
     run_tq[i].nr_threads = 0;
     for (j = 0; j < NR_PRIORITY_BITMAPS; j++) {
       run_tq[i].bitmap[j] = 0;
     }
   }
-  current_th[cpu] = prev_th[cpu] = &idle_th[cpu];
-  deadline_tq[cpu] = &idle_th[cpu];
-  sleep_tq[cpu] = &idle_th[cpu];
+  current_th[cpu] = prev_th[cpu] = &kernel_th[cpu];
+  deadline_tq[cpu] = &kernel_th[cpu];
+  sleep_tq[cpu] = &kernel_th[cpu];
 
 }

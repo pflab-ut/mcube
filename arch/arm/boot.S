@@ -9,15 +9,14 @@ ENTRY(_start)
   // Setup the stack with CPU ID.
 initialize_stack:  
   get_cpu_id x0, x1
-  mov x1, #STACK_SIZE
+  mov x1, #KERNEL_STACK_SIZE
   mul x0, x0, x1
-  ldr x1, =idle_stack
+  ldr x1, =kernel_stack
   add x2, x0, x1
   mov sp, x2
 
-use_sp_el0_at_all_exception_levels: 
-  mov x0, 0x0
-  msr spsel, x0
+use_spsel0_in_all_exception_levels:
+//  msr spsel, xzr
   
 initialize_vector_addresses_el3_el2_el1:
   ldr x0, =vector
@@ -31,7 +30,8 @@ initialize_system_conrol_registers:
    * NOTE: there may be other system control registers, which should be initiailized.
    */  
   msr hcr_el2, xzr
-  ldr x1, =0x30c50838
+//  ldr x1, =0x30c50838
+  ldr x1, =(SCTLR_ELx_nTWE | SCTLR_ELx_nTWI | SCTLR_ELx_CP15BEN | SCTLR_ELx_SA0 | SCTLR_ELx_SA)
   msr sctlr_el2, x1
   msr sctlr_el1, x1
 
@@ -42,9 +42,9 @@ initialize_mmu_and_cache:
 enable_neon_and_fp:
   /* disable trapping of accessing in EL3 and EL2. */
   msr cptr_el3, xzr
-  msr cptr_el3, xzr
+  msr cptr_el2, xzr
   /* disable access trapping in EL1 and EL0. */
-  mov x1, #(0x3 << 20) // FPEN disables trapping to EL1.
+  mov x1, #CPACR_EL1_FPEN_NOT_CAUSE // FPEN disables trapping to EL1.
   msr cpacr_el1, x1
   isb
 
@@ -82,9 +82,9 @@ change_el2_to_el1:
 start_el1:
   // set up stack in el1
   get_cpu_id x0, x1
-  mov x1, #STACK_SIZE
+  mov x1, #KERNEL_STACK_SIZE
   mul x0, x0, x1
-  ldr x1, =idle_stack
+  ldr x1, =kernel_stack
   add x2, x0, x1
   mov sp, x2
   

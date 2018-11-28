@@ -9,12 +9,10 @@
 
 #define NR_THREADS 16
 
-/* 256 */
-//#define STACK_SIZE 0x100
-/* 1K */
-//#define STACK_SIZE 0x400
 /* 4K */
-#define STACK_SIZE 0x1000
+#define KERNEL_STACK_SIZE 0x1000
+#define USER_STACK_SIZE 0x1000
+
 
 #define NR_PRIORITIES NR_THREADS
 

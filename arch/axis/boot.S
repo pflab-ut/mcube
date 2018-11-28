@@ -8,7 +8,7 @@
 	.section	.text
   .globl  __begin
   .ent    __begin
-  .globl idle_stack
+  .globl kernel_stack
 __begin:
 ENTRY(_start)
 	.set 	noreorder
@@ -16,9 +16,9 @@ ENTRY(_start)
   mfs $t0, $1
 //	la		$sp, THREAD_STACK_ADDR(0, 0)
   //	la		$sp, (MEMORY_BASE + MEMORY_SIZE)
-  // $sp = idle_stack + cpu_id($t0) * STACK_SIZE
-  la $sp, idle_stack
-  muli $t1, $t0, STACK_SIZE
+  // $sp = kernel_stack + cpu_id($t0) * STACK_SIZE
+  la $sp, kernel_stack
+  muli $t1, $t0, KERNEL_STACK_SIZE
 	add		$sp, $sp, $t1
 //	move		$fp, $sp
 //	la		$sp, 0x00010000

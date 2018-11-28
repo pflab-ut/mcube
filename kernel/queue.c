@@ -67,7 +67,7 @@ struct thread_struct *enqueue_thread(struct thread_struct *head,
 	th->prev = p;
 	th->next = n;
 
-	if (((th->state & (READY | RUNNING)) || n != &idle_th[cpu]) && n) {
+	if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
 		n->prev = th;
 	}
 
@@ -100,7 +100,7 @@ struct thread_struct *enqueue_deadline_thread(struct thread_struct *head,
 	th->dprev = p;
 	th->dnext = n;
 	//	PDEBUG("p = %x n = %x\n", p, n);
-	if (((th->state & (READY | RUNNING)) || n != &idle_th[cpu]) && n) {
+	if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
 		n->dprev = th;
 	}
 
@@ -127,7 +127,7 @@ struct thread_struct *dequeue_thread(struct thread_struct *head, struct thread_s
 		th->prev->next = th->next;
 	}
 
-	if (th->state & (READY | RUNNING) || th->next != &idle_th[cpu]) {
+	if (th->state & (READY | RUNNING) || th->next != &kernel_th[cpu]) {
 		th->next->prev = th->prev;
 	}
 
@@ -143,7 +143,7 @@ struct thread_struct *dequeue_deadline_thread(struct thread_struct *head, struct
 		th->dprev->dnext = th->dnext;
 	}
 
-	if (th->state & (READY | RUNNING) || th->dnext != &idle_th[cpu]) {
+	if (th->state & (READY | RUNNING) || th->dnext != &kernel_th[cpu]) {
 		th->dnext->dprev = th->dprev;
 	}
 	return head;

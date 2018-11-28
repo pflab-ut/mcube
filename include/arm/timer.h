@@ -124,10 +124,10 @@ static inline unsigned long get_current_cpu_time(void)
 
 static inline void delay(unsigned long us)
 {
-  unsigned long now = get_current_cpu_time();
+  unsigned long now = get_cntvct_el0();
   unsigned long timer_cntfrq = get_cntfrq_el0();
   /* do loop until us elapse. */
-  while (((get_current_cpu_time() - now) * 1000 * 1000) / timer_cntfrq <= us) {
+  while (((get_cntvct_el0() - now) * 1000 * 1000) / timer_cntfrq <= us) {
   }
 }
 

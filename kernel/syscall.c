@@ -32,7 +32,8 @@ asmlinkage int sys_get_exec_time(unsigned long *id_ptr, unsigned long *cputime_p
 	print("id_ptr = 0x%lx id = %lu\n", id_ptr, *id_ptr);
 	print("cputime_ptr = 0x%lx cputime = %lu\n", cputime_ptr, *cputime_ptr);
 #endif
-	*cputime_ptr = th->sched.sum_exec_time + tsc2nsec(get_current_cpu_time() - th->sched.begin_cpu_time);
+	*cputime_ptr = th->sched.sum_exec_time + tsc2nsec(get_current_cpu_time()
+                                                    - th->sched.begin_cpu_time);
 	return 0;
 }
 

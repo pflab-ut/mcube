@@ -40,7 +40,7 @@
   stp x28, x29, [sp, #16 * 14]
 //  str x30, [sp, #16 * 15]
 
-#if 0  
+#if 1
   .if     \el == 0
   mrs     x21, sp_el0
   .else
@@ -60,11 +60,14 @@
   ldp     x22, x23, [sp, #16 * 16]
   ldp     x30, x21, [sp, #16 * 15]
 
-#if 0  
+#if 1
   .if \el == 0
   msr     sp_el0, x21
   .endif /* \el == 0 */
 #endif
+//  mov x21, sp
+//  msr sp_el0, x21
+  
   msr     elr_el1, x22 // restore exception link register
   msr     spsr_el1, x23 // restore saved program status register
   
@@ -89,10 +92,11 @@
   .if \type == 0
   eret
   .else
+//  invalid_entry 1, 1
 //  eret
-// NOTE: 48 (112) means margin of ret against eret
-//  add sp, sp, 48
-  add sp, sp, 112
+  // NOTE: 112 means margin of ret against eret
+  //  add sp, sp, 112
+//  add sp, sp, -32
   ret
   .endif
 .endm

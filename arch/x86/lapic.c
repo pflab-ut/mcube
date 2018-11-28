@@ -14,7 +14,7 @@ void handle_lapic_timer_tick(interrupt_context_t *context)
   //  inf_loop();
 
 	//	printk("handle_LAPIC_timer_tick(): current_th[%d]->id = %llu\n", cpu, current_th[cpu]->id);
-  if (current_th[cpu] != &idle_th[cpu]) {
+  if (current_th[cpu] != &kernel_th[cpu]) {
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
     current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_current_cpu_time()
@@ -29,7 +29,7 @@ void handle_lapic_timer_tick(interrupt_context_t *context)
   if (sched_time <= sys_jiffies) {
 		//    printk("handle_LAPIC_timer_tick(): sched_end: cpu = %lu\n", cpu);
     sched_end = TRUE;
-    current_th[cpu] = &idle_th[cpu];
+    current_th[cpu] = &kernel_th[cpu];
     stop_lapic_timer(0);
     mmio_out64(LAPIC_EOI, 0x0);
   } else {

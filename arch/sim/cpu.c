@@ -24,7 +24,7 @@ void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long 
 }
 
 
-void set_cpu_frequency(void)
+void set_cpu_clock(void)
 {
   time_t base_time;
   uint64_t begin_clk, end_clk;
@@ -52,5 +52,5 @@ void set_cpu_frequency(void)
 
 void init_cpu(void)
 {
-  //  set_cpu_frequency();
+  //  set_cpu_clock();
 }

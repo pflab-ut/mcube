@@ -102,7 +102,7 @@ static inline void print_queue(struct thread_struct *head, char *name, unsigned 
 {
 	struct thread_struct *p;
 	PDEBUG("[%s]: ", name);
-	for (p = head; p && p != &idle_th[cpu] && p->id != 0; p = p->next) {
+	for (p = head; p && p != &kernel_th[cpu] && p->id != 0; p = p->next) {
 		PDEBUG("id(%lu)->", p->id);
 	}
 	PDEBUG("NULL\n");
