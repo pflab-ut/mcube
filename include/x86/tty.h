@@ -26,7 +26,7 @@
 #define MAX_TTYS  4
 
 /**
- * @enum  textcolor_t
+ * @enum  textcolor
  * @brief Color values used for tty text.
  */
 enum textcolor {
@@ -95,7 +95,7 @@ struct tty {
 typedef struct tty tty_t;
 
 /**
- * @function init_tty
+ * @fn       init_tty
  * @brief    Initialize all virtual consoles.
  * @details  This function must be called before any other console
  *           functions can be used.
@@ -103,7 +103,7 @@ typedef struct tty tty_t;
 void init_tty(void);
 
 /**
- * @function  tty_activate
+ * @fn        tty_activate
  * @brief     Activate the requested virtual console.
  * @details   The virtual console's buffer is immediately displayed on the
  *            screen.
@@ -112,7 +112,7 @@ void init_tty(void);
 void tty_activate(int id);
 
 /**
- * @function  tty_set_textcolor
+ * @fn        tty_set_textcolor
  * @brief     Set the foreground and background colors used to display
  *            text on the virtual console.
  * @param[in] id      Virtual tty id (0-3).
@@ -122,7 +122,7 @@ void tty_activate(int id);
 void tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg);
 
 /**
- * @function   tty_set_textcolor_fg
+ * @fn         tty_set_textcolor_fg
  * @brief      Set the foreground color used to display text on the virtual
  *             console.
  * @param[in]  id      Virtual tty id (0-3).
@@ -131,7 +131,7 @@ void tty_set_textcolor(int id, textcolor_t fg, textcolor_t bg);
 void tty_set_textcolor_fg(int id, textcolor_t fg);
 
 /**
- * @function   tty_set_textcolor_bg
+ * @fn         tty_set_textcolor_bg
  * @brief      Set the background color used to display text on the virtual
  *             console.
  * @param[in]  id      Virtual tty id (0-3).
@@ -140,16 +140,16 @@ void tty_set_textcolor_fg(int id, textcolor_t fg);
 void tty_set_textcolor_bg(int id, textcolor_t bg);
 
 /**
- * @function   tty_get_textcolor_fg
+ * @fn         tty_get_textcolor_fg
  * @brief      Get the foreground color used to display text on the virtual
- *            console.
+ *             console.
  * @param[in]  id      Virtual tty id (0-3).
  * @returns    Foreground color.
  */
 textcolor_t tty_get_textcolor_fg(int id);
 
 /**
- * @function   tty_get_textcolor_bg
+ * @fn         tty_get_textcolor_bg
  * @brief      Get the background color used to display text on the virtual
  *             console.
  * @param[in]  id      Virtual tty id (0-3).
@@ -158,7 +158,7 @@ textcolor_t tty_get_textcolor_fg(int id);
 textcolor_t tty_get_textcolor_bg(int id);
 
 /**
- * @function   tty_clear
+ * @fn         tty_clear
  * @brief      Clear the virtual console screen's contents using the current
  *             text background color.
  * @param[in]  id      Virtual tty id (0-3).
@@ -166,7 +166,7 @@ textcolor_t tty_get_textcolor_bg(int id);
 void tty_clear(int id);
 
 /**
- * @function   tty_setpos
+ * @fn         tty_setpos
  * @brief      Set the position of the cursor on the virtual console.
  * @details    Text written to the console after this function will be
  *             located at the requested screen position.
@@ -176,7 +176,7 @@ void tty_clear(int id);
 void tty_setpos(int id, screenpos_t pos);
 
 /**
- * @function   tty_getpos
+ * @fn         tty_getpos
  * @brief      Get the current position of the cursor on the virtual console.
  * @param[in]  id      Virtual tty id (0-3).
  * @param[out] pos     A pointer to a screenpos_t to receive the position.
@@ -184,7 +184,7 @@ void tty_setpos(int id, screenpos_t pos);
 void tty_getpos(int id, screenpos_t *pos);
 
 /**
- * @function   tty_print
+ * @fn         tty_print
  * @brief      Output a null-terminated string to the virtual console using
  *             the console's current text color and screen position.
  *
@@ -209,7 +209,7 @@ void tty_getpos(int id, screenpos_t *pos);
 void tty_print(int id, const char *str);
 
 /**
- *  @function   tty_printc
+ *  @fn         tty_printc
  *  @brief      Output a single character to the virtual console using
  *              the console's current text color and screen position.
  *  @details    See tty_print for further details.
@@ -219,7 +219,7 @@ void tty_print(int id, const char *str);
 void tty_printc(int id, char ch);
 
 /**
- *  @function   tty_printf
+ *  @fn         tty_printf
  *  @brief      Output a print-formatted string to the virtual console using
  *              the console's current text color and screen position.
  *  @details    See tty_print for further details.

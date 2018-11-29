@@ -20,13 +20,13 @@
 
 
 /**
- * @function timer_enable
+ * @fn       timer_enable
  * @brief    Enable timer interrupts.
  */
 void timer_enable(void);
 
 /**
- * @function   timer_disable
+ * @fn         timer_disable
  * @brief      Disable timer interrupts.
  */
 void timer_disable(void);

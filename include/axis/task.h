@@ -9,10 +9,6 @@
 
 #ifndef __ASSEMBLY__
 
-struct pt_regs {
-  /* dummy */  
-};
-
 #endif /* !__ASSEMBLY__ */
 
 #endif	/* __MCUBE_AXIS_TASK_H__ */

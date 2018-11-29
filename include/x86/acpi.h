@@ -183,34 +183,34 @@ struct acpi_madt_iso {
 } PACKSTRUCT;
 
 /**
- * @function init_acpi
+ * @fn       init_acpi
  * @brief    Find and parse all available ACPI tables.
  */
 void init_acpi(void);
 
 /**
- * @function acpi_version
+ * @fn       acpi_version
  * @brief    Return the ACPI version number.
  * @returns  The ACPI version number (1 through 5).
  */
 int acpi_version(void);
 
 /**
- * @function acpi_fadt
+ * @fn       acpi_fadt
  * @brief    Return a pointer to the ACPI fixed ACPI description table.
  * @returns  A pointer to the non-extended FADT structure.
  */
 const struct acpi_fadt *acpi_fadt(void);
 
 /**
- * @function acpi_madt
+ * @fn       acpi_madt
  * @brief    Return a pointer to the ACPI multiple APIC description table(MADT).
  * @returns  A pointer to the MADT structure.
  */
 const struct acpi_madt *acpi_madt(void);
 
 /**
- * @function   acpi_next_local_apic
+ * @fn         acpi_next_local_apic
  * @brief      Return a pointer to the next Local APIC structure entry in the MADT table.
  * @param[in]  prev Pointer to the local APIC returned by a previous call to this function.
  *             Pass NULL for the first call.
@@ -219,7 +219,7 @@ const struct acpi_madt *acpi_madt(void);
 const struct acpi_madt_local_apic *acpi_next_local_apic(const struct acpi_madt_local_apic *prev);
 
 /**
- * @function  acpi_next_io_apic
+ * @fn        acpi_next_io_apic
  * @brief     Return a pointer to the next I/O APIC structure entry in the MADT table.
  * @param[in] prev Pointer to the I/O APIC returned by a previous call to this function.
  *            Pass NULL for the first call.
@@ -228,7 +228,7 @@ const struct acpi_madt_local_apic *acpi_next_local_apic(const struct acpi_madt_l
 const struct acpi_madt_io_apic *acpi_next_io_apic(const struct acpi_madt_io_apic *prev);
 
 /**
- * @function  acpi_next_iso
+ * @fn        acpi_next_iso
  * @brief     Return a pointer to the next Interrupt Source Override (ISO) structure entry in the MADT table.
  * @param[in] prev Pointer to the ISO returned by a previous call to this function.
  *            Pass NULL for the first call.
@@ -237,7 +237,7 @@ const struct acpi_madt_io_apic *acpi_next_io_apic(const struct acpi_madt_io_apic
 const struct acpi_madt_iso *acpi_next_iso(const struct acpi_madt_iso *prev);
 
 /**
- * @function  acpi_next_mcfg_addr
+ * @fn        acpi_next_mcfg_addr
  * @brief     Return a pointer to the next Mapped Configuration (MCFG)
  *            address entry, used for PCIe.
  * @param[in] prev Pointer to the MCFG entry returned by a previous call to this function.

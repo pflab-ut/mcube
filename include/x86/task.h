@@ -8,9 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-struct pt_regs {
-  /* TODO: implement */
-};
 
 
 #endif /* __ASSEMBLY__ */

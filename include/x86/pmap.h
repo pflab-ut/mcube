@@ -60,14 +60,14 @@ struct pmap {
 typedef struct pmap pmap_t;
 
 /**
- * @function   init_pmap
+ * @fn         init_pmap
  * @brief      Initialize the physical memory map using data installed by the
  *             BIOS during boot loading.
  */
 void init_pmap(void);
 
 /**
- * @function   pmap_add
+ * @fn         pmap_add
  * @brief      Add a region of memory to the physical memory map.
  * @param[in]  addr    The starting address of the region.
  * @param[in]  size    The size of the region.
@@ -76,7 +76,7 @@ void init_pmap(void);
 void pmap_add(uint64_t addr, uint64_t size, enum pmemtype type);
 
 /**
- * @function   get_pmap
+ * @fn         get_pmap
  * @brief      Return a pointer to the current physical memory map.
  * @returns    A pointer to the physical memory map.
  */

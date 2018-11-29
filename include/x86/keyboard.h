@@ -109,7 +109,7 @@ struct keylayout {
 typedef struct keylayout keylayout_t;
 
 /**
- *  @function   init_keyboard
+ *  @fn         init_keyboard
  *  @brief      Initialize the keyboard so that it can provide input to the
  *              kernel.
  *  @details    kb_init installs the default US English PS/2 keyboard layout.
@@ -117,7 +117,7 @@ typedef struct keylayout keylayout_t;
 void init_keyboard(void);
 
 /**
- *  @function   kb_setlayout
+ *  @fn         kb_setlayout
  *  @brief      Install a new keyboard layout.
  *  @param[in]  layout  The keyboard layout to install.
  */
@@ -125,7 +125,7 @@ void init_keyboard(void);
 void kb_setlayout(keylayout_t *layout);
 
 /**
- *  @function   kb_getchar
+ *  @fn         kb_getchar
  *  @brief      Return the next available character from the keyboard's
  *              input buffer.
  *  @returns    The ascii value of the next character in the input buffer,
@@ -134,7 +134,7 @@ void kb_setlayout(keylayout_t *layout);
 char kb_getchar(void);
 
 /**
- *  @function   kb_getkey
+ *  @fn         kb_getkey
  *  @brief      Return the available next key from the keyboard's input
  *              buffer.
  *  @param[out] key     The key record of the next key in the buffer.
@@ -143,7 +143,7 @@ char kb_getchar(void);
 bool kb_getkey(keyboard_t *key);
 
 /**
- *  @function   kb_meta
+ *  @fn         kb_meta
  *  @brief      Return the current meta-key bit mask.
  *  @returns    The meta-key bitmask.
  */

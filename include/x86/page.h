@@ -75,7 +75,7 @@ typedef struct pagetable {
 } pagetable_t;
 
 /**
- * @function   init_page
+ * @fn         init_page
  * @brief      Initialize the page frame database.
  * @details    The page frame database manages the physical memory used by
  *             all memory pages known to the kernel.
@@ -83,7 +83,7 @@ typedef struct pagetable {
 void init_page(void);
 
 /**
- * @function   pagetable_create
+ * @fn         pagetable_create
  * @brief      Create a new page table that can be used to associate virtual
  *             addresses with physical addresses. The page table includes
  *             protected mappings for kernel memory.
@@ -98,13 +98,13 @@ void init_page(void);
 void pagetable_create(pagetable_t *pt, void *vaddr, uint64_t size);
 
 /**
- * @function   pagetable_destroy
+ * @fn         pagetable_destroy
  * @brief      Destroy a page table.
  */
 void pagetable_destroy(pagetable_t *pt);
 
 /**
- * @function   pagetable_activate
+ * @fn         pagetable_activate
  * @brief      Activate a page table on the CPU, so all virtual memory
  *             operations are performed relative to the page table.
  * @param[in]  pt      A handle to the activated page table. Pass NULL to
@@ -113,7 +113,7 @@ void pagetable_destroy(pagetable_t *pt);
 void pagetable_activate(pagetable_t *pt);
 
 /**
- * @function   page_alloc
+ * @fn         page_alloc
  * @brief      Allocate one or more pages contiguous in virtual memory.
  * @param[in]  pt      Handle to the page table from which to allocate the
  *                     page(s).
@@ -125,7 +125,7 @@ void pagetable_activate(pagetable_t *pt);
 void *page_alloc(pagetable_t *pt, void *vaddr, int count);
 
 /**
- * @function   page_free
+ * @fn         page_free
  * @brief      Free one or more contiguous pages from virtual memory.
  * @param[in]  pt      Handle to ehte page table from which to free the
  *                     page(s).

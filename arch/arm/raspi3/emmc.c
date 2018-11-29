@@ -1,5 +1,5 @@
 /**
- * @file arch/arm/raspi3/mcube.c
+ * @file arch/arm/raspi3/emmc.c
  *
  * @author Hiroyuki Chishiro
  */

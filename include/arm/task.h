@@ -16,12 +16,6 @@
 #define PSR_MODE_EL3t   0x0000000c
 #define PSR_MODE_EL3h   0x0000000d
 
-struct pt_regs {
-  unsigned long regs[31];
-  unsigned long sp;
-  unsigned long pc;
-  unsigned long pstate;
-};
 
 #endif /* !__ASSEMBLY__ */
 

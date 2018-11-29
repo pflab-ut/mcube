@@ -8,10 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-struct pt_regs {
-  /* dummy */
-};
-
 
 #endif /* !__ASSEMBLY__ */
 

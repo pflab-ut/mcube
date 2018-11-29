@@ -50,7 +50,6 @@ struct task_struct {
   /** Preempt count. */
   long preempt_count;
 
-  struct pt_regs regs;
 };
 
 typedef struct task_struct task_struct;

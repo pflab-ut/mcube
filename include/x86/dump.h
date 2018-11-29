@@ -16,7 +16,7 @@
 #ifndef __ASSEMBLY__
 
 /**
- *  @function   dump_registers
+ *  @fn         dump_registers
  *  @brief      Dump the contents of a CPU registers structure to a string
  *              buffer.
  *  @param[in]  regs    Pointer to a CPU registers structure.
@@ -24,7 +24,7 @@
 void dump_registers(const registers_t *regs);
 
 /**
- *  @function   dump_cpuflags
+ *  @fn         dump_cpuflags
  *  @brief      Dump the contents of the CPU flags register.
  *  @param[in]  rflags  The 64-bit rflags register value.
  */
@@ -43,7 +43,7 @@ enum dumpstyle {
 };
 
 /**
- *  @function   dump_memory
+ *  @fn         dump_memory
  *  @brief      Dump the contents of memory.
  *  @param[in]  buf     Pointer to the character buffer to hold the resulting
  *                      null-terminated string.

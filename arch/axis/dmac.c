@@ -1,5 +1,5 @@
 /**
- * @file arch/axis/mm.c
+ * @file arch/axis/dmac.c
  *
  * @author Hiroyuki Chishiro
  */

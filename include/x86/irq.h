@@ -345,7 +345,7 @@ typedef struct interrupt_context interrupt_context_t;
 void do_switch_thread_arch(interrupt_context_t *context);
 
 //----------------------------------------------------------------------------
-//  @function   init_irq_asm
+//  @fn         init_irq_asm
 /// @brief      Initialize all interrupt tables.
 /// @details    Initialize a table of interrupt service routine thunks, one
 ///             for each of the 256 possible interrupts. Then set up the
@@ -365,7 +365,7 @@ void init_irq_asm(void);
 typedef void (*isr_handler)(interrupt_context_t *context);
 
 //----------------------------------------------------------------------------
-//  @function   set_isr
+//  @fn         set_isr
 /// @brief      Set an interrupt service routine for the given interrupt
 ///             number.
 /// @details    Interrupts should be disabled while setting these handlers.
@@ -376,14 +376,14 @@ typedef void (*isr_handler)(interrupt_context_t *context);
 void set_isr(int interrupt, isr_handler handler);
 
 //----------------------------------------------------------------------------
-//  @function   enable_irq
+//  @fn         enable_irq
 /// @brief      Tell the PIC to enable a hardware interrupt.
 /// @param[in]  irq     IRQ number to enable (0-15).
 //----------------------------------------------------------------------------
 void enable_irq(uint8_t irq);
 
 //----------------------------------------------------------------------------
-//  @function   disable_irq
+//  @fn         disable_irq
 /// @brief      Tell the PIC to disable a hardware interrupt.
 /// @param[in]  irq     IRQ number to enable (0-15).
 //----------------------------------------------------------------------------
