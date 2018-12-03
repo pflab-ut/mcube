@@ -96,11 +96,11 @@ int user_ap_main(void)
 
 #define BUFSIZE 32
 
-uint8_t src[BUFSIZE] = "hello world\n";
-uint8_t dst[BUFSIZE] = {0};
-
 int user_dmac_main(void)
 {
+  char src[BUFSIZE] = "hello world\n";
+  char dst[BUFSIZE] = {0};
+  
   print("user_dmac_main()\n");
   print("dst = 0x%lx\n", (unsigned long) dst);
 #if 1
@@ -139,6 +139,7 @@ int ap_main(void)
 
 
 void user_raspi3_main(void);
+
 
 int user_arch_main(void)
 {

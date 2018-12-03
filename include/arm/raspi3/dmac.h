@@ -470,6 +470,11 @@
 
 #ifndef __ASSEMBLY__
 
+
+/**
+ * @struct dmac_info
+ * @brief DMAC information.
+ */
 struct dmac_info {
   uint32_t transfer_information;
   uint32_t src_addr;

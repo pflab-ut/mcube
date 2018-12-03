@@ -105,7 +105,7 @@ int strcmp(const char *s1, const char *s2)
  * it compares the only first (at most) @c n bytes of @c s1 and @c s2.
  * @param s1 is a pointer of @c char.
  * @param s2 is a pointer of @c char.
- * @param n is the number of bytes comparing @s1 to @s2.
+ * @param n is the number of bytes comparing @a s1 to @a s2.
  * @return Integer less than, equal to, or greater than zero
  * if @c s1 (or the first @c n bytes thereof) is found, respectively,
  * to be less than, to match, or be greater than @c s2.

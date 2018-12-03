@@ -144,6 +144,10 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @struct frame_buffer
+ * @brief Frame buffer information.
+ */
 struct frame_buffer {
   unsigned int width;
   unsigned int height;
@@ -163,6 +167,23 @@ struct frame_buffer {
 
   unsigned int pitch;
 };
+
+
+
+/* PC Screen Font as used by Linux Console */
+struct pc_screen_font_info {
+  unsigned int magic;
+  unsigned int version;
+  unsigned int headersize;
+  unsigned int flags;
+  unsigned int numglyph;
+  unsigned int bytesperglyph;
+  unsigned int height;
+  unsigned int width;
+  unsigned char glyphs;
+} __attribute__((packed));
+
+typedef struct pc_screen_font_info psf_t;
 
 
 unsigned long get_serial_number(void);

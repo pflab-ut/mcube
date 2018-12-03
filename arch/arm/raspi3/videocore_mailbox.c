@@ -312,19 +312,6 @@ void fb_show_picture(char *data, int width, int height)
   }
 }
 
-/* PC Screen Font as used by Linux Console */
-typedef struct {
-  unsigned int magic;
-  unsigned int version;
-  unsigned int headersize;
-  unsigned int flags;
-  unsigned int numglyph;
-  unsigned int bytesperglyph;
-  unsigned int height;
-  unsigned int width;
-  unsigned char glyphs;
-} __attribute__((packed)) psf_t;
-
 extern volatile unsigned char _binary___lib_font_psf_start;
 
 

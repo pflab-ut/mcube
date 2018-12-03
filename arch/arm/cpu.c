@@ -27,7 +27,7 @@ void enable_pmu(void)
 
   /* Performance Monitors Count Enable Set register bit 30:0 disable, 31 enable.
    * Can also enable other event counters here. */
-  asm volatile("msr pmcntenset_el0, %0" : : "r" (PMCNTENSET_C));
+  asm volatile("msr pmcntenset_el0, %0" :: "r" ((unsigned long) PMCNTENSET_C));
 
   /* Enable counters */
   asm volatile("mrs %0, pmcr_el0" : "=r" (val));
