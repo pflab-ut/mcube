@@ -23,9 +23,9 @@ void init_timer(unsigned long tick_us)
              LP_LOCAL_TIMER_WRITE_FLAGS_INTERRUPT_FLAG_CLEAR
              | LP_LOCAL_TIMER_WRITE_FLAGS_LOCAL_TIMER_RELOADED);
   /* IRQ routing to core [cpu] */
-  mmio_out32(LP_GPU_INTERRUPTS_ROUTING,
-             LP_GPU_INTERRUPT_ROUTING_FIQ_CORE(cpu)
-             | LP_GPU_INTERRUPT_ROUTING_IRQ_CORE(cpu));
+  mmio_out32(LP_GPU_INTERRUPT_ROUTING,
+             /*LP_GPU_INTERRUPT_ROUTING_FIQ_CORE(cpu)
+               | */LP_GPU_INTERRUPT_ROUTING_IRQ_CORE(cpu));
   /* route cor0cntv to core [cpu] irq */
   mmio_out32(LP_CORE_TIMERS_INTERRUPT_CTRL(cpu),
              LP_CORE_TIMERS_INTERRUPT_CTRL_CNTVIRQ_IRQ_CTRL);

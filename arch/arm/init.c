@@ -33,7 +33,7 @@ void init_arch(void)
 }
 
 void init_arch_ap(void)
-{
+{  
   //  init_timer(TICK_USEC);
   init_irq();
 }
