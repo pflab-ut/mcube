@@ -6,6 +6,7 @@
 #include <mcube/mcube.h>
   .section ".text.boot"
 ENTRY(_start)
+  disable_local_irq
   // Setup the stack with CPU ID.
 initialize_stack:  
   get_cpu_id x0, x1
@@ -16,7 +17,7 @@ initialize_stack:
   mov sp, x2
 
 use_spsel0_in_all_exception_levels:
-//  msr spsel, xzr
+  msr spsel, xzr
   
 initialize_vector_addresses_el3_el2_el1:
   ldr x0, =vector
@@ -30,7 +31,7 @@ initialize_system_conrol_registers:
    * NOTE: there may be other system control registers, which should be initiailized.
    */  
   msr hcr_el2, xzr
-//  ldr x1, =0x30c50838
+  ldr x1, =0x30c50838
   ldr x1, =(SCTLR_ELx_nTWE | SCTLR_ELx_nTWI | SCTLR_ELx_CP15BEN | SCTLR_ELx_SA0 | SCTLR_ELx_SA)
   msr sctlr_el2, x1
   msr sctlr_el1, x1
