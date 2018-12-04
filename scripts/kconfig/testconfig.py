@@ -62,12 +62,12 @@ def do_testconfig(cinfo, val):
   p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   stdout, stderr = p.communicate()
   sys.stdout.write(stderr.decode())
-          
+
   cmd = "./scripts/kconfig/configure.py"
   p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   stdout, stderr = p.communicate()
   sys.stdout.write(stderr.decode())
-              
+
   if stderr == b"":
     print("make configure success")
     cmd = "make -j" + str(multiprocessing.cpu_count())
@@ -92,8 +92,8 @@ def do_testconfig(cinfo, val):
     # fw.close()
 
 val = [0, 0, 0, 0, 0, 0, 0, 0]
-    
-# nested for loop    
+
+# nested for loop
 """
 #for a in range(1, cinfo[0].num-1):
 #for a in range(3, cinfo[0].num):
@@ -118,7 +118,7 @@ def recursive_for_loop(index, depth):
     else:
 #      print(val)
       do_testconfig(cinfo, val)
-      
+
 recursive_for_loop(0, 7)
 
 
@@ -153,4 +153,3 @@ else:
 subject = "Configure Test"
 
 tools.sendmail(EMAIL_TO_ADDRESS, EMAIL_FROM_ADDRESS, subject, message)
-

@@ -108,4 +108,3 @@ for k, v, in tools.configures.items():
 
 f.write("#endif /* __MCUBE_MCUBE_CONFIG_H__ */\n")
 f.close()
-

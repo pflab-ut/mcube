@@ -247,18 +247,18 @@ def scan_configs(filename):
             sys.exit("Error: invalid defs " + val)
 #          print(val[2:len(val)])
           configure_defs[val[2:len(val)]] = "y"
-                         
-          
+
+
       cfiles_list = RE_CFILES_LINE.findall(line)
       if cfiles_list:
         cfiles += " \\\n" + cfiles_list[0]
 #        print("cfiles = %s" % cfiles_list)
-        
+
       afiles_list = RE_AFILES_LINE.findall(line)
       if afiles_list:
         afiles += " \\\n" + afiles_list[0]
 #        print("afiles = %s" % afiles_list)
-      
+
       type_list = RE_TYPE_LINE.findall(line)
       if type_list:
         __type += " \\\n" + type_list[0]
@@ -317,7 +317,7 @@ def scan_dependencies(filename):
   for line in f:
     if RE_COMMENT_LINE.match(line):
       continue
-    
+
     kconfig_list = RE_KCONFIG_LINE.findall(line)
 #    print(list)
     if kconfig_list:
@@ -339,7 +339,7 @@ def scan_dependencies(filename):
         dependencies[current_config] += val
       else:
         dependencies[current_config] = val
-    
+
     conflicts_list = RE_CONFLICTS_LINE.findall(line)
     if conflicts_list:
       conf_str = "conflicts"
@@ -352,7 +352,7 @@ def scan_dependencies(filename):
         conflicts[current_config] += val
       else:
         conflicts[current_config] = val
-      
+
     title_list = RE_TITLE_LINE.findall(line)
 #    print(title_list)
     if title_list:
@@ -390,7 +390,7 @@ def check_conflicts_and_dependencies():
             if no_error:
               no_error = False
             print("Conflict Error", k, "conflicts with", c)
-            
+
   return no_error
 
 
@@ -414,7 +414,7 @@ def save_config(filename):
     default_list = RE_DEFAULT_LINE.findall(line)
     if default_list:
       configure_file.write("=" + default_list[0] + "\n")
-        
+
   f.close()
   configure_file.close()
 
@@ -427,7 +427,7 @@ class ConfigInfo:
     self.__type = ""
     self.config = []
     self.num = 0
-    
+
 def scan_all_configs(filename):
   cinfo = []
   f = open(filename, "r")
@@ -446,7 +446,7 @@ def scan_all_configs(filename):
     if type_list:
       print(type_list)
       cinfo[len(cinfo)-1].__type = type_list[0]
-      
+
     kconfig_list = RE_KCONFIG_LINE.findall(line)
     if kconfig_list:
       print(kconfig_list)
@@ -458,7 +458,7 @@ def scan_all_configs(filename):
   for ci in cinfo:
     if ci.__type == "exclusive":
       ci.num = len(ci.config)
-    elif ci.__type  == "none":
+    elif ci.__type == "none":
       ci.num = pow(2, len(ci.config))
     else:
       sys.exit("Error: unknown type " + ci.__type + "\n")
@@ -475,21 +475,21 @@ def write_menu(filename, ci, index):
       if i == index:
         filename.write(ci.config[i] + "=y\n")
       else:
-        filename.write(ci.config[i] + "=n\n")          
+        filename.write(ci.config[i] + "=n\n")
   elif ci.__type == "none":
 #    print("index = ", index)
     for i in range(0, len(ci.config)):
       if bin((0b1 << i) & index) == bin(0b1 << i):
         filename.write(ci.config[i] + "=y\n")
       else:
-        filename.write(ci.config[i] + "=n\n")    
+        filename.write(ci.config[i] + "=n\n")
   else:
     sys.exit("Unknown type " + ci.__type + "\n")
-    
+
 def write_config(filename, cinfo, val):
   for i in range(0, len(val)):
     write_menu(filename, cinfo[i], val[i])
-  
+
 def sendmail(to_address, from_address, subject, message):
   msg = MIMEText(message)
   msg["Subject"] = "Build Test"

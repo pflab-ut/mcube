@@ -113,13 +113,13 @@ docker:
 	@$(TOP_DIR)/scripts/docker/docker.sh
 
 pylint:
-	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pylint --py3k
+	@$(FIND) . -name "*.py" | xargs pylint #--py3k
 
 pyflakes:
-	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pyflakes3
+	@$(FIND) . -name "*.py" | xargs pyflakes3
 
-#	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pep8 --ignore=E111
-#	@$(FIND) $(PYTHON_DIR) -name "*.py" | xargs pychecker
+#	@$(FIND) . -name "*.py" | xargs pep8 --ignore=E111
+#	@$(FIND) . -name "*.py" | xargs pychecker
 
 
 .PHONY: run grun mrun line size

@@ -10,18 +10,21 @@ get line.
 
 import glob
 
-total_len = 0
+TOTAL_LEN = 0
 
 def count_line(files):
-  global total_len
-  for file in files:
-    print(file)
-    f = open(file)
-    total_len += len(f.readlines())
-    f.close()
+  """
+  Count line.
+  """
+  global TOTAL_LEN
+  for filename in files:
+    print(filename)
+    fname = open(filename)
+    TOTAL_LEN += len(fname.readlines())
+    fname.close()
 
 count_line(glob.glob("*/*.c"))
 count_line(glob.glob("*/*/*.h"))
 count_line(glob.glob("*/*/*.py"))
 
-print(total_len)
+print(TOTAL_LEN)

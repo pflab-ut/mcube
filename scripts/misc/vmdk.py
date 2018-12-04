@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # @file scripts/misc/vmdk.py
-# 
+#
 # @author Hiroyuki Chishiro
 #
 """
@@ -12,16 +12,16 @@ import sys
 import struct
 import os
 
-argv = sys.argv
-argc = len(argv)
+ARGV = sys.argv
+ARGC = len(ARGV)
 
-if argc != 4:
-  print("Usage: %s filename eb[el]" % argv[0])
+if ARGC != 4:
+  print("Usage: %s filename eb[el]" % ARGV[0])
   quit()
-  
-fin = open(argv[1], "rb")
-fout = open(argv[2], "wb")
-fout2 = open(argv[3], "w")
+
+fin = open(ARGV[1], "rb")
+fout = open(ARGV[2], "wb")
+fout2 = open(ARGV[3], "w")
 
 while True:
   byte_data = fin.read(4)
@@ -40,7 +40,7 @@ nr_cylinders = 1
 # kernel size's upper bound
 kbound = sector_size * nr_sectors * nr_heads * nr_cylinders
 
-ksize = os.path.getsize(argv[1])
+ksize = os.path.getsize(ARGV[1])
 padsize = kbound - ksize
 #padsize = sector_size - ksize % sector_size
 #print("padsize = ", padsize)
@@ -52,14 +52,14 @@ if padsize >= 0:
     fout.write(struct.pack("B", 0))
     padsize -= 1
   ksize += 1
-else:    
+else:
   print("Error: too much kernel size > vmdksize: {0} > {1}".format(ksize, kbound))
   quit()
 
 #cylinders = (ksize / sector_size / nr_sectors / nr_heads).ceil
 val = int(kbound / sector_size)
 
-str = f"""
+string = f"""
 # Disk DescriptorFile
 version=1
 encoding="Shift_JIS"
@@ -83,7 +83,7 @@ ddb.geometry.cylinders = "{nr_cylinders}"
 ddb.adapterType = "ide"
 """
 
-fout2.write(str)
+fout2.write(string)
 
 fout2.close
 fout.close

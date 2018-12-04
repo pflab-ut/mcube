@@ -16,7 +16,7 @@
 /** Algorithm. */
 #define CONFIG_ALGO_FP 1
 /** Task Queue. */
-#define CONFIG_TQ_DLIST 1
+#define CONFIG_TQ_O1 1
 /** Tie-Break. */
 #define CONFIG_TIE_BREAK_FIFO 1
 /** Memory. */
