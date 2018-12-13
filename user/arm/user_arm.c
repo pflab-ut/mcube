@@ -18,7 +18,7 @@ void kernel_level_main(void)
   print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
   //  call_sys_move_to_kernel_level();
   move_to_user_level();
-  printf("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
+  print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
   asm volatile("mov %0, x30" : "=r"(ret));
   print("ret = 0x%lx\n", ret);
   asm volatile("mov %0, sp" : "=r"(sp));
@@ -29,6 +29,10 @@ void kernel_level_main(void)
   print("ret = 0x%lx\n", ret);
   asm volatile("mov %0, sp" : "=r"(sp));
   print("sp = 0x%x\n", sp);
+  move_to_user_level();
+  print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
+  call_sys_move_to_kernel_level();
+  print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
   
 }
 

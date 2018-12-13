@@ -131,10 +131,6 @@ menu Option
     title Debug
     default y
     defs -DCONFIG_DEBUG
-  config CONFIG_TRACE
-    title Trace
-    default n
-    defs -DCONFIG_TRACE
   config CONFIG_FS_FAT
     title Fat File System
     default n

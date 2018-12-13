@@ -21,9 +21,9 @@ SRCS += \
  $(TOP_DIR)/kernel/queue.c \
  $(TOP_DIR)/lib/ctype.c \
  $(TOP_DIR)/lib/math.c \
+ $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/lib/stdlib.c \
  $(TOP_DIR)/lib/string.c \
- $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/user/user.c \
 
 
@@ -113,13 +113,13 @@ docker:
 	@$(TOP_DIR)/scripts/docker/docker.sh
 
 pylint:
-	@$(FIND) . -name "*.py" | xargs pylint #--py3k
+	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pylint #--py3k
 
 pyflakes:
-	@$(FIND) . -name "*.py" | xargs pyflakes3
+	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pyflakes3
 
-#	@$(FIND) . -name "*.py" | xargs pep8 --ignore=E111
-#	@$(FIND) . -name "*.py" | xargs pychecker
+#	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pep8 --ignore=E111
+#	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pychecker
 
 
 .PHONY: run grun mrun line size

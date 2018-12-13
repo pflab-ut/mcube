@@ -49,7 +49,6 @@
 #include <mcube/string.h>
 #include <mcube/syscall.h>
 #include <mcube/timer.h>
-#include <mcube/trace.h>
 #include <mcube/uart.h>
 #include <mcube/user.h>
 
