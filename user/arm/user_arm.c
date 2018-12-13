@@ -4,7 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
-
+#include "../user.h"
 
 void kernel_level_main(void)
 {
@@ -151,7 +151,8 @@ int user_arch_main(void)
   //  user_thread_main();
   // user_ap_main();
   // user_dmac_main();
-  kernel_level_main();
+  //  kernel_level_main();
+  test_ring_buf();
 #if CONFIG_ARCH_ARM_RASPI3
   //  user_raspi3_main();
 #endif /* CONFIG_ARCH_ARM_RASPI3 */

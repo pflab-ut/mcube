@@ -48,19 +48,14 @@
 #undef FALSE
 #endif
 
-#ifdef __ASSEMBLY__
-
 #define FALSE 0
 #define TRUE 1
 
-#else
 
-enum bool {
-  FALSE = 0,
-  TRUE
-};
+#ifndef __ASSEMBLY__
 
-typedef enum bool bool;
+
+typedef int bool;
 
 #endif /* !__ASSEMBLY__ */
 

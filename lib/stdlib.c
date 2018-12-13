@@ -5,7 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-
+#if !CONFIG_ARCH_SIM
 
 unsigned long user_malloc[MALLOC_SIZE];
 mem_block *free_list;
@@ -334,3 +334,5 @@ void qsort(void *base, size_t num, size_t size, sortcmp cmp)
     num -= part + 1;
   }
 }
+
+#endif /* CONFIG_ARCH_SIM */
