@@ -26,6 +26,7 @@ void init_arch(void)
   init_uart();
   init_timer(TICK_USEC);
   init_dmac();
+  init_malloc();
 #if CONFIG_ARCH_ARM_RASPI3
   init_rand_raspi3();
 #endif /* CONFIG_ARCH_ARM_RASPI3 */

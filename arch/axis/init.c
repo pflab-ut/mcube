@@ -43,6 +43,7 @@ void init_arch(void)
 {  
   init_irq();
   init_cpu();
+  init_malloc();
 }
 
 void init_arch_ap(void)

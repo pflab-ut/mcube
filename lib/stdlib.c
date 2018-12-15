@@ -7,103 +7,158 @@
 
 #if !CONFIG_ARCH_SIM
 
-unsigned long user_malloc[MALLOC_SIZE];
-mem_block *free_list;
 
+atomic_int global_malloc_lock = SPIN_UNLOCKED;
+unsigned char user_malloc[MALLOC_SIZE];
+struct mem_block_header *head;
+struct mem_block_header *tail;
+
+void init_malloc(void)
+{
+  print("init_malloc()\n");
+  int i;
+  head = (struct mem_block_header *) user_malloc;
+  tail = (struct mem_block_header *) &user_malloc[MALLOC_SIZE];
+  struct mem_block_header *current = head;
+  for (i = 0; i < BLOCK_NUM; i++) {
+    current->next = current + BLOCK_SIZE;
+    current->size = BLOCK_SIZE - sizeof(struct mem_block_header);
+    current->is_free = TRUE;
+    current = current->next;
+  }
+}
+
+
+void *sbrk(size_t increment)
+{
+  return (void *) -1;
+}
+
+
+struct mem_block_header *get_free_block(size_t size)
+{
+  struct mem_block_header *current = head;
+  while (current) {
+    print("current = 0x%x\n", current);
+    print("current->is_free = %d current->size = %d\n", current->is_free, current->size);
+    if (current->is_free && current->size >= size) {
+      return current;
+    }
+    current = current->next;
+  }
+  return NULL;
+}
 
 void *malloc(size_t size)
 {
-	mem_block *bestfit = NULL;
-	mem_block *prev = NULL;
-	mem_block *cur = free_list;
-	size = ((size + sizeof(size_t) - 1) / sizeof(size_t)) * sizeof(size_t);
-	PDEBUG("size = %u\n", (unsigned int) size);
-	
-	while (cur) {
-		if (cur->size == size) {
-			if (prev) {
-				prev->next = cur->next;
-			} else {
-				free_list = cur->next;
-			}
-			/* find just memory size */
-			return (void *)((unsigned long) cur + sizeof(mem_block));
-		} else if (cur->size > size) {
-			if (bestfit) {
-				if (bestfit->size > cur->size) {
-					bestfit = cur;
-				}
-			} else {
-				bestfit = cur;
-			}
-		}
-		prev = cur;
-		cur = cur->next;
-	}
-	/* split the nearest memory size */
-	if (bestfit) {
-		mem_block *slice = (mem_block *)((unsigned long) bestfit + sizeof(mem_block) + size);
-		slice->size = bestfit->size - (size + sizeof(mem_block));
-		if (bestfit == free_list) {
-			slice->next = free_list->next;
-			free_list = slice;
-		} else {
-			slice->next = free_list;
-			free_list = slice;
-		}
-		bestfit->size = size;
-		return (void *)((unsigned long) bestfit + sizeof(mem_block));
-	}
-	return NULL;
+  size_t total_size;
+  void *block;
+  struct mem_block_header *header;
+  if (!size) {
+    return NULL;
+  }
+  spin_lock(&global_malloc_lock);
+  header = get_free_block(size);
+  if (header) {
+    header->is_free = FALSE;
+    spin_unlock(&global_malloc_lock);
+    return (void *)(header + 1);
+  }
+  total_size = sizeof(struct mem_block_header) + size;
+  block = sbrk(total_size);
+  if (block == (void *) -1) {
+    spin_unlock(&global_malloc_lock);
+    return NULL;
+  }
+  header = block;
+  header->size = size;
+  header->is_free = FALSE;
+  header->next = NULL;
+  if (!head) {
+    head = header;
+  }
+  if (tail) {
+    tail->next = header;
+  }
+  tail = header;
+  spin_unlock(&global_malloc_lock);
+  return (void*)(header + 1);
 }
 
 
-void free(void *objp)
+void free(void *block)
 {
-	mem_block *del_mem = (mem_block *)((unsigned long) objp - sizeof(mem_block));
-	int connected = 0;
-	if ((unsigned long) objp < (unsigned long) user_malloc || (unsigned long) objp >= (unsigned long) user_malloc + sizeof(user_malloc)) {
-		//		print("Invalid address %x\n", objp);
-		return;
-	}
-	do {
-		//		PDEBUG("connected = %x\n", connected);
-		connected &= 0x01;
-		mem_block *cur = free_list;
-		mem_block *prev = NULL;
-		while (cur) {
-			//			PDEBUG("cur = %x del_mem = %x\n", cur, del_mem);
-			if (cur != del_mem) {
-				if (((unsigned long) del_mem + sizeof(mem_block) + del_mem->size) == (unsigned long) cur) {
-					/* merge cur memory and post memory */
-					del_mem->next = cur->next;
-					del_mem->size += sizeof(mem_block) + cur->size;
-					connected = 0x03;
-					if (!prev) {
-						free_list = del_mem;
-					} else if (prev != del_mem) {
-						prev->next = del_mem;
-					}
-					break;
-				} else if (((unsigned long) cur + sizeof(mem_block) + cur->size) == (unsigned long) del_mem ) {
-					/* merge cur memory and prev memory */
-					cur->size += sizeof(mem_block) + del_mem->size;
-					del_mem = cur;
-					connected = 0x03;
-					break;
-				}
-			}
-			prev = cur;
-			cur = cur->next;
-		}
-	} while (connected & 0x02);
+  struct mem_block_header *header, *tmp;
+  void *programbreak;
 
-  if (connected == 0) {
-		/* add freelist if neighbour memory does not exist */
-		del_mem->next = free_list;
-		free_list = del_mem;
-	}
+  if (!block) {
+    return;
+  }
+  spin_lock(&global_malloc_lock);
+  header = (struct mem_block_header*)block - 1;
+
+  programbreak = sbrk(0);
+  if ((char *) block + header->size == programbreak) {
+    if (head == tail) {
+      head = tail = NULL;
+    } else {
+      tmp = head;
+      while (tmp) {
+        if(tmp->next == tail) {
+          tmp->next = NULL;
+          tail = tmp;
+        }
+        tmp = tmp->next;
+      }
+    }
+    sbrk(0 - sizeof(struct mem_block_header) - header->size);
+    spin_unlock(&global_malloc_lock);
+    return;
+  }
+  header->is_free = TRUE;
+  spin_unlock(&global_malloc_lock);
 }
+
+void *calloc(size_t num, size_t nsize)
+{
+  size_t size;
+  void *block;
+  if (!num || !nsize) {
+    return NULL;
+  }
+  size = num * nsize;
+  /* check mul overflow */
+  if (nsize != size / num) {
+    return NULL;
+  }
+  block = malloc(size);
+  if (!block) {
+    return NULL;
+  }
+  memset(block, 0, size);
+  return block;
+}
+
+void *realloc(void *block, size_t size)
+{
+  struct mem_block_header *header;
+  void *ret;
+  if (!block || !size) {
+    return malloc(size);
+  }
+  header = (struct mem_block_header*) block - 1;
+  if (header->size >= size) {
+    return block;
+  }
+  ret = malloc(size);
+  if (ret) {
+
+    memcpy(ret, block, header->size);
+    free(block);
+  }
+  return ret;
+}
+
 
 #if !CONFIG_ARCH_AXIS
 

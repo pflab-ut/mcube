@@ -35,6 +35,7 @@ void init_arch(void)
   
   init_keyboard();
   init_apic();
+  init_malloc();
 #if 0
   print_cpu_brand();
   print_simd_info();

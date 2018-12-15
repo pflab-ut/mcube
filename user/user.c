@@ -9,7 +9,12 @@
 
 int test_ring_buf(void)
 {
-  uint8_t *buffer  = malloc(EXAMPLE_BUFFER_SIZE * sizeof(uint8_t));
+  uint8_t *buffer;
+  if (!(buffer = malloc(EXAMPLE_BUFFER_SIZE * sizeof(uint8_t)))) {
+    printf("Error: cannot allocate memory %lu\n", EXAMPLE_BUFFER_SIZE * sizeof(uint8_t));
+    return 1;
+  }
+  print("buffer = 0x%x\n", buffer);
 
   printf("\n=== C Ring Buffer Check ===\n");
 

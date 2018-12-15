@@ -29,28 +29,34 @@ void free(void *objp);
 
 
 void qsort(void *base, size_t num, size_t size, sortcmp cmp);
-  
+
+void init_malloc(void);
+
 #endif /* CONFIG_ARCH_SIM */
 
+/* 4k */
 #define MALLOC_SIZE 0x1000
 
-extern unsigned long user_malloc[MALLOC_SIZE];
+#define BLOCK_NUM 0x10
+#define BLOCK_SIZE (MALLOC_SIZE / BLOCK_NUM)
+
+
+extern unsigned char user_malloc[MALLOC_SIZE];
+
 
 /**
- * @brief Memory block
+ * @brief mem_block_header
  *
  * The mem_block structure has memory block information for dynamic allocation.
  */
-struct mem_block {
-	/** Pointer to next memory block. */
-  struct mem_block *next;
-	/** Size of memory block. */
+struct mem_block_header {
   size_t size;
+  unsigned is_free;
+  struct mem_block_header *next;
 };
 
-typedef struct mem_block mem_block;
+typedef struct mem_block_header mem_block_header;
 
-extern mem_block *free_list;
 
 
 

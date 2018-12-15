@@ -52,12 +52,6 @@
 #define TRUE 1
 
 
-#ifndef __ASSEMBLY__
-
-
-typedef int bool;
-
-#endif /* !__ASSEMBLY__ */
 
 
 #define SUCCESS 1
@@ -72,6 +66,9 @@ typedef int bool;
 
 #define __stringify_1(x...)   #x
 #define __stringify(x...)    __stringify_1(x)
+
+typedef int bool;
+
 
 /**
  * @brief Argument parameter

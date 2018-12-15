@@ -13,7 +13,8 @@ typedef struct ring_buf {
   size_t head;
   size_t tail;
   size_t max;
-  bool full;
+  int full;
+  atomic_int lock;
 } ring_buf_t;
 
 typedef ring_buf_t* cbuf_handle_t;
