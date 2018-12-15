@@ -29,13 +29,10 @@ static void retreat_pointer(cbuf_handle_t cbuf)
 cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
 {
   cbuf_handle_t cbuf;
-  cbuf = malloc(sizeof(ring_buf_t));
-#if 0
   if (!(cbuf = malloc(sizeof(ring_buf_t)))) {
     print("Error: cannot allocate memory %lu\n", sizeof(ring_buf_t));
     return NULL;
   }
-#endif
   cbuf->buffer = buffer;
   cbuf->max = size;
   cbuf->lock = SPIN_UNLOCKED;

@@ -81,6 +81,13 @@ void handle_mailbox_interrupt(unsigned int cpu, unsigned int mb)
       mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
                  LP_MAILBOX0_INTERRUPT_SCHED);
     }
+    if (data & LP_MAILBOX0_INTERRUPT_CALLBACK) {
+      if (Callback) {
+        Callback();
+      }
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_CALLBACK);
+    }
     break;
   case 1:
     break;
@@ -93,6 +100,8 @@ void handle_mailbox_interrupt(unsigned int cpu, unsigned int mb)
     break;
   }  
 }
+
+
 
 
 void do_irq_mailbox(unsigned int cpu, unsigned int mb)

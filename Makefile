@@ -19,6 +19,7 @@ SRCS += \
  $(TOP_DIR)/kernel/state.c \
  $(TOP_DIR)/kernel/syscall.c \
  $(TOP_DIR)/kernel/queue.c \
+ $(TOP_DIR)/kernel/irq.c \
  $(TOP_DIR)/lib/buffer.c \
  $(TOP_DIR)/lib/ctype.c \
  $(TOP_DIR)/lib/math.c \

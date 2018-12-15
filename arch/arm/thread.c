@@ -33,4 +33,6 @@ void __attribute__((noreturn)) exit(int status)
 
 void wait(unsigned long count)
 {
+  while (get_current_cpu_time() < count)
+    ;
 }

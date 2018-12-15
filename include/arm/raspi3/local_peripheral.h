@@ -342,6 +342,7 @@
 /* Core [cpu] Mailbox [mb] Write-Set Registers */
 #define LP_MAILBOX0_INTERRUPT_DEBUG (0x1 << 0)
 #define LP_MAILBOX0_INTERRUPT_SCHED (0x1 << 1)
+#define LP_MAILBOX0_INTERRUPT_CALLBACK (0x1 << 2)
 
 
 #ifndef __ASSEMBLY__
@@ -361,6 +362,9 @@ static inline void disable_mailbox_interrupt(void)
     mmio_out32(LP_CORE_MAILBOXES_INTERRUPT_CTRL(i), 0x0);
   }
 }
+
+
+void register_mailbox_callback_handler(callback_t func);
 
 
 #endif /* !__ASSEMBLY__ */

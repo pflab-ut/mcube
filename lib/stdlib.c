@@ -39,8 +39,6 @@ struct mem_block_header *get_free_block(size_t size)
 {
   struct mem_block_header *current = head;
   while (current) {
-    print("current = 0x%x\n", current);
-    print("current->is_free = %d current->size = %d\n", current->is_free, current->size);
     if (current->is_free && current->size >= size) {
       return current;
     }

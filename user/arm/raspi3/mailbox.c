@@ -65,6 +65,12 @@ void raspi3_sd_main(void)
 #endif /* CONFIG_FS_FAT */
 }
 
+void callback_func(void)
+{
+  printk("callback_func()\n");
+}
+
+
 void raspi3_int_main(void)
 {
   unsigned long cpu = get_cpu_id();
@@ -72,8 +78,10 @@ void raspi3_int_main(void)
   printk("cpu = %d\n", cpu);
 
 
+  register_callback_handler(callback_func);
   //  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(1, 0), LP_MAILBOX0_INTERRUPT_DEBUG);
-  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(0, 0), LP_MAILBOX0_INTERRUPT_SCHED);
+  //  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(0, 0), LP_MAILBOX0_INTERRUPT_SCHED);
+  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(0, 0), LP_MAILBOX0_INTERRUPT_CALLBACK);
 
   //disable_mailbox_interrupt();
 }

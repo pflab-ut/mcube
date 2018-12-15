@@ -14,8 +14,6 @@ int test_ring_buf(void)
     printf("Error: cannot allocate memory %lu\n", EXAMPLE_BUFFER_SIZE * sizeof(uint8_t));
     return 1;
   }
-  print("buffer = 0x%x\n", buffer);
-
   printf("\n=== C Ring Buffer Check ===\n");
 
   cbuf_handle_t cbuf = ring_buf_init(buffer, EXAMPLE_BUFFER_SIZE);
