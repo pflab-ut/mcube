@@ -71,7 +71,7 @@ void callback_func(void)
 }
 
 
-void raspi3_int_main(void)
+void raspi3_irq_main(void)
 {
   unsigned long cpu = get_cpu_id();
   printk("raspi3_int_main()\n");
@@ -92,6 +92,6 @@ int user_raspi3_main(void)
   //  raspi3_mailbox_main();
   //  raspi3_frame_buffer_main();
   //  raspi3_sd_main();
-  raspi3_int_main();
+  raspi3_irq_main();
   return 0;
 }

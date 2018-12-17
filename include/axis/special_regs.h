@@ -16,9 +16,22 @@ static inline unsigned long get_cpu_id(void)
 {
   unsigned long data;
   asm volatile("mfs %0, $1" : "=r"(data));
-  return data;
+  return data & 0x7;
 }
 
+static inline unsigned long get_cluster_id(void)
+{
+  unsigned long data;
+  asm volatile("mfs %0, $1" : "=r"(data));
+  return data >> 16;
+}
+
+static inline unsigned long get_cluster_and_cpu_ids(void)
+{
+  unsigned long data;
+  asm volatile("mfs %0, $1" : "=r"(data));
+  return data;
+}
 
 static inline unsigned long get_interrupt_vector_base_address(void)
 {

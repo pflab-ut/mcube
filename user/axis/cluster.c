@@ -118,7 +118,7 @@ void do_sequential(void)
 	unsigned long cpu_id;
   unsigned long begin, end;
   print("do_sequential()\n");
-  cpu_id = get_cpu_id();
+  cpu_id = get_cluster_and_cpu_ids();
 	set_cpu_id(&own, cpu_id);
   //  print("own.x = %d own.y = %d\n", own.x, own.y);
   if (own.x == 0 && own.y == 0) {
@@ -218,7 +218,7 @@ void do_parallel(void)
 	unsigned long cpu_id;
   int i;
   unsigned long begin, end;
-  cpu_id = get_cpu_id();
+  cpu_id = get_cluster_and_cpu_ids();
   //  print("cpu_id = 0x%x\n", cpu_id);
 	set_cpu_id(&own, cpu_id);
   //  print("own.x = %d own.y = %d\n", own.x, own.y);

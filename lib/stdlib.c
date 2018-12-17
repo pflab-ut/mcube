@@ -15,13 +15,16 @@ struct mem_block_header *tail;
 
 void init_malloc(void)
 {
-  print("init_malloc()\n");
   int i;
   head = (struct mem_block_header *) user_malloc;
   tail = (struct mem_block_header *) &user_malloc[MALLOC_SIZE];
   struct mem_block_header *current = head;
   for (i = 0; i < BLOCK_NUM; i++) {
-    current->next = current + BLOCK_SIZE;
+    if (i < BLOCK_NUM - 1) {
+      current->next = current + BLOCK_SIZE;
+    } else {
+      current->next = NULL;
+    }
     current->size = BLOCK_SIZE - sizeof(struct mem_block_header);
     current->is_free = TRUE;
     current = current->next;
@@ -31,6 +34,7 @@ void init_malloc(void)
 
 void *sbrk(size_t increment)
 {
+  /* TODO: implement */
   return (void *) -1;
 }
 
@@ -80,7 +84,7 @@ void *malloc(size_t size)
   }
   tail = header;
   spin_unlock(&global_malloc_lock);
-  return (void*)(header + 1);
+  return (void *)(header + 1);
 }
 
 
