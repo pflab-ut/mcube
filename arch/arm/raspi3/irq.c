@@ -88,6 +88,55 @@ void handle_mailbox_interrupt(unsigned int cpu, unsigned int mb)
       mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
                  LP_MAILBOX0_INTERRUPT_CALLBACK0);
     }
+    if (data & LP_MAILBOX0_INTERRUPT_CALLBACK1) {
+      if (Callback[1]) {
+        Callback[1]();
+      }
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_CALLBACK1);
+    }
+    if (data & LP_MAILBOX0_INTERRUPT_CALLBACK2) {
+      if (Callback[2]) {
+        Callback[2]();
+      }
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_CALLBACK2);
+    }
+    if (data & LP_MAILBOX0_INTERRUPT_CALLBACK3) {
+      if (Callback[3]) {
+        Callback[3]();
+      }
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_CALLBACK3);
+    }
+    if (data & LP_MAILBOX0_INTERRUPT_CALLBACK4) {
+      if (Callback[4]) {
+        Callback[4]();
+      }
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_CALLBACK4);
+    }
+    if (data & LP_MAILBOX0_INTERRUPT_CALLBACK5) {
+      if (Callback[5]) {
+        Callback[5]();
+      }
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_CALLBACK5);
+    }
+    if (data & LP_MAILBOX0_INTERRUPT_CALLBACK6) {
+      if (Callback[6]) {
+        Callback[6]();
+      }
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_CALLBACK6);
+    }
+    if (data & LP_MAILBOX0_INTERRUPT_CALLBACK7) {
+      if (Callback[7]) {
+        Callback[7]();
+      }
+      mmio_out32(LP_CORE_MAILBOX_READ_WRITE_HIGH_TO_CLEAR(cpu, mb),
+                 LP_MAILBOX0_INTERRUPT_CALLBACK7);
+    }
     break;
   case 1:
     break;

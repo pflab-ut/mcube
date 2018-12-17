@@ -74,7 +74,7 @@ void callback_func(void)
 void raspi3_irq_main(void)
 {
   unsigned long cpu = get_cpu_id();
-  printk("raspi3_int_main()\n");
+  printk("raspi3_irq_main()\n");
   printk("cpu = %d\n", cpu);
 
 
