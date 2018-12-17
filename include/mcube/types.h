@@ -42,6 +42,9 @@ typedef unsigned int size_t;
 /** Integer data type. */
 typedef int ssize_t;
 
+/** Interger pointer type. */
+typedef long int intptr_t;
+
 #else
 #error "Unknown Architecture"
 #endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
