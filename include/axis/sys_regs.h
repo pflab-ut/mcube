@@ -31,7 +31,6 @@ static inline void start_cpu(volatile unsigned long id)
   }
   printk("SYS_CPU_CTRL(%lu) = 0x%lx\n", id, SYS_CPU_CTRL(id));
   mmio_out32(SYS_CPU_CTRL(id), 0);
-  //  mmio_out32(0xffffffff, SYS_CPU_CTRL(id));
 }
 
 static inline void stop_cpu(volatile unsigned long id)

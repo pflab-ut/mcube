@@ -14,10 +14,10 @@ void init_irq(void)
   for (i = 0; i < NR_SOFTWARE_INTERRUPTS; i++) {
     enable_software_interrupt(i);
   }
+  register_callback_handler(do_sched_by_software_interrupt, 0);
   enable_previous_irq();
   enable_local_irq();
 }
-
 
 void exit_irq(void)
 {
@@ -33,7 +33,6 @@ int myputs(const char *s)
   }
   return t - s;
 }
-
 
 
 /**

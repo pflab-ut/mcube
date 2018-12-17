@@ -75,7 +75,6 @@ static inline int is_irq_enabled(unsigned long flags)
   return data & 0x1;
 }
 
-
 static inline void save_local_irq(unsigned long *flags)
 {
   asm volatile("mfs %0, $0" : "=r"(*flags));
@@ -83,7 +82,6 @@ static inline void save_local_irq(unsigned long *flags)
     disable_local_irq();
   }
 }
-
 
 static inline void restore_local_irq(unsigned long *flags)
 {
@@ -94,6 +92,7 @@ static inline void restore_local_irq(unsigned long *flags)
 }
 
 void common_interrupt_handler(void);
+void do_sched_by_software_interrupt(void);
 
 #endif /* !__ASSEMBLY__ */
 

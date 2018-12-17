@@ -13,17 +13,18 @@ __begin:
 ENTRY(_start)
 	.set 	noreorder
 	la		$gp, _gp
-  mfs $t0, $1
+  mfs $t0, $1 // get cluster and cpu ids
+  and $t0, $t0, 0x7 // get cpu id
 //	la		$sp, THREAD_STACK_ADDR(0, 0)
   //	la		$sp, (MEMORY_BASE + MEMORY_SIZE)
   // $sp = kernel_stack + cpu_id($t0) * STACK_SIZE
   la $sp, kernel_stack
+  addi $t0, $t0, 1
   muli $t1, $t0, KERNEL_STACK_SIZE
 	add		$sp, $sp, $t1
-//	move		$fp, $sp
-//	la		$sp, 0x00010000
-//  addi  $t0, $0, 'Z'
-//  mts   $31, $t0
+
+  addi  $t0, $0, 'Z'
+  mts   $31, $t0
   
 __jump_to_main:
 	la		$t0, main

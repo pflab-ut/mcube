@@ -140,8 +140,9 @@ else ifeq ($(MACHINE_NAME), raspi3)
 # for MINI UART
 #	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET)
 else ifeq ($(ARCH_NAME), axis)
-	$(RUN_AXIS) "+define+PRINT_ALL"
 #	$(RUN_AXIS)
+	$(RUN_AXIS) "+define+PRINT_ALL"
+#	$(RUN_AXIS_CLUSTER) "+define+PRINT_ALL"
 else
 	echo "Unknown Architecture"
 endif

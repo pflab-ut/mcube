@@ -30,18 +30,16 @@ int main(int argc, char *argv[])
   unsigned long cpu = get_cpu_id();
   if (cpu == 0) {
     init_arch();
-    IsInitialized = TRUE;
     print("main()\n");
+    IsInitialized = TRUE;
     init_rq();
-    print("main()2\n");
     init_sched();
-    print("main()3\n");
     //    print("%13lx\n", 0x1234);
-    
+
     user_main();
     exit_arch();
     print("main() end\n");
-  } else {
+  } else {    
     //    print("get_cpu_id() = %lu\n", get_cpu_id());
     init_arch_ap();
     /* wait until init_arch() is finished. */

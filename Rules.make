@@ -39,8 +39,8 @@ endif
 
 CFLAGS += -Iinclude -Wall
 #CFLAGS += -Wextra
-#CFLAGS += -O3
-CFLAGS += -O2
+CFLAGS += -O3
+#CFLAGS += -O2
 #CFLAGS += -O0
 
 CFLAGS += -std=gnu11

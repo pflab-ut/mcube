@@ -157,11 +157,6 @@ int usertask(void *arg);
   } while (0)
 
 
-typedef void (*callback_t)(void);
-
-void register_callback_handler(callback_t func);
-
-extern callback_t Callback;
 extern unsigned int Debug;
 
 int main(int argc, char *argv[]);

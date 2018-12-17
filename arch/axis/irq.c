@@ -110,29 +110,33 @@ static void handle_dmac_interrupt(void)
   set_dmac_status_clear(1);
 }
 
-static void handle_software_interrupt(unsigned long id)
+void do_sched_by_software_interrupt(void)
 {
   unsigned long cpu = get_cpu_id();
   unsigned long current_timer_count;
+  current_timer_count = get_timer_count();
+  if (current_th[cpu] != &kernel_th[cpu]) {
+    current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(current_timer_count
+                                                          - current_th[cpu]->sched.begin_cpu_time);
+  }
+  if (current_th[cpu] != &kernel_th[cpu]) {
+    /* end current_th and call do_sched() */
+    do_end_job(current_th[cpu]);
+  }
+  /* software interrupt for scheduler */
+  do_sched();  
+}
+
+static void handle_software_interrupt(unsigned long id)
+{
   PDEBUG("%s(): id = %lu\n", __func__, id);
   set_common_interrupt_clear(id);
   /* do processing... */
   switch (id) {
-  case 0:
-    current_timer_count = get_timer_count();
-    if (current_th[cpu] != &kernel_th[cpu]) {
-      current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(current_timer_count
-                                                            - current_th[cpu]->sched.begin_cpu_time);
+  case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+    if (Callback[id]) {
+      Callback[id]();
     }
-    if (current_th[cpu] != &kernel_th[cpu]) {
-      /* end current_th and call do_sched() */
-      do_end_job(current_th[cpu]);
-    }
-    /* software interrupt for scheduler */
-    do_sched();
-    break;
-  case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-    printk("Software interrupts 1-7 do nothing.\n");
     break;
   default:
     printk("Error: unknown id %lu\n", id);
@@ -180,3 +184,4 @@ asmlinkage int do_irq(struct full_regs *regs)
   enable_local_irq();
   return 0;
 }
+

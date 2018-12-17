@@ -154,7 +154,6 @@ void *realloc(void *block, size_t size)
   }
   ret = malloc(size);
   if (ret) {
-
     memcpy(ret, block, header->size);
     free(block);
   }
