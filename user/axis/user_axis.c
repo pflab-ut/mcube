@@ -91,23 +91,35 @@ int test_main(void)
   return 0;
 }
 
+void callback_func(void)
+{
+  printk("callback_func()\n");
+}
+
+void callback_main(void)
+{
+  register_callback_handler(callback_func, 0);
+  generate_software_interrupt(0);
+}
+
+
 void multi_cpus_main(void)
 {
   print("get_cpu_id() = %lu\n", get_cpu_id());
+
+  // start CPU1
   set_program_counter(1, 0);
   start_cpu(1);
-  
+
+  // NOTE: work well if CPU2 is implemented.
   // set_program_counter(2, 0);
   // start_cpu(2);
+  
   volatile int i = 0;
   while (1) {
     i++;
-    //    print("i = %d\n", i);
+    print("i = %d\n", i);
   }
-  extern volatile unsigned long cpu_ids[256];
-  while (cpu_ids[1] == 0) {
-  }
-  //  print("cpu_ids[1] = %lu\n", cpu_ids[1]);
 }
 
 void tsc_main(void)
@@ -140,7 +152,8 @@ int user_arch_main(void)
   //  timer_main();
   //  dmac_main();
   //  test_main();
-  multi_cpus_main();
+  callback_main();
+  //  multi_cpus_main();
   //  tsc_main();
   //  cluster_main();
   return 0;

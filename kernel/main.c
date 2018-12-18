@@ -34,8 +34,6 @@ int main(int argc, char *argv[])
     IsInitialized = TRUE;
     init_rq();
     init_sched();
-    //    print("%13lx\n", 0x1234);
-
     user_main();
     exit_arch();
     print("main() end\n");
@@ -45,7 +43,7 @@ int main(int argc, char *argv[])
     /* wait until init_arch() is finished. */
     while (IsInitialized == FALSE) {
     }
-    /* do application processor's specific code. */
+    /* execute the specific code of application processors (except bootstrap processor). */
     ap_main();
     exit_arch_ap();
   }
