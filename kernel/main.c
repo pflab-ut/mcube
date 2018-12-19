@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
   if (cpu == 0) {
     init_arch();
     print("main()\n");
-    IsInitialized = TRUE;
     init_rq();
     init_sched();
+    IsInitialized = TRUE;
     user_main();
     exit_arch();
     print("main() end\n");

@@ -76,12 +76,15 @@ void raspi3_irq_main(void)
   unsigned long cpu = get_cpu_id();
   printk("raspi3_irq_main()\n");
   printk("cpu = %d\n", cpu);
+  unsigned long dst_cpu, dst_mb;
 
-
+  dst_cpu = 0;
+  dst_mb = 0;
+  
   register_callback_handler(callback_func, 0);
   //  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(1, 0), LP_MAILBOX0_INTERRUPT_DEBUG);
   //  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(0, 0), LP_MAILBOX0_INTERRUPT_SCHED);
-  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(0, 0), LP_MAILBOX0_INTERRUPT_CALLBACK0);
+  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(dst_cpu, dst_mb), LP_MAILBOX0_INTERRUPT_CALLBACK0);
 
   //disable_mailbox_interrupt();
 }

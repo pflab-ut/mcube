@@ -8,6 +8,11 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @brief Ring buffer
+ *
+ * The ring_buf structure has ring buffer information.
+ */
 typedef struct ring_buf {
   uint8_t *buffer;
   size_t head;

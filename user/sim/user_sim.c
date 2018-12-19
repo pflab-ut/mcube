@@ -6,6 +6,7 @@
 #include <mcube/mcube.h>
 #include "../user.h"
 
+
 int ap_main(void)
 {
   unsigned long cpu = get_cpu_id();
@@ -19,6 +20,6 @@ int ap_main(void)
 
 int user_arch_main(void)
 {
-  test_ring_buf();
+  //  test_ring_buf();
   return 0;
 }

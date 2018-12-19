@@ -34,14 +34,7 @@ void init_malloc(void);
 
 #endif /* CONFIG_ARCH_SIM */
 
-/* 4k */
-#define MALLOC_SIZE 0x1000
 
-#define BLOCK_NUM 0x10
-#define BLOCK_SIZE (MALLOC_SIZE / BLOCK_NUM)
-
-
-extern unsigned char user_malloc[MALLOC_SIZE];
 
 
 /**
@@ -51,13 +44,18 @@ extern unsigned char user_malloc[MALLOC_SIZE];
  */
 struct mem_block_header {
   size_t size;
-  unsigned is_free;
+  unsigned int is_free;
   struct mem_block_header *next;
 };
 
 typedef struct mem_block_header mem_block_header;
 
 
+/* 4k */
+#define BLOCK_NUM 0x8
+#define MALLOC_SIZE (0x1000 + (BLOCK_NUM - 1) * sizeof(struct mem_block_header))
+
+extern unsigned char user_malloc[MALLOC_SIZE];
 
 
 

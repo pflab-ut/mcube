@@ -10,22 +10,26 @@
 
 atomic_int global_malloc_lock = SPIN_UNLOCKED;
 unsigned char user_malloc[MALLOC_SIZE];
+size_t block_size[BLOCK_NUM];
+
 struct mem_block_header *head;
 struct mem_block_header *tail;
 
 void init_malloc(void)
 {
   int i;
+  size_t sum = 0;
   head = (struct mem_block_header *) user_malloc;
   struct mem_block_header *current = head;
   for (i = 0; i < BLOCK_NUM; i++) {
+    current->size = sizeof(struct mem_block_header) + 16 * lpow(2, i);
+    sum += current->size;
     if (i < BLOCK_NUM - 1) {
-      current->next = current + BLOCK_SIZE;
+      current->next = current + current->size;
     } else {
       current->next = NULL;
       tail = current;
     }
-    current->size = BLOCK_SIZE - sizeof(struct mem_block_header);
     current->is_free = TRUE;
     current = current->next;
   }
@@ -165,7 +169,7 @@ void *realloc(void *block, size_t size)
 
 double strtod(const char *nptr, char **endptr)
 {
-	const char* org = nptr;
+	const char *org = nptr;
 	bool valid = FALSE;
 	double value = 0.0;
 	double sign = 1.0;

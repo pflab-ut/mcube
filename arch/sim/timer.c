@@ -5,6 +5,11 @@
  */
 #include <mcube/mcube.h>
 
+void init_timer(unsigned long tick_us)
+{
+}
+
+
 void start_timer(unsigned int ch)
 {
 }
