@@ -41,7 +41,7 @@ struct registers4 {
   uint32_t edx;
 } __attribute__ ((packed));
 
-typedef struct register4 registers4_t;
+typedef struct registers4 registers4_t;
 
 static inline uint8_t inb(uint16_t port)
 {

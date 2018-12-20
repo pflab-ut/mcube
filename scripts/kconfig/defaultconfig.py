@@ -10,4 +10,4 @@ set up default configuration.
 
 import tools
 
-tools.save_config("Kconfig")
+tools.save_configure("Kconfig")

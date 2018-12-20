@@ -14,23 +14,58 @@ import smtplib
 
 from email.mime.text import MIMEText
 
+class ConfigInfo:
+  """
+  ConfigInfo class has config information.
+  """
+  def __init__(self):
+    self.__menu = ""
+    self.__type = ""
+    self.__configure = []
+    self.__num = 0
 
-configures = {}
-configure_defs = {}
-titles = {}
-defs = "CFLAGS += "
-cfiles = "SRCS += "
-afiles = "ASRCS += "
-vpaths = "vpath %.cpp"
-dependencies = {}
-conflicts = {}
-__type = "none"
+  def get_menu(self):
+    "get menu"
+    return self.__menu
+  def get_type(self):
+    "get type"
+    return self.__type
+  def get_configure(self):
+    "get configure"
+    return self.__configure
+  def get_num(self):
+    "get num"
+    return self.__num
+  def set_menu(self, menu):
+    "set menu"
+    self.__menu = menu
+  def set_type(self, _type):
+    "set type"
+    self.__type = _type
+  def set_configure(self, configure):
+    "set configure"
+    self.__configure = configure
+  def set_num(self, num):
+    "set num"
+    self.__num = num
+
+
+CONFIGURES = {}
+CONFIGURE_DEFS = {}
+TITLES = {}
+DEFS = "CFLAGS += "
+CFILES = "SRCS += "
+AFILES = "ASRCS += "
+VPATHS = "vpath %.cpp"
+DEPENDENCIES = {}
+CONFLICTS = {}
+TYPE = "none"
 
 CONFIGURE_LINE = r"^(.*)=(.)"
 RE_CONFIGURE_LINE = re.compile(CONFIGURE_LINE)
 
-comment_line = r"^\#"
-RE_COMMENT_LINE = re.compile(comment_line)
+COMMENT_LINE = r"^\#"
+RE_COMMENT_LINE = re.compile(COMMENT_LINE)
 
 ALGO_LINE = r"\s+alname\s+(.*)"
 RE_ALGO_LINE = re.compile(ALGO_LINE)
@@ -103,8 +138,9 @@ CONFIG_HEADER = "#\n" \
                 + "#\n"
 
 def scan_configure(filename):
-  f = open(filename, "r")
-  for line in f:
+  "scan configure"
+  fin = open(filename, "r")
+  for line in fin:
 #    print("line = %s" % (line))
     if line.strip() == "":
       continue
@@ -114,16 +150,17 @@ def scan_configure(filename):
 #    print(list)
     key = configure_list[0][0]
     value = configure_list[0][1]
-    configures[key] = value
+    CONFIGURES[key] = value
 #    print(key, value)
-  f.close()
+  fin.close()
 
 
 def scan_algo_name(filename):
-  f = open(filename, "r")
+  "scan algorithm name"
+  fin = open(filename, "r")
   this_algo = False
   algo_name = "rmwp"
-  for line in f:
+  for line in fin:
     if line.strip() == "":
       continue
     if RE_COMMENT_LINE.match(line):
@@ -133,22 +170,23 @@ def scan_algo_name(filename):
       this_algo = False
     kconfig_list = RE_KCONFIG_LINE.findall(line)
     if kconfig_list:
-      if configures[kconfig_list[0]] == "y":
+      if CONFIGURES[kconfig_list[0]] == "y":
         this_algo = True
     elif this_algo:
       algo_list = RE_ALGO_LINE.findall(line)
       if algo_list:
         algo_name = algo_list[0]
         break
-  f.close()
+  fin.close()
   return algo_name
 
 
 def scan_arch_name(filename):
-  f = open(filename, "r")
+  "scan architecture name"
+  fin = open(filename, "r")
   this_arch = False
   arch_name = "axis"
-  for line in f:
+  for line in fin:
     if line.strip() == "":
       continue
     if RE_COMMENT_LINE.match(line):
@@ -158,22 +196,23 @@ def scan_arch_name(filename):
       this_arch = False
     kconfig_list = RE_KCONFIG_LINE.findall(line)
     if kconfig_list:
-      if configures[kconfig_list[0]] == "y":
+      if CONFIGURES[kconfig_list[0]] == "y":
         this_arch = True
     elif this_arch:
       arch_list = RE_ARCH_LINE.findall(line)
       if arch_list:
         arch_name = arch_list[0]
         break
-  f.close()
+  fin.close()
 #  print(arch_name)
   return arch_name
 
 def scan_compiler_name(filename):
-  f = open(filename, "r")
+  "scan compiler name"
+  fin = open(filename, "r")
   this_cc = False
   cc_name = "clang"
-  for line in f:
+  for line in fin:
     if line.strip() == "":
       continue
     if RE_COMMENT_LINE.match(line):
@@ -184,22 +223,23 @@ def scan_compiler_name(filename):
       this_cc = False
     kconfig_list = RE_KCONFIG_LINE.findall(line)
     if kconfig_list:
-      if configures[kconfig_list[0]] == "y":
+      if CONFIGURES[kconfig_list[0]] == "y":
         this_cc = True
     elif this_cc:
       cc_list = RE_CC_LINE.findall(line)
       if cc_list:
         cc_name = cc_list[0]
         break
-  f.close()
+  fin.close()
 #  print(cc_name)
   return cc_name
 
 def scan_machine_name(filename):
-  f = open(filename, "r")
+  "scan machine name"
+  fin = open(filename, "r")
   this_machine = False
   machine_name = "none"
-  for line in f:
+  for line in fin:
     if line.strip() == "":
       continue
     if RE_COMMENT_LINE.match(line):
@@ -209,74 +249,76 @@ def scan_machine_name(filename):
       this_machine = False
     kconfig_list = RE_KCONFIG_LINE.findall(line)
     if kconfig_list:
-      if configures[kconfig_list[0]] == "y":
+      if CONFIGURES[kconfig_list[0]] == "y":
         this_machine = True
     elif this_machine:
       machine_list = RE_MACHINE_LINE.findall(line)
       if machine_list:
         machine_name = machine_list[0]
         break
-  f.close()
+  fin.close()
   return machine_name
 
 
 
-def scan_configs(filename):
-  global defs, cfiles, afiles, __type, vpaths, configure_defs
+def scan_kconfig(filename):
+  "scan Kconfig"
+  global DEFS, CFILES, AFILES, TYPE, VPATHS, CONFIGURE_DEFS
   current_config_val = "n"
 #  print("scan_configs()")
-  f = open(filename, "r")
-  for line in f:
+  fin = open(filename, "r")
+  for line in fin:
     if RE_SKIP_LINE.match(line):
       continue
     kconfig_list = RE_KCONFIG_LINE.findall(line)
 #    print(line)
 #    print(kconfig_list)
-#    print(configures)
+#    print(CONFIGURES)
     if kconfig_list:
-      current_config_val = configures[kconfig_list[0]]
+      current_config_val = CONFIGURES[kconfig_list[0]]
     elif current_config_val == "y":
       defs_list = RE_DEFS_LINE.findall(line)
       if defs_list:
-        defs += " \\\n" + defs_list[0]
-#        print("defs = %s" % defs)
+        DEFS += " \\\n" + defs_list[0]
+#        print("DEFS = %s" % DEFS)
         for val in defs_list:
 #          print("val = %s " % val)
           index = val.find("-D")
           if index != 0:
             sys.exit("Error: invalid defs " + val)
 #          print(val[2:len(val)])
-          configure_defs[val[2:len(val)]] = "y"
+          CONFIGURE_DEFS[val[2:len(val)]] = "y"
 
 
       cfiles_list = RE_CFILES_LINE.findall(line)
       if cfiles_list:
-        cfiles += " \\\n" + cfiles_list[0]
-#        print("cfiles = %s" % cfiles_list)
+        CFILES += " \\\n" + cfiles_list[0]
+#        print("CFILES = %s" % cfiles_list)
 
       afiles_list = RE_AFILES_LINE.findall(line)
       if afiles_list:
-        afiles += " \\\n" + afiles_list[0]
-#        print("afiles = %s" % afiles_list)
+        AFILES += " \\\n" + afiles_list[0]
+#        print("AFILES = %s" % afiles_list)
 
       type_list = RE_TYPE_LINE.findall(line)
       if type_list:
-        __type += " \\\n" + type_list[0]
+        TYPE += " \\\n" + type_list[0]
         # print("type = %s" % type_list)
       vpaths_list = RE_VPATHS_LINE.findall(line)
       if vpaths_list:
-        vpaths += " \\\n" + vpaths_list[0]
-#        print("vpaths = %s" % vpaths_list)
-  f.close()
+        VPATHS += " \\\n" + vpaths_list[0]
+#        print("VPATHS = %s" % vpaths_list)
+  fin.close()
 
 
 def check_exclusives(filename):
+  "check exclusives"
   ret = True
   ex_menu = False
   ynum = 0
   current_menu = ""
-  f = open(filename, "r")
-  for line in f:
+  fin = open(filename, "r")
+  for line in fin:
     if RE_COMMENT_LINE.match(line):
       continue
 #    print(line)
@@ -300,21 +342,22 @@ def check_exclusives(filename):
     if ex_menu:
       kconfig_list = RE_KCONFIG_LINE.findall(line)
       if kconfig_list:
-        if configures[kconfig_list[0]] == "y":
+        if CONFIGURES[kconfig_list[0]] == "y":
           ynum += 1
         if ynum > 1:
           print("Exclusive Error: %s" % current_menu)
           ex_menu = False
           ret = False
-  f.close()
+  fin.close()
   return ret
 
 
 def scan_dependencies(filename):
-  global dependencies, conflicts, titles
-  f = open(filename, "r")
+  "scan dependencies"
+  global DEPENDENCIES, CONFLICTS, TITLES
+  fin = open(filename, "r")
   current_config = ""
-  for line in f:
+  for line in fin:
     if RE_COMMENT_LINE.match(line):
       continue
 
@@ -335,10 +378,10 @@ def scan_dependencies(filename):
       val = RE_SPLIT_LINE.split(val)
       # print(val)
       # print(current_config)
-      if current_config in dependencies:
-        dependencies[current_config] += val
+      if current_config in DEPENDENCIES:
+        DEPENDENCIES[current_config] += val
       else:
-        dependencies[current_config] = val
+        DEPENDENCIES[current_config] = val
 
     conflicts_list = RE_CONFLICTS_LINE.findall(line)
     if conflicts_list:
@@ -348,10 +391,10 @@ def scan_dependencies(filename):
       val = val.rstrip("\n").strip()
       val = RE_SPLIT_LINE.split(val)
 #      print("val = ", val)
-      if current_config in conflicts:
-        conflicts[current_config] += val
+      if current_config in CONFLICTS:
+        CONFLICTS[current_config] += val
       else:
-        conflicts[current_config] = val
+        CONFLICTS[current_config] = val
 
     title_list = RE_TITLE_LINE.findall(line)
 #    print(title_list)
@@ -363,43 +406,56 @@ def scan_dependencies(filename):
       val = val.rstrip("\n").strip()
       val = RE_SPLIT_LINE.split(val)
 #      print(val)
-      titles[current_config] = val
+      TITLES[current_config] = val
+  fin.close()
+
+def check_conflicts(key):
+  "check conflicts"
+#  print(CONFLICTS)
+  if key in CONFLICTS:
+    print("key = ", key)
+    for con in CONFLICTS[key]:
+#      print(con)
+      if con in CONFIGURE_DEFS and CONFIGURE_DEFS[con] == "y":
+        if no_error:
+          no_error = False
+        print("Conflict Error", key, "conflicts with", con)
+
+
+def check_dependencies(key):
+  "check dependencies"
+#  print("key = %s" % key)
+#  print(DEPENDENCIES)
+  if key in DEPENDENCIES:
+    for dep in DEPENDENCIES[key]:
+      # print("dep = %s" % dep)
+      # print("CONFIGURE_DEFS = %s" % CONFIGURE_DEFS)
+      if not dep in CONFIGURE_DEFS:
+        if no_error:
+          no_error = False
+        print("Dependency Error:", key, "depends on", dep)
+
 
 def check_conflicts_and_dependencies():
+  "check conflicts and dependencies"
   no_error = True
 #  print("check_conflicts_and_dependencies()")
-  for k, v in configure_defs.items():
-#    print(k, v)
-    if v == "y":
-#      print("k = %s" % k)
-#      print(dependencies)
-      if k in dependencies:
-        for d in dependencies[k]:
-#          print("d = %s" % d)
-#          print("configure_defs = %s" % configure_defs)
-          if not d in configure_defs:
-            if no_error:
-              no_error = False
-            print("Dependency Error:", k, "depends on", d)
-#      print(conflicts)
-      if k in conflicts:
-#        print("k = ", k)
-        for c in conflicts[k]:
-#          print(c)
-          if c in configure_defs and configure_defs[c] == "y":
-            if no_error:
-              no_error = False
-            print("Conflict Error", k, "conflicts with", c)
+  for key, value in CONFIGURE_DEFS.items():
+#    print(key, value)
+    if value == "y":
+      check_conflicts(key)
+      check_dependencies(key)
 
   return no_error
 
 
-def save_config(filename):
+def save_configure(filename):
+  "save configure"
   configure_file = open("configure", "w")
   configure_file.write(CONFIG_HEADER)
   current_configure = ""
-  f = open(filename, "r")
-  for line in f:
+  fin = open(filename, "r")
+  for line in fin:
     if RE_INIT_SKIP_LINE.match(line):
       continue
     menu_list = RE_MENU_LINE.findall(line)
@@ -415,88 +471,88 @@ def save_config(filename):
     if default_list:
       configure_file.write("=" + default_list[0] + "\n")
 
-  f.close()
+  fin.close()
   configure_file.close()
 
-class ConfigInfo:
-  """
-  ConfigInfo class has config information.
-  """
-  def __init__(self):
-    self.menu = ""
-    self.__type = ""
-    self.config = []
-    self.num = 0
-
-def scan_all_configs(filename):
+def scan_all_configures(filename):
+  "scan all configures"
   cinfo = []
-  f = open(filename, "r")
-  for line in f:
+  fin = open(filename, "r")
+  for line in fin:
     if RE_COMMENT_LINE.match(line):
       continue
     menu_list = RE_MENU_LINE.findall(line)
     if menu_list:
       print(menu_list)
       cinfo.append(ConfigInfo())
-      cinfo[len(cinfo)-1].menu = menu_list[0]
+      cinfo[len(cinfo)-1].set_menu(menu_list[0])
 
     type_list = RE_TYPE_LINE.findall(line)
 #    print(line)
 #    print(type_list)
     if type_list:
       print(type_list)
-      cinfo[len(cinfo)-1].__type = type_list[0]
+      cinfo[len(cinfo)-1].set_type(type_list[0])
 
     kconfig_list = RE_KCONFIG_LINE.findall(line)
     if kconfig_list:
       print(kconfig_list)
-      cinfo[len(cinfo)-1].config.append(kconfig_list[0])
+      cinfo[len(cinfo)-1].get_configure().append(kconfig_list[0])
 
-  f.close()
+  fin.close()
 
   num = 1
-  for ci in cinfo:
-    if ci.__type == "exclusive":
-      ci.num = len(ci.config)
-    elif ci.__type == "none":
-      ci.num = pow(2, len(ci.config))
+  for cif in cinfo:
+    if cif.get_type() == "exclusive":
+      cif.num = len(cif.config)
+    elif cif.get_type() == "none":
+      cif.num = pow(2, len(cif.config))
     else:
-      sys.exit("Error: unknown type " + ci.__type + "\n")
-    print(ci.num)
-    num *= ci.num
+      sys.exit("Error: unknown type " + cif.get_type() + "\n")
+    print(cif.num)
+    num *= cif.num
 
   return cinfo, num
 
-def write_menu(filename, ci, index):
+def write_menu(filename, cif, index):
+  "write menu"
 #  print("index = ", index)
-  filename.write("\n# " + ci.menu + "\n")
-  if ci.__type == "exclusive":
-    for i in range(0, len(ci.config)):
+  filename.write("\n# " + cif.menu + "\n")
+  if cif.get_type() == "exclusive":
+    for i in range(0, len(cif.config)):
       if i == index:
-        filename.write(ci.config[i] + "=y\n")
+        filename.write(cif.config[i] + "=y\n")
       else:
-        filename.write(ci.config[i] + "=n\n")
-  elif ci.__type == "none":
+        filename.write(cif.config[i] + "=n\n")
+  elif cif.get_type() == "none":
 #    print("index = ", index)
-    for i in range(0, len(ci.config)):
+    for i in range(0, len(cif.config)):
       if bin((0b1 << i) & index) == bin(0b1 << i):
-        filename.write(ci.config[i] + "=y\n")
+        filename.write(cif.config[i] + "=y\n")
       else:
-        filename.write(ci.config[i] + "=n\n")
+        filename.write(cif.config[i] + "=n\n")
   else:
-    sys.exit("Unknown type " + ci.__type + "\n")
+    sys.exit("Unknown type " + cif.get_type() + "\n")
 
-def write_config(filename, cinfo, val):
-  for i in range(0, len(val)):
+def write_configure(filename, cinfo, val):
+  "write configure"
+  for i in enumerate(len(val)):
     write_menu(filename, cinfo[i], val[i])
 
 def sendmail(to_address, from_address, subject, message):
+  "send e-mail"
   msg = MIMEText(message)
-  msg["Subject"] = "Build Test"
+  msg["Subject"] = subject
   msg["From"] = from_address
   msg["To"] = to_address
 
-  s = smtplib.SMTP()
-  s.connect()
-  s.sendmail(from_address, to_address, msg.as_string())
-  s.close()
+  smtp = smtplib.SMTP()
+  smtp.connect()
+  smtp.sendmail(from_address, to_address, msg.as_string())
+  smtp.close()
+
+def check_argc(argc, argv, correct_argc):
+  "check argc"
+  if argc != correct_argc:
+    print("Usage: %s filename eb[el]" % argv[0])
+    quit()

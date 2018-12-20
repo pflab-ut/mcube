@@ -190,15 +190,6 @@ double copysign(double x, double y)
 }
 
 
-long lpow(long x, long y)
-{
-  long ret = 1;
-  int i;
-  for (i = 0; i < y; i++) {
-    ret *= x;
-  }
-  return ret;
-}
 
 /* NOTE: work if y is integer */
 /* TODO: work if y is not integer */
@@ -269,3 +260,13 @@ double cbrt(double x)
 }
 
 #endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM */
+
+long lpow(long x, long y)
+{
+  long ret = 1;
+  int i;
+  for (i = 0; i < y; i++) {
+    ret *= x;
+  }
+  return ret;
+}

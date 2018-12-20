@@ -8,6 +8,22 @@
 
 #ifndef __ASSEMBLY__
 
+#if CONFIG_ARCH_AXIS
+
+/**
+ * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
+ * @return Ceiling of @c size/unit.
+ */
+#define CEIL(size, unit) (((int32_t) (size) * (int32_t) (unit) < 0) \
+													|| ((int32_t) (size) % (int32_t) (unit)) == 0 ? \
+													(size) / (unit) : (size) / (unit) + 1)
+/**
+ * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
+ * @return Floor of @c size/unit.
+ */
+#define	FLOOR(size, unit)	((size) / (unit))
+
+#else
 /**
  * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
  * @return Ceiling of @c size/unit.
@@ -22,6 +38,7 @@
 #define	FLOOR(size, unit)	((size) / (unit) > 0 ? (size) / (unit) :		\
 													 (int64_t) (size) / (unit) > (double) (size) / (unit) ?	\
 													 (size) / (unit) - 1 : (size) / (unit))
+#endif /* CONFIG_ARCH_AXIS */
 
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -60,7 +77,6 @@
 
 double __ieee754_sqrt(double x);
 double copysign(double x, double y);
-long lpow(long x, long y);
 double pow(double x, double y);
 
 double cos(double x);
@@ -77,6 +93,8 @@ double cbrt(double x);
 #else
 #error "Unknown Architecture"
 #endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+
+long lpow(long x, long y);
 
 
 #endif /* !__ASSEMBLY__ */

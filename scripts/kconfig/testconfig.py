@@ -14,8 +14,8 @@ import subprocess
 import sys
 import multiprocessing
 import datetime
-import tools
 import errno
+import tools
 
 
 BEGIN = datetime.datetime.now()
@@ -40,103 +40,103 @@ if not os.path.exists(os.path.dirname(PATH)):
       raise
 
 # count number of configs
-cinfo, NUM = tools.scan_all_configs("Kconfig")
+CINFO, NUM = tools.scan_all_configures("Kconfig")
 print("NUM = ", NUM)
 
-# TODO: change recursive call
-print(len(cinfo))
+print(len(CINFO))
 
-index = 0
-message = ""
+INDEX = 0
+MESSAGE = ""
 
 def do_testconfig(cinfo, val):
-  global index
-  global message
-  print(index, "/", NUM)
+  "do testconfig"
+  global INDEX
+  global MESSAGE
+  print(INDEX, "/", NUM)
   configure_file = open("configure", "w")
   configure_file.write(tools.CONFIG_HEADER)
-  tools.write_config(configure_file, cinfo, val)
+  tools.write_configure(configure_file, cinfo, val)
   configure_file.close()
-  index += 1
+  INDEX += 1
   cmd = "make buildclean"
-  p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  stdout, stderr = p.communicate()
+  proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  stdout, stderr = proc.communicate()
   sys.stdout.write(stderr.decode())
 
   cmd = "./scripts/kconfig/configure.py"
-  p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  stdout, stderr = p.communicate()
+  proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  stdout, stderr = proc.communicate()
   sys.stdout.write(stderr.decode())
 
   if stderr == b"":
     print("make configure success")
     cmd = "make -j" + str(multiprocessing.cpu_count())
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()
+    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = proc.communicate()
     if stderr == b"":
       print("make success")
     else:
       print("make failure")
       # save configure IDs if 'make failure' occurs.
-      if message == "":
-        message = "Configure IDs of 'make failure' are as follows.\n\n"
-      message += str(index) + "\n"
-      fw = open(PATH + str(index) + "_make.log", "w")
-      fw.write(stdout.decode() + "\n" + stderr.decode())
-      fw.close()
-      shutil.copyfile("configure", PATH + str(index) + "_configure")
+      if MESSAGE == "":
+        MESSAGE = "Configure IDs of 'make failure' are as follows.\n\n"
+      MESSAGE += str(INDEX) + "\n"
+      fout = open(PATH + str(INDEX) + "_make.log", "w")
+      fout.write(stdout.decode() + "\n" + stderr.decode())
+      fout.close()
+      shutil.copyfile("configure", PATH + str(INDEX) + "_configure")
   else:
     print("make configure failure")
-    # fw = open(PATH + str(index) + "_make_configure.log", "w")
-    # fw.write(stdout.decode() + "\n" + stderr.decode())
-    # fw.close()
+    # fout = open(PATH + str(INDEX) + "_make_configure.log", "w")
+    # fout.write(stdout.decode() + "\n" + stderr.decode())
+    # fout.close()
 
-val = [0, 0, 0, 0, 0, 0, 0, 0]
+VAL = [0, 0, 0, 0, 0, 0, 0, 0]
 
 # nested for loop
 """
-#for a in range(1, cinfo[0].num-1):
-#for a in range(3, cinfo[0].num):
-for val[0] in range(0, cinfo[0].num):
-  for val[1] in range(0, cinfo[1].num):
-    for val[2] in range(0, cinfo[2].num):
-      for val[3] in range(0, cinfo[3].num):
-        for val[4] in range(0, cinfo[4].num):
-          for val[5] in range(0, cinfo[5].num):
-            for val[6] in range(0, cinfo[6].num):
-              for val[7]  in range(0, cinfo[7].num):
-                do_testconfig(cinfo, val)
+#for a in range(1, CINFO[0].num-1):
+#for a in range(3, CINFO[0].num):
+for VAL[0] in range(0, CINFO[0].num):
+  for VAL[1] in range(0, CINFO[1].num):
+    for VAL[2] in range(0, CINFO[2].num):
+      for VAL[3] in range(0, CINFO[3].num):
+        for VAL[4] in range(0, CINFO[4].num):
+          for VAL[5] in range(0, CINFO[5].num):
+            for VAL[6] in range(0, CINFO[6].num):
+              for VAL[7]  in range(0, CINFO[7].num):
+                do_testconfig(CINFO, VAL)
 
 
 """
-# recursive for loop
 def recursive_for_loop(index, depth):
-  global val
-  for val[index] in range(0, cinfo[index].num):
+  "Recursive for loop"
+  global VAL
+  for VAL[index] in range(0, CINFO[index].num):
     if depth > 0:
       recursive_for_loop(index + 1, depth - 1)
     else:
-#      print(val)
-      do_testconfig(cinfo, val)
+#      print(VAL)
+      do_testconfig(CINFO, VAL)
 
 recursive_for_loop(0, 7)
 
 
-if message == "":
-  message = "Build Test is successful."
+if MESSAGE == "":
+  MESSAGE = "Build Test is successful."
 
 END = datetime.datetime.now()
 
 ELAPSED = END - BEGIN
-message = "Begin Time: " + str(BEGIN) + "\n" \
+MESSAGE = "Begin Time: " + str(BEGIN) + "\n" \
           + "End Time: " + str(END) + "\n" \
           + "Elapsed Time: " + str(ELAPSED) + "\n\n" \
-          + message
-print(message)
+          + MESSAGE
+print(MESSAGE)
 
-f = open(CWD + "/message.log", "w")
-f.write(message)
-f.close()
+FIN = open(CWD + "/MESSAGE.log", "w")
+FIN.write(MESSAGE)
+FIN.close()
 
 
 if os.environ.get("EMAIL_FROM_ADDRESS"):
@@ -150,6 +150,6 @@ else:
   sys.exit("Unknown Environment Variable: EMAIL_TO_ADDRESS")
 
 
-subject = "Configure Test"
+SUBJECT = "Build Test"
 
-tools.sendmail(EMAIL_TO_ADDRESS, EMAIL_FROM_ADDRESS, subject, message)
+tools.sendmail(EMAIL_TO_ADDRESS, EMAIL_FROM_ADDRESS, SUBJECT, MESSAGE)

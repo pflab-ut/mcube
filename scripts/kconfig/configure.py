@@ -11,100 +11,100 @@ set up configuration.
 import sys
 import tools
 
-configure_file = "configure"
-kconfig_file = "Kconfig"
+CONFIGURE_FILE = "configure"
+KCONFIG_FILE = "Kconfig"
 
-tools.scan_configure(configure_file)
+tools.scan_configure(CONFIGURE_FILE)
 
-arch = tools.scan_arch_name(kconfig_file)
-compiler = tools.scan_compiler_name(kconfig_file)
-algo = tools.scan_algo_name(kconfig_file)
-machine = tools.scan_machine_name(kconfig_file)
+ARCH = tools.scan_arch_name(KCONFIG_FILE)
+COMPILER = tools.scan_compiler_name(KCONFIG_FILE)
+ALGO = tools.scan_algo_name(KCONFIG_FILE)
+MACHINE = tools.scan_machine_name(KCONFIG_FILE)
 
-tools.scan_configs(kconfig_file)
+tools.scan_kconfig(KCONFIG_FILE)
 
-if not tools.check_exclusives(kconfig_file):
+if not tools.check_exclusives(KCONFIG_FILE):
   sys.exit("Error: check_exclusives()")
 
-tools.scan_dependencies(kconfig_file)
+tools.scan_dependencies(KCONFIG_FILE)
 
 if not tools.check_conflicts_and_dependencies():
   sys.exit("Error: check_conflicts_and_dependencies()")
 
 
-f = open("./.sysconfig", "w")
+FOUT = open("./.sysconfig", "w")
 
-if arch == "sim":
-  f.write("ARCH_NAME = sim\n")
-elif arch == "x86":
-  f.write("ARCH_NAME = x86\n")
-elif arch == "arm":
-  f.write("ARCH_NAME = arm\n")
-  if machine == "raspi3":
-    f.write("MACHINE_NAME = raspi3\n")
-  elif machine == "synquacer":
-    f.write("MACHINE_NAME = synquacer\n")
-  elif machine == "none":
-    f.write("MACHINE_NAME = none\n")
+if ARCH == "sim":
+  FOUT.write("ARCH_NAME = sim\n")
+elif ARCH == "x86":
+  FOUT.write("ARCH_NAME = x86\n")
+elif ARCH == "arm":
+  FOUT.write("ARCH_NAME = arm\n")
+  if MACHINE == "raspi3":
+    FOUT.write("MACHINE_NAME = raspi3\n")
+  elif MACHINE == "synquacer":
+    FOUT.write("MACHINE_NAME = synquacer\n")
+  elif MACHINE == "none":
+    FOUT.write("MACHINE_NAME = none\n")
   else:
     print("Unknown Machine")
-elif arch == "axis":
-  f.write("ARCH_NAME = axis\n")
+elif ARCH == "axis":
+  FOUT.write("ARCH_NAME = axis\n")
 else:
   print("Unknown Architecture")
 
-if compiler == "gcc":
-  f.write("CC = gcc\n")
-elif compiler == "clang":
-  f.write("CC = clang\n")
+if COMPILER == "gcc":
+  FOUT.write("CC = gcc\n")
+elif COMPILER == "clang":
+  FOUT.write("CC = clang\n")
 else:
   print("Unknown Compiler")
 
-f.write("ALGO_NAME = " + algo + "\n")
+FOUT.write("ALGO_NAME = " + ALGO + "\n")
 
-f.close()
-
-
-f = open("./.kconfig", "w")
-f.write(tools.defs + "\n\n")
-f.write(tools.cfiles + "\n\n")
-f.write(tools.afiles + "\n")
-f.close()
+FOUT.close()
 
 
-f = open("./include/mcube/config.h", "w")
-f.write("/**\n"
-        + " * @file include/mcube/config.h \n"
-        + " *\n"
-        + " * @author Hiroyuki Chishiro\n"
-        + " */\n")
-f.write("#ifndef __MCUBE_MCUBE_CONFIG_H__\n"
-        + "#define __MCUBE_MCUBE_CONFIG_H__\n"
-        + "/* Don't edit this file.\n"
-        + " * Please edit configure then do make configure. */\n")
+FOUT2 = open("./.kconfig", "w")
+FOUT2.write(tools.DEFS + "\n\n")
+FOUT2.write(tools.CFILES + "\n\n")
+FOUT2.write(tools.AFILES + "\n")
+FOUT2.close()
 
 
-for k, v, in tools.configures.items():
+FOUT3 = open("./include/mcube/config.h", "w")
+FOUT3.write("/**\n"
+            + " * @file include/mcube/config.h \n"
+            + " *\n"
+            + " * @author Hiroyuki Chishiro\n"
+            + " */\n")
+FOUT3.write("#ifndef __MCUBE_MCUBE_CONFIG_H__\n"
+            + "#define __MCUBE_MCUBE_CONFIG_H__\n"
+            + "/* Don't edit this file.\n"
+            + " * Please edit configure then do make configure. */\n")
+
+
+for k, v, in tools.CONFIGURES.items():
   if v == "y":
     if k.find("CONFIG_ARCH") == 0:
-      f.write("/** Architecture. */\n")
+      FOUT3.write("/** Architecture. */\n")
     elif k.find("CONFIG_COMPILER") == 0:
-      f.write("/** Compiler. */\n")
+      FOUT3.write("/** Compiler. */\n")
     elif k.find("CONFIG_ALGO") == 0:
-      f.write("/** Algorithm. */\n")
+      FOUT3.write("/** Algorithm. */\n")
     elif k.find("CONFIG_PRINT") == 0:
-      f.write("/** Print. */\n")
+      FOUT3.write("/** Print. */\n")
     elif k.find("CONFIG_TQ") == 0:
-      f.write("/** Task Queue. */\n")
+      FOUT3.write("/** Task Queue. */\n")
     elif k.find("CONFIG_TIE_BREAK") == 0:
-      f.write("/** Tie-Break. */\n")
+      FOUT3.write("/** Tie-Break. */\n")
     elif k.find("CONFIG_OPTION") == 0:
-      f.write("/** Option. */\n")
+      FOUT3.write("/** Option. */\n")
     elif k.find("CONFIG_TARGET_DRIVE") == 0:
-      f.write("/** Target Drive. */\n")
+      FOUT3.write("/** Target Drive. */\n")
     elif k.find("CONFIG_MEMORY") == 0:
-      f.write("/** Memory. */\n")
-    f.write("#define " + k + " 1\n")
+      FOUT3.write("/** Memory. */\n")
+    FOUT3.write("#define " + k + " 1\n")
 
-f.write("#endif /* __MCUBE_MCUBE_CONFIG_H__ */\n")
-f.close()
+FOUT3.write("#endif /* __MCUBE_MCUBE_CONFIG_H__ */\n")
+FOUT3.close()

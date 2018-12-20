@@ -58,7 +58,7 @@ void sem_up(struct sem_struct *sem)
 		sem->ewq = th->next;
 		th->sched.release = th->sched.deadline;
 		if (th->sched.deadline < sys_jiffies) {
-			th->sched.release += CEIL(sys_jiffies - th->sched.deadline, th->sched.period) * th->sched.period;
+      th->sched.release += CEIL(sys_jiffies - th->sched.deadline, th->sched.period) * th->sched.period;
 		}
 		th->sched.deadline = th->sched.release + th->sched.relative_deadline;
 		//		chk_nattr(th);
