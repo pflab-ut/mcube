@@ -413,7 +413,7 @@ def check_conflicts(key):
   "check conflicts"
 #  print(CONFLICTS)
   if key in CONFLICTS:
-    print("key = ", key)
+#    print("key = ", key)
     for con in CONFLICTS[key]:
 #      print(con)
       if con in CONFIGURE_DEFS and CONFIGURE_DEFS[con] == "y":
@@ -451,10 +451,10 @@ def check_conflicts_and_dependencies():
 
 def save_configure(filename):
   "save configure"
+  fin = open(filename, "r")
   configure_file = open("configure", "w")
   configure_file.write(CONFIG_HEADER)
   current_configure = ""
-  fin = open(filename, "r")
   for line in fin:
     if RE_INIT_SKIP_LINE.match(line):
       continue
@@ -471,8 +471,8 @@ def save_configure(filename):
     if default_list:
       configure_file.write("=" + default_list[0] + "\n")
 
-  fin.close()
   configure_file.close()
+  fin.close()
 
 def scan_all_configures(filename):
   "scan all configures"
@@ -483,7 +483,7 @@ def scan_all_configures(filename):
       continue
     menu_list = RE_MENU_LINE.findall(line)
     if menu_list:
-      print(menu_list)
+#      print(menu_list)
       cinfo.append(ConfigInfo())
       cinfo[len(cinfo)-1].set_menu(menu_list[0])
 
@@ -491,12 +491,12 @@ def scan_all_configures(filename):
 #    print(line)
 #    print(type_list)
     if type_list:
-      print(type_list)
+#      print(type_list)
       cinfo[len(cinfo)-1].set_type(type_list[0])
 
     kconfig_list = RE_KCONFIG_LINE.findall(line)
     if kconfig_list:
-      print(kconfig_list)
+#      print(kconfig_list)
       cinfo[len(cinfo)-1].get_configure().append(kconfig_list[0])
 
   fin.close()
@@ -504,40 +504,40 @@ def scan_all_configures(filename):
   num = 1
   for cif in cinfo:
     if cif.get_type() == "exclusive":
-      cif.num = len(cif.config)
+      cif.set_num(len(cif.get_configure()))
     elif cif.get_type() == "none":
-      cif.num = pow(2, len(cif.config))
+      cif.set_num(pow(2, len(cif.get_configure())))
     else:
       sys.exit("Error: unknown type " + cif.get_type() + "\n")
-    print(cif.num)
-    num *= cif.num
+    print(cif.get_num())
+    num *= cif.get_num()
 
   return cinfo, num
 
-def write_menu(filename, cif, index):
+def write_menu(filename, cinfo, index):
   "write menu"
 #  print("index = ", index)
-  filename.write("\n# " + cif.menu + "\n")
-  if cif.get_type() == "exclusive":
-    for i in range(0, len(cif.config)):
+  filename.write("\n# " + cinfo.get_menu() + "\n")
+  if cinfo.get_type() == "exclusive":
+    for i in range(0, len(cinfo.get_configure())):
       if i == index:
-        filename.write(cif.config[i] + "=y\n")
+        filename.write(cinfo.get_configure()[i] + "=y\n")
       else:
-        filename.write(cif.config[i] + "=n\n")
-  elif cif.get_type() == "none":
+        filename.write(cinfo.get_configure()[i] + "=n\n")
+  elif cinfo.get_type() == "none":
 #    print("index = ", index)
-    for i in range(0, len(cif.config)):
+    for i in range(0, len(cinfo.get_configure())):
       if bin((0b1 << i) & index) == bin(0b1 << i):
-        filename.write(cif.config[i] + "=y\n")
+        filename.write(cinfo.get_configure()[i] + "=y\n")
       else:
-        filename.write(cif.config[i] + "=n\n")
+        filename.write(cinfo.get_configure()[i] + "=n\n")
   else:
-    sys.exit("Unknown type " + cif.get_type() + "\n")
+    sys.exit("Unknown type " + cinfo.get_type() + "\n")
 
-def write_configure(filename, cinfo, val):
+def write_configure(filename, cinfo, vals):
   "write configure"
-  for i in enumerate(len(val)):
-    write_menu(filename, cinfo[i], val[i])
+  for i, val in enumerate(vals):
+    write_menu(filename, cinfo[i], val)
 
 def sendmail(to_address, from_address, subject, message):
   "send e-mail"

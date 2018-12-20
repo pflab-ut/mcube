@@ -91,33 +91,33 @@ def do_testconfig(cinfo, val):
     # fout.write(stdout.decode() + "\n" + stderr.decode())
     # fout.close()
 
-VAL = [0, 0, 0, 0, 0, 0, 0, 0]
+VALS = [0, 0, 0, 0, 0, 0, 0, 0]
 
 # nested for loop
 """
 #for a in range(1, CINFO[0].num-1):
 #for a in range(3, CINFO[0].num):
-for VAL[0] in range(0, CINFO[0].num):
-  for VAL[1] in range(0, CINFO[1].num):
-    for VAL[2] in range(0, CINFO[2].num):
-      for VAL[3] in range(0, CINFO[3].num):
-        for VAL[4] in range(0, CINFO[4].num):
-          for VAL[5] in range(0, CINFO[5].num):
-            for VAL[6] in range(0, CINFO[6].num):
-              for VAL[7]  in range(0, CINFO[7].num):
-                do_testconfig(CINFO, VAL)
+for VALS[0] in range(0, CINFO[0].num):
+  for VALS[1] in range(0, CINFO[1].num):
+    for VALS[2] in range(0, CINFO[2].num):
+      for VALS[3] in range(0, CINFO[3].num):
+        for VALS[4] in range(0, CINFO[4].num):
+          for VALS[5] in range(0, CINFO[5].num):
+            for VALS[6] in range(0, CINFO[6].num):
+              for VALS[7]  in range(0, CINFO[7].num):
+                do_testconfig(CINFO, VALS)
 
 
 """
 def recursive_for_loop(index, depth):
   "Recursive for loop"
-  global VAL
-  for VAL[index] in range(0, CINFO[index].num):
+  global VALS
+  for VALS[index] in range(0, CINFO[index].get_num()):
     if depth > 0:
       recursive_for_loop(index + 1, depth - 1)
     else:
-#      print(VAL)
-      do_testconfig(CINFO, VAL)
+#      print(VALS)
+      do_testconfig(CINFO, VALS)
 
 recursive_for_loop(0, 7)
 
