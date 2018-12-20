@@ -10,10 +10,10 @@
 #ifndef __ASSEMBLY__
 
 /**
- * @struct bpb
+ * @struct bios_parameter_block
  * @brief The BIOS Parameter Block (in Volume Boot Record)
  */
-struct bpb {
+struct bios_parameter_block {
   char            jmp[3];
   char            oem[8];
   unsigned char   bps0;
@@ -39,7 +39,7 @@ struct bpb {
   char            fst2[8];
 } __attribute__((packed));
 
-typedef struct bpb bpb_t;
+typedef struct bios_parameter_block bpb_t;
 
 
 /**

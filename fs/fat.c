@@ -42,7 +42,7 @@ extern unsigned char __end;
 int fat_getpartition(void)
 {
   unsigned char *mbr = &__end;
-  bpb_t *bpb=(bpb_t*) &__end;
+  bpb_t *bpb = (bpb_t *) &__end;
   /* get the end of bss segment from linker */
 
   /* read the partitioning table */
