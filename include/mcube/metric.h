@@ -17,9 +17,8 @@ void init_overhead(void);
 
 
 /**
+ * @struct overhead
  * @brief Overhead measurement
- *
- * The overhead structure measures overhead.
  */
 struct overhead {
 	/** Time stamp counter. */
@@ -43,9 +42,8 @@ extern overhead tick_ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS];
 
 
 /**
+ * @struct performance_metrics
  * @brief Performance metrics
- *
- * The performance_metrics structure has scheduling results.
  */
 struct performance_metrics {
 	/** Number of successes. */

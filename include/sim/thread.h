@@ -31,9 +31,8 @@ static inline int get_pthread_id(void)
 #if CONFIG_USER_TASK_PTHREAD
 
 /**
+ * @struct pthread_arg
  * @brief POSIX thread argument
- *
- * The pthread_arg structure has POSIX thread information.
  */
 struct pthread_arg {
 	/** Thread ID. */

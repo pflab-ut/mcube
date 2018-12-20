@@ -71,22 +71,17 @@ typedef int bool;
 
 
 /**
+ * @struct arg_parameter
  * @brief Argument parameter
- *
- * The arg_parameter structure has argument parameter information.
  */
 struct arg_parameter {
 	/** Debug mode. */
 	uint32_t debug;
-	/** Minimum utilization of optional parts. */
-	uint32_t oumin;
-	/** Maximum utilization of optional parts. */
-	uint32_t oumax;
-	/** Minimum utilization of mandatory parts. */
+	/** Minimum utilization. */
 	uint32_t umin;
-	/** Maximum utilization of mandatory parts. */
+	/** Maximum utilization. */
 	uint32_t umax;
-	/** Start index of task set. */
+	/** Beginning index of task set. */
 	uint32_t tstart;
 	/** End index of task set. */
 	uint32_t tend;
@@ -110,9 +105,8 @@ extern struct arg_parameter arg_param;
 #define ARGBUF 0x40
 
 /**
+ * @struct args
  * @brief Arguments
- *
- * The args structure has arguments from command line.
  */
 struct args {
 	/** Argv. */
@@ -131,9 +125,8 @@ typedef struct args args;
 
 
 /**
+ * @struct conv_flag
  * @brief Convert flag
- *
- * The conv_flag structure has convert flag information.
  */
 struct conv_flag {
 	/** Pad. */

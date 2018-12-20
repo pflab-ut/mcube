@@ -8,7 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-extern seqlock_struct xtime_lock;
 
 
 void start_timer(unsigned int ch);

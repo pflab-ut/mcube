@@ -22,11 +22,8 @@
 /** Network size. */
 #define NET_SIZE  0x80000000
 
-
 /** Bank size. */
 #define BANK_SIZE 0x00000800 /* 2KB (maybe) */
-
-
 
 
 #endif /* __MCUBE_AXIS_ADDR_H__ */

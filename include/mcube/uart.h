@@ -11,9 +11,8 @@
 
 
 /**
- * @brief Thread information
- *
- * The uart_devdata structure has UART device data.
+ * @struct uart_devdata
+ * @brief UART information
  */
 struct uart_devdata {
 	/** Channel. */

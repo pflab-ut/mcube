@@ -24,6 +24,15 @@ static inline int spin_trylock(volatile atomic_int *lock);
 
 void init_spinlock(void);
 
+static inline void lock_scheduler(void)
+{
+}
+
+static inline void unlock_scheduler(void)
+{
+}
+
+
 #endif	/* __ASSEMBLY__ */
 
 #endif	/* __MCUBE_MCUBE_SPINLOCK_H__ */

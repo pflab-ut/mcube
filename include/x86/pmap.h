@@ -6,10 +6,10 @@
 #ifndef __MCUBE_X86_PMAP_H__
 #define	__MCUBE_X86_PMAP_H__
 /**
- * @brief      Physical memory map describing usable and reserved regions
- *             of physical memory.
- * @details    Most of the map is derived from data provided by the system
- *             BIOS at boot time.
+ * @brief   Physical memory map describing usable and reserved regions
+ *          of physical memory.
+ * @details Most of the map is derived from data provided by the system
+ *          BIOS at boot time.
  *
  * Copyright 2016 Brett Vickers.
  * Use of this source code is governed by a BSD-style license that can
@@ -19,8 +19,8 @@
 #ifndef __ASSEMBLY__
 
 /**
- * @enum       pmemtype
- * @brief      The types of physical memory.
+ * @enum  pmemtype
+ * @brief The types of physical memory.
  */
 enum pmemtype {
   PMEMTYPE_USABLE   = 1,   ///< Reported usable by the BIOS.
@@ -33,9 +33,9 @@ enum pmemtype {
 };
 
 /**
- * @struct     pmapregion
- * @brief      A memregion represents and describes a contiguous region of
- *             physical memory.
+ * @struct pmapregion
+ * @brief  A memregion represents and describes a contiguous region of
+ *         physical memory.
  */
 struct pmapregion {
   uint64_t addr;               ///< base address
@@ -47,10 +47,10 @@ struct pmapregion {
 typedef struct pmapregion pmapregion_t;
 
 /**
- * @struct     pmap
- * @brief      A memory map describing available and reserved regions of
- *             physical memory.
- * @details    There are no gaps in a memory map.
+ * @struct  pmap
+ * @brief   A memory map describing available and reserved regions of
+ *          physical memory.
+ * @details There are no gaps in a memory map.
  */
 struct pmap {
   uint64_t     count;          ///< Memory regions in the memory map
@@ -60,9 +60,9 @@ struct pmap {
 typedef struct pmap pmap_t;
 
 /**
- * @fn         init_pmap
- * @brief      Initialize the physical memory map using data installed by the
- *             BIOS during boot loading.
+ * @fn    init_pmap
+ * @brief Initialize the physical memory map using data installed by the
+ *        BIOS during boot loading.
  */
 void init_pmap(void);
 

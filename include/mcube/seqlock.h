@@ -9,36 +9,35 @@
 #ifndef __ASSEMBLY__
 
 /**
- * @brief Sequence lock information
- *
- * The seqlock_struct structure has sequence lock information.
+ * @struct seqlock
+ * @brief Sequence lock
  */
-struct seqlock_struct {
+struct seqlock {
 	/** Sequence. */
 	unsigned sequence;
 	/** Lock. */
 	atomic_int lock;
 };
 
-typedef struct seqlock_struct seqlock_struct;
+typedef struct seqlock seqlock;
 
 /* Lock out other writers and update the count.
  * Acts like a normal spin_lock/unlock.
  * Don't need preempt_disable() because that is in the spin_lock already.
  */
-static inline void write_seqlock(seqlock_struct *sl)
+static inline void write_seqlock(seqlock *sl)
 {
 	spin_lock(&sl->lock);
 	++sl->sequence;
 }   
 
-static inline void write_sequnlock(seqlock_struct *sl) 
+static inline void write_sequnlock(seqlock *sl) 
 {
 	sl->sequence++;
 	spin_unlock(&sl->lock);
 }
 
-static inline int write_tryseqlock(seqlock_struct *sl)
+static inline int write_tryseqlock(seqlock *sl)
 {
 	int ret = spin_trylock(&sl->lock);
 

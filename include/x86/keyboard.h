@@ -6,11 +6,11 @@
 #ifndef __MCUBE_X86_KEYBOARD_H__
 #define __MCUBE_X86_KEYBOARD_H__
 /**
- *  @brief      Keyboard input routines.
+ * @brief Keyboard input routines.
  *
- *  Copyright 2016 Brett Vickers.
- *  Use of this source code is governed by a BSD-style license
- *  that can be found in the MonkOS LICENSE file.
+ * Copyright 2016 Brett Vickers.
+ * Use of this source code is governed by a BSD-style license
+ * that can be found in the MonkOS LICENSE file.
  */
 
 
@@ -34,11 +34,11 @@
 #ifndef __ASSEMBLY__
 
 /**
- *  @enum       keycode
- *  @brief      Key code values representing individual keys on the keyboard.
- *  @details    Key codes corresponding to printable characters are not
- *              listed here, but they are equal in value to their lowercase
- *              ASCII representations (e.g., KEY_A = 'a', KEY_1 = '1', etc.).
+ * @enum    keycode
+ * @brief   Key code values representing individual keys on the keyboard.
+ * @details Key codes corresponding to printable characters are not
+ *          listed here, but they are equal in value to their lowercase
+ *          ASCII representations (e.g., KEY_A = 'a', KEY_1 = '1', etc.).
  */
 enum keycode {
   KEY_BACKSPACE = 0x08,
@@ -84,9 +84,9 @@ enum keycode {
 typedef enum keycode keycode_t;
 
 /**
- *  @struct     keyboard
- *  @brief      A record representing the state of the keyboard at the time
- *              a key was presssed or unpressed.
+ * @struct keyboard
+ * @brief  A record representing the state of the keyboard at the time
+ *         a key was presssed or unpressed.
  */
 struct keyboard {
   uint8_t brk;                 ///< KEYBRK_UP or KEYBRK_DOWN
@@ -98,8 +98,8 @@ struct keyboard {
 typedef struct keyboard keyboard_t;
 
 /**
- *  @struct     keylayout
- *  @brief      A map of keyboard scan codes to key codes.
+ * @struct keylayout
+ * @brief  A map of keyboard scan codes to key codes.
  */
 struct keylayout {
   uint8_t shifted[128];        ///< when shift key is down.
@@ -109,43 +109,43 @@ struct keylayout {
 typedef struct keylayout keylayout_t;
 
 /**
- *  @fn         init_keyboard
- *  @brief      Initialize the keyboard so that it can provide input to the
- *              kernel.
- *  @details    kb_init installs the default US English PS/2 keyboard layout.
+ * @fn      init_keyboard
+ * @brief   Initialize the keyboard so that it can provide input to the
+ *          kernel.
+ * @details kb_init installs the default US English PS/2 keyboard layout.
  */
 void init_keyboard(void);
 
 /**
- *  @fn         kb_setlayout
- *  @brief      Install a new keyboard layout.
- *  @param[in]  layout  The keyboard layout to install.
+ * @fn        kb_setlayout
+ * @brief     Install a new keyboard layout.
+ * @param[in] layout  The keyboard layout to install.
  */
 
 void kb_setlayout(keylayout_t *layout);
 
 /**
- *  @fn         kb_getchar
- *  @brief      Return the next available character from the keyboard's
- *              input buffer.
- *  @returns    The ascii value of the next character in the input buffer,
- *              or 0 if there are no characters available.
+ * @fn      kb_getchar
+ * @brief   Return the next available character from the keyboard's
+ *          input buffer.
+ * @returns The ascii value of the next character in the input buffer,
+ *          or 0 if there are no characters available.
  */
 char kb_getchar(void);
 
 /**
- *  @fn         kb_getkey
- *  @brief      Return the available next key from the keyboard's input
- *              buffer.
- *  @param[out] key     The key record of the next key in the buffer.
- *  @returns    true if there is a key in the buffer, false otherwise.
+ * @fn         kb_getkey
+ * @brief      Return the available next key from the keyboard's input
+ *             buffer.
+ * @param[out] key     The key record of the next key in the buffer.
+ * @returns    true if there is a key in the buffer, false otherwise.
  */
 bool kb_getkey(keyboard_t *key);
 
 /**
- *  @fn         kb_meta
- *  @brief      Return the current meta-key bit mask.
- *  @returns    The meta-key bitmask.
+ * @fn      kb_meta
+ * @brief   Return the current meta-key bit mask.
+ * @returns The meta-key bitmask.
  */
 uint8_t kb_meta(void);
 

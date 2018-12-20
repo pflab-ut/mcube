@@ -31,9 +31,8 @@
 typedef struct tlb_info tlb_info;
 
 /**
+ * @struct task_struct
  * @brief Task information
- *
- * The task_struct structure has task information.
  */
 struct task_struct {
 	/** Task ID. */
@@ -81,9 +80,8 @@ static inline void preempt_enable(void)
 
 
 /**
+ * @struct emc_req_info
  * @brief Request information to external memory controller
- *
- * The emc_req_info structure has request information to external memory controller.
  */
 struct emc_req_info {
 	/** Semaphore to external memory controller. */

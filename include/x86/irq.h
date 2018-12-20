@@ -324,11 +324,11 @@ static inline void fatal(void)
 // PIC commands
 #define PIC_CMD_EOI           0x20   ///< End of interrupt
 
-//----------------------------------------------------------------------------
-//  @struct interrupt_context
-/// @brief      A record describing the CPU state at the time of the
-///             interrupt.
-//----------------------------------------------------------------------------
+
+/**
+ * @struct interrupt_context
+ * @brief  A record describing the CPU state at the time of the interrupt.
+ */
 struct interrupt_context {
     registers_t regs;            ///< all general-purpose registers.
     uint64_t    error;           ///< exception error identifier.
@@ -344,49 +344,47 @@ typedef struct interrupt_context interrupt_context_t;
 
 void do_switch_thread_arch(interrupt_context_t *context);
 
-//----------------------------------------------------------------------------
-//  @fn         init_irq_asm
-/// @brief      Initialize all interrupt tables.
-/// @details    Initialize a table of interrupt service routine thunks, one
-///             for each of the 256 possible interrupts. Then set up the
-///             interrupt descriptor table (IDT) to point to each of the
-///             thunks.
-///
-///             Interrupts should not be enabled until this function has
-///             been called.
-//----------------------------------------------------------------------------
+/**
+ * @fn         init_irq_asm
+ * @brief      Initialize all interrupt tables.
+ * @details    Initialize a table of interrupt service routine thunks, one
+ *             for each of the 256 possible interrupts. Then set up the
+ *             interrupt descriptor table (IDT) to point to each of the
+ *             thunks.
+ *
+ *            Interrupts should not be enabled until this function has been called.
+ */
 void init_irq_asm(void);
 
-//----------------------------------------------------------------------------
-//  @typedef    isr_handler
-/// @brief      Interrupt service routine called when an interrupt occurs.
-/// @param[in]  context     The CPU state at the time of the interrupt.
-//----------------------------------------------------------------------------
+/**
+ * @typedef    isr_handler
+ * @brief      Interrupt service routine called when an interrupt occurs.
+ * @param[in]  context     The CPU state at the time of the interrupt.
+ */
 typedef void (*isr_handler)(interrupt_context_t *context);
 
-//----------------------------------------------------------------------------
-//  @fn         set_isr
-/// @brief      Set an interrupt service routine for the given interrupt
-///             number.
-/// @details    Interrupts should be disabled while setting these handlers.
-///             To disable an ISR, set its handler to null.
-/// @param[in]  interrupt   Interrupt number (0-255).
-/// @param[in]  handler     Interrupt service routine handler function.
-//----------------------------------------------------------------------------
+/**
+ * @fn         set_isr
+ * @brief      Set an interrupt service routine for the given interrupt number.
+ * @details    Interrupts should be disabled while setting these handlers.
+ *             To disable an ISR, set its handler to null.
+ * @param[in]  interrupt   Interrupt number (0-255).
+ * @param[in]  handler     Interrupt service routine handler function.
+ */
 void set_isr(int interrupt, isr_handler handler);
 
-//----------------------------------------------------------------------------
-//  @fn         enable_irq
-/// @brief      Tell the PIC to enable a hardware interrupt.
-/// @param[in]  irq     IRQ number to enable (0-15).
-//----------------------------------------------------------------------------
+/**
+ * @fn         enable_irq
+ * @brief      Tell the PIC to enable a hardware interrupt.
+ * @param[in]  irq     IRQ number to enable (0-15).
+ */
 void enable_irq(uint8_t irq);
 
-//----------------------------------------------------------------------------
-//  @fn         disable_irq
-/// @brief      Tell the PIC to disable a hardware interrupt.
-/// @param[in]  irq     IRQ number to enable (0-15).
-//----------------------------------------------------------------------------
+/**
+ * @fn         disable_irq
+ * @brief      Tell the PIC to disable a hardware interrupt.
+ * @param[in]  irq     IRQ number to enable (0-15).
+ */
 void disable_irq(uint8_t irq);
 
 

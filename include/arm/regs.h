@@ -14,9 +14,8 @@
 #define	STACK_ALIGN(x)	(((x) + 7) & -8)
 
 /**
+ * @struct context_regs
  * @brief Context register
- *
- * The context_regs structure has context register information.
  */
 struct context_regs {
 	/** General purpose registers in ARM. */
@@ -27,9 +26,8 @@ typedef struct context_regs context_regs;
 
 
 /**
+ * @struct full_regs
  * @brief Full register
- *
- * The full_regs structure has full register information.
  */
 struct full_regs {
 	/** General purpose registers in ARM. */

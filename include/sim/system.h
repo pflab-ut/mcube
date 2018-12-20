@@ -12,7 +12,6 @@
 
 static inline void generate_software_interrupt(volatile unsigned long id)
 {
-  /* TODO: implement */
 }
 
 #endif /* !__ASSEMBLY__ */

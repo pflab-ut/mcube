@@ -77,7 +77,6 @@ void heap_free(heap_t *heap, void *ptr);
 /**
  * @struct heap
  * @brief Heap information.
- * The heap structure has heap information.
  */
 struct heap {
   pagetable_t          *pt;           // page table that owns the heap

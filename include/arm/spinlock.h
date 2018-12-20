@@ -50,20 +50,6 @@ static inline void spin_unlock(volatile atomic_int *lock)
                : : "r" (lock), "r" (SPIN_UNLOCKED) : "memory");
 }
 
-static inline void lock_scheduler(void)
-{
-#if CONFIG_ASSIGN_GLOBAL
-	spin_lock(&sched_lock);
-#endif /* CONFIG_ASSIGN_GLOBAL */
-}
-
-static inline void unlock_scheduler(void)
-{
-#if CONFIG_ASSIGN_GLOBAL
-	spin_unlock(&sched_lock);
-#endif /* CONFIG_ASSIGN_GLOBAL */
-}
-
 
 #endif /* !__ASSEMBLY__ */
 

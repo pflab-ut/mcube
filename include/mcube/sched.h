@@ -117,9 +117,8 @@ typedef enum budget_policy budget_policy;
 
 
 /**
+ * @struct sched_info
  * @brief Scheduling information
- *
- * The sched_info structure has scheduling information.
  */
 struct sched_info {
 
@@ -136,9 +135,7 @@ struct sched_info {
 	 */
 	unsigned long period;
 
-	/**
-	 * Worst case execution time.
-	 */
+	/** Worst case execution time. */
 	unsigned long wcet;
 
 	/** Cpu time to begin execution. */

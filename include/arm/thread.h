@@ -29,8 +29,6 @@ struct cpu_context {
 };
 
 
-
-
 #define INIT_CPU_CONTEXT (struct cpu_context) {0}
 
 #endif /* !__ASSEMBLY__ */

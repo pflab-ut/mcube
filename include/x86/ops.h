@@ -34,12 +34,14 @@ typedef struct registers {
  * @struct registers4
  * @brief  A record describing the first 4 general-purpose registers.
  */
-typedef struct registers4 {
+struct registers4 {
   uint32_t eax;
   uint32_t ebx;
   uint32_t ecx;
   uint32_t edx;
-} __attribute__ ((packed)) registers4_t;
+} __attribute__ ((packed));
+
+typedef struct register4 registers4_t;
 
 static inline uint8_t inb(uint16_t port)
 {

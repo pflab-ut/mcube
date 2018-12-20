@@ -18,9 +18,8 @@
 extern unsigned long current_cpu;
 
 /**
+ * @struct cpuid_info
  * @brief CPU ID information
- *
- * The cpuid_info structure has CPU ID information.
  */
 struct cpuid_info {
   /** EAX register. */

@@ -26,6 +26,7 @@ SRCS += \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/lib/stdlib.c \
  $(TOP_DIR)/lib/string.c \
+ $(TOP_DIR)/ipc/semaphore.c \
  $(TOP_DIR)/user/user.c \
 
 
@@ -173,12 +174,12 @@ line:
 size:
 	$(SIZE) $(TARGET)
 
-.PHONY: doxy clean buildclean doxyclean docclean
+.PHONY: doxygen clean buildclean doxygenclean docclean
 
-doxy: doxyclean
+doxygen: doxygenclean
 	@$(DOXYGEN) Doxyfile
 
-clean: doxyclean buildclean docclean
+clean: doxygenclean buildclean docclean
 	@for file in $(CLEANFILES); do $(FIND) . -name $$file -delete || exit 1; done
 	@$(RM) $(TARGET) $(TARGET).elf $(OBJS) $(DEPS) $(DMPFILE) $(MAP)
 	@$(RM) $(ROMFILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
@@ -187,7 +188,7 @@ clean: doxyclean buildclean docclean
 buildclean:
 	@$(RM) -r $(BUILD_DIR)
 
-doxyclean:
+doxygenclean:
 	@$(RM) -r html latex
 
 docclean:

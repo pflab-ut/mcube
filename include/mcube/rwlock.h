@@ -9,9 +9,8 @@
 #ifndef __ASSEMBLY__
 
 /**
+ * @struct rwlock
  * @brief Read/Write lock
- *
- * The rw_struct structure has read/write lock information.
  */
 struct rwlock {
 	/** Number of readers. */

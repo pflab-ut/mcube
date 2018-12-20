@@ -9,18 +9,20 @@
 #ifndef __ASSEMBLY__
 
 /**
+ * @struct ring_buf
  * @brief Ring buffer
- *
- * The ring_buf structure has ring buffer information.
  */
-typedef struct ring_buf {
+struct ring_buf {
   uint8_t *buffer;
   size_t head;
   size_t tail;
   size_t max;
   int full;
   atomic_int lock;
-} ring_buf_t;
+};
+
+typedef struct ring_buf ring_buf_t;
+
 
 typedef ring_buf_t* cbuf_handle_t;
 

@@ -16,9 +16,8 @@ void init_gen_rand(uint32_t seed);
   128-bit SIMD data type for Altivec, SSE2 or standard C
   ------------------------------------------------------*/
 /**
+ * @struct W128_T
  * @brief 128-bit data structure
- *
- * The W128_T structure has 128-bit data structure.
  */
 struct W128_T {
 	/** 32-bit data structure x 4. */

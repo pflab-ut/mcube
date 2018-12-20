@@ -17,9 +17,8 @@ typedef int atomic_int;
 
 
 /**
+ * @struct atomic
  * @brief Atomic variable
- *
- * The atomic structure has atomic information.
  */
 typedef struct atomic {
 	/** Counter. */

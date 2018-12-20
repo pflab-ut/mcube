@@ -39,8 +39,6 @@ static inline void spin_unlock(volatile atomic_int *lock)
 }
 
 
-extern volatile atomic_int lapic_lock;
-
 
 #endif /* !__ASSEMBLY__ */
 

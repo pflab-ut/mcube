@@ -51,28 +51,32 @@
 #define PGPTR(pte)       ((page_t *)((pte) & ~PGMASK_OFFSET))
 
 /**
- * @union      page
- * @brief      A pagetable page record.
- * @details    Contains 512 page table entries if the page holds a page
- *             table. Otherwise it contains 4096 bytes of memory.
+ * @union   page
+ * @brief   A pagetable page record.
+ * @details Contains 512 page table entries if the page holds a page table.
+ *          Otherwise it contains 4096 bytes of memory.
  */
-typedef union page {
+union page {
   uint64_t entry[PAGE_SIZE / sizeof(uint64_t)];
   uint8_t  memory[PAGE_SIZE];
-} page_t;
+};
+
+typedef union page page_t;
 
 /**
- * @struct     pagetable
- * @brief      A pagetable structure.
- * @details    Holds all the page table entries that map virtual addresses to
- *             physical addresses.
+ * @struct  pagetable
+ * @brief   A pagetable structure.
+ * @details Holds all the page table entries that map virtual addresses to
+ *          physical addresses.
  */
-typedef struct pagetable {
+struct pagetable {
   uint64_t proot;     ///< Physical address of root page table (PML4T) entry
   uint64_t vroot;     ///< Virtual address of root page table (PML4T) entry
   uint64_t vnext;     ///< Virtual address to use for table's next page
   uint64_t vterm;     ///< Boundary of pages used to store the table
-} pagetable_t;
+};
+
+typedef struct pagetable pagetable_t;
 
 /**
  * @fn         init_page

@@ -10,9 +10,8 @@
 
 
 /**
+ * @struct sem_struct
  * @brief Semaphore
- *
- * The sem_struct structure has semaphore information.
  */
 struct sem_struct {
 	/** Semaphore counter. */

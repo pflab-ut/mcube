@@ -9,9 +9,8 @@
 #ifndef __ASSEMBLY__
 
 /**
+ * @struct bheap_node
  * @brief Binominal heap node
- *
- * The bheap_node structure has binominal heap node information.
  */
 struct bheap_node {
 	/** Node ID. */
@@ -33,9 +32,8 @@ struct bheap_node {
 typedef struct bheap_node bheap_node;
 
 /**
+ * @struct runqueue
  * @brief Runqueue information
- *
- * The runqueue structure has runqueue information.
  */
 struct runqueue {
 	/** Lock to runqueue. */

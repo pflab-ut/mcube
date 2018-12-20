@@ -8,6 +8,10 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @enum dmac
+ * @brief DMAC policy.
+ */
 enum dmac {
   DMAC_POLLING,
   DMAC_SYNC_INTERRUPT,

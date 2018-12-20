@@ -11,14 +11,17 @@
 
 static inline void spin_lock(volatile atomic_int *lock)
 {
+  /* TODO: implement */
 }
 
 static inline void spin_unlock(volatile atomic_int *lock)
 {
+  /* TODO: implement */
 }
 
 static inline int spin_trylock(volatile atomic_int *lock)
 {
+  /* TODO: implement */
   return 0;
 }
 

@@ -170,7 +170,10 @@ struct frame_buffer {
 
 
 
-/* PC Screen Font as used by Linux Console */
+/**
+ * @struct pc_screen_font_info
+ * @brief PC screen font information.
+ */
 struct pc_screen_font_info {
   unsigned int magic;
   unsigned int version;

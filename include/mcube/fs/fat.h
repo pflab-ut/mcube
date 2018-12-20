@@ -9,8 +9,11 @@
 
 #ifndef __ASSEMBLY__
 
-/* the BIOS Parameter Block (in Volume Boot Record) */
-typedef struct {
+/**
+ * @struct bpb
+ * @brief The BIOS Parameter Block (in Volume Boot Record)
+ */
+struct bpb {
   char            jmp[3];
   char            oem[8];
   unsigned char   bps0;
@@ -34,10 +37,16 @@ typedef struct {
   char            fst[8];
   char            dmy[20];
   char            fst2[8];
-} __attribute__((packed)) bpb_t;
+} __attribute__((packed));
 
-/* directory entry structure */
-typedef struct {
+typedef struct bpb bpb_t;
+
+
+/**
+ * @struct fatdir
+ * @brief Directory entry structure.
+ */
+struct fatdir {
   char            name[8];
   char            ext[3];
   char            attr[9];
@@ -45,7 +54,10 @@ typedef struct {
   unsigned int    attr2;
   unsigned short  cl;
   unsigned int    size;
-} __attribute__((packed)) fatdir_t;
+} __attribute__((packed));
+
+typedef struct fatdir fatdir_t;
+
 
 int fat_getpartition(void);
 void fat_listdirectory(void);

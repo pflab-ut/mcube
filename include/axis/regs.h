@@ -15,9 +15,8 @@
 
 
 /**
- * @brief Context register
- *
- * The context_regs structure has context register information.
+ * @struct gpr_regs
+ * @brief General purpose register
  */
 struct gpr_regs {
   /** General purpose registers in AXIS. */
@@ -30,9 +29,8 @@ typedef struct context_regs context_regs;
 #define NR_SPECIAL_REGS 9
 
 /**
+ * @struct special_regs
  * @brief Special register
- *
- * The special_regs structure has special register information.
  */
 struct special_regs {
   /** Special registers in AXIS. */
@@ -48,9 +46,8 @@ typedef struct special_regs special_regs;
 #define NR_COMMON_SYSTEM_REGS 1
 
 /**
+ * @struct system_regs
  * @brief System register
- *
- * The system_regs structure has system register information.
  */
 struct system_regs {
   /** Special registers of each core in AXIS. */
@@ -63,9 +60,8 @@ typedef struct special_regs special_regs;
 
 
 /**
+ * @struct full_regs
  * @brief Full register
- *
- * The full_regs structure has full register information.
  */
 struct full_regs {
 	/** General purpose registers in AXIS. */
