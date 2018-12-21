@@ -12,12 +12,12 @@ import sys
 import struct
 import os
 
-import tools
+import common
 
 ARGV = sys.argv
 ARGC = len(ARGV)
 
-tools.check_argc(ARGC, ARGV, 4)
+common.check_argc(ARGC, ARGV, 4)
 
 FIN = open(ARGV[1], "rb")
 FOUT = open(ARGV[2], "wb")

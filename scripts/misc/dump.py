@@ -10,12 +10,12 @@ transform binary file to dump file with considering big/little endian.
 
 import sys
 
-import tools
+import common
 
 ARGV = sys.argv
 ARGC = len(ARGV)
 
-tools.check_argc(ARGC, ARGV, 4)
+common.check_argc(ARGC, ARGV, 4)
 
 
 #print(argv[1])
