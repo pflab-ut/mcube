@@ -411,7 +411,7 @@ def scan_dependencies(filename):
 
 def check_conflicts(key):
   "check conflicts"
-  no_error = True;
+  no_error = True
 #  print(CONFLICTS)
   if key in CONFLICTS:
 #    print("key = ", key)
@@ -426,7 +426,7 @@ def check_conflicts(key):
 
 def check_dependencies(key):
   "check dependencies"
-  no_error = True;
+  no_error = True
 #  print("key = %s" % key)
 #  print(DEPENDENCIES)
   if key in DEPENDENCIES:

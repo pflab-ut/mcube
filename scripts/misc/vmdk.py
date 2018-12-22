@@ -12,12 +12,13 @@ import sys
 import struct
 import os
 
-import common
-
 ARGV = sys.argv
 ARGC = len(ARGV)
 
-common.check_argc(ARGC, ARGV, 4)
+if ARGC != 4:
+  print("Usage: %s filename eb[el]" % ARGV[0])
+  quit()
+
 
 FIN = open(ARGV[1], "rb")
 FOUT = open(ARGV[2], "wb")

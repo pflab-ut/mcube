@@ -10,12 +10,13 @@ transform binary file to dump file with considering big/little endian.
 
 import sys
 
-import common
 
 ARGV = sys.argv
 ARGC = len(ARGV)
 
-common.check_argc(ARGC, ARGV, 4)
+if ARGC != 4:
+  print("Usage: %s filename eb[el]" % ARGV[0])
+  quit()
 
 
 #print(argv[1])

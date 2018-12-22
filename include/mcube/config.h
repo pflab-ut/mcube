@@ -19,7 +19,6 @@
 #define CONFIG_TQ_O1 1
 /** Tie-Break. */
 #define CONFIG_TIE_BREAK_FIFO 1
-#define CONFIG_FS_FAT 1
 /** Memory. */
 #define CONFIG_MEMORY_VARIABLE 1
 #endif /* __MCUBE_MCUBE_CONFIG_H__ */
