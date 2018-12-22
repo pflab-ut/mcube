@@ -50,14 +50,20 @@ static inline void atomic_dec(atomic_t *v)
 
 static inline int fetch_and_inc(int *i)
 {
-	/* TODO: use atomic instruction */
-	return *++i;
+  unsigned long new, old;
+  new = *i + 1;
+  old = *i;
+  cmpxchg((unsigned long *) i, new, old);
+  return *i;
 }
 
 static inline int fetch_and_dec(int *i)
 {
-	/* TODO: use atomic instruction */
-	return *--i;
+  unsigned long new, old;
+  new = *i - 1;
+  old = *i;
+  cmpxchg((unsigned long *) i, new, old);
+  return *i;
 }
 
 #endif /* !__ASSEMBLY__ */
