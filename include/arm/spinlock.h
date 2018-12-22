@@ -12,8 +12,7 @@
 static inline void spin_lock(volatile atomic_int *lock)
 {
   unsigned int tmp;
-  asm volatile(
-               "sevl\n"
+  asm volatile("sevl\n"
                "1:wfe\n"
                "2:ldaxr %w0, [%1]\n"
                "cbz %w0, 1b\n"
@@ -30,8 +29,7 @@ static inline int spin_trylock(volatile atomic_int *lock)
 {
   unsigned int tmp;
 
-  asm volatile(
-               "ldaxr %w0, [%1]\n"
+  asm volatile("ldaxr %w0, [%1]\n"
                "cbz %w0, 1f\n"
                "stxr %w0, %w2, [%1]\n"
                "1:\n"
@@ -45,9 +43,8 @@ static inline int spin_trylock(volatile atomic_int *lock)
 
 static inline void spin_unlock(volatile atomic_int *lock)
 {
-  asm volatile(
-               "stlr %w1, [%0]\n"
-               : : "r" (lock), "r" (SPIN_UNLOCKED) : "memory");
+  asm volatile("stlr %w1, [%0]\n"
+               :: "r" (lock), "r" (SPIN_UNLOCKED) : "memory");
 }
 
 

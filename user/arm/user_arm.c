@@ -141,6 +141,17 @@ int ap_main(void)
   return 0;
 }
 
+void user_atomic_main(void)
+{
+  atomic_t v;
+  v.counter = 1;
+  print("v.counter = %d\n", v.counter);
+  atomic_inc(&v);
+  print("v.counter = %d\n", v.counter);
+  atomic_dec(&v);
+  print("v.counter = %d\n", v.counter);
+}
+
 
 void user_raspi3_main(void);
 
@@ -152,7 +163,8 @@ int user_arch_main(void)
   // user_ap_main();
   // user_dmac_main();
   //  kernel_level_main();
-  test_ring_buf();
+  user_atomic_main();
+  //  test_ring_buf();
 #if CONFIG_ARCH_ARM_RASPI3
   //  user_raspi3_main();
 #endif /* CONFIG_ARCH_ARM_RASPI3 */
