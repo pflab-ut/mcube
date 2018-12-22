@@ -12,9 +12,9 @@
 
 #define LOCK_PREFIX LOCK_PREFIX_HERE
 
-static inline void compare_and_exchange(volatile unsigned long *ptr,
-                                        unsigned long new,
-                                        unsigned long old)
+static inline void compare_and_swap(volatile unsigned long *ptr,
+                                    unsigned long new,
+                                    unsigned long old)
 {
   unsigned long tmp;
 #if 1
@@ -39,7 +39,7 @@ static inline void atomic_inc(atomic_t *v)
   unsigned long new, old;
   new = v->counter + 1;
   old = v->counter;
-  compare_and_exchange((unsigned long *) &v->counter, new, old);
+  compare_and_swap((unsigned long *) &v->counter, new, old);
 }
 
 static inline void atomic_dec(atomic_t *v)
@@ -47,7 +47,7 @@ static inline void atomic_dec(atomic_t *v)
   unsigned long new, old;
   new = v->counter - 1;
   old = v->counter;
-  compare_and_exchange((unsigned long *) &v->counter, new, old);
+  compare_and_swap((unsigned long *) &v->counter, new, old);
 }
 
 static inline int fetch_and_inc(int *i)
@@ -55,7 +55,7 @@ static inline int fetch_and_inc(int *i)
   unsigned long new, old;
   new = *i + 1;
   old = *i;
-  compare_and_exchange((unsigned long *) i, new, old);
+  compare_and_swap((unsigned long *) i, new, old);
   return *i;
 }
 
@@ -64,7 +64,7 @@ static inline int fetch_and_dec(int *i)
   unsigned long new, old;
   new = *i - 1;
   old = *i;
-  compare_and_exchange((unsigned long *) i, new, old);
+  compare_and_swap((unsigned long *) i, new, old);
   return *i;
 }
 
