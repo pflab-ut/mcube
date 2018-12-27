@@ -92,7 +92,6 @@ static void test_bltu(void)
   asm volatile("bgtu $15, $16, label_bgtu");
   asm volatile("label_bgtu:");
   
-  /* TODO: bgtu instruction */
 }
 
 static void test_bge(void)
@@ -126,8 +125,6 @@ static void test_bgeu(void)
   asm volatile("bleu $18, $17, label_bleu");
   asm volatile("sync");
   asm volatile("label_bleu:");
-  
-  /* TODO: bleu instruction */
 }
 
 

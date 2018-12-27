@@ -35,10 +35,10 @@ struct overhead {
 
 typedef struct overhead overhead;
 
-extern overhead cxs_ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS];
-extern overhead release_ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS];
-extern overhead sched_ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS];
-extern overhead tick_ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS];
+extern overhead cxs_ovhd[NR_CPUS][NR_THREADS];
+extern overhead release_ovhd[NR_CPUS][NR_THREADS];
+extern overhead sched_ovhd[NR_CPUS][NR_THREADS];
+extern overhead tick_ovhd[NR_CPUS][NR_THREADS];
 
 
 /**
@@ -80,10 +80,10 @@ extern uint64_t migrations[NR_THREADS];
 
 extern uint64_t ths_release[NR_THREADS];
 
-void print_ovhd(struct overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
+void print_ovhd(struct overhead ovhd[NR_CPUS][NR_THREADS]);
 
-void save_pre_time(overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
-void save_post_time(overhead ovhd[NR_INTRA_KERNEL_CPUS][NR_THREADS]);
+void save_pre_time(overhead ovhd[NR_CPUS][NR_THREADS]);
+void save_post_time(overhead ovhd[NR_CPUS][NR_THREADS]);
 
 
 #endif /* !__ASSEMBLY__ */

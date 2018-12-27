@@ -123,7 +123,7 @@ void stop_lapic_timer(unsigned int ch)
 
 void measure_lapic_timer(void)
 {
-	// TODO: measure CPU frequency
+	// TODO: measure CPU Bus frequency
 	cpu_bus_freq_mhz = CPU_CLOCK_MHZ_PER_USEC;
 	//	printk("cpu_bus_freq_mhz = %d\n", cpu_bus_freq_mhz);
 }

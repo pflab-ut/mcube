@@ -225,7 +225,7 @@ extern int is_finishing[NR_THREADS];
 /* first dynamically created thread */
 #define	FIRST_DYNAMIC_THREAD_ID 1
 
-extern struct thread_struct kernel_th[NR_INTRA_KERNEL_CPUS];
+extern struct thread_struct kernel_th[NR_CPUS];
 
 int alloc_thread_id(void);
 struct thread_struct *do_create_thread(void *(*func)(void *),
@@ -233,7 +233,7 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
                                        struct th_attr *attr);
 
 
-extern unsigned char kernel_stack[NR_INTRA_KERNEL_CPUS][KERNEL_STACK_SIZE];
+extern unsigned char kernel_stack[NR_CPUS][KERNEL_STACK_SIZE];
 extern unsigned char user_stack[NR_THREADS][USER_STACK_SIZE];
 
 void (*th_mains[NR_THREADS])(void);
@@ -307,7 +307,7 @@ static inline void end_budget(struct thread_struct *th)
 			.evmsg_port = NULL,																\
 			.nr_resources = 0,																\
 			.priority = ULONG_MAX,														\
-			.stack_top = (unsigned long) &kernel_stack[cpu][NR_INTRA_KERNEL_CPUS],	\
+			.stack_top = (unsigned long) &kernel_stack[cpu][NR_CPUS],	\
 			.sched = {																				\
 			.relative_deadline = ULONG_MAX,									\
 			.period = ULONG_MAX,															\

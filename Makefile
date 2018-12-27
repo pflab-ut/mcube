@@ -121,9 +121,6 @@ pylint:
 pyflakes:
 	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pyflakes3
 
-#	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pep8 --ignore=E111
-#	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pychecker
-
 
 .PHONY: run grun mrun line size
 

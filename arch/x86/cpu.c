@@ -48,7 +48,7 @@ int ap_main(void)
 void init_smp(void)
 {
 	int cpu = get_cpu_id();
-	if (cpu == 0 && NR_INTRA_KERNEL_CPUS > 1) {
+	if (cpu == 0 && NR_CPUS > 1) {
 		//		apic_lock.lock = SPIN_UNLOCKED;
 		//		nr_apic_locks = 0;
 		/* BSP notifies SIPI to all APs */

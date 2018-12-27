@@ -12,13 +12,11 @@
 
 #define LOCK_PREFIX LOCK_PREFIX_HERE
 
-static inline void compare_and_swap(volatile unsigned long *ptr,
-                                    unsigned long new,
-                                    unsigned long old)
+static inline void compare_and_swap(volatile int *ptr, int new, int old)
 {
-  unsigned long tmp;
+  int tmp;
 #if 1
-  unsigned long oldval;
+  int oldval;
   //  asm volatile("prfm    pstl1strm, %0" :: "r"(&v->counter));
   asm volatile("1: ldaxr %w0, [%1]" : "=&r"(oldval) : "r"(ptr));
   asm volatile("eor %0, %1, %2" : "=r"(tmp) : "r"(oldval), "r"(old));
@@ -36,35 +34,35 @@ static inline void compare_and_swap(volatile unsigned long *ptr,
 
 static inline void atomic_inc(atomic_t *v)
 {
-  unsigned long new, old;
+  int new, old;
   new = v->counter + 1;
   old = v->counter;
-  compare_and_swap((unsigned long *) &v->counter, new, old);
+  compare_and_swap(&v->counter, new, old);
 }
 
 static inline void atomic_dec(atomic_t *v)
 {
-  unsigned long new, old;
+  int new, old;
   new = v->counter - 1;
   old = v->counter;
-  compare_and_swap((unsigned long *) &v->counter, new, old);
+  compare_and_swap(&v->counter, new, old);
 }
 
 static inline int fetch_and_inc(int *i)
 {
-  unsigned long new, old;
+  int new, old;
   new = *i + 1;
   old = *i;
-  compare_and_swap((unsigned long *) i, new, old);
+  compare_and_swap(i, new, old);
   return *i;
 }
 
 static inline int fetch_and_dec(int *i)
 {
-  unsigned long new, old;
+  int new, old;
   new = *i - 1;
   old = *i;
-  compare_and_swap((unsigned long *) i, new, old);
+  compare_and_swap(i, new, old);
   return *i;
 }
 

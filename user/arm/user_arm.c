@@ -144,12 +144,19 @@ int ap_main(void)
 void user_atomic_main(void)
 {
   atomic_t v;
+  int i = 10;
   v.counter = 1;
   print("v.counter = %d\n", v.counter);
   atomic_inc(&v);
   print("v.counter = %d\n", v.counter);
   atomic_dec(&v);
   print("v.counter = %d\n", v.counter);
+
+  print("i = %d\n", i);
+  fetch_and_inc(&i);
+  print("i = %d\n", i);
+  fetch_and_dec(&i);
+  print("i = %d\n", i);
 }
 
 

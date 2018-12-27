@@ -51,7 +51,7 @@ typedef struct special_regs special_regs;
  */
 struct system_regs {
   /** Special registers of each core in AXIS. */
-	uint32_t regs[NR_INTRA_KERNEL_CPUS][NR_SYSTEM_REGS];
+	uint32_t regs[NR_CPUS][NR_SYSTEM_REGS];
   /** Common special registers. */
   uint32_t common_regs[NR_COMMON_SYSTEM_REGS];
 };

@@ -45,15 +45,15 @@ static inline unsigned long tsc2usec(unsigned long tsc);
 static inline unsigned long tsc2nsec(unsigned long tsc);
 
 
-extern int bindex[NR_INTRA_KERNEL_CPUS];
+extern int bindex[NR_CPUS];
 extern int try;
 
 
 extern unsigned long nr_tasks;
 
 
-extern struct thread_struct *current_th[NR_INTRA_KERNEL_CPUS];
-extern struct thread_struct *prev_th[NR_INTRA_KERNEL_CPUS];
+extern struct thread_struct *current_th[NR_CPUS];
+extern struct thread_struct *prev_th[NR_CPUS];
 
 
 extern unsigned long sched_time;
@@ -61,8 +61,8 @@ extern int is_in_int;
 
 extern volatile uint32_t sched_end;
 
-extern struct thread_struct *sleep_tq[NR_INTRA_KERNEL_CPUS];
-extern struct thread_struct *deadline_tq[NR_INTRA_KERNEL_CPUS];
+extern struct thread_struct *sleep_tq[NR_CPUS];
+extern struct thread_struct *deadline_tq[NR_CPUS];
 
 unsigned long sys_timer_interrupt(void);
 

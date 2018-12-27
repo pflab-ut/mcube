@@ -6,9 +6,9 @@
 #include <mcube/mcube.h>
 
 /* task queues */
-struct thread_struct *sleep_tq[NR_INTRA_KERNEL_CPUS];
-struct thread_struct *deadline_tq[NR_INTRA_KERNEL_CPUS];
-struct runqueue run_tq[NR_INTRA_KERNEL_CPUS];
+struct thread_struct *sleep_tq[NR_CPUS];
+struct thread_struct *deadline_tq[NR_CPUS];
+struct runqueue run_tq[NR_CPUS];
 
 
 void enqueue_rq_head(struct runqueue *rq, struct thread_struct *th)

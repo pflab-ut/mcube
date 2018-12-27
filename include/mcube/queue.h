@@ -54,12 +54,12 @@ struct runqueue {
 
 typedef struct runqueue runqueue;
 
-#define NR_CPU_BITMAPS (CEIL(NR_INTRA_KERNEL_CPUS, 32))
+#define NR_CPU_BITMAPS (CEIL(NR_CPUS, 32))
 
-extern runqueue run_tq[NR_INTRA_KERNEL_CPUS];
+extern runqueue run_tq[NR_CPUS];
 
 /* partitioned scheduling */
-extern unsigned long nr_ptasks[NR_INTRA_KERNEL_CPUS];
+extern unsigned long nr_ptasks[NR_CPUS];
 
 void enqueue_rq_head(struct runqueue *rq, struct thread_struct *th);
 void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th);

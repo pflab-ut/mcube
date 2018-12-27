@@ -8,8 +8,8 @@
 unsigned long cpu_bus_freq_mhz = 0;
 unsigned long sys_tsc = 0;
 
-unsigned long timer_count[NR_INTRA_KERNEL_CPUS];
-unsigned long tcur[NR_INTRA_KERNEL_CPUS], tprev[NR_INTRA_KERNEL_CPUS];
+unsigned long timer_count[NR_CPUS];
+unsigned long tcur[NR_CPUS], tprev[NR_CPUS];
 
 
                          

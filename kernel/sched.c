@@ -5,12 +5,12 @@
  */
 #include <mcube/mcube.h>
 
-struct thread_struct *current_th[NR_INTRA_KERNEL_CPUS];
-struct thread_struct *prev_th[NR_INTRA_KERNEL_CPUS];
+struct thread_struct *current_th[NR_CPUS];
+struct thread_struct *prev_th[NR_CPUS];
 
 volatile atomic_int sched_lock = SPIN_UNLOCKED;
 
-struct thread_struct kernel_th[NR_INTRA_KERNEL_CPUS];
+struct thread_struct kernel_th[NR_CPUS];
 
 
 unsigned long sys_jiffies = 0;
@@ -21,7 +21,7 @@ unsigned long exec_jiffies = 0;
 
 unsigned long nr_tasks = 0;
 
-int bindex[NR_INTRA_KERNEL_CPUS];
+int bindex[NR_CPUS];
 int bidleindex;
 
 unsigned long sched_time;
@@ -83,7 +83,8 @@ void do_release(void)
   unsigned long cpu = get_cpu_id();
   pdebug_array(run_tq[cpu].array);
 	PDEBUG("run_tq: bheap\n");
-  pdebug_bheap(&run_tq[cpu], run_tq[cpu].head);
+  //  pdebug_bheap(&run_tq[cpu], run_tq[cpu].head);
+  spin_lock(&sched_lock);
 
 
 	//pdebug_jiffies();
@@ -92,9 +93,9 @@ void do_release(void)
 
 	//	print("sleep_tq[cpu]->sched.release = %d\n", sleep_tq[cpu]->sched.release);
 
-	pdebug_bitmap(run_tq[cpu].bitmap);
+  //	pdebug_bitmap(run_tq[cpu].bitmap);
 	//	pdebug_bheap(&run_tq, run_tq[cpu].head);
-  pdebug_sleep_tq();
+  //  pdebug_sleep_tq();
 
 	while (sleep_tq[cpu]->sched.release <= get_current_jiffies()) {
 		th = sleep_tq[cpu];
@@ -105,6 +106,7 @@ void do_release(void)
     th->sched.remaining = th->sched.wcet;
 		//		pdebug_jiffies();
 	}
+  spin_unlock(&sched_lock);
   pdebug_array(run_tq[cpu].array);
 }
 
@@ -116,7 +118,7 @@ void do_sched(void)
 	struct thread_struct *th;
   pdebug_deadline_tq();
 
-
+  spin_lock(&sched_lock);
 	/* jump to algorithm-specific function */
   //  do_sched_algo();
 
@@ -140,6 +142,7 @@ void do_sched(void)
   if (prev_th[cpu] != current_th[cpu]) {
     begin_budget(current_th[cpu]);
   }
+  spin_unlock(&sched_lock);
   //  switch_to(current_th[cpu]);
 	//	pdebug_jiffies();
 	printk("do_sched(): end\n");
@@ -186,7 +189,7 @@ int run(unsigned long nr_threads)
 	sched_end = FALSE;
 
   print("run()2\n");
-  for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
+  for (i = 0; i < NR_CPUS; i++) {
     current_th[i] = prev_th[i] = &kernel_th[i];
     current_th[i]->id = 0;
     current_th[i]->stack_top = KERNEL_THREAD_STACK_ADDR(i);
@@ -242,7 +245,7 @@ void init_sched(void)
   unsigned int i, j;
   sys_jiffies = 0;
 
-  for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
+  for (i = 0; i < NR_CPUS; i++) {
     kernel_th[i] = (struct thread_struct) INIT_KERNEL_THREAD(cpu);
     kernel_th[i].thflags = THFLAGS_START_TH;
     run_tq[i].util = 0;

@@ -30,6 +30,7 @@
 #include <mcube/byteops.h>
 #include <mcube/cache.h>
 #include <mcube/compiler.h>
+#include <mcube/core_state.h>
 #include <mcube/ctype.h>
 #include <mcube/dmac.h>
 #include <mcube/errno-base.h>

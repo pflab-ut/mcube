@@ -15,7 +15,6 @@
 #define spin_unlock_irqrestore(lock, flags)
 
 
-extern volatile atomic_int smp_sched_lock;
 extern volatile atomic_int sched_lock;
 
 static inline void spin_lock(volatile atomic_int *lock);

@@ -88,7 +88,7 @@ void init_rq(void)
 {
 	int i, j;
   /* NOTE: other members in run_tq are initialized at compile time.  */
-  for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
+  for (i = 0; i < NR_CPUS; i++) {
     for (j = 0; j < NR_PRIORITIES; j++) {
       run_tq[i].array[j].prev = run_tq[i].array[j].next = &run_tq[i].array[j];
     }

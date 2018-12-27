@@ -66,7 +66,7 @@ struct thread_struct *pick_next_task(void)
 void init_rq(void)
 {
 	int i, j;
-  for (i = 0; i < NR_INTRA_KERNEL_CPUS; i++) {
+  for (i = 0; i < NR_CPUS; i++) {
     run_tq[i].util = 0;
     run_tq[i].nr_threads = 0;
     for (j = 0; j < NR_PRIORITY_BITMAPS; j++) {
