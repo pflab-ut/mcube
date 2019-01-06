@@ -7,9 +7,11 @@ CFLAGS +=  \
 -DSCHED_FP \
 -DCONFIG_TQ_O1 \
 -DCONFIG_TIE_BREAK_FIFO \
+-DCONFIG_FS_FAT \
 -DCONFIG_MEMORY_VARIABLE
 
 SRCS +=  \
-$(TOP_DIR)/kernel/queue/o1.c
+$(TOP_DIR)/kernel/queue/o1.c \
+$(TOP_DIR)/fs/fat.c
 
 ASRCS += 

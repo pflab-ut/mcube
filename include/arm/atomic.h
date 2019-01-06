@@ -19,10 +19,10 @@ static inline void compare_and_swap(volatile int *ptr, int new, int old)
   int oldval;
   //  asm volatile("prfm    pstl1strm, %0" :: "r"(&v->counter));
   asm volatile("1: ldaxr %w0, [%1]" : "=&r"(oldval) : "r"(ptr));
-  asm volatile("eor %0, %1, %2" : "=r"(tmp) : "r"(oldval), "r"(old));
-  asm volatile("cbnz %0, 2f" :: "r"(tmp));
+  asm volatile("eor %w0, %w1, %w2" : "=r"(tmp) : "r"(oldval), "r"(old));
+  asm volatile("cbnz %w0, 2f" :: "r"(tmp));
   asm volatile("stxr %w0, %w2, [%1]" : "=&r"(tmp) : "r"(ptr), "r"(new));
-  asm volatile("cbnz %0, 1b" :: "r"(tmp));
+  asm volatile("cbnz %w0, 1b" :: "r"(tmp));
   asm volatile("2:");
 #else  
   /* Large System Extension (LSE) in ARMv8.1 */
