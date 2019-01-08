@@ -8,6 +8,7 @@
 
 void init_arch(void)
 {
+#if 0
   disable_local_irq();
   init_cpu();
   /* initialize console */
@@ -20,7 +21,7 @@ void init_arch(void)
 #endif /* CONFIG_PRINT2UART */
   
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
-  tty_clear(TTY_ID);
+  //  tty_clear(TTY_ID);
 
 
   /* initialize memory */
@@ -63,6 +64,7 @@ void init_arch(void)
     //printk("read_hpet_counter() = %lu\n", read_hpet_counter());
     //    printk("TIMER_COMPARATOR_64(0) = %lu\n", mmio_in64(TIMER_COMPARATOR_64(0)));
   }
+#endif
 #endif
 }
 

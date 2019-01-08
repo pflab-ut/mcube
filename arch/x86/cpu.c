@@ -10,7 +10,7 @@ void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long 
 {
 }
 
-
+#if 0
 void init_fpu(void)
 {
   uint32_t val = get_cr0();
@@ -106,3 +106,4 @@ void init_cpu(void)
   CPU_CLOCK = (unsigned long) 2400 * 1000 * 1000;
   CPU_CLOCK_MHZ_PER_USEC = CPU_CLOCK / (1000 * 1000);
 }
+#endif

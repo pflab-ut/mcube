@@ -53,6 +53,11 @@ int user_level_main(void)
   return 0;
 }
 
+int ap_main(void)
+{
+  return 0;
+}
+
 
 int user_arch_main(void)
 {

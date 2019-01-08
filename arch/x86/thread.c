@@ -51,7 +51,7 @@ void __attribute__((noreturn)) run_user_thread(void)
   unsigned long rsp;
   printk("run_user_thread()\n");
   printk("current_th[cpu]->id = %lu\n", current_th[cpu]->id);
-  asm volatile("mov %0, rsp" : "=r"(rsp));
+  asm volatile("mov %%rsp, %0" : "=r"(rsp));
   printk("rsp = 0x%lx\n", rsp);
   if (current_th[cpu]->run_user_func) {
     ret = (*current_th[cpu]->run_user_func)(current_th[cpu]->arg);
@@ -59,7 +59,7 @@ void __attribute__((noreturn)) run_user_thread(void)
   if (ret) {
     printk("ret = 0x%lx\n", (unsigned long) ret);
   }
-  halt();
+  hlt();
   inf_loop();
 }
 
@@ -73,6 +73,6 @@ void wait(unsigned long count)
 void __attribute__((noreturn)) exit(int status)
 {
 	cli();
-	halt();
+	hlt();
 	inf_loop();
 }

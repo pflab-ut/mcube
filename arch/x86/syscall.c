@@ -15,14 +15,14 @@
 
 int call_sys_sched(void)
 {
-  syscall0(SYS_sched);
+  //  syscall0(SYS_sched);
   return 0;
 }
 
 int call_sys_end_job(void)
 {
   int cpu = get_cpu_id();
-  syscall1(SYS_end_job, (unsigned long) &current_th[cpu]->id);
+  //  syscall1(SYS_end_job, (unsigned long) &current_th[cpu]->id);
   return 0;
 }
 
@@ -30,7 +30,7 @@ unsigned long call_sys_get_exec_time(void)
 {
   int cpu = get_cpu_id();
   unsigned long cpu_time;
-  syscall2(SYS_get_exec_time, (unsigned long) &current_th[cpu]->id, (unsigned long) &cpu_time);
+  //  syscall2(SYS_get_exec_time, (unsigned long) &current_th[cpu]->id, (unsigned long) &cpu_time);
   return cpu_time;
 }
 
@@ -43,7 +43,7 @@ int call_sys_write(char *buf)
 int call_sys_get_mode_level(void)
 {
   int ret;
-  syscall1(SYS_get_mode_level, (unsigned long) &ret);
+  //  syscall1(SYS_get_mode_level, (unsigned long) &ret);
   return ret;
 }
 
@@ -52,7 +52,7 @@ int call_user_sys_write(char *buf)
   int ret;
   //  syscall1(SYS_write, (unsigned long) buf);
   printk("&ret = 0x%lx\n", (unsigned long) &ret);
-  syscall2(SYS_write, (unsigned long) &ret, (unsigned long) buf);
+  //  syscall2(SYS_write, (unsigned long) &ret, (unsigned long) buf);
   return ret;
 }
 
@@ -77,6 +77,7 @@ static void handle_syscall(interrupt_context_t *context)
   //  printk("handle_syscall()\n");
   //  dump_registers(&context->regs);
 
+  /*
   switch (context->regs.rdi) {
   case SYS_sched:
     do_sched();
@@ -102,12 +103,13 @@ static void handle_syscall(interrupt_context_t *context)
     printk("Error: Unknown System Call ID %ld\n", context->regs.rdi);
     break;
   }
+  */
 }
 
 void init_syscall(void)
 {
 #if 1
-  set_isr(SYSCALL_IRQ, handle_syscall);
+  //  set_isr(SYSCALL_IRQ, handle_syscall);
 #else
   // Request the CPU's extended features.
   registers4_t regs4;

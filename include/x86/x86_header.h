@@ -6,38 +6,52 @@
 #ifndef	__MCUBE_X86_X86_HEADER_H__
 #define	__MCUBE_X86_X86_HEADER_H__
 
+#if 0
+//#include <x86/ops.h>
 
-#include <x86/exception.h>
-#include <x86/ops.h>
-#include <x86/cpu.h>
-#include <x86/irq.h>
-
-#include <x86/page.h>
+//#include <x86/page.h>
 #include <x86/pmap.h>
-#include <x86/acpi.h>
 #include <x86/addr.h>
 #include <x86/atomic.h>
 #include <x86/dmac.h>
 #include <x86/dsctbl.h>
 #include <x86/dump.h>
-#include <x86/heap.h>
+//#include <x86/heap.h>
 #include <x86/hpet.h>
 #include <x86/io.h>
 #include <x86/ioapic.h>
 #include <x86/keyboard.h>
 #include <x86/lapic.h>
-#include <x86/mm.h>
+//#include <x86/mm.h>
 #include <x86/gdt.h>
 #include <x86/msr.h>
 #include <x86/regs.h>
 #include <x86/shell.h>
-#include <x86/spinlock.h>
 #include <x86/system.h>
 #include <x86/task.h>
-#include <x86/thread.h>
-#include <x86/timer.h>
 #include <x86/tty.h>
+#endif
+
+#include <x86/const.h>
+#include <x86/acpi.h>
+#include <x86/apic.h>
+#include <x86/arch.h>
+#include <x86/bootinfo.h>
+#include <x86/desc.h>
+#include <x86/i8254.h>
+#include <x86/kernel.h>
+#include <x86/memory.h>
+#include <x86/pgt.h>
+#include <x86/kvar.h>
+#include <x86/kvar_def.h>
+
+#include <x86/spinlock.h>
+#include <x86/exception.h>
+#include <x86/cpu.h>
+#include <x86/irq.h>
+#include <x86/thread.h>
 #include <x86/uart.h>
+#include <x86/timer.h>
 
 
 #endif	/* __MCUBE_X86_X86_HEADER_H__ */

@@ -19,7 +19,7 @@ int putchar(int c)
   unsigned long flags;
   save_local_irq(&flags);
   spin_lock(&putchar_lock);
-  tty_printc(TTY_ID, c);
+  //  tty_printc(TTY_ID, c);
   spin_unlock(&putchar_lock);
   restore_local_irq(&flags);
   return c;
@@ -35,7 +35,7 @@ int putchar(int c)
   unsigned long flags;
   save_local_irq(&flags);
   spin_lock(&putchar_lock);
-  uart_putc(c, STDIO_PORT);
+  //  uart_putc(c, STDIO_PORT);
   spin_unlock(&putchar_lock);
   restore_local_irq(&flags);
   return c;

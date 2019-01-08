@@ -1,383 +1,659 @@
-/**
- * @file arch/x86/acpi.c
+/*_
+ * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
+ * All rights reserved.
  *
- * @author Hiroyuki Chishiro
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 #include <mcube/mcube.h>
-//============================================================================
-/// @brief      Advanced configuration and power interface (ACPI) tables.
-//
-//  Copyright 2016 Brett Vickers.
-//  Use of this source code is governed by a BSD-style license
-//  that can be found in the MonkOS LICENSE file.
-//============================================================================
+
+/* BIOS data area (BDA): 0x0400--0x04ff; if extended BDA (EDBA) presents, its
+   address >> 4 (16 bit) is stored in 0x040e. */
+#define BDA_EDBA        0x040e
+
+#define ACPI_TMR_HZ 3579545
+#define ACPI_SCI_EN 0x1
+#define ACPI_SLP_EN (1<<13)
+
+/*
+ * Root System Descriptor Pointer (RSDP)
+ */
+struct acpi_rsdp {
+    char signature[8];
+    uint8_t checksum;
+    char oemid[6];
+    uint8_t revision;
+    uint32_t rsdt_addr;
+    /* the following values are introduced since 2.0 */
+    uint32_t length;
+    uint64_t xsdt_addr;
+    uint8_t extended_checksum;
+    char reserved[3];
+} __attribute__ ((packed));
+
+/*
+ * System Description Table (SDT) header
+ */
+struct acpi_sdt_hdr {
+    char signature[4];
+    uint32_t length;
+    uint8_t revision;
+    uint8_t checksum;
+    char oemid[6];
+    char oemtableid[8];
+    uint32_t oemrevision;
+    uint32_t creatorid;
+    uint32_t creatorrevision;
+} __attribute__ ((packed));
+
+/*
+ * APIC
+ */
+struct acpi_sdt_apic {
+    uint32_t local_controller_addr;
+    uint32_t flags;
+} __attribute__ ((packed));
+
+/*
+ * APIC header
+ */
+struct acpi_sdt_apic_hdr {
+    uint8_t type; /* 0 = local APIC, 1 = I/O APIC */
+    uint8_t length;
+} __attribute__ ((packed));
+
+/*
+ * Local APIC
+ */
+struct acpi_sdt_apic_lapic {
+    struct acpi_sdt_apic_hdr hdr;
+    uint8_t cpu_id;
+    uint8_t apic_id;
+    uint32_t flags;
+} __attribute__ ((packed));
+
+/*
+ * I/O APIC
+ */
+struct acpi_sdt_apic_ioapic {
+    struct acpi_sdt_apic_hdr hdr;
+    uint8_t id;
+    uint8_t reserved;
+    uint32_t addr;
+    uint32_t global_int_base;
+} __attribute__ ((packed));
+
+/*
+ * Interrupt Source Override
+ */
+struct acpi_sdt_apic_int_src {
+    struct acpi_sdt_apic_hdr hdr;
+    uint8_t bus;
+    uint8_t bus_int;
+    uint32_t global_int;
+    uint16_t mps_flags;
+} __attribute__ ((packed));
+
+/*
+ * Generic address structure of ACPI
+ */
+struct acpi_generic_addr_struct {
+    uint8_t addr_space;
+    uint8_t bit_width;
+    uint8_t bit_offset;
+    uint8_t access_size;
+    uint64_t addr;
+} __attribute__ ((packed));
+
+/*
+ * FADT
+ */
+struct acpi_sdt_fadt {
+    /* acpi_sdt_hdr */
+    uint32_t firmware_ctrl;
+    uint32_t dsdt;
+
+    uint8_t reserved;
+
+    uint8_t preferred_pm_profile;
+    uint16_t sci_interrupt;
+    uint32_t smi_cmd_port;
+    uint8_t acpi_enable;
+    uint8_t acpi_disable;
+    uint8_t s4bios_req;
+    uint8_t pstate_ctrl;
+    uint32_t pm1a_event_block;
+    uint32_t pm1b_event_block;
+    uint32_t pm1a_ctrl_block;
+    uint32_t pm1b_ctrl_block;
+    uint32_t pm2_ctrl_block;
+    uint32_t pm_timer_block;
+    uint32_t gpe0_block;
+    uint32_t gpe1_block;
+    uint8_t pm1_event_length;
+    uint8_t pm1_ctrl_length;
+    uint8_t pm2_ctrl_length;
+    uint8_t pm_timer_length;
+    uint8_t gpe0_length;
+    uint8_t gpe1_length;
+    uint8_t gpe1_base;
+    uint8_t cstate_ctrl;
+    uint16_t worst_c2_latency;
+    uint16_t worst_c3_latency;
+    uint16_t flush_size;
+    uint16_t flush_stride;
+    uint8_t duty_offset;
+    uint8_t duty_width;
+    uint8_t day_alarm;
+    uint8_t month_alarm;
+    uint8_t century;
+
+    uint16_t boot_arch_flags;
+
+    uint8_t reserved2;
+    uint32_t flags;
+
+    struct acpi_generic_addr_struct reset_reg;
+    uint8_t reset_value;
+
+    uint8_t reserved3[3];
+
+    uint64_t x_firmware_ctrl;
+    uint64_t x_dsdt;
+
+    struct acpi_generic_addr_struct x_pm1a_event_block;
+    struct acpi_generic_addr_struct x_pm1b_event_block;
+    struct acpi_generic_addr_struct x_pm1a_ctrl_block;
+    struct acpi_generic_addr_struct x_pm1b_ctrl_block;
+    struct acpi_generic_addr_struct x_pm2_ctrl_block;
+    struct acpi_generic_addr_struct x_pm_timer_block;
+    struct acpi_generic_addr_struct x_gpe0_block;
+    struct acpi_generic_addr_struct x_gpe1_block;
+
+} __attribute__ ((packed));
+
+/*
+ * SRAT
+ * - acpi_sdt_hdr
+ * - reserved[4+8]
+ * - Static Resource Allocation Structure[n]
+ */
+struct acpi_sdt_srat_common {
+    uint8_t type;
+    uint8_t length;
+} __attribute__ ((packed));
+struct acpi_sdt_srat_lapic {
+    uint8_t type;                    /* 0: Local APIC */
+    uint8_t length;                  /* 16 */
+    uint8_t proximity_domain;        /* Bit 7-0 */
+    uint8_t apic_id;
+    uint32_t flags;
+    uint8_t local_sapic_eid;
+    uint8_t proximity_domain2[3];    /* Bit 31-8 */
+    uint32_t clock_domain;
+} __attribute__ ((packed));
+struct acpi_sdt_srat_memory {
+    uint8_t type;                    /* 1: Memory */
+    uint8_t length;                  /* 40 */
+    uint32_t proximity_domain;
+    uint8_t reserved1[2];
+    uint32_t base_addr_low;
+    uint32_t base_addr_high;
+    uint32_t length_low;
+    uint32_t length_high;
+    uint32_t reserved2;
+    uint32_t flags;
+    uint8_t reserved3[8];
+} __attribute__ ((packed));
+struct acpi_sdt_srat_lapicx2 {
+    uint8_t type;                    /* 2: Local x2APIC */
+    uint8_t length;                  /* 24 */
+    uint16_t reserved1;
+    uint32_t proximity_domain;
+    uint32_t x2apic_id;
+    uint32_t flags;
+    uint32_t clock_domain;
+    uint32_t reserved2;
+} __attribute__ ((packed));
+struct acpi_sdt_srat_hdr {
+    /* acpi_sdt_hdr */
+    uint8_t reserved1[4];
+    uint8_t reserved2[8];
+    /* acpi_sdt_srat_*[n] */
+} __attribute__ ((packed));
 
 
-static struct acpi acpi;
+/* Prototype declarations */
+static int _validate_checksum(const uint8_t *, int);
+static int _parse_apic(acpi_t *, struct acpi_sdt_hdr *);
+static int _parse_fadt(acpi_t *, struct acpi_sdt_hdr *);
+static int _parse_rsdt(acpi_t *, struct acpi_rsdp *);
+static int _rsdp_search_range(acpi_t *, uintptr_t, uintptr_t);
 
-static void read_fadt(const struct acpi_hdr *hdr)
+/*
+ * Validate ACPI checksum: Since the ACPI checksum is a one-byte modular sum,
+ * this function calculates the sum of len bytes from the memory space pointed
+ * by ptr.  If the checksum is valid, this function returns zero.  Otherwise,
+ * this returns a non-zero value.
+ */
+static int
+_validate_checksum(const uint8_t *ptr, int len)
 {
-  const struct acpi_fadt *fadt = (const struct acpi_fadt *) hdr;
-  acpi.fadt = fadt;
-}
+    uint8_t sum = 0;
+    int i;
 
-static void read_madt(const struct acpi_hdr *hdr)
-{
-  const struct acpi_madt *madt = (const struct acpi_madt *) hdr;
-  acpi.madt = madt;
-}
-
-static void read_mcfg(const struct acpi_hdr *hdr)
-{
-  const struct acpi_mcfg *mcfg = (const struct acpi_mcfg *) hdr;
-  acpi.mcfg = mcfg;
-}
-
-static void read_table(const struct acpi_hdr *hdr)
-{
-  switch (hdr->signature.dword) {
-  case SIGNATURE_FADT:
-    read_fadt(hdr);
-    break;
-  case SIGNATURE_MADT:
-    read_madt(hdr);
-    break;
-  case SIGNATURE_MCFG:
-    read_mcfg(hdr);
-    break;
-  default:
-    break;
-  }
-}
-
-static bool is_mapped(btable_t *btable, uint64_t addr)
-{
-  uint64_t pml4te = PML4E(addr);
-  uint64_t pdpte = PDPTE(addr);
-  uint64_t pde = PDE(addr);
-  uint64_t pte = PTE(addr);
-
-  page_t *pml4t = btable->root;
-  if (pml4t->entry[pml4te] == 0) {
-    return FALSE;
-  }
-  page_t *pdpt = PGPTR(pml4t->entry[pml4te]);
-  if (pdpt->entry[pdpte] == 0) {
-    return FALSE;
-  }
-  if (pdpt->entry[pdpte] & PF_PS) {
-    return TRUE;
-  }
-
-  page_t *pdt = PGPTR(pdpt->entry[pdpte]);
-  if (pdt->entry[pde] == 0) {
-    return FALSE;
-  }
-  if (pdt->entry[pde] & PF_PS) {
-    return TRUE;
-  }
-
-  page_t *pt = PGPTR(pdt->entry[pde]);
-  return pt->entry[pte] != 0;
-}
-
-static uint64_t alloc_page(btable_t *btable)
-{
-  if (btable->next_page == btable->term_page) {
-    fatal();
-  }
-  
-  page_t *page = btable->next_page++;
-  memzero(page, sizeof(page_t));
-  return (uint64_t) page | PF_PRESENT | PF_RW;
-}
-
-static void create_page(btable_t *btable, uint64_t addr, uint64_t flags)
-{
-  uint64_t pml4te = PML4E(addr);
-  uint64_t pdpte = PDPTE(addr);
-  uint64_t pde = PDE(addr);
-  uint64_t pte = PTE(addr);
-
-  page_t *pml4t = btable->root;
-  if (pml4t->entry[pml4te] == 0) {
-    pml4t->entry[pml4te] = alloc_page(btable);
-  }
-  
-  page_t *pdpt = PGPTR(pml4t->entry[pml4te]);
-  if (pdpt->entry[pdpte] == 0) {
-    pdpt->entry[pdpte] = alloc_page(btable);
-  }
-  
-  page_t *pdt = PGPTR(pdpt->entry[pdpte]);
-  if (pdt->entry[pde] == 0) {
-    pdt->entry[pde] = alloc_page(btable);
-  }
-  
-  page_t *pt = PGPTR(pdt->entry[pde]);
-  pt->entry[pte] = addr | flags;
-}
-
-static void map_range(btable_t *btable, uint64_t addr, uint64_t size, uint64_t flags)
-{
-  // Calculate the page-aligned extents of the block of memory.
-  uint64_t begin = PAGE_ALIGN_DOWN(addr);
-  uint64_t term  = PAGE_ALIGN_UP(addr + size);
-
-  // If necessary, create new pages in the boot page table to cover the
-  // address range.
-  for (uint64_t addr = begin; addr < term; addr += PAGE_SIZE) {
-    if (!is_mapped(btable, addr)) {
-      create_page(btable, addr, flags);
+    for ( i = 0; i < len; i++ ) {
+        sum += ptr[i];
     }
-  }
+
+    return sum;
 }
 
-static void map_table(btable_t *btable, const struct acpi_hdr *hdr)
+/*
+ * APIC
+ *   0: Processor Local APIC
+ *   1: I/O APIC
+ *   2: Interrupt Source Override
+ */
+static int
+_parse_apic(acpi_t *acpi, struct acpi_sdt_hdr *sdt)
 {
-  uint64_t addr  = (uint64_t) hdr;
-  uint64_t flags = PF_PRESENT | PF_RW;
+    uint64_t addr;
+    struct acpi_sdt_apic *apic;
+    struct acpi_sdt_apic_hdr *hdr;
+    struct acpi_sdt_apic_lapic *lapic;
+    struct acpi_sdt_apic_ioapic *ioapic;
+    uint32_t len;
 
-  // First map the header itself, since we can't read its length until
-  // it's mapped.
-  map_range(btable, addr, sizeof(struct acpi_hdr), flags);
+    len = 0;
+    addr = (uint64_t)sdt;
+    len += sizeof(struct acpi_sdt_hdr);
 
-  // Now that we can read the header's length, map the entire ACPI table.
-  uint64_t size = hdr->length;
-  map_range(btable, addr, size, flags);
+    apic = (struct acpi_sdt_apic *)(addr + len);
+    len += sizeof(struct acpi_sdt_apic);
 
-  // Calculate the page-aligned extents of the ACPI table, and add them to
-  // the BIOS-generated memory table.
-  pmap_add(PAGE_ALIGN_DOWN(addr),
-           PAGE_ALIGN_UP(addr + hdr->length) - PAGE_ALIGN_DOWN(addr),
-           PMEMTYPE_ACPI);
-}
+    /* Local APIC */
+    acpi->apic_address = apic->local_controller_addr;
 
-
-static void read_xsdt(btable_t *btable)
-{
-  const struct acpi_xsdt *xsdt = acpi.xsdt;
-  const struct acpi_hdr  *xhdr = &xsdt->hdr;
-
-  printk("read_xsdt()\n");
-  printk("[acpi] oem='%s' tbl='%s' rev=0x%x creator='%s'\n",
-         xhdr->oemid, xhdr->oemtableid, xhdr->oemrevision, xhdr->creatorid);
-
-  // Read each of the tables referenced by the XSDT table.
-  int tables = (int)(xhdr->length - sizeof(*xhdr)) / sizeof(uint64_t);
-  for (int i = 0; i < tables; i++) {
-    const struct acpi_hdr *hdr = (const struct acpi_hdr *) xsdt->ptr_table[i];
-    map_table(btable, hdr);
-    printk("[acpi] Found %s table at 0x%lx.\n",
-           hdr->signature.bytes, (uint64_t) hdr);
-    if (hdr->signature.dword == SIGNATURE_HPET) {
-      /* map HPET address space */
-      printk("HPET\n");
-      printk("sizeof(struct hpet) = %lu\n", sizeof(struct hpet));
-      //      struct hpet *addr = (struct hpet *) HPET0_START;
-      struct hpet *addr = (struct hpet *) hdr;
-      printk("address = 0x%lx\n", addr->address.address);
-      pmap_add(PAGE_ALIGN_DOWN(HPET0_START),
-               PAGE_ALIGN_UP(HPET0_START + 0x400) - PAGE_ALIGN_DOWN(HPET0_START),
-               PMEMTYPE_ACPI);
+    while ( len < sdt->length ) {
+        hdr = (struct acpi_sdt_apic_hdr *)(addr + len);
+        if ( len + hdr->length > sdt->length ) {
+            /* Invalid */
+            return -1;
+        }
+        switch  ( hdr->type ) {
+        case 0:
+            /* Local APIC */
+            lapic = (struct acpi_sdt_apic_lapic *)hdr;
+            break;
+        case 1:
+            /* I/O APIC */
+            ioapic = (struct acpi_sdt_apic_ioapic *)hdr;
+            if ( !acpi->ioapic_base ) {
+                /* First I/O APIC is used */
+                acpi->ioapic_base = ioapic->addr;
+            }
+            break;
+        case 2:
+            /* Interrupt Source Override */
+            break;
+        default:
+            /* Other */
+            ;
+        }
+        len += hdr->length;
     }
-    read_table(hdr);
-  }
-  //  inf_loop();
+
+    return 0;
 }
 
-static void read_rsdt(btable_t *btable)
+/*
+ * Parse Fixed ACPI Description Table (FADT)
+ */
+static int
+_parse_fadt(acpi_t *acpi, struct acpi_sdt_hdr *sdt)
 {
-  const struct acpi_rsdt *rsdt = acpi.rsdt;
-  const struct acpi_hdr  *rhdr = &rsdt->hdr;
-  int i;
-  printk("read_rsdt()\n");
-  printk("[acpi] oem='%s' tbl='%s' rev=%x creator='%s'\n",
-         rhdr->oemid, rhdr->oemtableid, rhdr->oemrevision, rhdr->creatorid);
+    uint64_t addr;
+    struct acpi_sdt_fadt *fadt;
+    uint32_t len;
+    uint64_t dsdt;
 
-  // Read each of the tables referenced by the RSDT table.
-  int tables = (int)(rhdr->length - sizeof(*rhdr)) / sizeof(uint32_t);
-  for (i = 0; i < tables; i++) {
-    const struct acpi_hdr *hdr = (const struct acpi_hdr *)(uintptr_t) rsdt->ptr_table[i];
-    map_table(btable, hdr);
-    printk("[acpi] Found %s table at 0x%lx.\n",
-           hdr->signature.bytes, (uint64_t) hdr);
-    printk("hdr->length = %u\n", hdr->length);
-    printk("hdr->signature.bytes = %s\n", hdr->signature.bytes);
-    if (hdr->signature.dword == SIGNATURE_HPET) {
-      /* map HPET address space */
-      printk("HPET\n");
-      printk("sizeof(struct hpet) = %lu\n", sizeof(struct hpet));
-      struct hpet *addr = (struct hpet *) hdr;
-      printk("address = 0x%lx\n", addr->address.address);
-      pmap_add(PAGE_ALIGN_DOWN(HPET0_START),
-               PAGE_ALIGN_UP(HPET0_START + 0x400) - PAGE_ALIGN_DOWN(HPET0_START),
-               PMEMTYPE_ACPI);
-    }
-    read_table(hdr);
-  }
-}
+    len = 0;
+    addr = (uint64_t)sdt;
+    len += sizeof(struct acpi_sdt_hdr);
+    fadt = (struct acpi_sdt_fadt *)(addr + len);
 
-static const struct acpi_rsdp *find_rsdp(uint64_t addr, uint64_t size)
-{
-  // Scan memory for the 8-byte RSDP signature. It's guaranteed to be
-  // aligned on a 16-byte boundary.
-  const uint64_t *ptr  = (const uint64_t *) addr;
-  const uint64_t *term = (const uint64_t *)(addr + size);
-  for (; ptr < term; ptr += 2) {
-    if (*ptr == SIGNATURE_RSDP) {
-      return (const struct acpi_rsdp *) ptr;
-    }
-  }
-  return NULL;
-}
+    if ( sdt->revision >= 3 ) {
+        /* FADT revision 2.0 or higher */
+        if ( fadt->x_pm_timer_block.addr_space == 1 ) {
+            /* Must be 1 (System I/O) */
+            acpi->pm_tmr_port = fadt->x_pm_timer_block.addr;
+            if ( !acpi->pm_tmr_port ) {
+                acpi->pm_tmr_port = fadt->pm_timer_block;
+            }
+        }
 
-void init_acpi(void)
-{
-  // Initialize the state of the temporary page table generated by the boot
-  // loader. We'll be updating it as we scan ACPI tables.
-  btable_t btable = {
-    .root = (page_t *) MEM_PAGE_TABLE,
-    .next_page = (page_t *) MEM_PAGE_TABLE_LOADED,
-    .term_page = (page_t *) MEM_PAGE_TABLE_END,
-  };
+        /* PM1a control block */
+        if ( fadt->x_pm1a_ctrl_block.addr_space == 1 ) {
+            /* Must be 1 (System I/O) */
+            acpi->pm1a_ctrl_block = fadt->x_pm1a_ctrl_block.addr;
+            if ( !acpi->pm1a_ctrl_block ) {
+                acpi->pm1a_ctrl_block = fadt->pm1a_ctrl_block;
+            }
+        }
 
-  // Scan the extended BIOS and system ROM memory regions for the ACPI RSDP
-  // table.
-  if (!(acpi.rsdp = find_rsdp(MEM_EXTENDED_BIOS, MEM_EXTENDED_BIOS_SIZE))) {
-    acpi.rsdp = find_rsdp(MEM_SYSTEM_ROM, MEM_SYSTEM_ROM_SIZE);
-  }
-  // Fatal out if the ACPI tables could not be found.
-  if (!acpi.rsdp) {
-    printk("[acpi] No ACPI tables found.\n");
-    fatal();
-  }
+        /* PM1b control block */
+        if ( fadt->x_pm1b_ctrl_block.addr_space == 1 ) {
+            /* Must be 1 (System I/O) */
+            acpi->pm1b_ctrl_block = fadt->x_pm1b_ctrl_block.addr;
+            if ( !acpi->pm1b_ctrl_block ) {
+                acpi->pm1b_ctrl_block = fadt->pm1b_ctrl_block;
+            }
+        }
 
-  acpi.version = acpi.rsdp->revision + 1;
-  printk("[acpi] ACPI %d.0 RSDP table found at 0x%lx.\n",
-         acpi.version, (uintptr_t) acpi.rsdp);
-
-  // Prefer the ACPI2.0 XSDT table for finding all other tables.
-  if (acpi.version > 1) {
-    acpi.xsdt = (const struct acpi_xsdt *) acpi.rsdp->ptr_xsdt;
-    if (!acpi.xsdt) {
-      printk("[acpi] No XSDT table found.\n");
+        /* DSDT */
+        dsdt = fadt->x_dsdt;
+        if ( !dsdt ) {
+            dsdt = fadt->dsdt;
+        }
     } else {
-      printk("[acpi] Found XSDT table at 0x%lx.\n",
-             (uintptr_t) acpi.xsdt);
-      map_table(&btable, &acpi.xsdt->hdr);
-      read_xsdt(&btable);
-    }
-  }
+        /* Revision < 3 */
+        acpi->pm_tmr_port = fadt->pm_timer_block;
 
-  // Fall back to the ACPI1.0 RSDT table if XSDT isn't available.
-  if (!acpi.xsdt) {
-    if (!(acpi.rsdt = (const struct acpi_rsdt *)(uintptr_t) acpi.rsdp->ptr_rsdt)) {
-      printk("[acpi] No RSDT table found.\n");
-      fatal();
+        /* PM1a control block  */
+        acpi->pm1a_ctrl_block = fadt->pm1a_ctrl_block;
+
+        /* PM1b control block  */
+        acpi->pm1b_ctrl_block = fadt->pm1b_ctrl_block;
+
+        /* DSDT */
+        dsdt = fadt->dsdt;
+    }
+
+    /* Check flags: The eighth bit of fadt->flags presents the TMR_VAL_EXT flag.
+       If this flag is clear, the counter of the timer is implemented as a
+       24-bit value.  Otherwise, it is implemented as a 32-bit value. */
+    acpi->pm_tmr_ext = (fadt->flags >> 8) & 0x1;
+
+    /* SMI command */
+    acpi->smi_cmd_port = fadt->smi_cmd_port;
+
+    /* ACPI enable */
+    acpi->acpi_enable = fadt->acpi_enable;
+
+    /* Century */
+    acpi->cmos_century = fadt->century;
+
+    return 0;
+}
+
+/*
+ * Parse ACPI Static Resource Affinity Table (SRAT)
+ */
+static int
+_parse_srat(acpi_t *acpi, struct acpi_sdt_hdr *sdt)
+{
+    uint64_t addr;
+    struct acpi_sdt_srat_common *srat;
+    struct acpi_sdt_srat_lapic *srat_lapic;
+    struct acpi_sdt_srat_memory *srat_memory;
+    uint32_t len;
+    uint64_t mbase;
+    uint64_t mlen;
+
+    len = 0;
+    addr = (uint64_t)sdt;
+    len += sizeof(struct acpi_sdt_hdr) + sizeof(struct acpi_sdt_srat_hdr);
+
+    while ( len < sdt->length ) {
+        srat = (struct acpi_sdt_srat_common *)(addr + len);
+        if ( len + srat->length > sdt->length ) {
+            /* Oversized */
+            break;
+        }
+        switch ( srat->type ) {
+        case 0:
+            /* Local APIC */
+            srat_lapic = (struct acpi_sdt_srat_lapic *)srat;
+            acpi->lapic_domain[srat_lapic->apic_id].valid = 1;
+            acpi->lapic_domain[srat_lapic->apic_id].domain
+                = srat_lapic->proximity_domain
+                | ((uint32_t)srat_lapic->proximity_domain2[0] << 8)
+                | ((uint32_t)srat_lapic->proximity_domain2[1] << 16)
+                | ((uint32_t)srat_lapic->proximity_domain2[2] << 24);
+            break;
+        case 1:
+            /* Memory */
+            srat_memory = (struct acpi_sdt_srat_memory *)srat;
+            if ( (srat_memory->flags & 1)
+                 && acpi->num_memory_region < MAX_MEMORY_REGIONS ) {
+                mbase = (uint64_t)srat_memory->base_addr_low
+                    |((uint64_t)srat_memory->base_addr_high << 32);
+                mlen = (uint64_t)srat_memory->length_low
+                    | ((uint64_t)srat_memory->length_high << 32);
+                acpi->memory_domain[acpi->num_memory_region].base = mbase;
+                acpi->memory_domain[acpi->num_memory_region].length = mlen;
+                acpi->memory_domain[acpi->num_memory_region].domain
+                    = srat_memory->proximity_domain;
+                acpi->num_memory_region++;
+            }
+            break;
+        default:
+            /* Unknown */
+            ;
+        }
+
+        /* Next entry */
+        len += srat->length;
+    }
+
+    return 0;
+}
+
+/*
+ * Parse Root System Description Table (RSDT/XSDT) in RSDP
+ */
+static int
+_parse_rsdt(acpi_t *acpi, struct acpi_rsdp *rsdp)
+{
+    struct acpi_sdt_hdr *rsdt;
+    int i;
+    int nr;
+    int sz;
+    uint64_t addr;
+    struct acpi_sdt_hdr *tmp;
+
+    /* Check the ACPI version */
+    if ( rsdp->revision >= 1 ) {
+        /* ACPI 2.0 or later */
+        sz = 8;
+        rsdt = (struct acpi_sdt_hdr *)rsdp->xsdt_addr;
+        if ( 0 != kmemcmp((uint8_t *)rsdt->signature, "XSDT", 4) ) {
+            return -1;
+        }
     } else {
-      printk("[acpi] Found RSDT table at 0x%lx.\n",
-             (uintptr_t) acpi.rsdt);
-      map_table(&btable, &acpi.rsdt->hdr);
-      read_rsdt(&btable);
+        /* Parse RSDT (ACPI 1.x) */
+        sz = 4;
+        rsdt = (struct acpi_sdt_hdr *)(uintptr_t)rsdp->rsdt_addr;
+        if ( 0 != kmemcmp((uint8_t *)rsdt->signature, "RSDT", 4) ) {
+            return -1;
+        }
     }
-  }
 
-  // Reserve local APIC memory-mapped I/O addresses.
-  if (acpi.madt) {
-    //    printk("acpi.madt->ptr_local_apic = 0x%x\n", acpi.madt->ptr_local_apic);
-    pmap_add(PAGE_ALIGN_DOWN(acpi.madt->ptr_local_apic), PAGE_SIZE,
-             PMEMTYPE_UNCACHED);
-  }
+    /* Compute the number of SDTs */
+    nr = (rsdt->length - sizeof(struct acpi_sdt_hdr)) / sz;
 
-  // Reserve I/O APIC memory-mapped I/O addresses.
-  const struct acpi_madt_io_apic *io = NULL;
-  while ((io = acpi_next_io_apic(io))) {
-    //    printk("io->ptr_io_apic = 0x%x\n", io->ptr_io_apic);
-    pmap_add(PAGE_ALIGN_DOWN(io->ptr_io_apic), PAGE_SIZE,
-             PMEMTYPE_UNCACHED);
-  }
-}
-
-int acpi_version(void)
-{
-  return acpi.version;
-}
-
-const struct acpi_fadt *acpi_fadt(void)
-{
-  return acpi.fadt;
-}
-
-const struct acpi_madt *acpi_madt(void)
-{
-  return acpi.madt;
-}
-
-static const void *madt_find(enum acpi_madt_type type, const void *prev)
-{
-  const struct acpi_madt *madt = acpi.madt;
-  if (!madt) {
-    return NULL;
-  }
-
-  const void *term = (const uint8_t *) madt + madt->hdr.length;
-
-  const void *ptr;
-  if (prev) {
-    ptr = (const uint8_t *) prev + ((const struct acpi_madt_hdr *) prev)->length;
-  } else {
-    ptr = madt + 1;
-  }
-
-  while (ptr < term) {
-    const struct acpi_madt_hdr *hdr = (const struct acpi_madt_hdr *) ptr;
-    if (hdr->type == type) {
-      return hdr;
+    /* Check all SDTs */
+    for ( i = 0; i < nr; i++ ) {
+        if ( 4 == sz ) {
+            addr = *(uint32_t *)((uintptr_t)(rsdt)
+                                 + sizeof(struct acpi_sdt_hdr) + i * sz);
+        } else {
+            addr = *(uint64_t *)((uintptr_t)(rsdt)
+                                 + sizeof(struct acpi_sdt_hdr) + i * sz);
+        }
+        tmp = (struct acpi_sdt_hdr *)addr;
+        if ( 0 == kmemcmp((uint8_t *)tmp->signature, "APIC", 4) ) {
+            /* APIC */
+            if ( _parse_apic(acpi, tmp) < 0 ) {
+                return -1;
+            }
+        } else if ( 0 == kmemcmp((uint8_t *)tmp->signature, "FACP", 4) ) {
+            /* FADT */
+            if ( _parse_fadt(acpi, tmp) < 0 ) {
+                return -1;
+            }
+        } else if ( 0 == kmemcmp((uint8_t *)tmp->signature, "SRAT ", 4) ) {
+            /* SRAT */
+            if ( _parse_srat(acpi, tmp) < 0 ) {
+                return -1;
+            }
+        }
     }
-    ptr = (const uint8_t *) hdr + hdr->length;
-  }
 
-  return NULL;
+    return 0;
 }
 
-const struct acpi_madt_local_apic *
-acpi_next_local_apic(const struct acpi_madt_local_apic *prev)
+/*
+ * Search Root System Description Pointer (RSDP) in ACPI data structure
+ */
+static int
+_rsdp_search_range(acpi_t *acpi, uintptr_t start, uintptr_t end)
 {
-  return (const struct acpi_madt_local_apic *) madt_find(ACPI_MADT_LOCAL_APIC, prev);
+    uintptr_t addr;
+    struct acpi_rsdp *rsdp;
+
+    for ( addr = start; addr < end; addr += 0x10 ) {
+        /* Check the checksum of the RSDP */
+        if ( 0 == _validate_checksum((uint8_t *)addr, 20) ) {
+            /* Checksum is correct, then check the signature. */
+            rsdp = (struct acpi_rsdp *)addr;
+            if ( 0 == kmemcmp((uint8_t *)rsdp->signature, "RSD PTR ", 8) ) {
+                /* This seems to be a valid RSDP, then parse RSDT. */
+                return _parse_rsdt(acpi, rsdp);
+            }
+        }
+    }
+
+    return -1;
 }
 
-const struct acpi_madt_io_apic *
-acpi_next_io_apic(const struct acpi_madt_io_apic *prev)
+/*
+ * acpi_load -- load and parse ACPI from EBDA or main BIOS area
+ */
+int
+acpi_load(acpi_t *acpi)
 {
-  return (const struct acpi_madt_io_apic *) madt_find(ACPI_MADT_IO_APIC, prev);
+    uint16_t ebda;
+    uintptr_t ebda_addr;
+
+    /* Reset the data structure */
+    kmemset(acpi, 0, sizeof(acpi_t));
+
+    /* Check 1KB of EBDA, first */
+    ebda = *(uint16_t *)BDA_EDBA;
+    if ( ebda ) {
+        ebda_addr = (uintptr_t)ebda << 4;
+        if ( _rsdp_search_range(acpi, ebda_addr, ebda_addr + 0x0400) >= 0 ) {
+            return 0;
+        }
+    }
+
+    /* If not found in the EDBA, check main BIOS area */
+    return _rsdp_search_range(acpi, 0xe0000, 0x100000);
 }
 
-const struct acpi_madt_iso *
-acpi_next_iso(const struct acpi_madt_iso *prev)
+/*
+ * acpi_timer_available -- check the availability of the ACPI PM timer
+ */
+int
+acpi_timer_available(acpi_t *acpi)
 {
-  return (const struct acpi_madt_iso *) madt_find(ACPI_MADT_ISO, prev);
+    if ( 0 == acpi->pm_tmr_port ) {
+        return -1;              /* Not available */
+    } else {
+        return 0;               /* Available */
+    }
 }
 
-const struct acpi_mcfg_addr *
-acpi_next_mcfg_addr(const struct acpi_mcfg_addr *prev)
+/*
+ * Get the current ACPI timer.  Note that the caller must check the
+ * availability of the ACPI timer through the acpi_timer_available() function
+ * before calling this function.
+ */
+uint32_t
+acpi_get_timer(acpi_t *acpi)
 {
-  const struct acpi_mcfg *mcfg = acpi.mcfg;
-  if (!mcfg) {
-    return NULL;
-  }
-  
-  const struct acpi_mcfg_addr *ptr;
-  if (prev) {
-    ptr = prev + 1;
-  } else {
-    ptr = (const struct acpi_mcfg_addr *)(mcfg + 1);
-  }
-  
-  const uint8_t *term = (const uint8_t *) mcfg + mcfg->hdr.length;
-  if ((const uint8_t *) ptr < term) {
-    return ptr;
-  } else {
-    return NULL;
-  }
+    return inl(acpi->pm_tmr_port);
 }
+
+/*
+ * Get the timer period (wrapping)
+ */
+uint64_t
+acpi_get_timer_period(acpi_t *acpi)
+{
+    if ( acpi->pm_tmr_ext ) {
+        /* 32-bit counter */
+        return ((uint64_t)1ULL << 32);
+    } else {
+        /* 24-bit counter */
+        return (1 << 24);
+    }
+}
+
+/*
+ * Wait usec microseconds using ACPI timer.  Note that the caller must check
+ * the availability of the ACPI timer through the acpi_timer_available()
+ * function before calling this function.
+ */
+void
+acpi_busy_usleep(acpi_t *acpi, uint64_t usec)
+{
+    uint64_t clk;
+    volatile uint64_t acc;
+    volatile uint64_t cur;
+    volatile uint64_t prev;
+
+    /* usec to count */
+    clk = (ACPI_TMR_HZ * usec) / 1000000;
+
+    prev = acpi_get_timer(acpi);
+    acc = 0;
+    while ( acc < clk ) {
+        cur = acpi_get_timer(acpi);
+        if ( cur < prev ) {
+            /* Overflow */
+            acc += acpi_get_timer_period(acpi) + cur - prev;
+        } else {
+            acc += cur - prev;
+        }
+        prev = cur;
+        pause();
+    }
+}
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: sw=4 ts=4 fdm=marker
+ * vim<600: sw=4 ts=4
+ */

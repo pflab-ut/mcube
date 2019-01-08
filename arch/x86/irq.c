@@ -7,11 +7,12 @@
 
 void wait_until_next_interrupt(void)
 {
-  halt();
+  hlt();
 }
 
 void do_switch_thread_arch(interrupt_context_t *context)
 {
+#if 0
 	unsigned long cpu = get_cpu_id();
   if (current_th[cpu] != prev_th[cpu]) {
     prev_th[cpu]->rsp = context->rsp;
@@ -34,12 +35,14 @@ void do_switch_thread_arch(interrupt_context_t *context)
     }
     prev_th[cpu] = current_th[cpu];
   }
+#endif
 }
 
 
 
 void init_irq(void)
 {
+#if 0
   extern struct desc_ptr IDT_Pointer;
   init_irq_asm();
   //  printk("IDT_Pointer = 0x%lx\n", (unsigned long) &IDT_Pointer);
@@ -47,5 +50,6 @@ void init_irq(void)
   //  printk("IDT_Pointer.addr = 0x%lx\n", IDT_Pointer.addr);
   //  lidt(&IDT_Pointer);
   asm volatile("lidt [%0]" :: "r"(&IDT_Pointer));
+#endif
 }
 

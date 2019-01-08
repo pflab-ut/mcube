@@ -150,6 +150,7 @@ static inline void mfence(void)
 }
 
 
+/*
 static inline void cpuid(uint32_t code, registers4_t *regs)
 {
   asm volatile("cpuid"
@@ -157,6 +158,7 @@ static inline void cpuid(uint32_t code, registers4_t *regs)
                   "=d" (regs->edx)
                 : "0" (code));
 }
+*/
 
 
 /* read time stamp counter */

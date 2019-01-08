@@ -297,10 +297,11 @@ static inline int lfout(double lf, int base, char *dst, int n, struct conv_flag 
 #endif /* !CONFIG_ARCH_AXIS */
 
 
-static int vsprint(char *buf, const char *fmt, va_list ap)
+int __vsnprint(char *buf, size_t size, const char *fmt, va_list ap)
 {
+  /* TODO: use size */
   int ret;
-  unsigned int size;
+  unsigned int digit_size;
 	int d;
 	unsigned int u;
 	char *p, *s;
@@ -341,12 +342,12 @@ static int vsprint(char *buf, const char *fmt, va_list ap)
       fmt++;
     }
     /* check size */
-    size = 0;
+    digit_size = 0;
     while ((*fmt >= '0') && (*fmt <= '9')) {
-      size = size * 10 + (*fmt - '0');
+      digit_size = digit_size * 10 + (*fmt - '0');
       fmt++;
     }
-    cf.digit = size;
+    cf.digit = digit_size;
     
 skip:
 		switch (*fmt++) {
@@ -479,7 +480,7 @@ int printk(const char *fmt, ...)
   int n;
 	va_list ap;
 	va_start(ap, fmt);
-  n = vsprint(buf, fmt, ap);
+  n = __vsnprint(buf, sizeof(buf), fmt, ap);
   va_end(ap);
   puts(buf);
 	return n;
@@ -497,7 +498,7 @@ int print(const char *fmt, ...)
   int n;
 	va_list ap;
 	va_start(ap, fmt);
-  n = vsprint(buf, fmt, ap);
+  n = __vsnprint(buf, sizeof(buf), fmt, ap);
   va_end(ap);
   if (call_sys_get_mode_level() == USER_LEVEL) {
     call_sys_write(buf);
@@ -519,7 +520,7 @@ int printf(const char *fmt, ...)
   int n;
 	va_list ap;
 	va_start(ap, fmt);
-  n = vsprint(buf, fmt, ap);  
+  n = __vsnprint(buf, sizeof(buf), fmt, ap);  
   call_sys_write(buf);
   va_end(ap);
   

@@ -27,6 +27,7 @@ rom.txt
 *.lck
 *.log
 *.dd
+*.org
 
 # latex suffixes
 *.aux

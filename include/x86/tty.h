@@ -6,6 +6,8 @@
 #ifndef	__MCUBE_X86_TTY_H__
 #define	__MCUBE_X86_TTY_H__
 
+#ifndef __ASSEMBLY__
+
 /**
  * @brief Teletype (console) screen text manipulation routines.
  *
@@ -231,5 +233,7 @@ void tty_printc(int id, char ch);
  *  @returns    The number of characters written to the console.
  */
 int tty_printf(int id, const char *format, ...);
+
+#endif /* !__ASSEMBLY__ */
 
 #endif /* __MCUBE_X86_TTY_H__ */

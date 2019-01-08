@@ -14,7 +14,8 @@ TEXT_ADDR = 0x00007c00
 
 #PRIVATE_LDFLAGS = -Ttext=$(TEXT_ADDR) -N -Bstatic
 
-CFLAGS += -fPIC
+#CFLAGS += -fPIC
+#CFLAGS += -fPIE
 CFLAGS += -m64
 #LDFLAGS += -Ttext=$(TEXT_ADDR)
 
@@ -28,45 +29,78 @@ ifeq ($(CC), clang)
 #  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
   OBJDUMP = objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
-  CFLAGS += -masm=intel
+#  CFLAGS += -masm=intel
   LDFLAGS += -T scripts/linker/x86-elf.ld --Map $(MAP)
 else
   CROSS_PREFIX = 
   CC = $(CCACHE) $(CROSS_PREFIX)gcc
-  LD = gcc
+  LD = ld
 #  AS = $(CROSS_PREFIX)as
   AS = nasm
   ASFLAGS = -f elf64
-  BOOT_ASFLAGS = -f bin
   OBJDUMP = $(CROSS_PREFIX)objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
 #  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
   LDFLAGS += -nostdlib
-  CFLAGS += -masm=intel
+#  CFLAGS += -masm=intel
 # MonkOS's CFLAGS and LDFLAGS
 #CFLAGS +=  -Qn -g  -m64 -mno-red-zone -mno-mmx -mfpmath=sse  \
 #     -ffreestanding -fno-asynchronous-unwind-tables -Wall  -fPIC
 #LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000   
-		LDFLAGS  +=  -z max-page-size=0x1000   
-  LDFLAGS += -T scripts/linker/x86-elf.ld
+#		LDFLAGS  +=  -z max-page-size=0x1000   
+  LDFLAGS += -N -T scripts/linker/x86-elf.ld
+#  LDFLAGS += -N -T scripts/linker/x86-elf.ld.org
 endif
 
-
-BOOT_TARGET = build/arch/x86/boot.sys
-LOADER_TARGET = build/arch/x86/loader.sys
-BOOT_ASM = arch/x86/boot.asm
-LOADER_ASM = arch/x86/loader.asm
-
-
 CFLAGS += -D__LITTLE_ENDIAN__
+CFLAGS += -mcmodel=large -nostdlib -nodefaultlibs -fno-builtin -fno-stack-protector
+#CFLAGS += -fno-pic
+#CFLAGS += -fno-pie
+CFLAGS += -fno-pie -Wno-pointer-sign -fno-stack-protector -mfentry
 
+
+MBR_TARGET = $(TOP_DIR)/build/mbr
+BOOTMON_TARGET = $(TOP_DIR)/build/bootmon
+MBR_ASMS = $(TOP_DIR)/arch/x86/mbr.S
+BOOTMON_ASMS = $(TOP_DIR)/arch/x86/bootmon.S \
+	$(TOP_DIR)/arch/x86/entry16.S \
+	$(TOP_DIR)/arch/x86/entry32.S \
+	$(TOP_DIR)/arch/x86/entry64.S \
+	$(TOP_DIR)/arch/x86/boot.S \
 
 ASMS = \
+	$(TOP_DIR)/arch/x86/asm.S \
+	$(TOP_DIR)/arch/x86/trampoline.S \
+	$(TOP_DIR)/arch/x86/ap_entry32.S \
+
+SRCS += \
+	$(TOP_DIR)/arch/x86/memory.c \
+	$(TOP_DIR)/arch/x86/physmem.c \
+	$(TOP_DIR)/arch/x86/slab.c \
+	$(TOP_DIR)/arch/x86/arch.c \
+	$(TOP_DIR)/arch/x86/acpi.c \
+	$(TOP_DIR)/arch/x86/apic.c \
+	$(TOP_DIR)/arch/x86/desc.c \
+	$(TOP_DIR)/arch/x86/i8254.c \
+	$(TOP_DIR)/arch/x86/pgt.c \
+	$(TOP_DIR)/arch/x86/strfmt.c \
+	$(TOP_DIR)/arch/x86/kernel.c \
+
+SRCS += \
+	$(TOP_DIR)/arch/x86/stdio.c \
+	$(TOP_DIR)/arch/x86/init.c \
+	$(TOP_DIR)/arch/x86/syscall.c \
+	$(TOP_DIR)/arch/x86/thread.c \
+	$(TOP_DIR)/arch/x86/timer.c \
+	$(TOP_DIR)/arch/x86/cpu.c \
+	$(TOP_DIR)/arch/x86/irq.c \
+
+#ASMS = \
 	$(TOP_DIR)/arch/x86/start.asm \
  $(TOP_DIR)/arch/x86/interrupt.asm \
 	$(TOP_DIR)/arch/x86/utils.asm \
 
-SRCS += \
+#SRCS += \
  $(TOP_DIR)/arch/x86/mm.c \
  $(TOP_DIR)/arch/x86/acpi.c \
  $(TOP_DIR)/arch/x86/apic.c \
@@ -90,6 +124,8 @@ SRCS += \
  $(TOP_DIR)/arch/x86/hpet.c \
  $(TOP_DIR)/arch/x86/lapic.c \
  $(TOP_DIR)/arch/x86/pit.c \
+
+SRCS += \
 	$(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_x86.c \
 

@@ -330,7 +330,7 @@ static inline void fatal(void)
  * @brief  A record describing the CPU state at the time of the interrupt.
  */
 struct interrupt_context {
-    registers_t regs;            ///< all general-purpose registers.
+  //    registers_t regs;            ///< all general-purpose registers.
     uint64_t    error;           ///< exception error identifier.
     uint64_t    interrupt;       ///< interrupt vector number.
     uint64_t    retaddr;         ///< interrupt return address.

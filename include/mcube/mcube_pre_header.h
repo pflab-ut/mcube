@@ -11,6 +11,7 @@
 #include <mcube/config.h>
 #include <mcube/types.h>
 #include <mcube/atomic.h>
+#include <mcube/stdarg.h>
 #include <mcube/stdio.h>
 #include <mcube/stddef.h>
 #include <mcube/linkage.h>
@@ -45,7 +46,6 @@
 #include <mcube/semaphore.h>
 #include <mcube/seqlock.h>
 #include <mcube/stdalgo.h>
-#include <mcube/stdarg.h>
 #include <mcube/stdlib.h>
 #include <mcube/string.h>
 #include <mcube/syscall.h>

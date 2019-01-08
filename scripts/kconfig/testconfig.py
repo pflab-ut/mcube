@@ -134,7 +134,7 @@ MESSAGE = "Begin Time: " + str(BEGIN) + "\n" \
           + MESSAGE
 print(MESSAGE)
 
-FIN = open(CWD + "/MESSAGE.log", "w")
+FIN = open(CWD + "/message.log", "w")
 FIN.write(MESSAGE)
 FIN.close()
 

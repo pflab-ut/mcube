@@ -23,8 +23,12 @@ vpath %.c $(TOP_DIR)/arch/$(ARCH_NAME) \
 vpath %.S $(TOP_DIR)/arch/$(ARCH_NAME)
 vpath %.asm $(TOP_DIR)/arch/$(ARCH_NAME)
 
+ifeq ($(ARCH_NAME), x86)
+IMG_TARGET = $(TOP_DIR)/build/mcube.img
+endif
 
 TARGET = $(TOP_DIR)/build/mcube
+
 DMPFILE = $(TARGET).dmp
 MAP = $(TARGET).map
 BIN = $(TARGET).bin
@@ -39,14 +43,14 @@ endif
 
 CFLAGS += -Iinclude -Wall
 #CFLAGS += -Wextra
-CFLAGS += -O3
+#CFLAGS += -O3
 #CFLAGS += -O2
 #CFLAGS += -O0
 
 CFLAGS += -std=gnu11
-CFLAGS += -nostdlib -fno-stack-protector -ffreestanding
-CFLAGS += -fno-builtin 
-CFLAGS += -fno-strict-aliasing
+#CFLAGS += -nostdlib -fno-stack-protector -ffreestanding
+#CFLAGS += -fno-builtin 
+#CFLAGS += -fno-strict-aliasing
 
 
 SIZE = $(CROSS_PREFIX)size
@@ -74,12 +78,10 @@ BUILD_DIR = $(TOP_DIR)/build
 
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 
-ifeq ($(ARCH_NAME), x86)
-ASM_OBJS = $(ASMS:%.asm=$(BUILD_DIR)/%.o)
-ASM_DEPS = $(ASMS:%.asm=$(BUILD_DIR)/%.d)
-else
 ASM_OBJS = $(ASMS:%.S=$(BUILD_DIR)/%.o)
 ASM_DEPS = $(ASMS:%.S=$(BUILD_DIR)/%.d)
-endif
 
 DEPS = $(SRCS:%.c=$(BUILD_DIR)/%.d)
+
+MBR_OBJS = $(MBR_ASMS:%.S=$(BUILD_DIR)/%.o)
+BOOTMON_OBJS = $(BOOTMON_ASMS:%.S=$(BUILD_DIR)/%.o)

@@ -66,7 +66,7 @@
 #define INIT_CPU_EFLAGS (CPU_EFLAGS_IF | CPU_EFLAGS_BIT)
    
 
-
+#if 0
 static inline unsigned long get_lapic_id(void)
 {
   registers4_t regs4;
@@ -78,6 +78,7 @@ static inline unsigned long get_lapic_id(void)
 	/* virtual machine */
   //  return (regs4.ebx & 0x0f000000) >> 24;
 }
+#endif
 
 #if 0
 static inline uint32_t get_lapic_id(void)
@@ -86,9 +87,10 @@ static inline uint32_t get_lapic_id(void)
 }
 #endif
 
-#define get_cpu_id() get_lapic_id()
+//#define get_cpu_id() get_lapic_id()
+#define get_cpu_id() 0
 
-
+#if 0
 static inline int get_nr_cpu_cores(void)
 {
 	registers4_t regs4;
@@ -101,6 +103,7 @@ static inline int get_nr_cpu_cores(void)
   }
   return 1;
 }
+#endif
 
 void init_syscall(void);
 

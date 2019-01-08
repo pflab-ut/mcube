@@ -9,6 +9,8 @@
 
 TOP_DIR = .
 
+include $(TOP_DIR)/Rules.make
+
 SRCS += \
  $(TOP_DIR)/kernel/main.c \
 	$(TOP_DIR)/kernel/print.c \
@@ -30,7 +32,6 @@ SRCS += \
  $(TOP_DIR)/user/user.c \
 
 
-include $(TOP_DIR)/Rules.make
 
 
 ifeq ($(ARCH_NAME), arm)
@@ -46,27 +47,31 @@ endif
 all: $(TARGET)
 
 
-$(TARGET): $(ASM_OBJS) $(OBJS) $(BOOT_TARGET) $(LOADER_TARGET) $(FONT_OBJ)
+$(TARGET): $(ASM_OBJS) $(OBJS) $(MBR_TARGET) $(BOOTMON_TARGET) $(FONT_OBJ)
 	$(LD) -o $@ $(ASM_OBJS) $(FONT_OBJ) $(OBJS) $(LDFLAGS)
-	$(SIZE) $@
 ifeq ($(ARCH_NAME), x86)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
-	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
-	$(TOP_DIR)/scripts/misc/mkcdrom.sh
+#	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
+#	$(TOP_DIR)/scripts/misc/mkcdrom.sh
+	$(TOP_DIR)/scripts/misc/create_image.sh $(IMG_TARGET) $(MBR_TARGET) $(BOOTMON_TARGET) $(BIN)
 else ifeq ($(ARCH_NAME), axis)
+	$(SIZE) $@
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
 	$(DUMP) $(BIN) $(DUMPARG) $(ROMFILE)
 endif
+	$(SIZE) $@
 	$(OBJDUMP) $@ > $(DMPFILE)
 
 ifeq ($(ARCH_NAME), x86)
-$(BOOT_TARGET): $(BOOT_ASM)
-	nasm -D__ASSEMBLY__ -f bin -o $@ -MP -MF $(@:%.sys=%.d) $(BOOT_ASM)
-$(LOADER_TARGET): $(LOADER_ASM)
-	nasm -D__ASSEMBLY__ -f bin -o $@ -MP -MF $(@:%.sys=%.d) $(LOADER_ASM)
+$(MBR_TARGET): $(MBR_OBJS)
+#	$(MAKE) -C arch/x86 mbr
+	$(LD) -N -T $(TOP_DIR)/scripts/linker/mbr.ld -o $@ $^
+$(BOOTMON_TARGET): $(BOOTMON_OBJS)
+#	$(MAKE) -C arch/x86 bootmon
+	$(LD) -N -T $(TOP_DIR)/scripts/linker/bootmon.ld -o $@ $^
 else
-$(BOOT_TARGET): # do nothing
-$(LOADER_TARGET): # do nothing
+$(MBR_TARGET): # do nothing
+$(BOOTMON_TARGET): # do nothing
 endif
 
 
@@ -86,16 +91,10 @@ $(BUILD_DIR)/%.o: %.c
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 	$(CC) $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
 
-# except x86
 $(BUILD_DIR)/%.o: %.S
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
 #	$(CC) -D__ASSEMBLY__ $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
 	$(CC) -D__ASSEMBLY__ $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
-
-# x86
-$(BUILD_DIR)/%.o: %.asm
-	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
-	$(AS) -D__ASSEMBLY__ $(ASFLAGS) -o $@ -MP -MF $(@:%.o=%.d) $<
 
 
 
@@ -128,8 +127,16 @@ run:
 ifeq ($(ARCH_NAME), sim)
 	$(TARGET)
 else ifeq ($(ARCH_NAME), x86)
-	qemu-system-x86_64 -cpu core2duo -cdrom $(TARGET).iso -nographic -curses -clock hpet
+#	qemu-system-x86_64 -cpu core2duo -cdrom $(TARGET).iso -nographic -curses -clock hpet
 #	qemu-system-x86_64 -cpu qemu64 -cdrom $(TARGET).iso -nographic -curses
+	qemu-system-x86_64 -m 1024 -smp cores=4,threads=1,sockets=2 \
+	-numa node,nodeid=0,cpus=0-3 \
+	-numa node,nodeid=1,cpus=4-7 \
+	-drive id=disk,format=raw,file=./build/mcube.img,if=none \
+	-device ahci,id=ahci \
+	-device ide-drive,drive=disk,bus=ahci.0 \
+	-boot a -display curses
+
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
 	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
