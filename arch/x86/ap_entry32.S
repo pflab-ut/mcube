@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/ap_entry32.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -23,10 +28,7 @@
 
 #include <mcube/mcube.h>
 
-#define MSR_APIC_BASE           0x1b
-#define APIC_LAPIC_ID           0x020
-
-	.globl	ap_entry32
+  .globl	ap_entry32
 
 	.text
 	.code32
@@ -39,27 +41,27 @@ ap_entry32:
 
 	/* %cs is automatically set after the long jump operation */
 	/* Setup other segment registers */
-	movl	$AP_GDT_DATA64_SEL,%eax
-	movl	%eax,%ss
-	movl	%eax,%ds
-	movl	%eax,%es
-	movl	%eax,%fs
-	movl	%eax,%gs
+	movl $AP_GDT_DATA64_SEL, %eax
+	movl %eax, %ss
+	movl %eax, %ds
+	movl %eax, %es
+	movl %eax, %fs
+	movl %eax, %gs
 
 	/* Get the local APIC ID */
-	movl    $MSR_APIC_BASE,%ecx
+	movl $MSR_APIC_BASE, %ecx
 	rdmsr
-	andl	$0xfffffffffffff000,%eax        /* APIC Base */
-	movl	APIC_LAPIC_ID(%eax),%eax
-	shrl	$24,%eax
+	andl	$0xfffffffffffff000, %eax        /* APIC Base */
+	movl	APIC_LAPIC_ID(%eax), %eax
+	shrl	$24, %eax
 
-	movl	$0xb8000,%ebx
-	movl	$160,%ecx
+	movl	$0xb8000, %ebx
+	movl	$160, %ecx
 	mull	%ecx
-	subl	$2,%eax
-	movl	$0x0721,%edx
-	addl	%eax,%ebx
-	movl	%edx,(%ebx)
+	subl	$2, %eax
+	movl	$0x0721, %edx
+	addl	%eax, %ebx
+	movl	%edx, (%ebx)
 
 1:
 	hlt

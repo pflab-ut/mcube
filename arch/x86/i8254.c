@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/i8254.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -23,49 +28,28 @@
 
 #include <mcube/mcube.h>
 
-/* Counter 0 register */
-#define I8254_REG_CNTR0         0x0040
-/* Control register */
-#define I8254_REG_CTRL          0x0043
-/* i8254 clock */
-#define I8254_HZ                1193182
-/* Square wave */
-#define I8254_CTRL_SQUAREWAVE   0x06
-/* 16bit read/load control register */
-#define I8254_CTRL_RL_16BIT     0x30
 
 /*
  * i8254_start_timer -- start i8254 timer
  */
-void
-i8254_start_timer(int hz)
+void i8254_start_timer(int hz)
 {
-    int counter;
+  int counter;
 
-    /* Start the timer of counter 0 with the specified rate */
-    counter = I8254_HZ / hz;
-    outb(I8254_REG_CTRL, I8254_CTRL_RL_16BIT | I8254_CTRL_SQUAREWAVE);
-    outb(I8254_REG_CNTR0, counter & 0xff);
-    outb(I8254_REG_CNTR0, counter >> 8);
+  /* Start the timer of counter 0 with the specified rate */
+  counter = I8254_HZ / hz;
+  outb(I8254_REG_CTRL, I8254_CTRL_RL_16BIT | I8254_CTRL_SQUAREWAVE);
+  outb(I8254_REG_CNTR0, counter & 0xff);
+  outb(I8254_REG_CNTR0, counter >> 8);
 }
 
 /*
  * i8254_stop_timer -- stop i8254 timer
  */
-void
-i8254_stop_timer(void)
+void i8254_stop_timer(void)
 {
-    /* Reset to the BIOS default */
-    outb(I8254_REG_CTRL, 0x30);
-    outb(I8254_REG_CNTR0, 0x0);
-    outb(I8254_REG_CNTR0, 0x0);
+  /* Reset to the BIOS default */
+  outb(I8254_REG_CTRL, 0x30);
+  outb(I8254_REG_CNTR0, 0x0);
+  outb(I8254_REG_CNTR0, 0x0);
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: sw=4 ts=4 fdm=marker
- * vim<600: sw=4 ts=4
- */

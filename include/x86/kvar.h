@@ -1,3 +1,8 @@
+/**
+ * @file include/x86/kvar.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,8 +26,8 @@
  * SOFTWARE.
  */
 
-#ifndef _ADVOS_KVAR_H
-#define _ADVOS_KVAR_H
+#ifndef __MCUBE_X86_KVAR_H__
+#define __MCUBE_X86_KVAR_H__
 
 #ifndef __ASSEMBLY__
 
@@ -45,4 +50,5 @@ typedef struct {
 
 #endif /* !__ASSEMBLY__ */
 
-#endif
+#endif /* __MCUBE_X86_KVAR_H__ */
+

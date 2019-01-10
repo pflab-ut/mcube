@@ -1,3 +1,8 @@
+/**
+ * @file include/x86/kernel.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,8 +26,8 @@
  * SOFTWARE.
  */
 
-#ifndef _ADVOS_KERNEL_H
-#define _ADVOS_KERNEL_H
+#ifndef __MCUBE_X86_KERNEL_H__
+#define __MCUBE_X86_KERNEL_H__
 
 #ifndef __ASSEMBLY__
 
@@ -68,5 +73,5 @@ int ksnprintf(char *, size_t, const char *, ...);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif
+#endif /* __MCUBE_X86_KERNEL_H__ */
 

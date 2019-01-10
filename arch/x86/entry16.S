@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/entry16.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,7 +26,7 @@
  * SOFTWARE.
  */
 
-	.globl	entry16
+	.globl entry16
 
 	/* Code segment */
 	.text
@@ -32,33 +37,33 @@ entry16:
 	cli
 
 	/* Setup IDTR and GDTR */
-	lidt	(idtr)
-	lgdt	(gdtr)
+	lidt (idtr)
+	lgdt (gdtr)
 
 	/* Enter protected mode */
-	movl	%cr0,%eax
-	orl	$0x1,%eax
-	movl	%eax,%cr0
+	movl %cr0, %eax
+	orl $0x1, %eax
+	movl %eax, %cr0
 
 	/* Go into the protected mode and flush CPU pipeline */
-	ljmpl	$0x10,$entry32		/* CS=0x10: Code 32 descriptor */
+	ljmpl	$0x10, $entry32 /* CS=0x10: Code 32 descriptor */
 
 	/* Data segment */
 	.data
 
 /* Pseudo interrupt descriptor table */
 idtr:
-	.word	0x0
-	.long	0x0
+	.word 0x0
+	.long 0x0
 
 gdt:
-	.word	0x0,0x0,0x0,0x0		/* Null descriptor */
-	.word	0xffff,0x0,0x9a00,0xaf	/* Code64 descriptor */
-	.word	0xffff,0x0,0x9a00,0xcf	/* Code32 descriptor */
-	.word	0xffff,0x0,0x9a00,0x8f	/* Code16 descriptor */
-	.word	0xffff,0x0,0x9200,0xcf	/* Data descriptor */
+	.word 0x0,0x0,0x0,0x0 /* Null descriptor */
+	.word 0xffff,0x0,0x9a00,0xaf /* Code64 descriptor */
+	.word 0xffff,0x0,0x9a00,0xcf /* Code32 descriptor */
+	.word 0xffff,0x0,0x9a00,0x8f /* Code16 descriptor */
+	.word 0xffff,0x0,0x9200,0xcf /* Data descriptor */
 gdt.1:
 /* Temporary global descriptor table */
 gdtr:
-	.word	gdt.1 - gdt - 1		/* Limit (size - 1) */
-	.long	gdt			/* Address */
+	.word	gdt.1 - gdt - 1 /* Limit (size - 1) */
+	.long	gdt /* Address */

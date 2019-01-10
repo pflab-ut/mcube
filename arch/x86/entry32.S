@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/entry32.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,10 +26,9 @@
  * SOFTWARE.
  */
 
-/* Page table */
-#define KERNEL_PGT      0x00079000
-
-	.globl	entry32
+#include <mcube/mcube.h>
+  
+	.globl entry32
 
 	/* Code segment */
 	.text
@@ -35,77 +39,77 @@ entry32:
 	cli
 
 	/* Mask all interrupts (i8259) */
-	movb	$0xff,%al
-	outb	%al,$0x21
-	movb	$0xff,%al
-	outb	%al,$0xa1
+	movb $0xff, %al
+	outb %al, $0x21
+	movb $0xff, %al
+	outb %al, $0xa1
 
 	/* Set data segment registers to data descriptors */
-	movl	$0x20,%eax
-	movl	%eax,%ss
-	movl	%eax,%ds
-	movl	%eax,%es
-	movl	%eax,%fs
-	movl	%eax,%gs
+	movl $0x20, %eax
+	movl %eax, %ss
+	movl %eax, %ds
+	movl %eax, %es
+	movl %eax, %fs
+	movl %eax, %gs
 
 	/* Setup stack */
-	movl	$0x7c00,%eax
-	movl	%eax,%esp
+	movl $0x7c00, %eax
+	movl %eax, %esp
 
 	/* Enable Page Address Extension (PAE) */
-	movl	$0x20,%eax		/* CR4[bit 5] = PAE */
-	movl	%eax,%cr4
+	movl $0x20, %eax /* CR4[bit 5] = PAE */
+	movl %eax, %cr4
 
 /* Create 64bit page table */
 pg_setup:
-	movl	$KERNEL_PGT,%ebx	/* Low 12 bit must be zero */
-	movl	%ebx,%edi
-	xorl	%eax,%eax
-	movl	$(512*8*6/4),%ecx
-	rep	stosl			/* Initialize %ecx*4 bytes from %edi */
-					/*  with %eax */
+	movl $KERNEL_PAGE_TABLE64_START, %ebx /* Low 12 bit must be zero */
+	movl %ebx, %edi
+	xorl %eax, %eax
+	movl $(512 * 8 * 6 /4), %ecx
+	rep	stosl /* Initialize %ecx*4 bytes from %edi */
+	          /*  with %eax */
 	/* Level 4 page map */
-	leal	0x1007(%ebx),%eax
-	movl	%eax,(%ebx)
+	leal 0x1007(%ebx), %eax
+	movl %eax, (%ebx)
 	/* Page directory pointers (PDPE) */
-	leal	0x1000(%ebx),%edi
-	leal	0x2007(%ebx),%eax
-	movl	$4,%ecx
+	leal 0x1000(%ebx), %edi
+	leal 0x2007(%ebx), %eax
+	movl $4, %ecx
 pg_setup.1:
-	movl	%eax,(%edi)
-	addl	$8,%edi
-	addl	$0x1000,%eax
-	loop	pg_setup.1
+	movl %eax, (%edi)
+	addl $8, %edi
+	addl $0x1000, %eax
+	loop pg_setup.1
 	/* Page directories (PDE) */
-	leal	0x2000(%ebx),%edi
-	movl	$0x083,%eax
-	movl	$(512*4),%ecx
+	leal 0x2000(%ebx), %edi
+	movl $0x083, %eax
+	movl $(512 * 4), %ecx
 pg_setup.2:
-	movl	%eax,(%edi)
-	addl	$8,%edi
-	addl	$0x00200000,%eax
-	loop	pg_setup.2
+	movl %eax, (%edi)
+	addl $8, %edi
+	addl $0x00200000, %eax
+	loop pg_setup.2
 
 	/* Modify kernel page table */
-	movl	%ebx,%edi
-	addl	$(0x1000*5),%edi
-	movl	$0x083,%eax
-	movl	%eax,(%edi)
+	movl %ebx, %edi
+	addl $(0x1000*5), %edi
+	movl $0x083, %eax
+	movl %eax, (%edi)
 
 	/* Set page table register */
-	movl	%ebx,%cr3
+	movl %ebx, %cr3
 
 	/* Enable long mode */
-	movl	$0xc0000080,%ecx	/* EFER MSR number */
-	rdmsr				/* Read from 64 bit-specific register */
-	btsl	$8,%eax			/* LME bit = 1 */
+	movl $0xc0000080, %ecx /* EFER MSR number */
+	rdmsr /* Read from 64 bit-specific register */
+	btsl $8, %eax /* LME bit = 1 */
 	wrmsr
 
 	/* Activate page translation and long mode */
-	movl	$0x80000001,%eax
-	movl	%eax,%cr0
+	movl $0x80000001, %eax
+	movl %eax, %cr0
 
 	/* Load code64 descriptor */
-	pushl	$0x08
-	pushl	$entry64
+	pushl $0x08
+	pushl $entry64
 	lret

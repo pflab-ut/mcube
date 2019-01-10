@@ -1,3 +1,8 @@
+/**
+ * @file include/x86/arch.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,8 +26,8 @@
  * SOFTWARE.
  */
 
-#ifndef _ADVOS_KERNEL_ARCH_H
-#define _ADVOS_KERNEL_ARCH_H
+#ifndef __MCUBE_X86_ARCH_H__
+#define __MCUBE_X86_ARCH_H__
 
 #ifndef __ASSEMBLY__
 
@@ -30,92 +35,92 @@
  * TSS
  */
 struct tss {
-    uint32_t reserved1;
-    uint32_t rsp0l;
-    uint32_t rsp0h;
-    uint32_t rsp1l;
-    uint32_t rsp1h;
-    uint32_t rsp2l;
-    uint32_t rsp2h;
-    uint32_t reserved2;
-    uint32_t reserved3;
-    uint32_t ist1l;
-    uint32_t ist1h;
-    uint32_t ist2l;
-    uint32_t ist2h;
-    uint32_t ist3l;
-    uint32_t ist3h;
-    uint32_t ist4l;
-    uint32_t ist4h;
-    uint32_t ist5l;
-    uint32_t ist5h;
-    uint32_t ist6l;
-    uint32_t ist6h;
-    uint32_t ist7l;
-    uint32_t ist7h;
-    uint32_t reserved4;
-    uint32_t reserved5;
-    uint16_t reserved6;
-    uint16_t iomap;
+  uint32_t reserved1;
+  uint32_t rsp0l;
+  uint32_t rsp0h;
+  uint32_t rsp1l;
+  uint32_t rsp1h;
+  uint32_t rsp2l;
+  uint32_t rsp2h;
+  uint32_t reserved2;
+  uint32_t reserved3;
+  uint32_t ist1l;
+  uint32_t ist1h;
+  uint32_t ist2l;
+  uint32_t ist2h;
+  uint32_t ist3l;
+  uint32_t ist3h;
+  uint32_t ist4l;
+  uint32_t ist4h;
+  uint32_t ist5l;
+  uint32_t ist5h;
+  uint32_t ist6l;
+  uint32_t ist6h;
+  uint32_t ist7l;
+  uint32_t ist7h;
+  uint32_t reserved4;
+  uint32_t reserved5;
+  uint16_t reserved6;
+  uint16_t iomap;
 } __attribute__ ((packed));
 
 /*
  * Stackframe for 64-bit mode
  */
 struct stackframe64 {
-    /* Segment registers */
-    uint16_t gs;
-    uint16_t fs;
+  /* Segment registers */
+  uint16_t gs;
+  uint16_t fs;
 
-    /* Base pointer */
-    uint64_t bp;
+  /* Base pointer */
+  uint64_t bp;
 
-    /* Index registers */
-    uint64_t di;
-    uint64_t si;
+  /* Index registers */
+  uint64_t di;
+  uint64_t si;
 
-    /* Generic registers */
-    uint64_t r15;
-    uint64_t r14;
-    uint64_t r13;
-    uint64_t r12;
-    uint64_t r11;
-    uint64_t r10;
-    uint64_t r9;
-    uint64_t r8;
-    uint64_t dx;
-    uint64_t cx;
-    uint64_t bx;
-    uint64_t ax;
+  /* Generic registers */
+  uint64_t r15;
+  uint64_t r14;
+  uint64_t r13;
+  uint64_t r12;
+  uint64_t r11;
+  uint64_t r10;
+  uint64_t r9;
+  uint64_t r8;
+  uint64_t dx;
+  uint64_t cx;
+  uint64_t bx;
+  uint64_t ax;
 
-    /* Restored by `iretq' instruction */
-    uint64_t ip;            /* Instruction pointer */
-    uint64_t cs;            /* Code segment */
-    uint64_t flags;         /* Flags */
-    uint64_t sp;            /* Stack pointer */
-    uint64_t ss;            /* Stack segment */
+  /* Restored by `iretq' instruction */
+  uint64_t ip;            /* Instruction pointer */
+  uint64_t cs;            /* Code segment */
+  uint64_t flags;         /* Flags */
+  uint64_t sp;            /* Stack pointer */
+  uint64_t ss;            /* Stack segment */
 } __attribute__ ((packed));
 
 /*
  * Task
  */
 struct arch_task {
-    /* Restart point (stackframe) */
-    struct stackframe64 *rp;
-    /* SP0 for TSS */
-    uint64_t sp0;
-    /* User stack */
-    void *ustack;
-    /* Kernel stack */
-    void *kstack;
+  /* Restart point (stackframe) */
+  struct stackframe64 *rp;
+  /* SP0 for TSS */
+  uint64_t sp0;
+  /* User stack */
+  void *ustack;
+  /* Kernel stack */
+  void *kstack;
 } __attribute__ ((packed));
 
 /*
  * Processor's task information
  */
 struct arch_cpu_data {
-    struct arch_task *cur_task;
-    struct arch_task *next_task;
+  struct arch_task *cur_task;
+  struct arch_task *next_task;
 } __attribute__ ((packed));
 
 #define sfence()        __asm__ __volatile__ ("sfence")
@@ -153,8 +158,25 @@ void intr_gpf(void);
 void intr_irq1(void);
 void intr_crash(void);
 
+void trampoline(void);
+void trampoline_end(void);
+
+int arch_memory_map(void *arch, uintptr_t virtual, page_t *page);
+int arch_memory_unmap(void *arch, uintptr_t virtual, page_t *page);
+
+/*
+ * System memory map entry
+ */
+typedef struct {
+  uint64_t base;
+  uint64_t len;
+  uint32_t type;
+  uint32_t attr;
+} __attribute__ ((packed)) sysaddrmap_entry_t;
+
+
 #endif /* !__ASSEMBLY__ */
 
 
-#endif
+#endif /* __MCUBE_X86_ARCH_H__ */
 

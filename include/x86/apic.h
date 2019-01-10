@@ -1,3 +1,8 @@
+/**
+ * @file include/x86/apic.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,8 +26,10 @@
  * SOFTWARE.
  */
 
-#ifndef _ADVOS_KERNEL_APIC_H
-#define _ADVOS_KERNEL_APIC_H
+#ifndef	__MCUBE_X86_APIC_H__
+#define	__MCUBE_X86_APIC_H__
+
+#define MSR_APIC_BASE           0x1b
 
 
 #define APIC_LAPIC_ID                   0x020
@@ -79,4 +86,5 @@ void ioapic_map_intr(uint64_t, uint64_t, uint64_t);
 #endif /* __ASSEMBLY__ */
 
 
-#endif
+#endif /* __MCUBE_X86_APIC_H__ */
+

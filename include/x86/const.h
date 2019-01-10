@@ -1,3 +1,8 @@
+/**
+ * @file include/x86/const.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,8 +26,8 @@
  * SOFTWARE.
  */
 
-#ifndef _ADVOS_CONST_H
-#define _ADVOS_CONST_H
+#ifndef	__MCUBE_X86_CONST_H__
+#define	__MCUBE_X86_CONST_H__
 
 /* Maximum number of supported processors */
 #define MAX_PROCESSORS          256
@@ -72,5 +77,5 @@
 /* TSS */
 #define TSS_SP0                 4
 
-#endif
+#endif /* __MCUBE_X86_CONST_H__ */
 

@@ -1,3 +1,8 @@
+/**
+ * @file include/x86/kvar_def.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,8 +26,8 @@
  * SOFTWARE.
  */
 
-#ifndef _ADVOS_KVAR_DEF_H
-#define _ADVOS_KVAR_DEF_H
+#ifndef __MCUBE_X86_KVAR_DEF_H__
+#define __MCUBE_X86_KVAR_DEF_H__
 
 /* For kernel variables */
 #define KVAR_ADDR       0xc0068000
@@ -42,13 +47,5 @@
 
 #define KERNEL_LMAP             0x100000000
 
-#endif
+#endif /* __MCUBE_X86_KVAR_DEF_H__ */
 
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: sw=4 ts=4 fdm=marker
- * vim<600: sw=4 ts=4
- */

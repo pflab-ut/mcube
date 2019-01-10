@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/mbr.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,11 +26,7 @@
  * SOFTWARE.
  */
 
-#define VGA_TEXT_COLOR_80x25    0x03
-#define NUM_RETRIES     3               /* # of retries for disk read */
-#define BOOTMON_SEG             0x0900  /* Memory where to load boot monitor */
-#define BOOTMON_OFF             0x0000  /*  segment and offset [0900:0000] */
-#define BOOTMON_SIZE            0x0020  /* Boot monitor size in sector */
+#include <mcube/mcube.h>  
 
 	.globl	start
 
@@ -38,56 +39,56 @@ start:
 	cli
 
 	/* Setup the stack (below $start = 0x7c00) */
-	xorw	%ax,%ax
-	movw	%ax,%ss
-	movw	$start,%sp
+	xorw %ax, %ax
+	movw %ax, %ss
+	movw $start, %sp
 	/* Reset data segment registers */
-	movw	%ax,%ds
-	movw	%ax,%es
+	movw %ax, %ds
+	movw %ax, %es
 
 	sti
 
 	/* Save drive information */
-	movb	%dl,drive
+	movb %dl, drive
 
 	/* Set the video mode to 16-bit color text mode */
-	movb	$VGA_TEXT_COLOR_80x25,%al
-	movb	$0x00,%ah
-	int	$0x10
+	movb $VGA_TEXT_COLOR_80x25, %al
+	movb $0x00, %ah
+	int $0x10
 
 	/* Get drive parameters */
-	xorw	%ax,%ax
-	movw	%ax,%es
-	movw	%ax,%di
-	movb	$0x08,%ah
-	int	$0x13
-	jc	disk_error
+	xorw %ax, %ax
+	movw %ax, %es
+	movw %ax, %di
+	movb $0x08, %ah
+	int $0x13
+	jc disk_error
 
 	/* Save the drive information (CHS) */
-	incb	%dh		/* Get # of heads (%dh: last index of heads) */
-	movb	%dh,heads
-	movb	%cl,%al		/* %cl[5:0]: last index of sectors per track */
-	andb	$0x3f,%al	/*  N.B., sector is one-based numbering */
-	movb	%al,sectors
-	movb	%ch,%al         /* %cx[7:6]%cx[15:8]: last index of cylinders */
-				/*  then copy %cx[15:8] to %al */
-	movb	%cl,%ah		/* Lower byte to higher byte */
-	shrb	$6,%ah		/* Pick most significant two bits */
-	incw	%ax		/*  N.B., cylinder starting with 0 */
-	movw	%ax,cylinders
+	incb %dh /* Get # of heads (%dh: last index of heads) */
+	movb %dh, heads
+	movb %cl, %al /* %cl[5:0]: last index of sectors per track */
+	andb $0x3f, %al /*  N.B., sector is one-based numbering */
+	movb %al, sectors
+	movb %ch, %al /* %cx[7:6]%cx[15:8]: last index of cylinders */
+	              /*  then copy %cx[15:8] to %al */
+	movb %cl, %ah /* Lower byte to higher byte */
+	shrb $6, %ah /* Pick most significant two bits */
+	incw %ax /* N.B., cylinder starting with 0 */
+	movw %ax, cylinders
 
 	/* Load boot monitor */
-	movb	drive,%dl
-	movw	$BOOTMON_SIZE,%cx/* Specify boot monitor size */
-	movw	$1,%ax
-	movw	$BOOTMON_SEG,%bx
-	movw	%bx,%es		/* Buffer address pointer (Segment) */
-	movw	$BOOTMON_OFF,%bx/* Buffer address pointer (Offset) */
-	call	read		/* Read %cx sectors starting at LBA %ax on */
-				/*  drive %dl into %es:[%bx] */
+	movb drive, %dl
+	movw $BOOTMON_SIZE, %cx /* Specify boot monitor size */
+	movw $1, %ax
+	movw $BOOTMON_SEG, %bx
+	movw %bx, %es /* Buffer address pointer (Segment) */
+	movw $BOOTMON_OFFSET, %bx /* Buffer address pointer (Offset) */
+	call read /* Read %cx sectors starting at LBA %ax on */
+	          /* drive %dl into %es:[%bx] */
 
 	/* Jump to boot monitor */
-	ljmp	$BOOTMON_SEG,$BOOTMON_OFF
+	ljmp $BOOTMON_SEG,$BOOTMON_OFFSET
 
 /*
  * Load sectors from the disk
@@ -98,40 +99,40 @@ start:
  *   %es:(%bx): Buffer
  */
 read:
-	pushw	%bp
-	movw	%sp,%bp
+	pushw %bp
+	movw %sp, %bp
 	/* Save registers */
-	movw	%ax,-2(%bp)
-	movw	%bx,-4(%bp)
-	movw	%cx,-6(%bp)
-	movw	%dx,-8(%bp)
+	movw %ax, -2(%bp)
+	movw %bx, -4(%bp)
+	movw %cx, -6(%bp)
+	movw %dx, -8(%bp)
 	/* Prepare space for local variables */
 	/* u16 counter -10(%bp) */
-	subw	$10,%sp
+	subw $10, %sp
 	/* Reset counter */
-	xorw	%ax,%ax
-	movw	%ax,-10(%bp)
+	xorw %ax, %ax
+	movw %ax, -10(%bp)
 1:
-	movw	-2(%bp),%ax	/* Restore %ax */
-	addw	-10(%bp),%ax	/* Current LBA */
-	call	lba2chs		/* Convert LBA (%ax) to CHS (%cx,%dh) */
-	call	read_sector	/* Read a sector */
+	movw -2(%bp), %ax /* Restore %ax */
+	addw -10(%bp), %ax /* Current LBA */
+	call lba2chs /* Convert LBA (%ax) to CHS (%cx,%dh) */
+	call read_sector /* Read a sector */
 	/* Next 512-byte buffer */
-	addw	$512,%bx
+	addw $512, %bx
 	/* Increment the counter */
-	movw	-10(%bp),%ax
-	incw	%ax
-	movw	%ax,-10(%bp)
+	movw -10(%bp), %ax
+	incw %ax
+	movw %ax, -10(%bp)
 	/* More sectors to read? */
-	cmpw	-6(%bp),%ax
-	jb	1b		/* Read more sectors */
+	cmpw -6(%bp), %ax
+	jb 1b /* Read more sectors */
 	/* Restore the saved registers */
-	movw	-8(%bp),%dx
-	movw	-6(%bp),%cx
-	movw	-4(%bp),%bx
-	movw	-2(%bp),%ax
-	movw	%bp,%sp
-	popw	%bp
+	movw -8(%bp), %dx
+	movw -6(%bp), %cx
+	movw -4(%bp), %bx
+	movw -2(%bp), %ax
+	movw %bp, %sp
+	popw %bp
 	ret
 
 /*
@@ -142,36 +143,36 @@ read:
  *   %es:(%bx): Buffer
  */
 read_sector:
-	pushw	%bp
-	movw	%sp,%bp
+	pushw %bp
+	movw %sp, %bp
 	/* Save registers */
-	movw	%ax,-2(%bp)
+	movw %ax, -2(%bp)
 	/* Prepare space for local variables */
 	/* u16 retries -4(%bp); retry counter  */
 	/* u16 error -6(%bp); error code  */
-	subw	$6,%sp
+	subw $6, %sp
 	/* Reset retry counter */
-	xorw	%ax,%ax
-	movw	%ax,-4(%bp)
+	xorw %ax, %ax
+	movw %ax, -4(%bp)
 1:
 	/* Read a sector from the drive */
-	movb	$0x02,%ah
-	movb	$1,%al
-	int	$0x13
-	jnc	2f		/* Jump if success */
-	movw	%ax,-6(%bp)	/* Save the error code */
-	movw	-4(%bp),%ax
-	incw	%ax
-	movw	%ax,-4(%bp)
-	cmpw	$NUM_RETRIES,%ax
-	movw	-6(%bp),%ax	/* Restore the error code */
-	ja	disk_error	/* Exceeded the maximum number of retries */
-	jmp	1b
+	movb $0x02, %ah
+	movb $1, %al
+	int $0x13
+	jnc 2f /* Jump if success */
+	movw %ax, -6(%bp) /* Save the error code */
+	movw -4(%bp), %ax
+	incw %ax
+	movw %ax, -4(%bp)
+	cmpw $NUM_RETRIES, %ax
+	movw -6(%bp), %ax /* Restore the error code */
+	ja disk_error /* Exceeded the maximum number of retries */
+	jmp 1b
 2:
 	/* Restore saved registers */
-	movw	-2(%bp),%ax
-	movw	%bp,%sp
-	popw	%bp
+	movw -2(%bp), %ax
+	movw %bp, %sp
+	popw %bp
 	ret
 
 /*
@@ -183,31 +184,31 @@ read_sector:
  */
 lba2chs:
 	/* Save registers */
-	pushw	%ax
-	pushw	%bx
-	pushw	%dx
+	pushw %ax
+	pushw %bx
+	pushw %dx
 	/* Compute sector number */
-	xorw	%bx,%bx
-	movw	%bx,%dx
-	movw	%bx,%cx
-	movb	sectors,%bl
-	divw	%bx		/* %dx:%ax / %bx; %ax:quotient, %dx:remainder */
-	incw	%dx		/* Sector number is one-based numbering */
-	movb	%dl,%cl		/* Sector: %cx[5:0] */
+	xorw %bx, %bx
+	movw %bx, %dx
+	movw %bx, %cx
+	movb sectors, %bl
+	divw %bx /* %dx:%ax / %bx; %ax:quotient, %dx:remainder */
+	incw %dx /* Sector number is one-based numbering */
+	movb %dl, %cl /* Sector: %cx[5:0] */
 	/* Compute head and track (cylinder) numbers */
-	xorw	%bx,%bx
-	movw	%bx,%dx
-	movb	heads,%bl
-	divw	%bx		/* %dx:%ax / %bx; %ax:quotient, %dx:remainder */
-	movb	%al,%ch		/* Cylinder[7:0]: %cx[7:6]%cx[15:8] */
-	shlb	$6,%ah
-	orb	%ah,%cl
-	movw	%dx,%bx		/* %dl: Head */
-	popw	%dx		/* Restore %dx */
-	movb	%bl,%dh		/* Head */
+	xorw %bx, %bx
+	movw %bx, %dx
+	movb heads, %bl
+	divw %bx /* %dx:%ax / %bx; %ax:quotient, %dx:remainder */
+	movb %al, %ch /* Cylinder[7:0]: %cx[7:6]%cx[15:8] */
+	shlb $6, %ah
+	orb %ah, %cl
+	movw %dx, %bx /* %dl: Head */
+	popw %dx /* Restore %dx */
+	movb %bl, %dh /* Head */
 	/* Restore registers */
-	popw	%bx
-	popw	%ax
+	popw %bx
+	popw %ax
 	ret
 
 /*
@@ -218,20 +219,20 @@ lba2chs:
  */
 putstr:
 putstr.load:
-	lodsb			/* Load %ds:(%si) to %al, then incl %si */
-	testb	%al,%al
-	jnz	putstr.putc
-	xorw	%ax,%ax
+	lodsb /* Load %ds:(%si) to %al, then incl %si */
+	testb %al, %al
+	jnz putstr.putc
+	xorw %ax,%ax
 	ret
 putstr.putc:
-	call	putc
-	jmp	putstr
+	call putc
+	jmp putstr
 putc:
-	pushw	%bx
-	movw	$0x7,%bx
-	movb	$0xe,%ah
-	int	$0x10
-	popw	%bx
+	pushw %bx
+	movw $0x7, %bx
+	movb $0xe, %ah
+	int $0x10
+	popw %bx
 	ret
 
 /*
@@ -242,14 +243,14 @@ putc:
  */
 disk_error:
 	pushw	%bx
-	movb	%ah,%al
-	movw	$error_code,%di
-	xorw	%bx,%bx
-	movw	%bx,%es
-	call	hex8
-	movw	$msg_error,%si
-	call	putstr
-	popw	%bx
+	movb %ah, %al
+	movw $error_code, %di
+	xorw %bx, %bx
+	movw %bx, %es
+	call hex8
+	movw $msg_error, %si
+	call putstr
+	popw %bx
 	ret
 
 /*
@@ -261,16 +262,16 @@ disk_error:
  */
 hex8:
 	pushw	%ax
-	shrb	$4,%al		/* Get the most significant 4 bits in %al */
-	call	hex8.allsb
-	popw	%ax
+	shrb $4, %al /* Get the most significant 4 bits in %al */
+	call hex8.allsb
+	popw %ax
 hex8.allsb:
-	andb	$0xf,%al	/* Get the least significant 4 bits in %al */
-	cmpb	$0xa,%al	/* CF=1 if %al < 10 */
-	sbbb	$0x69,%al	/* %al <= %al - (0x69 + CF) */
-	das			/* Adjust BCD */
-	orb	$0x20,%al	/* To lower case */
-	stosb			/* Save chars to %es:(%di) and inc %di */
+	andb $0xf, %al /* Get the least significant 4 bits in %al */
+	cmpb $0xa, %al /* CF=1 if %al < 10 */
+	sbbb $0x69, %al /* %al <= %al - (0x69 + CF) */
+	das /* Adjust BCD */
+	orb $0x20, %al /* To lower case */
+	stosb /* Save chars to %es:(%di) and inc %di */
 	ret
 
 	/* Data segment */

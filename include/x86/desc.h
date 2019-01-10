@@ -1,3 +1,8 @@
+/**
+ * @file include/x86/desc.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,8 +26,8 @@
  * SOFTWARE.
  */
 
-#ifndef _ADVOS_KERNEL_DESC_H
-#define _ADVOS_KERNEL_DESC_H
+#ifndef	__MCUBE_X86_DESC_H__
+#define	__MCUBE_X86_DESC_H__
 
 /* GDT type */
 #define GDT_TYPE_EX     8
@@ -112,5 +117,5 @@ void tr_load(int);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif
+#endif /* __MCUBE_X86_DESC_H__ */
 

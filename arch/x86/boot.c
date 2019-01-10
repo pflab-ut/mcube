@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/boot.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -23,7 +28,7 @@
 
 #include <mcube/mcube.h>
 
-void ljmp(uint64_t, uint64_t, uint64_t);
+void ljmp(uint64_t cs, uint64_t ip, uint64_t sp);
 
 /*
  * Entry point for C code

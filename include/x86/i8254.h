@@ -1,3 +1,8 @@
+/**
+ * @file include/x86/i8254.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*_
  * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
  * All rights reserved.
@@ -21,15 +26,26 @@
  * SOFTWARE.
  */
 
-#ifndef _ADVOS_KERNEL_I8254_H
-#define _ADVOS_KERNEL_I8254_H
+#ifndef __MCUBE_X86_I8254_H__
+#define __MCUBE_X86_I8254_H__
 
 #ifndef __ASSEMBLY__
+
+/* Counter 0 register */
+#define I8254_REG_CNTR0         0x0040
+/* Control register */
+#define I8254_REG_CTRL          0x0043
+/* i8254 clock */
+#define I8254_HZ                1193182
+/* Square wave */
+#define I8254_CTRL_SQUAREWAVE   0x06
+/* 16bit read/load control register */
+#define I8254_CTRL_RL_16BIT     0x30
 
 void i8254_start_timer(int);
 void i8254_stop_timer(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif
+#endif /* __MCUBE_X86_I8254_H__ */
 
