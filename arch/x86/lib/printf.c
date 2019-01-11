@@ -297,7 +297,7 @@ int vsnprintf(char *buf, int size, const char *fmt, va_list args)
 #define VGA_DEFAULT_COLOR	VGA_COLOR(VGA_BLACK, VGA_WHITE)
 #define VGA_AREA		(VGA_MAXROWS * VGA_MAXCOLS * 2)
 
-static spinlock_t vga_lock = SPIN_UNLOCKED();
+static spinlock_t vga_lock = INIT_SPINLOCK;
 static int vga_xpos, vga_ypos;
 static char vga_buffer[VGA_AREA];
 
@@ -411,7 +411,7 @@ int puts(const char *s)
  */
 
 static char kbuf[1024];
-static spinlock_t kbuf_lock = SPIN_UNLOCKED();
+static spinlock_t kbuf_lock = INIT_SPINLOCK;
 int printk(const char *fmt, ...)
 {
 	va_list args;
@@ -433,7 +433,7 @@ int printk(const char *fmt, ...)
 }
 
 static char sbuf[1024];
-static spinlock_t sbuf_lock = SPIN_UNLOCKED();
+static spinlock_t sbuf_lock = INIT_SPINLOCK;
 int prints(const char *fmt, ...)
 {
 	va_list args;

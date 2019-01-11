@@ -16,7 +16,7 @@ struct seqlock {
 	/** Sequence. */
 	unsigned sequence;
 	/** Lock. */
-	atomic_int lock;
+	spinlock_t lock;
 };
 
 typedef struct seqlock seqlock;
@@ -27,19 +27,19 @@ typedef struct seqlock seqlock;
  */
 static inline void write_seqlock(seqlock *sl)
 {
-	mcube_spin_lock(&sl->lock);
+	spin_lock(&sl->lock);
 	++sl->sequence;
 }   
 
 static inline void write_sequnlock(seqlock *sl) 
 {
 	sl->sequence++;
-	mcube_spin_unlock(&sl->lock);
+	spin_unlock(&sl->lock);
 }
 
 static inline int write_tryseqlock(seqlock *sl)
 {
-	int ret = mcube_spin_trylock(&sl->lock);
+	int ret = spin_trylock(&sl->lock);
 
 	if (ret) {
 		++sl->sequence;

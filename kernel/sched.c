@@ -8,7 +8,7 @@
 struct thread_struct *current_th[NR_CPUS];
 struct thread_struct *prev_th[NR_CPUS];
 
-volatile atomic_int sched_lock = MCUBE_SPIN_UNLOCKED;
+spinlock_t sched_lock = INIT_SPINLOCK;
 
 struct thread_struct kernel_th[NR_CPUS];
 
@@ -84,7 +84,7 @@ void do_release(void)
   pdebug_array(run_tq[cpu].array);
 	PDEBUG("run_tq: bheap\n");
   //  pdebug_bheap(&run_tq[cpu], run_tq[cpu].head);
-  mcube_spin_lock(&sched_lock);
+  spin_lock(&sched_lock);
 
 
 	//pdebug_jiffies();
@@ -106,7 +106,7 @@ void do_release(void)
     th->sched.remaining = th->sched.wcet;
 		//		pdebug_jiffies();
 	}
-  mcube_spin_unlock(&sched_lock);
+  spin_unlock(&sched_lock);
   pdebug_array(run_tq[cpu].array);
 }
 
@@ -118,7 +118,7 @@ void do_sched(void)
 	struct thread_struct *th;
   pdebug_deadline_tq();
 
-  mcube_spin_lock(&sched_lock);
+  spin_lock(&sched_lock);
 	/* jump to algorithm-specific function */
   //  do_sched_algo();
 
@@ -142,7 +142,7 @@ void do_sched(void)
   if (prev_th[cpu] != current_th[cpu]) {
     begin_budget(current_th[cpu]);
   }
-  mcube_spin_unlock(&sched_lock);
+  spin_unlock(&sched_lock);
   //  switch_to(current_th[cpu]);
 	//	pdebug_jiffies();
 	printk("do_sched(): end\n");

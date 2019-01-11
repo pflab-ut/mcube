@@ -60,12 +60,12 @@
 
 
 /*
- * _SPIN_UNLOCKED = 0, _SPIN_LOCKED = 1
+ * SPIN_UNLOCKED = 1, SPIN_LOCKED = 0
  */
 
 void spin_init(struct lock_spin *lock)
 {
-	lock->val = _SPIN_UNLOCKED;
+	lock->val = SPIN_UNLOCKED;
 }
 
 /*
@@ -90,10 +90,10 @@ void spin_lock(struct lock_spin *lock)
 	/* Reentrancy-safe place: stack or a register */
 	rflags = local_irq_disable_save();
 
-	while (atomic_bit_test_and_set(&lock->val) == _SPIN_LOCKED) {
+	while (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
 		local_irq_restore(rflags);
 
-		while (lock->val == _SPIN_LOCKED)
+		while (lock->val == SPIN_LOCKED)
 			cpu_pause();
 
 		local_irq_disable();
@@ -120,7 +120,7 @@ bool spin_trylock(struct lock_spin *lock)
 
 	rflags = local_irq_disable_save();
 
-	if (atomic_bit_test_and_set(&lock->val) == _SPIN_LOCKED) {
+	if (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
 		local_irq_restore(rflags);
 		return false;
 	}
@@ -139,7 +139,7 @@ void spin_unlock(struct lock_spin *lock)
 	/* Access a lock's elements iff it's already held. */
 	rflags = lock->rflags;
 	barrier();
-	lock->val = _SPIN_UNLOCKED;
+	lock->val = SPIN_UNLOCKED;
 
 	local_irq_restore(rflags);
 }
@@ -148,7 +148,7 @@ void spin_unlock(struct lock_spin *lock)
  * NOTE! As discussed above, lock() in terms of trylock():
  *
  *	while (!spin_trylock(lock))
- *		while (lock->val == _SPIN_LOCKED)
+ *		while (lock->val == SPIN_LOCKED)
  *			cpu_pause();
  *
  */

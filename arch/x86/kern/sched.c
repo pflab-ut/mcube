@@ -388,7 +388,7 @@ void sched_init(void)
 #if SCHED_STATS
 
 #include <spinlock.h>
-spinlock_t printstats_lock = SPIN_UNLOCKED();
+spinlock_t printstats_lock = INIT_SPINLOCK;
 
 static void print_proc_stats(struct proc *proc, int prio)
 {

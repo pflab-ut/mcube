@@ -18,7 +18,7 @@ struct ring_buf {
   size_t tail;
   size_t max;
   int full;
-  atomic_int lock;
+  spinlock_t lock;
 };
 
 typedef struct ring_buf ring_buf_t;

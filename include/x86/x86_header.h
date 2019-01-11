@@ -53,6 +53,7 @@
 
 #ifndef __ASSEMBLY__
 struct cpu_context {
+  uint64_t dummy;
 };
 typedef struct interrupt_context {
 } interrupt_context_t;
@@ -68,16 +69,6 @@ static inline void save_local_irq(unsigned long *flags)
 }
 static inline void restore_local_irq(unsigned long *flags)
 {
-}
-static inline void mcube_spin_lock(volatile atomic_int *lock)
-{
-}
-static inline void mcube_spin_unlock(volatile atomic_int *lock)
-{
-}
-static inline int mcube_spin_trylock(volatile atomic_int *lock)
-{
-  return 0;
 }
 static inline unsigned long get_current_cpu_time(void)
 {

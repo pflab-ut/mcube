@@ -17,13 +17,15 @@
 #include <mcube/kernel.h>
 #include <mcube/linkage.h>
 #include <mcube/irq.h>
-#include <mcube/spinlock.h>
 #include <mcube/math.h>
 #include <mcube/cpu.h>
 #include <mcube/limits.h>
 #include <mcube/list.h>
 #include <mcube/sched.h>
 #include <mcube/main.h>
+#include <mcube/spinlock.h>
+#include <mcube/rwlock.h>
+#include <mcube/seqlock.h>
 
 /* alphabetical order */
 #include <mcube/attribute.h>
@@ -44,9 +46,7 @@
 #include <mcube/mm.h>
 #include <mcube/mt.h>
 #include <mcube/rand.h>
-#include <mcube/rwlock.h>
 #include <mcube/semaphore.h>
-#include <mcube/seqlock.h>
 #include <mcube/stdalgo.h>
 #include <mcube/stdlib.h>
 #include <mcube/string.h>

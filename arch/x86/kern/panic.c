@@ -11,7 +11,7 @@
 #include <mcube/mcube.h>
 
 static char buf[256];
-static spinlock_t panic_lock = SPIN_UNLOCKED();
+static spinlock_t panic_lock = INIT_SPINLOCK;
 
 /*
  * Quickly disable system interrupts upon entrance! Now the

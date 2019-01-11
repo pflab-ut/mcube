@@ -243,7 +243,7 @@ static bool remote_ready(void)
 }
 
 static int port_is_broken;
-spinlock_t port_lock = SPIN_UNLOCKED();
+spinlock_t port_lock = INIT_SPINLOCK;
 
 static int __putc(uint8_t byte)
 {

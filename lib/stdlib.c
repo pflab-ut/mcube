@@ -9,7 +9,7 @@
 
 #if 0
 
-atomic_int global_malloc_lock = MCUBE_SPIN_UNLOCKED;
+spinlock_t global_malloc_lock = INIT_SPINLOCK;
 unsigned char user_malloc[MALLOC_SIZE];
 size_t block_size[BLOCK_NUM];
 
@@ -64,7 +64,7 @@ void *malloc(size_t size)
   if (!size) {
     return NULL;
   }
-  mcube_spin_lock(&global_malloc_lock);
+  spin_lock(&global_malloc_lock);
   header = get_free_block(size);
   if (header) {
     header->is_free = FALSE;
@@ -88,7 +88,7 @@ void *malloc(size_t size)
     tail->next = header;
   }
   tail = header;
-  mcube_spin_unlock(&global_malloc_lock);
+  spin_unlock(&global_malloc_lock);
   return (void *)(header + 1);
 }
 
