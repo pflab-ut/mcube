@@ -84,7 +84,7 @@ void do_release(void)
   pdebug_array(run_tq[cpu].array);
 	PDEBUG("run_tq: bheap\n");
   //  pdebug_bheap(&run_tq[cpu], run_tq[cpu].head);
-  spin_lock(&sched_lock);
+  mcube_spin_lock(&sched_lock);
 
 
 	//pdebug_jiffies();
@@ -106,7 +106,7 @@ void do_release(void)
     th->sched.remaining = th->sched.wcet;
 		//		pdebug_jiffies();
 	}
-  spin_unlock(&sched_lock);
+  mcube_spin_unlock(&sched_lock);
   pdebug_array(run_tq[cpu].array);
 }
 
@@ -118,7 +118,7 @@ void do_sched(void)
 	struct thread_struct *th;
   pdebug_deadline_tq();
 
-  spin_lock(&sched_lock);
+  mcube_spin_lock(&sched_lock);
 	/* jump to algorithm-specific function */
   //  do_sched_algo();
 
@@ -142,7 +142,7 @@ void do_sched(void)
   if (prev_th[cpu] != current_th[cpu]) {
     begin_budget(current_th[cpu]);
   }
-  spin_unlock(&sched_lock);
+  mcube_spin_unlock(&sched_lock);
   //  switch_to(current_th[cpu]);
 	//	pdebug_jiffies();
 	printk("do_sched(): end\n");

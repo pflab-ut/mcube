@@ -14,12 +14,14 @@
 #include <mcube/stdarg.h>
 #include <mcube/stdio.h>
 #include <mcube/stddef.h>
+#include <mcube/kernel.h>
 #include <mcube/linkage.h>
 #include <mcube/irq.h>
 #include <mcube/spinlock.h>
 #include <mcube/math.h>
 #include <mcube/cpu.h>
 #include <mcube/limits.h>
+#include <mcube/list.h>
 #include <mcube/sched.h>
 #include <mcube/main.h>
 

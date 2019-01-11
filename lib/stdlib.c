@@ -7,6 +7,7 @@
 
 #if !CONFIG_ARCH_SIM
 
+#if 0
 
 atomic_int global_malloc_lock = MCUBE_SPIN_UNLOCKED;
 unsigned char user_malloc[MALLOC_SIZE];
@@ -63,7 +64,7 @@ void *malloc(size_t size)
   if (!size) {
     return NULL;
   }
-  spin_lock(&global_malloc_lock);
+  mcube_spin_lock(&global_malloc_lock);
   header = get_free_block(size);
   if (header) {
     header->is_free = FALSE;
@@ -87,7 +88,7 @@ void *malloc(size_t size)
     tail->next = header;
   }
   tail = header;
-  spin_unlock(&global_malloc_lock);
+  mcube_spin_unlock(&global_malloc_lock);
   return (void *)(header + 1);
 }
 
@@ -394,5 +395,7 @@ void qsort(void *base, size_t num, size_t size, sortcmp cmp)
     num -= part + 1;
   }
 }
+
+#endif
 
 #endif /* CONFIG_ARCH_SIM */

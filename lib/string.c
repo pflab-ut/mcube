@@ -18,6 +18,7 @@
  * For a nonzero return value, the sign is determined by the sign of the difference between the first
  * pair of bytes (interpreted as @c unsigned @c char) that differ in @c s1 and @c s2.
  */
+#if 0
 int memcmp(const void *s1, const void *s2, size_t n)
 {
 	const unsigned char *su1, *su2;
@@ -30,6 +31,7 @@ int memcmp(const void *s1, const void *s2, size_t n)
 	}
 	return res;
 }
+#endif
 
 
 /**
@@ -71,6 +73,7 @@ void *memmove(void *dest, const void *src, size_t n)
  * @param s is a pointer of @c char.
  * @return Number of bytes in the string @c s.
  */
+#if 0
 size_t strlen(const char *s)
 {
 	size_t num = 0;
@@ -79,6 +82,7 @@ size_t strlen(const char *s)
 	}
 	return num;
 }
+#endif
 
 /**
  * The strcmp() function compares the two strings @c s1 and @c s2.
@@ -110,6 +114,7 @@ int strcmp(const char *s1, const char *s2)
  * if @c s1 (or the first @c n bytes thereof) is found, respectively,
  * to be less than, to match, or be greater than @c s2.
  */
+#if 0
 int strncmp(const char *s1, const char *s2, size_t n)
 {
 	signed char res = 0;
@@ -122,6 +127,7 @@ int strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return res;
 }
+#endif
 
 /**
  * The strcpy() function copies the string pointed to by @c src, including the terminating null byte
@@ -151,6 +157,7 @@ char *strcpy(char *dest, const char *src)
  * @param n is the number of bytes copying @c src to @c dest.
  * @return Pointer to the destination string @c dest.
  */
+#if 0
 char *strncpy(char *dest, const char *src, size_t n)
 {
 	char *tmp = dest;
@@ -164,6 +171,8 @@ char *strncpy(char *dest, const char *src, size_t n)
 	}
 	return dest;
 }
+#endif
+
 
 /**
  * The strcat() function appends the @c src string to the @c dest string, overwriting the terminating null
@@ -242,6 +251,7 @@ char *strchr(const char *s, int c)
  * @param n is the number of bytes filled by @c c.
  * @return Pointer to the memory area @c s.
  */
+#if 0
 void *memset(void *s, int c, size_t n)
 {
   /* NOTE: volatile is required for -O3 option of GCC. */
@@ -257,6 +267,7 @@ void *memset(void *s, int c, size_t n)
   }
   return s;
 }
+#endif
 
 /**
  * The memsetw() function fills the first @c n bytes of the memory area pointed to
@@ -321,6 +332,7 @@ void *memsetd(void *s, int c, size_t n)
  * @param n is the number fo bytes copying @c src to @c dest.
  * @return Pointer to @c dest.
  */
+#if 0
 void *memcpy(void *dest, const void *src, size_t n)
 {
   char *d = (char *) dest;
@@ -331,6 +343,7 @@ void *memcpy(void *dest, const void *src, size_t n)
   }
   return dest;
 }
+#endif
 
 
 /**

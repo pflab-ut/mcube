@@ -8,9 +8,9 @@
 
 
 /* for global scheduling and synchronization */
-void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th)
+void enqueue_rq_queue_head(struct mcube_runqueue *rq, struct thread_struct *th)
 {
-	/* enqueue the head of runqueue */
+	/* enqueue the head of mcube_runqueue */
 	//	PDEBUG("th->priority = %llu\n", th->priority);
 	set_bit(rq->bitmap, th->priority);
 	rq->array[th->priority].next->prev = th;
@@ -20,7 +20,7 @@ void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th)
 }
 
 
-void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th)
+void enqueue_rq_queue(struct mcube_runqueue *rq, struct thread_struct *th)
 {
 	//	PDEBUG("th = 0x%x th->priority = %llu\n", th, th->priority);
 	//	PDEBUG("rq->array[%llu].prev = %x\n", th->priority, rq->array[th->priority].prev);
@@ -33,7 +33,7 @@ void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th)
 
 
 
-void dequeue_rq_queue(struct runqueue *rq, struct thread_struct *th)
+void dequeue_rq_queue(struct mcube_runqueue *rq, struct thread_struct *th)
 {
   pdebug_array(rq->array);
   if (rq->array[th->priority].next == th) {

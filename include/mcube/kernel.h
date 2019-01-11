@@ -21,6 +21,26 @@
 #define true    ((_Bool)1)
 #define false   ((_Bool)0)
 
+#define NULL ((void *) 0)
+
+#undef EOF
+#define EOF -1
+
+#ifdef TRUE
+#undef TRUE
+#endif
+
+#ifdef FALSE
+#undef FALSE
+#endif
+
+#define FALSE 0
+#define TRUE 1
+
+
+#define SUCCESS 1
+#define FAILURE 0
+
 /*
  * GCC extensions shorthands
  */

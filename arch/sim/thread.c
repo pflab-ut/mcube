@@ -109,7 +109,7 @@ void __attribute__((noreturn)) run_user_thread(void)
     ret = (*current_th[cpu]->run_user_func)(current_th[cpu]->arg);
   }
   if (ret) {
-    printk("ret = 0x%lx\n", (unsigned long) ret);
+    mcube_printk("ret = 0x%lx\n", (unsigned long) ret);
   }
   halt();
   inf_loop();

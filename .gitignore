@@ -13,6 +13,7 @@ latex/
 irun*
 rom.txt
 *\#*
+ramdisk
 
 # suffixes
 *.bak

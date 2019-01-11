@@ -33,12 +33,12 @@ LD	= ld
 CMACH_FLAGS =				\
   -m64					\
   -mcmodel=kernel			\
-  -mno-mmx				\
+  -mno-3dnow				\
+  -mno-red-zone \
+		-mno-mmx			\
   -mno-sse				\
   -mno-sse2				\
   -mno-sse3				\
-  -mno-3dnow				\
-  -mno-red-zone
 
 #
 # GCC C dialect flags:

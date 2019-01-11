@@ -5,6 +5,7 @@
  */
 #include <mcube/mcube.h>
 
+#if 0
 void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
@@ -53,6 +54,8 @@ int user_level_main(void)
   return 0;
 }
 
+#endif
+
 int ap_main(void)
 {
   return 0;
@@ -61,7 +64,7 @@ int ap_main(void)
 
 int user_arch_main(void)
 {
-  user_thread_main();
+  //  user_thread_main();
   //  user_level_main();
   
   return 0;

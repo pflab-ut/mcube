@@ -10,7 +10,7 @@
 int test_ring_buf(void)
 {
   uint8_t *buffer;
-  if (!(buffer = malloc(EXAMPLE_BUFFER_SIZE * sizeof(uint8_t)))) {
+  if (!(buffer = kmalloc(EXAMPLE_BUFFER_SIZE * sizeof(uint8_t)))) {
     printf("Error: cannot allocate memory %lu\n", EXAMPLE_BUFFER_SIZE * sizeof(uint8_t));
     return 1;
   }
@@ -95,7 +95,7 @@ int test_ring_buf(void)
   }
   printf("\n");
 
-  free(buffer);
+  kfree(buffer);
   ring_buf_free(cbuf);
 
   return 0;

@@ -52,19 +52,19 @@ struct mcube_runqueue {
 #endif /* CONFIG_TQ_BHEAP */
 };
 
-typedef struct runqueue runqueue;
+typedef struct mcube_runqueue mcube_runqueue;
 
 #define NR_CPU_BITMAPS (CEIL(NR_CPUS, 32))
 
-extern runqueue run_tq[NR_CPUS];
+extern mcube_runqueue run_tq[NR_CPUS];
 
 /* partitioned scheduling */
 extern unsigned long nr_ptasks[NR_CPUS];
 
-void enqueue_rq_head(struct runqueue *rq, struct thread_struct *th);
-void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th);
-void enqueue_rq(struct runqueue *rq, struct thread_struct *th);
-void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th);
+void enqueue_rq_head(struct mcube_runqueue *rq, struct thread_struct *th);
+void enqueue_rq_queue_head(struct mcube_runqueue *rq, struct thread_struct *th);
+void enqueue_rq(struct mcube_runqueue *rq, struct thread_struct *th);
+void enqueue_rq_queue(struct mcube_runqueue *rq, struct thread_struct *th);
 
 
 struct thread_struct *compare_thread(struct thread_struct *th,
@@ -78,8 +78,8 @@ struct thread_struct *enqueue_deadline_thread(struct thread_struct *head,
 																							unsigned long offset);
 struct thread_struct *dequeue_thread(struct thread_struct *head, struct thread_struct *th);
 struct thread_struct *dequeue_deadline_thread(struct thread_struct *head, struct thread_struct *th);
-void dequeue_rq(struct runqueue *rq, struct thread_struct *th);
-void dequeue_rq_queue(struct runqueue *rq, struct thread_struct *th);
+void dequeue_rq(struct mcube_runqueue *rq, struct thread_struct *th);
+void dequeue_rq_queue(struct mcube_runqueue *rq, struct thread_struct *th);
 
 
 struct thread_struct *pick_next_task(void);
@@ -97,21 +97,21 @@ extern thread_prio_t thread_prio;
 extern struct bheap_node bh_nodes[NR_THREADS];
 
 struct bheap_node *merge_bheap(struct bheap_node *p, struct bheap_node *q);
-int empty_bheap(struct runqueue *rq);
+int empty_bheap(struct mcube_runqueue *rq);
 void link_bheap(struct bheap_node *root, struct bheap_node *child);
-void union_bheap(struct runqueue *rq, struct bheap_node *h2);
-void insert_bheap(struct runqueue *rq, struct bheap_node *node);
-void min_bheap(struct runqueue *rq, struct bheap_node **prev, struct bheap_node **node);
-void min_uncache(struct runqueue *rq);
-void union_bheap_uncache(struct runqueue *target, struct runqueue *addition);
+void union_bheap(struct mcube_runqueue *rq, struct bheap_node *h2);
+void insert_bheap(struct mcube_runqueue *rq, struct bheap_node *node);
+void min_bheap(struct mcube_runqueue *rq, struct bheap_node **prev, struct bheap_node **node);
+void min_uncache(struct mcube_runqueue *rq);
+void union_bheap_uncache(struct mcube_runqueue *target, struct mcube_runqueue *addition);
 struct bheap_node *reverse_bheap(struct bheap_node *h);
-struct bheap_node *extract_min_bheap(struct runqueue *rq);
-struct bheap_node *take_bheap(struct runqueue *rq);
-struct bheap_node *peek_bheap(struct runqueue *rq);
-void decrease_bheap(struct runqueue *rq, struct bheap_node *node);
-void delete_bheap(struct runqueue *rq, struct bheap_node *node);
+struct bheap_node *extract_min_bheap(struct mcube_runqueue *rq);
+struct bheap_node *take_bheap(struct mcube_runqueue *rq);
+struct bheap_node *peek_bheap(struct mcube_runqueue *rq);
+void decrease_bheap(struct mcube_runqueue *rq, struct bheap_node *node);
+void delete_bheap(struct mcube_runqueue *rq, struct bheap_node *node);
 
-void print_bheap(struct runqueue *rq, struct bheap_node *th);
+void print_bheap(struct mcube_runqueue *rq, struct bheap_node *th);
 
 #endif /* CONFIG_TQ_BHEAP */
 

@@ -17,7 +17,7 @@ void init_timer(unsigned long tick_us)
   /* route cor0cntv to core0 irq */
   mmio_out64(TIMER_CORE0_TIMERS_INTERRUPT_CTRL, 1 << 3);
 
-  printk("timer_local_timer_ctrl_status = %x\n", mmio_in32(TIMER_LOCAL_TIMER_CTRL_STATUS));
+  //  printk("timer_local_timer_ctrl_status = %x\n", mmio_in32(TIMER_LOCAL_TIMER_CTRL_STATUS));
   /* clear interrupt flag and reload local timer */
   mmio_out32(TIMER_LOCAL_TIMER_WRITE_FLAGS, 0x3 << 30);
   /* local timer interrupt goes to Core 0 IRQ */

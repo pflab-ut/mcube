@@ -37,7 +37,7 @@ asmlinkage int sys_get_exec_time(unsigned long *id_ptr, unsigned long *cputime_p
 	return 0;
 }
 
-asmlinkage int sys_write(char *buf)
+asmlinkage int sys_mcube_write(char *buf)
 {
   return puts(buf);
 }
@@ -99,7 +99,7 @@ void *const sys_call_table[] = {
   sys_sched,
   sys_end_job,
   sys_get_exec_time,
-  sys_write,
+  sys_mcube_write,
   sys_get_cpu_id,
   sys_get_mode_level,
   sys_move_to_kernel_level,

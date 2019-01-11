@@ -45,8 +45,8 @@ void set_cpu_clock(void)
   CPU_USEC_PER_CLOCK_MHZ = (1.0 * 1000 * 1000) / CPU_CLOCK;
   CPU_CLOCK_MHZ_PER_NSEC = CPU_CLOCK / (1.0 * 1000 * 1000 * 1000);
   CPU_NSEC_PER_CLOCK_MHZ = (1.0 * 1000 * 1000 * 1000) / CPU_CLOCK;
-  printk("CPU_CLOCK = %lu\n", CPU_CLOCK);
-  printk("CPU_CLOCK_MHZ_PER_USEC = %lu\n", CPU_CLOCK_MHZ_PER_USEC);
+  mcube_printk("CPU_CLOCK = %lu\n", CPU_CLOCK);
+  mcube_printk("CPU_CLOCK_MHZ_PER_USEC = %lu\n", CPU_CLOCK_MHZ_PER_USEC);
 }
 
 

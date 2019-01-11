@@ -8,17 +8,17 @@
 /* task queues */
 struct thread_struct *sleep_tq[NR_CPUS];
 struct thread_struct *deadline_tq[NR_CPUS];
-struct runqueue run_tq[NR_CPUS];
+struct mcube_runqueue run_tq[NR_CPUS];
 
 
-void enqueue_rq_head(struct runqueue *rq, struct thread_struct *th)
+void enqueue_rq_head(struct mcube_runqueue *rq, struct thread_struct *th)
 {
   enqueue_rq_queue(rq, th);
 	th->state = READY;
 }
 
 
-void enqueue_rq(struct runqueue *rq, struct thread_struct *th)
+void enqueue_rq(struct mcube_runqueue *rq, struct thread_struct *th)
 {
   enqueue_rq_queue(rq, th);
 	th->state = READY;
@@ -112,7 +112,7 @@ struct thread_struct *enqueue_deadline_thread(struct thread_struct *head,
 	return head;
 }
 
-void dequeue_rq(struct runqueue *rq, struct thread_struct *th)
+void dequeue_rq(struct mcube_runqueue *rq, struct thread_struct *th)
 {
 	dequeue_rq_queue(rq, th);
 }

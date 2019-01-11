@@ -389,6 +389,23 @@ void putc(char c)
 	putc_colored(c, VGA_DEFAULT_COLOR);
 }
 
+int putchar(int c)
+{
+ 	putc_colored(c, VGA_DEFAULT_COLOR);
+  return 0;
+}
+
+int puts(const char *s)
+{
+  int i;
+  int n = strlen(s);
+  for (i = 0; i < n; i++) {
+    putc(s[i]);
+  }
+  return n;
+}
+
+
 /*
  * Kernel print, for VGA and serial outputs
  */
@@ -433,6 +450,7 @@ int prints(const char *fmt, ...)
 	spin_unlock(&sbuf_lock);
   return n;
 }
+
 
 /*
  * Do not permit any access to screen state after calling

@@ -185,7 +185,7 @@ static inline unsigned int luout(unsigned long lu, int base, char *dst, int n, s
 }
 
 
-#if !CONFIG_ARCH_AXIS
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
 static inline int fout(float f, int base, char *dst, int n, struct conv_flag *cf)
 {
 	int i;
@@ -294,7 +294,7 @@ static inline int lfout(double lf, int base, char *dst, int n, struct conv_flag 
 
 	return n;
 }
-#endif /* !CONFIG_ARCH_AXIS */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
 
 
 int __vsnprint(char *buf, size_t size, const char *fmt, va_list ap)
@@ -309,10 +309,10 @@ int __vsnprint(char *buf, size_t size, const char *fmt, va_list ap)
 	unsigned long lu;
 	long ld;
   int n = 0;
-#if !CONFIG_ARCH_AXIS
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
   float f;
   double lf;
-#endif /* !CONFIG_ARCH_AXIS */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
 
 	while (*fmt) {
 		if (*fmt != '%') {
@@ -377,7 +377,7 @@ skip:
 				}
 				n = ret;
 				break;
-#if !CONFIG_ARCH_AXIS
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
       case 'f': /* double */
         lf = va_arg(ap, double);
         ret = lfout(lf, 10, buf, n, &cf);
@@ -386,7 +386,7 @@ skip:
         }
         n = ret;
         break;
-#endif /* !CONFIG_ARCH_AXIS */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
 			case 'x':	/* hex unsigned long */
 				lu = va_arg(ap, unsigned long);
 				ret = luout(lu, 16, buf, n, &cf);
@@ -430,7 +430,7 @@ skip:
 			}
 			n = ret;
 			break;
-#if !CONFIG_ARCH_AXIS
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
     case 'f': /* float */
       f = (float) va_arg(ap, double);
       ret = fout(f, 10, buf, n, &cf);
@@ -439,7 +439,7 @@ skip:
       }
       n = ret;
       break;
-#endif /* !CONFIG_ARCH_AXIS */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
 		case 'x':	/* hex unsigned int */
 			u = va_arg(ap, unsigned int);
 			ret = uout(u, 16, buf, n, &cf);
@@ -474,7 +474,7 @@ out:
  * @param fmt specifies how subsequent arguments.
  * @return Number of characters printed.
  */
-int printk(const char *fmt, ...)
+int mcube_printk(const char *fmt, ...)
 {
 	char buf[FOUT_SIZE];
   int n;

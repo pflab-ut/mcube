@@ -29,7 +29,7 @@ static void retreat_pointer(cbuf_handle_t cbuf)
 cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
 {
   cbuf_handle_t cbuf;
-  if (!(cbuf = malloc(sizeof(ring_buf_t)))) {
+  if (!(cbuf = kmalloc(sizeof(ring_buf_t)))) {
     print("Error: cannot allocate memory %lu\n", sizeof(ring_buf_t));
     return NULL;
   }
@@ -43,7 +43,7 @@ cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
 
 void ring_buf_free(cbuf_handle_t cbuf)
 {
-  free(cbuf);
+  kfree(cbuf);
 }
 
 void ring_buf_reset(cbuf_handle_t cbuf)

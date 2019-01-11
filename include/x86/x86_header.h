@@ -6,8 +6,6 @@
 #ifndef	__MCUBE_X86_X86_HEADER_H__
 #define	__MCUBE_X86_X86_HEADER_H__
 
-#include <x86/kernel.h>
-#include <x86/list.h>
 #include <x86/mmio.h>
 #include <x86/msr.h>
 #include <x86/paging.h>
@@ -93,6 +91,17 @@ static inline unsigned long tsc2nsec(unsigned long tsc)
 {
   return 0;
 }
+
+static inline unsigned long get_cpu_id(void)
+{
+  return apic_read(APIC_ID);
+}
+#define INIT_CPU_CONTEXT (struct cpu_context) {0}
+
+#include <x86/uart.h>
+
+#define USER_LEVEL 0
+#define KERNEL_LEVEL 3
 
 #endif
 

@@ -33,7 +33,6 @@ SRCS += \
 
 
 
-
 ifeq ($(ARCH_NAME), arm)
 FONT_PSF = $(TOP_DIR)/lib/font.psf
 FONT_OBJ = $(TOP_DIR)/build/$(FONT_PSF:.psf=.o)
@@ -47,31 +46,29 @@ endif
 all: $(TARGET)
 
 
-$(TARGET): $(ASM_OBJS) $(OBJS) $(MBR_TARGET) $(BOOTMON_TARGET) $(FONT_OBJ)
-	$(LD) -o $@ $(ASM_OBJS) $(FONT_OBJ) $(OBJS) $(LDFLAGS)
+$(TARGET): $(ASM_OBJS) $(OBJS) $(MBR_TARGET) $(BOOTSECT_TARGET) $(FONT_OBJ)
+	$(LD) $(LDFLAGS) $(ASM_OBJS) $(FONT_OBJ) $(OBJS) -o $@
+	$(SIZE) $@
+	$(OBJDUMP) $@ > $(DMPFILE)
 ifeq ($(ARCH_NAME), x86)
+	$(OBJCOPY) -O binary $(BOOTSECT_TARGET) $(BOOTSECT_BIN)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
+	cat $(BOOTSECT_BIN) $(BIN) > $(TARGET).img
+	python scripts/misc/build-hdimage.py
 #	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
 #	$(TOP_DIR)/scripts/misc/mkcdrom.sh
-	$(TOP_DIR)/scripts/misc/create_image.sh $(IMG_TARGET) $(MBR_TARGET) $(BOOTMON_TARGET) $(BIN)
+#	$(TOP_DIR)/scripts/misc/create_image.sh $(IMG_TARGET) $(MBR_TARGET) $(BOOTSECT_TARGET) $(BIN)
 else ifeq ($(ARCH_NAME), axis)
 	$(SIZE) $@
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
 	$(DUMP) $(BIN) $(DUMPARG) $(ROMFILE)
 endif
-	$(SIZE) $@
-	$(OBJDUMP) $@ > $(DMPFILE)
 
 ifeq ($(ARCH_NAME), x86)
-$(MBR_TARGET): $(MBR_OBJS)
-#	$(MAKE) -C arch/x86 mbr
-	$(LD) -N -T $(TOP_DIR)/scripts/linker/mbr.ld -o $@ $^
-$(BOOTMON_TARGET): $(BOOTMON_OBJS)
-#	$(MAKE) -C arch/x86 bootmon
-	$(LD) -N -T $(TOP_DIR)/scripts/linker/bootmon.ld -o $@ $^
+$(BOOTSECT_TARGET): $(BOOTSECT_OBJS)
+	$(LD) -N -Ttext 0x0 -o $@ $^
 else
-$(MBR_TARGET): # do nothing
-$(BOOTMON_TARGET): # do nothing
+$(BOOTSECT_TARGET): # do nothing
 endif
 
 
@@ -93,9 +90,7 @@ $(BUILD_DIR)/%.o: %.c
 
 $(BUILD_DIR)/%.o: %.S
 	@if [ ! -e `dirname $@` ]; then mkdir -p `dirname $@`; fi
-#	$(CC) -D__ASSEMBLY__ $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
 	$(CC) -D__ASSEMBLY__ $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
-
 
 
 setup: 
@@ -136,7 +131,8 @@ else ifeq ($(ARCH_NAME), x86)
 	-device ahci,id=ahci \
 	-device ide-drive,drive=disk,bus=ahci.0 \
 	-boot a -display curses
-	qemu-system-x86_64 -m 1024 -smp cores=2,threads=1,sockets=1 \
+	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 4 -m 1G
+#	qemu-system-x86_64 -m 1024 -smp cores=2,threads=1,sockets=1 \
 	-drive id=disk,format=raw,file=./build/mcube.img,if=none \
 	-device ahci,id=ahci \
 	-device ide-drive,drive=disk,bus=ahci.0 \
