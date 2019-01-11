@@ -9,14 +9,14 @@
 #ifndef __ASSEMBLY__
 
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
+#if CONFIG_ARCH_SIM
 #include <sys/types.h>
 #include <inttypes.h>
 #include <stdint.h>
 
 
 
-#elif CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
+#elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
 
 
 /** 8-bit integer data type. */
@@ -38,12 +38,20 @@ typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 
 /** Unsigned integer data type. */
-typedef unsigned int size_t;
+typedef uint64_t size_t;
 /** Integer data type. */
-typedef int ssize_t;
+typedef int64_t ssize_t;
+
+/** 32-bit unsigned integer data type. */
+typedef uint32_t uint;
 
 /** Interger pointer type. */
 typedef long int intptr_t;
+
+/** Unsigned interger pointer type. */
+typedef unsigned long int uintptr_t;
+
+typedef uint64_t clock_t;
 
 #else
 #error "Unknown Architecture"

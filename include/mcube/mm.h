@@ -8,7 +8,9 @@
 
 
 /* 4KB */
-#define PAGE_SIZE 0x1000
+#define PAGE_SHIFT    12 
+#define PAGE_SIZE (0x1 << PAGE_SHIFT)
+
 /* 2MB */
 #define SECTION_SIZE 0x200000
 
@@ -21,8 +23,8 @@ extern unsigned long LOW_MEMORY;
 extern unsigned long HIGH_MEMORY;
 
 extern unsigned short *mem_map;
-unsigned long get_free_page(void);
-void free_page(unsigned long p);
+//unsigned long get_free_page(void);
+//void free_page(unsigned long p);
 void init_mm(void);
 
 void memdump(void *ptr, size_t n);

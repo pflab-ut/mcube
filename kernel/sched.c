@@ -8,7 +8,7 @@
 struct thread_struct *current_th[NR_CPUS];
 struct thread_struct *prev_th[NR_CPUS];
 
-volatile atomic_int sched_lock = SPIN_UNLOCKED;
+volatile atomic_int sched_lock = MCUBE_SPIN_UNLOCKED;
 
 struct thread_struct kernel_th[NR_CPUS];
 

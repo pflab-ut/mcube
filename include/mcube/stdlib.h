@@ -19,8 +19,8 @@ typedef int (*sortcmp)(const void *a, const void *b);
 long strtol(const char *cp, char **endp, int base);
 unsigned long strtoul(const char *cp, char **endp, int base);
 char *itoa(int val, char *buf, int radix);
-char *ltoa(long val, char *buf, int radix);
-char *ultoa(unsigned long val, char *buf, int radix);
+char *mcube_ltoa(long val, char *buf, int radix);
+char *mcube_ultoa(unsigned long val, char *buf, int radix);
 void exit(int status);
 
 

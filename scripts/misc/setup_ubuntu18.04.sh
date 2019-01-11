@@ -15,7 +15,7 @@ $prefix python3 python3-pip
 pip3 install pyflakes pylint 
 
 # tool
-$prefix git samba make doxygen sendmail git genisoimage
+$prefix git samba make doxygen sendmail git genisoimage grub-efi kpartx
 
 # LaTeX
 $prefix tetex-* texlive-latex* texlive-science ptex-jtex

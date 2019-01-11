@@ -6,8 +6,9 @@
 #ifndef	__MCUBE_MCUBE_SPINLOCK_H__
 #define	__MCUBE_MCUBE_SPINLOCK_H__
 
-#define	SPIN_UNLOCKED	0x1
-#define	SPIN_LOCKED	0x0
+
+#define	MCUBE_SPIN_UNLOCKED	0x1
+#define	MCUBE_SPIN_LOCKED	0x0
 
 #ifndef	__ASSEMBLY__
 
@@ -17,9 +18,9 @@
 
 extern volatile atomic_int sched_lock;
 
-static inline void spin_lock(volatile atomic_int *lock);
-static inline void spin_unlock(volatile atomic_int *lock);
-static inline int spin_trylock(volatile atomic_int *lock);
+static inline void mcube_spin_lock(volatile atomic_int *lock);
+static inline void mcube_spin_unlock(volatile atomic_int *lock);
+static inline int mcube_spin_trylock(volatile atomic_int *lock);
 
 void init_spinlock(void);
 

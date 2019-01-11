@@ -5,7 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-static volatile atomic_int putchar_lock = SPIN_UNLOCKED;
+static volatile atomic_int putchar_lock = MCUBE_SPIN_UNLOCKED;
 
 int putchar(int c)
 {

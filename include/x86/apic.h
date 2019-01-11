@@ -1,90 +1,348 @@
-/**
- * @file include/x86/apic.h
+#ifndef _APIC_H
+#define _APIC_H
+
+/*
+ * Local APIC definitions, 8259A PIC ports, ..
  *
- * @author Hiroyuki Chishiro
+ * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, version 2.
  */
-/*_
- * Copyright (c) 2018 Hirochika Asai <asai@jar.jp>
- * All rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
-#ifndef	__MCUBE_X86_APIC_H__
-#define	__MCUBE_X86_APIC_H__
-
-#define MSR_APIC_BASE           0x1b
-
-
-#define APIC_LAPIC_ID                   0x020
-#define APIC_SIVR                       0x0f0
-#define APIC_ICR_LOW                    0x300
-#define APIC_ICR_HIGH                   0x310
-#define APIC_LVT_TMR                    0x320
-#define APIC_INITTMR                    0x380
-#define APIC_CURTMR                     0x390
-#define APIC_TMRDIV                     0x3e0
-
-
-/* ICR delivery mode */
-#define APIC_ICR_FIXED                  0x00000000
-#define APIC_ICR_INIT                   0x00000500
-#define APIC_ICR_STARTUP                0x00000600
-/* ICR status */
-#define APIC_ICR_SEND_PENDING           0x00001000
-/* ICR level */
-#define APIC_ICR_LEVEL_ASSERT           0x00004000
-/* ICR destination */
-#define APIC_ICR_DEST_NOSHORTHAND       0x00000000
-#define APIC_ICR_DEST_SELF              0x00040000
-#define APIC_ICR_DEST_ALL_INC_SELF      0x00080000
-#define APIC_ICR_DEST_ALL_EX_SELF       0x000c0000
-/* LVT */
-#define APIC_LVT_DISABLE                0x10000
-#define APIC_LVT_ONESHOT                0x00000000
-#define APIC_LVT_PERIODIC               0x00020000
-#define APIC_LVT_TSC_DEADLINE           0x00040000
-/* Timer */
-#define APIC_TMRDIV_X1                  0xb
-#define APIC_TMRDIV_X2                  0x0
-#define APIC_TMRDIV_X4                  0x1
-#define APIC_TMRDIV_X8                  0x2
-#define APIC_TMRDIV_X16                 0x3
-#define APIC_TMRDIV_X32                 0x8
-#define APIC_TMRDIV_X64                 0x9
-#define APIC_TMRDIV_X128                0xa
 
 #ifndef __ASSEMBLY__
 
-void lapic_send_init_ipi(void);
-void lapic_send_startup_ipi(uint8_t);
-void lapic_bcast_fixed_ipi(uint8_t);
-void lapic_send_fixed_ipi(int, uint8_t);
-void lapic_set_timer(uint32_t, int);
-uint64_t lapic_stop_and_read_timer(void);
-void lapic_start_timer(uint64_t, uint64_t, uint8_t);
-void lapic_stop_timer(void);
-void ioapic_init(void);
-void ioapic_map_intr(uint64_t, uint64_t, uint64_t);
 
-#endif /* __ASSEMBLY__ */
+/*
+ * APIC Base Address MSR
+ */
+#define MSR_APICBASE		0x0000001b
+#define MSR_APICBASE_ENABLE	(1UL << 11)
+#define MSR_APICBASE_BSC	(1UL << 8)
+#define MSR_APICBASE_ADDRMASK	0x000ffffffffff000ULL
 
+static inline uint64_t msr_apicbase_getaddr(void)
+{
+	uint64_t msr = read_msr(MSR_APICBASE);
+	return (msr & MSR_APICBASE_ADDRMASK);
+}
 
-#endif /* __MCUBE_X86_APIC_H__ */
+static inline void msr_apicbase_setaddr(uint64_t addr)
+{
+	uint64_t msr = read_msr(MSR_APICBASE);
+	msr &= ~MSR_APICBASE_ADDRMASK;
+	addr &= MSR_APICBASE_ADDRMASK;
+	msr |= addr;
+	write_msr(MSR_APICBASE, msr);
+}
 
+static inline void msr_apicbase_enable(void)
+{
+	uint64_t tmp;
+
+	tmp = read_msr(MSR_APICBASE);
+	tmp |= MSR_APICBASE_ENABLE;
+	write_msr(MSR_APICBASE, tmp);
+}
+
+/*
+ * APIC mempory-mapped registers. Offsets are relative to the
+ * the Apic Base Address and are aligned on 128-bit boundary.
+ */
+
+#define APIC_ID		0x20	/* APIC ID Register */
+union apic_id {
+	struct {
+		uint32_t reserved:24, id:8;
+	} __packed;
+	uint32_t raw;
+};
+
+#define APIC_LVR	0x30	/* APIC Version Register */
+
+#define APIC_TPR	0x80    /* Task Priority Register */
+union apic_tpr {
+	struct {
+		uint32_t subclass:4, priority:4, reserved:24;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_APR	0x90	/* Arbitration Priority Register */
+#define APIC_PPR	0xa0	/* Processor Priority Register */
+#define APIC_EOI	0xb0	/* End of Interrupt Register */
+#define APIC_RRR	0xc0	/* Remote Read Register */
+
+#define APIC_LDR	0xd0	/* Logical Desitination Register */
+union apic_ldr {
+	struct {
+		uint32_t reserved:24, logical_id:8;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_DFR	0xe0	/* Destination Format Register */
+union apic_dfr {
+	struct {
+		uint32_t reserved:28, apic_model:4;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_SPIV	0xf0	/* Spurious Interrupt Vector Register */
+union apic_spiv {
+	struct {
+		uint32_t vector:8, apic_enable:1, focus:1, reserved:22;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_ESR	0x280   /* Error Status Register */
+
+#define APIC_ICRL	0x300   /* Interrupt Command Register Low [31:0] */
+#define APIC_ICRH	0x310   /* Interrupt Command Register High [63:32] */
+union apic_icr {
+	struct {
+		uint32_t vector:8, delivery_mode:3, dest_mode:1,
+			delivery_status:1, reserved0:1, level:1,
+			trigger:1, reserved1:2, dest_shorthand:2,
+			reserved2:12;
+		uint32_t reserved3:24, dest:8;
+	} __packed;
+
+	/* Writing the low word of the ICR causes the
+	 * Inter-Process Interrupt (IPI) to be sent */
+	struct {
+		uint32_t value_low;
+		uint32_t value_high;
+	} __packed;
+
+	uint64_t value;
+};
+
+/*
+ * Local Vector Table entries
+ */
+
+#define APIC_LVTT	0x320   /* Timer LVT Entry */
+union apic_lvt_timer {
+	struct {
+		uint32_t vector:8,
+			reserved0:4,
+			delivery_status:1,	/* read-only */
+			reserved1:3,
+			mask:1,
+			timer_mode:1,
+			reserved2:14;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_LVTTHER	0x330   /* Thermal LVT Entry */
+union apic_lvt_thermal {
+	struct {
+		unsigned vector:8, delivery_mode:3, reserved0:1,
+			delivery_status:1, reserved1:3, mask:1, reserved3:15;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_LVTPC	0x340   /* Performance Counter LVT Entry */
+union apic_lvt_perfc {
+	struct {
+		unsigned vector:8, delivery_mode:3, reserved0:1,
+			delivery_status:1, reserved1:3, mask:1, reserved3:15;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_LVT0	0x350	/* Local Interrupt 0 LVT Entry */
+#define APIC_LVT1	0x360	/* Local Interrupt 1 LVT Entry */
+union apic_lvt_lint {
+	struct {
+		unsigned vector:8, delivery_mode:3, reserved0:1,
+			delivery_status:1, reserved1:1, remote_irr:1, trigger:1,
+			mask:1, reserved3:15;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_LVTERR	0x370   /* Error LVT Entry */
+union apic_lvt_error {
+	struct {
+		unsigned vector:8, delivery_mode:3, reserved0:1,
+			delivery_status:1, reserved1:3, mask:1, reserved3:15;
+	} __packed;
+	uint32_t value;
+};
+
+#define APIC_TIMER_INIT_CNT	0x380	/* Timer Initial Count register */
+#define APIC_TIMER_CUR_CNT	0x390	/* Timer Current Count register */
+
+#define APIC_DCR		0x3e0	/* Timer Divide Configuration register */
+union apic_dcr {
+	struct {
+		uint32_t divisor:4,	/* NOTE! bit-2 MUST be zero */
+			reserved0:28;
+	} __packed;
+	uint32_t value;
+};
+
+/* Timer Divide Register divisor; only APIC_DCR_1 was tested */
+enum {
+	APIC_DCR_2   = 0x0,		/* Divide by 2   */
+	APIC_DCR_4   = 0x1,		/* Divide by 4   */
+	APIC_DCR_8   = 0x2,		/* Divide by 8   */
+	APIC_DCR_16  = 0x3,		/* Divide by 16  */
+	APIC_DCR_32  = 0x8,		/* Divide by 32  */
+	APIC_DCR_64  = 0x9,		/* Divide by 64  */
+	APIC_DCR_128 = 0xa,		/* Divide by 128 */
+	APIC_DCR_1   = 0xb,		/* Divide by 1!  */
+};
+
+/*
+ * APIC registers field values
+ */
+
+/* TPR priority and subclass */
+enum {
+	APIC_TPR_DISABLE_IRQ_BALANCE = 0,/* Disable hardware IRQ balancing */
+};
+
+/* Logical Destination Mode model (DFR) */
+enum {
+	APIC_MODEL_CLUSTER = 0x0,	/* Hierarchial cluster */
+	APIC_MODEL_FLAT    = 0xf,	/* Unique APIC ID for up to 8 cores */
+};
+
+/* Delivery mode for IPI and LVT entries */
+enum {
+	APIC_DELMOD_FIXED = 0x0,	/* deliver to core in vector field */
+	APIC_DELMOD_LOWPR = 0x1,	/* to lowest cpu among dest cores */
+	APIC_DELMOD_SMI   = 0x2,	/* deliver SMI; vector should be zero */
+	APIC_DELMOD_NMI   = 0x4,	/* deliver NMI; vector ignored */
+	APIC_DELMOD_INIT  = 0x5,	/* IPI INIT; vector should be zero */
+	APIC_DELMOD_START = 0x6,	/* Startup IPI; core starts at 0xVV000 */
+	APIC_DELMOD_ExtINT= 0x7,	/* Get IRQ vector by PIC's INTA cycle */
+};
+
+/* IPI destination mode */
+enum {
+	APIC_DESTMOD_PHYSICAL = 0x0,
+	APIC_DESTMOD_LOGICAL  = 0x1,
+};
+
+/* Trigger mode for IPI, LINT0, and LINT1
+ * This's only used when delivery mode == `fixed'.
+ * NMI, SMI, and INIT are always edge-triggered */
+enum {
+	APIC_TRIGGER_EDGE  = 0x0,
+	APIC_TRIGGER_LEVEL = 0x1,
+};
+
+/* Destination shorthands for IPIs
+ * When in use, writing the ICR low-word is enough */
+enum {
+	APIC_DEST_SHORTHAND_NONE = 0x0,
+	APIC_DEST_SHORTHAND_SELF = 0x1,
+	APIC_DEST_SHORTHAND_ALL_AND_SELF = 0x2,
+	APIC_DEST_SHORTHAND_ALL_BUT_SELF = 0x3,
+};
+
+/* Intereupt level for IPIs */
+enum {
+	APIC_LEVEL_DEASSERT = 0x0,	/* 82489DX Obsolete. _Never_ use */
+	APIC_LEVEL_ASSERT   = 0x1,	/* Always use assert */
+};
+
+/* Delivery status for IPI and LVT entries */
+enum {
+	APIC_DELSTATE_IDLE    = 0,	/* No IPI action, or last IPI acked */
+	APIC_DELSTATE_PENDING = 1,	/* Last IPI not yet acked */
+};
+
+/* LVT entries mask bit */
+enum {
+	APIC_UNMASK = 0x0,
+	APIC_MASK   = 0x1,
+};
+
+/* APIC timer modes */
+enum {
+	APIC_TIMER_ONESHOT  = 0x0,	/* Trigger timer as one shot */
+	APIC_TIMER_PERIODIC = 0x1,	/* Trigger timer monotonically */
+};
+
+/* APIC entries hardware-reset values, Intel-defined */
+enum {
+	APIC_TPR_RESET  = 0x00000000,	/* priority & priority subclass = 0 */
+	APIC_LDR_RESET  = 0x00000000,	/* destination logical id = 0 */
+	APIC_DFR_RESET  = UINT32_MAX,	/* Flat model, reserved bits all 1s */
+	APIC_SPIV_RESET = 0x000000ff,	/* vector=ff, apic disabled, rsrved=0 */
+	APIC_LVT_RESET  = 0x00010000,	/* All 0s, while setting the mask bit */
+};
+
+/*
+ * APIC register accessors
+ */
+
+#define APIC_PHBASE	0xfee00000	/* Physical */
+#define APIC_MMIO_SPACE	PAGE_SIZE	/* 4-KBytes */
+void *apic_vrbase(void);		/* Virtual */
+
+static inline void apic_write(uint32_t reg, uint32_t val)
+{
+	void *vaddr;
+
+	vaddr = apic_vrbase();
+	vaddr = (char *)vaddr + reg;
+	writel(val, vaddr);
+}
+
+static inline uint32_t apic_read(uint32_t reg)
+{
+	void *vaddr;
+
+	vaddr = apic_vrbase();
+	vaddr = (char *)vaddr + reg;
+	return readl(vaddr);
+}
+
+enum irq_dest {
+	IRQ_BROADCAST,			/* Interrupt all cores */
+	IRQ_BOOTSTRAP,			/* Interrupt BSC only */
+	IRQ_SINGLE,			/* Interrupt a specific core */
+};
+
+void apic_init(void);
+void apic_local_regs_init(void);
+
+uint8_t apic_bootstrap_id(void);
+
+void apic_udelay(uint64_t us);
+void apic_mdelay(int ms);
+void apic_monotonic(int ms, uint8_t vector);
+
+void apic_send_ipi(int dst_id, int del_mode, int vector);
+void apic_broadcast_ipi(int del_mode, int vector);
+bool apic_ipi_acked(void);
+
+#if	APIC_TESTS
+
+void apic_run_tests(void);
+
+#else
+
+static void __unused apic_run_tests(void) { }
+
+#endif	/* APIC_TESTS */
+
+#else
+
+#define APIC_PHBASE	0xfee00000	/* Physical */
+#define APIC_EOI	0xb0		/* End of Interrupt Register */
+
+#endif /* !__ASSEMBLY__ */
+
+#endif /* _APIC_H */

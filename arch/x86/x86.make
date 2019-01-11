@@ -54,19 +54,20 @@ endif
 
 CFLAGS += -D__LITTLE_ENDIAN__
 CFLAGS += -mcmodel=large -nostdlib -nodefaultlibs -fno-builtin -fno-stack-protector
-#CFLAGS += -fno-pic
+CFLAGS += -fno-pic
 #CFLAGS += -fno-pie
 CFLAGS += -fno-pie -Wno-pointer-sign -fno-stack-protector -mfentry
 
 
 MBR_TARGET = $(TOP_DIR)/build/mbr
 BOOTMON_TARGET = $(TOP_DIR)/build/bootmon
+
 MBR_ASMS = $(TOP_DIR)/arch/x86/mbr.S
+
 BOOTMON_ASMS = $(TOP_DIR)/arch/x86/bootmon.S \
 	$(TOP_DIR)/arch/x86/entry16.S \
 	$(TOP_DIR)/arch/x86/entry32.S \
 	$(TOP_DIR)/arch/x86/entry64.S \
-	$(TOP_DIR)/arch/x86/boot.S \
 
 ASMS = \
 	$(TOP_DIR)/arch/x86/asm.S \
@@ -95,10 +96,6 @@ SRCS += \
 	$(TOP_DIR)/arch/x86/cpu.c \
 	$(TOP_DIR)/arch/x86/irq.c \
 
-#ASMS = \
-	$(TOP_DIR)/arch/x86/start.asm \
- $(TOP_DIR)/arch/x86/interrupt.asm \
-	$(TOP_DIR)/arch/x86/utils.asm \
 
 #SRCS += \
  $(TOP_DIR)/arch/x86/mm.c \

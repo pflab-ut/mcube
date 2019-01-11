@@ -35,7 +35,7 @@ typedef struct bheap_node bheap_node;
  * @struct runqueue
  * @brief Runqueue information
  */
-struct runqueue {
+struct mcube_runqueue {
 	/** Lock to runqueue. */
   atomic_int lock;
 	/** Array to manage threads. */

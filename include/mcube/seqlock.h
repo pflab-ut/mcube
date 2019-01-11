@@ -27,19 +27,19 @@ typedef struct seqlock seqlock;
  */
 static inline void write_seqlock(seqlock *sl)
 {
-	spin_lock(&sl->lock);
+	mcube_spin_lock(&sl->lock);
 	++sl->sequence;
 }   
 
 static inline void write_sequnlock(seqlock *sl) 
 {
 	sl->sequence++;
-	spin_unlock(&sl->lock);
+	mcube_spin_unlock(&sl->lock);
 }
 
 static inline int write_tryseqlock(seqlock *sl)
 {
-	int ret = spin_trylock(&sl->lock);
+	int ret = mcube_spin_trylock(&sl->lock);
 
 	if (ret) {
 		++sl->sequence;

@@ -46,9 +46,9 @@
 
 #if CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM
 
-#ifndef CONFIG_ARCH_ARM
+#ifdef CONFIG_ARCH_SIM
 #include <math.h>
-#endif /* CONFIG_ARCH_ARM */
+#endif /* CONFIG_ARCH_SIM */
 
 
 /**

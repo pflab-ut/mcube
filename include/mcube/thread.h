@@ -236,7 +236,7 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
 extern unsigned char kernel_stack[NR_CPUS][KERNEL_STACK_SIZE];
 extern unsigned char user_stack[NR_THREADS][USER_STACK_SIZE];
 
-void (*th_mains[NR_THREADS])(void);
+extern void (*th_mains[NR_THREADS])(void);
 
 
 #define KERNEL_THREAD_STACK_ADDR(cpu) ((unsigned long) &kernel_stack[cpu][KERNEL_STACK_SIZE])

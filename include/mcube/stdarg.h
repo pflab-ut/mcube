@@ -8,9 +8,7 @@
 
 #ifndef __ASSEMBLY__
 
-#ifndef CONFIG_ARCH_X86
 #include <stdarg.h>
-#endif /* CONFIG_ARCH_X86 */
 
 #endif /* !__ASSEMBLY__ */
 

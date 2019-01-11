@@ -35,7 +35,7 @@ cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
   }
   cbuf->buffer = buffer;
   cbuf->max = size;
-  cbuf->lock = SPIN_UNLOCKED;
+  cbuf->lock = MCUBE_SPIN_UNLOCKED;
   ring_buf_reset(cbuf);
 
   return cbuf;

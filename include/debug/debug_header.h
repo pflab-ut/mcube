@@ -22,7 +22,7 @@ extern unsigned int Debug;
 #define	PDEBUG_WHERE() PDEBUG("%s:%s():%d: ", __FILE__, __func__, __LINE__)
 
 /** Assert macro. */
-#define assert(expr) do {                       \
+#define mcube_assert(expr) do {                       \
     if (!(expr)) {                              \
       PDEBUG_WHERE();                           \
       printk("assert() failes\n");              \
@@ -36,7 +36,7 @@ extern unsigned int Debug;
 #define	PDEBUG(fmt, args...)
 #define	PDEBUG_WHERE()
 
-#define assert(expr)
+#define mcube_assert(expr)
 
 #endif /* CONFIG_DEBUG */
 #endif /* __ASSEMBLY__ */

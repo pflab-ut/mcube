@@ -8,7 +8,7 @@
 #if !CONFIG_ARCH_SIM
 
 
-atomic_int global_malloc_lock = SPIN_UNLOCKED;
+atomic_int global_malloc_lock = MCUBE_SPIN_UNLOCKED;
 unsigned char user_malloc[MALLOC_SIZE];
 size_t block_size[BLOCK_NUM];
 

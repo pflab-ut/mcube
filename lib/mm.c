@@ -9,6 +9,7 @@ unsigned long LOW_MEMORY;
 unsigned long HIGH_MEMORY;
 unsigned short *mem_map;
 
+#if 0
 unsigned long get_free_page(void)
 {
   size_t i;
@@ -26,6 +27,7 @@ void free_page(unsigned long p)
 	mem_map[(p - LOW_MEMORY) / PAGE_SIZE] = 0;
 }
 
+#endif
 
 void memdump(void *ptr, size_t n)
 {
