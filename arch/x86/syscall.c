@@ -29,7 +29,7 @@ int call_sys_end_job(void)
 unsigned long call_sys_get_exec_time(void)
 {
   int cpu = get_cpu_id();
-  unsigned long cpu_time;
+  unsigned long cpu_time = 0;
   //  syscall2(SYS_get_exec_time, (unsigned long) &current_th[cpu]->id, (unsigned long) &cpu_time);
   return cpu_time;
 }
@@ -42,7 +42,7 @@ int call_sys_write(char *buf)
 
 int call_sys_get_mode_level(void)
 {
-  int ret;
+  int ret = 0;
   //  syscall1(SYS_get_mode_level, (unsigned long) &ret);
   return ret;
 }
