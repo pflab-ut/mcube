@@ -19,7 +19,6 @@
  * pair of bytes (interpreted as @c unsigned @c char) that differ in @c s1 and @c s2.
  */
 
-#if !CONFIG_ARCH_X86
 int memcmp(const void *s1, const void *s2, size_t n)
 {
   const unsigned char *su1, *su2;
@@ -32,7 +31,6 @@ int memcmp(const void *s1, const void *s2, size_t n)
   }
   return res;
 }
-#endif
 
 
 /**
@@ -75,7 +73,6 @@ void *memmove(void *dest, const void *src, size_t n)
  * @return Number of bytes in the string @c s.
  */
 
-#if !CONFIG_ARCH_X86
 size_t strlen(const char *s)
 {
   size_t num = 0;
@@ -84,7 +81,22 @@ size_t strlen(const char *s)
   }
   return num;
 }
-#endif
+
+size_t strnlen(const char *str, int n)
+{
+  const char *tmp;
+
+  tmp = str;
+  while (n) {
+    if (*tmp == '\0')
+      break;
+    tmp++;
+    n--;
+  }
+
+  return tmp - str;
+}
+
 
 /**
  * The strcmp() function compares the two strings @c s1 and @c s2.
@@ -117,7 +129,6 @@ int strcmp(const char *s1, const char *s2)
  * to be less than, to match, or be greater than @c s2.
  */
 
-#if !CONFIG_ARCH_X86
 int strncmp(const char *s1, const char *s2, size_t n)
 {
   signed char res = 0;
@@ -130,7 +141,7 @@ int strncmp(const char *s1, const char *s2, size_t n)
   }
   return res;
 }
-#endif
+
 
 
 /**
@@ -162,7 +173,6 @@ char *strcpy(char *dest, const char *src)
  * @return Pointer to the destination string @c dest.
  */
 
-#if !CONFIG_ARCH_X86
 char *strncpy(char *dest, const char *src, size_t n)
 {
   char *tmp = dest;
@@ -176,7 +186,6 @@ char *strncpy(char *dest, const char *src, size_t n)
   }
   return dest;
 }
-#endif
 
 
 /**
@@ -256,7 +265,79 @@ char *strchr(const char *s, int c)
  * @param n is the number of bytes filled by @c c.
  * @return Pointer to the memory area @c s.
  */
-#if !CONFIG_ARCH_X86
+
+/*
+ * "Note that a REP STOS instruction is the fastest way to
+ * initialize a large block of memory." --Intel, vol. 2B
+ *
+ * To copy the @ch byte repetitively over an 8-byte block,
+ * we multiply its value with (0xffffffffffffffff / 0xff).
+ */
+#if CONFIG_ARCH_X86
+void *memset(void *dst, int ch, size_t len)
+{
+  uint64_t uch;
+  uintptr_t d0;
+
+  uch = ch;
+  asm volatile (
+    "mov  %3, %%rcx;"
+    "rep  stosb;"      /* rdi, rcx */
+    "mov  %4, %%rcx;"
+    "rep  stosq;"      /* ~~~ */
+    :"=&D" (d0)
+    :"0" (dst), "a" (uch * 0x0101010101010101),
+     "ir" (len & 7), "ir" (len >> 3)
+    :"rcx", "memory");
+
+  return dst;
+}
+
+
+/*
+ * Fill memory with given 4-byte value @val. For easy
+ * implementation, @len is vetoed to be a multiple of 8
+ */
+void *memset32(void *dst, uint32_t val, uint64_t len)
+{
+  uint64_t uval;
+  uintptr_t d0;
+
+  assert((len % 8) == 0);
+  len = len / 8;
+
+  uval = ((uint64_t)val << 32) + val;
+  asm volatile (
+    "rep stosq"      /* rdi, rcx */
+    :"=&D" (d0), "+&c" (len)
+    :"0" (dst), "a" (uval)
+    :"memory");
+
+  return dst;
+}
+
+/*
+ * Fill memory with given 8-byte value @val. For easy
+ * implementation, @len is vetoed to be a multiple of 8
+ */
+void *memset64(void *dst, uint64_t val, uint64_t len)
+{
+  uintptr_t d0;
+
+  assert((len % 8) == 0);
+  len = len / 8;
+
+  asm volatile (
+    "rep stosq"      /* rdi, rcx */
+    :"=&D" (d0), "+&c" (len)
+    :"0" (dst), "a" (val)
+    :"memory");
+
+  return dst;
+}
+
+#else
+
 void *memset(void *s, int c, size_t n)
 {
   /* NOTE: volatile is required for -O3 option of GCC. */
@@ -272,7 +353,9 @@ void *memset(void *s, int c, size_t n)
   }
   return s;
 }
-#endif
+
+#endif /* CONFIG_ARCH_X86 */
+
 
 /**
  * The memsetw() function fills the first @c n bytes of the memory area pointed to
@@ -337,7 +420,6 @@ void *memsetd(void *s, int c, size_t n)
  * @param n is the number fo bytes copying @c src to @c dest.
  * @return Pointer to @c dest.
  */
-#if !CONFIG_ARCH_X86
 void *memcpy(void *dest, const void *src, size_t n)
 {
   char *d = (char *) dest;
@@ -348,7 +430,6 @@ void *memcpy(void *dest, const void *src, size_t n)
   }
   return dest;
 }
-#endif
 
 
 /**

@@ -73,9 +73,11 @@ void *memcpy_forward(void *dst, const void *src, size_t len)
   return __memcpy_forward(dst, src, len);
 }
 
+
 /*
  * C99-compliant, with extra sanity checks.
  */
+#if 0
 void *memcpy(void * restrict dst, const void * restrict src, size_t len)
 {
   uintptr_t udst, usrc;
@@ -91,6 +93,8 @@ void *memcpy(void * restrict dst, const void * restrict src, size_t len)
 
   return __memcpy_forward(dst, src, len);
 }
+#endif
+
 
 /*
  * memcpy(), minus the checks
@@ -112,152 +116,6 @@ void *memcpy_nocheck(void * restrict dst, const void * restrict src, size_t len)
   return __memcpy_forward(dst, src, len);
 }
 
-/*
- * "Note that a REP STOS instruction is the fastest way to
- * initialize a large block of memory." --Intel, vol. 2B
- *
- * To copy the @ch byte repetitively over an 8-byte block,
- * we multiply its value with (0xffffffffffffffff / 0xff).
- */
-void *memset(void *dst, int ch, size_t len)
-{
-  uint64_t uch;
-  uintptr_t d0;
-
-  uch = ch;
-  asm volatile (
-    "mov  %3, %%rcx;"
-    "rep  stosb;"      /* rdi, rcx */
-    "mov  %4, %%rcx;"
-    "rep  stosq;"      /* ~~~ */
-    :"=&D" (d0)
-    :"0" (dst), "a" (uch * 0x0101010101010101),
-     "ir" (len & 7), "ir" (len >> 3)
-    :"rcx", "memory");
-
-  return dst;
-}
-
-/*
- * Fill memory with given 4-byte value @val. For easy
- * implementation, @len is vetoed to be a multiple of 8
- */
-void *memset32(void *dst, uint32_t val, uint64_t len)
-{
-  uint64_t uval;
-  uintptr_t d0;
-
-  assert((len % 8) == 0);
-  len = len / 8;
-
-  uval = ((uint64_t)val << 32) + val;
-  asm volatile (
-    "rep stosq"      /* rdi, rcx */
-    :"=&D" (d0), "+&c" (len)
-    :"0" (dst), "a" (uval)
-    :"memory");
-
-  return dst;
-}
-
-/*
- * Fill memory with given 8-byte value @val. For easy
- * implementation, @len is vetoed to be a multiple of 8
- */
-void *memset64(void *dst, uint64_t val, uint64_t len)
-{
-  uintptr_t d0;
-
-  assert((len % 8) == 0);
-  len = len / 8;
-
-  asm volatile (
-    "rep stosq"      /* rdi, rcx */
-    :"=&D" (d0), "+&c" (len)
-    :"0" (dst), "a" (val)
-    :"memory");
-
-  return dst;
-}
-
-/*
- * Yet-to-be-optimized string ops
- */
-
-size_t strlen(const char *str)
-{
-  const char *tmp;
-
-  for (tmp = str; *tmp; tmp++)
-    ;
-  return tmp - str;
-}
-
-size_t strnlen(const char *str, int n)
-{
-  const char *tmp;
-
-  tmp = str;
-  while (n) {
-    if (*tmp == '\0')
-      break;
-    tmp++;
-    n--;
-  }
-
-  return tmp - str;
-}
-
-char *strncpy(char *dst, const char *src, size_t n)
-{
-  char *tmp = dst;
-
-  while (n) {
-    *tmp = *src;
-    if (*tmp)
-      src++;
-    tmp++;
-    n--;
-  }
-
-  return dst;
-}
-
-int strncmp(const char *c1, const char *c2, size_t n)
-{
-  uint8_t s1, s2, res;
-
-  res = 0;
-  while (n) {
-    s1 = *c1++;
-    s2 = *c2++;
-
-    res = s1 - s2;
-    if (res != 0 || s1 == 0)
-      break;
-    n--;
-  }
-
-  return res;
-}
-
-int memcmp(const void *s1, const void *s2, size_t n)
-{
-  const uint8_t *v1, *v2;
-  uint8_t res;
-
-  v1 = s1;
-  v2 = s2;
-
-  res = 0;
-  while (n--) {
-    res = *v1++ - *v2++;
-    if (res != 0)
-      break;
-  }
-
-  return res;
-}
 
 #if STRING_TESTS
 

@@ -30,9 +30,9 @@ void __attribute__((noreturn)) run_user_thread(void)
   if (ret) {
     printk("ret = 0x%lx\n", (unsigned long) ret);
   }
+#endif
   hlt();
   inf_loop();
-#endif
 }
 
 void wait(unsigned long count)
@@ -46,9 +46,7 @@ void wait(unsigned long count)
 
 void __attribute__((noreturn)) exit(int status)
 {
-#if 0
   cli();
   hlt();
   inf_loop();
-#endif
 }

@@ -76,9 +76,7 @@ struct task_struct *do_create_task(struct th_attr *attr)
   tk = tasks[task_index++];
   tk->id = alloc_task_id();  
 
-  tk->top_thread = do_create_thread(NULL,
-                                    NULL,
-                                    attr);
+  tk->top_thread = do_create_thread(NULL, NULL, attr);
   tk->top_thread->line = NULL;
 
   return tk;

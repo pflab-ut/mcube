@@ -36,6 +36,7 @@
 #include <x86/kmalloc.h>
 #include <x86/mm.h>
 #include <x86/mptables.h>
+#include <x86/ops.h>
 #include <x86/percpu.h>
 #include <x86/pic.h>
 #include <x86/pit.h>
