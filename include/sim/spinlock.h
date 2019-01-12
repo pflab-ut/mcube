@@ -9,18 +9,18 @@
 #ifndef __ASSEMBLY__
 
 
-static inline void spin_lock(volatile atomic_int *lock)
+static inline void spin_lock(spinlock_t *lock)
 {
 }
 
 
-static inline int spin_trylock(volatile atomic_int *lock)
+static inline bool spin_trylock(spinlock_t *lock)
 {
-  return 0;
+  return true;
 }
 
 
-static inline void spin_unlock(volatile atomic_int *lock)
+static inline void spin_unlock(spinlock_t *lock)
 {
 }
 

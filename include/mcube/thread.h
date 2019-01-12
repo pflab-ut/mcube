@@ -182,9 +182,9 @@ static inline int is_budget_enforced(struct thread_struct *th)
 static inline int is_budget_exhausted(struct thread_struct *th)
 {
 	if (th->sched.remaining <= 0) {
-		return TRUE;
+		return true;
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 

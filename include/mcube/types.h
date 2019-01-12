@@ -13,7 +13,7 @@
 #include <sys/types.h>
 #include <inttypes.h>
 #include <stdint.h>
-
+#include <stdbool.h>
 
 
 #elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
@@ -38,9 +38,9 @@ typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 
 /** Unsigned integer data type. */
-typedef uint64_t size_t;
+typedef unsigned long size_t;
 /** Integer data type. */
-typedef int64_t ssize_t;
+typedef long ssize_t;
 
 /** 32-bit unsigned integer data type. */
 typedef uint32_t uint;

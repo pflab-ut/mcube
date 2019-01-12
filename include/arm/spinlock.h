@@ -9,7 +9,7 @@
 #ifndef __ASSEMBLY__
 
 
-static inline void spin_lock(volatile atomic_int *lock)
+static inline void spin_lock(spinlock_t *lock)
 {
   unsigned int tmp;
   asm volatile("sevl\n"
@@ -25,7 +25,7 @@ static inline void spin_lock(volatile atomic_int *lock)
 }
 
 
-static inline int spin_trylock(volatile atomic_int *lock)
+static inline bool spin_trylock(spinlock_t *lock)
 {
   unsigned int tmp;
 
@@ -41,7 +41,7 @@ static inline int spin_trylock(volatile atomic_int *lock)
 }
 
 
-static inline void spin_unlock(volatile atomic_int *lock)
+static inline void spin_unlock(spinlock_t *lock)
 {
   asm volatile("stlr %w1, [%0]\n"
                :: "r" (lock), "r" (SPIN_UNLOCKED) : "memory");

@@ -96,7 +96,7 @@ int handle_timer_interrupt(void)
   
   if (get_current_jiffies() >= sched_time) {
     printk("sched_time expires!!!!\n");
-    sched_end = TRUE;
+    sched_end = true;
     disable_timer_interrupt();
     current_th[cpu] = &kernel_th[cpu];
   } else {

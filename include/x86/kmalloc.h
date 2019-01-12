@@ -76,49 +76,6 @@ static inline int is_free_buf(void *buf)
 
 void *__kmalloc(int bucket_idx);
 
-/*
- * For given desired allocation size (@size), calculate the suit-
- * able bucket index in the kmembuckets table and pass it to the
- * real kmalloc. Bucket index is log2 the @size.
- *
- * We do this 'fake' and 'real' kmalloc divide to calculate bucket
- * indeces at compile-time for constant expressions, thanks to the
- * now-standard compilers' constant-folding capabilities. Luckily,
- * this is the most common case as sizeof() returns a constant!
- *
- * For a number of GCC versions, constant propagation with loops
- * is troublesome. We unfold the loop to avoid run-time costs.
- *
- * For the run-time side, although a binary search will lead to
- * less instructions, it will result in pipeline stalls: reasona-
- * ble instruction-prefetch strategies can't predict all branches.
- *
- * Returned addresses are at-least 16-byte aligned.
- */
-static inline void *kmalloc(int size)
-{
-	assert(size > 0);
-
-	compiler_assert((MINALLOC_SZ * 256) == MAXALLOC_SZ);
-	compiler_assert((MINBUCKET_IDX + 8) == MAXBUCKET_IDX);
-
-	if (size <= MINALLOC_SZ)	return __kmalloc(MINBUCKET_IDX);
-	if (size <= MINALLOC_SZ *   2)	return __kmalloc(MINBUCKET_IDX + 1);
-	if (size <= MINALLOC_SZ *   4)	return __kmalloc(MINBUCKET_IDX + 2);
-	if (size <= MINALLOC_SZ *   8)	return __kmalloc(MINBUCKET_IDX + 3);
-	if (size <= MINALLOC_SZ *  16)	return __kmalloc(MINBUCKET_IDX + 4);
-	if (size <= MINALLOC_SZ *  32)	return __kmalloc(MINBUCKET_IDX + 5);
-	if (size <= MINALLOC_SZ *  64)	return __kmalloc(MINBUCKET_IDX + 6);
-	if (size <= MINALLOC_SZ * 128)	return __kmalloc(MINBUCKET_IDX + 7);
-	if (size <= MINALLOC_SZ * 256)	return __kmalloc(MINBUCKET_IDX + 8);
-
-	panic("Malloc: %d bytes requested; can't support > %d "
-	      "bytes", size, MAXALLOC_SZ);
-
-	return NULL;
-}
-
-void kfree(void *addr);
 void kmalloc_init(void);
 
 /*

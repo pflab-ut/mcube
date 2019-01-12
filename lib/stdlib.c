@@ -7,9 +7,12 @@
 
 #if !CONFIG_ARCH_SIM
 
-#if 0
-
+#if CONFIG_ARCH_AXIS
+spinlock_t global_malloc_lock;
+#else
 spinlock_t global_malloc_lock = INIT_SPINLOCK;
+#endif
+
 unsigned char user_malloc[MALLOC_SIZE];
 size_t block_size[BLOCK_NUM];
 
@@ -21,18 +24,18 @@ void init_malloc(void)
   int i;
   size_t sum = 0;
   head = (struct mem_block_header *) user_malloc;
-  struct mem_block_header *current = head;
+  struct mem_block_header *current_mb_hdr = head;
   for (i = 0; i < BLOCK_NUM; i++) {
-    current->size = sizeof(struct mem_block_header) + 16 * lpow(2, i);
-    sum += current->size;
+    current_mb_hdr->size = sizeof(struct mem_block_header) + 16 * lpow(2, i);
+    sum += current_mb_hdr->size;
     if (i < BLOCK_NUM - 1) {
-      current->next = current + current->size;
+      current_mb_hdr->next = current_mb_hdr + current_mb_hdr->size;
     } else {
-      current->next = NULL;
-      tail = current;
+      current_mb_hdr->next = NULL;
+      tail = current_mb_hdr;
     }
-    current->is_free = TRUE;
-    current = current->next;
+    current_mb_hdr->is_free = true;
+    current_mb_hdr = current_mb_hdr->next;
   }
 }
 
@@ -46,12 +49,12 @@ void *sbrk(intptr_t increment)
 
 struct mem_block_header *get_free_block(size_t size)
 {
-  struct mem_block_header *current = head;
-  while (current) {
-    if (current->is_free && current->size >= size) {
-      return current;
+  struct mem_block_header *current_mb_hdr = head;
+  while (current_mb_hdr) {
+    if (current_mb_hdr->is_free && current_mb_hdr->size >= size) {
+      return current_mb_hdr;
     }
-    current = current->next;
+    current_mb_hdr = current_mb_hdr->next;
   }
   return NULL;
 }
@@ -67,7 +70,7 @@ void *malloc(size_t size)
   spin_lock(&global_malloc_lock);
   header = get_free_block(size);
   if (header) {
-    header->is_free = FALSE;
+    header->is_free = false;
     spin_unlock(&global_malloc_lock);
     return (void *)(header + 1);
   }
@@ -79,7 +82,7 @@ void *malloc(size_t size)
   }
   header = block;
   header->size = size;
-  header->is_free = FALSE;
+  header->is_free = false;
   header->next = NULL;
   if (!head) {
     head = header;
@@ -122,7 +125,7 @@ void free(void *block)
     spin_unlock(&global_malloc_lock);
     return;
   }
-  header->is_free = TRUE;
+  header->is_free = true;
   spin_unlock(&global_malloc_lock);
 }
 
@@ -166,12 +169,12 @@ void *realloc(void *block, size_t size)
 }
 
 
-#if !CONFIG_ARCH_AXIS
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
 
 double strtod(const char *nptr, char **endptr)
 {
 	const char *org = nptr;
-	bool valid = FALSE;
+	bool valid = false;
 	double value = 0.0;
 	double sign = 1.0;
 	double psign;
@@ -185,18 +188,18 @@ double strtod(const char *nptr, char **endptr)
 		nptr++;
 	}
 	if (isdigit((unsigned char) *nptr)) {
-		valid = TRUE;
+		valid = true;
 		do {
 			value = value * 10.0 + (*nptr - '0');
 			nptr++;
 		} while (isdigit((unsigned char) *nptr));
 	}
 	if (*nptr == '.') {
-		valid = FALSE;
+		valid = false;
 		nptr++;
 		if (isdigit((unsigned char) *nptr)) {
 			small = 0.1;
-			valid = TRUE;
+			valid = true;
 			do {
 				value += small * (*nptr - '0');
 				small *= 0.1;
@@ -206,7 +209,7 @@ double strtod(const char *nptr, char **endptr)
 	}
 	if (valid && (*nptr == 'e' || *nptr == 'E')) {
 		nptr++;
-		valid = FALSE;
+		valid = false;
 		psign = +1.0;
 		if (*nptr == '+') {
 			nptr++;
@@ -215,7 +218,7 @@ double strtod(const char *nptr, char **endptr)
 			nptr++;
 		}
 		if (isdigit((unsigned char) *nptr)) {
-			valid = TRUE;
+			valid = true;
 			p = 0.0;
 			do {
 				p = p * 10.0 + (*nptr - '0');
@@ -396,6 +399,5 @@ void qsort(void *base, size_t num, size_t size, sortcmp cmp)
   }
 }
 
-#endif
 
-#endif /* CONFIG_ARCH_SIM */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */

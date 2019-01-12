@@ -43,6 +43,7 @@ SRCS	+=	$(TOP_DIR)/arch/arm/init.c \
 	$(TOP_DIR)/arch/arm/irq.c \
 	$(TOP_DIR)/arch/arm/stdio.c \
 	$(TOP_DIR)/arch/arm/dump.c \
+	$(TOP_DIR)/arch/arm/kmalloc.c \
  $(TOP_DIR)/drivers/uart/uart.c \
 	$(TOP_DIR)/drivers/uart/uart_arm.c \
 

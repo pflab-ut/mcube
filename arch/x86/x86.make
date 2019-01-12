@@ -107,7 +107,6 @@ CMACH_FLAGS =				\
 # back (stdarg.h, etc) using the -iwithprefix flag.
 #
 CDIALECT_FLAGS =			\
-  -std=gnu99				\
   -ffreestanding			\
   -fno-pie				\
   -fno-stack-protector			\
@@ -115,6 +114,8 @@ CDIALECT_FLAGS =			\
   -nostdlib				\
   -nostdinc				\
   -iwithprefix include
+
+#  -std=gnu99				\
 
 #-I ../../include/
 

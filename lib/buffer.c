@@ -21,7 +21,7 @@ static void advance_pointer(cbuf_handle_t cbuf)
 
 static void retreat_pointer(cbuf_handle_t cbuf)
 {
-  cbuf->full = FALSE;
+  cbuf->full = false;
   cbuf->tail = (cbuf->tail + 1) % cbuf->max;
 }
 
@@ -51,7 +51,7 @@ void ring_buf_reset(cbuf_handle_t cbuf)
   spin_lock(&cbuf->lock);
   cbuf->head = 0;
   cbuf->tail = 0;
-  cbuf->full = FALSE;
+  cbuf->full = false;
   spin_unlock(&cbuf->lock);
 }
 

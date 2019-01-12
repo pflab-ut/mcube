@@ -14,34 +14,6 @@
 #ifndef __ASSEMBLY__
 
 /*
- * C99
- */
-//#define NULL	((void *)0)
-#define bool	_Bool
-#define true    ((_Bool)1)
-#define false   ((_Bool)0)
-
-#define NULL ((void *) 0)
-
-#undef EOF
-#define EOF -1
-
-#ifdef TRUE
-#undef TRUE
-#endif
-
-#ifdef FALSE
-#undef FALSE
-#endif
-
-#define FALSE 0
-#define TRUE 1
-
-
-#define SUCCESS 1
-#define FAILURE 0
-
-/*
  * GCC extensions shorthands
  */
 
@@ -60,7 +32,9 @@
 /* Mark the 'always_inline' attributed function as C99
  * 'inline' cause the attribute by itself is worthless.
  * It's "for functions declared inline" -- GCC manual */
+#ifndef __always_inline
 #define __always_inline	inline __attribute__((always_inline))
+#endif
 
 /* Suppress GCC's "var used uninitialized" */
 #define __uninitialized(x)	(x) = (x)
@@ -130,6 +104,32 @@ static inline uint64_t ceil_div(uint64_t a, uint64_t b)
 		return a;
 	return ((a - 1) / b) + 1;
 }
+
+#if CONFIG_ARCH_SIM
+
+#include <assert.h>
+
+#else
+
+/*
+ * C99
+ */
+//#define NULL	((void *)0)
+#define bool	_Bool
+#define true    ((_Bool) 1)
+#define false   ((_Bool) 0)
+
+#define NULL ((void *) 0)
+
+
+#undef EOF
+#define EOF -1
+
+
+
+#define SUCCESS 1
+#define FAILURE 0
+
 
 /*
  * Main kernel print methods
@@ -219,6 +219,9 @@ void __unused __undefined_method(void);
 })
 
 void __no_return kernel_start(void);
+
+#endif /* !CONFIG_ARCH_SIM */
+
 
 #endif /* !__ASSEMBLY__ */
 

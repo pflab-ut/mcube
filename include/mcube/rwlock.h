@@ -56,9 +56,9 @@ static inline int try_readers_lock(rwlock *lock)
 	if (spin_trylock(&lock->wlock)) {
 		lock->nread++;
 		spin_unlock(&lock->wlock);
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 static inline int try_writers_lock(rwlock *lock)
@@ -66,11 +66,11 @@ static inline int try_writers_lock(rwlock *lock)
 	if (spin_trylock(&lock->wlock)) {
 		if (lock->nread > 0) {
 			spin_unlock(&lock->wlock);
-			return FALSE;
+			return false;
 		}
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 #endif /* !__ASSEMBLY__ */

@@ -13,7 +13,7 @@ extern unsigned int Debug;
 
 /** The PDEBUG() macro. */
 #define PDEBUG(fmt, args...) do {										\
-	  if (Debug == TRUE) {                            \
+	  if (Debug == true) {                            \
 			printk(fmt, ## args);													\
 		}																								\
 	} while (0)

@@ -12,6 +12,8 @@
 #include <x86/x86.h>
 #include <x86/sched.h>
 #include <x86/segment.h>
+#include <x86/idt.h>
+#include <x86/atomic.h>
 #include <x86/spinlock.h>
 #include <x86/stat.h>
 #include <x86/stdint.h>
@@ -20,7 +22,6 @@
 #include <x86/vm.h>
 
 #include <x86/apic.h>
-#include <x86/atomic.h>
 #include <x86/bitmap.h>
 #include <x86/buffer_dumper.h>
 #include <x86/conf_sched.h>
@@ -30,7 +31,6 @@
 #include <x86/fcntl.h>
 #include <x86/file.h>
 #include <x86/hash.h>
-#include <x86/idt.h>
 #include <x86/io.h>
 #include <x86/ioapic.h>
 #include <x86/keyboard.h>

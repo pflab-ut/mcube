@@ -8,7 +8,11 @@
 struct thread_struct *current_th[NR_CPUS];
 struct thread_struct *prev_th[NR_CPUS];
 
+#if CONFIG_ARCH_AXIS
+spinlock_t sched_lock;
+#else
 spinlock_t sched_lock = INIT_SPINLOCK;
+#endif
 
 struct thread_struct kernel_th[NR_CPUS];
 
@@ -25,7 +29,7 @@ int bindex[NR_CPUS];
 int bidleindex;
 
 unsigned long sched_time;
-volatile uint32_t sched_end = FALSE;
+volatile uint32_t sched_end = false;
 
 #if SCHED_FP
 void set_priority(struct thread_struct *th)
@@ -158,9 +162,9 @@ int check_deadline_miss(void)
 		PDEBUG("if the following inequality holds,\n");
 		PDEBUG("then you must adjust parameters:\n");
 		PDEBUG("current_th->sched.deadline = %lu\n", deadline_tq[cpu]->sched.deadline);
-		return FALSE;
+		return false;
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -186,7 +190,7 @@ int run(unsigned long nr_threads)
 #endif
 
 	sys_jiffies = 0;
-	sched_end = FALSE;
+	sched_end = false;
 
   print("run()2\n");
   for (i = 0; i < NR_CPUS; i++) {
@@ -207,7 +211,7 @@ int run(unsigned long nr_threads)
   //  generate_software_interrupt(0);
   
 	/* idle thread start */
-	while (sched_end == FALSE) {
+	while (sched_end == false) {
     //print("");
     // print("get_timer_count() = %lu\n", get_timer_count());
     // printk("CNTV_TVAL: %lu\n", get_cntvct_el0()); 

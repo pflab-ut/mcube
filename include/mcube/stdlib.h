@@ -10,6 +10,10 @@
 
 typedef int (*sortcmp)(const void *a, const void *b);
 
+void *kmalloc(size_t size);
+void kfree(void *addr);
+
+
 #if CONFIG_ARCH_SIM
 
 #include <stdlib.h>
@@ -57,6 +61,7 @@ typedef struct mem_block_header mem_block_header;
 
 extern unsigned char user_malloc[MALLOC_SIZE];
 
+extern spinlock_t global_malloc_lock;
 
 
 #endif /* !__ASSEMBLY__ */

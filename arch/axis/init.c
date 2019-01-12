@@ -25,13 +25,11 @@ void exit_irq(void)
   disable_previous_irq();
 }
 
-int myputs(const char *s)
+
+void init_spinlock(void)
 {
-  const char *t = s;
-  while (*t) {
-    putchar(*t++);
-  }
-  return t - s;
+  sched_lock = INIT_SPINLOCK;
+  global_malloc_lock = INIT_SPINLOCK;
 }
 
 
@@ -39,7 +37,8 @@ int myputs(const char *s)
  * The init_arch() function initializes architecture-dependent features.
  */
 void init_arch(void)
-{  
+{
+  init_spinlock();
   init_irq();
   init_cpu();
   init_malloc();

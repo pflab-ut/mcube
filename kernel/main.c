@@ -12,8 +12,8 @@
 char PADDING[PADDING_SIZE] = {PADDING_DATA};
 #endif
 
-unsigned int Debug = FALSE;
-//unsigned int Debug = TRUE;
+unsigned int Debug = false;
+//unsigned int Debug = true;
 
 unsigned long CPU_CLOCK;
 unsigned long CPU_CLOCK_MHZ_PER_USEC;
@@ -23,7 +23,7 @@ double CPU_CLOCK_MHZ_PER_NSEC;
 double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* !CONFIG_ARCH_AXIS */
 
-volatile static unsigned int IsInitialized = FALSE;
+volatile static unsigned int IsInitialized = false;
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     print("main()\n");
     init_rq();
     init_sched();
-    IsInitialized = TRUE;
+    IsInitialized = true;
     user_main();
     exit_arch();
     print("main() end\n");
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     //    print("get_cpu_id() = %lu\n", get_cpu_id());
     init_arch_ap();
     /* wait until init_arch() is finished. */
-    while (IsInitialized == FALSE) {
+    while (IsInitialized == false) {
     }
     /* execute the specific code of application processors (except bootstrap processor). */
     ap_main();
