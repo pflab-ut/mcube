@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_STDLIB_H__
-#define	__MCUBE_MCUBE_STDLIB_H__
+#ifndef __MCUBE_MCUBE_STDLIB_H__
+#define __MCUBE_MCUBE_STDLIB_H__
 
 #ifndef __ASSEMBLY__
 
@@ -66,4 +66,4 @@ extern spinlock_t global_malloc_lock;
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_STDLIB_H__ */
+#endif /* __MCUBE_MCUBE_STDLIB_H__ */

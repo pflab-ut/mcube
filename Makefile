@@ -53,11 +53,9 @@ $(TARGET): $(ASM_OBJS) $(OBJS) $(MBR_TARGET) $(BOOTSECT_TARGET) $(FONT_OBJ)
 ifeq ($(ARCH_NAME), x86)
 	$(OBJCOPY) -O binary $(BOOTSECT_TARGET) $(BOOTSECT_BIN)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
-	cat $(BOOTSECT_BIN) $(BIN) > $(TARGET).img
-	python scripts/misc/build-hdimage.py
+	$(CAT) $(BOOTSECT_BIN) $(BIN) > $(TARGET).img
+	$(PYTHON) scripts/misc/build-hdimage.py
 #	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
-#	$(TOP_DIR)/scripts/misc/mkcdrom.sh
-#	$(TOP_DIR)/scripts/misc/create_image.sh $(IMG_TARGET) $(MBR_TARGET) $(BOOTSECT_TARGET) $(BIN)
 else ifeq ($(ARCH_NAME), axis)
 	$(SIZE) $@
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)

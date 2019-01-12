@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_MCUBE_POST_HEADER_H__
-#define	__MCUBE_MCUBE_MCUBE_POST_HEADER_H__
+#ifndef __MCUBE_MCUBE_MCUBE_POST_HEADER_H__
+#define __MCUBE_MCUBE_MCUBE_POST_HEADER_H__
 
 
 #include <mcube/thread.h>

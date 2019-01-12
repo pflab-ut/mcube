@@ -13,13 +13,13 @@
  */
 static inline uint64_t read_tsc(void)
 {
-	uint32_t low, high;
+  uint32_t low, high;
 
-	asm volatile (
-		"rdtsc;"
-		: "=a" (low), "=d" (high));
+  asm volatile (
+    "rdtsc;"
+    : "=a" (low), "=d" (high));
 
-	return ((uint64_t)high << 32) + low;
+  return ((uint64_t)high << 32) + low;
 }
 
 #endif /* !__ASSEMBLY__ */

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_COMPILER_COMPILER_GCC_H__
-#define	__MCUBE_MCUBE_COMPILER_COMPILER_GCC_H__
+#ifndef __MCUBE_MCUBE_COMPILER_COMPILER_GCC_H__
+#define __MCUBE_MCUBE_COMPILER_COMPILER_GCC_H__
 
 /* Never include this file directly.  Include <mcube/compiler.h> instead.  */
 
@@ -26,29 +26,29 @@
  * the inline assembly constraint from =g to =r, in this particular
  * case either is valid.
  */
-#define RELOC_HIDE(ptr, off)					\
-  ({ unsigned long __ptr;					\
-    __asm__ ("" : "=r"(__ptr) : "0"(ptr));		\
+#define RELOC_HIDE(ptr, off)                    \
+  ({ unsigned long __ptr;                       \
+    __asm__ ("" : "=r"(__ptr) : "0"(ptr));      \
     (typeof(ptr)) (__ptr + (off)); })
 
 
-//#define inline		inline		__attribute__((always_inline))
-#define __inline__	__inline__	__attribute__((always_inline))
-#define __inline	__inline	__attribute__((always_inline))
-#define __deprecated			__attribute__((deprecated))
-#define __packed			__attribute__((packed))
-#define __weak				__attribute__((weak))
-#define __naked				__attribute__((naked))
-#define __noreturn			__attribute__((noreturn))
-#define __pure				__attribute__((pure))
-#define __aligned(x)			__attribute__((aligned(x)))
-#define __printf(a,b)			__attribute__((format(printf,a,b)))
-#define  noinline			__attribute__((noinline))
-//#define __attribute_pure__		__attribute__((pure))
+//#define inline    inline    __attribute__((always_inline))
+#define __inline__  __inline__  __attribute__((always_inline))
+#define __inline  __inline  __attribute__((always_inline))
+#define __deprecated      __attribute__((deprecated))
+#define __packed      __attribute__((packed))
+#define __weak        __attribute__((weak))
+#define __naked        __attribute__((naked))
+#define __noreturn      __attribute__((noreturn))
+#define __pure        __attribute__((pure))
+#define __aligned(x)      __attribute__((aligned(x)))
+#define __printf(a,b)      __attribute__((format(printf,a,b)))
+#define  noinline      __attribute__((noinline))
+//#define __attribute_pure__    __attribute__((pure))
 #ifdef __attribute_const__
 #undef __attribute_const__
 #endif
-#define __attribute_const__		__attribute__((__const__))
+#define __attribute_const__    __attribute__((__const__))
 
 #if __GNUC__ >= 7
 #define FALLTHROUGH __attribute__((fallthrough))
@@ -57,5 +57,5 @@
 #endif
 
 
-#endif /*	__MCUBE_MCUBE_COMPILER_COMPILER_GCC_H__ */
+#endif /* __MCUBE_MCUBE_COMPILER_COMPILER_GCC_H__ */
 

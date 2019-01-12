@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_METRIC_H__
-#define	__MCUBE_MCUBE_METRIC_H__
+#ifndef __MCUBE_MCUBE_METRIC_H__
+#define __MCUBE_MCUBE_METRIC_H__
 
 #ifndef __ASSEMBLY__
 
@@ -21,16 +21,16 @@ void init_overhead(void);
  * @brief Overhead measurement
  */
 struct overhead {
-	/** Time stamp counter. */
-	uint64_t tsc;
-	/** Sum overhead time. */
-	uint64_t sum_time;
-	/** Number of tries. */
-	uint64_t nr_tries;
-	/** Minimum overhead time. */
-	uint64_t min;
-	/** Maximum overhead time. */
-	uint64_t max;
+  /** Time stamp counter. */
+  uint64_t tsc;
+  /** Sum overhead time. */
+  uint64_t sum_time;
+  /** Number of tries. */
+  uint64_t nr_tries;
+  /** Minimum overhead time. */
+  uint64_t min;
+  /** Maximum overhead time. */
+  uint64_t max;
 };
 
 typedef struct overhead overhead;
@@ -46,14 +46,14 @@ extern overhead tick_ovhd[NR_CPUS][NR_THREADS];
  * @brief Performance metrics
  */
 struct performance_metrics {
-	/** Number of successes. */
-	uint64_t successes;
-	/** Average number of context switches per job in task. */
-	double cxs_per_job_in_task;
-	/** Average number of preemptions per job in task. */
-	double preemption_per_job_in_task;
-	/** Average number of migrations per job in task. */
-	double migration_per_job_in_task;
+  /** Number of successes. */
+  uint64_t successes;
+  /** Average number of context switches per job in task. */
+  double cxs_per_job_in_task;
+  /** Average number of preemptions per job in task. */
+  double preemption_per_job_in_task;
+  /** Average number of migrations per job in task. */
+  double migration_per_job_in_task;
 };
 
 typedef struct performance_metrics performance_metrics;
@@ -88,4 +88,4 @@ void save_post_time(overhead ovhd[NR_CPUS][NR_THREADS]);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_METRIC_H__ */
+#endif /* __MCUBE_MCUBE_METRIC_H__ */

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_SIM_CPU_H__
-#define	__MCUBE_SIM_CPU_H__
+#ifndef __MCUBE_SIM_CPU_H__
+#define __MCUBE_SIM_CPU_H__
 
 #define USER_LEVEL 0
 #define KERNEL_LEVEL 3
@@ -41,4 +41,4 @@ int get_nr_cpu_cores(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_SIM_CPU_H__ */
+#endif /* __MCUBE_SIM_CPU_H__ */

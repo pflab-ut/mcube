@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_EMMC_H__
-#define	__MCUBE_ARM_RASPI3_EMMC_H__
+#ifndef __MCUBE_ARM_RASPI3_EMMC_H__
+#define __MCUBE_ARM_RASPI3_EMMC_H__
 
 
 #define EMMC_ARG2           (EMMC_BASE + 0x00)
@@ -108,5 +108,5 @@ int sd_readblock(unsigned int lba, unsigned char *buffer, unsigned int num);
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /*	__MCUBE_ARM_RASPI3_EMMC_H__ */
+#endif /* __MCUBE_ARM_RASPI3_EMMC_H__ */
 

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_AXIS_AXIS_HEADER_H__
-#define	__MCUBE_AXIS_AXIS_HEADER_H__
+#ifndef __MCUBE_AXIS_AXIS_HEADER_H__
+#define __MCUBE_AXIS_AXIS_HEADER_H__
 
 #include <axis/addr.h>
 #include <axis/special_regs.h>

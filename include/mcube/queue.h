@@ -13,18 +13,18 @@
  * @brief Binominal heap node
  */
 struct bheap_node {
-	/** Node ID. */
+  /** Node ID. */
   unsigned long node_id;
-	/** Pointer to parent node. */
+  /** Pointer to parent node. */
   struct bheap_node *parent;
-	/** Pointer to next node. */
+  /** Pointer to next node. */
   struct bheap_node *next;
-	/** Pointer to child node. */
+  /** Pointer to child node. */
   struct bheap_node *child;
 
-	/** Degree. */
+  /** Degree. */
   unsigned long degree;
-	/** Value in node. */
+  /** Value in node. */
   struct thread_struct *value;
   //  struct bheap_node **ref;
 };
@@ -36,16 +36,16 @@ typedef struct bheap_node bheap_node;
  * @brief Runqueue information
  */
 struct mcube_runqueue {
-	/** Lock to runqueue. */
+  /** Lock to runqueue. */
   atomic_int lock;
-	/** Array to manage threads. */
+  /** Array to manage threads. */
   struct thread_struct array[NR_PRIORITIES];
-	/** Bitmap. */
+  /** Bitmap. */
   uint32_t bitmap[NR_PRIORITY_BITMAPS];
-	/** Utilization of runqueue. */
+  /** Utilization of runqueue. */
   unsigned long util;
-	/** Number of threads in runqueue */
-	int nr_threads;
+  /** Number of threads in runqueue */
+  int nr_threads;
 #if CONFIG_TQ_BHEAP
   struct bheap_node *head;
   struct bheap_node *min;
@@ -74,8 +74,8 @@ struct thread_struct *enqueue_thread(struct thread_struct *head,
                                      struct thread_struct *th,
                                      unsigned long offset);
 struct thread_struct *enqueue_deadline_thread(struct thread_struct *head,
-																							struct thread_struct *th,
-																							unsigned long offset);
+                                              struct thread_struct *th,
+                                              unsigned long offset);
 struct thread_struct *dequeue_thread(struct thread_struct *head, struct thread_struct *th);
 struct thread_struct *dequeue_deadline_thread(struct thread_struct *head, struct thread_struct *th);
 void dequeue_rq(struct mcube_runqueue *rq, struct thread_struct *th);

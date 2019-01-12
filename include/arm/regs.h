@@ -9,17 +9,17 @@
 #ifndef __ASSEMBLY__
 
 
-#define	SEPARATE_SIZE	0
+#define SEPARATE_SIZE  0
 
-#define	STACK_ALIGN(x)	(((x) + 7) & -8)
+#define STACK_ALIGN(x) (((x) + 7) & -8)
 
 /**
  * @struct context_regs
  * @brief Context register
  */
 struct context_regs {
-	/** General purpose registers in ARM. */
-	uint64_t gpr[32];
+  /** General purpose registers in ARM. */
+  uint64_t gpr[32];
 } __attribute__((packed));
 
 typedef struct context_regs context_regs;
@@ -30,8 +30,8 @@ typedef struct context_regs context_regs;
  * @brief Full register
  */
 struct full_regs {
-	/** General purpose registers in ARM. */
-	struct context_regs cregs;
+  /** General purpose registers in ARM. */
+  struct context_regs cregs;
   /** Exception link register */
   uint64_t elr;
   /** Saved program status register */

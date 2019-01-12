@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_MAIN_H__
-#define	__MCUBE_MCUBE_MAIN_H__
+#ifndef __MCUBE_MCUBE_MAIN_H__
+#define __MCUBE_MCUBE_MAIN_H__
 
 
 #define NR_THREADS 16
@@ -19,7 +19,7 @@
 /* each bitmap length is 32 bit */
 #define NR_PRIORITY_BITMAPS CEIL(NR_PRIORITIES, 32)
 
-#ifndef	__ASSEMBLY__
+#ifndef  __ASSEMBLY__
 
 #define ARRSIZE(x)           ((int)(sizeof(x) / sizeof(x[0])))
 
@@ -51,26 +51,26 @@
  * @brief Argument parameter
  */
 struct arg_parameter {
-	/** Debug mode. */
-	uint32_t debug;
-	/** Minimum utilization. */
-	uint32_t umin;
-	/** Maximum utilization. */
-	uint32_t umax;
-	/** Beginning index of task set. */
-	uint32_t tstart;
-	/** End index of task set. */
-	uint32_t tend;
-	/** Minimum ratio of actual case execution time */
-	uint32_t emin;
-	/** Number of hyperperiods for simulation length. */
-	uint32_t hnum;
-	/** Number of processors. */
-	uint32_t nr_cpus;
-	/** Offset of system utilization. */
-	uint32_t offset;
-	/** Working set size. */
-	uint32_t wss;
+  /** Debug mode. */
+  uint32_t debug;
+  /** Minimum utilization. */
+  uint32_t umin;
+  /** Maximum utilization. */
+  uint32_t umax;
+  /** Beginning index of task set. */
+  uint32_t tstart;
+  /** End index of task set. */
+  uint32_t tend;
+  /** Minimum ratio of actual case execution time */
+  uint32_t emin;
+  /** Number of hyperperiods for simulation length. */
+  uint32_t hnum;
+  /** Number of processors. */
+  uint32_t nr_cpus;
+  /** Offset of system utilization. */
+  uint32_t offset;
+  /** Working set size. */
+  uint32_t wss;
 };
 
 typedef struct arg_parameter arg_parameter;
@@ -85,16 +85,16 @@ extern struct arg_parameter arg_param;
  * @brief Arguments
  */
 struct args {
-	/** Argv. */
-	char argv[ARGBUF];
-	/** Pointer to function adddress. */
-	int (*func)(int argc, char *argv[NR_ARGS]);
-	/** Argc. */
-	uint32_t *argc;
-	/** Error. */
-	int err;
-	/** Error message. */
-	char *errstr;
+  /** Argv. */
+  char argv[ARGBUF];
+  /** Pointer to function adddress. */
+  int (*func)(int argc, char *argv[NR_ARGS]);
+  /** Argc. */
+  uint32_t *argc;
+  /** Error. */
+  int err;
+  /** Error message. */
+  char *errstr;
 };
 
 typedef struct args args;
@@ -105,10 +105,10 @@ typedef struct args args;
  * @brief Convert flag
  */
 struct conv_flag {
-	/** Pad. */
-	short pad;
-	/** Digital number. */
-	short digit;
+  /** Pad. */
+  short pad;
+  /** Digital number. */
+  short digit;
 };
 
 typedef struct conv_flag conv_flag;
@@ -116,13 +116,13 @@ typedef struct conv_flag conv_flag;
 int usermain(void);
 int usertask(void *arg);
 
-#define inf_loop() do {																									\
-		print("%s:%s():%d %s\n", __FILE__, __func__, __LINE__, "inf_loop()"); \
-		if (call_sys_get_mode_level() != USER_LEVEL) {                      \
+#define inf_loop() do {                                                 \
+    print("%s:%s():%d %s\n", __FILE__, __func__, __LINE__, "inf_loop()"); \
+    if (call_sys_get_mode_level() != USER_LEVEL) {                      \
       disable_local_irq();                                              \
     }                                                                   \
-		for (;;)																														\
-			;																																	\
+    for (;;)                                                            \
+      ;                                                                 \
   } while (0)
 
 
@@ -138,4 +138,4 @@ void exit_arch_ap(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_MAIN_H__ */
+#endif /* __MCUBE_MCUBE_MAIN_H__ */

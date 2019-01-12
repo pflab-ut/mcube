@@ -171,7 +171,7 @@ el1h_svc:
   adr     stbl, sys_call_table                    // load syscall table pointer
   uxtw    scno, w8                                // syscall number in w8
   mov     sc_nr, #NR_syscalls
-//	enable_local_irq
+//  enable_local_irq
   cmp     scno, sc_nr                             // check upper syscall limit
   b.hs    el1h_ni_sys
 
@@ -213,7 +213,7 @@ el0_svc:
   adr     stbl, sys_call_table                    // load syscall table pointer
   uxtw    scno, w8                                // syscall number in w8
   mov     sc_nr, #NR_syscalls
-//	enable_local_irq
+//  enable_local_irq
   cmp     scno, sc_nr                             // check upper syscall limit
   b.hs    el0_ni_sys
 

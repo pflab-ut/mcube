@@ -22,56 +22,56 @@
 /*
  * System clock ticks per second
  */
-#define HZ			250
+#define HZ      250
 
 /*
  * A thread round-robin slice in number of ticks
  */
-#define RR_INTERVAL		2
+#define RR_INTERVAL    2
 
 /*
  * Threads priority boundaries
  */
-#define		MIN_PRIO	0
-#define		MAX_PRIO	19
+#define    MIN_PRIO  0
+#define    MAX_PRIO  19
 
 /*
  * Priorities only affect latency, not CPU usage.
  */
-#define DEFAULT_PRIO		10
-#define UNDEF_PRIO		-1
-#define VALID_PRIO(prio)			\
-	(MIN_PRIO <= (prio) && (prio) <= MAX_PRIO)
+#define DEFAULT_PRIO    10
+#define UNDEF_PRIO    -1
+#define VALID_PRIO(prio)      \
+  (MIN_PRIO <= (prio) && (prio) <= MAX_PRIO)
 
 /*
  * The runqueue: a bucket array holding heads of
  * the lists connecting threads of equal priority.
  */
 struct runqueue {
-	struct list_node head[MAX_PRIO + 1];
+  struct list_node head[MAX_PRIO + 1];
 };
 
 static inline void rq_init(struct runqueue *rq)
 {
-	for (int i = MIN_PRIO; i <= MAX_PRIO; i++)
-		list_init(&rq->head[i]);
+  for (int i = MIN_PRIO; i <= MAX_PRIO; i++)
+    list_init(&rq->head[i]);
 }
 
 static inline int rq_get_highest_prio(struct runqueue *rq)
 {
-	for (int i = MAX_PRIO; i >= MIN_PRIO; i--)
-		if (!list_empty(&rq->head[i]))
-			return i;
+  for (int i = MAX_PRIO; i >= MIN_PRIO; i--)
+    if (!list_empty(&rq->head[i]))
+      return i;
 
-	return UNDEF_PRIO;
+  return UNDEF_PRIO;
 }
 
 static inline bool rq_empty(struct runqueue *rq)
 {
-	if (rq_get_highest_prio(rq) == UNDEF_PRIO)
-		return true;
+  if (rq_get_highest_prio(rq) == UNDEF_PRIO)
+    return true;
 
-	return false;
+  return false;
 }
 
 /*
@@ -81,23 +81,23 @@ static inline bool rq_empty(struct runqueue *rq)
  * of these elements outside of the timer IRQ context.
  */
 struct percpu_sched {
-	volatile clock_t sys_ticks;
+  volatile clock_t sys_ticks;
 
-	struct runqueue rrq[2];
-	struct runqueue *rq_active;
-	struct runqueue *rq_expired;
+  struct runqueue rrq[2];
+  struct runqueue *rq_active;
+  struct runqueue *rq_expired;
 
-	struct list_node just_queued;
+  struct list_node just_queued;
 
-	int current_prio;
+  int current_prio;
 
-	int just_queued_turn;
+  int just_queued_turn;
 };
 
 struct proc;
 enum cpu_type {
-	BOOTSTRAP,
-	SECONDARY,
+  BOOTSTRAP,
+  SECONDARY,
 };
 
 void sched_percpu_area_init(void);
@@ -105,14 +105,14 @@ void schedulify_this_code_path(enum cpu_type);
 void sched_init(void);
 
 void sched_enqueue(struct proc *);
-struct proc *sched_tick(void);	/* Avoid GCC warning */
+struct proc *sched_tick(void);  /* Avoid GCC warning */
 
 void kthread_create(void (* func)(void));
 uint64_t kthread_alloc_pid(void);
 
 void smpboot_run_tests(void);
 
-#if	SCHED_TESTS
+#if  SCHED_TESTS
 void sched_run_tests(void);
 void __no_return loop_print(char ch, int color);
 #else
@@ -148,7 +148,7 @@ static inline void update_jiffies(void)
 #if CONFIG_ARCH_SIM
   exec_jiffies = 0;
 #endif
-	sys_jiffies++;
+  sys_jiffies++;
 }
 
 
@@ -217,9 +217,9 @@ int run(unsigned long nr_threads);
 
 
 enum budget_policy {
-	NO_ENFORCEMENT = 1,
-	TICK_ENFORCEMENT,
-	PRECISE_ENFORCEMENT
+  NO_ENFORCEMENT = 1,
+  TICK_ENFORCEMENT,
+  PRECISE_ENFORCEMENT
 };
 
 typedef enum budget_policy budget_policy;
@@ -234,51 +234,51 @@ typedef enum budget_policy budget_policy;
  */
 struct sched_info {
 
-	/** Absolute release time. */
-	unsigned long release;
-	/** Absolute deadline. */
-	unsigned long deadline;
-	
-	/** Period. */
-	/**
-	 * @note Period for periodic thread,
-	 * min. inter-arrival time for sporadic thread,
-	 * or ULONG_MAX for aperiodic thread.
-	 */
-	unsigned long period;
+  /** Absolute release time. */
+  unsigned long release;
+  /** Absolute deadline. */
+  unsigned long deadline;
+  
+  /** Period. */
+  /**
+   * @note Period for periodic thread,
+   * min. inter-arrival time for sporadic thread,
+   * or ULONG_MAX for aperiodic thread.
+   */
+  unsigned long period;
 
-	/** Worst case execution time. */
-	unsigned long wcet;
+  /** Worst case execution time. */
+  unsigned long wcet;
 
-	/** Cpu time to begin execution. */
-	unsigned long begin_cpu_time;
+  /** Cpu time to begin execution. */
+  unsigned long begin_cpu_time;
 
-	/** Remaining execution time. */
-	long remaining;
+  /** Remaining execution time. */
+  long remaining;
 
-	/** Sum of execution time in all jobs. */
-	unsigned long sum_exec_time;
+  /** Sum of execution time in all jobs. */
+  unsigned long sum_exec_time;
 
-	/** Flag to check if release. */
-	unsigned long is_crelease;
-	/** Relative deadline. */
-	unsigned long relative_deadline;
+  /** Flag to check if release. */
+  unsigned long is_crelease;
+  /** Relative deadline. */
+  unsigned long relative_deadline;
 
-	/** Time when entering semaphore. */
-	unsigned long enter_sem[NR_RESOURCES];
+  /** Time when entering semaphore. */
+  unsigned long enter_sem[NR_RESOURCES];
 
 #if !CONFIG_SYNC_NONE
-	/** Length of accessing semaphore. */
-	unsigned int sem[NR_RESOURCES];
-	/** Maximum blocking time. */
-	unsigned int block;
-	/** Preemption level. */
-	unsigned int prlevel;
+  /** Length of accessing semaphore. */
+  unsigned int sem[NR_RESOURCES];
+  /** Maximum blocking time. */
+  unsigned int block;
+  /** Preemption level. */
+  unsigned int prlevel;
 #endif
 
 
-	/** Budget policy. */
-	budget_policy budget_policy;
+  /** Budget policy. */
+  budget_policy budget_policy;
 };
 
 typedef struct sched_info sched_info;
@@ -286,7 +286,7 @@ typedef struct sched_info sched_info;
 void do_sync(void);
 
 
-#endif	/* !__ASSEMBLY__ */
+#endif /* !__ASSEMBLY__ */
 
 
 

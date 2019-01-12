@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_AXIS_THREAD_H__
-#define	__MCUBE_AXIS_THREAD_H__
+#ifndef __MCUBE_AXIS_THREAD_H__
+#define __MCUBE_AXIS_THREAD_H__
 
 /** Stack frame size for interrupt enter/exit. */
 #define STACK_FRAME_SIZE 128 
@@ -39,4 +39,4 @@ struct cpu_context {
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_AXIS_THREAD_H__ */
+#endif /* __MCUBE_AXIS_THREAD_H__ */

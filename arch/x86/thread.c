@@ -47,8 +47,8 @@ void wait(unsigned long count)
 void __attribute__((noreturn)) exit(int status)
 {
 #if 0
-	cli();
-	hlt();
-	inf_loop();
+  cli();
+  hlt();
+  inf_loop();
 #endif
 }

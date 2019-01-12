@@ -15,9 +15,9 @@
  */
 uint64_t kthread_alloc_pid(void)
 {
-	static uint64_t pids;
+  static uint64_t pids;
 
-	return atomic_inc(&pids);
+  return atomic_inc(&pids);
 }
 
 /*
@@ -28,42 +28,42 @@ uint64_t kthread_alloc_pid(void)
  */
 void kthread_create(void (* /* __no_return */ func)(void))
 {
-	struct proc *proc;
-	struct irq_ctx *irq_ctx;
-	char *stack;
+  struct proc *proc;
+  struct irq_ctx *irq_ctx;
+  char *stack;
 
-	proc = kmalloc(sizeof(*proc));
-	proc_init(proc);
+  proc = kmalloc(sizeof(*proc));
+  proc_init(proc);
 
-	/* New thread stack, moving down */
-	stack = kmalloc(STACK_SIZE);
-	stack = stack + STACK_SIZE;
+  /* New thread stack, moving down */
+  stack = kmalloc(STACK_SIZE);
+  stack = stack + STACK_SIZE;
 
-	/* Reserve space for our IRQ stack protocol */
-	irq_ctx = (struct irq_ctx *)(stack - sizeof(*irq_ctx));
-	irq_ctx_init(irq_ctx);
+  /* Reserve space for our IRQ stack protocol */
+  irq_ctx = (struct irq_ctx *)(stack - sizeof(*irq_ctx));
+  irq_ctx_init(irq_ctx);
 
-	/*
-	 * Values for the code to-be-executed once scheduled.
-	 * They will get popped and used automatically by the
-	 * processor at ticks handler `iretq'.
-	 *
-	 * Set to-be-executed code's %rsp to the top of the
-	 * newly allocated stack since this new code doesn't
-	 * care about the values currently 'pushed'; only
-	 * the ctontext switching code does.
-	 */
-	irq_ctx->cs = KERNEL_CS;
-	irq_ctx->rip = (uintptr_t)func;
-	irq_ctx->ss = 0;
-	irq_ctx->rsp = (uintptr_t)stack;
-	irq_ctx->rflags = default_rflags().raw;
+  /*
+   * Values for the code to-be-executed once scheduled.
+   * They will get popped and used automatically by the
+   * processor at ticks handler `iretq'.
+   *
+   * Set to-be-executed code's %rsp to the top of the
+   * newly allocated stack since this new code doesn't
+   * care about the values currently 'pushed'; only
+   * the ctontext switching code does.
+   */
+  irq_ctx->cs = KERNEL_CS;
+  irq_ctx->rip = (uintptr_t)func;
+  irq_ctx->ss = 0;
+  irq_ctx->rsp = (uintptr_t)stack;
+  irq_ctx->rflags = default_rflags().raw;
 
-	/* For context switching code, which runs at the
-	 * ticks handler context, give a stack that respects
-	 * our IRQ stack protocol */
-	proc->pcb.rsp = (uintptr_t)irq_ctx;
+  /* For context switching code, which runs at the
+   * ticks handler context, give a stack that respects
+   * our IRQ stack protocol */
+  proc->pcb.rsp = (uintptr_t)irq_ctx;
 
-	/* Push the now completed proc to the runqueu */
-	sched_enqueue(proc);
+  /* Push the now completed proc to the runqueu */
+  sched_enqueue(proc);
 }

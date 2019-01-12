@@ -15,22 +15,22 @@
 
 static inline uint8_t inb(uint16_t port)
 {
-	uint8_t val;
+  uint8_t val;
 
-	asm volatile (
-		"inb %[port], %[val]"
-		: [val] "=a" (val)
-		: [port] "Nd" (port));
+  asm volatile (
+    "inb %[port], %[val]"
+    : [val] "=a" (val)
+    : [port] "Nd" (port));
 
-	return val;
+  return val;
 }
 
 static inline void outb(uint8_t val, uint16_t port)
 {
-	asm volatile (
-		"outb %[val], %[port]"
-		:
-		: [val] "a" (val), [port] "Nd" (port));
+  asm volatile (
+    "outb %[val], %[port]"
+    :
+    : [val] "a" (val), [port] "Nd" (port));
 
 }
 
@@ -40,7 +40,7 @@ static inline void outb(uint8_t val, uint16_t port)
  */
 static inline void io_delay(void)
 {
-	asm volatile ("outb %al, $0xed");
+  asm volatile ("outb %al, $0xed");
 }
 
 #endif /* !__ASSEMBLY__ */

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_RAND_H__
-#define	__MCUBE_ARM_RASPI3_RAND_H__
+#ifndef __MCUBE_ARM_RASPI3_RAND_H__
+#define __MCUBE_ARM_RASPI3_RAND_H__
 
 #define RANDOM_NUMBER_GEN_CTRL     (RANDOM_NUMBER_GEN_BASE + 0x00)
 #define RANDOM_NUMBER_GEN_STATUS   (RANDOM_NUMBER_GEN_BASE + 0x04)
@@ -26,5 +26,5 @@ unsigned int rand_raspi3(unsigned int min, unsigned int max);
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /*	__MCUBE_ARM_RASPI3_RAND_H__ */
+#endif /* __MCUBE_ARM_RASPI3_RAND_H__ */
 

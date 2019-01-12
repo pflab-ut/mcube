@@ -18,8 +18,8 @@
  * @formatter: how to dump buffers to output device (using hex?, ascii?, null?)
  */
 struct buffer_dumper {
-	int (*pr)(const char *fmt, ...);
-	void (*formatter)(struct buffer_dumper *dumper, void *buf, uint len);
+  int (*pr)(const char *fmt, ...);
+  void (*formatter)(struct buffer_dumper *dumper, void *buf, uint len);
 };
 
 /*
@@ -36,46 +36,8 @@ int null_printer(const char *fmt, ...);
 void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len);
 void buf_char_dump(struct buffer_dumper *dumper, void *given_buf, uint len);
 void buf_null_dump( __unused struct buffer_dumper *dumper,
-		    __unused void *given_buf, __unused uint len);
+        __unused void *given_buf, __unused uint len);
 
-/**
- * Public interface:
- */
-
-__unused static struct buffer_dumper vga_hex_dumper = {
-	.pr = printk,
-	.formatter = buf_hex_dump,
-};
-
-__unused static struct buffer_dumper vga_char_dumper = {
-	.pr = printk,
-	.formatter = buf_char_dump,
-};
-
-__unused static struct buffer_dumper vga_null_dumper = {
-	.pr = prints,
-	.formatter = buf_null_dump,
-};
-
-__unused static struct buffer_dumper serial_hex_dumper = {
-	.pr = prints,
-	.formatter = buf_hex_dump,
-};
-
-__unused static struct buffer_dumper serial_char_dumper = {
-	.pr = prints,
-	.formatter = buf_char_dump,
-};
-
-__unused static struct buffer_dumper serial_null_dumper = {
-	.pr = prints,
-	.formatter = buf_null_dump,
-};
-
-__unused static struct buffer_dumper null_null_dumper = {
-	.pr = null_printer,
-	.formatter = buf_null_dump,
-};
 
 void printbuf(struct buffer_dumper*, void *buf, uint len);
 

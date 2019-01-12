@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_CTYPE_H__
-#define	__MCUBE_MCUBE_CTYPE_H__
+#ifndef __MCUBE_MCUBE_CTYPE_H__
+#define __MCUBE_MCUBE_CTYPE_H__
 
 #ifndef __ASSEMBLY__
 
@@ -49,4 +49,4 @@ int toupper(int c);
 #endif /* !__ASSEMBLY__ */
 
 
-#endif	/* __MCUBE_MCUBE_CTYPE_H__ */
+#endif /* __MCUBE_MCUBE_CTYPE_H__ */

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_CPU_H__
-#define	__MCUBE_ARM_CPU_H__
+#ifndef __MCUBE_ARM_CPU_H__
+#define __MCUBE_ARM_CPU_H__
 
 #define USER_LEVEL 0
 #define KERNEL_LEVEL 1
@@ -51,4 +51,4 @@ static inline unsigned long get_el(void)
 #endif /* !__ASSEMBLY__ */
 
 
-#endif	/* __MCUBE_ARM_CPU_H__ */
+#endif /* __MCUBE_ARM_CPU_H__ */

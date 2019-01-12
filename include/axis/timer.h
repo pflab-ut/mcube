@@ -11,12 +11,12 @@
 
 static inline unsigned long tsc2usec(unsigned long tsc)
 {
-	return tsc / CPU_CLOCK_MHZ_PER_USEC;
+  return tsc / CPU_CLOCK_MHZ_PER_USEC;
 }
 
 static inline unsigned long tsc2nsec(unsigned long tsc)
 {
-	return (tsc * 1000) / CPU_CLOCK_MHZ_PER_USEC;
+  return (tsc * 1000) / CPU_CLOCK_MHZ_PER_USEC;
 }
 
 static inline void delay(unsigned long us)

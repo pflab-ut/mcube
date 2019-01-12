@@ -6,10 +6,10 @@
 #include <mcube/mcube.h>
 
 ENTRY(memzero)
-	str xzr, [x0], #8
-	subs x1, x1, #8
-	b.gt memzero
-	ret
+  str xzr, [x0], #8
+  subs x1, x1, #8
+  b.gt memzero
+  ret
 
   
 ENTRY(arch_switch_to)

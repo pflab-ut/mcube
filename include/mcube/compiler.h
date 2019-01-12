@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_COMPILER_H__
-#define	__MCUBE_MCUBE_COMPILER_H__
+#ifndef __MCUBE_MCUBE_COMPILER_H__
+#define __MCUBE_MCUBE_COMPILER_H__
 
 #ifndef __ASSEMBLY__
 
@@ -19,5 +19,5 @@
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /*	__MCUBE_MCUBE_COMPILER_H__ */
+#endif /* __MCUBE_MCUBE_COMPILER_H__ */
 

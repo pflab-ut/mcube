@@ -54,32 +54,32 @@
  * Doubly-linked list node
  */
 struct list_node {
-	struct list_node *next;
-	struct list_node *prev;
+  struct list_node *next;
+  struct list_node *prev;
 };
 
 /*
  * Static init, for inside-structure nodes
  */
-#define LIST_INIT(n)			\
-	{				\
-		.next = &(n),		\
-		.prev = &(n),		\
-	}
+#define LIST_INIT(n)                            \
+  {                                             \
+    .next = &(n),                               \
+      .prev = &(n),                             \
+      }
 
 /*
  * Global declaration with a static init
  */
-#define LIST_NODE(n)			\
-	struct list_node n = LIST_INIT(n)
+#define LIST_NODE(n)                            \
+  struct list_node n = LIST_INIT(n)
 
 /*
  * Dynamic init, for run-time
  */
 static inline void list_init(struct list_node *node)
 {
-	node->next = node;
-	node->prev = node;
+  node->next = node;
+  node->prev = node;
 }
 
 /*
@@ -87,13 +87,13 @@ static inline void list_init(struct list_node *node)
  */
 static inline bool list_empty(const struct list_node *node)
 {
-	if (node->next == node) {
-		assert(node->prev == node);
-		return true;
-	}
+  if (node->next == node) {
+    assert(node->prev == node);
+    return true;
+  }
 
-	assert(node->prev != node);
-	return false;
+  assert(node->prev != node);
+  return false;
 }
 
 /*
@@ -101,11 +101,11 @@ static inline bool list_empty(const struct list_node *node)
  */
 static inline void list_add(struct list_node *node, struct list_node *new)
 {
-	new->next = node->next;
-	new->next->prev = new;
+  new->next = node->next;
+  new->next->prev = new;
 
-	node->next = new;
-	new->prev = node;
+  node->next = new;
+  new->prev = node;
 }
 
 /*
@@ -113,11 +113,11 @@ static inline void list_add(struct list_node *node, struct list_node *new)
  */
 static inline void list_add_tail(struct list_node *node, struct list_node *new)
 {
-	new->prev = node->prev;
-	new->prev->next = new;
+  new->prev = node->prev;
+  new->prev->next = new;
 
-	node->prev = new;
-	new->next = node;
+  node->prev = new;
+  new->next = node;
 }
 
 /*
@@ -128,16 +128,16 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
  * The "useless" pointer assignment is for type-checking.
  * `Make it hard to misuse' -- a golden APIs advice.
  */
-#define list_entry(node, type, node_name)		\
-({							\
-	size_t offset;					\
-	struct list_node __unused *m;			\
-							\
-	m = (node);					\
-							\
-	offset = offsetof(type, node_name);		\
-	(type *)((uint8_t *)(node) - offset);		\
-})
+#define list_entry(node, type, node_name)       \
+  ({                                            \
+    size_t offset;                              \
+    struct list_node __unused *m;               \
+                                                \
+    m = (node);                                 \
+                                                \
+    offset = offsetof(type, node_name);         \
+    (type *)((uint8_t *)(node) - offset);       \
+  })
 
 /*
  * Scan the list, beginning from @node, using the iterator
@@ -148,10 +148,10 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
  * NOTE! Don't delete the the iterator's list node inside
  * loop: we use it in the initialization of next iteration.
  */
-#define list_for_each(node, struc, name)				\
-	for (struc = list_entry((node)->next, typeof(*struc), name);	\
-	     &(struc->name) != (node);					\
-	     struc = list_entry(struc->name.next, typeof(*struc), name))
+#define list_for_each(node, struc, name)                            \
+  for (struc = list_entry((node)->next, typeof(*struc), name);      \
+       &(struc->name) != (node);                                    \
+       struc = list_entry(struc->name.next, typeof(*struc), name))
 
 /*
  * Same as list_for_each(), but with making it safe to
@@ -160,38 +160,38 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
  *
  * You'll need to give us a spare iterator for this.
  */
-#define list_for_each_safe(node, struc, spare_struc, name)		       \
-	for (struc = list_entry((node)->next, typeof(*struc), name),	       \
-	     spare_struc = list_entry(struc->name.next, typeof(*struc), name); \
-	     &(struc->name) != (node);					       \
-	     struc = spare_struc,					       \
-	     spare_struc = list_entry(struc->name.next, typeof(*struc), name))
+#define list_for_each_safe(node, struc, spare_struc, name)              \
+  for (struc = list_entry((node)->next, typeof(*struc), name),          \
+         spare_struc = list_entry(struc->name.next, typeof(*struc), name); \
+       &(struc->name) != (node);                                        \
+       struc = spare_struc,                                             \
+         spare_struc = list_entry(struc->name.next, typeof(*struc), name))
 
 /*
  * Pop @node out of its connected neighbours.
  */
 static inline void list_del(struct list_node *node)
 {
-	struct list_node *prevn;
-	struct list_node *nextn;
+  struct list_node *prevn;
+  struct list_node *nextn;
 
-	prevn = node->prev;
-	nextn = node->next;
+  prevn = node->prev;
+  nextn = node->next;
 
-	assert(prevn != NULL);
-	assert(nextn != NULL);
-	assert(prevn->next == node);
-	assert(nextn->prev == node);
+  assert(prevn != NULL);
+  assert(nextn != NULL);
+  assert(prevn->next == node);
+  assert(nextn->prev == node);
 
-	prevn->next = node->next;
-	nextn->prev = node->prev;
+  prevn->next = node->next;
+  nextn->prev = node->prev;
 
-	node->next = node;
-	node->prev = node;
+  node->next = node;
+  node->prev = node;
 }
 
 
-#if	LIST_TESTS
+#if LIST_TESTS
 
 void list_run_tests(void);
 

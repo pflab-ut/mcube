@@ -20,20 +20,20 @@
 /*
  * Ramdisk header format.
  */
-#define RDSIG_LEN		8
-#define RDSIG_START		"CUTE-STA"
-#define RDSIG_END		"CUTE-END"
+#define RDSIG_LEN    8
+#define RDSIG_START    "CUTE-STA"
+#define RDSIG_END    "CUTE-END"
 
 static struct ramdisk_header {
-	char start_signature[RDSIG_LEN];
-	uint32_t sectors;		/* Rdisk len in 512-byte sectors (+hdr)*/
-	uint32_t length;		/* Rdisk len in bytes (without hdr) */
-	char end_signature[RDSIG_LEN];
+  char start_signature[RDSIG_LEN];
+  uint32_t sectors;    /* Rdisk len in 512-byte sectors (+hdr)*/
+  uint32_t length;    /* Rdisk len in bytes (without hdr) */
+  char end_signature[RDSIG_LEN];
 } __packed *rdheader;
 
 static struct ramdisk {
-	char *buf;
-	int len;
+  char *buf;
+  int len;
 } ramdisk;
 
 /*
@@ -43,26 +43,26 @@ static struct ramdisk {
  */
 void *ramdisk_memory_area_end(void)
 {
-	assert(rdheader != NULL);
-	return (char *)ramdisk.buf + ramdisk.len;
+  assert(rdheader != NULL);
+  return (char *)ramdisk.buf + ramdisk.len;
 }
 
 void ramdisk_init(void)
 {
-	/* Ramdisk header is loaded directly after kernel image */
-	rdheader = VIRTUAL(KTEXT_PHYS(__kernel_end));
-	if (memcmp(rdheader->start_signature, RDSIG_START, RDSIG_LEN))
-		panic("Ramdisk: Invalid header start signature");
-	if (memcmp(rdheader->end_signature, RDSIG_END, RDSIG_LEN))
-		panic("Ramdisk: Invalid header end signature");
+  /* Ramdisk header is loaded directly after kernel image */
+  rdheader = VIRTUAL(KTEXT_PHYS(__kernel_end));
+  if (memcmp(rdheader->start_signature, RDSIG_START, RDSIG_LEN))
+    panic("Ramdisk: Invalid header start signature");
+  if (memcmp(rdheader->end_signature, RDSIG_END, RDSIG_LEN))
+    panic("Ramdisk: Invalid header end signature");
 
-	ramdisk.buf = (char *)(rdheader + 1);
-	ramdisk.len = rdheader->length;
-	if (ramdisk.len != 0)
-		printk("Ramdisk: start address = 0x%lx, length = %d KB\n",
-		       ramdisk.buf, ramdisk.len / 1024);
-	else
-		printk("Ramdisk: No disk image loaded\n");
+  ramdisk.buf = (char *)(rdheader + 1);
+  ramdisk.len = rdheader->length;
+  if (ramdisk.len != 0)
+    printk("Ramdisk: start address = 0x%lx, length = %d KB\n",
+           ramdisk.buf, ramdisk.len / 1024);
+  else
+    printk("Ramdisk: No disk image loaded\n");
 }
 
 /*
@@ -71,12 +71,12 @@ void ramdisk_init(void)
 
 int ramdisk_get_len(void)
 {
-	assert(rdheader != NULL);
-	return ramdisk.len;
+  assert(rdheader != NULL);
+  return ramdisk.len;
 }
 
 char *ramdisk_get_buf(void)
 {
-	assert(rdheader != NULL);
-	return ramdisk.buf;
+  assert(rdheader != NULL);
+  return ramdisk.buf;
 }

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_IRQ_H__
-#define	__MCUBE_ARM_RASPI3_IRQ_H__
+#ifndef __MCUBE_ARM_RASPI3_IRQ_H__
+#define __MCUBE_ARM_RASPI3_IRQ_H__
 
 
 #define IRQ_BASIC_PENDING  (IRQ_BASIC_BASE + 0x00000000)

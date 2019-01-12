@@ -10,9 +10,9 @@
  * This is an ad-hoc UnrolledLinkedList-like structure for storing a
  * thread's File Descriptor Table.  Its core advantages are:
  *
- *	- Semi-random access using indices as the search keys,  which is
+ *  - Semi-random access using indices as the search keys,  which is
  *        suitable for the Unix file descriptors [0->N] continuous range.
- *	- Automatic and efficient reuse of deleted keys (i.e., close()-d
+ *  - Automatic and efficient reuse of deleted keys (i.e., close()-d
  *        descriptors), thus saving memory space as much as possible.
  *
  * NOTE! This is mostly how it's done on Solaris: "The process-level [file
@@ -30,16 +30,16 @@
  */
 static struct __node *__unode_new(uint node_num, uint array_len)
 {
-	struct __node *node;
+  struct __node *node;
 
-	node = kmalloc(sizeof(struct __node));
-	node->array = kmalloc(array_len * sizeof(void *));
-	memset(node->array, 0, array_len * sizeof(void *));
-	node->array_len = array_len;
-	node->array_nrfree = array_len;
-	node->num = node_num;
-	node->next = NULL;
-	return node;
+  node = kmalloc(sizeof(struct __node));
+  node->array = kmalloc(array_len * sizeof(void *));
+  memset(node->array, 0, array_len * sizeof(void *));
+  node->array_len = array_len;
+  node->array_nrfree = array_len;
+  node->num = node_num;
+  node->next = NULL;
+  return node;
 }
 
 /*
@@ -47,8 +47,8 @@ static struct __node *__unode_new(uint node_num, uint array_len)
  */
 static void __unode_free(struct __node *node)
 {
-	kfree(node->array);
-	kfree(node);
+  kfree(node->array);
+  kfree(node);
 }
 
 /*
@@ -56,34 +56,34 @@ static void __unode_free(struct __node *node)
  */
 static uint __unode_array_find_free_idx(struct __node *node)
 {
-	assert(node->array_nrfree > 0);
+  assert(node->array_nrfree > 0);
 
-	for (uint i = 0; i < node->array_len; i++)
-		if (node->array[i] == NULL)
-			return i;
+  for (uint i = 0; i < node->array_len; i++)
+    if (node->array[i] == NULL)
+      return i;
 
-	assert(false);
+  assert(false);
 }
 
 static void __unode_store_val_in_array(struct __node *node, uint array_idx,
-				       void *val)
+               void *val)
 {
-	assert(val != NULL);
-	assert(array_idx < node->array_len);
-	assert(node->array[array_idx] == NULL);
+  assert(val != NULL);
+  assert(array_idx < node->array_len);
+  assert(node->array[array_idx] == NULL);
 
-	node->array_nrfree--;
-	node->array[array_idx] = val;
+  node->array_nrfree--;
+  node->array[array_idx] = val;
 }
 
 static void __unused __unode_update_val_in_array(struct __node *node,
-						 uint array_idx, void *val)
+             uint array_idx, void *val)
 {
-	assert(val != NULL);
-	assert(array_idx < node->array_len);
-	assert(node->array[array_idx] != NULL);
+  assert(val != NULL);
+  assert(array_idx < node->array_len);
+  assert(node->array[array_idx] != NULL);
 
-	node->array[array_idx] = val;
+  node->array[array_idx] = val;
 }
 
 /*
@@ -92,24 +92,24 @@ static void __unused __unode_update_val_in_array(struct __node *node,
  * was out of range.
  */
 static struct __node *__get_node(struct unrolled_head *head, uint key,
-				 uint *array_idx)
+         uint *array_idx)
 {
-	struct __node *node;
-	uint node_num;
+  struct __node *node;
+  uint node_num;
 
-	node = head->node;
-	if (!node)				/* Empty list */
-		return NULL;
+  node = head->node;
+  if (!node)        /* Empty list */
+    return NULL;
 
-	node_num = key / node->array_len;
-	*array_idx = key % node->array_len;
-	while (node_num--) {
-		if (!node)			/* Out of Range key */
-			return NULL;
-		node = node->next;
-	}
+  node_num = key / node->array_len;
+  *array_idx = key % node->array_len;
+  while (node_num--) {
+    if (!node)      /* Out of Range key */
+      return NULL;
+    node = node->next;
+  }
 
-	return node;
+  return node;
 }
 
 /*
@@ -123,9 +123,9 @@ static struct __node *__get_node(struct unrolled_head *head, uint key,
  */
 void unrolled_init(struct unrolled_head *head, uint array_len)
 {
-	head->node = NULL;
-	head->array_len = array_len;
-	assert(head->array_len > 0);
+  head->node = NULL;
+  head->array_len = array_len;
+  assert(head->array_len > 0);
 }
 
 /*
@@ -133,14 +133,14 @@ void unrolled_init(struct unrolled_head *head, uint array_len)
  */
 void unrolled_free(struct unrolled_head *head)
 {
-	struct __node *node, *prev;
+  struct __node *node, *prev;
 
-	node = head->node;
-	while (node != NULL) {
-		prev = node;
-		node = node->next;
-		__unode_free(prev);
-	}
+  node = head->node;
+  while (node != NULL) {
+    prev = node;
+    node = node->next;
+    __unode_free(prev);
+  }
 }
 
 /*
@@ -156,28 +156,28 @@ void unrolled_free(struct unrolled_head *head)
  */
 uint unrolled_insert(struct unrolled_head *head, void *val)
 {
-	struct __node *node, *prev;
-	uint idx;
+  struct __node *node, *prev;
+  uint idx;
 
-	if (head->node == NULL)
-		head->node = __unode_new(0, head->array_len);
+  if (head->node == NULL)
+    head->node = __unode_new(0, head->array_len);
 
-	assert(val != NULL);
-	assert(head->node != NULL);
-	for (node = head->node; node != NULL; node = node->next) {
-		if (node->array_nrfree > 0) {
-			idx = __unode_array_find_free_idx(node);
-			__unode_store_val_in_array(node, idx, val);
-			return (node->num * node->array_len) + idx;
-		}
-		prev = node;
-	}
+  assert(val != NULL);
+  assert(head->node != NULL);
+  for (node = head->node; node != NULL; node = node->next) {
+    if (node->array_nrfree > 0) {
+      idx = __unode_array_find_free_idx(node);
+      __unode_store_val_in_array(node, idx, val);
+      return (node->num * node->array_len) + idx;
+    }
+    prev = node;
+  }
 
-	/* No node with free array space was found */
-	node = __unode_new(prev->num + 1, prev->array_len);
-	__unode_store_val_in_array(node, 0, val);
-	prev->next = node;
-	return node->num * node->array_len;
+  /* No node with free array space was found */
+  node = __unode_new(prev->num + 1, prev->array_len);
+  __unode_store_val_in_array(node, 0, val);
+  prev->next = node;
+  return node->num * node->array_len;
 }
 
 /*
@@ -188,14 +188,14 @@ uint unrolled_insert(struct unrolled_head *head, void *val)
  */
 void *unrolled_lookup(struct unrolled_head *head, uint key)
 {
-	struct __node *node;
-	uint array_idx;
+  struct __node *node;
+  uint array_idx;
 
-	node = __get_node(head, key, &array_idx);
-	if (node == NULL)
-		return node;
+  node = __get_node(head, key, &array_idx);
+  if (node == NULL)
+    return node;
 
-	return node->array[array_idx];
+  return node->array[array_idx];
 }
 
 /*
@@ -203,16 +203,16 @@ void *unrolled_lookup(struct unrolled_head *head, uint key)
  */
 void unrolled_remove_key(struct unrolled_head *head, uint key)
 {
-	struct __node *node;
-	uint array_idx;
+  struct __node *node;
+  uint array_idx;
 
-	node = __get_node(head, key, &array_idx);
-	if (node == NULL || node->array[array_idx] == NULL)
-		panic("UNROLLED: Tried  to remove non-existing "
-		      "mapping structure key %u", key);
+  node = __get_node(head, key, &array_idx);
+  if (node == NULL || node->array[array_idx] == NULL)
+    panic("UNROLLED: Tried  to remove non-existing "
+          "mapping structure key %u", key);
 
-	node->array_nrfree++;
-	node->array[array_idx] = NULL;
+  node->array_nrfree++;
+  node->array[array_idx] = NULL;
 }
 
 /*
@@ -226,23 +226,23 @@ void unrolled_remove_key(struct unrolled_head *head, uint key)
  */
 static void _test_N_elements(struct unrolled_head *head, uint len)
 {
-	void *val;
-	uintptr_t ret;
+  void *val;
+  uintptr_t ret;
 
-	printk("_UNROLLED: _test_N_elements(%u): ", len);
-	for (uintptr_t i = 0; i < len; i++)
-		unrolled_insert(head, (void *)(i + 5));
-	uint i = 0;
-	unrolled_for_each(head, val) {
-		if ((ret = (uintptr_t)unrolled_lookup(head, i)) != i + 5)
-			panic("_UNROLLED: Value for key %u got corrupted; "
-			      "returned = %u, actual = %u", i, ret, val);
-		i++;
-	}
-	if (i != len)
-		panic("_UNROLLED: List iterator returned %u element(s) "
-		      "although actual length is %u!", i, len);
-	printk("Success!\n");
+  printk("_UNROLLED: _test_N_elements(%u): ", len);
+  for (uintptr_t i = 0; i < len; i++)
+    unrolled_insert(head, (void *)(i + 5));
+  uint i = 0;
+  unrolled_for_each(head, val) {
+    if ((ret = (uintptr_t)unrolled_lookup(head, i)) != i + 5)
+      panic("_UNROLLED: Value for key %u got corrupted; "
+            "returned = %u, actual = %u", i, ret, val);
+    i++;
+  }
+  if (i != len)
+    panic("_UNROLLED: List iterator returned %u element(s) "
+          "although actual length is %u!", i, len);
+  printk("Success!\n");
 }
 
 /*
@@ -250,28 +250,28 @@ static void _test_N_elements(struct unrolled_head *head, uint len)
  */
 static void _test_generated_keys(struct unrolled_head *head)
 {
-	uint idx, nr_elements;
-	void *val;
+  uint idx, nr_elements;
+  void *val;
 
-	printk("_UNROLLED: _test_generated_keys(): ");
-	nr_elements = head->array_len * 10;
-	for (uintptr_t i = 0; i < nr_elements; i++) {
-		idx = unrolled_insert(head, (void *)(i + 5));
-		if (idx != i)
-			panic("_UNROLLED: Generated keys does not start "
-			      "from 0 upwards!");
-	}
-	uint i = 0;
-	unrolled_for_each(head, val) {
-		if ((uintptr_t)val != i + 5)
-			panic("_UNROLLED: Value for key %u got corrupted; "
-			      "returned = %u, actual = %u", i, val, i + 5);
-		i++;
-	}
-	if (i != nr_elements)
-		panic("_UNROLLED: List iterator returned %u elements "
-		      "although actual length is %u!", i, nr_elements);
-	printk("Success!\n");
+  printk("_UNROLLED: _test_generated_keys(): ");
+  nr_elements = head->array_len * 10;
+  for (uintptr_t i = 0; i < nr_elements; i++) {
+    idx = unrolled_insert(head, (void *)(i + 5));
+    if (idx != i)
+      panic("_UNROLLED: Generated keys does not start "
+            "from 0 upwards!");
+  }
+  uint i = 0;
+  unrolled_for_each(head, val) {
+    if ((uintptr_t)val != i + 5)
+      panic("_UNROLLED: Value for key %u got corrupted; "
+            "returned = %u, actual = %u", i, val, i + 5);
+    i++;
+  }
+  if (i != nr_elements)
+    panic("_UNROLLED: List iterator returned %u elements "
+          "although actual length is %u!", i, nr_elements);
+  printk("Success!\n");
 }
 
 /*
@@ -279,32 +279,32 @@ static void _test_generated_keys(struct unrolled_head *head)
  */
 static void _test_keys_removal(struct unrolled_head *head)
 {
-	uint key, nr_elements = 10000;
-	void *val;
+  uint key, nr_elements = 10000;
+  void *val;
 
-	printk("_UNROLLED: _test_keys_removal(): ");
-	for (uintptr_t i = 0; i < nr_elements; i++)
-		unrolled_insert(head, (void *)(i+1));
-	for (intptr_t i = nr_elements - 1; i >= 0; i--) {
-		val = unrolled_lookup(head, i);
-		if (i+1 != (intptr_t)val)
-			panic("_UNROLLED: Value for key %u got corrupted; "
-			      "returned = %u, actual = %u", i, val, i+1);
-		unrolled_remove_key(head, i);
+  printk("_UNROLLED: _test_keys_removal(): ");
+  for (uintptr_t i = 0; i < nr_elements; i++)
+    unrolled_insert(head, (void *)(i+1));
+  for (intptr_t i = nr_elements - 1; i >= 0; i--) {
+    val = unrolled_lookup(head, i);
+    if (i+1 != (intptr_t)val)
+      panic("_UNROLLED: Value for key %u got corrupted; "
+            "returned = %u, actual = %u", i, val, i+1);
+    unrolled_remove_key(head, i);
 
-		uint j = 0;
-		unrolled_for_each(head, val) {
-			j++;
-		}
-		if (j != nr_elements - 1)
-			panic("_UNROLLED: List iterator returned %u elements al"
-			      "though actual len is %u!", j, nr_elements - 1);
-		key = unrolled_insert(head, (void *)(i+1));
-		if (key != i)
-			panic("_UNROLLED: Returned key should've been %u, "
-			      " but it's %u", i, key);
-	}
-	printk("Success!\n");
+    uint j = 0;
+    unrolled_for_each(head, val) {
+      j++;
+    }
+    if (j != nr_elements - 1)
+      panic("_UNROLLED: List iterator returned %u elements al"
+            "though actual len is %u!", j, nr_elements - 1);
+    key = unrolled_insert(head, (void *)(i+1));
+    if (key != i)
+      panic("_UNROLLED: Returned key should've been %u, "
+            " but it's %u", i, key);
+  }
+  printk("Success!\n");
 }
 
 /*
@@ -312,33 +312,33 @@ static void _test_keys_removal(struct unrolled_head *head)
  */
 static void _test_keys_removal2(struct unrolled_head *head)
 {
-	uint key, nr_elements = 10000, nr_deleted_keys;
-	void *val;
+  uint key, nr_elements = 10000, nr_deleted_keys;
+  void *val;
 
-	printk("_UNROLLED: _test_keys_removal2(): ");
-	nr_deleted_keys = 0;
-	for (uintptr_t i = 0; i < nr_elements; i++)
-		unrolled_insert(head, (void *)(i+1));
-	for (uint key = 0; key < nr_elements; key++)
-		if (key % 2 == 0) {
-			unrolled_remove_key(head, key);
-			nr_deleted_keys++;
-		}
-	uint j = 0;
-	unrolled_for_each(head, val) {
-		j++;
-	}
-	if (j != nr_elements - nr_deleted_keys)
-			panic("_UNROLLED: List iterator returned %u elements al"
-			      "though actual len is %u!", j, nr_elements / 2);
-	while (nr_deleted_keys--) {
-		key = unrolled_insert(head, (void *)3);
-		if (key % 2 != 0 || key >= nr_elements)
-			panic("_UNROLLED: Allocated new key %u, while %u keys "
-			      "were deleted and not yet re-used!", key,
-			      nr_deleted_keys);
-	}
-	printk("Success!\n");
+  printk("_UNROLLED: _test_keys_removal2(): ");
+  nr_deleted_keys = 0;
+  for (uintptr_t i = 0; i < nr_elements; i++)
+    unrolled_insert(head, (void *)(i+1));
+  for (uint key = 0; key < nr_elements; key++)
+    if (key % 2 == 0) {
+      unrolled_remove_key(head, key);
+      nr_deleted_keys++;
+    }
+  uint j = 0;
+  unrolled_for_each(head, val) {
+    j++;
+  }
+  if (j != nr_elements - nr_deleted_keys)
+      panic("_UNROLLED: List iterator returned %u elements al"
+            "though actual len is %u!", j, nr_elements / 2);
+  while (nr_deleted_keys--) {
+    key = unrolled_insert(head, (void *)3);
+    if (key % 2 != 0 || key >= nr_elements)
+      panic("_UNROLLED: Allocated new key %u, while %u keys "
+            "were deleted and not yet re-used!", key,
+            nr_deleted_keys);
+  }
+  printk("Success!\n");
 }
 
 /*
@@ -347,43 +347,43 @@ static void _test_keys_removal2(struct unrolled_head *head)
  */
 static void _unrolled_run_tests(uint array_len)
 {
-	struct unrolled_head head;
-	uint i;
-	void *val;
+  struct unrolled_head head;
+  uint i;
+  void *val;
 
-	unrolled_init(&head, array_len);
-	unrolled_free(&head);
+  unrolled_init(&head, array_len);
+  unrolled_free(&head);
 
-	for (i = 0; i < 1500; i++) {
-		unrolled_init(&head, array_len);
-		_test_N_elements(&head, i);
-		unrolled_free(&head);
-	}
+  for (i = 0; i < 1500; i++) {
+    unrolled_init(&head, array_len);
+    _test_N_elements(&head, i);
+    unrolled_free(&head);
+  }
 
-	unrolled_init(&head, array_len);
-	_test_generated_keys(&head);
-	i = 0;
-	unrolled_for_each(&head, val) {	/* Delete all keys */
-		unrolled_remove_key(&head, i);
-		i++;
-	}
-	_test_generated_keys(&head);	/* Keys should start from 0 again */
-	unrolled_free(&head);
+  unrolled_init(&head, array_len);
+  _test_generated_keys(&head);
+  i = 0;
+  unrolled_for_each(&head, val) {  /* Delete all keys */
+    unrolled_remove_key(&head, i);
+    i++;
+  }
+  _test_generated_keys(&head);  /* Keys should start from 0 again */
+  unrolled_free(&head);
 
-	unrolled_init(&head, array_len);
-	_test_keys_removal(&head);
-	unrolled_free(&head);
+  unrolled_init(&head, array_len);
+  _test_keys_removal(&head);
+  unrolled_free(&head);
 
-	unrolled_init(&head, array_len);
-	_test_keys_removal2(&head);
-	unrolled_free(&head);
+  unrolled_init(&head, array_len);
+  _test_keys_removal2(&head);
+  unrolled_free(&head);
 }
 
 void unrolled_run_tests(void)
 {
-	/* Note the performance increase with bigger node array sizes! */
-	for (uint array_len = 1; array_len <= 32; array_len++)
-		_unrolled_run_tests(array_len);
+  /* Note the performance increase with bigger node array sizes! */
+  for (uint array_len = 1; array_len <= 32; array_len++)
+    _unrolled_run_tests(array_len);
 }
 
 #endif /* UNROLLED_TESTS */

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_ATTRIBUTE_H__
-#define	__MCUBE_MCUBE_ATTRIBUTE_H__
+#ifndef __MCUBE_MCUBE_ATTRIBUTE_H__
+#define __MCUBE_MCUBE_ATTRIBUTE_H__
 
 
-#endif	/* __MCUBE_MCUBE_ATTRIBUTE_H__ */
+#endif /* __MCUBE_MCUBE_ATTRIBUTE_H__ */

@@ -25,15 +25,15 @@ static struct e820_setup memory_setup;
  */
 static uint32_t e820_checksum(void *base, int len)
 {
-	uint8_t *p;
-	uint32_t sum;
+  uint8_t *p;
+  uint32_t sum;
 
-	p = base;
-	sum = 0;
-	while (len--)
-		sum += *p++;
+  p = base;
+  sum = 0;
+  while (len--)
+    sum += *p++;
 
-	return sum;
+  return sum;
 }
 
 /*
@@ -44,72 +44,72 @@ static uint32_t e820_checksum(void *base, int len)
  */
 static void validate_e820h_struct(void)
 {
-	uint32_t *entry, entry_len, err, chksum1, chksum2;
-	struct e820_range *range;
+  uint32_t *entry, entry_len, err, chksum1, chksum2;
+  struct e820_range *range;
 
-	entry = E820_BASE;
-	if (*entry != E820_INIT_SIG)
-		panic("E820h - Invalid buffer start signature");
-	entry++;
+  entry = E820_BASE;
+  if (*entry != E820_INIT_SIG)
+    panic("E820h - Invalid buffer start signature");
+  entry++;
 
-	while (*entry != E820_END) {
-		if (entry >= (uint32_t *)E820_MAX)
-			panic("E820h - Unterminated buffer structure");
+  while (*entry != E820_END) {
+    if (entry >= (uint32_t *)E820_MAX)
+      panic("E820h - Unterminated buffer structure");
 
-		entry_len = *entry++;
-		range = (struct e820_range *)entry;
-		printk("Memory: E820 range: 0x%lx - 0x%lx (%s)\n", range->base,
-		       range->base + range->len, e820_typestr(range->type));
+    entry_len = *entry++;
+    range = (struct e820_range *)entry;
+    printk("Memory: E820 range: 0x%lx - 0x%lx (%s)\n", range->base,
+           range->base + range->len, e820_typestr(range->type));
 
-		entry = (uint32_t *)((char *)entry + entry_len);
-	}
-	entry++;
+    entry = (uint32_t *)((char *)entry + entry_len);
+  }
+  entry++;
 
-	err = *entry;
-	if (err != E820_SUCCESS)
-		panic("E820h error - %s", e820_errstr(err));
-	entry++;
+  err = *entry;
+  if (err != E820_SUCCESS)
+    panic("E820h error - %s", e820_errstr(err));
+  entry++;
 
-	chksum2 = *entry;
-	chksum1 = e820_checksum(E820_BASE, (char *)entry - (char *)E820_BASE);
-	if (chksum1 != chksum2)
-		panic("E820h error - calculated checksum = 0x%lx, "
-		      "found checksum = 0x%lx\n", chksum1, chksum2);
-	entry++;
+  chksum2 = *entry;
+  chksum1 = e820_checksum(E820_BASE, (char *)entry - (char *)E820_BASE);
+  if (chksum1 != chksum2)
+    panic("E820h error - calculated checksum = 0x%lx, "
+          "found checksum = 0x%lx\n", chksum1, chksum2);
+  entry++;
 
-	assert(entry <= (uint32_t *)E820_MAX);
+  assert(entry <= (uint32_t *)E820_MAX);
 
-	/* Things are hopefully fine; mark the struct as valid */
-	entry = E820_BASE;
-	*entry = E820_VALID_SIG;
+  /* Things are hopefully fine; mark the struct as valid */
+  entry = E820_BASE;
+  *entry = E820_VALID_SIG;
 }
 
 static void build_memory_setup(void)
 {
-	uint64_t avail_len, avail_ranges, phys_end, end;
-	struct e820_range *range;
+  uint64_t avail_len, avail_ranges, phys_end, end;
+  struct e820_range *range;
 
-	assert(memory_setup.valid == 0);
+  assert(memory_setup.valid == 0);
 
-	phys_end = 0;
-	avail_len = 0;
-	avail_ranges = 0;
-	e820_for_each(range) {
-		if (range->type != E820_AVAIL)
-			continue;
+  phys_end = 0;
+  avail_len = 0;
+  avail_ranges = 0;
+  e820_for_each(range) {
+    if (range->type != E820_AVAIL)
+      continue;
 
-		avail_len += range->len;
-		avail_ranges++;
+    avail_len += range->len;
+    avail_ranges++;
 
-		end = range->base + range->len;
-		if (end > phys_end)
-			phys_end = end;
-	}
+    end = range->base + range->len;
+    if (end > phys_end)
+      phys_end = end;
+  }
 
-	memory_setup.valid = 1;
-	memory_setup.avail_ranges = avail_ranges;
-	memory_setup.avail_pages = avail_len / PAGE_SIZE;
-	memory_setup.phys_addr_end = phys_end;
+  memory_setup.valid = 1;
+  memory_setup.avail_ranges = avail_ranges;
+  memory_setup.avail_pages = avail_len / PAGE_SIZE;
+  memory_setup.phys_addr_end = phys_end;
 }
 
 /*
@@ -121,30 +121,30 @@ static void build_memory_setup(void)
  */
 int e820_sanitize_range(struct e820_range *range, uint64_t kmem_end)
 {
-	uint64_t start, end;
+  uint64_t start, end;
 
-	assert(range->type == E820_AVAIL);
-	start = range->base;
-	end = start + range->len;
+  assert(range->type == E820_AVAIL);
+  start = range->base;
+  end = start + range->len;
 
-	start = round_up(start, PAGE_SIZE);
-	end = round_down(end, PAGE_SIZE);
+  start = round_up(start, PAGE_SIZE);
+  end = round_down(end, PAGE_SIZE);
 
-	if (end <= start) {
-		range->type = E820_ERRORMEM;
-		return -1;
-	}
+  if (end <= start) {
+    range->type = E820_ERRORMEM;
+    return -1;
+  }
 
-	assert(page_aligned(kmem_end));
-	if (end <= PHYS(kmem_end))
-		return -1;
-	if (start < PHYS(kmem_end))
-		start = PHYS(kmem_end);
+  assert(page_aligned(kmem_end));
+  if (end <= PHYS(kmem_end))
+    return -1;
+  if (start < PHYS(kmem_end))
+    start = PHYS(kmem_end);
 
-	range->base = start;
-	range->len = end - start;
+  range->base = start;
+  range->len = end - start;
 
-	return 0;
+  return 0;
 }
 
 /*
@@ -154,21 +154,21 @@ int e820_sanitize_range(struct e820_range *range, uint64_t kmem_end)
  */
 struct e820_setup *e820_get_memory_setup(void)
 {
-	assert(memory_setup.valid == 1);
+  assert(memory_setup.valid == 1);
 
-	return &memory_setup;
+  return &memory_setup;
 }
 
 uint64_t e820_get_phys_addr_end(void)
 {
-	assert(memory_setup.valid == 1);
-	assert(memory_setup.phys_addr_end);
+  assert(memory_setup.valid == 1);
+  assert(memory_setup.phys_addr_end);
 
-	return memory_setup.phys_addr_end;
+  return memory_setup.phys_addr_end;
 }
 
 void e820_init(void)
 {
-	validate_e820h_struct();
-	build_memory_setup();
+  validate_e820h_struct();
+  build_memory_setup();
 }

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_DMAC_H__
-#define	__MCUBE_MCUBE_DMAC_H__
+#ifndef __MCUBE_MCUBE_DMAC_H__
+#define __MCUBE_MCUBE_DMAC_H__
 
 #ifndef __ASSEMBLY__
 
@@ -29,4 +29,4 @@ void do_local_dmac(uint32_t dst,
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_DMAC_H__ */
+#endif /* __MCUBE_MCUBE_DMAC_H__ */

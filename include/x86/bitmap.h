@@ -20,4 +20,4 @@ static __unused void bitmap_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* _BITMAP_H */
+#endif /* _BITMAP_H */

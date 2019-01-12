@@ -11,31 +11,31 @@
  *  the Free Software Foundation, version 2.
  */
 
-#define IDT_GATES	(0xFF + 1)
+#define IDT_GATES  (0xFF + 1)
 #define EXCEPTION_GATES (0x1F + 1)
 
-#define GATE_INTERRUPT	0xe
-#define GATE_TRAP	0xf
+#define GATE_INTERRUPT  0xe
+#define GATE_TRAP  0xf
 
 #ifndef __ASSEMBLY__
 
 struct idt_gate {
-	uint16_t offset_low;
-	uint16_t selector;
-	uint16_t ist: 3,
-		 reserved0: 5,
-		 type: 4,
-		 reserved0_1: 1,
-		 dpl: 2,
-		 p: 1;
-	uint16_t offset_middle;
-	uint32_t offset_high;
-	uint32_t reserved0_2;
+  uint16_t offset_low;
+  uint16_t selector;
+  uint16_t ist: 3,
+     reserved0: 5,
+     type: 4,
+     reserved0_1: 1,
+     dpl: 2,
+     p: 1;
+  uint16_t offset_middle;
+  uint32_t offset_high;
+  uint32_t reserved0_2;
 } __packed;
 
 struct idt_descriptor {
-	uint16_t limit;
-	uint64_t base;
+  uint16_t limit;
+  uint64_t base;
 } __packed;
 
 /*
@@ -61,24 +61,24 @@ extern void default_irq_handler(void);
 
 static inline void pack_idt_gate(struct idt_gate *gate, uint8_t type, void *addr)
 {
-	gate->offset_low = (uintptr_t)addr & 0xffff;
-	gate->selector = KERNEL_CS;
-	gate->ist = 0;
-	gate->reserved0 = 0;
-	gate->type = type;
-	gate->reserved0_1 = 0;
-	gate->dpl = 0;
-	gate->p = 1;
-	gate->offset_middle = ((uintptr_t)addr >> 16) & 0xffff;
-	gate->offset_high = (uintptr_t)addr >> 32;
-	gate->reserved0_2 = 0;
+  gate->offset_low = (uintptr_t)addr & 0xffff;
+  gate->selector = KERNEL_CS;
+  gate->ist = 0;
+  gate->reserved0 = 0;
+  gate->type = type;
+  gate->reserved0_1 = 0;
+  gate->dpl = 0;
+  gate->p = 1;
+  gate->offset_middle = ((uintptr_t)addr >> 16) & 0xffff;
+  gate->offset_high = (uintptr_t)addr >> 32;
+  gate->reserved0_2 = 0;
 }
 
 static inline void write_idt_gate(struct idt_gate *gate, struct idt_gate *idt,
-				  unsigned offset)
+          unsigned offset)
 {
-	assert(offset < IDT_GATES);
-	idt[offset] = *gate;
+  assert(offset < IDT_GATES);
+  idt[offset] = *gate;
 }
 
 /*
@@ -96,41 +96,41 @@ static inline void write_idt_gate(struct idt_gate *gate, struct idt_gate *idt,
 
 static inline void set_intr_gate(unsigned int n, void *addr)
 {
-	struct idt_gate gate;
-	pack_idt_gate(&gate, GATE_INTERRUPT, addr);
-	write_idt_gate(&gate, idt, n);
+  struct idt_gate gate;
+  pack_idt_gate(&gate, GATE_INTERRUPT, addr);
+  write_idt_gate(&gate, idt, n);
 }
 
 static inline void load_idt(const struct idt_descriptor *idt_desc)
 {
-	asm volatile("lidt %0"
-		     :
-		     :"m"(*idt_desc));
+  asm volatile("lidt %0"
+         :
+         :"m"(*idt_desc));
 }
 
 static inline struct idt_descriptor get_idt(void)
 {
-	struct idt_descriptor idt_desc;
+  struct idt_descriptor idt_desc;
 
-	asm volatile("sidt %0"
-		     :"=m"(idt_desc)
-		     :);
+  asm volatile("sidt %0"
+         :"=m"(idt_desc)
+         :);
 
-	return idt_desc;
+  return idt_desc;
 }
 
 static inline void local_irq_disable(void)
 {
-	asm volatile ("cli"
-		      ::
-		      :"cc", "memory");
+  asm volatile ("cli"
+          ::
+          :"cc", "memory");
 }
 
 static inline void local_irq_enable(void)
 {
-	asm volatile ("sti"
-		      ::
-		      :"cc", "memory");
+  asm volatile ("sti"
+          ::
+          :"cc", "memory");
 }
 
 /*
@@ -140,19 +140,19 @@ static inline void local_irq_enable(void)
 
 static inline union x86_rflags local_irq_disable_save(void)
 {
-	union x86_rflags flags;
+  union x86_rflags flags;
 
-	flags = get_rflags();
-	if (flags.irqs_enabled)
-		local_irq_disable();
+  flags = get_rflags();
+  if (flags.irqs_enabled)
+    local_irq_disable();
 
-	return flags;
+  return flags;
 }
 
 static inline void local_irq_restore(union x86_rflags flags)
 {
-	if (flags.irqs_enabled)
-		set_rflags(flags);
+  if (flags.irqs_enabled)
+    set_rflags(flags);
 }
 
 #endif /* !__ASSEMBLY__ */

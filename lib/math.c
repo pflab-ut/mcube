@@ -17,31 +17,31 @@
  */
 double cos(double x)
 {
-	double t;
-	double y;
-	int n;
+  double t;
+  double y;
+  int n;
     
-	y = 1.0;
-	t = 1.0;
-	n = 1;
-	while (1) {
-		/* maclaurin expansion of cos(x) */
-		t = - (t * x * x) / ((2 * n) * (2 * n - 1));
+  y = 1.0;
+  t = 1.0;
+  n = 1;
+  while (1) {
+    /* maclaurin expansion of cos(x) */
+    t = - (t * x * x) / ((2 * n) * (2 * n - 1));
 #if defined(TERM_NUMBER)
-		if (n > TERM_NUMBER) {
-			break;
-		}
+    if (n > TERM_NUMBER) {
+      break;
+    }
 #elif defined(TERM_AMPLITUDE)
-		if (FABS(t) <= TERM_AMPLITUDE) {
-			break;
-		}
+    if (FABS(t) <= TERM_AMPLITUDE) {
+      break;
+    }
 #else
 #error "Unknown Termination Policy"
 #endif /* TERM_NUMBER */
-		y += t;
-		n++;
-	}
-	return y;
+    y += t;
+    n++;
+  }
+  return y;
 }
 
 
@@ -54,31 +54,31 @@ double cos(double x)
  */
 double sin(double x)
 {
-	double t;
-	double y;
-	int n;
+  double t;
+  double y;
+  int n;
     
-	y = x;
-	t = x;
-	n = 1;
-	while (1) {
-		/* maclaurin expansion of sin(x) */
-		t = - (t * x * x) / ((2 * n + 1) * (2 * n));
+  y = x;
+  t = x;
+  n = 1;
+  while (1) {
+    /* maclaurin expansion of sin(x) */
+    t = - (t * x * x) / ((2 * n + 1) * (2 * n));
 #if defined(TERM_NUMBER)
-		if (n > TERM_NUMBER) {
-			break;
-		}
+    if (n > TERM_NUMBER) {
+      break;
+    }
 #elif defined(TERM_AMPLITUDE)
-		if (FABS(t) <= TERM_AMPLITUDE) {
-			break;
-		}
+    if (FABS(t) <= TERM_AMPLITUDE) {
+      break;
+    }
 #else
 #error "Unknown Termination Policy"
 #endif /* TERM_NUMBER */
-		y += t;
-		n++;
-	}
-	return y;
+    y += t;
+    n++;
+  }
+  return y;
 }
 
 /**
@@ -92,29 +92,29 @@ double sin(double x)
  */
 double tan(double x)
 {
-	int k;
-	double t;
-	int i;
-	double x2;
-	
-	/* maclaurin expansion of tan(x) */
-	k = (int)(x / (PI / 2) + (x >= 0 ? 0.5 : -0.5));
-	x = (x - (3217.0 / 2048) * k) + D * k;
-	x2 = x * x;
+  int k;
+  double t;
+  int i;
+  double x2;
+  
+  /* maclaurin expansion of tan(x) */
+  k = (int)(x / (PI / 2) + (x >= 0 ? 0.5 : -0.5));
+  x = (x - (3217.0 / 2048) * k) + D * k;
+  x2 = x * x;
   t = 0;
-	/* cannot use termination by amplitude due to divergent sequence */
-	for (i = MAX_BERNOULLI_ODD_NUMBER; i >= 3; i -= 2) {
-		t = x2 / (i - t);
-	}
-	t = x / (1 - t);
+  /* cannot use termination by amplitude due to divergent sequence */
+  for (i = MAX_BERNOULLI_ODD_NUMBER; i >= 3; i -= 2) {
+    t = x2 / (i - t);
+  }
+  t = x / (1 - t);
 
-	if ((k % 2) == 0) {
-		return t;
-	}
-	if (t != 0) {
+  if ((k % 2) == 0) {
+    return t;
+  }
+  if (t != 0) {
     return -1 / t;
-	}
-	/* overflow */
+  }
+  /* overflow */
   return HUGE_VAL;
 }
 
@@ -131,43 +131,43 @@ double tan(double x)
  */
 double atan(double x)
 {
-	int n, sign;
-	double t;
+  int n, sign;
+  double t;
 
-	if (x > 1) {
-		sign = 1;
-		x = 1 / x;
+  if (x > 1) {
+    sign = 1;
+    x = 1 / x;
   } else if (x < -1) {
-		sign = -1;
-		x = 1 / x;
+    sign = -1;
+    x = 1 / x;
   } else {
-		sign = 0;
-	}
-	t = 0;
-	n = 0;
-	while (1) {
-		t = (n * n * x * x) / (2 * n + 1 + t);
+    sign = 0;
+  }
+  t = 0;
+  n = 0;
+  while (1) {
+    t = (n * n * x * x) / (2 * n + 1 + t);
 #if defined(TERM_NUMBER)
-		if (n > TERM_NUMBER) {
-			break;
-		}
+    if (n > TERM_NUMBER) {
+      break;
+    }
 #elif defined(TERM_AMPLITUDE)
-		if (FABS(t) <= TERM_AMPLITUDE) {
-			break;
-		}
+    if (FABS(t) <= TERM_AMPLITUDE) {
+      break;
+    }
 #else
 #error "Unknown Termination Policy"
 #endif /* TERM_NUMBER */
-		n++;
-	}
+    n++;
+  }
 
-	if (sign > 0) {
-		return PI / 2 - x / (1 + t);
-	}
-	if (sign < 0) {
-		return -PI / 2 - x / (1 + t);
-	}
-	return x / (1 + t);
+  if (sign > 0) {
+    return PI / 2 - x / (1 + t);
+  }
+  if (sign < 0) {
+    return -PI / 2 - x / (1 + t);
+  }
+  return x / (1 + t);
 }
 
 
@@ -175,18 +175,18 @@ double atan(double x)
 
 double remainder(double x, double y)
 {
-	long n = x / y;
-	return x - n * y;
+  long n = x / y;
+  return x - n * y;
 }
 
 
 double copysign(double x, double y)
 {
-	if (y > 0.0) {
-		return FABS(x);
-	} else {
-		return -FABS(x);
-	}
+  if (y > 0.0) {
+    return FABS(x);
+  } else {
+    return -FABS(x);
+  }
 }
 
 
@@ -195,7 +195,7 @@ double copysign(double x, double y)
 /* TODO: work if y is not integer */
 double pow(double x, double y)
 {
-	//	double z = __ieee754_pow(x, y);	
+  //  double z = __ieee754_pow(x, y);  
 #if 1
   double ret = 1.0;
   int i;
@@ -209,54 +209,54 @@ double pow(double x, double y)
 
 double sqrt(double x)
 {
-	double s, last;
+  double s, last;
 
-	if (x > 0.0) {
-		if (x > 1.0) {
-			s = x;
-		} else {
-			s = 1.0;
-		}
-		do {
-			last = s;
-			s = (x / s + s) / 2.0;
-		} while (s < last);
-		return last;
-	}
-	if (x != 0.0) {
-		print("ksqrt: domain error\n");
-	}
-	return 0;
+  if (x > 0.0) {
+    if (x > 1.0) {
+      s = x;
+    } else {
+      s = 1.0;
+    }
+    do {
+      last = s;
+      s = (x / s + s) / 2.0;
+    } while (s < last);
+    return last;
+  }
+  if (x != 0.0) {
+    print("ksqrt: domain error\n");
+  }
+  return 0;
 }
 
 double cbrt(double x)
 {
-	double s, prev;
-	int positive;
+  double s, prev;
+  int positive;
 
-	if (x == 0.0) {
-		return 0.0;
-	}
-	if (x > 0.0) {
-		positive = 1;
-	} else {
-		positive = 0;
-		x = -x;
+  if (x == 0.0) {
+    return 0.0;
   }
-	if (x > 1.0) {
-		s = x;
-	} else {
-		s = 1.0;
-	}
-	do {
-		prev = s;
-		s = (x / (s * s) + 2.0 * s) / 3.0;
-	} while (s < prev);
-	if (positive) {
-		return prev;
-	} else {
-		return -prev;
-	}
+  if (x > 0.0) {
+    positive = 1;
+  } else {
+    positive = 0;
+    x = -x;
+  }
+  if (x > 1.0) {
+    s = x;
+  } else {
+    s = 1.0;
+  }
+  do {
+    prev = s;
+    s = (x / (s * s) + 2.0 * s) / 3.0;
+  } while (s < prev);
+  if (positive) {
+    return prev;
+  } else {
+    return -prev;
+  }
 }
 
 #endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM */

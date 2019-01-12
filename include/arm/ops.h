@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_OPS_H__
-#define	__MCUBE_ARM_OPS_H__
+#ifndef __MCUBE_ARM_OPS_H__
+#define __MCUBE_ARM_OPS_H__
 
 #ifndef __ASSEMBLY__
 
@@ -31,40 +31,40 @@ static inline void pause(void)
 
 static inline void nop(void)
 {
-	asm volatile("nop");
+  asm volatile("nop");
 }
 
 /* instruction synchronization barrier */
 static inline void isb(void)
 {
-	asm volatile("isb");
+  asm volatile("isb");
 }
 
 /* debug */
 static inline void dbg(void)
 {
-	asm volatile("dbg");
+  asm volatile("dbg");
 }
 
 /* data synchronization barrier */
 static inline void dsb(void)
 {
-	asm volatile("dsb");
+  asm volatile("dsb");
 }
 
 /* data memory barrier */
 static inline void dmb(void)
 {
-	asm volatile("dmb");
+  asm volatile("dmb");
 }
 
 static inline void sev(void)
 {
-	asm volatile("sev");
+  asm volatile("sev");
 }
 
 
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_ARM_OPS_H__ */
+#endif /* __MCUBE_ARM_OPS_H__ */

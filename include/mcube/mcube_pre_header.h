@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_MCUBE_PRE_HEADER_H__
-#define	__MCUBE_MCUBE_MCUBE_PRE_HEADER_H__
+#ifndef __MCUBE_MCUBE_MCUBE_PRE_HEADER_H__
+#define __MCUBE_MCUBE_MCUBE_PRE_HEADER_H__
 
 
 /* early include due to dependency */

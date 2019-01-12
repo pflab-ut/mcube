@@ -39,10 +39,10 @@
  *
  * Bucket index '4' represents a buf size of (2 << 4) = 16 bytes.
  */
-#define MINBUCKET_IDX	4		/* 16 bytes */
-#define MAXBUCKET_IDX	12		/* 4096 bytes = 1 page */
-#define MINALLOC_SZ	(1 << MINBUCKET_IDX)
-#define MAXALLOC_SZ	(1 << MAXBUCKET_IDX)
+#define MINBUCKET_IDX  4    /* 16 bytes */
+#define MAXBUCKET_IDX  12    /* 4096 bytes = 1 page */
+#define MINALLOC_SZ  (1 << MINBUCKET_IDX)
+#define MAXALLOC_SZ  (1 << MAXBUCKET_IDX)
 
 /*
  * For sanity checks, we sign buffers as either free or
@@ -50,8 +50,8 @@
  * distinguish those signatures in memory dumps.
  */
 
-#define FREEBUF_SIG	0xcafebabe	/* Hot free babe (buffer) */
-#define ALLOCBUF_SIG	0xdeadbeef	/* Allocated beef (buffer) */
+#define FREEBUF_SIG  0xcafebabe  /* Hot free babe (buffer) */
+#define ALLOCBUF_SIG  0xdeadbeef  /* Allocated beef (buffer) */
 
 #ifndef __ASSEMBLY__
 
@@ -61,17 +61,17 @@
  */
 static inline void sign_buf(void *buf, uint32_t signature)
 {
-	buf = (char *)buf + sizeof(void *);
-	*(uint32_t *)buf = signature;
+  buf = (char *)buf + sizeof(void *);
+  *(uint32_t *)buf = signature;
 }
 
 static inline int is_free_buf(void *buf)
 {
-	buf = (char *)buf + sizeof(void *);
-	if (*(uint32_t *)buf == FREEBUF_SIG)
-		return 1;
+  buf = (char *)buf + sizeof(void *);
+  if (*(uint32_t *)buf == FREEBUF_SIG)
+    return 1;
 
-	return 0;
+  return 0;
 }
 
 void *__kmalloc(int bucket_idx);
@@ -82,7 +82,7 @@ void kmalloc_init(void);
  * Test cases driver
  */
 
-#if	KMALLOC_TESTS
+#if KMALLOC_TESTS
 
 void kmalloc_run_tests(void);
 

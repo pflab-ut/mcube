@@ -33,7 +33,7 @@ typedef unsigned long uint64_t;
 /*
  * Integral types large enough to hold any pointer
  */
-typedef signed long int	intptr_t;
+typedef signed long int  intptr_t;
 typedef unsigned long int uintptr_t;
 
 typedef uint64_t size_t;
@@ -43,18 +43,18 @@ typedef uint64_t size_t;
  * MAXs and MINs
  */
 
-#define INT8_MAX	(0x7f)
-#define INT16_MAX	(0x7fff)
-#define INT32_MAX	(0x7fffffff)
-#define INT64_MAX	(0x7fffffffffffffffL)
+#define INT8_MAX  (0x7f)
+#define INT16_MAX  (0x7fff)
+#define INT32_MAX  (0x7fffffff)
+#define INT64_MAX  (0x7fffffffffffffffL)
 
-#define UINT8_MAX	(0xff)
-#define UINT16_MAX	(0xffff)
-#define UINT32_MAX	(0xffffffff)
-#define UINT64_MAX	(0xffffffffffffffffUL)
+#define UINT8_MAX  (0xff)
+#define UINT16_MAX  (0xffff)
+#define UINT32_MAX  (0xffffffff)
+#define UINT64_MAX  (0xffffffffffffffffUL)
 
 /* MAX value of given unsigned variable type */
-#define UTYPE_MAXVAL(x)	((typeof(x))UINT64_MAX)
+#define UTYPE_MAXVAL(x) ((typeof(x))UINT64_MAX)
 
 #endif /* !__ASSEMBLY__ */
 

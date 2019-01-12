@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_STRING_H__
-#define	__MCUBE_MCUBE_STRING_H__
+#ifndef __MCUBE_MCUBE_STRING_H__
+#define __MCUBE_MCUBE_STRING_H__
 
 #ifndef __ASSEMBLY__
 
@@ -37,4 +37,4 @@ char *strtok(char *str, const char *delim);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_STRING_H__ */
+#endif /* __MCUBE_MCUBE_STRING_H__ */

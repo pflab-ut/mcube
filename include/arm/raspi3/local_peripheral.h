@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_LOCAL_PERIPHERAL_H__
-#define	__MCUBE_ARM_RASPI3_LOCAL_PERIPHERAL_H__
+#ifndef __MCUBE_ARM_RASPI3_LOCAL_PERIPHERAL_H__
+#define __MCUBE_ARM_RASPI3_LOCAL_PERIPHERAL_H__
 
 
 #define LP_CTRL_REG (LOCAL_PERIPHERAL_BASE + 0x0)
@@ -377,5 +377,5 @@ void register_mailbox_callback_handler(callback_t func);
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /*	__MCUBE_ARM_RASPI3_LOCAL_PERIPHERAL_H__ */
+#endif /* __MCUBE_ARM_RASPI3_LOCAL_PERIPHERAL_H__ */
 

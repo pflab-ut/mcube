@@ -57,7 +57,7 @@ void init_arch(void)
   //  asm volatile("int 0x12");
   //  asm volatile("int 0x32");
   //  kshell();
-  //	init_cache();
+  //  init_cache();
   printk("init_end()\n");
 #if 1
   for (;;) {

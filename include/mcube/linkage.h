@@ -10,13 +10,13 @@
 
 #define SYMBOL_NAME_LABEL(name) name##:
 
-#define ENTRY(name)					\
-  .globl name;                \
-	SYMBOL_NAME_LABEL(name)
+#define ENTRY(name)                             \
+  .globl name;                                  \
+  SYMBOL_NAME_LABEL(name)
 
 
-#define END(name)																\
-	.size name, .-name
+#define END(name)                               \
+  .size name, .-name
 
 
 #define ASM_SIZE_DIRECTIVE(name) .size name,.-name;

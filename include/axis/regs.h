@@ -20,7 +20,7 @@
  */
 struct gpr_regs {
   /** General purpose registers in AXIS. */
-	uint32_t regs[NR_GENERAL_PURPOSE_REGS];
+  uint32_t regs[NR_GENERAL_PURPOSE_REGS];
 };
 
 typedef struct context_regs context_regs;
@@ -34,7 +34,7 @@ typedef struct context_regs context_regs;
  */
 struct special_regs {
   /** Special registers in AXIS. */
-	uint32_t regs[NR_SPECIAL_REGS];
+  uint32_t regs[NR_SPECIAL_REGS];
 };
 
 typedef struct special_regs special_regs;
@@ -51,7 +51,7 @@ typedef struct special_regs special_regs;
  */
 struct system_regs {
   /** Special registers of each core in AXIS. */
-	uint32_t regs[NR_CPUS][NR_SYSTEM_REGS];
+  uint32_t regs[NR_CPUS][NR_SYSTEM_REGS];
   /** Common special registers. */
   uint32_t common_regs[NR_COMMON_SYSTEM_REGS];
 };
@@ -64,8 +64,8 @@ typedef struct special_regs special_regs;
  * @brief Full register
  */
 struct full_regs {
-	/** General purpose registers in AXIS. */
-	struct gpr_regs gpr_regs;
+  /** General purpose registers in AXIS. */
+  struct gpr_regs gpr_regs;
   /** Special registers in AXIS. */
   struct special_regs spe_regs;
   /** System registers in AXIS. */

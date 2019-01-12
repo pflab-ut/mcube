@@ -18,23 +18,23 @@
  *     -----------------------       -----------------------
  *    |       Checksum        |     |       Checksum        |
  *     -----------------------       -----------------------
- *    |     Err Code (0)      |     |    Err Code ( > 0)    |	Error code
+ *    |     Err Code (0)      |     |    Err Code ( > 0)    |  Error code
  *     -----------------------       -----------------------
  *    |       E820_END        |     |       E820_END        |   Entries-end flag
  *     -----------------------       -----------------------
  *    |        ......         |     |        ......         |
- *    |      E820 Entry       |     |      E820 Entry       |	Entry N
+ *    |      E820 Entry       |     |      E820 Entry       |  Entry N
  *     -----------------------       -----------------------
- *    |    E820 Entry Size    |     |    E820 Entry Size    |	Entry N size
+ *    |    E820 Entry Size    |     |    E820 Entry Size    |  Entry N size
  *     -----------------------       -----------------------
- *              ....                          ....		Var # of entries
+ *              ....                          ....    Var # of entries
  *     -----------------------       -----------------------
  *    |        ......         |     |        ......         |
  *    |      E820 Entry       |     |      E820 Entry       |   Entry 1
  *     -----------------------       -----------------------
- *    |    E820 Entry Size    |     |    E820 Entry Size    |	Entry 1 size
+ *    |    E820 Entry Size    |     |    E820 Entry Size    |  Entry 1 size
  *     -----------------------       -----------------------
- *    | 'C' | 'U' | 'T' | 'E' |     | 'C' | 'U' | 'T' | 'E' |	Start signature
+ *    | 'C' | 'U' | 'T' | 'E' |     | 'C' | 'U' | 'T' | 'E' |  Start signature
  *     -----------------------       -----------------------
  *                            ^                             ^
  *        E820_BASE ----------|         E820_BASE ----------|
@@ -58,29 +58,29 @@
 
 /* E820H struct base address. Should in the first 64K
  * [0, 0xffff] range to ease real-mode access */
-#define E820_PHYS_BASE	0x1000
+#define E820_PHYS_BASE  0x1000
 
 /* The struct shouldn't exceed a 4K page (arbitary) */
-#define E820_PHYS_MAX	(E820_PHYS_BASE + 0x1000)
+#define E820_PHYS_MAX  (E820_PHYS_BASE + 0x1000)
 
 /* Struct start signature */
-#define E820_INIT_SIG	('C'<<(3*8) | 'U'<<(2*8) | 'T'<<(1*8) | 'E')
+#define E820_INIT_SIG  ('C'<<(3*8) | 'U'<<(2*8) | 'T'<<(1*8) | 'E')
 
 /* E820H-struct-is-validated signature */
-#define E820_VALID_SIG	('V'<<(3*8) | 'A'<<(2*8) | 'L'<<(1*8) | 'D')
+#define E820_VALID_SIG  ('V'<<(3*8) | 'A'<<(2*8) | 'L'<<(1*8) | 'D')
 
 /* ACPI-defined 'E820h supported' BIOS signature */
-#define E820_BIOS_SIG	('S'<<(3*8) | 'M'<<(2*8) | 'A'<<(1*8) | 'P')
+#define E820_BIOS_SIG  ('S'<<(3*8) | 'M'<<(2*8) | 'A'<<(1*8) | 'P')
 
-#define E820_END	0xffffffff	/* E820 list end mark */
+#define E820_END  0xffffffff  /* E820 list end mark */
 
 /* Error codes by e820.S */
-#define E820_SUCCESS	0x0		/* No errors; e820 entries validated */
-#define E820_NOT_SUPP	0x1		/* Bios doesn't support E820H srvice */
-#define E820_BUF_FULL	0x2		/* Returned data passed size limit */
-#define E820_ERROR	0x3		/* General e820 error (carry set) */
-#define E820_BIOS_BUG	0x4		/* Buggy bios - violating ACPI */
-#define E820_HUGE_ENTRY 0x5		/* Entry size > limit */
+#define E820_SUCCESS  0x0    /* No errors; e820 entries validated */
+#define E820_NOT_SUPP  0x1    /* Bios doesn't support E820H srvice */
+#define E820_BUF_FULL  0x2    /* Returned data passed size limit */
+#define E820_ERROR  0x3    /* General e820 error (carry set) */
+#define E820_BIOS_BUG  0x4    /* Buggy bios - violating ACPI */
+#define E820_HUGE_ENTRY 0x5    /* Entry size > limit */
 
 #ifndef __ASSEMBLY__
 
@@ -88,50 +88,50 @@
 /*
  * C code shouldn't be concerned with phys addresses
  */
-#define E820_BASE	VIRTUAL(E820_PHYS_BASE)
-#define E820_MAX	VIRTUAL(E820_PHYS_MAX)
+#define E820_BASE  VIRTUAL(E820_PHYS_BASE)
+#define E820_MAX  VIRTUAL(E820_PHYS_MAX)
 
 /*
  * E820h struct error to string map
  */
-static const char *e820_errors[] = {
-	[E820_SUCCESS]    = "success",
-	[E820_NOT_SUPP]   = "no BIOS support",
-	[E820_BUF_FULL]   = "custom buffer full",
-	[E820_ERROR]      = "general error (carry set)",
-	[E820_BIOS_BUG]   = "BIOS bug, violating ACPI",
-	[E820_HUGE_ENTRY] = "huge returned e820 entry",
-};
+  static const char *e820_errors[] = {
+    [E820_SUCCESS]    = "success",
+    [E820_NOT_SUPP]   = "no BIOS support",
+    [E820_BUF_FULL]   = "custom buffer full",
+    [E820_ERROR]      = "general error (carry set)",
+    [E820_BIOS_BUG]   = "BIOS bug, violating ACPI",
+    [E820_HUGE_ENTRY] = "huge returned e820 entry",
+  };
 
 static inline const char *e820_errstr(uint32_t error)
 {
-	if (error > E820_HUGE_ENTRY)
-		return "unknown e820.S-reported error";
+  if (error > E820_HUGE_ENTRY)
+    return "unknown e820.S-reported error";
 
-	assert(error < ARRAY_SIZE(e820_errors));
+  assert(error < ARRAY_SIZE(e820_errors));
 
-	return e820_errors[error];
+  return e820_errors[error];
 }
 
 /*
  * ACPI Address Range Descriptor
  */
 struct e820_range {
-	uint64_t base;			/* Range base address */
-	uint64_t len;			/* Range length */
-	uint32_t type;			/* ACPI-defined range type */
+  uint64_t base;      /* Range base address */
+  uint64_t len;      /* Range length */
+  uint32_t type;      /* ACPI-defined range type */
 } __packed;
 
 /*
  * ACPI memory range types
  */
 enum {
-	E820_AVAIL	= 0x1,		/* Available for use by the OS */
-	E820_RESERVED	= 0x2,		/* Do not use */
-	E820_ACPI_TBL	= 0x3,		/* ACPI Reclaim Memory */
-	E820_ACPI_NVS	= 0x4,		/* ACPI NVS Memory */
-	E820_ERRORMEM	= 0x5,		/* BIOS detected errors at this range */
-	E820_DISABLED	= 0x6,		/* Not BIOS chipset-enabled memory */
+  E820_AVAIL  = 0x1,    /* Available for use by the OS */
+  E820_RESERVED  = 0x2,    /* Do not use */
+  E820_ACPI_TBL  = 0x3,    /* ACPI Reclaim Memory */
+  E820_ACPI_NVS  = 0x4,    /* ACPI NVS Memory */
+  E820_ERRORMEM  = 0x5,    /* BIOS detected errors at this range */
+  E820_DISABLED  = 0x6,    /* Not BIOS chipset-enabled memory */
 };
 
 /**
@@ -143,28 +143,28 @@ enum {
  *
  * Prerequisite: E820h-struct previously validated
  */
-#define e820_for_each(range)						\
-	for (uint32_t *entry = (uint32_t *)E820_BASE + 1,		\
-		     entry_len = *entry++,				\
-		     __unused *_____b = (uint32_t *)			\
-		             ({range  = (struct e820_range *)entry;});	\
-									\
-	     *(entry - 1) != E820_END;					\
-									\
-	     entry = (uint32_t *)((char *)entry + entry_len),		\
-		     entry_len = *entry++,				\
-		     range = (struct e820_range *)entry)
+#define e820_for_each(range)                            \
+  for (uint32_t *entry = (uint32_t *)E820_BASE + 1,     \
+         entry_len = *entry++,                          \
+         __unused *_____b = (uint32_t *)                \
+         ({range  = (struct e820_range *)entry;});      \
+                                                        \
+       *(entry - 1) != E820_END;                        \
+                                                        \
+       entry = (uint32_t *)((char *)entry + entry_len), \
+         entry_len = *entry++,                          \
+         range = (struct e820_range *)entry)
 
 /*
  * ACPI memory type -> string.
  */
 static const char *e820_types[] = {
-	[E820_AVAIL]    = "available",
-	[E820_RESERVED] = "reserved",
-	[E820_ACPI_TBL] = "acpi tables",
-	[E820_ACPI_NVS] = "acpi nvs",
-	[E820_ERRORMEM] = "erroneous",
-	[E820_DISABLED] = "disabled",
+  [E820_AVAIL]    = "available",
+  [E820_RESERVED] = "reserved",
+  [E820_ACPI_TBL] = "acpi tables",
+  [E820_ACPI_NVS] = "acpi nvs",
+  [E820_ERRORMEM] = "erroneous",
+  [E820_DISABLED] = "disabled",
 };
 
 /*
@@ -172,14 +172,14 @@ static const char *e820_types[] = {
  */
 static inline const char *e820_typestr(uint32_t type)
 {
-	if (type < E820_AVAIL || type > E820_DISABLED)
-		return "unknown type - reserved";
+  if (type < E820_AVAIL || type > E820_DISABLED)
+    return "unknown type - reserved";
 
-	/* Don't put this on top of above return; we
-	 * can have unknown values from future BIOSes */
-	assert(type < ARRAY_SIZE(e820_types));
+  /* Don't put this on top of above return; we
+   * can have unknown values from future BIOSes */
+  assert(type < ARRAY_SIZE(e820_types));
 
-	return e820_types[type];
+  return e820_types[type];
 }
 
 /*
@@ -187,10 +187,10 @@ static inline const char *e820_typestr(uint32_t type)
  */
 
 struct e820_setup {
-	int valid;			/* true if struct is initialized */
-	uint64_t avail_pages;		/* # of e820-available pages */
-	uint64_t avail_ranges;		/* # of bios e820 ranges */
-	uint64_t phys_addr_end;		/* max addressable/avail phys addr + 1 */
+  int valid;      /* true if struct is initialized */
+  uint64_t avail_pages;    /* # of e820-available pages */
+  uint64_t avail_ranges;    /* # of bios e820 ranges */
+  uint64_t phys_addr_end;   /* max addressable/avail phys addr + 1 */
 };
 
 struct e820_setup *e820_get_memory_setup(void);

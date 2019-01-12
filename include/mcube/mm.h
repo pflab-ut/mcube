@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_MM_H__
-#define	__MCUBE_MCUBE_MM_H__
+#ifndef __MCUBE_MCUBE_MM_H__
+#define __MCUBE_MCUBE_MM_H__
 
 
 /* 4KB */
@@ -14,7 +14,7 @@
 /* 2MB */
 #define SECTION_SIZE 0x200000
 
-#ifndef	__ASSEMBLY__
+#ifndef __ASSEMBLY__
 
 #define PAGE_ALIGNMENT __attribute__((aligned(PAGE_SIZE)))
 
@@ -37,4 +37,4 @@ void *memzero(void *dst, size_t num);
 #define PAGING_PAGES            (PAGING_MEMORY / PAGE_SIZE)
 
 
-#endif	/* __MCUBE_MCUBE_MM_H__ */
+#endif /* __MCUBE_MCUBE_MM_H__ */

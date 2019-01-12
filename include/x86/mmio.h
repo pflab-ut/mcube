@@ -42,45 +42,45 @@
 
 #ifndef __ASSEMBLY__
 
-#define __read__(type, addr) ({					\
-	type val;						\
-	asm volatile ("mov %[addr], %[val];"			\
-		      : [val] "=r"(val)				\
-		      : [addr] "m"(*(const volatile type *)addr)\
-		      : "memory");				\
-	val;							\
+#define __read__(type, addr) ({          \
+  type val;            \
+  asm volatile ("mov %[addr], %[val];"      \
+          : [val] "=r"(val)        \
+          : [addr] "m"(*(const volatile type *)addr)\
+          : "memory");        \
+  val;              \
 })
 static inline uint8_t  readb(const volatile void *addr) {
-	return __read__(uint8_t,  addr);
+  return __read__(uint8_t,  addr);
 }
 static inline uint16_t readw(const volatile void *addr) {
-	return __read__(uint16_t, addr);
+  return __read__(uint16_t, addr);
 }
 static inline uint32_t readl(const volatile void *addr) {
-	return __read__(uint32_t, addr);
+  return __read__(uint32_t, addr);
 }
 static inline uint64_t readq(const volatile void *addr) {
-	return __read__(uint64_t, addr);
+  return __read__(uint64_t, addr);
 }
 #undef __read__
 
-#define __write__(type, val, addr) ({				\
-	asm volatile ("mov %[val], %[addr];"			\
-		      : [addr] "=m"(*(volatile type *)addr)	\
-		      : [val] "r"(val)				\
-		      : "memory");				\
+#define __write__(type, val, addr) ({        \
+  asm volatile ("mov %[val], %[addr];"      \
+          : [addr] "=m"(*(volatile type *)addr)  \
+          : [val] "r"(val)        \
+          : "memory");        \
 })
 static inline void writeb(uint8_t val, volatile void *addr) {
 return __write__(uint8_t, val, addr);
 }
 static inline void writew(uint16_t val, volatile void *addr) {
-	return __write__(uint16_t, val, addr);
+  return __write__(uint16_t, val, addr);
 }
 static inline void writel(uint32_t val, volatile void *addr) {
-	return __write__(uint32_t, val, addr);
+  return __write__(uint32_t, val, addr);
 }
 static inline void writeq(uint64_t val, volatile void *addr) {
-	return __write__(uint64_t, val, addr);
+  return __write__(uint64_t, val, addr);
 }
 #undef __write__
 

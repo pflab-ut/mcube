@@ -3,14 +3,13 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_X86_X86_HEADER_H__
-#define	__MCUBE_X86_X86_HEADER_H__
+#ifndef __MCUBE_X86_X86_HEADER_H__
+#define __MCUBE_X86_X86_HEADER_H__
 
 #include <x86/mmio.h>
 #include <x86/msr.h>
 #include <x86/paging.h>
 #include <x86/x86.h>
-#include <x86/sched.h>
 #include <x86/segment.h>
 #include <x86/idt.h>
 #include <x86/atomic.h>
@@ -97,4 +96,4 @@ static inline unsigned long get_cpu_id(void)
 #endif
 
 
-#endif	/* __MCUBE_X86_X86_HEADER_H__ */
+#endif /* __MCUBE_X86_X86_HEADER_H__ */

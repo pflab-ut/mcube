@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_THREAD_H__
-#define	__MCUBE_ARM_THREAD_H__
+#ifndef __MCUBE_ARM_THREAD_H__
+#define __MCUBE_ARM_THREAD_H__
 
 #ifndef __ASSEMBLY__
 
@@ -33,4 +33,4 @@ struct cpu_context {
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_ARM_THREAD_H__ */
+#endif /* __MCUBE_ARM_THREAD_H__ */

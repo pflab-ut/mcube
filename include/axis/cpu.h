@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_AXIS_CPU_H__
-#define	__MCUBE_AXIS_CPU_H__
+#ifndef __MCUBE_AXIS_CPU_H__
+#define __MCUBE_AXIS_CPU_H__
 
 #define USER_LEVEL 0 // compatibility for other architectures
 #define KERNEL_LEVEL 1

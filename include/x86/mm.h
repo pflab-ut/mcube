@@ -60,36 +60,36 @@
  * bits: it's essential to save space in that struct.
  */
 enum zone_id {
-	/* Allocate pages from the first GByte
-	 *
-	 * At early boot, where permanent kernel page tables
-	 * are not yet ready, PAGE_OFFSET-based addresses are
-	 * only set-up for the first physical GB by head.S
-	 *
-	 * At that state, the subset of virtual adddresses
-	 * representing phys regions > 1-GB are unmapped. If
-	 * the system has > 1-GB RAM, the page allocator will
-	 * then return some unmapped virt addresses, leading
-	 * to #PFs at early boot - Zones_1GB raison d'être.
-	 *
-	 * IMP: Before and while building kernel's permanent
-	 * page tables at vm_init(), _only_ use this zone! */
-	ZONE_1GB = 0,
+  /* Allocate pages from the first GByte
+   *
+   * At early boot, where permanent kernel page tables
+   * are not yet ready, PAGE_OFFSET-based addresses are
+   * only set-up for the first physical GB by head.S
+   *
+   * At that state, the subset of virtual adddresses
+   * representing phys regions > 1-GB are unmapped. If
+   * the system has > 1-GB RAM, the page allocator will
+   * then return some unmapped virt addresses, leading
+   * to #PFs at early boot - Zones_1GB raison d'être.
+   *
+   * IMP: Before and while building kernel's permanent
+   * page tables at vm_init(), _only_ use this zone! */
+  ZONE_1GB = 0,
 
-	/* Allocate pages from any zone
-	 *
-	 * Beside acting as a flag, this zone also represents
-	 * all pages in the system with no special semantics
-	 * to us. Thus, always make it the least-priority one.
-	 *
-	 * If we requested a page from this zone, the page
-	 * allocator will get free pages from the least prio-
-	 * rity zone first, reserving precious memory areas
-	 * as far as possible */
-	ZONE_ANY = 1,
+  /* Allocate pages from any zone
+   *
+   * Beside acting as a flag, this zone also represents
+   * all pages in the system with no special semantics
+   * to us. Thus, always make it the least-priority one.
+   *
+   * If we requested a page from this zone, the page
+   * allocator will get free pages from the least prio-
+   * rity zone first, reserving precious memory areas
+   * as far as possible */
+  ZONE_ANY = 1,
 
-	/* Undefined; the `NULL' zone! */
-	ZONE_UNASSIGNED = 2,
+  /* Undefined; the `NULL' zone! */
+  ZONE_UNASSIGNED = 2,
 };
 
 /*
@@ -103,25 +103,25 @@ enum zone_id {
  * erved memory area like the legacy ISA and PCI holes.
  */
 struct page {
-	uint64_t pfn:(64 - PAGE_SHIFT),	/* Phys addr = pfn << PAGE_SHIFT */
-		free:1,			/* Not allocated? */
-		in_bucket:1,		/* Used by the bucket-allocator? */
-		zone_id:2;		/* The zone we're assigned to */
+  uint64_t pfn:(64 - PAGE_SHIFT),  /* Phys addr = pfn << PAGE_SHIFT */
+    free:1,      /* Not allocated? */
+    in_bucket:1,    /* Used by the bucket-allocator? */
+    zone_id:2;    /* The zone we're assigned to */
 
-	union {
-		struct page *next;	/* If in pfdfree_head, next free page */
-		uint8_t bucket_idx;	/* If allocated for the bucket allocator,
-					   bucket index in the kmembuckets table */
-	};
+  union {
+    struct page *next;  /* If in pfdfree_head, next free page */
+    uint8_t bucket_idx;  /* If allocated for the bucket allocator,
+             bucket index in the kmembuckets table */
+  };
 };
 
 static inline void page_init(struct page *page, uintptr_t phys_addr)
 {
-	page->pfn = phys_addr >> PAGE_SHIFT;
-	page->free = 1;
-	page->in_bucket = 0;
-	page->zone_id = ZONE_UNASSIGNED;
-	page->next = NULL;
+  page->pfn = phys_addr >> PAGE_SHIFT;
+  page->free = 1;
+  page->in_bucket = 0;
+  page->zone_id = ZONE_UNASSIGNED;
+  page->next = NULL;
 }
 
 /*
@@ -133,7 +133,7 @@ static inline void page_init(struct page *page, uintptr_t phys_addr)
  */
 static inline void *page_address(struct page *page)
 {
-	return VIRTUAL((uintptr_t)page->pfn << PAGE_SHIFT);
+  return VIRTUAL((uintptr_t)page->pfn << PAGE_SHIFT);
 }
 
 /*
@@ -148,12 +148,12 @@ static inline void *page_address(struct page *page)
  */
 static inline uintptr_t page_phys_addr(struct page *page)
 {
-	return (uintptr_t)page->pfn << PAGE_SHIFT;
+  return (uintptr_t)page->pfn << PAGE_SHIFT;
 }
 
 static inline int page_is_free(struct page *page)
 {
-	return page->free;
+  return page->free;
 }
 
 /*
@@ -172,7 +172,7 @@ void pagealloc_init(void);
  * Test cases driver
  */
 
-#if	PAGEALLOC_TESTS
+#if PAGEALLOC_TESTS
 
 void pagealloc_run_tests(void);
 

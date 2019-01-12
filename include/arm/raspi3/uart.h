@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_UART_H__
-#define	__MCUBE_ARM_RASPI3_UART_H__
+#ifndef __MCUBE_ARM_RASPI3_UART_H__
+#define __MCUBE_ARM_RASPI3_UART_H__
 
 #define PL011_UART 1
 #define MINI_UART 1
@@ -337,5 +337,5 @@ static inline uint16_t calculate_mini_uart_baudrate_counter(void)
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /*	__MCUBE_ARM_RASPI3_UART_H__ */
+#endif /* __MCUBE_ARM_RASPI3_UART_H__ */
 

@@ -115,11 +115,11 @@ void wait_until_loop_completion(void)
 void do_sequential(void)
 {
   int i;
-	unsigned long cpu_id;
+  unsigned long cpu_id;
   unsigned long begin, end;
   print("do_sequential()\n");
   cpu_id = get_cluster_and_cpu_ids();
-	set_cpu_id(&own, cpu_id);
+  set_cpu_id(&own, cpu_id);
   //  print("own.x = %d own.y = %d\n", own.x, own.y);
   if (own.x == 0 && own.y == 0) {
     init_array();
@@ -136,8 +136,8 @@ void do_sequential(void)
 
 void do_callback(volatile int index)
 {
-	volatile unsigned long high_addr;
-	volatile unsigned long low_addr;
+  volatile unsigned long high_addr;
+  volatile unsigned long low_addr;
   volatile int i, j;
   
 #if defined(PUSH_TO_SLAVE_CLUSTERS)
@@ -215,12 +215,12 @@ int is_cluster_active(struct cluster *c)
 
 void do_parallel(void)
 {
-	unsigned long cpu_id;
+  unsigned long cpu_id;
   int i;
   unsigned long begin, end;
   cpu_id = get_cluster_and_cpu_ids();
   //  print("cpu_id = 0x%x\n", cpu_id);
-	set_cpu_id(&own, cpu_id);
+  set_cpu_id(&own, cpu_id);
   //  print("own.x = %d own.y = %d\n", own.x, own.y);
   if (own.x == 0 && own.y == 0) {
     print("begin\n");

@@ -20,11 +20,11 @@ int putchar(int c)
 
 int puts(const char *s)
 {
-	int i;
-	int len = strlen(s);
-	for (i = 0; i < len; i++) {
-		putchar(s[i]);
-	}
+  int i;
+  int len = strlen(s);
+  for (i = 0; i < len; i++) {
+    putchar(s[i]);
+  }
   return 0;
 }
 

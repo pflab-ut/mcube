@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_X86_UART_H__
-#define	__MCUBE_X86_UART_H__
+#ifndef __MCUBE_X86_UART_H__
+#define __MCUBE_X86_UART_H__
 
 
 /* interrupt enable */
@@ -76,7 +76,7 @@
 /* 1.8432MHz */
 #define UART_CLK 1843200
 
-#define	STDIO_PORT 0
+#define  STDIO_PORT 0
 #define NR_UART_PORTS 2
 
 #define COM1_START 0x03f8
@@ -123,4 +123,4 @@ extern struct uart_devdata uart_data[NR_UART_PORTS];
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_X86_UART_H__ */
+#endif /* __MCUBE_X86_UART_H__ */

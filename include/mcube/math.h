@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_MATH_H__
-#define	__MCUBE_MCUBE_MATH_H__
+#ifndef __MCUBE_MCUBE_MATH_H__
+#define __MCUBE_MCUBE_MATH_H__
 
 #ifndef __ASSEMBLY__
 
@@ -15,13 +15,13 @@
  * @return Ceiling of @c size/unit.
  */
 #define CEIL(size, unit) (((int32_t) (size) * (int32_t) (unit) < 0) \
-													|| ((int32_t) (size) % (int32_t) (unit)) == 0 ? \
-													(size) / (unit) : (size) / (unit) + 1)
+                          || ((int32_t) (size) % (int32_t) (unit)) == 0 ? \
+                          (size) / (unit) : (size) / (unit) + 1)
 /**
  * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
  * @return Floor of @c size/unit.
  */
-#define	FLOOR(size, unit)	((size) / (unit))
+#define  FLOOR(size, unit)  ((size) / (unit))
 
 #else
 /**
@@ -29,15 +29,15 @@
  * @return Ceiling of @c size/unit.
  */
 #define CEIL(size, unit) (((int64_t) (size) * (int64_t) (unit) < 0) \
-													|| ((int64_t) (size) % (int64_t) (unit)) == 0 ? \
-													(size) / (unit) : (size) / (unit) + 1)
+                          || ((int64_t) (size) % (int64_t) (unit)) == 0 ? \
+                          (size) / (unit) : (size) / (unit) + 1)
 /**
  * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
  * @return Floor of @c size/unit.
  */
-#define	FLOOR(size, unit)	((size) / (unit) > 0 ? (size) / (unit) :		\
-													 (int64_t) (size) / (unit) > (double) (size) / (unit) ?	\
-													 (size) / (unit) - 1 : (size) / (unit))
+#define  FLOOR(size, unit)  ((size) / (unit) > 0 ? (size) / (unit) :    \
+                           (int64_t) (size) / (unit) > (double) (size) / (unit) ?  \
+                           (size) / (unit) - 1 : (size) / (unit))
 #endif /* CONFIG_ARCH_AXIS */
 
 
@@ -99,4 +99,4 @@ long lpow(long x, long y);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_MATH_H__ */
+#endif /* __MCUBE_MCUBE_MATH_H__ */

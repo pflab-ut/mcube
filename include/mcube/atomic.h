@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_ATOMIC_H__
-#define	__MCUBE_MCUBE_ATOMIC_H__
+#ifndef __MCUBE_MCUBE_ATOMIC_H__
+#define __MCUBE_MCUBE_ATOMIC_H__
 
 #ifndef __ASSEMBLY__
 
@@ -21,11 +21,11 @@ typedef int atomic_int;
  * @brief Atomic variable
  */
 typedef struct atomic {
-	/** Counter. */
+  /** Counter. */
   int counter;
 } atomic_t;
 
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_ATOMIC_H__ */
+#endif /* __MCUBE_MCUBE_ATOMIC_H__ */

@@ -10,25 +10,25 @@
 /* for global scheduling and synchronization */
 void enqueue_rq_queue_head(struct mcube_runqueue *rq, struct thread_struct *th)
 {
-	/* enqueue the head of mcube_runqueue */
-	//	PDEBUG("th->priority = %llu\n", th->priority);
-	set_bit(rq->bitmap, th->priority);
-	rq->array[th->priority].next->prev = th;
-	th->next = rq->array[th->priority].next;
-	th->prev = &rq->array[th->priority];
-	rq->array[th->priority].next = th;
+  /* enqueue the head of mcube_runqueue */
+  //  PDEBUG("th->priority = %llu\n", th->priority);
+  set_bit(rq->bitmap, th->priority);
+  rq->array[th->priority].next->prev = th;
+  th->next = rq->array[th->priority].next;
+  th->prev = &rq->array[th->priority];
+  rq->array[th->priority].next = th;
 }
 
 
 void enqueue_rq_queue(struct mcube_runqueue *rq, struct thread_struct *th)
 {
-	//	PDEBUG("th = 0x%x th->priority = %llu\n", th, th->priority);
-	//	PDEBUG("rq->array[%llu].prev = %x\n", th->priority, rq->array[th->priority].prev);
-	set_bit(rq->bitmap, th->priority);
-	rq->array[th->priority].prev->next = th;
-	th->prev = rq->array[th->priority].prev;
-	th->next = &rq->array[th->priority];
-	rq->array[th->priority].prev = th;
+  //  PDEBUG("th = 0x%x th->priority = %llu\n", th, th->priority);
+  //  PDEBUG("rq->array[%llu].prev = %x\n", th->priority, rq->array[th->priority].prev);
+  set_bit(rq->bitmap, th->priority);
+  rq->array[th->priority].prev->next = th;
+  th->prev = rq->array[th->priority].prev;
+  th->next = &rq->array[th->priority];
+  rq->array[th->priority].prev = th;
 }
 
 
@@ -43,7 +43,7 @@ void dequeue_rq_queue(struct mcube_runqueue *rq, struct thread_struct *th)
   }
 
   th->next->prev = th->prev;
-	if (rq->array[th->priority].next == &rq->array[th->priority]) {
+  if (rq->array[th->priority].next == &rq->array[th->priority]) {
     clear_bit(rq->bitmap, th->priority);
   }
 }
@@ -51,21 +51,21 @@ void dequeue_rq_queue(struct mcube_runqueue *rq, struct thread_struct *th)
 struct thread_struct *pick_next_task(void)
 {
   unsigned long cpu = get_cpu_id();
-	struct thread_struct *th = NULL;
+  struct thread_struct *th = NULL;
   bindex[cpu] = find_first_bit(run_tq[cpu].bitmap, NR_PRIORITY_BITMAPS);
-	//	PDEBUG("bindex[%d] = %d\n", cpu, bindex);
-	if (bindex[cpu] != NR_PRIORITIES) {
+  //  PDEBUG("bindex[%d] = %d\n", cpu, bindex);
+  if (bindex[cpu] != NR_PRIORITIES) {
     th = run_tq[cpu].array[bindex[cpu]].next;
-		//		th->state = RUNNING;
+    //    th->state = RUNNING;
   }
-	return th;
+  return th;
 }
 
 
 
 void init_rq(void)
 {
-	int i, j;
+  int i, j;
   for (i = 0; i < NR_CPUS; i++) {
     run_tq[i].util = 0;
     run_tq[i].nr_threads = 0;

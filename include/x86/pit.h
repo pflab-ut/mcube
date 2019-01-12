@@ -11,7 +11,7 @@ void pit_monotonic(int ms);
  * Test cases
  */
 
-#if	PIT_TESTS
+#if PIT_TESTS
 
 void pit_run_tests(void);
 
@@ -19,7 +19,7 @@ void pit_run_tests(void);
 
 static void __unused pit_run_tests(void) { }
 
-#endif	/* PIT_TESTS */
+#endif /* PIT_TESTS */
 
 #endif /* !__ASSEMBLY__ */
 

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_ARM_HEADER_H__
-#define	__MCUBE_ARM_ARM_HEADER_H__
+#ifndef __MCUBE_ARM_ARM_HEADER_H__
+#define __MCUBE_ARM_ARM_HEADER_H__
 
 #include <arm/machine.h>
 #include <arm/cpu.h>

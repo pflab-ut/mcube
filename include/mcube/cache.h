@@ -8,7 +8,7 @@
 
 #ifndef __ASSEMBLY__
 
-#define	__DCACHE_ALIGNED__
+#define __DCACHE_ALIGNED__
 
 void enable_icache(void);
 void enable_dcache(void);
@@ -26,4 +26,4 @@ void init_cache(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_CACHE_H__ */
+#endif /* __MCUBE_MCUBE_CACHE_H__ */

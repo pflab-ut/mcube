@@ -10,14 +10,14 @@
  * This is an implementation of the McKusick-Karels kernel memory
  * allocator (with slight modifications) as described in:
  *
- *	'Design of a General Purpose Memory Allocator for the 4.3BSD
- *	UNIX Kernel', Kirk McKusick and J. Karels, Berkely, Usenix 1988
+ *  'Design of a General Purpose Memory Allocator for the 4.3BSD
+ *  UNIX Kernel', Kirk McKusick and J. Karels, Berkely, Usenix 1988
  *
  * and as also clearly described and compared to other allocators in the
  * greatest Unix book ever written:
  *
- *	'UNIX Internals: The New Frontiers', Uresh Vahalia, Prentice
- *	Hall, 1996
+ *  'UNIX Internals: The New Frontiers', Uresh Vahalia, Prentice
+ *  Hall, 1996
  *
  * One of the weakest points of classical power-of-2 allocators like the
  * one used in 4.2BSD was keeping memory blocks metadata inside the blocks
@@ -65,43 +65,43 @@
  * free bufs list of size (1 << x) bytes, including its head.
  */
 static struct bucket {
-	spinlock_t lock;		/* Bucket lock */
-	void *head;			/* Free blocks list head */
-	int totalpages;			/* # of pages requested from page allocator */
-	int totalfree;			/* # of free buffers */
+  spinlock_t lock;    /* Bucket lock */
+  void *head;      /* Free blocks list head */
+  int totalpages;      /* # of pages requested from page allocator */
+  int totalfree;      /* # of free buffers */
 } kmembuckets[MAXBUCKET_IDX + 1];
 
 static void *get_tokenized_page(int bucket_idx);
 
 void *__kmalloc(int bucket_idx)
 {
-	struct bucket *bucket;
-	char *buf;
+  struct bucket *bucket;
+  char *buf;
 
-	assert(bucket_idx <= MAXBUCKET_IDX);
-	bucket = &kmembuckets[bucket_idx];
+  assert(bucket_idx <= MAXBUCKET_IDX);
+  bucket = &kmembuckets[bucket_idx];
 
-	spin_lock(&bucket->lock);
+  spin_lock(&bucket->lock);
 
-	if (bucket->head) {
-		buf = bucket->head;
-		bucket->head = *(void **)(bucket->head);
-		goto out;
-	}
+  if (bucket->head) {
+    buf = bucket->head;
+    bucket->head = *(void **)(bucket->head);
+    goto out;
+  }
 
-	assert(bucket->totalfree == 0);
-	buf = get_tokenized_page(bucket_idx);
-	bucket->head = *(void **)buf;
-	bucket->totalpages++;
-	bucket->totalfree = PAGE_SIZE / (1 << bucket_idx);
+  assert(bucket->totalfree == 0);
+  buf = get_tokenized_page(bucket_idx);
+  bucket->head = *(void **)buf;
+  bucket->totalpages++;
+  bucket->totalfree = PAGE_SIZE / (1 << bucket_idx);
 
 out:
-	bucket->totalfree--;
-	spin_unlock(&bucket->lock);
+  bucket->totalfree--;
+  spin_unlock(&bucket->lock);
 
-	assert(is_free_buf(buf));
-	sign_buf(buf, ALLOCBUF_SIG);
-	return buf;
+  assert(is_free_buf(buf));
+  sign_buf(buf, ALLOCBUF_SIG);
+  return buf;
 }
 
 /*
@@ -112,28 +112,28 @@ out:
  */
 static void *get_tokenized_page(int bucket_idx)
 {
-	struct page *page;
-	char *buf, *start, *end;
-	int buf_len;
+  struct page *page;
+  char *buf, *start, *end;
+  int buf_len;
 
-	page = get_free_page(ZONE_ANY);
-	page->in_bucket = 1;
-	page->bucket_idx = bucket_idx;
+  page = get_free_page(ZONE_ANY);
+  page->in_bucket = 1;
+  page->bucket_idx = bucket_idx;
 
-	start = page_address(page);
-	end = start + PAGE_SIZE;
+  start = page_address(page);
+  end = start + PAGE_SIZE;
 
-	buf = start;
-	buf_len = 1 << bucket_idx;
-	while (buf < (end - buf_len)) {
-		*(void **)buf = buf + buf_len;
-		sign_buf(buf, FREEBUF_SIG);
-		buf += buf_len;
-	}
-	*(void **)buf = NULL;
-	sign_buf(buf, FREEBUF_SIG);
+  buf = start;
+  buf_len = 1 << bucket_idx;
+  while (buf < (end - buf_len)) {
+    *(void **)buf = buf + buf_len;
+    sign_buf(buf, FREEBUF_SIG);
+    buf += buf_len;
+  }
+  *(void **)buf = NULL;
+  sign_buf(buf, FREEBUF_SIG);
 
-	return start;
+  return start;
 }
 
 /*
@@ -157,25 +157,25 @@ static void *get_tokenized_page(int bucket_idx)
  */
 void *kmalloc(size_t size)
 {
-	assert(size > 0);
+  assert(size > 0);
 
-	compiler_assert((MINALLOC_SZ * 256) == MAXALLOC_SZ);
-	compiler_assert((MINBUCKET_IDX + 8) == MAXBUCKET_IDX);
+  compiler_assert((MINALLOC_SZ * 256) == MAXALLOC_SZ);
+  compiler_assert((MINBUCKET_IDX + 8) == MAXBUCKET_IDX);
 
-	if (size <= MINALLOC_SZ)	return __kmalloc(MINBUCKET_IDX);
-	if (size <= MINALLOC_SZ *   2)	return __kmalloc(MINBUCKET_IDX + 1);
-	if (size <= MINALLOC_SZ *   4)	return __kmalloc(MINBUCKET_IDX + 2);
-	if (size <= MINALLOC_SZ *   8)	return __kmalloc(MINBUCKET_IDX + 3);
-	if (size <= MINALLOC_SZ *  16)	return __kmalloc(MINBUCKET_IDX + 4);
-	if (size <= MINALLOC_SZ *  32)	return __kmalloc(MINBUCKET_IDX + 5);
-	if (size <= MINALLOC_SZ *  64)	return __kmalloc(MINBUCKET_IDX + 6);
-	if (size <= MINALLOC_SZ * 128)	return __kmalloc(MINBUCKET_IDX + 7);
-	if (size <= MINALLOC_SZ * 256)	return __kmalloc(MINBUCKET_IDX + 8);
+  if (size <= MINALLOC_SZ)  return __kmalloc(MINBUCKET_IDX);
+  if (size <= MINALLOC_SZ *   2)  return __kmalloc(MINBUCKET_IDX + 1);
+  if (size <= MINALLOC_SZ *   4)  return __kmalloc(MINBUCKET_IDX + 2);
+  if (size <= MINALLOC_SZ *   8)  return __kmalloc(MINBUCKET_IDX + 3);
+  if (size <= MINALLOC_SZ *  16)  return __kmalloc(MINBUCKET_IDX + 4);
+  if (size <= MINALLOC_SZ *  32)  return __kmalloc(MINBUCKET_IDX + 5);
+  if (size <= MINALLOC_SZ *  64)  return __kmalloc(MINBUCKET_IDX + 6);
+  if (size <= MINALLOC_SZ * 128)  return __kmalloc(MINBUCKET_IDX + 7);
+  if (size <= MINALLOC_SZ * 256)  return __kmalloc(MINBUCKET_IDX + 8);
 
-	panic("Malloc: %d bytes requested; can't support > %d "
-	      "bytes", size, MAXALLOC_SZ);
+  panic("Malloc: %d bytes requested; can't support > %d "
+        "bytes", size, MAXALLOC_SZ);
 
-	return NULL;
+  return NULL;
 }
 
 /*
@@ -188,47 +188,47 @@ void *kmalloc(size_t size)
  */
 void kfree(void *addr)
 {
-	struct page *page;
-	struct bucket *bucket;
-	int buf_size;
-	char *buf;
+  struct page *page;
+  struct bucket *bucket;
+  int buf_size;
+  char *buf;
 
-	buf = addr;
-	page = addr_to_page(buf);
-	bucket = &kmembuckets[page->bucket_idx];
+  buf = addr;
+  page = addr_to_page(buf);
+  bucket = &kmembuckets[page->bucket_idx];
 
-	if (page_is_free(page))
-		panic("Bucket: Freeing address 0x%lx which resides in "
-		      "an unallocated page frame", buf);
+  if (page_is_free(page))
+    panic("Bucket: Freeing address 0x%lx which resides in "
+          "an unallocated page frame", buf);
 
-	if (!page->in_bucket)
-		panic("Bucket: Freeing address 0x%lx which resides in "
-		      "a foreign page frame (not allocated by us)", buf);
+  if (!page->in_bucket)
+    panic("Bucket: Freeing address 0x%lx which resides in "
+          "a foreign page frame (not allocated by us)", buf);
 
-	buf_size = 1 << page->bucket_idx;
-	if (!is_aligned((uintptr_t)buf, buf_size))
-		panic("Bucket: Freeing invalidly-aligned 0x%lx address; "
-		      "bucket buffer size = 0x%lx\n", buf, buf_size);
+  buf_size = 1 << page->bucket_idx;
+  if (!is_aligned((uintptr_t)buf, buf_size))
+    panic("Bucket: Freeing invalidly-aligned 0x%lx address; "
+          "bucket buffer size = 0x%lx\n", buf, buf_size);
 
-	if (is_free_buf(buf))
-		panic("Bucket: Freeing already free buffer at 0x%lx, "
-		      "with size = 0x%lx bytes", buf, buf_size);
+  if (is_free_buf(buf))
+    panic("Bucket: Freeing already free buffer at 0x%lx, "
+          "with size = 0x%lx bytes", buf, buf_size);
 
-	sign_buf(buf, FREEBUF_SIG);
+  sign_buf(buf, FREEBUF_SIG);
 
-	spin_lock(&bucket->lock);
+  spin_lock(&bucket->lock);
 
-	*(void **)buf = bucket->head;
-	bucket->head = buf;
-	bucket->totalfree++;
+  *(void **)buf = bucket->head;
+  bucket->head = buf;
+  bucket->totalfree++;
 
-	spin_unlock(&bucket->lock);
+  spin_unlock(&bucket->lock);
 }
 
 void kmalloc_init(void)
 {
-	for (int i = 0; i <= MAXBUCKET_IDX; i++)
-		spin_init(&kmembuckets[i].lock);
+  for (int i = 0; i <= MAXBUCKET_IDX; i++)
+    spin_init(&kmembuckets[i].lock);
 }
 
 /*
@@ -241,7 +241,7 @@ void kmalloc_init(void)
  * number generator ready.
  */
 
-#if	KMALLOC_TESTS
+#if  KMALLOC_TESTS
 
 #include <string.h>
 #include <paging.h>
@@ -249,15 +249,15 @@ void kmalloc_init(void)
 /*
  * Max # of allocations to do during testing
  */
-#define ALLOCS_COUNT	100000
+#define ALLOCS_COUNT  100000
 
 /*
  * Big array of pointers to allocated addresses and
  * their area sizes.
  */
 static struct {
-	int size;
-	void *p;
+  int size;
+  void *p;
 } p[ALLOCS_COUNT];
 
 static char tmpbuf[PAGE_SIZE];
@@ -268,11 +268,11 @@ static char tmpbuf[PAGE_SIZE];
  */
 static void _disrupt(int size)
 {
-	char *p;
+  char *p;
 
-	p = kmalloc(size);
-	memset(p, 0xff, size);
-	kfree(p);
+  p = kmalloc(size);
+  memset(p, 0xff, size);
+  kfree(p);
 }
 
 /*
@@ -281,62 +281,62 @@ static void _disrupt(int size)
  */
 void _test_allocs(int count, int rounded)
 {
-	int i, size;
+  int i, size;
 
-	size = (rounded) ? MINALLOC_SZ : 1;
+  size = (rounded) ? MINALLOC_SZ : 1;
 
-	for (i = 0; i < count; i++) {
-		_disrupt(size);
+  for (i = 0; i < count; i++) {
+    _disrupt(size);
 
-		p[i].p = kmalloc(size);
-		assert(is_aligned((uintptr_t)p[i].p, 16));
-		p[i].size = size;
+    p[i].p = kmalloc(size);
+    assert(is_aligned((uintptr_t)p[i].p, 16));
+    p[i].size = size;
 
-		if (rounded) {
-			memset32(p[i].p, i, size);
-			size *= 2;
-			size = (size > MAXALLOC_SZ) ? MINALLOC_SZ : size;
-		} else {
-			memset(p[i].p, i, size);
-			size++;
-			size = (size > MAXALLOC_SZ) ? 1 : size;
-		}
-	}
+    if (rounded) {
+      memset32(p[i].p, i, size);
+      size *= 2;
+      size = (size > MAXALLOC_SZ) ? MINALLOC_SZ : size;
+    } else {
+      memset(p[i].p, i, size);
+      size++;
+      size = (size > MAXALLOC_SZ) ? 1 : size;
+    }
+  }
 
-	for (i = 0; i < count; i++) {
-		size = p[i].size;
-		_disrupt(size);
+  for (i = 0; i < count; i++) {
+    size = p[i].size;
+    _disrupt(size);
 
-		(rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
-		if (__builtin_memcmp(p[i].p, tmpbuf, size))
-			panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
-			      "%d bytes got corrupted", i, p[i].p, size);
+    (rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
+    if (__builtin_memcmp(p[i].p, tmpbuf, size))
+      panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
+            "%d bytes got corrupted", i, p[i].p, size);
 
-		kfree(p[i].p);
+    kfree(p[i].p);
 
-		size = ((size / 2) > 1) ? size / 2 : MINALLOC_SZ;
-		p[i].p = kmalloc(size);
-		assert(is_aligned((uintptr_t)p[i].p, 16));
-		p[i].size = size;
-		(rounded) ? memset32(p[i].p, i, size) : memset(p[i].p, i, size);
+    size = ((size / 2) > 1) ? size / 2 : MINALLOC_SZ;
+    p[i].p = kmalloc(size);
+    assert(is_aligned((uintptr_t)p[i].p, 16));
+    p[i].size = size;
+    (rounded) ? memset32(p[i].p, i, size) : memset(p[i].p, i, size);
 
-		_disrupt(size);
-	}
+    _disrupt(size);
+  }
 
-	for (i = 0; i < count; i++) {
-		_disrupt(45);
+  for (i = 0; i < count; i++) {
+    _disrupt(45);
 
-		size = p[i].size;
-		(rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
-		if (__builtin_memcmp(p[i].p, tmpbuf, size))
-			panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
-			      "%d bytes got corrupted", i, p[i].p, size);
+    size = p[i].size;
+    (rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
+    if (__builtin_memcmp(p[i].p, tmpbuf, size))
+      panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
+            "%d bytes got corrupted", i, p[i].p, size);
 
-		kfree(p[i].p);
-		_disrupt(32);
-	}
+    kfree(p[i].p);
+    _disrupt(32);
+  }
 
-	printk("_Bucket: %s: Success\n", __FUNCTION__);
+  printk("_Bucket: %s: Success\n", __FUNCTION__);
 }
 
 /*
@@ -347,26 +347,26 @@ void _test_allocs(int count, int rounded)
  */
 void kmalloc_run_tests(void)
 {
-	uint64_t i, count, repeat;
+  uint64_t i, count, repeat;
 
-	count = ALLOCS_COUNT;
-	repeat = 100;
+  count = ALLOCS_COUNT;
+  repeat = 100;
 
-	for (i = 0; i < repeat; i++) {
-		printk("[%d] ", i);
-		_test_allocs(count, 1);
-	}
+  for (i = 0; i < repeat; i++) {
+    printk("[%d] ", i);
+    _test_allocs(count, 1);
+  }
 
-	memset(p, 0, sizeof(p));
-	for (i = 0; i < repeat; i++) {
-		printk("[%d] ", i);
-		_test_allocs(count, 0);
-	}
+  memset(p, 0, sizeof(p));
+  for (i = 0; i < repeat; i++) {
+    printk("[%d] ", i);
+    _test_allocs(count, 0);
+  }
 
-	for (i = MINBUCKET_IDX; i <= MAXBUCKET_IDX; i++)
-		printk("Buf size = %d: free bufs = %d, total pages requested "
-		       "= %d\n", 1 << i, kmembuckets[i].totalfree,
-		       kmembuckets[i].totalpages);
+  for (i = MINBUCKET_IDX; i <= MAXBUCKET_IDX; i++)
+    printk("Buf size = %d: free bufs = %d, total pages requested "
+           "= %d\n", 1 << i, kmembuckets[i].totalfree,
+           kmembuckets[i].totalpages);
 }
 
 #endif /* KMALLOC_TESTS */

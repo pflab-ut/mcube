@@ -10,22 +10,22 @@
  * Stack contents upon entrance of an exception or IRQ handler, assuming
  * any generated exception error-code popped up:
  *
- *		%ss		0x68(%rsp)
- *		%rsp		0x60(%rsp)
- *		%rflags		0x58(%rsp)
- *		%cs		0x50(%rsp)
- *		%rip		0x48(%rsp)
- *		   -- Pushed by CPU --
- *		%rax		0x40(%rsp)
- *		%rcx		0x38(%rsp)
- *		%rdx		0x30(%rsp)
- *		%rdi		0x28(%rsp)
- *		%rsi		0x20(%rsp)
- *		%r8		0x18(%rsp)
- *		%r9		0x10(%rsp)
- *		%r10		0x08(%rsp)
- *		%r11		0x00(%rsp)
- *		   -- Pushed by US --
+ *    %ss    0x68(%rsp)
+ *    %rsp    0x60(%rsp)
+ *    %rflags    0x58(%rsp)
+ *    %cs    0x50(%rsp)
+ *    %rip    0x48(%rsp)
+ *       -- Pushed by CPU --
+ *    %rax    0x40(%rsp)
+ *    %rcx    0x38(%rsp)
+ *    %rdx    0x30(%rsp)
+ *    %rdi    0x28(%rsp)
+ *    %rsi    0x20(%rsp)
+ *    %r8    0x18(%rsp)
+ *    %r9    0x10(%rsp)
+ *    %r10    0x08(%rsp)
+ *    %r11    0x00(%rsp)
+ *       -- Pushed by US --
  */
 
 #include <mcube/mcube.h>
@@ -48,11 +48,11 @@
 .globl idt_exception_stubs
 idt_exception_stubs:
         i = 0
-	.rept  EXCEPTION_GATES
-	movq   $i, %rsi
-	jmp    default_exception_handler
-	i = i + 1
-	.endr
+  .rept  EXCEPTION_GATES
+  movq   $i, %rsi
+  jmp    default_exception_handler
+  i = i + 1
+  .endr
 
 /*
  * The default/fallback interrupt handler; print a verbose
@@ -73,48 +73,48 @@ idt_exception_stubs:
  * which leads to a mask of 0x27d00 for such vector numbers
  */
 default_exception_handler:
-	movq   $0xdead, %rdx		# No error-code mark
+  movq   $0xdead, %rdx    # No error-code mark
 
-	/* Pop the error code, if any */
-	movl   %esi, %ecx
-	movl   $1, %eax
-	shl    %cl, %eax
-	andl   $0x27d00, %eax		# error code pushed?
-	jz     0f
-	popq   %rdx			# error code
+  /* Pop the error code, if any */
+  movl   %esi, %ecx
+  movl   $1, %eax
+  shl    %cl, %eax
+  andl   $0x27d00, %eax    # error code pushed?
+  jz     0f
+  popq   %rdx      # error code
 0:
-	/* Emulate our IRQ stack protocol */
-	subq   $(9 * 8), %rsp
+  /* Emulate our IRQ stack protocol */
+  subq   $(9 * 8), %rsp
 
-	/* Because we pass below values to printk() using
-	 * the stack, lets save them to regs first not to
-	 * mess up IRQ stack protocol offset calculations */
-	movq   IRQCTX_RFLAGS(%rsp), %r15
-	movq   IRQCTX_RSP(%rsp), %r14
+  /* Because we pass below values to printk() using
+   * the stack, lets save them to regs first not to
+   * mess up IRQ stack protocol offset calculations */
+  movq   IRQCTX_RFLAGS(%rsp), %r15
+  movq   IRQCTX_RSP(%rsp), %r14
 
-	/* printk(): %rsi, %rdx are already saved above */
-	movq   $idt_msg, %rdi
-	movq   IRQCTX_CS(%rsp), %rcx
-	movq   IRQCTX_RIP(%rsp), %r8
-	movq   IRQCTX_SS(%rsp), %r9
-	movq   %cr4, %rax
-	push   %rax			# %cr4
-	movq   %cr3, %rax
-	push   %rax			# %cr3
-	movq   %cr2, %rax
-	push   %rax			# %cr2
-	push   %r15			# %rflags
-	push   %r14			# %rsp
-	cld
-	call   printk
-1:	hlt
-	jmp    1b
+  /* printk(): %rsi, %rdx are already saved above */
+  movq   $idt_msg, %rdi
+  movq   IRQCTX_CS(%rsp), %rcx
+  movq   IRQCTX_RIP(%rsp), %r8
+  movq   IRQCTX_SS(%rsp), %r9
+  movq   %cr4, %rax
+  push   %rax      # %cr4
+  movq   %cr3, %rax
+  push   %rax      # %cr3
+  movq   %cr2, %rax
+  push   %rax      # %cr2
+  push   %r15      # %rflags
+  push   %r14      # %rsp
+  cld
+  call   printk
+1:  hlt
+  jmp    1b
 
 idt_msg:
-	.ascii "Exception: vector=%d, errcode=0x%lx, %%cs=0x%lx, "
-	.ascii "%%rip=0x%lx, %%ss=0x%lx, %%rsp=0x%lx, %%rflags=0x%lx, "
-	.ascii "%%cr2=0x%lx, %%cr3=0x%lx, %%cr4=0x%lx \n"
-	.byte  0
+  .ascii "Exception: vector=%d, errcode=0x%lx, %%cs=0x%lx, "
+  .ascii "%%rip=0x%lx, %%ss=0x%lx, %%rsp=0x%lx, %%rflags=0x%lx, "
+  .ascii "%%cr2=0x%lx, %%cr3=0x%lx, %%cr4=0x%lx \n"
+  .byte  0
 
 /*
  * System IRQ handlers
@@ -126,7 +126,7 @@ idt_msg:
  */
 .globl PIC_handler
 PIC_handler:
-	iretq
+  iretq
 
 /*
  * AMD64 ABI indicates that only %rbp, %rbx, and %r12
@@ -140,28 +140,28 @@ PIC_handler:
  * functions entry; clear the flag. No need to save CPU
  * %rflags as the CPU core automatically does so for us.
  */
-#define PUSH_REGS		\
-	pushq  %rax;		\
-	pushq  %rcx;		\
-	pushq  %rdx;		\
-	pushq  %rdi;		\
-	pushq  %rsi;		\
-	pushq  %r8 ;		\
-	pushq  %r9 ;		\
-	pushq  %r10;		\
-	pushq  %r11;		\
-	cld
+#define PUSH_REGS    \
+  pushq  %rax;    \
+  pushq  %rcx;    \
+  pushq  %rdx;    \
+  pushq  %rdi;    \
+  pushq  %rsi;    \
+  pushq  %r8 ;    \
+  pushq  %r9 ;    \
+  pushq  %r10;    \
+  pushq  %r11;    \
+  cld
 
-#define RESTORE_REGS		\
-	popq   %r11;		\
-	popq   %r10;		\
-	popq   %r9 ;		\
-	popq   %r8 ;		\
-	popq   %rsi;		\
-	popq   %rdi;		\
-	popq   %rdx;		\
-	popq   %rcx;		\
-	popq   %rax
+#define RESTORE_REGS    \
+  popq   %r11;    \
+  popq   %r10;    \
+  popq   %r9 ;    \
+  popq   %r8 ;    \
+  popq   %rsi;    \
+  popq   %rdi;    \
+  popq   %rdx;    \
+  popq   %rcx;    \
+  popq   %rax
 
 /*
  * Where every IRQ handler ends ..
@@ -177,10 +177,10 @@ PIC_handler:
  * NOTE-4! Don't clobber any reg not saved at PUSH_REGS
  */
 irq_end:
-	movq   $(VIRTUAL(APIC_PHBASE) + APIC_EOI), %rax
-	movl   $0,(%rax)
-	RESTORE_REGS
-	iretq
+  movq   $(VIRTUAL(APIC_PHBASE) + APIC_EOI), %rax
+  movl   $0,(%rax)
+  RESTORE_REGS
+  iretq
 
 /*
  * Clock ticks handler - Context Switching:
@@ -232,51 +232,51 @@ irq_end:
  */
 .globl ticks_handler
 ticks_handler:
-	PUSH_REGS
+  PUSH_REGS
 
-	/* Pick the new process to run */
-	call   sched_tick
-	cmpq   current, %rax
-	je     2f
+  /* Pick the new process to run */
+  call   sched_tick
+  cmpq   current, %rax
+  je     2f
 
-	movq   %rax, %rdi
-	movq   current, %rax
+  movq   %rax, %rdi
+  movq   current, %rax
 
-	/* Save scratch regs to current->pcb */
-	addq   $PD_PCB, %rax
-	movq   %rbp, PCB_RBP(%rax)
-	movq   %rbx, PCB_RBX(%rax)
-	movq   %r12, PCB_R12(%rax)
-	movq   %r13, PCB_R13(%rax)
-	movq   %r14, PCB_R14(%rax)
-	movq   %r15, PCB_R15(%rax)
-1:	movq   %rsp, PCB_RSP(%rax)
+  /* Save scratch regs to current->pcb */
+  addq   $PD_PCB, %rax
+  movq   %rbp, PCB_RBP(%rax)
+  movq   %rbx, PCB_RBX(%rax)
+  movq   %r12, PCB_R12(%rax)
+  movq   %r13, PCB_R13(%rax)
+  movq   %r14, PCB_R14(%rax)
+  movq   %r15, PCB_R15(%rax)
+1:  movq   %rsp, PCB_RSP(%rax)
 
-	/* current = next */
-	movq   %rdi, current
+  /* current = next */
+  movq   %rdi, current
 
-	/* Restore scratch from the new PCB */
-	addq   $PD_PCB, %rdi
-	movq   PCB_RBP(%rdi), %rbp
-	movq   PCB_RBX(%rdi), %rbx
-	movq   PCB_R12(%rdi), %r12
-	movq   PCB_R13(%rdi), %r13
-	movq   PCB_R14(%rdi), %r14
-	movq   PCB_R15(%rdi), %r15
-	movq   PCB_RSP(%rdi), %rsp
+  /* Restore scratch from the new PCB */
+  addq   $PD_PCB, %rdi
+  movq   PCB_RBP(%rdi), %rbp
+  movq   PCB_RBX(%rdi), %rbx
+  movq   PCB_R12(%rdi), %r12
+  movq   PCB_R13(%rdi), %r13
+  movq   PCB_R14(%rdi), %r14
+  movq   PCB_R15(%rdi), %r15
+  movq   PCB_RSP(%rdi), %rsp
 
-	/*
-	 * Voila! we're the new process!
-	 *
-	 * - We're now running with the new stack
-	 * - Non-scratch regs have ve been updated from the PCB.
-	 * - Scratch regs won't be updated till the end of the
-	 *   handler (values will be popped from the new stack)
-	 * - %rsp, %rip, and %rflags will be updated by `iret';
-	 *   CPU will implicitly pop those from the new stack.
-	 */
+  /*
+   * Voila! we're the new process!
+   *
+   * - We're now running with the new stack
+   * - Non-scratch regs have ve been updated from the PCB.
+   * - Scratch regs won't be updated till the end of the
+   *   handler (values will be popped from the new stack)
+   * - %rsp, %rip, and %rflags will be updated by `iret';
+   *   CPU will implicitly pop those from the new stack.
+   */
 
-2:	jmp    irq_end
+2:  jmp    irq_end
 
 
 /*
@@ -289,9 +289,9 @@ ticks_handler:
  */
 .globl kb_handler
 kb_handler:
-	PUSH_REGS
-	call   __kb_handler
-	jmp    irq_end
+  PUSH_REGS
+  call   __kb_handler
+  jmp    irq_end
 
 /*
  * Once a CPU panic()s, it sends an IPI to other cores to jump
@@ -299,31 +299,31 @@ kb_handler:
  */
 .globl halt_cpu_ipi_handler
 halt_cpu_ipi_handler:
-	cli
-1:	hlt
-	jmp   1b
+  cli
+1:  hlt
+  jmp   1b
 
 /*
  * PIT periodic mode test handler
  */
-#if	PIT_TESTS
+#if  PIT_TESTS
 .globl pit_periodic_handler
 pit_periodic_handler:
-	PUSH_REGS
-	call   __pit_periodic_handler
-	jmp    irq_end
-#endif	/* PIT_TESTS */
+  PUSH_REGS
+  call   __pit_periodic_handler
+  jmp    irq_end
+#endif  /* PIT_TESTS */
 
 /*
  * APIC periodic mode test handler
  */
-#if	APIC_TESTS
+#if  APIC_TESTS
 .globl apic_timer_handler
 apic_timer_handler:
-	PUSH_REGS
-	call   __apic_timer_handler
-	jmp    irq_end
-#endif	/* APIC_TESTS */
+  PUSH_REGS
+  call   __apic_timer_handler
+  jmp    irq_end
+#endif  /* APIC_TESTS */
 
 .data
 
@@ -336,8 +336,8 @@ apic_timer_handler:
  */
 .globl idtdesc
 idtdesc:
-	.word  idt_end - idt - 1	# limit
-	.quad  VIRTUAL(KTEXT_PHYS(idt))	# base
+  .word  idt_end - idt - 1  # limit
+  .quad  VIRTUAL(KTEXT_PHYS(idt))  # base
 
 .bss
 
@@ -352,5 +352,5 @@ idtdesc:
 .align 16
 .globl idt
 idt:
-	.skip  IDT_GATES * 16
+  .skip  IDT_GATES * 16
 idt_end:

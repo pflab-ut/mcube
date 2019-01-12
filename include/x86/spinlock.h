@@ -30,26 +30,26 @@
  */
 static inline void spin_lock(struct lock_spin *lock)
 {
-	union x86_rflags rflags;
+  union x86_rflags rflags;
 
-	/* Reentrancy-safe place: stack or a register */
-	rflags = local_irq_disable_save();
+  /* Reentrancy-safe place: stack or a register */
+  rflags = local_irq_disable_save();
 
-	while (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
-		local_irq_restore(rflags);
+  while (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
+    local_irq_restore(rflags);
 
-		while (lock->val == SPIN_LOCKED)
-			cpu_pause();
+    while (lock->val == SPIN_LOCKED)
+      cpu_pause();
 
-		local_irq_disable();
-	}
+    local_irq_disable();
+  }
 
-	/*
-	 * Careful! Spinlocks (ironically enough) are globals & thus
-	 * must be themselves protected against concurrent SMP access.
-	 * Access a lock's elements if and only if it's already held.
-	 */
-	lock->rflags = rflags;
+  /*
+   * Careful! Spinlocks (ironically enough) are globals & thus
+   * must be themselves protected against concurrent SMP access.
+   * Access a lock's elements if and only if it's already held.
+   */
+  lock->rflags = rflags;
 }
 
 /*
@@ -61,17 +61,17 @@ static inline void spin_lock(struct lock_spin *lock)
  */
 static inline bool spin_trylock(struct lock_spin *lock)
 {
-	union x86_rflags rflags;
+  union x86_rflags rflags;
 
-	rflags = local_irq_disable_save();
+  rflags = local_irq_disable_save();
 
-	if (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
-		local_irq_restore(rflags);
-		return false;
-	}
+  if (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
+    local_irq_restore(rflags);
+    return false;
+  }
 
-	lock->rflags = rflags;
-	return true;
+  lock->rflags = rflags;
+  return true;
 }
 
 /*
@@ -79,22 +79,22 @@ static inline bool spin_trylock(struct lock_spin *lock)
  */
 static inline void spin_unlock(struct lock_spin *lock)
 {
-	union x86_rflags rflags;
+  union x86_rflags rflags;
 
-	/* Access a lock's elements iff it's already held. */
-	rflags = lock->rflags;
-	barrier();
-	lock->val = SPIN_UNLOCKED;
+  /* Access a lock's elements iff it's already held. */
+  rflags = lock->rflags;
+  barrier();
+  lock->val = SPIN_UNLOCKED;
 
-	local_irq_restore(rflags);
+  local_irq_restore(rflags);
 }
 
 /*
  * NOTE! As discussed above, lock() in terms of trylock():
  *
- *	while (!spin_trylock(lock))
- *		while (lock->val == SPIN_LOCKED)
- *			cpu_pause();
+ *  while (!spin_trylock(lock))
+ *    while (lock->val == SPIN_LOCKED)
+ *      cpu_pause();
  *
  */
 

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_BUFFER_H__
-#define	__MCUBE_MCUBE_BUFFER_H__
+#ifndef __MCUBE_MCUBE_BUFFER_H__
+#define __MCUBE_MCUBE_BUFFER_H__
 
 #ifndef __ASSEMBLY__
 
@@ -85,4 +85,4 @@ size_t ring_buf_size(cbuf_handle_t cbuf);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_BUFFER_H__ */
+#endif /* __MCUBE_MCUBE_BUFFER_H__ */

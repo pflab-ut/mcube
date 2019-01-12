@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
 #
@@ -41,37 +41,37 @@ ramdisk_file  = './ramdisk'
 final_image   = build_folder + 'mcube-hd.img'
 
 if not os.path.exists(build_folder):
-    os.makedirs(build_folder)
+  os.makedirs(build_folder)
 
 # Expand kernel image to 512 Kbytes
 size_512k = 512 * 1024
 with open(kernel_file, 'rb') as f:
-    buf1 = f.read()
+  buf1 = f.read()
 with open(final_image, 'wb') as f:
-    f.write(buf1)
-    f.write(b'0' * size_512k)
-    f.truncate(size_512k)
+  f.write(buf1)
+  f.write(b'0' * size_512k)
+  f.truncate(size_512k)
 
 # Build ramdisk header, and its buffer
 header_length = 8 + 4 + 4 + 8
 ramdisk_length = header_length
 if os.path.exists(ramdisk_file):
-    ramdisk_length += os.path.getsize(ramdisk_file)
-    ramdisk_buffer  = open(ramdisk_file, 'rb').read()
+  ramdisk_length += os.path.getsize(ramdisk_file)
+  ramdisk_buffer  = open(ramdisk_file, 'rb').read()
 else:
-    ramdisk_buffer  = b''
+  ramdisk_buffer  = b''
 ramdisk_sectors = (ramdisk_length - 1)//512 + 1
 ramdisk_header = struct.pack('=8cII8c',
-    b'C', b'U', b'T', b'E', b'-', b'S', b'T', b'A',
-    ramdisk_sectors,
-    ramdisk_length - header_length,
-    b'C', b'U', b'T', b'E', b'-', b'E', b'N', b'D')
+                             b'C', b'U', b'T', b'E', b'-', b'S', b'T', b'A',
+                             ramdisk_sectors,
+                             ramdisk_length - header_length,
+                             b'C', b'U', b'T', b'E', b'-', b'E', b'N', b'D')
 assert len(ramdisk_header) == header_length
 
 # Expand final disk image beyond 1MB: some virtual
 # machine BIOSes fail if that image len is < 1MB
 size_1MB = 1024 * 1024
 with open(final_image, 'ab') as f:
-    f.write(ramdisk_header)
-    f.write(ramdisk_buffer)
-    f.write(b'#' * size_1MB)
+  f.write(ramdisk_header)
+  f.write(ramdisk_buffer)
+  f.write(b'#' * size_1MB)

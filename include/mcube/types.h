@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_TYPES_H__
-#define	__MCUBE_MCUBE_TYPES_H__
+#ifndef __MCUBE_MCUBE_TYPES_H__
+#define __MCUBE_MCUBE_TYPES_H__
 
 #ifndef __ASSEMBLY__
 
@@ -60,4 +60,4 @@ typedef uint64_t clock_t;
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_TYPES_H__ */
+#endif /* __MCUBE_MCUBE_TYPES_H__ */

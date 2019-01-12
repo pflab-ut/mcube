@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_SYNQUACER_ADDR_H__
-#define	__MCUBE_ARM_SYNQUACER_ADDR_H__
+#ifndef __MCUBE_ARM_SYNQUACER_ADDR_H__
+#define __MCUBE_ARM_SYNQUACER_ADDR_H__
 
 
 /*** ADDRESS ***/

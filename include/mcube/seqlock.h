@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_SEQLOCK_H__
-#define	__MCUBE_MCUBE_SEQLOCK_H__
+#ifndef __MCUBE_MCUBE_SEQLOCK_H__
+#define __MCUBE_MCUBE_SEQLOCK_H__
 
 #ifndef __ASSEMBLY__
 
@@ -13,10 +13,10 @@
  * @brief Sequence lock
  */
 struct seqlock {
-	/** Sequence. */
-	unsigned sequence;
-	/** Lock. */
-	spinlock_t lock;
+  /** Sequence. */
+  unsigned sequence;
+  /** Lock. */
+  spinlock_t lock;
 };
 
 typedef struct seqlock seqlock;
@@ -27,26 +27,26 @@ typedef struct seqlock seqlock;
  */
 static inline void write_seqlock(seqlock *sl)
 {
-	spin_lock(&sl->lock);
-	++sl->sequence;
+  spin_lock(&sl->lock);
+  ++sl->sequence;
 }   
 
 static inline void write_sequnlock(seqlock *sl) 
 {
-	sl->sequence++;
-	spin_unlock(&sl->lock);
+  sl->sequence++;
+  spin_unlock(&sl->lock);
 }
 
 static inline int write_tryseqlock(seqlock *sl)
 {
-	int ret = spin_trylock(&sl->lock);
+  int ret = spin_trylock(&sl->lock);
 
-	if (ret) {
-		++sl->sequence;
-	}
-	return ret;
+  if (ret) {
+    ++sl->sequence;
+  }
+  return ret;
 }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_SEQLOCK_H__ */
+#endif /* __MCUBE_MCUBE_SEQLOCK_H__ */

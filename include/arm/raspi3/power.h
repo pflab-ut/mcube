@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_POWER_H__
-#define	__MCUBE_ARM_RASPI3_POWER_H__
+#ifndef __MCUBE_ARM_RASPI3_POWER_H__
+#define __MCUBE_ARM_RASPI3_POWER_H__
 
 #define POWER_MANAGEMENT_RSTC (POWER_MANAGEMENT_BASE + 0x1c)
 #define POWER_MANAGEMENT_RSTS (POWER_MANAGEMENT_BASE + 0x20)
@@ -23,5 +23,5 @@ void reset(void);
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /*	__MCUBE_ARM_RASPI3_POWER_H__ */
+#endif /* __MCUBE_ARM_RASPI3_POWER_H__ */
 

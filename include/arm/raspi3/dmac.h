@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_DMAC_H__
-#define	__MCUBE_ARM_RASPI3_DMAC_H__
+#ifndef __MCUBE_ARM_RASPI3_DMAC_H__
+#define __MCUBE_ARM_RASPI3_DMAC_H__
 
 
 #define DMAC_CH_BASE(x) (DMAC_BASE + (x) * 0x100)
@@ -489,5 +489,5 @@ struct dmac_info {
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /*	__MCUBE_ARM_RASPI3_DMAC_H__ */
+#endif /* __MCUBE_ARM_RASPI3_DMAC_H__ */
 

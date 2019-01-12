@@ -20,11 +20,11 @@
  * declaration ‘void *array[]’, and putting that at structure end?
  */
 struct __node {
-	void **array;		/* Array of void pointers to data! */
-	uint array_len;		/* Number of cells in the @array (Redundant!)*/
-	uint array_nrfree;	/* Number of free cells in the @array */
-	uint num;		/* Node number in the linked list, from 0 */
-	struct __node *next;	/* Next node in this list, or NULL */
+  void **array;    /* Array of void pointers to data! */
+  uint array_len;    /* Number of cells in the @array (Redundant!)*/
+  uint array_nrfree;  /* Number of free cells in the @array */
+  uint num;    /* Node number in the linked list, from 0 */
+  struct __node *next;  /* Next node in this list, or NULL */
 };
 
 /*
@@ -32,8 +32,8 @@ struct __node {
  * desired kernel structure.
  */
 struct unrolled_head {
-	struct __node *node;	/* Singly-linked list of unrolled nodes */
-	uint array_len;		/* Number of cells in each node array */
+  struct __node *node;  /* Singly-linked list of unrolled nodes */
+  uint array_len;    /* Number of cells in each node array */
 };
 
 /*
@@ -60,24 +60,24 @@ void unrolled_remove_key(struct unrolled_head *head, uint key);
  * Take care while modifying this code, we're quite bending C
  * and GNU extensions syntax to achieve it.
  */
-#define unrolled_for_each(head, val)					\
-	for (struct __node *__node = (head)->node;			\
-	     __node != NULL;						\
-	     __node = __node->next)					\
-		for (uint __i = 0,					\
-		     __unused *_____c =					\
-				  ({					\
-val = NULL;								\
-while (__i < __node->array_len && (val = __node->array[__i]) == NULL)	\
-__i++; val;								\
-				  });					\
-		     __i < __node->array_len;				\
-		     __i++,						\
-				  ({					\
-val = NULL;								\
-while (__i < __node->array_len && (val = __node->array[__i]) == NULL)	\
-__i++; val;								\
-				  }))
+#define unrolled_for_each(head, val)                                    \
+  for (struct __node *__node = (head)->node;                            \
+       __node != NULL;                                                  \
+       __node = __node->next)                                           \
+    for (uint __i = 0,                                                  \
+           __unused *_____c =                                           \
+           ({                                                           \
+             val = NULL;                                                \
+             while (__i < __node->array_len && (val = __node->array[__i]) == NULL) \
+               __i++; val;                                              \
+           });                                                          \
+         __i < __node->array_len;                                       \
+         __i++,                                                         \
+           ({                                                           \
+             val = NULL;                                                \
+             while (__i < __node->array_len && (val = __node->array[__i]) == NULL) \
+               __i++; val;                                              \
+           }))
 
 #if UNROLLED_TESTS
 void unrolled_run_tests(void);

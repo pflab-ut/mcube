@@ -15,24 +15,24 @@
 #include <mcube/mcube.h>
 
 enum state {
-	NONE,			/* .. Start State */
-	SLASH,			/* The '/' path separator */
-	DIRECTORY,		/* Parsing a directory name */
-	FILE,			/* Parsing a regular file name */
-	NAME,			/* File name (either dir or file) */
-	EOL,			/* .. End State */
+  NONE,      /* .. Start State */
+  SLASH,      /* The '/' path separator */
+  DIRECTORY,    /* Parsing a directory name */
+  FILE,      /* Parsing a regular file name */
+  NAME,      /* File name (either dir or file) */
+  EOL,      /* .. End State */
 };
 
 static uint64_t handle(char *buf, uint64_t *buf_len, uint64_t inum) {
-	struct dir_entry *dentry;
+  struct dir_entry *dentry;
 
-	buf[*buf_len] = '\0';
-	dentry = find_dir_entry(inode_get(inum), buf, *buf_len);
-	inum = dentry->inode_num;
-	kfree(dentry);
+  buf[*buf_len] = '\0';
+  dentry = find_dir_entry(inode_get(inum), buf, *buf_len);
+  inum = dentry->inode_num;
+  kfree(dentry);
 
-	*buf_len = 0;
-	return inum;
+  *buf_len = 0;
+  return inum;
 }
 
 /*
@@ -42,54 +42,54 @@ static uint64_t handle(char *buf, uint64_t *buf_len, uint64_t inum) {
  */
 uint64_t name_i(const char *path)
 {
-	enum state state, prev_state;
-	char *buf;
-	uint64_t buf_len, inum;
+  enum state state, prev_state;
+  char *buf;
+  uint64_t buf_len, inum;
 
-	state = NONE;
-	buf_len = 0;
-	inum = 0;
-	buf = kmalloc(EXT2_FILENAME_LEN + 2);
-	for (int i = 0; i <= strlen(path); i++) {
-		prev_state = state;
-		switch (path[i]) {
-		case '/':
-			state = SLASH;
-			if (prev_state == SLASH)
-				break;
-			if (prev_state == NONE)
-				inum = EXT2_ROOT_INODE;		/* Absolute */
-			if (prev_state == NAME) {
-				inum = handle(buf, &buf_len, inum);
-				if (inum == 0 || !is_dir(inum))
-					goto notfound;
-			}
-			break;
-		case '\0':
-			state = EOL;
-			if (prev_state == NONE)
-				goto notfound;
-			if (prev_state == NAME) {
-				inum = handle(buf, &buf_len, inum);
-				if (inum == 0)
-					goto notfound;
-			}
-			break;
-		default:
-			state = NAME;
-			if (prev_state == NONE)			/* Relative */
-				panic("EXT2: Relative paths aren't supported!");
-			if (buf_len > EXT2_FILENAME_LEN)
-				goto notfound;
-			buf[buf_len] = path[i];
-			buf_len++;
-		}
-	}
-	goto found;
+  state = NONE;
+  buf_len = 0;
+  inum = 0;
+  buf = kmalloc(EXT2_FILENAME_LEN + 2);
+  for (int i = 0; i <= strlen(path); i++) {
+    prev_state = state;
+    switch (path[i]) {
+    case '/':
+      state = SLASH;
+      if (prev_state == SLASH)
+        break;
+      if (prev_state == NONE)
+        inum = EXT2_ROOT_INODE;    /* Absolute */
+      if (prev_state == NAME) {
+        inum = handle(buf, &buf_len, inum);
+        if (inum == 0 || !is_dir(inum))
+          goto notfound;
+      }
+      break;
+    case '\0':
+      state = EOL;
+      if (prev_state == NONE)
+        goto notfound;
+      if (prev_state == NAME) {
+        inum = handle(buf, &buf_len, inum);
+        if (inum == 0)
+          goto notfound;
+      }
+      break;
+    default:
+      state = NAME;
+      if (prev_state == NONE)      /* Relative */
+        panic("EXT2: Relative paths aren't supported!");
+      if (buf_len > EXT2_FILENAME_LEN)
+        goto notfound;
+      buf[buf_len] = path[i];
+      buf_len++;
+    }
+  }
+  goto found;
 
 notfound:
-	inum = 0;
+  inum = 0;
 found:
-	kfree(buf);
-	return inum;
+  kfree(buf);
+  return inum;
 }

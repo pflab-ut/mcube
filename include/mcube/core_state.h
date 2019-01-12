@@ -34,4 +34,4 @@ struct core_state {
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_CORE_STATE_H__ */
+#endif /* __MCUBE_MCUBE_CORE_STATE_H__ */

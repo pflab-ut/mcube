@@ -60,6 +60,7 @@ PYTHON = python3
 DUMPARG = eb
 RM = rm -f
 FIND = find
+CAT = cat
 CLEANFILES = *.o *~ *.o.* *.log *.pyc *.tmp __pycache__
 
 

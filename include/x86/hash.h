@@ -10,7 +10,7 @@ void hash_insert(struct hash *hash, void *elem);
 void *hash_find(struct hash *hash, uint64_t elem_id);
 void hash_remove(struct hash *hash, uint64_t elem_id);
 
-#if	HASH_TESTS
+#if HASH_TESTS
 void hash_run_tests(void);
 #else
 static void __unused hash_run_tests(void) { }

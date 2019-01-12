@@ -65,6 +65,6 @@
 
 void spin_init(struct lock_spin *lock)
 {
-	lock->val = SPIN_UNLOCKED;
+  lock->val = SPIN_UNLOCKED;
 }
 

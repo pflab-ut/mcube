@@ -10,22 +10,22 @@
 
 static inline void nop(void)
 {
-	asm volatile ("nop");
+  asm volatile ("nop");
 }
 
 static inline void sync(void)
 {
-	asm volatile("sync");
+  asm volatile("sync");
 }
 
 static inline void wi(void)
 {
-	asm volatile("wi");
+  asm volatile("wi");
 }
 
 static inline void ert(void)
 {
-	asm volatile("ert");
+  asm volatile("ert");
 }
 
 

@@ -15,10 +15,10 @@
  * which will list all the files that no data were written to, possibly
  * due to reaching disk limit.
  *
- * Build by:	$ gcc --std=gnu99 <program-name>.c
+ * Build by:  $ gcc --std=gnu99 <program-name>.c
  */
 
-#define _XOPEN_SOURCE 500			/* for nftw() */
+#define _XOPEN_SOURCE 500      /* for nftw() */
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -45,45 +45,45 @@
  */
 void *memset32(void *dst, uint32_t val, uint64_t len)
 {
-	uint64_t uval;
-	uintptr_t d0;
+  uint64_t uval;
+  uintptr_t d0;
 
-	assert((len % 8) == 0);
-	len = len / 8;
+  assert((len % 8) == 0);
+  len = len / 8;
 
-	uval = ((uint64_t)val << 32) + val;
-	__asm__ __volatile__ (
-		"rep stosq"			/* rdi, rcx */
-		:"=&D" (d0), "+&c" (len)
-		:"0" (dst), "a" (uval)
-		:"memory");
+  uval = ((uint64_t)val << 32) + val;
+  __asm__ __volatile__ (
+    "rep stosq"      /* rdi, rcx */
+    :"=&D" (d0), "+&c" (len)
+    :"0" (dst), "a" (uval)
+    :"memory");
 
-	return dst;
+  return dst;
 }
 
 /*
  * Print @given_buf, with length of @len bytes, in the format:
- *	$ od --format=x1 --address-radix=none --output-duplicates
+ *  $ od --format=x1 --address-radix=none --output-duplicates
  */
 void buf_hex_dump(void *given_buf, int len)
 {
-	unsigned int bytes_perline = 16, n = 0;
-	uint8_t *buf = given_buf;
+  unsigned int bytes_perline = 16, n = 0;
+  uint8_t *buf = given_buf;
 
-	assert(buf != NULL);
+  assert(buf != NULL);
 
-	for (int i = 0; i < len; i++) {
-		printf(" ");
-		if (buf[i] < 0x10)
-			printf("0");
-		printf("%x", buf[i]);
+  for (int i = 0; i < len; i++) {
+    printf(" ");
+    if (buf[i] < 0x10)
+      printf("0");
+    printf("%x", buf[i]);
 
-		n++;
-		if (n == bytes_perline || i == len - 1) {
-			printf("\n");
-			n = 0;
-		}
-	}
+    n++;
+    if (n == bytes_perline || i == len - 1) {
+      printf("\n");
+      n = 0;
+    }
+  }
 }
 
 /* ********** End of the Library Functions ********** */
@@ -91,60 +91,60 @@ void buf_hex_dump(void *given_buf, int len)
 static int
 dirTree(const char *pathname, const struct stat *sbuf, int type, struct FTW *ftwb)
 {
-	char *buf, *readbuf;
-	int len, n, fd, ret;
+  char *buf, *readbuf;
+  int len, n, fd, ret;
 
-	if (!S_ISREG(sbuf->st_mode))
-		return 0;
-	printf("Testing file '%s' with ino %lu: ", pathname, sbuf->st_ino);
+  if (!S_ISREG(sbuf->st_mode))
+    return 0;
+  printf("Testing file '%s' with ino %lu: ", pathname, sbuf->st_ino);
 
-	len = 4096 * 3;
-	if ((buf = malloc(len)) == NULL) {
-		perror("malloc");
-		return -1;
-	}
-	if ((readbuf = malloc(len)) == NULL) {
-		perror("malloc");
-		return -1;
-	}
-	memset32(buf, sbuf->st_ino, 4096);		/* Check top comment */
-	memset32(buf + 4096, sbuf->st_ino + 1, 4096);	/* Check top comment */
-	memset32(buf + 8192, sbuf->st_ino + 2, 4096);	/* Check top comment */
+  len = 4096 * 3;
+  if ((buf = malloc(len)) == NULL) {
+    perror("malloc");
+    return -1;
+  }
+  if ((readbuf = malloc(len)) == NULL) {
+    perror("malloc");
+    return -1;
+  }
+  memset32(buf, sbuf->st_ino, 4096);    /* Check top comment */
+  memset32(buf + 4096, sbuf->st_ino + 1, 4096);  /* Check top comment */
+  memset32(buf + 8192, sbuf->st_ino + 2, 4096);  /* Check top comment */
 
-	if ((fd = open(pathname, O_RDONLY)) < 0) {
-		perror("open");
-		return -1;
-	}
+  if ((fd = open(pathname, O_RDONLY)) < 0) {
+    perror("open");
+    return -1;
+  }
 
-	n = 0; do {
-		if ((ret = read(fd, readbuf, len - n)) < 0) {
-			perror("read");
-			return -1;
-		}
-		n += ret;
-	} while (n < len && ret != 0);
+  n = 0; do {
+    if ((ret = read(fd, readbuf, len - n)) < 0) {
+      perror("read");
+      return -1;
+    }
+    n += ret;
+  } while (n < len && ret != 0);
 
-	if (memcmp(buf, readbuf, len) != 0) {
-		printf("Data corruption: Buffer should be:\n");
-		buf_hex_dump(buf, len);
-		printf("But we found this:\n");
-		buf_hex_dump(readbuf, len);
-		printf("Failure!");
-		return 0;
-	}
-	printf("Success!\n");
+  if (memcmp(buf, readbuf, len) != 0) {
+    printf("Data corruption: Buffer should be:\n");
+    buf_hex_dump(buf, len);
+    printf("But we found this:\n");
+    buf_hex_dump(readbuf, len);
+    printf("Failure!");
+    return 0;
+  }
+  printf("Success!\n");
 
-	close(fd);
-	free(buf), free(readbuf);
-	return 0;
+  close(fd);
+  free(buf), free(readbuf);
+  return 0;
 }
 
 int main(int argc, char **argv)
 {
-	if (nftw(argc > 1 ? argv[1] : ".", dirTree, 10, FTW_PHYS) == -1) {
-		perror("nftw");
-		return -1;
-	}
+  if (nftw(argc > 1 ? argv[1] : ".", dirTree, 10, FTW_PHYS) == -1) {
+    perror("nftw");
+    return -1;
+  }
 
-	return 0;
+  return 0;
 }

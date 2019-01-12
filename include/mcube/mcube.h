@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_MCUBE_H__
-#define	__MCUBE_MCUBE_MCUBE_H__
+#ifndef __MCUBE_MCUBE_MCUBE_H__
+#define __MCUBE_MCUBE_MCUBE_H__
 
 
 #include <mcube/mcube_pre_header.h>
@@ -26,4 +26,4 @@
 #include <debug/debug_header.h>
 
 
-#endif	/* __MCUBE_MCUBE_MCUBE_H__ */
+#endif /* __MCUBE_MCUBE_MCUBE_H__ */

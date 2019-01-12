@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_RASPI3_HEADER_H__
-#define	__MCUBE_ARM_RASPI3_RASPI3_HEADER_H__
+#ifndef __MCUBE_ARM_RASPI3_RASPI3_HEADER_H__
+#define __MCUBE_ARM_RASPI3_RASPI3_HEADER_H__
 
 #include <arm/raspi3/addr.h>
 #include <arm/raspi3/local_peripheral.h>

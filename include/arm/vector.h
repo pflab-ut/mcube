@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_VECTOR_H__
-#define	__MCUBE_ARM_VECTOR_H__
+#ifndef __MCUBE_ARM_VECTOR_H__
+#define __MCUBE_ARM_VECTOR_H__
 
 #define S_FRAME_SIZE         272 // size of all saved registers
 #define S_X0                 0 // offset of x0 register in saved stack frame
@@ -33,4 +33,4 @@
 #define SYSCALL_ERROR        17
 
 
-#endif	/* __MCUBE_ARM_VECTOR_H__ */
+#endif /* __MCUBE_ARM_VECTOR_H__ */

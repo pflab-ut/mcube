@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_FS_FAT_H__
-#define	__MCUBE_MCUBE_FS_FAT_H__
+#ifndef __MCUBE_MCUBE_FS_FAT_H__
+#define __MCUBE_MCUBE_FS_FAT_H__
 
 
 #ifndef __ASSEMBLY__
@@ -68,5 +68,5 @@ char *fat_readfile(unsigned int cluster);
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /*	__MCUBE_MCUBE_FS_FAT_H__ */
+#endif /* __MCUBE_MCUBE_FS_FAT_H__ */
 

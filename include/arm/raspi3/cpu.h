@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_CPU_H__
-#define	__MCUBE_ARM_RASPI3_CPU_H__
+#ifndef __MCUBE_ARM_RASPI3_CPU_H__
+#define __MCUBE_ARM_RASPI3_CPU_H__
 
 #ifndef __ASSEMBLY__
 
@@ -15,5 +15,5 @@ static inline int get_nr_cpu_cores(void)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /*	__MCUBE_ARM_RASPI3_CPU_H__ */
+#endif /* __MCUBE_ARM_RASPI3_CPU_H__ */
 

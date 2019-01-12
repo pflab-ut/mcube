@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_RASPI3_GPIO_H__
-#define	__MCUBE_ARM_RASPI3_GPIO_H__
+#ifndef __MCUBE_ARM_RASPI3_GPIO_H__
+#define __MCUBE_ARM_RASPI3_GPIO_H__
 
 #define GPFSEL0   (GPIO_CONTROLLER_BASE + 0x00)
 #define GPFSEL1   (GPIO_CONTROLLER_BASE + 0x04)
@@ -272,5 +272,5 @@
 
 
 
-#endif /*	__MCUBE_ARM_RASPI3_GPIO_H__ */
+#endif /* __MCUBE_ARM_RASPI3_GPIO_H__ */
 

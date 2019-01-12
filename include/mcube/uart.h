@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_UART_H__
-#define	__MCUBE_MCUBE_UART_H__
+#ifndef __MCUBE_MCUBE_UART_H__
+#define __MCUBE_MCUBE_UART_H__
 
 
 #ifndef __ASSEMBLY__
@@ -15,10 +15,10 @@
  * @brief UART information
  */
 struct uart_devdata {
-	/** Channel. */
-	unsigned int ch;
-	/** Baudrate. */
-	unsigned int baudrate;
+  /** Channel. */
+  unsigned int ch;
+  /** Baudrate. */
+  unsigned int baudrate;
 };
 
 typedef struct uart_devdata uart_devdata;
@@ -37,5 +37,5 @@ void init_uart(void);
 
 #endif
 
-#endif	/* __MCUBE_MCUBE_UART_H__ */
+#endif /* __MCUBE_MCUBE_UART_H__ */
 

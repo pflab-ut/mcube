@@ -6,7 +6,7 @@
 #ifndef __MCUBE_MCUBE_BARRIER_H__
 #define __MCUBE_MCUBE_BARRIER_H__
 
-#ifndef	__ASSEMBLY__
+#ifndef __ASSEMBLY__
 
 
 void smp_barrier(int index);

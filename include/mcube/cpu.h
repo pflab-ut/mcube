@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_CPU_H__
-#define	__MCUBE_MCUBE_CPU_H__
+#ifndef __MCUBE_MCUBE_CPU_H__
+#define __MCUBE_MCUBE_CPU_H__
 
 #define NR_CPUS 4
 
@@ -22,7 +22,7 @@
 /** Microsecond to CPU clock. */
 #define USEC_TO_CPU_CLOCK(usec) ((usec) * (CPU_CLOCK / (1000 * 1000)))
 
-#ifndef	__ASSEMBLY__
+#ifndef __ASSEMBLY__
 
 
 /* CPU clock. */
@@ -50,6 +50,6 @@ void vector(void);
 
 
 
-#endif	/* __ASSEMBLY__ */
+#endif /* __ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_CPU_H__ */
+#endif /* __MCUBE_MCUBE_CPU_H__ */

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_TIMER_H__
-#define	__MCUBE_MCUBE_TIMER_H__
+#ifndef __MCUBE_MCUBE_TIMER_H__
+#define __MCUBE_MCUBE_TIMER_H__
 
 #ifndef __ASSEMBLY__
 
@@ -43,19 +43,19 @@ extern unsigned long sys_tsc;
 
 #define TICK_NSEC (1000 * TICK_USEC)
 
-#define SEC2MSEC(sec)  ((sec) * 1000)
-#define SEC2USEC(sec)  ((sec) * 1000000)
-#define SEC2NSEC(sec)  ((sec) * 1000000000)
+#define SEC2MSEC(sec) ((sec) * 1000)
+#define SEC2USEC(sec) ((sec) * 1000000)
+#define SEC2NSEC(sec) ((sec) * 1000000000)
 
-#define MSEC2SEC(msec)  ((msec) / 1000)
+#define MSEC2SEC(msec) ((msec) / 1000)
 #define MSEC2USEC(msec) ((msec) * 1000)
 #define MSEC2NSEC(msec) ((msec) * 1000000)
 
-#define USEC2SEC(usec)  ((usec) / 1000000)
+#define USEC2SEC(usec) ((usec) / 1000000)
 #define USEC2MSEC(usec) ((usec) / 1000)
 #define USEC2NSEC(usec) ((usec) * 1000)
 
-#define NSEC2SEC(nsec)  ((nsec) / 1000000000)
+#define NSEC2SEC(nsec) ((nsec) / 1000000000)
 #define NSEC2MSEC(nsec) ((nsec) / 1000000)
 #define NSEC2USEC(nsec) ((nsec) / 1000)
 
@@ -63,4 +63,4 @@ extern unsigned long sys_tsc;
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_MCUBE_TIMER_H__ */
+#endif /* __MCUBE_MCUBE_TIMER_H__ */

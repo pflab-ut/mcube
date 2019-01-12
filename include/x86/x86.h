@@ -11,22 +11,22 @@
  *  the Free Software Foundation, version 2.
  */
 
-#define MSR_FS_BASE	0xC0000100
-#define MSR_GS_BASE	0xC0000101
+#define MSR_FS_BASE  0xC0000100
+#define MSR_GS_BASE  0xC0000101
 
 #ifndef __ASSEMBLY__
 
 
 static inline union x86_rflags get_rflags(void)
 {
-	union x86_rflags flags;
+  union x86_rflags flags;
 
-	asm volatile ("pushfq;"
-		      "popq %0;"
-		      :"=rm"(flags.raw)
-		      :);
+  asm volatile ("pushfq;"
+          "popq %0;"
+          :"=rm"(flags.raw)
+          :);
 
-	return flags;
+  return flags;
 }
 
 /*
@@ -37,11 +37,11 @@ static inline union x86_rflags get_rflags(void)
  */
 static inline void set_rflags(union x86_rflags flags)
 {
-	asm volatile ("pushq %0;"
-		      "popfq;"
-		      :
-		      :"g"(flags.raw)
-		      :"cc", "memory");
+  asm volatile ("pushq %0;"
+          "popfq;"
+          :
+          :"g"(flags.raw)
+          :"cc", "memory");
 }
 
 /*
@@ -51,13 +51,13 @@ static inline void set_rflags(union x86_rflags flags)
  */
 static inline union x86_rflags default_rflags(void)
 {
-	union x86_rflags flags;
+  union x86_rflags flags;
 
-	flags.raw = 0;
-	flags.__reserved1_0 = 1;
-	flags.irqs_enabled = 1;
+  flags.raw = 0;
+  flags.__reserved1_0 = 1;
+  flags.irqs_enabled = 1;
 
-	return flags;
+  return flags;
 }
 
 /*
@@ -67,17 +67,17 @@ static inline union x86_rflags default_rflags(void)
 
 static inline void set_fs(uint64_t val)
 {
-	write_msr(MSR_FS_BASE, val);
+  write_msr(MSR_FS_BASE, val);
 }
 
 static inline void set_gs(uint64_t val)
 {
-	write_msr(MSR_GS_BASE, val);
+  write_msr(MSR_GS_BASE, val);
 }
 
 static inline uint64_t get_gs(void)
 {
-	return read_msr(MSR_GS_BASE);
+  return read_msr(MSR_GS_BASE);
 }
 
 #endif /* !__ASSEMBLY__ */

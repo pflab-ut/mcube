@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_SIM_THREAD_H__
-#define	__MCUBE_SIM_THREAD_H__
+#ifndef __MCUBE_SIM_THREAD_H__
+#define __MCUBE_SIM_THREAD_H__
 
 #ifndef __ASSEMBLY__
 
@@ -25,7 +25,7 @@ struct cpu_context {
 
 static inline int get_pthread_id(void)
 {
-	return syscall(SYS_gettid);
+  return syscall(SYS_gettid);
 }
 
 #if CONFIG_USER_TASK_PTHREAD
@@ -35,10 +35,10 @@ static inline int get_pthread_id(void)
  * @brief POSIX thread argument
  */
 struct pthread_arg {
-	/** Thread ID. */
-	uint32_t thid;
-	/** Function pointer to execution. */
-	int (*func)(void *arg);
+  /** Thread ID. */
+  uint32_t thid;
+  /** Function pointer to execution. */
+  int (*func)(void *arg);
 };
 
 typedef struct pthread_arg pthread_arg;
@@ -52,4 +52,4 @@ void exec_thread(void);
 #endif /* !__ASSEMBLY__ */
 
 
-#endif	/* __MCUBE_SIM_THREAD_H__ */
+#endif /* __MCUBE_SIM_THREAD_H__ */

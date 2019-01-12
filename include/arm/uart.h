@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_ARM_UART_H__
-#define	__MCUBE_ARM_UART_H__
+#ifndef __MCUBE_ARM_UART_H__
+#define __MCUBE_ARM_UART_H__
 
 
 
@@ -574,4 +574,4 @@ extern struct uart_devdata uart_data[NR_UART_PORTS];
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_ARM_UART_H__ */
+#endif /* __MCUBE_ARM_UART_H__ */

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef	__MCUBE_MCUBE_LIMITS_H__
-#define	__MCUBE_MCUBE_LIMITS_H__
+#ifndef __MCUBE_MCUBE_LIMITS_H__
+#define __MCUBE_MCUBE_LIMITS_H__
 
 #if CONFIG_ARCH_SIM
 #include <limits.h>
@@ -62,4 +62,4 @@
 #endif /* CONFIG_ARCH_SIM */
 
 
-#endif	/* __MCUBE_MCUBE_LIMITS_H__ */
+#endif /* __MCUBE_MCUBE_LIMITS_H__ */

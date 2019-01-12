@@ -108,12 +108,12 @@ static inline void disable_cntv_ctl_el0(void)
 
 static inline unsigned long tsc2usec(unsigned long tsc)
 {
-	return ((unsigned long) ((tsc) * CPU_USEC_PER_CLOCK_MHZ + 0.5));
+  return ((unsigned long) ((tsc) * CPU_USEC_PER_CLOCK_MHZ + 0.5));
 }
 
 static inline unsigned long tsc2nsec(unsigned long tsc)
 {
-	return ((unsigned long) ((tsc) * CPU_NSEC_PER_CLOCK_MHZ + 0.5));
+  return ((unsigned long) ((tsc) * CPU_NSEC_PER_CLOCK_MHZ + 0.5));
 }
 
 
@@ -143,4 +143,4 @@ static inline void delay_cycles(unsigned int n)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif	/* __MCUBE_ARM_TIMER_H__ */
+#endif /* __MCUBE_ARM_TIMER_H__ */
