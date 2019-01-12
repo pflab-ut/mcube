@@ -164,9 +164,9 @@ extern struct percpu cpus[CPUS_MAX];
  *  percpu_set(A, 0xcafe);  // [2] same variable
  *  z = percpu_get(A);  // [3] same variable
  *
- * lets GCC store 'A’s value below to _both_ y and z before setting it
- * to 0xcafe, violating the order needed for correctness: '[3]’ reads
- * from a memory area written by '[2]’, thus '[3]’ depends on '[2]’.
+ * lets GCC store 'A's value below to _both_ y and z before setting it
+ * to 0xcafe, violating the order needed for correctness: '[3]' reads
+ * from a memory area written by '[2]', thus '[3]' depends on '[2]'.
  *
  * Optimizing compilers need to know such run-time depdendencies between
  * ops to translate code while maintaining correctness and sequentiality.
@@ -213,7 +213,7 @@ extern struct percpu cpus[CPUS_MAX];
  * So such volatile-qualified cast is meaningless: object value (rvalue)
  * will get extracted using non-volatile semantics then such rvalue will
  * get aimlessly casted to a volatile. Check section 14 of our notes,
- * 'On the C volatile type qualifier’ for further details, especially
+ * 'On the C volatile type qualifier' for further details, especially
  * the section appendix.
  *
  * Using above tricks, we do not suffer the performance of a full compiler

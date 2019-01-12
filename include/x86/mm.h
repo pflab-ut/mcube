@@ -70,7 +70,7 @@ enum zone_id {
    * representing phys regions > 1-GB are unmapped. If
    * the system has > 1-GB RAM, the page allocator will
    * then return some unmapped virt addresses, leading
-   * to #PFs at early boot - Zones_1GB raison d'être.
+   * to #PFs at early boot - Zones_1GB raison d'etre.
    *
    * IMP: Before and while building kernel's permanent
    * page tables at vm_init(), _only_ use this zone! */

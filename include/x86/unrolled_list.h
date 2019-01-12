@@ -17,7 +17,7 @@
  * Singly-linked unrolled list node
  *
  * NOTE! the  data array could've been embedded in the node using
- * declaration ‘void *array[]’, and putting that at structure end?
+ * declaration 'void *array[]', and putting that at structure end?
  */
 struct __node {
   void **array;    /* Array of void pointers to data! */
@@ -54,7 +54,7 @@ void unrolled_remove_key(struct unrolled_head *head, uint key);
 /*
  * unrolled_for_each - iterate over all the unrolled list values
  * @head        : Unrolled linked list head
- * @val         : of type ‘void *’, this's where the value will be
+ * @val         : of type 'void *', this's where the value will be
  *                put in each iteration.
  *
  * Take care while modifying this code, we're quite bending C

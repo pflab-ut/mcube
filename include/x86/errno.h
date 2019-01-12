@@ -12,9 +12,9 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, version 2.
  *
- * “No function in this document sets errno to 0 to indicate an error.
+ * "No function in this document sets errno to 0 to indicate an error.
  * Only these symbolic names should be used in programs, since the actual
- * val of the err number is unspecified.” --Single UNIX Specv3, POSIX:2001
+ * val of the err number is unspecified." --Single UNIX Specv3, POSIX:2001
  *
  * The errno values range 1->34 seems to be standardized _only_ as a his-
  * torical artifact in the UNIX jungle. Even Linus in linux-0.01 wonders
@@ -24,9 +24,9 @@
  */
 
 /*
- * Descriptions are copied  verbatim from the “Single Unix Specification,
- * Version 1”, Namely the “X/Open CAE Specification”: ‘System Interfaces
- * and Headers, Issue 4, Version 2 (1994)’.
+ * Descriptions are copied  verbatim from the "Single Unix Specification,
+ * Version 1", Namely the "X/Open CAE Specification": 'System Interfaces
+ * and Headers, Issue 4, Version 2 (1994)'.
  */
 static inline const char *errno_description(int err)
 {

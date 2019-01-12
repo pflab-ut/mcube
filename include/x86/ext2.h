@@ -14,10 +14,10 @@
  *
  * REFERENCES:
  *
- *  - “The Design of the UNIX Operating System”, Maurice J. Bach,
- *    Ch. 4: ‘Internal Representation of Files’, 1986
- *  - “UNIX Implementation”, Ken Thompson, Bell Journal, 1978
- *  - “The Second Extended File System - Internal Layout”, David
+ *  - "The Design of the UNIX Operating System", Maurice J. Bach,
+ *    Ch. 4: 'Internal Representation of Files', 1986
+ *  - "UNIX Implementation", Ken Thompson, Bell Journal, 1978
+ *  - "The Second Extended File System - Internal Layout", David
  *    Poirier et. al, 2001-2011
  *  - Finally, my collection of _primary sources_ FS papers with
  *    their study notes at: http://www.webcitation.org/68IbFbOGr

@@ -54,7 +54,7 @@ typedef struct lock_spin {
 
   /*
    * Interrupts get disabled when entering spin-protected
-   * critical regions; original state of CPU's ¡ÆIF¡Ç flag
+   * critical regions; original state of CPU's 'IF' flag
    * is saved here ... to get restored upon lock release.
    */
   union x86_rflags rflags;
