@@ -535,10 +535,9 @@ int printf(const char *fmt, ...)
 void __no_return panic(const char *fmt, ...)
 {
   char buf[FOUT_SIZE];
-  int n;
   va_list ap;
   va_start(ap, fmt);
-  n = __vsnprint(buf, sizeof(buf), fmt, ap);
+  __vsnprint(buf, sizeof(buf), fmt, ap);
   call_sys_write(buf);
   va_end(ap);
   for (;;)

@@ -10,7 +10,7 @@ struct bheap_node bh_nodes[NR_THREADS];
 
 thread_prio_t thread_prio = thread_is_high_prio;
 
-int empty_bheap(struct runqueue *rq)
+int empty_bheap(struct rt_runqueue *rq)
 {
   return !(rq->head) && !(rq->min);
 }
@@ -70,7 +70,7 @@ struct bheap_node *reverse_bheap(struct bheap_node *h)
   return h;
 }
 
-void min_bheap(struct runqueue *rq, struct bheap_node **prev, struct bheap_node **node)
+void min_bheap(struct rt_runqueue *rq, struct bheap_node **prev, struct bheap_node **node)
 {
   struct bheap_node *_prev, *cur;
   *prev = NULL;
@@ -97,7 +97,7 @@ void min_bheap(struct runqueue *rq, struct bheap_node **prev, struct bheap_node 
 }
 
 
-void union_bheap(struct runqueue *rq, struct bheap_node *h2)
+void union_bheap(struct rt_runqueue *rq, struct bheap_node *h2)
 {
   struct bheap_node *h1;
   struct bheap_node *prev, *x, *next;
@@ -142,7 +142,7 @@ void union_bheap(struct runqueue *rq, struct bheap_node *h2)
   rq->head = h1;
 }
 
-struct bheap_node *min_bheap_extract(struct runqueue *rq)
+struct bheap_node *min_bheap_extract(struct rt_runqueue *rq)
 {
   struct bheap_node *prev, *node;
   min_bheap(rq, &prev, &node);
@@ -159,7 +159,7 @@ struct bheap_node *min_bheap_extract(struct runqueue *rq)
 }
 
 /* insert (and reinitialize) a node into the bheap */
-void insert_bheap(struct runqueue *rq, struct bheap_node *node)
+void insert_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 {
   struct bheap_node *min;
   PDEBUG("insert_bheap(): node = %lx node->value->id = %lu\n",
@@ -182,7 +182,7 @@ void insert_bheap(struct runqueue *rq, struct bheap_node *node)
   }
 }
 
-void min_bheap_uncache(struct runqueue *rq)
+void min_bheap_uncache(struct rt_runqueue *rq)
 {
   struct bheap_node *min;
   if (rq->min) {
@@ -193,7 +193,7 @@ void min_bheap_uncache(struct runqueue *rq)
 }
 
 /* merge addition into target */
-void union_bheap_uncache(struct runqueue *target, struct runqueue *addition)
+void union_bheap_uncache(struct rt_runqueue *target, struct rt_runqueue *addition)
 {
   /* first insert any cached minima, if necessary */
   min_bheap_uncache(target);
@@ -203,7 +203,7 @@ void union_bheap_uncache(struct runqueue *target, struct runqueue *addition)
   addition->head = NULL;
 }
 
-struct bheap_node *peek_bheap(struct runqueue *rq)
+struct bheap_node *peek_bheap(struct rt_runqueue *rq)
 {
   if (!rq->min) {
     rq->min = min_bheap_extract(rq);
@@ -211,7 +211,7 @@ struct bheap_node *peek_bheap(struct runqueue *rq)
   return rq->min;
 }
 
-struct bheap_node *take_bheap(struct runqueue *rq)
+struct bheap_node *take_bheap(struct rt_runqueue *rq)
 {
   struct bheap_node *node;
   if (!rq->min) {
@@ -225,7 +225,7 @@ struct bheap_node *take_bheap(struct runqueue *rq)
   return node;
 }
 
-void decrease_bheap(struct runqueue *rq, struct bheap_node *node)
+void decrease_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 {
   struct bheap_node *parent;
   void *tmp;
@@ -261,7 +261,7 @@ void decrease_bheap(struct runqueue *rq, struct bheap_node *node)
   }
 }
 
-void delete_bheap(struct runqueue *rq, struct bheap_node *node)
+void delete_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 {
   struct bheap_node *parent, *prev, *pos;
   void *tmp;
@@ -320,7 +320,7 @@ void delete_bheap(struct runqueue *rq, struct bheap_node *node)
 }
 
 
-void print_bheap(struct runqueue *rq, struct bheap_node *h)
+void print_bheap(struct rt_runqueue *rq, struct bheap_node *h)
 {
   static int nr_tabs = 0;
   int i;
@@ -343,7 +343,7 @@ void print_bheap(struct runqueue *rq, struct bheap_node *h)
 }
 
 
-void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th)
+void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
 {
 #if SCHED_FP
   set_bit(rq->bitmap, th->priority);
@@ -353,7 +353,7 @@ void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th)
 
 
 /* first argument 'rq' is dummy */
-void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th)
+void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
 #if SCHED_FP
   set_bit(rq->bitmap, th->priority);
@@ -362,7 +362,7 @@ void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th)
 }
 
 
-void dequeue_rq_queue(struct runqueue *rq, struct thread_struct *th)
+void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
   /* dequeue */
   //  struct bheap_node *bn;

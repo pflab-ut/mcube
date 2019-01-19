@@ -19,6 +19,7 @@ vpath %.c $(TOP_DIR)/arch/$(ARCH_NAME) \
  $(TOP_DIR)/fs \
  $(TOP_DIR)/user \
  $(TOP_DIR)/user/$(ARCH_NAME)/ \
+ $(TOP_DIR)/user/test/ \
 
 vpath %.S $(TOP_DIR)/arch/$(ARCH_NAME)
 vpath %.asm $(TOP_DIR)/arch/$(ARCH_NAME)

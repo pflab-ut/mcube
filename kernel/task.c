@@ -11,11 +11,11 @@ struct task_struct *tasks[NR_TASKS] = {&init_task, };
 
 int copy_process(unsigned long func, unsigned long arg)
 {
+#if 0
   struct task_struct *p;
   int pid;
   
   preempt_disable();
-#if 0
   if (!(p = (struct task_struct *) get_free_page())) {
     print("Error: cannot create task\n");
     return 1;
@@ -28,8 +28,8 @@ int copy_process(unsigned long func, unsigned long arg)
   copy_arch_process(p, func, arg);
   pid = nr_tasks++;
   tasks[pid] = p;
-#endif
   preempt_enable();
+#endif
   return 0;
 }
 

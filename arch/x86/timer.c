@@ -28,8 +28,8 @@ void init_timer(unsigned long tick_us)
 #elif PIT_TIMER
   init_pit_timer(tick_us);
 #endif /* LAPIC_TIMER */
-  measure_cpu_frequency();
 #endif
+  measure_cpu_frequency();
 }
 
 void start_timer(unsigned int ch)

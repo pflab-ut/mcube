@@ -354,6 +354,46 @@ void *memset(void *s, int c, size_t n)
   return s;
 }
 
+/*
+ * Fill memory with given 4-byte value @val. For easy
+ * implementation, @len is vetoed to be a multiple of 8
+ */
+void *memset32(void *s, uint32_t c, uint64_t n)
+{
+  /* NOTE: volatile is required for -O3 option of GCC. */
+#if CONFIG_COMPILER_GCC
+  volatile uint32_t *xs = s;
+#elif CONFIG_COMPILER_CLANG
+  uint32_t *xs = s;
+#else
+#error "Unknown Compiler"
+#endif /* CONFIG_COMPILER_GCC */
+  while (n--) {
+    *xs++ = c;
+  }
+  return s;
+}
+
+/*
+ * Fill memory with given 8-byte value @val. For easy
+ * implementation, @len is vetoed to be a multiple of 8
+ */
+void *memset64(void *s, uint64_t c, uint64_t n)
+{
+  /* NOTE: volatile is required for -O3 option of GCC. */
+#if CONFIG_COMPILER_GCC
+  volatile uint64_t *xs = s;
+#elif CONFIG_COMPILER_CLANG
+  uint64_t *xs = s;
+#else
+#error "Unknown Compiler"
+#endif /* CONFIG_COMPILER_GCC */
+  while (n--) {
+    *xs++ = c;
+  }
+  return s;
+}
+
 #endif /* CONFIG_ARCH_X86 */
 
 

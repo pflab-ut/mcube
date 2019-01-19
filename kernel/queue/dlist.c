@@ -6,7 +6,7 @@
 #include <mcube/mcube.h>
 
 
-static void enqueue_rq_dlist(struct runqueue *rq,
+static void enqueue_rq_dlist(struct rt_runqueue *rq,
                              struct thread_struct *th,
                              unsigned long offset)
 {
@@ -38,7 +38,7 @@ static void enqueue_rq_dlist(struct runqueue *rq,
 
 
 /* same */
-void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th)
+void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
 {
   set_bit(rq->bitmap, 0);
   enqueue_rq_dlist(rq,
@@ -47,7 +47,7 @@ void enqueue_rq_queue_head(struct runqueue *rq, struct thread_struct *th)
 }
 
 
-void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th)
+void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
   set_bit(rq->bitmap, 0);
   enqueue_rq_dlist(rq,
@@ -56,7 +56,7 @@ void enqueue_rq_queue(struct runqueue *rq, struct thread_struct *th)
 }
 
 
-void dequeue_rq_queue(struct runqueue *rq, struct thread_struct *th)
+void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
   //  pdebug_array(run_tq[0].array);
   if (rq->array[0].next == th) {
