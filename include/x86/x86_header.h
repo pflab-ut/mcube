@@ -24,6 +24,7 @@
 #include <x86/bitmap.h>
 #include <x86/buffer_dumper.h>
 #include <x86/conf_sched.h>
+#include <x86/cpu.h>
 #include <x86/e820.h>
 #include <x86/errno.h>
 #include <x86/ext2.h>

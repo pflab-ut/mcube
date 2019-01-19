@@ -21,14 +21,14 @@ int call_sys_sched(void)
 
 int call_sys_end_job(void)
 {
-  int cpu = get_cpu_id();
+  //  int cpu = get_cpu_id();
   //  syscall1(SYS_end_job, (unsigned long) &current_th[cpu]->id);
   return 0;
 }
 
 unsigned long call_sys_get_exec_time(void)
 {
-  int cpu = get_cpu_id();
+  //  int cpu = get_cpu_id();
   unsigned long cpu_time = 0;
   //  syscall2(SYS_get_exec_time, (unsigned long) &current_th[cpu]->id, (unsigned long) &cpu_time);
   return cpu_time;
@@ -57,7 +57,7 @@ int call_user_sys_write(char *buf)
 }
 
 
-
+#if 0
 static void handle_syscall(interrupt_context_t *context)
 {
   /*
@@ -70,7 +70,7 @@ static void handle_syscall(interrupt_context_t *context)
    * R9:  6th Argument
    */
   
-  unsigned long cpu = get_cpu_id();
+  //  unsigned long cpu = get_cpu_id();
   //  unsigned long rcx;
   //asm volatile("movq %0, rcx" : "=r"(rcx));
   // Do nothing for now.
@@ -105,6 +105,7 @@ static void handle_syscall(interrupt_context_t *context)
   }
   */
 }
+#endif
 
 void init_syscall(void)
 {
