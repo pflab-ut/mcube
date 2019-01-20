@@ -1,5 +1,10 @@
-#ifndef _SPINLOCK_H
-#define _SPINLOCK_H
+/**
+ * @file include/x86/spinlock.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_SPINLOCK_H__
+#define __MCUBE_X86_SPINLOCK_H__
 
 /*
  * SMP spinlocks
@@ -101,4 +106,4 @@ static inline void spin_unlock(struct lock_spin *lock)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _SPINLOCK_H */
+#endif /* __MCUBE_X86_SPINLOCK_H__ */

@@ -1,5 +1,10 @@
-#ifndef _MPTABLES_H
-#define _MPTABLES_H
+/**
+ * @file include/x86/mptables.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_MPTABLES_H__
+#define __MCUBE_X86_MPTABLES_H__
 
 /*
  * Intel MultiProcessor Specification v1.4 tables
@@ -182,4 +187,4 @@ static void __unused mpc_dump(struct mpc_table *mpc) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _MPTABLES_H */
+#endif /* __MCUBE_X86_MPTABLES_H__ */

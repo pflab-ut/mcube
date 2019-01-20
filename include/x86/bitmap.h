@@ -1,5 +1,10 @@
-#ifndef _BITMAP_H
-#define _BITMAP_H
+/**
+ * @file include/x86/bitmap.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_BITMAP_H__
+#define __MCUBE_X86_BITMAP_H__
 
 #ifndef __ASSEMBLY__
 
@@ -20,4 +25,4 @@ static __unused void bitmap_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _BITMAP_H */
+#endif /* __MCUBE_X86_BITMAP_H__ */

@@ -51,9 +51,9 @@ static uint64_t pit_calibrate_cpu(int repeat)
   ms_delay = 5;
   diff_min = UINT64_MAX;
   for (int i = 0; i < repeat; i ++) {
-    tsc1 = read_tsc();
+    tsc1 = rdtsc();
     pit_mdelay(ms_delay);
-    tsc2 = read_tsc();
+    tsc2 = rdtsc();
 
     diff = tsc2 - tsc1;
     if (diff < diff_min)

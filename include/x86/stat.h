@@ -1,5 +1,11 @@
-#ifndef _STAT_H
-#define _STAT_H
+/**
+ * @file include/x86/stat.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_STAT_H__
+#define __MCUBE_X86_STAT_H__
+
 
 /*
  * stat.h - Data returned by the stat() function
@@ -90,4 +96,4 @@ struct stat {
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _STAT_H */
+#endif /* __MCUBE_X86_STAT_H__ */

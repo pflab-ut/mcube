@@ -1,5 +1,10 @@
-#ifndef _EXT2_H
-#define _EXT2_H
+/**
+ * @file include/x86/ext2.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_EXT2_H__
+#define __MCUBE_X86_EXT2_H__
 
 #ifndef __ASSEMBLY__
 
@@ -465,4 +470,4 @@ void dentry_dump(struct dir_entry *dentry);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _EXT2_H */
+#endif /* __MCUBE_X86_EXT2_H__ */

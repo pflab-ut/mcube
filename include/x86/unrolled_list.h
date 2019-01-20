@@ -1,5 +1,10 @@
-#ifndef _UNROLLED_H
-#define _UNROLLED_H
+/**
+ * @file include/x86/unrolled_list.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_UNROLLED_LIST_H__
+#define __MCUBE_X86_UNROLLED_LIST_H__
 
 /*
  * Unrolled Linked List -- A linked list of small arrays!
@@ -87,4 +92,4 @@ static void __unused unrolled_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _UNROLLED_H */
+#endif /* __MCUBE_X86_UNROLLED_LIST_H__ */

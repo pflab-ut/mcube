@@ -1,3 +1,10 @@
+/**
+ * @file include/x86/tests.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_TESTS_H__
+#define __MCUBE_X86_TESTS_H__
 /*
  * Testcases switches
  *
@@ -7,9 +14,6 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, version 2.
  */
-
-#ifndef _TESTS_H
-#define _TESTS_H
 
 #define    LIST_TESTS    0  /* Linked stack/queue tests */
 #define    UNROLLED_TESTS    0  /* Unrolled linked list tests */
@@ -42,4 +46,4 @@
 #endif
 
 
-#endif /* _TESTS_H */
+#endif /* __MCUBE_X86_TESTS_H__ */

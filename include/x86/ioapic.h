@@ -1,5 +1,10 @@
-#ifndef _IOAPIC_H
-#define _IOAPIC_H
+/**
+ * @file include/x86/ioapic.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_IOAPIC_H__
+#define __MCUBE_X86_IOAPIC_H__
 
 /*
  * I/O APIC definitions
@@ -199,4 +204,4 @@ void ioapic_init(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _IOAPIC_H */
+#endif /* __MCUBE_X86_IOAPIC_H__ */

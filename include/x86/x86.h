@@ -1,5 +1,10 @@
-#ifndef _X86_H
-#define _X86_H
+/**
+ * @file include/x86/x86.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_X86_H__
+#define __MCUBE_X86_X86_H__
 
 /*
  * General x86 properties
@@ -81,4 +86,4 @@ static inline uint64_t get_gs(void)
 }
 
 #endif /* !__ASSEMBLY__ */
-#endif /* _X86_H */
+#endif /* __MCUBE_X86_X86_H__ */

@@ -1,5 +1,10 @@
-#ifndef _ERRNO_H
-#define _ERRNO_H
+/**
+ * @file include/x86/errno.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_ERRNO_H__
+#define __MCUBE_X86_ERRNO_H__
 
 #ifndef __ASSEMBLY__
 
@@ -84,4 +89,4 @@ static inline const char *errno_to_str(int err)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _ERRNO_H */
+#endif /* __MCUBE_X86_ERRNO_H__ */

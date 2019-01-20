@@ -1,5 +1,10 @@
-#ifndef _I8042_H
-#define _I8042_H
+/**
+ * @file include/x86/keyboard.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_KEYBOARD_H__
+#define __MCUBE_X86_KEYBOARD_H__
 
 #ifndef __ASSEMBLY__
 
@@ -8,4 +13,4 @@ void keyboard_init(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _I8042_H */
+#endif /* __MCUBE_X86_KEYBOARD_H__ */

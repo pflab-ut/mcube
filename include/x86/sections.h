@@ -1,5 +1,10 @@
-#ifndef SECTIONS_H
-#define SECTIONS_H
+/**
+ * @file include/x86/sections.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_SECTIONS_H__
+#define __MCUBE_X86_SECTIONS_H__
 
 /*
  * Section boundaries symbols
@@ -33,4 +38,4 @@ extern char __kernel_end[];
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* SECTIONS_H */
+#endif /* __MCUBE_X86_SECTIONS_H__ */

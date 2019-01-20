@@ -1,5 +1,10 @@
-#ifndef _IO_H
-#define _IO_H
+/**
+ * @file include/x86/io.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_IO_H__
+#define __MCUBE_X86_IO_H__
 
 /*
  * x86-64 I/O instructions
@@ -45,5 +50,5 @@ static inline void io_delay(void)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _IO_H */
+#endif /* __MCUBE_X86_IO_H__ */
 

@@ -1,5 +1,10 @@
-#ifndef _SCHED_CONF_H
-#define _SCHED_CONF_H
+/**
+ * @file include/x86/conf_sched.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_CONF_SCHED_H__
+#define __MCUBE_X86_CONF_SCHED_H__
 
 #ifndef __ASSEMBLY__
 
@@ -46,4 +51,4 @@ static void __unused print_sched_stats(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _SCHED_CONF_H */
+#endif /* __MCUBE_X86_CONF_SCHED_H__ */

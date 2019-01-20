@@ -1,5 +1,10 @@
-#ifndef _PERCPU_H
-#define _PERCPU_H
+/**
+ * @file include/x86/percpu.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_PERCPU_H__
+#define __MCUBE_X86_PERCPU_H__
 
 /*
  * Per-CPU bookkeeping
@@ -312,4 +317,4 @@ static void __unused percpu_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _PERCPU_H */
+#endif /* __MCUBE_X86_PERCPU_H__ */

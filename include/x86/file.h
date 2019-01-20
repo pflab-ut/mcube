@@ -1,5 +1,10 @@
-#ifndef _FILE_H
-#define _FILE_H
+/**
+ * @file include/x86/file.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_FILE_H__
+#define __MCUBE_X86_FILE_H__
 
 #ifndef __ASSEMBLY__
 
@@ -50,4 +55,4 @@ static void __unused file_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _FILE_H */
+#endif /* __MCUBE_X86_FILE_H__ */

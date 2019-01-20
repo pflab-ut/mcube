@@ -1,5 +1,10 @@
-#ifndef _PIT_H
-#define _PIT_H
+/**
+ * @file include/x86/pit.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_PIT_H__
+#define __MCUBE_X86_PIT_H__
 
 #ifndef __ASSEMBLY__
 
@@ -23,4 +28,4 @@ static void __unused pit_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _PIT_H */
+#endif /* __MCUBE_X86_PIT_H__ */

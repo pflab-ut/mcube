@@ -1,5 +1,10 @@
-#ifndef _MM_H
-#define _MM_H
+/**
+ * @file include/x86/mm.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_MM_H__
+#define __MCUBE_X86_MM_H__
 
 /*
  * Memory Management (MM) bare bones
@@ -184,4 +189,4 @@ static void __unused pagealloc_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _MM_H */
+#endif /* __MCUBE_X86_MM_H__ */

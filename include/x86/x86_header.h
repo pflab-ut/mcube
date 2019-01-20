@@ -15,7 +15,6 @@
 #include <x86/atomic.h>
 #include <x86/spinlock.h>
 #include <x86/stat.h>
-#include <x86/stdint.h>
 #include <x86/string.h>
 #include <x86/unrolled_list.h>
 #include <x86/vm.h>
@@ -47,7 +46,6 @@
 #include <x86/serial.h>
 #include <x86/smpboot.h>
 #include <x86/tests.h>
-#include <x86/tsc.h>
 #include <x86/unistd.h>
 #include <x86/vectors.h>
 #include <x86/vga.h>

@@ -58,6 +58,23 @@
 #define HUGE_VAL DBL_MAX
 #endif /* !HUGE_VAL */
 
+/*
+ * MAXs and MINs
+ */
+
+#define INT8_MAX  (0x7f)
+#define INT16_MAX  (0x7fff)
+#define INT32_MAX  (0x7fffffff)
+#define INT64_MAX  (0x7fffffffffffffffL)
+
+#define UINT8_MAX  (0xff)
+#define UINT16_MAX  (0xffff)
+#define UINT32_MAX  (0xffffffff)
+#define UINT64_MAX  (0xffffffffffffffffUL)
+
+/* MAX value of given unsigned variable type */
+#define UTYPE_MAXVAL(x) ((typeof(x))UINT64_MAX)
+
 
 #endif /* CONFIG_ARCH_SIM */
 

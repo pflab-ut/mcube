@@ -1,5 +1,10 @@
-#ifndef _PROC_H
-#define _PROC_H
+/**
+ * @file include/x86/proc.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_PROC_H__
+#define __MCUBE_X86_PROC_H__
 
 /*
  * Processes and their related definitions
@@ -235,4 +240,4 @@ static inline void pcb_validate_offsets(void)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _PROC_H */
+#endif /* __MCUBE_X86_PROC_H__ */

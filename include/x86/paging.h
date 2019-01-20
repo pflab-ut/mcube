@@ -1,5 +1,10 @@
-#ifndef _PAGING_H
-#define _PAGING_H
+/**
+ * @file include/x86/paging.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_PAGING_H__
+#define __MCUBE_X86_PAGING_H__
 
 /*
  * X86-64 paging and kernel address-space control
@@ -294,4 +299,4 @@ static inline uint64_t get_cr3(void)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _PAGING_H */
+#endif /* __MCUBE_X86_PAGING_H__ */

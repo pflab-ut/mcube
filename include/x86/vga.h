@@ -1,5 +1,10 @@
-#ifndef _VGA_H
-#define _VGA_H
+/**
+ * @file include/x86/vga.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_VGA_H__
+#define __MCUBE_X86_VGA_H__
 
 /*
  * VGA Colors
@@ -40,4 +45,4 @@
 /* Max color value, 4 bytes */
 #define VGA_COLOR_MAX    0xf
 
-#endif /* _VGA_H */
+#endif /* __MCUBE_X86_VGA_H__ */

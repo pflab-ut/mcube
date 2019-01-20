@@ -1,5 +1,10 @@
-#ifndef _UNISTD_H
-#define _UNISTD_H
+/**
+ * @file include/x86/unistd.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_UNISTD_H__
+#define __MCUBE_X86_UNISTD_H__
 
 /*
  * unistd.h - Standard symbolic constants and types
@@ -16,4 +21,4 @@
 #define SEEK_CUR  1  /* Set file offset to current + @offset */
 #define SEEK_END  2  /* Set file offset to EOF + @offset */
 
-#endif /* _UNISTD_H */
+#endif /* __MCUBE_X86_UNISTD_H__ */

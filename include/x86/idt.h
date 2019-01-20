@@ -1,5 +1,10 @@
-#ifndef IDT_H
-#define IDT_H
+/**
+ * @file include/x86/idt.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_IDT_H__
+#define __MCUBE_X86_IDT_H__
 
 /*
  * IDT table descriptor definitions and accessor methods
@@ -157,4 +162,5 @@ static inline void local_irq_restore(union x86_rflags flags)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif
+#endif /* __MCUBE_X86_IDT_H__ */
+

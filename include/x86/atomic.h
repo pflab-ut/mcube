@@ -1,5 +1,10 @@
-#ifndef _ATOMIC_H
-#define _ATOMIC_H
+/**
+ * @file include/x86/atomic.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_ATOMIC_H__
+#define __MCUBE_X86_ATOMIC_H__
 
 #ifndef __ASSEMBLY__
 
@@ -15,4 +20,4 @@ static void __unused atomic_run_tests(void) { }
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /* _ATOMIC_H */
+#endif /* __MCUBE_X86_ATOMIC_H__ */

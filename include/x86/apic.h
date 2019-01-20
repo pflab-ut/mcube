@@ -1,5 +1,10 @@
-#ifndef _APIC_H
-#define _APIC_H
+/**
+ * @file include/x86/apic.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_APIC_H__
+#define __MCUBE_X86_APIC_H__
 
 /*
  * Local APIC definitions, 8259A PIC ports, ..
@@ -345,4 +350,5 @@ static void __unused apic_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _APIC_H */
+#endif /* __MCUBE_X86_APIC_H__ */
+

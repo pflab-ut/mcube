@@ -1,5 +1,10 @@
-#ifndef _MSR_H
-#define _MSR_H
+/**
+ * @file include/x86/msr.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_MSR_H__
+#define __MCUBE_X86_MSR_H__
 
 /*
  * 64-bit Model-Specific Registers
@@ -46,4 +51,4 @@ static inline uint64_t read_msr(uint32_t msr)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _MSR_H */
+#endif /* __MCUBE_X86_MSR_H__ */

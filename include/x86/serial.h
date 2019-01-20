@@ -1,5 +1,10 @@
-#ifndef _SERIAL_H
-#define _SERIAL_H
+/**
+ * @file include/x86/serial.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_SERIAL_H__
+#define __MCUBE_X86_SERIAL_H__
 
 /*
  * Serial port, 8250/16550 UART
@@ -19,4 +24,4 @@ void serial_putc(char ch);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _SERIAL_H */
+#endif /* __MCUBE_X86_SERIAL_H__ */

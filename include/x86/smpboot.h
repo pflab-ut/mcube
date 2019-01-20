@@ -1,3 +1,10 @@
+/**
+ * @file include/x86/smpboot.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_SMPBOOT_H__
+#define __MCUBE_X86_SMPBOOT_H__
 /*
  * Multiple-Processor (MP) Initialization
  *
@@ -8,8 +15,6 @@
  *  the Free Software Foundation, version 2.
  */
 
-#ifndef _SMPBOOT_H
-#define _SMPBOOT_H
 
 
 #define SMPBOOT_START    0x10000  /* Trampoline start; 4k-aligned */
@@ -47,4 +52,4 @@ void smpboot_trigger_secondary_cores_testcases(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _SMPBOOT_H */
+#endif /* __MCUBE_X86_SMPBOOT_H__ */

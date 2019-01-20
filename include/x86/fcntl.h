@@ -1,5 +1,10 @@
-#ifndef _FCNTL_H
-#define _FCNTL_H
+/**
+ * @file include/x86/fcntl.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_FCNTL_H__
+#define __MCUBE_X86_FCNTL_H__
 
 /*
  * fcntl.h - File control options
@@ -43,4 +48,4 @@
 #define O_RSYNC    0x0200    /* ??? */
 #define O_SYNC    0x0400    /* ??? */
 
-#endif /* _FCNTL_H */
+#endif /* __MCUBE_X86_FCNTL_H__ */

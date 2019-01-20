@@ -1,5 +1,10 @@
-#ifndef _E820_H
-#define _E820_H
+/**
+ * @file include/x86/e820.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_X86_E820_H__
+#define __MCUBE_X86_X86_E820_H__
 
 /*
  * BIOS 0xE820 - Query System Address Map service.
@@ -201,4 +206,4 @@ void e820_init(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _E820_H */
+#endif /* __MCUBE_X86_X86_E820_H__ */

@@ -1,5 +1,10 @@
-#ifndef _VECTORS_H
-#define _VECTORS_H
+/**
+ * @file include/x86/vectors.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_VECTORS_H__
+#define __MCUBE_X86_VECTORS_H__
 
 /*
  * IRQ vectors assignment to bootstrap CPU
@@ -59,4 +64,4 @@
 
 // priority 0x1 - (System reserved)
 
-#endif /* _VECTORS_H */
+#endif /* __MCUBE_X86_VECTORS_H__ */

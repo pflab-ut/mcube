@@ -1,5 +1,10 @@
-#ifndef _BUFDUMP_H
-#define _BUFDUMP_H
+/**
+ * @file include/x86/buffer_dumper.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_BUFFER_DUMPER_H__
+#define __MCUBE_X86_BUFFER_DUMPER_H__
 
 #ifndef __ASSEMBLY__
 
@@ -43,4 +48,4 @@ void printbuf(struct buffer_dumper*, void *buf, uint len);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _BUFDUMP_H */
+#endif /* __MCUBE_X86_BUFFER_DUMPER_H__ */

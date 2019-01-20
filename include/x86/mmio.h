@@ -1,5 +1,10 @@
-#ifndef _MMIO_H
-#define _MMIO_H
+/**
+ * @file include/x86/mmio.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_MMIO_H__
+#define __MCUBE_X86_MMIO_H__
 
 /*
  * Memory-mapped I/O registers accessors
@@ -86,4 +91,4 @@ static inline void writeq(uint64_t val, volatile void *addr) {
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MMIO_H */
+#endif /* __MCUBE_X86_MMIO_H__ */

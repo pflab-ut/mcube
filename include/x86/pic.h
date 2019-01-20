@@ -1,5 +1,10 @@
-#ifndef _I8259_H
-#define _I8259_H
+/**
+ * @file include/x86/pic.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_PIC_H__
+#define __MCUBE_X86_PIC_H__
 
 /*
  * The i8259A PIC
@@ -16,4 +21,4 @@ void pic_init(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _I8259_H */
+#endif /* __MCUBE_X86_PIC_H__ */

@@ -1,5 +1,11 @@
-#ifndef _SEGMENT_H
-#define _SEGMENT_H
+/**
+ * @file include/x86/segment.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_SEGMENT_H__
+#define __MCUBE_X86_SEGMENT_H__
+
 
 /*
  * Segmentation definitions; minimal by the nature of x86-64
@@ -48,4 +54,4 @@ static inline struct gdt_descriptor get_gdt(void)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _SEGMENT_H */
+#endif /* __MCUBE_X86_SEGMENT_H__ */

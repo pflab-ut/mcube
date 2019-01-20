@@ -1,5 +1,10 @@
-#ifndef _HASH_H
-#define _HASH_H
+/**
+ * @file include/x86/hash.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_HASH_H__
+#define __MCUBE_X86_HASH_H__
 
 #ifndef __ASSEMBLY__
 
@@ -18,4 +23,4 @@ static void __unused hash_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _HASH_H */
+#endif /* __MCUBE_X86_HASH_H__ */

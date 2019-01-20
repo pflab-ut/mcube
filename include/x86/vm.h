@@ -1,5 +1,10 @@
-#ifndef _VM_H
-#define _VM_H
+/**
+ * @file include/x86/vm.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_VM_H__
+#define __MCUBE_X86_VM_H__
 
 /*
  * Kernel virtual memory
@@ -28,4 +33,4 @@ static inline void vm_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _VM_H */
+#endif /* __MCUBE_X86_VM_H__ */

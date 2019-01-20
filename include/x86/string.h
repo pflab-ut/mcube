@@ -1,5 +1,10 @@
-#ifndef STRING_H
-#define STRING_H
+/**
+ * @file include/x86/string.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_STRING_H__
+#define __MCUBE_X86_STRING_H__
 
 /*
  * Standard C string definitions
@@ -37,4 +42,5 @@ static void __unused string_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif
+#endif /* __MCUBE_X86_STRING_H__ */
+

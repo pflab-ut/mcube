@@ -1,5 +1,10 @@
-#ifndef _KMALLOC_H
-#define _KMALLOC_H
+/**
+ * @file include/x86/kmalloc.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_X86_KMALLOC_H__
+#define __MCUBE_X86_KMALLOC_H__
 
 /*
  * Kernel Memory Allocator
@@ -94,5 +99,5 @@ static void __unused kmalloc_run_tests(void) { }
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _KMALLOC_H */
+#endif /* __MCUBE_X86_KMALLOC_H__ */
 
