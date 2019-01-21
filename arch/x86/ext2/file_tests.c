@@ -41,12 +41,15 @@ static uint64_t _test_chdir_on_path(const char *path)
   prints("Testing path: '%s'\n", path);
 
   assert(*path == '/');
-  while (*path == '/')
+  while (*path == '/') {
     path++;
+  }
   prints("Changing to dir: '/' .");
   ret = sys_chdir("/");
   prints(". returned '%s'\n", errno_to_str(ret));
-  if (ret < 0) return ret;
+  if (ret < 0) {
+    return ret;
+  }
   str = kmalloc(EXT2_FILENAME_LEN);
 
   /* Special case for '/' */
@@ -59,24 +62,32 @@ static uint64_t _test_chdir_on_path(const char *path)
   /* Mini-Stateful parser */
   for (i = 0, ch = path; *ch != '\0';) {
     if (*ch == '/') {
-      while (*ch == '/') ch++;
+      while (*ch == '/') {
+        ch++;
+      }
       str[i] = '\0';
-      if (*ch != '\0') i = 0;
+      if (*ch != '\0') {
+        i = 0;
+      }
       prints("Changing to dir: '%s/' .", str);
       ret = sys_chdir(str);
       prints(". returned '%s'\n", errno_to_str(ret));
-      if (ret < 0) return ret;
+      if (ret < 0) {
+        return ret;
+      }
     } else {
-      if (i == EXT2_FILENAME_LEN)
+      if (i == EXT2_FILENAME_LEN) {
         panic("_FILE: Too long file name in '%s'", path);
+      }
       str[i] = *ch, ch++, i++;
     }
   }
 
   str[i] = '\0', inum = name_i(str);
-  if (inum < 0)
+  if (inum < 0) {
     panic("_FILE: path translation for relative path '%s': '%s'",
           str, errno_to_str(inum));
+  }
  out:
   prints("Inode num for relative path '%s' = %lu\n\n", str, inum);
   kfree(str);
@@ -93,18 +104,20 @@ static void __unused _test_chdir(void)
     file = &ext2_files_list[i];
     file->relative_inum = _test_chdir_on_path(file->path);
     if (file->absolute_inum &&
-        file->absolute_inum != file->relative_inum)
+        file->absolute_inum != file->relative_inum) {
       panic("_FILE: Absolute pathname translation for path "
             "'%s' = %lu, while relative = %lu", file->path,
             file->absolute_inum, file->relative_inum);
+    }
   }
 
   for (uint i = 0; ext2_root_list[i] != NULL; i++) {
     path = ext2_root_list[i];
     inum = _test_chdir_on_path(path);
-    if (inum != EXT2_ROOT_INODE)
+    if (inum != EXT2_ROOT_INODE) {
       panic("_FILE: Relative pathname translation for '%s' "
             "= %lu; while it should've been root inode 2!");
+    }
   }
 }
 
@@ -116,10 +129,11 @@ static void __unused _test_open(void)
     file = &ext2_files_list[i];
     prints("_FILE: Open()-ing path '%s': ", file->path);
     file->fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
-    if (file->fd < 0)
+    if (file->fd < 0) {
       panic("..error: '%s'\n", errno_to_str(file->fd));
-    else
+    } else {
       prints("..success! fd = %d\n", file->fd);
+    }
   }
 }
 
@@ -127,18 +141,19 @@ static void __unused _test_close(void)
 {
   struct path_translation *file;
   int fd;
-
+  
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     file = &ext2_files_list[i];
     prints("_FILE: Close()-ing path '%s': ", file->path);
     file->fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
     sys_close(file->fd);
     fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
-    if (file->fd != fd)
+    if (file->fd != fd) {
       panic("open()=%d, close(%d), open()=%d [should be "
             "%d]", file->fd, file->fd, fd, file->fd);
-    else
+    } else {
       prints("..success! fd = %d\n", file->fd);
+    }
   }
 }
 
@@ -161,9 +176,12 @@ static void __unused _test_read(int read_chunk)
       prints("\n");
     }
     if (len < 0) switch(len) {
-      case -EISDIR: prints("directory!\n"); break;
-      default: panic("Read()-ing path '%s' returned '%s'",
-                     file->path, errno_to_str(len));
+      case -EISDIR:
+        prints("directory!\n");
+        break;
+      default:
+        panic("Read()-ing path '%s' returned '%s'",
+              file->path, errno_to_str(len));
       }
     prints("----------------------- EOF -----------------------\n");
   }
@@ -210,8 +228,7 @@ static void __unused _test_write(void)
       (*pr)("Symbolic link!\n");
       continue;
     }
-    fd = sys_open(file->path, O_WRONLY | O_TRUNC | O_CREAT, 0);
-    if (fd < 0) {
+    if ((fd = sys_open(file->path, O_WRONLY | O_TRUNC | O_CREAT, 0)) < 0) {
       (*pr)("Open() error: '%s'\n", errno_to_str(fd));
       continue;
     }
@@ -272,8 +289,7 @@ static void __unused _test_write(void)
       (*pr)("Symbolic link!\n");
       continue;
     }
-    fd = sys_open(file->path, O_RDWR | O_CREAT, 0);
-    if (fd < 0) {
+    if ((fd = sys_open(file->path, O_RDWR | O_CREAT, 0)) < 0) {
       (*pr)("Open() error: '%s'\n", errno_to_str(fd));
       continue;
     }
@@ -286,10 +302,11 @@ static void __unused _test_write(void)
         (*pr)("Read() err: '%s\\n", errno_to_str(ilen));
         continue;
       }
-      if (ilen < BUF_LEN)
+      if (ilen < BUF_LEN) {
         panic("We've written %d bytes to file %s, but "
               "returned only %d bytes on read", BUF_LEN,
               file->path, ilen);
+      }
       if (memcmp(buf, buf2, BUF_LEN) != 0) {
         (*pr)("Data written differs from what's read!\n");
         (*pr)("We've written the following into file:\n");
@@ -317,12 +334,14 @@ static void __unused _test_write(void)
   for (uint64_t i = 0; i < inode_get(file->inum)->size_low; i++) {  \
     prints("seek(%d, %lu, " #SEEK_WHENCE "): ", p->fd, i);          \
     uint64_t old_offset = file->offset;                             \
-    if ((ret = sys_lseek(p->fd, i, SEEK_WHENCE)) < 0)               \
+    if ((ret = sys_lseek(p->fd, i, SEEK_WHENCE)) < 0) {             \
       panic("failure: '%s'", errno_to_str(ret));                    \
-    if (file->offset != (EXPECTED_VALUE))                           \
+    }                                                               \
+    if (file->offset != (EXPECTED_VALUE)) {                         \
       panic("lseek failure, path='%s', lseek(" #SEEK_WHENCE         \
             ",%lu), old offset = %lu, returned offset = %lu",       \
             p->path, i, old_offset, file->offset);                  \
+    }                                                               \
     prints("offset = %lu, Success!\n", file->offset);               \
   }
 
@@ -389,20 +408,23 @@ static void __unused _test_stat(void)
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     file = &ext2_files_list[i];
     prints("_FILE: stat()-ing path '%s': ", file->path);
-    if ((ret = sys_stat(file->path, statbuf)) < 0)
+    if ((ret = sys_stat(file->path, statbuf)) < 0) {
       panic("stat('%s', buf=0x%lx) = '%s'", file->path,
             statbuf, errno_to_str(ret));
-    if ((inum = name_i(file->path)) < 0)
+    }
+    if ((inum = name_i(file->path)) < 0) {
       panic("name_i('%s') = '%s'", file->path,
             errno_to_str(inum));
+    }
     __validate_statbuf(inum, statbuf);
     prints("Success!\n");
 
     fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
     prints("_FILE: Fstat()-ing path '%s': ", file->path);
-    if ((ret = sys_fstat(fd, statbuf)) < 0)
+    if ((ret = sys_fstat(fd, statbuf)) < 0) {
       panic("stat('%s', buf=0x%lx) = '%s'", file->path,
             statbuf, errno_to_str(ret));
+    }
     __validate_statbuf(statbuf->st_ino, statbuf);
     sys_close(fd);
     prints("Success!\n");
@@ -479,9 +501,10 @@ static void __unused file_test_creation(void)
       name[0] = p;
       name[1] = ch;
       fd = sys_open(name, O_CREAT | O_EXCL | O_RDWR, 0);
-      if (fd != -EEXIST)
+      if (fd != -EEXIST) {
         panic("File '%s' already exists, but file_new "
               "allocated a new fd %lu for it", name, fd);
+      }
     }
 
   /* Boundary Case: what about files creation with long names? */
@@ -490,18 +513,20 @@ static void __unused file_test_creation(void)
   longname[EXT2_FILENAME_LEN] = '\0';
   fd = sys_open(longname, O_CREAT | O_RDWR | O_EXCL, 0);
   prints("Creating file '%s': ", longname);
-  if (fd > 0)
+  if (fd > 0) {
     panic("Tried to create long file name of len %d, but it was "
           "accepted and inode %lu returned;  ENAMETOOLONG should"
           "'ve been returned!", EXT2_FILENAME_LEN, fd);
+  }
   prints("returned %s\n", errno_to_str(fd));
   longname[EXT2_FILENAME_LEN - 1] = '\0';
   fd = sys_open(longname, O_CREAT | O_RDWR | O_EXCL, 0);
   prints("Creating file '%s': ", longname);
-  if (fd < 0)
+  if (fd < 0) {
     panic("Tried to create max possible len (%d) file name, but "
-          "error %s was returned!", EXT2_FILENAME_LEN-1,
+          "error %s was returned!", EXT2_FILENAME_LEN - 1,
           errno_to_str(fd));
+  }
   prints("returned %d\n", fd);
 #else
   /* Enable this code if and only if the files list have all of
@@ -510,10 +535,11 @@ static void __unused file_test_creation(void)
     file = &ext2_files_list[j];
     prints("Creating file '%s':\n", file->path);
     fd = sys_open(file->path, O_CREAT|O_EXCL|O_RDWR|O_TRUNC, 0);
-    if (fd < 0)
+    if (fd < 0) {
       prints("FAILURE! Error %s\n", errno_to_str(fd));
-    else
+    } else {
       prints("SUCCESS! returned fd = %d\n", fd);
+    }
     sys_close(fd);
   }
 #endif
@@ -531,10 +557,11 @@ static void __unused file_test_deletion(void)
     name[0] = ch;
     prints("Deleting non-existing file '%s': ", name);
     ret = sys_unlink(name);
-    if (ret != -ENOENT)
+    if (ret != -ENOENT) {
       prints("FAILURE: returned '%s'\n", errno_to_str(ret));
-    else
+    } else {
       prints("SUCCESS: returned '-ENOENT'\n");
+    }
   }
   kfree(name);
 
@@ -580,21 +607,21 @@ static void file_test_hard_links(void)
        i++, name[0]++) {
     path = ext2_root_list[i];
     prints("Creating hard link from '%s' to '%s': ", path, name);
-    ret = sys_link(path, name);
-    if (ret < 0)
+    if ((ret = sys_link(path, name)) < 0) {
       prints("FAILURE: %s\n", errno_to_str(ret));
-    else
+    } else {
       prints("Success!\n");
+    }
   }
   kfree(name);
-  if (test_dirs_only)
+  if (test_dirs_only) {
     return;
+  }
 
   /* Hard links to a regular file */
   dst = "destination";
   prints("Creating hard link to regular file:\n");
-  fd = sys_open(dst, O_WRONLY|O_CREAT|O_EXCL, 0);
-  if (fd < 0) {
+  if ((fd = sys_open(dst, O_WRONLY|O_CREAT|O_EXCL, 0)) < 0) {
     prints("FAILURE: cannot creat reg file '%s': %s\n", dst,
            errno_to_str(fd));
     return;
@@ -610,10 +637,11 @@ static void file_test_hard_links(void)
     prints("Success!\n");
     prints("Creating hard link from '%s' to '%s': ", dst, name);
     ret = sys_link(dst, name);
-    if (ret < 0)
+    if (ret < 0) {
       prints("FAILURE: %s\n", errno_to_str(ret));
-    else
+    } else {
       prints("Success!\n");
+    }
   }
   kfree(name);
 }

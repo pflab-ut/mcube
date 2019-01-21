@@ -43,64 +43,77 @@ struct registers4 {
 
 typedef struct registers4 registers4_t;
 
-#if 0
+
 static inline uint8_t inb(uint16_t port)
 {
-  uint8_t value;
-  asm volatile("inb %0, %1" : "=a" (value) : "Nd" (port));
-  return value;
+  uint8_t val;
+
+  asm volatile("inb %[port], %[val]" : [val] "=a" (val) : [port] "Nd" (port));
+  
+  return val;
 }
-#endif
 
 static inline uint16_t inw(uint16_t port)
 {
-  uint16_t value;
-  asm volatile("inw %0, %1" : "=a" (value) : "Nd" (port));
-  return value;
+  uint16_t val;
+
+  asm volatile("inw %[port], %[val]" : [val] "=a" (val) : [port] "Nd" (port));
+  
+  return val;
 }
 
 static inline uint32_t inl(uint32_t port)
 {
-  uint32_t value;
-  asm volatile("inl %0, %1" : "=a" (value) : "Nd" (port));
-  return value;
+  uint32_t val;
+
+  asm volatile("inl %[port], %[val]" : [val] "=a" (val) : [port] "Nd" (port));
+  
+  return val;
 }
 
-static inline uint32_t ind(uint64_t port)
+static inline uint64_t ind(uint64_t port)
 {
-  uint64_t value;
-  asm volatile("ind %0, %1" : "=a" (value) : "Nd" (port));
-  return value;
+  uint64_t val;
+
+  asm volatile("ind %[port], %[val]" : [val] "=a" (val) : [port] "Nd" (port));
+  
+  return val;
 }
 
-#if 0
-static inline void outb(uint16_t port, uint8_t value)
+static inline void outb(uint8_t val, uint16_t port)
 {
-  asm volatile("outb %0, %1" :: "Nd"(port), "a"(value));
-}
-#endif
-
-
-static inline void outw(uint16_t port, uint16_t value)
-{
-  asm volatile("outw %0, %1" :: "Nd"(port), "a"(value));   
+  asm volatile("outb %[val], %[port]" :: [val] "a" (val), [port] "Nd" (port));
 }
 
-static inline void outl(uint32_t port, uint32_t value)
+static inline void outw(uint16_t val, uint16_t port)
 {
-  asm volatile("outl %0, %1" :: "Nd"(port), "a"(value));   
+  asm volatile("outw %[val], %[port]" :: [val] "a" (val), [port] "Nd" (port));
 }
 
-static inline void outd(uint64_t port, uint64_t value)
+static inline void outl(uint32_t val, uint32_t port)
 {
-  asm volatile("outd %0, %1" :: "Nd"(port), "a"(value));   
+  asm volatile("outl %[val], %[port]" :: [val] "a" (val), [port] "Nd" (port));
+}
+
+static inline void outd(uint64_t val, uint64_t port)
+{
+  asm volatile("outd %[val], %[port]" :: [val] "a" (val), [port] "Nd" (port));
+}
+
+
+/*
+ * A (hopefully) free port for I/O delay. Port 0x80 causes
+ * problems on HP Pavilion laptops.
+ */
+static inline void io_delay(void)
+{
+  asm volatile ("outb %al, $0xed");
 }
 
 static inline void finit(void)
 {
   asm volatile("finit");
 }
-
 
 /* clear interrupt */
 static inline void cli(void)
@@ -218,23 +231,34 @@ static inline void wbinvd(void)
   asm volatile("wbinvd");
 }
 
-/* read memory specific register */
-static inline uint64_t rdmsr(uint32_t addr)
+/*
+ * Write the content of @val using the %edx:%eax register pair to
+ * the @msr MSR.
+ */
+static inline void wrmsr(uint32_t msr, uint64_t val)
 {
-  uint64_t data;
-  asm volatile("rdmsr"
-               : "=A" (data)
-               : "c" (addr));
-  return data;
-}
+  uint32_t high = val >> 32;
+  uint32_t low = val & 0xffffffff;
 
-/* write to model specific register */
-static inline void wrmsr(uint32_t addr, uint64_t data)
-{
   asm volatile("wrmsr"
                :
-               : "c" (addr), "A" (data));
+               : "a"(low), "d"(high), "c"(msr));
 }
+/*
+ * Return the content of the @msr MSR (%ecx) using the %edx:%eax
+ * register pair.
+ */
+static inline uint64_t rdmsr(uint32_t msr)
+{
+  uint32_t high, low;
+
+  asm volatile("rdmsr"
+               : "=&a"(low), "=&d"(high)
+               : "c"(msr));
+  
+  return ((uint64_t) high << 32) + low;
+}
+
 
 static inline void invalidate_page(void *vaddr)
 {

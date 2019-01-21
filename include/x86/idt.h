@@ -28,11 +28,11 @@ struct idt_gate {
   uint16_t offset_low;
   uint16_t selector;
   uint16_t ist: 3,
-     reserved0: 5,
-     type: 4,
-     reserved0_1: 1,
-     dpl: 2,
-     p: 1;
+    reserved0: 5,
+    type: 4,
+    reserved0_1: 1,
+    dpl: 2,
+    p: 1;
   uint16_t offset_middle;
   uint32_t offset_high;
   uint32_t reserved0_2;
@@ -148,16 +148,18 @@ static inline union x86_rflags local_irq_disable_save(void)
   union x86_rflags flags;
 
   flags = get_rflags();
-  if (flags.irqs_enabled)
+  if (flags.irqs_enabled) {
     local_irq_disable();
+  }
 
   return flags;
 }
 
 static inline void local_irq_restore(union x86_rflags flags)
 {
-  if (flags.irqs_enabled)
+  if (flags.irqs_enabled) {
     set_rflags(flags);
+  }
 }
 
 #endif /* !__ASSEMBLY__ */

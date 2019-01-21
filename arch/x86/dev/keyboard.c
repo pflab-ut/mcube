@@ -165,9 +165,10 @@ static uint8_t kbd_read_input(void)
   union i8042_status status;
 
   status.raw = inb(KBD_STATUS_REG);
-  if (status.output_ready)
+  if (status.output_ready) {
     return inb(KBD_DATA_REG);
-
+  }
+  
   return KEY_NONE;
 }
 
@@ -180,8 +181,9 @@ static void kbd_flush_buffer(void)
   int trials = 128;
 
   while (trials--) {
-    if (kbd_read_input() == KEY_NONE)
+    if (kbd_read_input() == KEY_NONE) {
       break;
+    }
     apic_udelay(50);
   }
 }
@@ -190,7 +192,8 @@ static void kbd_flush_buffer(void)
  * The real handler
  */
 static int shifted;    /* Shift keys pressed? */
-void __kb_handler(void) {
+void __kb_handler(void)
+{
   uint8_t code, ascii;
 
   /* Implicit ACK: reading the scan code empties the
@@ -210,15 +213,18 @@ void __kb_handler(void) {
     break;
   };
 
-  if (code >= ARRAY_SIZE(scancodes))
+  if (code >= ARRAY_SIZE(scancodes)) {
     return;
+  }
 
   ascii = scancodes[code][shifted];
-  if (ascii)
+  if (ascii) {
     putc(ascii);
+  }
 }
 
-void keyboard_init(void) {
+void keyboard_init(void)
+{
   extern void kb_handler(void);
   uint8_t vector;
 

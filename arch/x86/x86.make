@@ -147,7 +147,7 @@ COPT_FLAGS =				\
 CWARN_FLAGS =				\
   -Wall					\
 
-# -Wextra				\
+#CWARN_FLAGS += -Wextra				\
 		-Wchar-subscripts			\
   -Wformat=2				\
   -Wmissing-include-dirs		\
@@ -155,7 +155,6 @@ CWARN_FLAGS =				\
   -Wtrigraphs				\
   -Wunused				\
   -Wstrict-aliasing=2			\
-  -Wundef				\
   -Wpointer-arith			\
   -Wcast-qual				\
   -Wwrite-strings			\
@@ -170,7 +169,9 @@ CWARN_FLAGS =				\
   -Wvla					\
   -Wdisabled-optimization		\
   -Wno-type-limits			\
-  -Wno-missing-field-initializers
+  -Wno-missing-field-initializers \
+
+#  -Wundef				\
 
 
 CFLAGS +=				\
@@ -234,11 +235,8 @@ SRCS +=	\
  $(TOP_DIR)/arch/x86/lib/list.c	\
  $(TOP_DIR)/arch/x86/lib/unrolled_list.c	\
  $(TOP_DIR)/arch/x86/lib/hash.c	\
- $(TOP_DIR)/arch/x86/lib/bitmap.c	\
-	$(TOP_DIR)/arch/x86/lib/string.c	\
  $(TOP_DIR)/arch/x86/lib/printf.c	\
  $(TOP_DIR)/arch/x86/lib/buffer_dumper.c	\
- $(TOP_DIR)/arch/x86/lib/atomic.c	\
  $(TOP_DIR)/arch/x86/lib/spinlock.c
 
 # All other kernel objects

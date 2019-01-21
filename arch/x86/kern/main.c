@@ -10,9 +10,10 @@
 
 static void setup_idt(void)
 {
-  for (int i = 0; i < EXCEPTION_GATES; i ++)
+  for (int i = 0; i < EXCEPTION_GATES; i ++) {
     set_intr_gate(i, (void *) &idt_exception_stubs[i]);
-
+  }
+  
   set_intr_gate(HALT_CPU_IPI_VECTOR, halt_cpu_ipi_handler);
 
   load_idt(&idtdesc);
@@ -45,6 +46,7 @@ static void print_info(void)
  */
 static void run_test_cases(void)
 {
+#if 0
   list_run_tests();
   unrolled_run_tests();
   hash_run_tests();
@@ -62,6 +64,7 @@ static void run_test_cases(void)
   ext2_run_tests();
   ext2_run_smp_tests();
   file_run_tests();
+#endif
 }
 
 /*

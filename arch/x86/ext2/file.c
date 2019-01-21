@@ -85,10 +85,12 @@ int sys_chdir(const char *path)
   int64_t inum;
 
   inum = name_i(path);
-  if (inum < 0)
+  if (inum < 0) {
     return inum;
-  if (!is_dir(inum))
+  }
+  if (!is_dir(inum)) {
     return -ENOTDIR;
+  }
 
   assert(inum != 0);
   current->working_dir = inum;
@@ -115,21 +117,33 @@ FSTATIC uint path_get_leaf(const char *path, mode_t *leaf_type)
     prev_state = state;
     switch(path[i]) {
     case '/':
-      state = SLASH; break;
+      state = SLASH;
+      break;
     case '\0':
       state = EOL;
       switch (prev_state) {
-      case SLASH:    *leaf_type = S_IFDIR; break;
-      case FILENAME: *leaf_type = S_IFREG; break;
-      default: assert(false);
-      } break;
+      case SLASH:
+        *leaf_type = S_IFDIR;
+        break;
+      case FILENAME:
+        *leaf_type = S_IFREG;
+        break;
+      default:
+        assert(false);
+      }
+      break;
     default:
       state = FILENAME;
       switch(prev_state) {
-      case START: case SLASH: leaf_start = i; break;
-      case FILENAME: break;
-      default: assert(false);
-      } break;
+      case START: case SLASH:
+        leaf_start = i;
+        break;
+      case FILENAME:
+        break;
+      default:
+        assert(false);
+      }
+      break;
     }
   }
   assert((*leaf_type & S_IFMT) != 0);
@@ -151,22 +165,25 @@ static int64_t path_parent_child(const char *path, const char **child, int flags
 
   max_len = PAGE_SIZE;
   leaf_idx = path_get_leaf(path, &leaf_type);
-  if ((flags & NO_DIR) && S_ISDIR(leaf_type))
+  if ((flags & NO_DIR) && S_ISDIR(leaf_type)) {
     return -EISDIR;
-  if (path[0] == '/')
+  }
+  if (path[0] == '/') {
     assert(leaf_idx != 0);
-  if (leaf_idx == 0)
+  }
+  if (leaf_idx == 0) {
     parent_inum = current->working_dir;
-  else if (leaf_idx >= max_len)
-    return -ENAMETOOLONG;
-  else {
+  } else if (leaf_idx >= max_len) {
+    return -ENAMETOOLONG;    
+  } else {
     char *parent = kmalloc(leaf_idx + 1);
     memcpy(parent, path, leaf_idx);
     parent[leaf_idx] = '\0';
     parent_inum = name_i(parent);
     kfree(parent);
-    if (parent_inum < 0)
+    if (parent_inum < 0) {
       return parent_inum;
+    }
   }
   *child = &path[leaf_idx];
   return parent_inum;
@@ -181,34 +198,41 @@ int sys_open(const char *path, int flags, __unused mode_t mode)
   struct file *file;
   const char *child;
 
-  if ((flags & O_ACCMODE) == 0)
+  if ((flags & O_ACCMODE) == 0) {
     return -EINVAL;
+  }
   if ((flags & O_TRUNC) &&
-      (flags & O_APPEND || (flags & O_WRONLY) == 0))
+      (flags & O_APPEND || (flags & O_WRONLY) == 0)) {
     return -EINVAL;
+  }
 
   inum = name_i(path);
   if (flags & O_CREAT) {
-    if (inum > 0 && (flags & O_EXCL))
+    if (inum > 0 && (flags & O_EXCL)) {
       return -EEXIST;
+    }
     if (inum == -ENOENT) {
       parent_inum = path_parent_child(path, &child, NO_DIR);
       inum = (parent_inum < 0) ? parent_inum :
         file_new(parent_inum, child, EXT2_FT_REG_FILE);
     }
   }
-  if (inum < 0)
+  if (inum < 0) {
     return inum;
-  if (is_dir(inum))
+  }
+  if (is_dir(inum)) {
     return -EISDIR;
+  }
 
   file = kmalloc(sizeof(*file));
   file_init(file, inum, flags);
   fd = unrolled_insert(&current->fdtable, file);
-  if (flags & O_TRUNC)
+  if (flags & O_TRUNC) {
     file_truncate(inum);
-  if (flags & O_APPEND)
+  }
+  if (flags & O_APPEND) {
     assert(sys_lseek(fd, 0, SEEK_END) > 0);
+  }
   return fd;
 }
 
@@ -222,14 +246,16 @@ int sys_close(int fd)
   struct file *file;
 
   file = unrolled_lookup(&current->fdtable, fd);
-  if (file == NULL)
+  if (file == NULL) {
     return -EBADF;
+  }
 
   /* Take care of a concurrent close() */
   spin_lock(&file->lock);
   assert(file->refcount > 0);
-  if (--file->refcount == 0)
+  if (--file->refcount == 0) {
     kfree(file);
+  }
   spin_unlock(&file->lock);
 
   unrolled_remove_key(&current->fdtable, fd);
@@ -241,8 +267,9 @@ int sys_fstat(int fd, struct stat *buf)
   struct file *file;
 
   file = unrolled_lookup(&current->fdtable, fd);
-  if (file == NULL)
+  if (file == NULL) {
     return -EBADF;
+  }
 
   fill_statbuf(file->inum, buf);
   return 0;
@@ -256,8 +283,9 @@ int sys_stat(const char *path, struct stat *buf)
   uint64_t inum;
 
   inum = name_i(path);
-  if (inum < 0)
+  if (inum < 0) {
     return inum;
+  }
 
   fill_statbuf(inum, buf);
   return 0;
@@ -273,16 +301,20 @@ int64_t sys_read(int fd, void *buf, uint64_t count)
   int64_t read_len;
 
   file = unrolled_lookup(&current->fdtable, fd);
-  if (file == NULL)
+  if (file == NULL) {
     return -EBADF;
-  if ((file->flags & O_RDONLY) == 0)
+  }
+  if ((file->flags & O_RDONLY) == 0) {
     return -EBADF;
+  }
 
   assert(file->inum > 0);
-  if (is_dir(file->inum))
+  if (is_dir(file->inum)) {
     return -EISDIR;
-  if (!is_regular_file(file->inum))
+  }
+  if (!is_regular_file(file->inum)) {
     return -EBADF;
+  }
   inode = inode_get(file->inum);
 
   spin_lock(&file->lock);
@@ -304,26 +336,31 @@ int64_t sys_write(int fd, void *buf, uint64_t count)
   int64_t write_len;
 
   file = unrolled_lookup(&current->fdtable, fd);
-  if (file == NULL)
+  if (file == NULL) {
     return -EBADF;
-  if ((file->flags & O_WRONLY) == 0)
+  }
+  if ((file->flags & O_WRONLY) == 0) {
     return -EBADF;
+  }
 
   assert(file->inum > 0);
-  if (is_dir(file->inum))
+  if (is_dir(file->inum)) {
     return -EISDIR;
-  if (!is_regular_file(file->inum))
+  }
+  if (!is_regular_file(file->inum)) {
     return -EBADF;
+  }
   inode = inode_get(file->inum);
 
   spin_lock(&file->lock);
-  write_len = file_write(inode, buf, file->offset, count);
-  if (write_len < 0)
+  if ((write_len = file_write(inode, buf, file->offset, count)) < 0) {
     goto out;
+  }
   assert(file->offset + write_len <= inode->size_low);
   file->offset += write_len;
 
- out:  spin_unlock(&file->lock);
+ out:
+  spin_unlock(&file->lock);
   return write_len;
 }
 
@@ -341,31 +378,42 @@ int64_t sys_lseek(int fd, uint64_t offset, uint whence)
   int error = 0;
 
   file = unrolled_lookup(&current->fdtable, fd);
-  if (file == NULL)
+  if (file == NULL) {
     return -EBADF;
+  }
 
   assert(file->inum > 0);
-  if (is_fifo(file->inum) || is_socket(file->inum))
+  if (is_fifo(file->inum) || is_socket(file->inum)) {
     return -ESPIPE;
+  }
   inode = inode_get(file->inum);
 
   spin_lock(&file->lock);
 
   switch (whence) {
-  case SEEK_SET: offset_base = 0; break;
-  case SEEK_CUR: offset_base = file->offset; break;
-  case SEEK_END: offset_base = inode->size_low; break;
-  default: error = -EINVAL; goto out;
+  case SEEK_SET:
+    offset_base = 0;
+    break;
+  case SEEK_CUR:
+    offset_base = file->offset;
+    break;
+  case SEEK_END:
+    offset_base = inode->size_low;
+    break;
+  default:
+    error = -EINVAL;
+    goto out;
   }
 
-  if ((offset_base + offset) < offset_base) {
+  if (offset_base + offset < offset_base) {
     error = -EOVERFLOW;
     goto out;
   }
 
   file->offset = offset_base + offset;
- out:  spin_unlock(&file->lock);
-  return error ? error : (int64_t)file->offset;
+ out:
+  spin_unlock(&file->lock);
+  return error ? error : (int64_t) file->offset;
 }
 
 int sys_unlink(const char *path)
@@ -373,9 +421,9 @@ int sys_unlink(const char *path)
   int64_t parent_inum;
   const char *child;
 
-  parent_inum = path_parent_child(path, &child, NO_DIR);
-  if (parent_inum < 0)
+  if ((parent_inum = path_parent_child(path, &child, NO_DIR)) < 0) {
     return parent_inum;
+  }
 
   return file_delete(parent_inum, child);
 }
@@ -386,12 +434,12 @@ int sys_link(const char *oldpath, const char *newpath)
   const char *child;
   struct inode *inode;
 
-  parent_inum = path_parent_child(newpath, &child, OK_DIR);
-  if (parent_inum < 0)
+  if ((parent_inum = path_parent_child(newpath, &child, OK_DIR)) < 0) {
     return parent_inum;
-  inum = name_i(oldpath);
-  if (inum < 0)
+  }
+  if ((inum = name_i(oldpath)) < 0) {
     return inum;
+  }
   inode = inode_get(inum);
 
   return ext2_new_dir_entry(parent_inum, inum, child,

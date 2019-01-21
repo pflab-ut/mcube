@@ -40,18 +40,18 @@ static void map_pml2_range(struct pml2e *pml2_base, uintptr_t vstart,
   assert(is_aligned(vend, PAGE_SIZE_2MB));
   assert(is_aligned(pstart, PAGE_SIZE_2MB));
 
-  if ((vend - vstart) > (0x1ULL << 30))
+  if ((vend - vstart) > (0x1ULL << 30)) {
     panic("A PML2 table cant map ranges > 1-GByte. "
           "Given range: 0x%lx - 0x%lx", vstart, vend);
-
+  }
   for (pml2e = pml2_base + pml2_index(vstart);
        pml2e <= pml2_base + pml2_index(vend - 1);
        pml2e++) {
     assert((char *)pml2e < (char *)pml2_base + PAGE_SIZE);
-    if (pml2e->present)
+    if (pml2e->present) {
       panic("Mapping virtual 0x%lx to already mapped physical "
             "page at 0x%lx", vstart, pml2e->page_base);
-
+    }
     pml2e->present = 1;
     pml2e->read_write = 1;
     pml2e->user_supervisor = 0;
@@ -83,10 +83,10 @@ static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
   assert(is_aligned(vend, PAGE_SIZE_2MB));
   assert(is_aligned(pstart, PAGE_SIZE_2MB));
 
-  if ((vend - vstart) > PML3_MAPPING_SIZE)
+  if ((vend - vstart) > PML3_MAPPING_SIZE) {
     panic("A PML3 table can't map ranges > 512-GBytes. "
           "Given range: 0x%lx - 0x%lx", vstart, vend);
-
+  }
   for (pml3e = pml3_base + pml3_index(vstart);
        pml3e <= pml3_base + pml3_index(vend - 1);
        pml3e++) {
@@ -101,11 +101,12 @@ static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
 
     pml2_base = VIRTUAL((uintptr_t)pml3e->pml2_base << PAGE_SHIFT);
 
-    if (pml3e == pml3_base + pml3_index(vend - 1)) /* Last entry */
+    if (pml3e == pml3_base + pml3_index(vend - 1)) {
+      /* Last entry */
       end = vend;
-    else
+    } else {
       end = vstart + PML3_ENTRY_MAPPING_SIZE;
-
+    }
     map_pml2_range(pml2_base, vstart, end, pstart);
 
     pstart += PML3_ENTRY_MAPPING_SIZE;
@@ -133,10 +134,10 @@ static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
   assert(is_aligned(vend, PAGE_SIZE_2MB));
   assert(is_aligned(pstart, PAGE_SIZE_2MB));
 
-  if ((vend - vstart) > PML4_MAPPING_SIZE)
+  if ((vend - vstart) > PML4_MAPPING_SIZE) {
     panic("Mapping a virtual range that exceeds the 48-bit "
           "architectural limit: 0x%lx - 0x%lx", vstart, vend);
-
+  }
   for (pml4e = pml4_base + pml4_index(vstart);
        pml4e <= pml4_base + pml4_index(vend - 1);
        pml4e++) {
@@ -151,11 +152,12 @@ static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
 
     pml3_base = VIRTUAL((uintptr_t)pml4e->pml3_base << PAGE_SHIFT);
 
-    if (pml4e == pml4_base + pml4_index(vend - 1)) /* Last entry */
+    if (pml4e == pml4_base + pml4_index(vend - 1)) {
+      /* Last entry */
       end = vend;
-    else
+    } else {
       end = vstart + PML4_ENTRY_MAPPING_SIZE;
-
+    }
     map_pml3_range(pml3_base, vstart, end, pstart);
 
     pstart += PML4_ENTRY_MAPPING_SIZE;
@@ -197,19 +199,19 @@ static bool vaddr_is_mapped(void *vaddr)
   assert((uintptr_t)vaddr < KERN_PAGE_END_MAX);
 
   pml4e = kernel_pml4_table + pml4_index(vaddr);
-  if (!pml4e->present)
+  if (!pml4e->present) {
     return false;
-
+  }
   pml3e = pml3_base(pml4e);
   pml3e += pml3_index(vaddr);
-  if (!pml3e->present)
+  if (!pml3e->present) {
     return false;
-
+  }
   pml2e = pml2_base(pml3e);
   pml2e += pml2_index(vaddr);
-  if (!pml2e->present)
+  if (!pml2e->present) {
     return false;
-
+  }
   assert((uintptr_t)page_base(pml2e) ==
          round_down((uintptr_t)vaddr, PAGE_SIZE_2MB));
   return true;
@@ -228,21 +230,21 @@ void *vm_kmap(uintptr_t pstart, uint64_t len)
   assert(len > 0);
   pend = pstart + len;
 
-  if (pend >= KERN_PHYS_END_MAX)
+  if (pend >= KERN_PHYS_END_MAX) {
     panic("VM - Mapping physical region [0x%lx - 0x%lx] "
           ">= max supported physical addresses end 0x%lx",
           pstart, pend, KERN_PHYS_END_MAX);
-
+  }
   ret = VIRTUAL(pstart);
   pstart = round_down(pstart, PAGE_SIZE_2MB);
   pend = round_up(pend, PAGE_SIZE_2MB);
 
   while (pstart < pend) {
     vstart = VIRTUAL(pstart);
-    if (!vaddr_is_mapped(vstart))
+    if (!vaddr_is_mapped(vstart)) {
       map_kernel_range((uintptr_t)vstart,
                        PAGE_SIZE_2MB, pstart);
-
+    }
     pstart += PAGE_SIZE_2MB;
   }
 
@@ -297,15 +299,16 @@ static void vm_check_phys_memory(void)
     /* This also assures that given address is mapped
      * to the expected physical address, according to
      * our kernel address space mapping rules */
-    if (!vaddr_is_mapped((char *)vaddr))
+    if (!vaddr_is_mapped((char *) vaddr)) {
       panic("_VM: Reporting supposedly mapped address 0x%lx "
             "as unmapped", vaddr);
-
+    }
     /* Limit the output a bit .. */
     if (vaddr > (KERN_PAGE_OFFSET + 0x20000) &&
-        is_aligned(vaddr, 0x200000))
+        is_aligned(vaddr, 0x200000)) {
       printk("Success: e820-avail phys range [0x%lx - 0x%lx] "
              "mapped\n", PHYS(vaddr - 0x200000), PHYS(vaddr));
+    }
   }
 }
 
@@ -326,14 +329,14 @@ static void vm_check_kmap1(void)
     vaddr = vm_kmap(paddr, 1);
     assert(vaddr == VIRTUAL(paddr));
 
-    if (!vaddr_is_mapped(vaddr))
+    if (!vaddr_is_mapped(vaddr)) {
       panic("_VM: Reporting supposedly mapped address 0x%lx "
             "as unmapped", vaddr);
-
-    if (is_aligned(paddr, 0x200000))
+    }
+    if (is_aligned(paddr, 0x200000)) {
       printk("Success: phys addrs [0x%lx - 0x%lx] mapped\n",
              paddr - 0x200000, paddr);
-
+    }
     paddr++;
   }
 }
@@ -362,9 +365,10 @@ static void vm_check_kmap2(void)
     assert(vaddr == VIRTUAL(paddr));
 
     for (int i = 0; i < len; i++) {
-      if (!vaddr_is_mapped(vaddr))
+      if (!vaddr_is_mapped(vaddr)) {
         panic("_VM: Reporting supposedly mapped "
               "address 0x%lx as unmapped", vaddr);
+      }
       vaddr++;
     }
 

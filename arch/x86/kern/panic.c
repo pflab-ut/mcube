@@ -39,8 +39,9 @@ void __no_return panic(const char *fmt, ...)
 
   /* Avoid concurrent panic()s: first call holds the most
    * important facts; the rest are usually side-effects. */
-  if (!spin_trylock(&panic_lock))
+  if (!spin_trylock(&panic_lock)) {
     goto halt;
+  }
 
   /* If other cores are alive, send them a fixed IPI, which
    * intentionally avoids interrupting cores with IF=0 till
@@ -60,9 +61,10 @@ void __no_return panic(const char *fmt, ...)
    * their local APICs, they will not be able to catch this
    * IPI and will normally continue execution.  Beware.
    */
-  if (smpboot_get_nr_alive_cpus() > 1)
+  if (smpboot_get_nr_alive_cpus() > 1) {
     apic_broadcast_ipi(APIC_DELMOD_FIXED, HALT_CPU_IPI_VECTOR);
-
+  }
+  
   va_start(args, fmt);
   n = vsnprintf(buf, sizeof(buf) - 1, fmt, args);
   va_end(args);

@@ -132,9 +132,9 @@ static struct zone zones[] = {
 
 static inline struct zone *get_zone(enum zone_id zid)
 {
-  if (zid != ZONE_1GB && zid != ZONE_ANY)
+  if (zid != ZONE_1GB && zid != ZONE_ANY) {
     panic("Memory - invalid zone id = %d", zid);
-
+  }
   return &zones[zid];
 }
 
@@ -321,18 +321,21 @@ struct page *get_free_page(enum zone_id zid)
   struct page *page;
   uint64_t start, end;
 
-  if (zid == ZONE_ANY)
+  if (zid == ZONE_ANY) {
     ascending_prio_for_each(zone) {
       page = __get_free_page(zone->id);
-      if (page != NULL)
+      if (page != NULL) {
         break;
+      }
     }
-  else
+  } else {
     page = __get_free_page(zid);
-
-  if (page == NULL)
+  }
+  
+  if (page == NULL) {
     panic("Memory - No more free pages available at "
           "`%s'", get_zone(zid)->description);
+  }
 
   start = page_phys_addr(page);
   end = start + PAGE_SIZE;
@@ -365,9 +368,10 @@ void free_page(struct page *page)
   zone->freelist = page;
   zone->freepages_count++;
 
-  if (page->free != 0)
+  if (page->free != 0) {
     panic("Memory - Freeing already free page at 0x%lx\n",
           page_address(page));
+  }
   page->free = 1;
 
   spin_unlock(&zone->freelist_lock);
@@ -396,10 +400,12 @@ struct page *addr_to_page(void *addr)
     start = range->base;
     end = start + range->len;
 
-    if (paddr < start)
+    if (paddr < start) {
       continue;
-    if (paddr >= end)
+    }
+    if (paddr >= end) {
       continue;
+    }
 
     page = rmap->pfd_start;
     offset = (paddr - start) / PAGE_SIZE;
@@ -451,7 +457,7 @@ void pagealloc_init(void)
   printk("Memory: Page Frame descriptor table size = %d KB\n",
          (avail_pages * sizeof(pfdtable[0])) / 1024);
 
-  pfdrmap = (struct rmap *)pfdtable_end;
+  pfdrmap = (struct rmap *) pfdtable_end;
   pfdrmap_top = pfdrmap;
   pfdrmap_end = pfdrmap + avail_ranges;
 
@@ -466,10 +472,12 @@ void pagealloc_init(void)
    */
 
   e820_for_each(range) {
-    if (range->type != E820_AVAIL)
+    if (range->type != E820_AVAIL) {
       continue;
-    if (e820_sanitize_range(range, kmem_end))
+    }
+    if (e820_sanitize_range(range, kmem_end)) {
       continue;
+    }
 
     pfdtable_add_range(range);
   }
@@ -535,10 +543,11 @@ static uint64_t _get_all_freepages_count(enum _count_type type)
 
   count = 0;
   ascending_prio_for_each(zone) {
-    if (type == _BOOT)
+    if (type == _BOOT) {
       count += zone->boot_freepages;
-    else
+    } else {
       count += zone->freepages_count;
+    }
   }
 
   return count;
@@ -555,24 +564,26 @@ static int _test_boot_freepages_count(void)
 
   count = 0;
   e820_for_each(range) {
-    if (range->type != E820_AVAIL)
+    if (range->type != E820_AVAIL) {
       continue;
-    if (e820_sanitize_range(range, kmem_end))
+    }
+    if (e820_sanitize_range(range, kmem_end)) {
       continue;
+    }
 
     count += range->len / PAGE_SIZE;
   }
 
   reported_count = _get_all_freepages_count(_BOOT);
-  if (count != reported_count)
+  if (count != reported_count) {
     panic("_Memory: Available e820 pages = %d, pfdtable boot "
           "avial-pages counter = %d\n", count, reported_count);
-
+  }
   pfdtable_count = pfdtable_top - pfdtable;
-  if (count != pfdtable_count)
+  if (count != pfdtable_count) {
     panic("_Memory: Available e820 pages = %d, pfdtable # of "
           "elements = %d\n", count, pfdtable_count);
-
+  }
   printk("_Memory: %s: Success\n", __FUNCTION__);
   return true;
 }
@@ -598,7 +609,8 @@ static int _test_boot_freepages_count(void)
  * Prerequisite-2: Do NOT call this after the allocator got
  * used: it _erases_ and re-creates all of its sturcutres!!
  */
-static int __unused _torture_pfdtable_add_range(void) {
+static int __unused _torture_pfdtable_add_range(void)
+{
   uint64_t old_end, old_count, count, repeat, ranges;
   struct e820_range *range, subrange;
   struct rmap *rmap;
@@ -634,11 +646,12 @@ static int __unused _torture_pfdtable_add_range(void) {
 
   /* Refill the table, page by page! */
   e820_for_each(range) {
-    if (range->type != E820_AVAIL)
+    if (range->type != E820_AVAIL) {
       continue;
-    if (e820_sanitize_range(range, kmem_end))
+    }
+    if (e820_sanitize_range(range, kmem_end)) {
       continue;
-
+    }
     subrange = *range;
     repeat = subrange.len / PAGE_SIZE;
     subrange.len = PAGE_SIZE;
@@ -656,10 +669,10 @@ static int __unused _torture_pfdtable_add_range(void) {
    * Compare old and new count with this fact in mind */
   old_count -= ((kmem_end - old_end) / PAGE_SIZE);
   count = _get_all_freepages_count(_BOOT);
-  if (old_count != count)
+  if (old_count != count) {
     panic("_Memory: Refilling pfdtable found %d free pages; %d "
           "pages originally reported", count, old_count);
-
+  }
   printk("_Memory: %s: Success!\n", __FUNCTION__);
   return true;
 }
@@ -674,16 +687,19 @@ static int _page_is_free(struct page *page)
   struct e820_range *range;
 
   paddr = page_phys_addr(page);
-  if (paddr < PHYS(kmem_end))
+  if (paddr < PHYS(kmem_end)) {
     return false;
+  }
 
   e820_for_each(range) {
-    if (range->type != E820_AVAIL)
+    if (range->type != E820_AVAIL) {
       continue;
+    }
     start = range->base;
     end = start + range->len;
-    if (paddr >= start && (paddr+PAGE_SIZE) <= end)
+    if (paddr >= start && (paddr+PAGE_SIZE) <= end) {
       return true;
+    }
   }
 
   return false;
@@ -703,11 +719,11 @@ static inline void _disrupt(void)
   /* Test reverse mapping */
   addr = page_address(p1);
   p2 = addr_to_page(addr);
-  if (p1 != p2)
+  if (p1 != p2) {
     panic("_Memory: FAIL: Reverse mapping addr=0x%lx lead to "
           "page descriptor 0x%lx; it's actually for page %lx\n",
           addr, p2, p1);
-
+  }
   memset64(addr, UINT64_MAX, PAGE_SIZE);
   free_page(p1);
 }
@@ -729,24 +745,25 @@ static int _test_pagealloc_coherency(int nr_pages)
 
   old_count = _get_all_freepages_count(_CURRENT);
 
-  for (i = 0; i < 100; i++)
+  for (i = 0; i < 100; i++) {
     _disrupt();
-
+  }
+  
   for (i = 0; i < nr_pages; i++) {
     _disrupt();
     pages[i] = get_free_page(ZONE_ANY);
-    if (!_page_is_free(pages[i]))
+    if (!_page_is_free(pages[i])) {
       panic("_Memory: Allocated invalid page address "
             "0x%lx\n", page_phys_addr(pages[i]));
-
+    }
     /* Test reverse mapping */
     addr = page_address(pages[i]);
     page = addr_to_page(addr);
-    if (page != pages[i])
+    if (page != pages[i]) {
       panic("_Memory: FAIL: Reverse mapping addr=0x%lx lead "
             "to page descriptor 0x%lx, while it's actually "
             "on %lx\n", addr, page, pages[i]);
-
+    }
     memset32(addr, i, PAGE_SIZE);
   }
 
@@ -754,31 +771,32 @@ static int _test_pagealloc_coherency(int nr_pages)
     memset32(tmpbuf, i, PAGE_SIZE);
     addr = page_address(pages[i]);
     res = memcmp(addr, tmpbuf, PAGE_SIZE);
-    if (res)
+    if (res) {
       panic("_Memory: FAIL: [%d] page at 0x%lx got "
             "corrupted\n", i, PHYS(addr));
-
+    }
     /* Test reverse mapping */
     page = addr_to_page(addr);
-    if (page != pages[i])
+    if (page != pages[i]) {
       panic("_Memory: FAIL: Reverse mapping addr=0x%lx lead "
             "to page descriptor 0x%lx, while it's actually "
             "on %lx\n", addr, page, pages[i]);
-
+    }
     free_page(pages[i]);
     _disrupt();
   }
 
-  for (i = 0; i < 100; i++)
+  for (i = 0; i < 100; i++) {
     _disrupt();
+  }
 
   /* We've freed everything we allocated, number of free
    * pages should not change */
   count = _get_all_freepages_count(_CURRENT);
-  if (old_count != count)
+  if (old_count != count) {
     panic("_Memory: free pages leak; original number = %ld, "
           "current number = %ld\n", old_count, count);
-
+  }
   printk("_Memory: %s: Success\n", __FUNCTION__);
   return 0;
 }
@@ -795,11 +813,12 @@ static void __unused _test_zone_exhaustion(enum zone_id zid)
   void* addr;
 
   zone = get_zone(zid);
-  if (zid == ZONE_ANY)
+  if (zid == ZONE_ANY) {
     count = _get_all_freepages_count(_CURRENT);
-  else
+  } else {
     count = zone->freepages_count;
-
+  }
+  
   while (count--) {
     page = get_free_page(zid);
     assert(page_phys_addr(page) >= zone->start);
@@ -832,8 +851,9 @@ void pagealloc_run_tests(void)
   /* _torture_pfdtable_add_range(); */
 
   count = _get_all_freepages_count(_CURRENT);
-  if (count > PAGES_COUNT)
+  if (count > PAGES_COUNT) {
     count = PAGES_COUNT;
+  }
 
   printk("_Memory: Allocating (and seeding) %ld pages on "
          "each run\n", count);

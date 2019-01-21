@@ -157,8 +157,9 @@ static int start_secondary_cpu(struct percpu *cpu, struct smpboot_params *params
   for (int j = 1; j <= MAX_SIPI_RETRY; j++) {
     send_startup_ipi(apic_id, SMPBOOT_START);
     acked = apic_ipi_acked();
-    if (acked)
+    if (acked) {
       break;
+    }
 
     printk("SMP: Failed to deliver SIPI#%d to CPU#%d\n",
            j, apic_id);
@@ -236,8 +237,9 @@ void __no_return secondary_start(void)
   printk("SMP: CPU apic_id=%d started\n", id.id);
 
   local_irq_enable();
-  while (start_running_testcases == false)
+  while (start_running_testcases == false) {
     cpu_pause();
+  }
 
   run_secondary_core_testcases();
   halt();
@@ -272,8 +274,9 @@ void smpboot_init(void)
   memcpy(TRAMPOLINE_START, trampoline, trampoline_end - trampoline);
 
   for_all_cpus_except_bootstrap(cpu) {
-    if (start_secondary_cpu(cpu, params))
+    if (start_secondary_cpu(cpu, params)) {
       panic("SMP: Could not start-up all AP cores\n");
+    }
   }
 
   kfree(params);

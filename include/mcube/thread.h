@@ -172,8 +172,6 @@ typedef struct th_attr_strip th_attr_strip;
 
 void init_sched_info(struct thread_struct *th, struct th_attr *attr);
 
-static inline unsigned long get_current_jiffies(void);
-
 static inline int is_budget_enforced(struct thread_struct *th)
 {
   return th->sched.budget_policy == TICK_ENFORCEMENT || th->sched.budget_policy == PRECISE_ENFORCEMENT;

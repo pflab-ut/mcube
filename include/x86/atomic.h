@@ -8,14 +8,43 @@
 
 #ifndef __ASSEMBLY__
 
-uint8_t atomic_bit_test_and_set(uint32_t *val);
-uint64_t atomic_inc(uint64_t *val);
+/*
+ * Atomically execute:
+ *  old = *val & 0x1; *val |= 0x1;
+ *  return old;
+ */
+static inline uint8_t atomic_bit_test_and_set(uint32_t *val)
+{
+  uint8_t ret;
 
-#if    ATOMIC_TESTS
-void atomic_run_tests(void);
-#else
-static void __unused atomic_run_tests(void) { }
-#endif
+  asm volatile (
+    "LOCK bts $0, %0;"
+    "     setc    %1;"
+    : "+m" (*val), "=qm" (ret)
+    :
+    : "cc", "memory");
+
+  return ret;
+}
+
+/*
+ * Atomically execute:
+ *  return *val++;
+ */
+static inline uint64_t atomic_inc(uint64_t *val)
+{
+  uint64_t i = 1;
+
+  asm volatile (
+    "LOCK xaddq %0, %1"
+    : "+r"(i), "+m" (*val)
+    :
+    : "cc");
+
+  return i;
+}
+
+
 
 #endif /* !__ASSEMBLY__ */
 

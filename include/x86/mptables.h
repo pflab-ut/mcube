@@ -128,7 +128,8 @@ struct mpc_linterrupt {
 #define MPC_ENTRY_MAX_LEN    (sizeof(struct mpc_cpu))
 
 /* Compile-time MP tables sizes sanity checks */
-static inline void mptables_check(void) {
+static inline void mptables_check(void)
+{
   compiler_assert(sizeof(struct mpf_struct) == 4 * 4);
   compiler_assert(sizeof(struct mpc_table) == 11 * 4);
   compiler_assert(sizeof(struct mpc_cpu) == 5 * 4);

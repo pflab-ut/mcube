@@ -31,8 +31,8 @@
 
 enum {
   EXT2_SUPERBLOCK_SIZE  = 1024,
-  EXT2_SUPERBLOCK_MAGIC  = 0xEF53,  /* EF'S' */
-  EXT2_MIN_FS_SIZE  = (60*1024),  /* 60-KB */
+  EXT2_SUPERBLOCK_MAGIC  = 0xef53,  /* EF'S' */
+  EXT2_MIN_FS_SIZE  = (60 * 1024),  /* 60-KB */
 
   // Below offsets are out of disk start
   EXT2_SUPERBLOCK_OFFSET  = 1024,    /* First Kilobyte */
@@ -111,29 +111,45 @@ enum file_type {
 
 static inline mode_t dir_entry_type_to_inode_mode(enum file_type type)
 {
-  switch(type) {
-  case EXT2_FT_REG_FILE:  return S_IFREG;
-  case EXT2_FT_DIR:  return S_IFDIR;
-  case EXT2_FT_CHRDEV:  return S_IFCHR;
-  case EXT2_FT_BLKDEV:  return S_IFBLK;
-  case EXT2_FT_FIFO:  return S_IFIFO;
-  case EXT2_FT_SOCK:  return S_IFSOCK;
-  case EXT2_FT_SYMLINK:  return S_IFLNK;
-  default:    assert(false);
+  switch (type) {
+  case EXT2_FT_REG_FILE:
+    return S_IFREG;
+  case EXT2_FT_DIR:
+    return S_IFDIR;
+  case EXT2_FT_CHRDEV:
+    return S_IFCHR;
+  case EXT2_FT_BLKDEV:
+    return S_IFBLK;
+  case EXT2_FT_FIFO:
+    return S_IFIFO;
+  case EXT2_FT_SOCK:
+    return S_IFSOCK;
+  case EXT2_FT_SYMLINK:
+    return S_IFLNK;
+  default:
+    assert(false);
   }
 }
 
 static inline enum file_type inode_mode_to_dir_entry_type(mode_t mode)
 {
-  switch(mode & S_IFMT) {
-  case S_IFREG:    return EXT2_FT_REG_FILE;
-  case S_IFDIR:    return EXT2_FT_DIR;
-  case S_IFCHR:    return EXT2_FT_CHRDEV;
-  case S_IFBLK:    return EXT2_FT_BLKDEV;
-  case S_IFIFO:    return EXT2_FT_FIFO;
-  case S_IFSOCK:    return EXT2_FT_SOCK;
-  case S_IFLNK:    return EXT2_FT_SYMLINK;
-  default:    assert(false);
+  switch (mode & S_IFMT) {
+  case S_IFREG:
+    return EXT2_FT_REG_FILE;
+  case S_IFDIR:
+    return EXT2_FT_DIR;
+  case S_IFCHR:
+    return EXT2_FT_CHRDEV;
+  case S_IFBLK:
+    return EXT2_FT_BLKDEV;
+  case S_IFIFO:
+    return EXT2_FT_FIFO;
+  case S_IFSOCK:
+    return EXT2_FT_SOCK;
+  case S_IFLNK:
+    return EXT2_FT_SYMLINK;
+  default:
+    assert(false);
   }
 }
 
@@ -335,7 +351,7 @@ static inline void inode_init(struct inode *inode, uint64_t inum)
 
 static inline void *dino_off(struct inode *inode)
 {
-  return (char *)inode + offsetof(struct inode, mode);
+  return (char *) inode + offsetof(struct inode, mode);
 }
 
 static inline uint64_t dino_len(void)

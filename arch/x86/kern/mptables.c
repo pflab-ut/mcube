@@ -59,9 +59,10 @@ static uint8_t mpf_checksum(void *mp, uint32_t len)
   uint8_t sum = 0;
   uint8_t *buf = mp;
 
-  while (len--)
+  while (len--) {
     sum += *buf++;
-
+  }
+  
   return sum;
 }
 
@@ -71,14 +72,18 @@ static struct mpf_struct *search_for_mpf(void *base, uint32_t len)
   uint8_t checksum;
 
   for (; len > 0; mpf += 1, len -= sizeof(*mpf)) {
-    if (len < sizeof(*mpf))
+    if (len < sizeof(*mpf)) {
       continue;
-    if (mpf->signature != MPF_SIGNATURE)
+    }
+    if (mpf->signature != MPF_SIGNATURE) {
       continue;
-    if (mpf->length != 0x01)
+    }
+    if (mpf->length != 0x01) {
       continue;
-    if (mpf->version != 0x01 && mpf->version != 0x04)
+    }
+    if (mpf->version != 0x01 && mpf->version != 0x04) {
       continue;
+    }
     checksum = mpf_checksum(mpf, sizeof(*mpf));
     if (checksum != 0) {
       printk("MP: buggy MP floating pointer struct at 0x%lx "
@@ -108,17 +113,17 @@ static struct mpf_struct *get_mpf(void)
   struct mpf_struct *mpf;
 
   ebda = (*(uint16_t *)VIRTUAL(0x40e)) << 4;
-  mpf = search_for_mpf(VIRTUAL(ebda), 0x400);
-  if (mpf != NULL)
+  if ((mpf = search_for_mpf(VIRTUAL(ebda), 0x400)) != NULL) {
     return mpf;
+  }
 
-  mpf = search_for_mpf(VIRTUAL(639 * 0x400), 0x400);
-  if (mpf != NULL)
+  if ((mpf = search_for_mpf(VIRTUAL(639 * 0x400), 0x400)) != NULL) {
     return mpf;
+  }
 
-  mpf = search_for_mpf(VIRTUAL(0xF0000), 0x10000);
-  if (mpf != NULL)
+  if ((mpf = search_for_mpf(VIRTUAL(0xF0000), 0x10000)) != NULL) {
     return mpf;
+  }
 
   return NULL;
 }
@@ -197,8 +202,9 @@ static void parse_cpu(void *addr)
   struct mpc_cpu *cpu = addr;
   static bool bsc_entry_filled;
 
-  if (!cpu->enabled)
+  if (!cpu->enabled) {
     return;
+  }
 
   if (cpu->bsc) {
     if (bsc_entry_filled)
@@ -222,11 +228,13 @@ static void parse_ioapic(void *addr)
 {
   struct mpc_ioapic *ioapic = addr;
 
-  if (!ioapic->enabled)
+  if (!ioapic->enabled) {
     return;
+  }
 
-  if (nr_ioapics >= IOAPICS_MAX)
+  if (nr_ioapics >= IOAPICS_MAX) {
     panic("Only %d IO APICs supported", IOAPICS_MAX);
+  }
 
   /* We read the version from the chip itself instead
    * of reading it now from the mptable entries */
@@ -240,9 +248,10 @@ static void parse_irq(void *addr)
 {
   struct mpc_irq *irq = addr;
 
-  if (nr_mpcirqs >= MAX_IRQS)
+  if (nr_mpcirqs >= MAX_IRQS) {
     panic("Only %d IRQ sources supported", MAX_IRQS);
-
+  }
+  
   mp_irqs[nr_mpcirqs] = *irq;
 
   ++nr_mpcirqs;
@@ -253,8 +262,9 @@ static void parse_bus(void *addr)
   struct mpc_bus *bus = addr;
 
   /* Only the ISA bus is needed for now */
-  if (memcmp("ISA", bus->type, sizeof("ISA") - 1) == 0)
+  if (memcmp("ISA", bus->type, sizeof("ISA") - 1) == 0) {
     mp_isa_busid = bus->id;
+  }
 
   return;
 }
@@ -316,15 +326,18 @@ void mptables_init(void)
   mptables_check();
 
   mpf = get_mpf();
-  if (!mpf)
+  if (!mpf) {
     panic("No compliant MP pointer found");
-
-  if (mpf->feature1)
+  }
+  
+  if (mpf->feature1) {
     panic("MP: Spec `default configuration' is not supported");
+  }
 
-  if (mpf->conf_physaddr == 0)
+  if (mpf->conf_physaddr == 0) {
     panic("MP: Spec configuration table does not exist");
-
+  }
+  
   mpc = vm_kmap(mpf->conf_physaddr, sizeof(*mpc));
 
   if (!mpc_check(mpc)) {

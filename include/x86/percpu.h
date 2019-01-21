@@ -137,7 +137,7 @@ struct percpu {
  * allocated in the first slot. Thus, slot 0 is reserved for the BSC.
  */
 extern struct percpu cpus[CPUS_MAX];
-#define BOOTSTRAP_PERCPU_AREA  ((uintptr_t)&cpus[0])
+#define BOOTSTRAP_PERCPU_AREA  ((uintptr_t) &cpus[0])
 
 /*
  * Per-CPU data accessors

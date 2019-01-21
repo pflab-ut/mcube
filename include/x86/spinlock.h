@@ -43,8 +43,9 @@ static inline void spin_lock(struct lock_spin *lock)
   while (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
     local_irq_restore(rflags);
 
-    while (lock->val == SPIN_LOCKED)
+    while (lock->val == SPIN_LOCKED) {
       cpu_pause();
+    }
 
     local_irq_disable();
   }

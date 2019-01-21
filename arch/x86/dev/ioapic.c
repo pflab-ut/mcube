@@ -42,11 +42,13 @@ static struct ioapic_pin ioapic_get_8259A_pin(void)
     for (int irq = 0; irq <= max_irq; irq++) {
       entry = ioapic_read_irqentry(apic, irq);
 
-      if (entry.delivery_mode != IOAPIC_DELMOD_EXTINT)
+      if (entry.delivery_mode != IOAPIC_DELMOD_EXTINT) {
         continue;
+      }
 
-      if (entry.mask != IOAPIC_UNMASK)
+      if (entry.mask != IOAPIC_UNMASK) {
         continue;
+      }
 
       pic.apic = apic;
       pic.pin = irq;
@@ -71,16 +73,18 @@ static struct ioapic_pin ioapic_isa_pin(int isa_irq, enum mp_irqtype type)
   for (irq = 0; irq < nr_mpcirqs; irq++) {
     if ((mp_irqs[irq].src_busid == mp_isa_busid) &&
         (mp_irqs[irq].src_busirq == isa_irq) &&
-        (mp_irqs[irq].type == type))
+        (mp_irqs[irq].type == type)) {
       break;
+    }
   }
 
   /* No compatible ISA MP irq entry found */
-  if (irq >= nr_mpcirqs)
+  if (irq >= nr_mpcirqs) {
     return pin;
+  }
 
   for (int apic = 0; apic < nr_ioapics; apic++) {
-    if(mp_irqs[irq].dst_ioapicid == ioapic_descs[apic].id) {
+    if (mp_irqs[irq].dst_ioapicid == ioapic_descs[apic].id) {
       pin.apic = apic;
       pin.pin = mp_irqs[irq].dst_ioapicpin;
       return pin;
@@ -184,7 +188,9 @@ void ioapic_init(void)
 
   /* We don't trust the BIOS setup: mask all the system
    * IOAPICs irq routing entries */
-  for (int apic = 0; apic < nr_ioapics; apic++)
-    for (int irq = 0; irq < ioapic_descs[apic].max_irq; irq++)
+  for (int apic = 0; apic < nr_ioapics; apic++) {
+    for (int irq = 0; irq < ioapic_descs[apic].max_irq; irq++) {
       ioapic_mask_irq(apic, irq);
+    }
+  }
 }

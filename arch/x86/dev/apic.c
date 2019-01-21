@@ -56,8 +56,9 @@ static uint64_t pit_calibrate_cpu(int repeat)
     tsc2 = rdtsc();
 
     diff = tsc2 - tsc1;
-    if (diff < diff_min)
+    if (diff < diff_min) {
       diff_min = diff;
+    }
   }
 
   /* ticks per second = ticks / delay-in-seconds
@@ -98,8 +99,9 @@ static uint64_t pit_calibrate_apic_timer(void)
 
     assert(counter1 > counter2);
     ticks = counter1 - counter2;
-    if (ticks < ticks_min)
+    if (ticks < ticks_min) {
       ticks_min = ticks;
+    }
   }
 
   /* ticks per second = ticks / delay-in-seconds
@@ -271,8 +273,9 @@ void apic_udelay(uint64_t us)
 
   apic_set_counter_us(us);
 
-  while (apic_read(APIC_TIMER_CUR_CNT) != 0)
+  while (apic_read(APIC_TIMER_CUR_CNT) != 0) {
     cpu_pause();
+  }
 }
 
 /*
@@ -364,8 +367,9 @@ bool apic_ipi_acked(void)
   while (timeout--) {
     icr.value_low = apic_read(APIC_ICRL);
 
-    if (icr.delivery_status == APIC_DELSTATE_IDLE)
+    if (icr.delivery_status == APIC_DELSTATE_IDLE) {
       return true;
+    }
 
     pit_mdelay(1);
   }
@@ -402,8 +406,9 @@ void *apic_vrbase(void)
  */
 static void apic_5secs_delay(void)
 {
-  for (int i = 0; i < 500; i++)
+  for (int i = 0; i < 500; i++) {
     apic_mdelay(10);
+  }
 }
 
 /*
@@ -418,32 +423,36 @@ static void apic_test_delay(void)
   apic_5secs_delay();
 
   printk("Note: Delay interval started \n");
-  for (int i = 0; i < 1000; i++)
+  for (int i = 0; i < 1000; i++) {
     apic_mdelay(10);
+  }
   printk("Note: Delay end \n\n");
 
   printk("Testing a 10-second delay using u-seconds\n");
   apic_5secs_delay();
 
   printk("Note: Delay interval started \n");
-  for (int i = 0; i < 100000; i++)
+  for (int i = 0; i < 100000; i++) {
     apic_udelay(100);
+  }
   printk("Note: Delay end \n\n");
 
   printk("Testing a 5-second delay after notice\n");
   apic_5secs_delay();
 
   printk("Note: Delay interval started \n");
-  for (int i = 0; i < 5000; i++)
+  for (int i = 0; i < 5000; i++) {
     apic_mdelay(1);
+  }
   printk("Note: Delay end \n\n");
 
   printk("Testing another 5-second delay after notice\n");
   apic_5secs_delay();
 
   printk("Note: Delay interval started \n");
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 5; i++) {
     apic_mdelay(1000);
+  }
   printk("Note: Delay end \n\n");
 }
 
@@ -497,8 +506,9 @@ static void apic_test_periodic_mode(void)
 
   /* This should print a list of ones */
   printk("Number of ticks triggered on each delay period: ");
-  for (i = 1; i < DELAY_TESTS; i++)
+  for (i = 1; i < DELAY_TESTS; i++) {
     printk("%ld ", ticks[i] - ticks[i - 1]);
+  }
   printk("\n\n");
 }
 

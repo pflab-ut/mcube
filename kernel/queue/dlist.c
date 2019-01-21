@@ -40,7 +40,7 @@ static void enqueue_rq_dlist(struct rt_runqueue *rq,
 /* same */
 void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
 {
-  set_bit(rq->bitmap, 0);
+  set_bit32(rq->bitmap, 0);
   enqueue_rq_dlist(rq,
                    th,
                    offsetof(struct thread_struct, priority));
@@ -49,7 +49,7 @@ void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
 
 void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
-  set_bit(rq->bitmap, 0);
+  set_bit32(rq->bitmap, 0);
   enqueue_rq_dlist(rq,
                    th,
                    offsetof(struct thread_struct, priority));
@@ -67,7 +67,7 @@ void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 
   th->next->prev = th->prev;
   if (rq->array[0].next == &rq->array[0]) {
-    clear_bit(rq->bitmap, 0);
+    clear_bit32(rq->bitmap, 0);
   }   
 }
 

@@ -162,15 +162,33 @@ void *kmalloc(size_t size)
   compiler_assert((MINALLOC_SZ * 256) == MAXALLOC_SZ);
   compiler_assert((MINBUCKET_IDX + 8) == MAXBUCKET_IDX);
 
-  if (size <= MINALLOC_SZ)  return __kmalloc(MINBUCKET_IDX);
-  if (size <= MINALLOC_SZ *   2)  return __kmalloc(MINBUCKET_IDX + 1);
-  if (size <= MINALLOC_SZ *   4)  return __kmalloc(MINBUCKET_IDX + 2);
-  if (size <= MINALLOC_SZ *   8)  return __kmalloc(MINBUCKET_IDX + 3);
-  if (size <= MINALLOC_SZ *  16)  return __kmalloc(MINBUCKET_IDX + 4);
-  if (size <= MINALLOC_SZ *  32)  return __kmalloc(MINBUCKET_IDX + 5);
-  if (size <= MINALLOC_SZ *  64)  return __kmalloc(MINBUCKET_IDX + 6);
-  if (size <= MINALLOC_SZ * 128)  return __kmalloc(MINBUCKET_IDX + 7);
-  if (size <= MINALLOC_SZ * 256)  return __kmalloc(MINBUCKET_IDX + 8);
+  if (size <= MINALLOC_SZ) {
+    return __kmalloc(MINBUCKET_IDX);
+  }
+  if (size <= MINALLOC_SZ *   2) {
+    return __kmalloc(MINBUCKET_IDX + 1);
+  }
+  if (size <= MINALLOC_SZ *   4) {
+    return __kmalloc(MINBUCKET_IDX + 2);
+  }
+  if (size <= MINALLOC_SZ *   8) {
+    return __kmalloc(MINBUCKET_IDX + 3);
+  }
+  if (size <= MINALLOC_SZ *  16) {
+    return __kmalloc(MINBUCKET_IDX + 4);
+  }
+  if (size <= MINALLOC_SZ *  32) {
+    return __kmalloc(MINBUCKET_IDX + 5);
+  }
+  if (size <= MINALLOC_SZ *  64) {
+    return __kmalloc(MINBUCKET_IDX + 6);
+  }
+  if (size <= MINALLOC_SZ * 128) {
+    return __kmalloc(MINBUCKET_IDX + 7);
+  }
+  if (size <= MINALLOC_SZ * 256) {
+    return __kmalloc(MINBUCKET_IDX + 8);
+  }
 
   panic("Malloc: %d bytes requested; can't support > %d "
         "bytes", size, MAXALLOC_SZ);
@@ -197,28 +215,32 @@ void kfree(void *addr)
   page = addr_to_page(buf);
   bucket = &kmembuckets[page->bucket_idx];
 
-  if (page_is_free(page))
+  if (page_is_free(page)) {
     panic("Bucket: Freeing address 0x%lx which resides in "
           "an unallocated page frame", buf);
-
-  if (!page->in_bucket)
+  }
+  
+  if (!page->in_bucket) {
     panic("Bucket: Freeing address 0x%lx which resides in "
           "a foreign page frame (not allocated by us)", buf);
-
+  }
+  
   buf_size = 1 << page->bucket_idx;
-  if (!is_aligned((uintptr_t)buf, buf_size))
+  if (!is_aligned((uintptr_t) buf, buf_size)) {
     panic("Bucket: Freeing invalidly-aligned 0x%lx address; "
           "bucket buffer size = 0x%lx\n", buf, buf_size);
-
-  if (is_free_buf(buf))
+  }
+  
+  if (is_free_buf(buf)) {
     panic("Bucket: Freeing already free buffer at 0x%lx, "
           "with size = 0x%lx bytes", buf, buf_size);
-
+  }
+  
   sign_buf(buf, FREEBUF_SIG);
 
   spin_lock(&bucket->lock);
 
-  *(void **)buf = bucket->head;
+  *(void **) buf = bucket->head;
   bucket->head = buf;
   bucket->totalfree++;
 
@@ -227,8 +249,9 @@ void kfree(void *addr)
 
 void kmalloc_init(void)
 {
-  for (int i = 0; i <= MAXBUCKET_IDX; i++)
+  for (int i = 0; i <= MAXBUCKET_IDX; i++) {
     spin_init(&kmembuckets[i].lock);
+  }
 }
 
 /*
@@ -308,10 +331,11 @@ void _test_allocs(int count, int rounded)
     _disrupt(size);
 
     (rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
-    if (__builtin_memcmp(p[i].p, tmpbuf, size))
+    if (__builtin_memcmp(p[i].p, tmpbuf, size)) {
       panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
             "%d bytes got corrupted", i, p[i].p, size);
-
+    }
+    
     kfree(p[i].p);
 
     size = ((size / 2) > 1) ? size / 2 : MINALLOC_SZ;
@@ -328,10 +352,11 @@ void _test_allocs(int count, int rounded)
 
     size = p[i].size;
     (rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
-    if (__builtin_memcmp(p[i].p, tmpbuf, size))
+    if (__builtin_memcmp(p[i].p, tmpbuf, size)) {
       panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
             "%d bytes got corrupted", i, p[i].p, size);
-
+    }
+    
     kfree(p[i].p);
     _disrupt(32);
   }
@@ -363,10 +388,11 @@ void kmalloc_run_tests(void)
     _test_allocs(count, 0);
   }
 
-  for (i = MINBUCKET_IDX; i <= MAXBUCKET_IDX; i++)
+  for (i = MINBUCKET_IDX; i <= MAXBUCKET_IDX; i++) {
     printk("Buf size = %d: free bufs = %d, total pages requested "
            "= %d\n", 1 << i, kmembuckets[i].totalfree,
            kmembuckets[i].totalpages);
+  }
 }
 
 #endif /* KMALLOC_TESTS */

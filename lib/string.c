@@ -452,6 +452,92 @@ void *memsetd(void *s, int c, size_t n)
   return s;
 }
 
+
+
+/*
+ * NOTE: Always put as much logic as possibe out of the inlined assembly
+ * code to the asm-constraints C expressions. This gives the optimizer
+ * way more freedom, especially regarding constant propagation.
+ */
+
+/*
+ * GCC "does not parse the assembler instruction template and does not
+ * know what it means or even whether it is valid assembler input." Thus,
+ * it needs to be told the list of registers __implicitly__ clobbered by
+ * such inlined assembly snippets.
+ *
+ * A good way to stress-test GCC extended assembler constraints is to
+ * always inline the assembler snippets (C99 'static inline'), compile
+ * the kernel at -O3 or -Os, and roll!
+ *
+ * Output registers are (explicitly) clobbered by definition. 'CCR' is
+ * the x86's condition code register %rflags.
+ */
+
+/*
+ * The AMD64 ABI guarantees a DF=0 upon function entry.
+ */
+static void *__memcpy_forward(void *dst, const void *src, size_t len)
+{
+  uintptr_t d0;
+
+  asm volatile (
+    "mov %3, %%rcx;"
+    "rep movsb;"      /* rdi, rsi, rcx */
+    "mov %4, %%rcx;"
+    "rep movsq;"      /* ~~~ */
+    :"=&D" (d0), "+&S" (src)
+    :"0" (dst), "ir" (len & 7), "ir" (len >> 3)
+    :"rcx", "memory");
+
+  return dst;
+}
+
+/*
+ * We do tolerate overlapping regions here if src > dst. In
+ * such case, (src - dst) must be bigger than movsq's block
+ * copy factor: 8 bytes.
+ */
+void *memcpy_forward(void *dst, const void *src, size_t len)
+{
+  uintptr_t udst, usrc;
+  bool bad_overlap;
+
+  udst = (uintptr_t)dst;
+  usrc = (uintptr_t)src;
+
+  bad_overlap = (udst + 8 > usrc) && (usrc + len > udst);
+  if (__unlikely(bad_overlap))
+    panic("%s: badly-overlapped regions, src=0x%lx, dst"
+          "=0x%lx, len=0x%lx", __func__, src, dst, len);
+
+  return __memcpy_forward(dst, src, len);
+}
+
+
+#if 1
+
+/*
+ * C99-compliant, with extra sanity checks.
+ */
+void *memcpy(void * restrict dst, const void * restrict src, size_t len)
+{
+  uintptr_t udst, usrc;
+  bool overlap;
+
+  udst = (uintptr_t)dst;
+  usrc = (uintptr_t)src;
+
+  overlap = (udst + len > usrc) && (usrc + len > udst);
+  if (__unlikely(overlap))
+    panic("%s: overlapped regions, src=0x%lx, dst=0x"
+          "%lx, len=0x%lx", __func__, src, dst, len);
+
+  return __memcpy_forward(dst, src, len);
+}
+#else
+
+
 /**
  * The memcpy() function copies @c n bytes from memory area @c src to memory area @c dest.
  * The memory areas must not overlap.
@@ -469,6 +555,30 @@ void *memcpy(void *dest, const void *src, size_t n)
     *d++ = *s++;
   }
   return dest;
+}
+
+
+#endif
+
+
+/*
+ * memcpy(), minus the checks
+ *
+ * Sanity checks overhead cannot be tolerated for HOT copying
+ * paths like screen scrolling.
+ *
+ * This is also useful for code implicitly called by panic():
+ * a sanity check failure there will lead to a stack overflow.
+ */
+
+void *memcpy_forward_nocheck(void *dst, const void *src, size_t len)
+{
+  return __memcpy_forward(dst, src, len);
+}
+
+void *memcpy_nocheck(void * restrict dst, const void * restrict src, size_t len)
+{
+  return __memcpy_forward(dst, src, len);
 }
 
 

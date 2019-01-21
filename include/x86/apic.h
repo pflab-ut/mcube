@@ -29,26 +29,26 @@
 
 static inline uint64_t msr_apicbase_getaddr(void)
 {
-  uint64_t msr = read_msr(MSR_APICBASE);
+  uint64_t msr = rdmsr(MSR_APICBASE);
   return (msr & MSR_APICBASE_ADDRMASK);
 }
 
 static inline void msr_apicbase_setaddr(uint64_t addr)
 {
-  uint64_t msr = read_msr(MSR_APICBASE);
+  uint64_t msr = rdmsr(MSR_APICBASE);
   msr &= ~MSR_APICBASE_ADDRMASK;
   addr &= MSR_APICBASE_ADDRMASK;
   msr |= addr;
-  write_msr(MSR_APICBASE, msr);
+  wrmsr(MSR_APICBASE, msr);
 }
 
 static inline void msr_apicbase_enable(void)
 {
   uint64_t tmp;
 
-  tmp = read_msr(MSR_APICBASE);
+  tmp = rdmsr(MSR_APICBASE);
   tmp |= MSR_APICBASE_ENABLE;
-  write_msr(MSR_APICBASE, tmp);
+  wrmsr(MSR_APICBASE, tmp);
 }
 
 /*
@@ -301,7 +301,7 @@ static inline void apic_write(uint32_t reg, uint32_t val)
   void *vaddr;
 
   vaddr = apic_vrbase();
-  vaddr = (char *)vaddr + reg;
+  vaddr = (char *) vaddr + reg;
   writel(val, vaddr);
 }
 
@@ -310,7 +310,7 @@ static inline uint32_t apic_read(uint32_t reg)
   void *vaddr;
 
   vaddr = apic_vrbase();
-  vaddr = (char *)vaddr + reg;
+  vaddr = (char *) vaddr + reg;
   return readl(vaddr);
 }
 

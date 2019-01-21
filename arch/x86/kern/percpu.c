@@ -17,9 +17,10 @@
  */
 void percpu_area_init(enum cpu_type t)
 {
-  if (t == BOOTSTRAP)
+  if (t == BOOTSTRAP) {
     set_gs(BOOTSTRAP_PERCPU_AREA);
-
+  }
+  
   /* else, we're on a secondary core where %gs
    * is already set-up by the trampoline. */
 
@@ -59,8 +60,9 @@ void percpu_inspect_current(void)
   memcpy(str1, str2, 100);
   memcpy(str1+100, str2+100, 100);
 
-  if (current->pid == 0)
+  if (current->pid == 0) {
     current->pid = 0x55;
+  }
 }
 
 /*
@@ -136,9 +138,10 @@ void percpu_run_tests(void)
 
   printk("_PerCPU#%d: area address: self = 0x%lx, %%gs = 0x%lx\n",
     id, self, gs);
-  if (self != gs)
+  if (self != gs) {
     panic("_PerCPU#%d: self reference '0x%lx' != %%gs", id, self);
-
+  }
+  
   *percpu_addr(x64) = 0x6464646464646464;
   percpu_set(x32, 0x32323232);
   percpu_set(x16, 0x1616);

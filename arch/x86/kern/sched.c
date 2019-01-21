@@ -271,8 +271,9 @@ struct proc *sched_tick(void)
   current->stats.runtime_overall++;
   current->stats.prio_map[PS->current_prio]++;
 
-  if (PS->sys_ticks % SCHED_STATS_RATE == 0)
+  if (PS->sys_ticks % SCHED_STATS_RATE == 0) {
     print_sched_stats();
+  }
 
   /*
    * Only switch queues after finishing the slice, not to introduce
@@ -282,8 +283,9 @@ struct proc *sched_tick(void)
     current->stats.preempt_slice_end++;
 
     new_proc = dispatch_runnable_proc(&new_prio);
-    if (new_proc == NULL)
+    if (new_proc == NULL) {
       return current;
+    }
 
     PS->current_prio = max(MIN_PRIO, PS->current_prio - 1);
     rq_add_proc(PS->rq_expired, current, PS->current_prio);
@@ -399,9 +401,10 @@ static void print_proc_stats(struct proc *proc, int prio)
   dispatch_count = max(1u, dispatch_count);
 
   rqwait_overall = proc->stats.rqwait_overall;
-  if (proc != current)
+  if (proc != current) {
     rqwait_overall += PS->sys_ticks - proc->enter_runqueue_ts;
-
+  }
+  
   prints("%lu:%d:%lu:%lu:%lu:%lu:%u:%u ", proc->pid, prio,
          proc->stats.runtime_overall,
          proc->stats.runtime_overall / dispatch_count,
@@ -445,10 +448,12 @@ static void rq_dump(struct runqueue *rq)
 
   name = (rq == rq_active) ? "active" : "expired";
   prints("Dumping %s table:\n", name);
-  for (int i = MAX_PRIO; i >= MIN_PRIO; i--)
-    if (!list_empty(&rq->head[i]))
+  for (int i = MAX_PRIO; i >= MIN_PRIO; i--) {
+    if (!list_empty(&rq->head[i])) {
       list_for_each(&rq->head[i], proc, pnode)
         prints("%lu ", proc->pid);
+    }
+  }
   prints("\n");
 }
 #endif  /* !SCHED_TRACE */
@@ -465,8 +470,9 @@ void __no_return loop_print(char ch, int color)
 {
   while (true) {
     putc_colored(ch, color);
-    for (int i = 0; i < 0xffff; i++)
+    for (int i = 0; i < 0xffff; i++) {
       cpu_pause();
+    }
   }
 }
 

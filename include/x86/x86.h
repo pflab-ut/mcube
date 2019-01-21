@@ -72,17 +72,17 @@ static inline union x86_rflags default_rflags(void)
 
 static inline void set_fs(uint64_t val)
 {
-  write_msr(MSR_FS_BASE, val);
+  wrmsr(MSR_FS_BASE, val);
 }
 
 static inline void set_gs(uint64_t val)
 {
-  write_msr(MSR_GS_BASE, val);
+  wrmsr(MSR_GS_BASE, val);
 }
 
 static inline uint64_t get_gs(void)
 {
-  return read_msr(MSR_GS_BASE);
+  return rdmsr(MSR_GS_BASE);
 }
 
 #endif /* !__ASSEMBLY__ */

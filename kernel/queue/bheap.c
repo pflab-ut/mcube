@@ -346,7 +346,7 @@ void print_bheap(struct rt_runqueue *rq, struct bheap_node *h)
 void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
 {
 #if SCHED_FP
-  set_bit(rq->bitmap, th->priority);
+  set_bit32(rq->bitmap, th->priority);
 #endif /* SCHED_FP */
   insert_bheap(rq, th->node);
 }
@@ -356,7 +356,7 @@ void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
 void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
 #if SCHED_FP
-  set_bit(rq->bitmap, th->priority);
+  set_bit32(rq->bitmap, th->priority);
 #endif /* SCHED_FP */
   insert_bheap(rq, th->node);
 }
@@ -371,7 +371,7 @@ void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
   //  PDEBUG("dequeue_rq(): bn->node_id = %u, bn_node->value->id = %u, th->id = %u\n", bn->node_id, bn->value->id, th->id);
 #if SCHED_FP
   if (rq->array[th->priority].next == &rq->array[th->priority]) {
-    clear_bit(rq->bitmap, th->priority);
+    clear_bit32(rq->bitmap, th->priority);
   }
 #endif /* SCHED_FP */
 }

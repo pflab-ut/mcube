@@ -250,12 +250,14 @@ static int __putc(uint8_t byte)
   int timeout;
 
   /* Next byte may have a better luck */
-  if (!remote_ready())
+  if (!remote_ready()) {
     return 0;
+  }
 
   timeout = 0xfffff;
-  while (!tx_buffer_empty() && timeout--)
+  while (!tx_buffer_empty() && timeout--) {
     cpu_pause();
+  }
 
   if (__unlikely(timeout == -1)) {
     port_is_broken = 1;
@@ -270,19 +272,23 @@ void serial_write(const char *buf, int len)
 {
   int ret;
 
-  if (port_base == 0)
+  if (port_base == 0) {
     return;
+  }
 
   spin_lock(&port_lock);
 
-  if (port_is_broken)
+  if (port_is_broken) {
     goto out;
+  }
 
   ret = 0;
-  while (*buf && len-- && ret == 0)
+  while (*buf && len-- && ret == 0) {
     ret = __putc(*buf++);
+  }
 
-out:  spin_unlock(&port_lock);
+out:
+  spin_unlock(&port_lock);
 }
 
 void serial_putc(char ch)

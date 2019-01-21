@@ -51,12 +51,11 @@ void *memset32(void *dst, uint32_t val, uint64_t len)
   assert((len % 8) == 0);
   len = len / 8;
 
-  uval = ((uint64_t)val << 32) + val;
-  __asm__ __volatile__ (
-    "rep stosq"      /* rdi, rcx */
-    :"=&D" (d0), "+&c" (len)
-    :"0" (dst), "a" (uval)
-    :"memory");
+  uval = ((uint64_t) val << 32) + val;
+  asm volatile ("rep stosq"      /* rdi, rcx */
+                :"=&D" (d0), "+&c" (len)
+                :"0" (dst), "a" (uval)
+                :"memory");
 
   return dst;
 }
@@ -74,8 +73,9 @@ void buf_hex_dump(void *given_buf, int len)
 
   for (int i = 0; i < len; i++) {
     printf(" ");
-    if (buf[i] < 0x10)
+    if (buf[i] < 0x10) {
       printf("0");
+    }
     printf("%x", buf[i]);
 
     n++;
@@ -88,14 +88,14 @@ void buf_hex_dump(void *given_buf, int len)
 
 /* ********** End of the Library Functions ********** */
 
-static int
-dirTree(const char *pathname, const struct stat *sbuf, int type, struct FTW *ftwb)
+static int dirTree(const char *pathname, const struct stat *sbuf, int type, struct FTW *ftwb)
 {
   char *buf, *readbuf;
   int len, n, fd, ret;
 
-  if (!S_ISREG(sbuf->st_mode))
+  if (!S_ISREG(sbuf->st_mode)) {
     return 0;
+  }
   printf("Testing file '%s' with ino %lu: ", pathname, sbuf->st_ino);
 
   len = 4096 * 3;
@@ -116,7 +116,8 @@ dirTree(const char *pathname, const struct stat *sbuf, int type, struct FTW *ftw
     return -1;
   }
 
-  n = 0; do {
+  n = 0;
+  do {
     if ((ret = read(fd, readbuf, len - n)) < 0) {
       perror("read");
       return -1;

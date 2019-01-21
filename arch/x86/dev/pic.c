@@ -107,9 +107,11 @@ void pic_init(void)
   /* Now assure that any misbheaving IRQ that get triggered
    * by the PIC, despite of its masked status, get ignored */
 
-  for (int i = PIC_IRQ0_VECTOR; i <= PIC_IRQ7_VECTOR; i++)
+  for (int i = PIC_IRQ0_VECTOR; i <= PIC_IRQ7_VECTOR; i++) {
     set_intr_gate(i, PIC_handler);
+  }
 
-  for (int i = PIC_IRQ8_VECTOR; i <= PIC_IRQ15_VECTOR; i++)
+  for (int i = PIC_IRQ8_VECTOR; i <= PIC_IRQ15_VECTOR; i++) {
     set_intr_gate(i, PIC_handler);
+  }
 }

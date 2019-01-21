@@ -97,28 +97,6 @@
 #define E820_MAX  VIRTUAL(E820_PHYS_MAX)
 
 /*
- * E820h struct error to string map
- */
-  static const char *e820_errors[] = {
-    [E820_SUCCESS]    = "success",
-    [E820_NOT_SUPP]   = "no BIOS support",
-    [E820_BUF_FULL]   = "custom buffer full",
-    [E820_ERROR]      = "general error (carry set)",
-    [E820_BIOS_BUG]   = "BIOS bug, violating ACPI",
-    [E820_HUGE_ENTRY] = "huge returned e820 entry",
-  };
-
-static inline const char *e820_errstr(uint32_t error)
-{
-  if (error > E820_HUGE_ENTRY)
-    return "unknown e820.S-reported error";
-
-  assert(error < ARRAY_SIZE(e820_errors));
-
-  return e820_errors[error];
-}
-
-/*
  * ACPI Address Range Descriptor
  */
 struct e820_range {
@@ -160,32 +138,6 @@ enum {
          entry_len = *entry++,                          \
          range = (struct e820_range *)entry)
 
-/*
- * ACPI memory type -> string.
- */
-static const char *e820_types[] = {
-  [E820_AVAIL]    = "available",
-  [E820_RESERVED] = "reserved",
-  [E820_ACPI_TBL] = "acpi tables",
-  [E820_ACPI_NVS] = "acpi nvs",
-  [E820_ERRORMEM] = "erroneous",
-  [E820_DISABLED] = "disabled",
-};
-
-/*
- * Transform given ACPI type value to string.
- */
-static inline const char *e820_typestr(uint32_t type)
-{
-  if (type < E820_AVAIL || type > E820_DISABLED)
-    return "unknown type - reserved";
-
-  /* Don't put this on top of above return; we
-   * can have unknown values from future BIOSes */
-  assert(type < ARRAY_SIZE(e820_types));
-
-  return e820_types[type];
-}
 
 /*
  * e820 module public interfaces

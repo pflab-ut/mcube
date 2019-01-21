@@ -30,8 +30,11 @@ SRCS += \
  $(TOP_DIR)/lib/string.c \
  $(TOP_DIR)/ipc/semaphore.c \
  $(TOP_DIR)/user/user.c \
+ $(TOP_DIR)/user/test/test.c \
+ $(TOP_DIR)/user/test/test_atomic.c \
  $(TOP_DIR)/user/test/test_bitmap.c \
  $(TOP_DIR)/user/test/test_ring_buf.c \
+ $(TOP_DIR)/user/test/test_string.c \
 
 
 

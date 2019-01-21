@@ -35,7 +35,7 @@
  */
 static inline const char *errno_description(int err)
 {
-  switch(err) {
+  switch (err) {
   case 0:
     return "Success";
   case -ENOENT:
@@ -68,20 +68,34 @@ static inline const char *errno_description(int err)
 static inline const char *errno_to_str(int err)
 {
   switch(err) {
-  case 0:      return "Success";
-  case -EPERM:    return "EPERM";
-  case -EINVAL:    return "EINVAL";
-  case -ENOENT:    return "ENOENT";
-  case -ENOTDIR:    return "ENOTDIR";
-  case -EISDIR:    return "EISDIR";
-  case -ENAMETOOLONG:  return "ENAMETOOLONG";
-  case -EBADF:    return "EBADF";
-  case -EEXIST:    return "EEXIST";
-  case -EFBIG:    return "EFBIG";
-  case -ENOSPC:    return "ENOSPC";
-  case -ESPIPE:    return "ESPIPE";
-  case -EOVERFLOW:  return "EOVERFLOW";
-  default:    return "Un-stringified";
+  case 0:
+    return "Success";
+  case -EPERM:
+    return "EPERM";
+  case -EINVAL:
+    return "EINVAL";
+  case -ENOENT:
+    return "ENOENT";
+  case -ENOTDIR:
+    return "ENOTDIR";
+  case -EISDIR:
+    return "EISDIR";
+  case -ENAMETOOLONG:
+    return "ENAMETOOLONG";
+  case -EBADF:
+    return "EBADF";
+  case -EEXIST:
+    return "EEXIST";
+  case -EFBIG:
+    return "EFBIG";
+  case -ENOSPC:
+    return "ENOSPC";
+  case -ESPIPE:
+    return "ESPIPE";
+  case -EOVERFLOW:
+    return "EOVERFLOW";
+  default:
+    return "Un-stringified";
   }
 }
 

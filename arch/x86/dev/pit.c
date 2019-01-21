@@ -173,8 +173,9 @@ void pit_mdelay(int ms)
   /* GATE-2 up */
   timer2_start();
 
-  while ((inb(0x61) & PIT_OUT2) == 0)
+  while ((inb(0x61) & PIT_OUT2) == 0) {
     cpu_pause();
+  }
 }
 
 /*
@@ -186,10 +187,11 @@ void pit_oneshot(int ms)
 
   /* No control over GATE-0: it's always positive */
 
-  if (timer0_monotonic == true)
+  if (timer0_monotonic == true) {
     panic("PIT: Programming timer0 as one-shot will "
           "stop currently setup monotonic mode");
-
+  }
+  
   cmd.bcd = 0;
   cmd.mode = MODE_0;
   cmd.rw = RW_16bit;
@@ -230,8 +232,9 @@ void pit_monotonic(int ms)
  */
 static void pit_5secs_delay(void)
 {
-  for (int i = 0; i < 500; i++)
+  for (int i = 0; i < 500; i++) {
     pit_mdelay(10);
+  }
 }
 
 /*
@@ -246,24 +249,27 @@ static void pit_test_mdelay(void)
   pit_5secs_delay();
 
   printk("Note: Delay interval started \n");
-  for (int i = 0; i < 1000; i++)
+  for (int i = 0; i < 1000; i++) {
     pit_mdelay(10);
+  }
   printk("Note: Delay end \n\n");
 
   printk("Testing a 5-second delay after notice\n");
   pit_5secs_delay();
 
   printk("Note: Delay interval started \n");
-  for (int i = 0; i < 5000; i++)
+  for (int i = 0; i < 5000; i++) {
     pit_mdelay(1);
+  }
   printk("Note: Delay end \n\n");
 
   printk("Testing another 5-second delay after notice\n");
   pit_5secs_delay();
 
   printk("Note: Delay interval started \n");
-  for (int i = 0; i < 100; i++)
+  for (int i = 0; i < 100; i++) {
     pit_mdelay(50);
+  }
   printk("Note: Delay end \n\n");
 }
 
@@ -320,8 +326,9 @@ static void pit_test_periodic_irq(void)
 
   /* This should print a list of ones */
   printk("Number of ticks triggered on each delay period: ");
-  for (i = 1; i < DELAY_TESTS; i++)
+  for (i = 1; i < DELAY_TESTS; i++) {
     printk("%ld ", ticks[i] - ticks[i - 1]);
+  }
   printk("\n\n");
 }
 

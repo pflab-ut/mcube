@@ -191,9 +191,10 @@ void inode_put(struct inode *inode)
    * }
    */
 
-  if (inode->dirty == true)
+  if (inode->dirty == true) {
     memcpy(inode_diskimage(inode->inum), dino_off(inode), dino_len());
-
+  }
+  
   spin_lock(&isb.inodes_hash_lock);
   assert(inode->refcount > 0);
   --inode->refcount;
@@ -207,8 +208,9 @@ void inode_put(struct inode *inode)
      * it can synchronize its own destruction and basically
      * deallocate itself from disk!
      */
-    if (inode->delete_on_last_use == true)
+    if (inode->delete_on_last_use == true) {
       __inode_dealloc(inode);
+    }
     kfree(inode);
     inode = NULL;
   }
@@ -221,17 +223,23 @@ static void __block_read_write(uint64_t block, char *buf, uint blk_offset,
   uint64_t final_offset, blocks_count;
 
   blocks_count = isb.sb->blocks_count;
-  if (block >= blocks_count)
+  if (block >= blocks_count) {
     panic("EXT2: Block %lu is out of volume boundary\n"
           "Volume block count = %lu blocks\n", block, blocks_count);
-  if (blk_offset + len > isb.block_size)
+  }
+  if (blk_offset + len > isb.block_size) {
     panic("EXT2: Block-#%lu, blk_offset=%u, len=%u access exceeds "
           "block boundaries!", block, blk_offset, len);
-
+  }
+  
   final_offset = (block * isb.block_size) + blk_offset;
   switch (operation) {
-  case BLOCK_READ: memcpy(buf, &isb.buf[final_offset], len); break;
-  case BLOCK_WRTE: memcpy(&isb.buf[final_offset], buf, len); break;
+  case BLOCK_READ:
+    memcpy(buf, &isb.buf[final_offset], len);
+    break;
+  case BLOCK_WRTE:
+    memcpy(&isb.buf[final_offset], buf, len);
+    break;
   };
 }
 
@@ -285,26 +293,29 @@ STATIC struct inode *inode_alloc(enum file_type type)
   for (uint i = 0; i < isb.blockgroups_count; i++, bgd++) {
     spin_lock(&isb.inode_allocation_lock);
     block_read(bgd->inode_bitmap, buf, 0, isb.block_size);
-    first_zero_bit = bitmap_first_zero_bit(buf, isb.block_size);
+    first_zero_bit = find_first_zero_bit8(buf, isb.block_size);
     if (first_zero_bit == -1) {
       spin_unlock(&isb.inode_allocation_lock);
       continue;
     }
 
     inum = i * isb.sb->inodes_per_group + first_zero_bit + 1;
-    if (inum < isb.sb->first_inode)
+    if (inum < isb.sb->first_inode) {
       panic("EXT2: Reserved ino #%lu marked as free", inum);
-    if (inum > isb.sb->inodes_count)
+    }
+    if (inum > isb.sb->inodes_count) {
       panic("EXT2: Returned ino #%lu exceeds count", inum);
-
+    }
+    
     assert(isb.sb->free_inodes_count > 0);
     assert(bgd->free_inodes_count > 0);
     isb.sb->free_inodes_count--;
     bgd->free_inodes_count--;
-    if (type == EXT2_FT_DIR)
+    if (type == EXT2_FT_DIR) {
       bgd->used_dirs_count++;
-
-    bitmap_set_bit(buf, first_zero_bit, isb.block_size);
+    }
+    
+    set_bit8(buf, first_zero_bit, isb.block_size);
     block_write(bgd->inode_bitmap, buf, 0, isb.block_size);
     spin_unlock(&isb.inode_allocation_lock);
 
@@ -359,11 +370,12 @@ static void __inode_dealloc(struct inode *inode)
   spin_lock(&isb.inode_allocation_lock);
   isb.sb->free_inodes_count++;
   bgd->free_inodes_count++;
-  if (S_ISDIR(inode->mode))
+  if (S_ISDIR(inode->mode)) {
     bgd->used_dirs_count--;
+  }
   block_read(bgd->inode_bitmap, buf, 0, isb.block_size);
   assert(bitmap_bit_is_set(buf, groupi, isb.block_size));
-  bitmap_clear_bit(buf, groupi, isb.block_size);
+  clear_bit8(buf, groupi, isb.block_size);
   block_write(bgd->inode_bitmap, buf, 0, isb.block_size);
   spin_unlock(&isb.inode_allocation_lock);
 
@@ -390,7 +402,7 @@ STATIC uint64_t block_alloc(void)
   for (uint i = 0; i < isb.blockgroups_count; i++, bgd++) {
     spin_lock(&isb.block_allocation_lock);
     block_read(bgd->block_bitmap, buf, 0, isb.block_size);
-    first_zero_bit = bitmap_first_zero_bit(buf, isb.block_size);
+    first_zero_bit = find_first_zero_bit8(buf, isb.block_size);
     if (first_zero_bit == -1) {
       spin_unlock(&isb.block_allocation_lock);
       continue;
@@ -401,17 +413,18 @@ STATIC uint64_t block_alloc(void)
       first_blk + sb->blocks_per_group - 1 :
       sb->blocks_count - 1;
     block = first_blk + first_zero_bit;
-    if (block < first_blk || block > last_blk)
+    if (block < first_blk || block > last_blk) {
       panic("EXT2: Returned block #%lu as free, although "
             "it's outside valid [%lu,%lu] blck boundaries",
             block, first_blk, last_blk);
-
+    }
+    
     assert(isb.sb->free_blocks_count > 0);
     assert(bgd->free_blocks_count > 0);
     isb.sb->free_blocks_count--;
     bgd->free_blocks_count--;
 
-    bitmap_set_bit(buf, first_zero_bit, isb.block_size);
+    set_bit8(buf, first_zero_bit, isb.block_size);
     block_write(bgd->block_bitmap, buf, 0, isb.block_size);
     spin_unlock(&isb.block_allocation_lock);
     goto out;
@@ -450,7 +463,7 @@ STATIC void block_dealloc(uint block)
   assert(sb->free_blocks_count <= sb->blocks_count);
   block_read(bgd->block_bitmap, buf, 0, isb.block_size);
   assert(bitmap_bit_is_set(buf, groupi, isb.block_size));
-  bitmap_clear_bit(buf, groupi, isb.block_size);
+  clear_bit8(buf, groupi, isb.block_size);
   block_write(bgd->block_bitmap, buf, 0, isb.block_size);
   spin_unlock(&isb.block_allocation_lock);
 
@@ -473,17 +486,21 @@ uint64_t file_read(struct inode *inode, char *buf, uint64_t offset, uint64_t len
   uint64_t supported_area, block, blk_offset;
   uint64_t read_len, ret_len;
 
-  if (!S_ISREG(inode->mode) && !S_ISDIR(inode->mode))
+  if (!S_ISREG(inode->mode) && !S_ISDIR(inode->mode)) {
     return 0;
+  }
 
   supported_area = isb.block_size * EXT2_INO_NR_DIRECT_BLKS;
-  if (offset >= inode->size_low)
+  if (offset >= inode->size_low) {
     return 0;
-  if (offset + len > inode->size_low)
+  }
+  if (offset + len > inode->size_low) {
     len = inode->size_low - offset;
-  if (offset + len > supported_area)
+  }
+  if (offset + len > supported_area) {
     len = supported_area  - offset;
-
+  }
+  
   ret_len = len;
   while (len != 0) {
     block = offset / isb.block_size;
@@ -499,8 +516,9 @@ uint64_t file_read(struct inode *inode, char *buf, uint64_t offset, uint64_t len
     buf += read_len;
     offset += read_len;
     assert(offset <= inode->size_low);
-    if (offset == inode->size_low)
+    if (offset == inode->size_low) {
       assert(len == 0);
+    }
   }
 
   return ret_len;
@@ -519,16 +537,20 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset, uint64_t len
   uint64_t supported_area, blk_offset, last_offset;
   uint64_t write_len, ret_len, block, new;
 
-  if (!S_ISREG(inode->mode) && !S_ISDIR(inode->mode))
+  if (!S_ISREG(inode->mode) && !S_ISDIR(inode->mode)) {
     return -EBADF;
+  }
 
   supported_area = isb.block_size * EXT2_INO_NR_DIRECT_BLKS;
-  if (offset >= supported_area || offset >= UINT32_MAX)
+  if (offset >= supported_area || offset >= UINT32_MAX) {
     return -EFBIG;
-  if (offset + len > supported_area)
+  }
+  if (offset + len > supported_area) {
     len = supported_area  - offset;
-  if (offset + len > UINT32_MAX)
+  }
+  if (offset + len > UINT32_MAX) {
     len = UINT32_MAX  - offset;
+  }
 
   ret_len = len;
   last_offset = offset + ret_len;
@@ -540,8 +562,9 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset, uint64_t len
 
     assert(block < EXT2_INO_NR_DIRECT_BLKS);
     if (inode->blocks[block] == 0) {
-      if ((new = block_alloc()) == 0)
+      if ((new = block_alloc()) == 0) {
         return -ENOSPC;
+      }
       inode->blocks[block] = new;
       inode->dirty = true;
     }
@@ -552,8 +575,9 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset, uint64_t len
     buf += write_len;
     offset += write_len;
     assert(offset <= last_offset);
-    if (offset == last_offset)
+    if (offset == last_offset) {
       assert(len == 0);
+    }
 
     if (offset > inode->size_low) {
       inode->size_low = offset;
@@ -574,7 +598,7 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset, uint64_t len
 static inline int dir_entry_min_len(int filename_len)
 {
   return round_up(EXT2_DIR_ENTRY_MIN_LEN + filename_len,
-      EXT2_DIR_ENTRY_ALIGN);
+                  EXT2_DIR_ENTRY_ALIGN);
 }
 
 /*
@@ -586,7 +610,7 @@ static inline int dir_entry_min_len(int filename_len)
  * FIXME: Assure entry's type == its destination inode mode.
  */
 STATIC bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
-          uint64_t offset, uint64_t read_len)
+                            uint64_t offset, uint64_t read_len)
 {
   uint64_t inum;
 
@@ -661,22 +685,30 @@ STATIC int64_t find_dir_entry(struct inode *dir, const char *name, uint name_len
   dentry_len = sizeof(struct dir_entry);
   dentry = *entry = kmalloc(dentry_len);
 
-  if (name_len == 0 || name_len > EXT2_FILENAME_LEN)
+  if (name_len == 0 || name_len > EXT2_FILENAME_LEN) {
     return -ENOENT;
+  }
 
   assert(name != NULL);
   for (offset = 0;  ; offset += dentry->record_len) {
     len = file_read(dir, (char *)dentry, offset, dentry_len);
-    if (len == 0)      /* EOF */
+    if (len == 0) {
+      /* EOF */
       return -ENOENT;
-    if (!dir_entry_valid(dir, dentry, offset, len))
+    }
+    if (!dir_entry_valid(dir, dentry, offset, len)) {
       return -EIO;
-    if (dentry->inode_num == 0)  /* Unused entry */
+    }
+    if (dentry->inode_num == 0) {
+      /* Unused entry */
       continue;
-    if (dentry->filename_len != name_len)
+    }
+    if (dentry->filename_len != name_len) {
       continue;
-    if (memcmp(dentry->filename, name, name_len))
+    }
+    if (memcmp(dentry->filename, name, name_len)) {
       continue;
+    }
     *roffset = offset;
     return dentry->inode_num;
   }
@@ -695,16 +727,16 @@ static int64_t remove_dir_entry(struct inode *dir, const char *name)
 
   assert(S_ISDIR(dir->mode));
   assert(name != NULL);
-  ret = find_dir_entry(dir, name, strlen(name), &dentry, &offset);
-  if (ret < 0)
+  if ((ret = find_dir_entry(dir, name, strlen(name), &dentry, &offset)) < 0) {
     goto out;
+  }
 
   dentry_inum = dentry->inode_num;
   dentry->inode_num = 0;
-  ret = file_write(dir, (char *)dentry, offset, dentry->record_len);
-  if (ret < 0)
+  if ((ret = file_write(dir, (char *)dentry, offset, dentry->record_len)) < 0) {
     goto out;
-
+  }
+  
   entry_ino = inode_get(dentry_inum);
   assert(entry_ino->links_count > 0);
   entry_ino->links_count--;
@@ -712,7 +744,8 @@ static int64_t remove_dir_entry(struct inode *dir, const char *name)
   inode_put(entry_ino);
   ret = dentry_inum;
 
-out:  kfree(dentry);
+out:
+  kfree(dentry);
   return ret;
 }
 
@@ -735,9 +768,10 @@ int file_delete(struct inode *parent, const char *name)
   assert(name != NULL);
 
   entry_inum = remove_dir_entry(parent, name);
-  if (entry_inum < 0)
+  if (entry_inum < 0) {
     return entry_inum;
-
+  }
+  
   inode = inode_get(entry_inum);
   assert(S_ISREG(inode->mode));
   if (inode->links_count == 0) {
@@ -758,7 +792,7 @@ int file_delete(struct inode *parent, const char *name)
  * to a new folder.
  */
 int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
-         const char *name, enum file_type type)
+                           const char *name, enum file_type type)
 {
   struct dir_entry *dentry, *lastentry, *newentry;
   uint64_t offset, blk_offset, newentry_len, len;
@@ -771,16 +805,20 @@ int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
   assert(type == EXT2_FT_REG_FILE || type == EXT2_FT_DIR);
 
   filename_len = strnlen(name, EXT2_FILENAME_LEN - 1);
-  if (name[filename_len] != '\0')
+  if (name[filename_len] != '\0') {
     return -ENAMETOOLONG;
-  if (filename_len == 0)
+  }
+  if (filename_len == 0) {
     return -ENOENT;
+  }
 
   ret = find_dir_entry(dir, name, filename_len, &dentry, &null);
-  if (ret > 0)
+  if (ret > 0) {
     ret = -EEXIST;
-  if (ret < 0 && ret != -ENOENT)
+  }
+  if (ret < 0 && ret != -ENOENT) {
     goto free_dentry1;
+  }
 
   /*
    * Find the parent dir's last entry: our new entry will get
@@ -792,8 +830,9 @@ int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
   memset(lastentry, 0, sizeof(*lastentry));
   for (offset = 0;  ; offset += lastentry->record_len) {
     len = file_read(dir,(char*)lastentry,offset,sizeof(*lastentry));
-    if (len == 0)
+    if (len == 0) {
       break;
+    }
     if (!dir_entry_valid(dir, lastentry, offset, len)) {
       ret = -EIO;
       goto free_dentry2;
@@ -811,9 +850,10 @@ int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
    *   corrupt data (dir sizes are always in terms of blocks)
    */
 
-  if (offset == 0)
+  if (offset == 0) {
     goto no_lastentry;
-
+  }
+  
   if (lastentry->inode_num == 0) {
     offset -= lastentry->record_len;
   } else {
@@ -866,15 +906,15 @@ no_lastentry:
   assert(filename_len < EXT2_FILENAME_LEN);
   memcpy(newentry->filename, name, filename_len);
   newentry->filename[filename_len] = '\0';  /*for 'fsck'*/
-  ret = file_write(dir, (char *)newentry, offset, newentry_len);
-  if (ret < 0)
+  if ((ret = file_write(dir, (char *)newentry, offset, newentry_len)) < 0) {
     goto free_dentry3;
+  }
   assert(newentry->record_len >= newentry_len);  /*dst*/
   assert(newentry->record_len - newentry_len <= isb.block_size);  /*src*/
-  ret = file_write(dir, zeroes, offset  + newentry_len,
-       newentry->record_len - newentry_len);
-  if (ret < 0)
+  if ((ret = file_write(dir, zeroes, offset  + newentry_len,
+                        newentry->record_len - newentry_len)) < 0) {
     goto free_dentry3;
+  }
   assert(dir_entry_valid(dir, newentry, offset, newentry_len));
 
   /*
@@ -908,21 +948,21 @@ int64_t file_new(struct inode *dir, const char *name, enum file_type type)
   struct inode *inode;
 
   assert(S_ISDIR(dir->mode));
-  inode = inode_alloc(type);
-  if (inode == NULL)
+  if ((inode = inode_alloc(type)) == NULL) {
     return -ENOSPC;
+  }
 
-  ret = ext2_new_dir_entry(dir, inode, name, type);
-  if (ret < 0)
+  if ((ret = ext2_new_dir_entry(dir, inode, name, type)) < 0) {
     goto dealloc_inode;
+  }
 
   if (type == EXT2_FT_DIR) {
-    ret = ext2_new_dir_entry(inode, inode, ".", EXT2_FT_DIR);
-    if (ret < 0)
+    if ((ret = ext2_new_dir_entry(inode, inode, ".", EXT2_FT_DIR)) < 0) {
       goto remove_newly_created_entry;
-    ret = ext2_new_dir_entry(inode, dir, "..", EXT2_FT_DIR);
-    if (ret < 0)
+    }
+    if ((ret = ext2_new_dir_entry(inode, dir, "..", EXT2_FT_DIR)) < 0) {
       goto remove_new_dir_dot_entry;
+    }
   }
 
   inum = inode->inum;
@@ -930,13 +970,15 @@ int64_t file_new(struct inode *dir, const char *name, enum file_type type)
   return inum;
 
 remove_new_dir_dot_entry:
-  if ((ret2 = remove_dir_entry(inode, ".")) <= 0)
+  if ((ret2 = remove_dir_entry(inode, ".")) <= 0) {
     panic("Removing just created directory inode #%lu dot "
           "entry returned -%s", inode->inum, errno(ret2));
+  }
 remove_newly_created_entry:
-  if ((ret2 = remove_dir_entry(dir, name)) <= 0)
+  if ((ret2 = remove_dir_entry(dir, name)) <= 0) {
     panic("Removing just created directory inode #%lu entry for "
           "file '%s' returned -%s", dir->inum, name, errno(ret2));
+  }
 dealloc_inode:
   inode_mark_delete(inode);
   inode_put(inode);
@@ -960,8 +1002,9 @@ static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
   uint32_t *entry;
   int entries_count;
 
-  if (block == 0)
+  if (block == 0) {
     return;
+  }
 
   assert(level >= 0);
   assert(level < INDIRECTION_LEVEL_MAX);
@@ -975,8 +1018,9 @@ static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
   block_read(block, buf, 0, isb.block_size);
 
   for (entry = (uint32_t *)buf; entries_count--; entry++) {
-    if (*entry != 0)
+    if (*entry != 0) {
       indirect_block_dealloc(*entry, level - 1);
+    }
   }
   assert((char *)entry == buf + isb.block_size);
 
@@ -999,8 +1043,9 @@ void file_truncate(struct inode *inode)
   inode->size_low = 0;
   inode->i512_blocks = 0;
   for (int i = 0; i < EXT2_INO_NR_DIRECT_BLKS; i++) {
-    if (inode->blocks[i] == 0)
+    if (inode->blocks[i] == 0) {
       continue;
+    }
     block_dealloc(inode->blocks[i]);
     inode->blocks[i] = 0;
   }
@@ -1032,7 +1077,8 @@ int64_t name_i(const char *path)
   case '\0':
     return -ENOENT;
   case '/':
-    inum = EXT2_ROOT_INODE; break;
+    inum = EXT2_ROOT_INODE;
+    break;
   default:
     inum = current->working_dir;
     assert(inum != 0);
@@ -1042,18 +1088,23 @@ int64_t name_i(const char *path)
   while (*p2 != '\0' && inum > 0) {
     prev_inum = inum;
     if (*p2 == '/') {
-      if (!is_dir(prev_inum))
+      if (!is_dir(prev_inum)) {
         return -ENOTDIR;
-      while (*p2 == '/')
+      }
+      while (*p2 == '/') {
         p1 = ++p2;
+      }
     }
-    if (*p2 == '\0')
+    if (*p2 == '\0') {
       break;
+    }
 
-    while (*p2 != '\0' && *p2 != '/' && p2 - p1 < EXT2_FILENAME_LEN)
+    while (*p2 != '\0' && *p2 != '/' && p2 - p1 < EXT2_FILENAME_LEN) {
       p2++;
-    if (*p2 != '\0' && *p2 != '/')
+    }
+    if (*p2 != '\0' && *p2 != '/') {
       return -ENAMETOOLONG;
+    }
 
     parent = inode_get(prev_inum);
     assert(S_ISDIR(parent->mode));
@@ -1079,9 +1130,9 @@ void ext2_init(void)
   uint64_t inodetbl_size, inodetbl_blocks, inodetbl_last_block;
 
   /* Ramdisk sanity checks */
-  ramdisk_len = ramdisk_get_len();
-  if (ramdisk_len == 0)
+  if ((ramdisk_len = ramdisk_get_len()) == 0) {
     return;
+  }
   if (ramdisk_len < EXT2_MIN_FS_SIZE) {
     printk("FS: Loaded ramdisk is too small for an EXT2 volume!\n");
     return;
@@ -1102,32 +1153,44 @@ void ext2_init(void)
   sb = isb.sb;
   bgd = isb.bgd;
   bits_per_byte = 8;
-  if (sb->blocks_count * isb.block_size > ramdisk_len)
+  if (sb->blocks_count * isb.block_size > ramdisk_len) {
     panic("FS: Truncated EXT2 volume image!");
+  }
 
   /* Superblock sanity checks */
-  if (sb->magic_signature != EXT2_SUPERBLOCK_MAGIC)
+  if (sb->magic_signature != EXT2_SUPERBLOCK_MAGIC) {
     panic("FS: Loaded image is not an EXT2 file system!");
-  if (sb->revision_level != EXT2_DYNAMIC_REVISION)
+  }
+  if (sb->revision_level != EXT2_DYNAMIC_REVISION) {
     panic("Ext2: Obsolete, un-supported, file system version!");
-  if (sb->state != EXT2_VALID_FS)
+  }
+  if (sb->state != EXT2_VALID_FS) {
     panic("Ext2: Erroneous file system state; run fsck!");
-  if (!is_aligned(sb->inode_size, 2))
+  }
+  if (!is_aligned(sb->inode_size, 2)) {
     panic("Ext2: Invalid inode size = %d bytes!", sb->inode_size);
-  if (sb->inode_size > isb.block_size)
+  }
+  if (sb->inode_size > isb.block_size) {
     panic("Ext2: Inode size > file system block size!");
-  if (isb.block_size != isb.frag_size)
+  }
+  if (isb.block_size != isb.frag_size) {
     panic("Ext2: Fragment size is not equal to block size!");
-  if (isb.block_size > EXT2_MAX_BLOCK_LEN)
+  }
+  if (isb.block_size > EXT2_MAX_BLOCK_LEN) {
     panic("Ext2: Huge block size of %ld bytes!", isb.block_size);
-  if (sb->blocks_per_group > isb.block_size * bits_per_byte)
+  }
+  if (sb->blocks_per_group > isb.block_size * bits_per_byte) {
     panic("Ext2: Block Groups block bitmap must fit in 1 block!");
-  if (sb->inodes_per_group > isb.block_size * bits_per_byte)
+  }
+  if (sb->inodes_per_group > isb.block_size * bits_per_byte) {
     panic("Ext2: Block Groups inode bitmap must fit in 1 block!");
-  if (sb->blocks_per_group == 0)
+  }
+  if (sb->blocks_per_group == 0) {
     panic("Ext2: A Block Group cannot have 0 blocks!");
-  if (sb->inodes_per_group == 0)
+  }
+  if (sb->inodes_per_group == 0) {
     panic("Ext2: A Block Group cannot have 0 inodes!");
+  }
   superblock_dump(sb);
 
   /* Use ceil division: the last Block Group my have a
@@ -1140,31 +1203,41 @@ void ext2_init(void)
 
   /* Block Group Descriptor Table sanity checks */
   if (isb.blockgroups_count > 1 &&  // Last group special case
-      sb->blocks_per_group > sb->blocks_count)
+      sb->blocks_per_group > sb->blocks_count) {
     panic("Ext2: Block Groups num of blocks > all disk ones!");
-  if (sb->inodes_per_group > sb->inodes_count)
+  }
+  if (sb->inodes_per_group > sb->inodes_count) {
     panic("Ext2: Block Groups num of inodes > all disk ones!");
+  }
   for (uint i = 0; i < isb.blockgroups_count; i++) {
     first = i * sb->blocks_per_group + sb->first_data_block;
-    if (i == isb.last_blockgroup)
+    if (i == isb.last_blockgroup) {
       last = sb->blocks_count - 1;
-    else
+    } else {
       last  = first + sb->blocks_per_group - 1;
+    }
     inodetbl_last_block = bgd->inode_table + inodetbl_blocks - 1;
-    if (bgd->block_bitmap < first || bgd->block_bitmap > last)
+    if (bgd->block_bitmap < first || bgd->block_bitmap > last) {
       panic("EXT2: Group %d bitmap block out of range", i);
-    if (bgd->inode_bitmap < first || bgd->inode_bitmap > last)
+    }
+    if (bgd->inode_bitmap < first || bgd->inode_bitmap > last) {
       panic("EXT2: Group %d inode bitmap out of range", i);
-    if (bgd->inode_table < first || bgd->inode_table > last)
+    }
+    if (bgd->inode_table < first || bgd->inode_table > last) {
       panic("EXT2: Group %d inode table  out of range", i);
-    if (inodetbl_last_block < first || inodetbl_last_block > last)
+    }
+    if (inodetbl_last_block < first || inodetbl_last_block > last) {
       panic("EXT2: Group %d i-table end block out of range", i);
-    if (bgd->free_blocks_count > sb->blocks_per_group)
+    }
+    if (bgd->free_blocks_count > sb->blocks_per_group) {
       panic("EXT2: Group %d free blocks count out of range", i);
-    if (bgd->free_inodes_count > sb->inodes_per_group)
+    }
+    if (bgd->free_inodes_count > sb->inodes_per_group) {
       panic("EXT2: Group %d free inodes count out of range", i);
-    if (bgd->used_dirs_count > sb->inodes_per_group)
+    }
+    if (bgd->used_dirs_count > sb->inodes_per_group) {
       panic("EXT2: Group %d used dirs count out of range", i);
+    }
     blockgroup_dump(i, bgd, first, last, inodetbl_blocks);
     bgd++;
   }
@@ -1175,14 +1248,18 @@ void ext2_init(void)
 
   /* Root Inode sanity checks */
   rooti = inode_get(EXT2_ROOT_INODE);
-  if (!S_ISDIR(rooti->mode))
+  if (!S_ISDIR(rooti->mode)) {
     panic("EXT2: Root inode ('/') is not a directory!");
-  if (rooti->i512_blocks == 0 || rooti->size_low == 0)
+  }
+  if (rooti->i512_blocks == 0 || rooti->size_low == 0) {
     panic("EXT2: Root inode ('/') size = 0 bytes!");
-  if (name_i("/.") != EXT2_ROOT_INODE)
+  }
+  if (name_i("/.") != EXT2_ROOT_INODE) {
     panic("EXT2: Corrupt root directory '.'  entry!");
-  if (name_i("/..") != EXT2_ROOT_INODE)
+  }
+  if (name_i("/..") != EXT2_ROOT_INODE) {
     panic("EXT2: Corrupt root directory '..' entry!");
+  }
   inode_dump(rooti, "/");
   inode_put(rooti);
 
