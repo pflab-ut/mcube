@@ -3,10 +3,6 @@
  *
  * Copyright (C) 2010 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * In an earlier stage, we've switched to real-mode and acquired the
  * BIOS's ACPI E820h memory map, which includes details on available and
  * reserved memory pages. The real-mode code passes the map entries to

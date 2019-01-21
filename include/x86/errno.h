@@ -13,10 +13,6 @@
  *
  * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * "No function in this document sets errno to 0 to indicate an error.
  * Only these symbolic names should be used in programs, since the actual
  * val of the err number is unspecified." --Single UNIX Specv3, POSIX:2001

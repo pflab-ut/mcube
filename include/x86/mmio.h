@@ -11,10 +11,6 @@
  *
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * Originally, the 'volatile' keyword was meant for memory-mapped I/O,
  * but this keyword is one of the very vague parts of ANSI C, and it
  * seems no compiler is able to get them completely right.[1][2]

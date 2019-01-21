@@ -4,10 +4,6 @@
  *
  * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * We don't repeat what's written in the POSIX spec here: check the sta-
  * ndard to make sense of all the syscalls parameters and return values.
  *

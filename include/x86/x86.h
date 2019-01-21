@@ -10,10 +10,6 @@
  * General x86 properties
  *
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
  */
 
 #define MSR_FS_BASE  0xC0000100

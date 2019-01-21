@@ -6,10 +6,6 @@
  *
  * Copyright (C) 2010 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * This API is very close to the Linux-2.6 one, which I've used back in
  * the days and found it to be very flexible. The code itself was
  * "cleanroomed" from Bovet & Cesati's `Understanding the Linux Kernel'

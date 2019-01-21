@@ -3,10 +3,6 @@
  *
  * Copyright (C) 2009-2012 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * A key fact of the pmode->rmode switch and returning back is the
  * vaguely documented 16-bit protected mode. Check attached documentation
  * for further analysis.

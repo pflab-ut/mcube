@@ -10,10 +10,6 @@
  * I/O APIC definitions
  *
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
  */
 
 
@@ -176,7 +172,7 @@ static inline union ioapic_irqentry ioapic_read_irqentry(int apic, uint8_t irq)
  * of the irq entry integrity if the irq is going to be enabled.
  */
 static inline void ioapic_write_irqentry(int apic, uint8_t irq,
-           union ioapic_irqentry entry)
+                                         union ioapic_irqentry entry)
 {
   ioapic_write(apic, IOAPIC_REDTBL0 + 2*irq + 1, entry.value_high);
   ioapic_write(apic, IOAPIC_REDTBL0 + 2*irq, entry.value_low);

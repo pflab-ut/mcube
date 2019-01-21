@@ -3,10 +3,6 @@
  *
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * Note that while the Intel MP spec is sweet, and still in fact
  * supported in these days machines, MOST x86-64 systems are designed
  * with ACPI as the primary model. Everyone knows that ACPI designers

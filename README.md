@@ -92,4 +92,4 @@ After configuration test, send the results to your e-mail.
 - See LICENSE
 
 ## Copyright
-2018 Hiroyuki Chishiro
+2018-2019 Hiroyuki Chishiro

@@ -3,10 +3,6 @@
  *
  * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * After basic sanity checks, export the ramdisk start address & length
  * to the rest of the kernel.
  *
@@ -44,7 +40,7 @@ static struct ramdisk {
 void *ramdisk_memory_area_end(void)
 {
   assert(rdheader != NULL);
-  return (char *)ramdisk.buf + ramdisk.len;
+  return (char *) ramdisk.buf + ramdisk.len;
 }
 
 void ramdisk_init(void)

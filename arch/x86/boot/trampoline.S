@@ -3,10 +3,6 @@
  *
  * Copyright (C) 2009-2011 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * NOTE! This code is linked to our long mode kernel. It's copied to
  * SMPBOOT_START directly before starting up the AP cores.
  *

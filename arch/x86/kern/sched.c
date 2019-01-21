@@ -3,10 +3,6 @@
  *
  * Copyright (C) 2010-2011 Ahmed S. Darwish <darwish.07@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 2.
- *
  * For a detailed analysis of general-purpose scheduling, along with a
  * nice historical context, check the research collected in the Cute
  * 'references' tree.
