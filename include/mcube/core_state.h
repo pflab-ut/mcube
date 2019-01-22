@@ -17,7 +17,7 @@ struct core_state {
    * This lock must be held before any operation where there is a possibility of
    * concurrent access to the same binding (e.g. multiple threads, or
    * asynchronous event handlers that use the same binding object). */
-  atomic_int lock;
+  spinlock_t lock;
 
   /**
    * Transmit message;

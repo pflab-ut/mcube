@@ -16,6 +16,7 @@ SRCS += \
 	$(TOP_DIR)/kernel/print.c \
 	$(TOP_DIR)/kernel/thread.c \
  $(TOP_DIR)/kernel/task.c \
+ $(TOP_DIR)/kernel/kmalloc.c \
  $(TOP_DIR)/kernel/sched.c \
  $(TOP_DIR)/kernel/job.c \
  $(TOP_DIR)/kernel/state.c \
@@ -33,6 +34,7 @@ SRCS += \
  $(TOP_DIR)/user/test/test.c \
  $(TOP_DIR)/user/test/test_atomic.c \
  $(TOP_DIR)/user/test/test_bitmap.c \
+ $(TOP_DIR)/user/test/test_kmalloc.c \
  $(TOP_DIR)/user/test/test_ring_buf.c \
  $(TOP_DIR)/user/test/test_string.c \
 

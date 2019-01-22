@@ -170,7 +170,7 @@ asmlinkage int do_irq(struct full_regs *regs)
   /* check if this is software interrupt. */
   status = get_common_interrupt_status();
   printk("get_common_interrupt_status() = 0x%lx\n", status);
-  id = ffb(status);
+  id = ffb32(status);
   if (id > NR_SOFTWARE_INTERRUPTS) {
     printk("Error: unknown id %lu\n", id);
   } else {

@@ -37,7 +37,7 @@ typedef struct bheap_node bheap_node;
  */
 struct rt_runqueue {
   /** Lock to runqueue. */
-  atomic_int lock;
+  spinlock_t lock;
   /** Array to manage threads. */
   struct thread_struct array[NR_PRIORITIES];
   /** Bitmap. */

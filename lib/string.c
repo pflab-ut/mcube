@@ -453,6 +453,8 @@ void *memsetd(void *s, int c, size_t n)
 }
 
 
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
+
 
 /*
  * NOTE: Always put as much logic as possibe out of the inlined assembly
@@ -473,6 +475,7 @@ void *memsetd(void *s, int c, size_t n)
  * Output registers are (explicitly) clobbered by definition. 'CCR' is
  * the x86's condition code register %rflags.
  */
+
 
 /*
  * The AMD64 ABI guarantees a DF=0 upon function entry.
@@ -515,7 +518,6 @@ void *memcpy_forward(void *dst, const void *src, size_t len)
 }
 
 
-#if 1
 
 /*
  * C99-compliant, with extra sanity checks.
@@ -535,6 +537,28 @@ void *memcpy(void * restrict dst, const void * restrict src, size_t len)
 
   return __memcpy_forward(dst, src, len);
 }
+
+
+/*
+ * memcpy(), minus the checks
+ *
+ * Sanity checks overhead cannot be tolerated for HOT copying
+ * paths like screen scrolling.
+ *
+ * This is also useful for code implicitly called by panic():
+ * a sanity check failure there will lead to a stack overflow.
+ */
+
+void *memcpy_forward_nocheck(void *dst, const void *src, size_t len)
+{
+  return __memcpy_forward(dst, src, len);
+}
+
+void *memcpy_nocheck(void * restrict dst, const void * restrict src, size_t len)
+{
+  return __memcpy_forward(dst, src, len);
+}
+
 #else
 
 
@@ -560,26 +584,6 @@ void *memcpy(void *dest, const void *src, size_t n)
 
 #endif
 
-
-/*
- * memcpy(), minus the checks
- *
- * Sanity checks overhead cannot be tolerated for HOT copying
- * paths like screen scrolling.
- *
- * This is also useful for code implicitly called by panic():
- * a sanity check failure there will lead to a stack overflow.
- */
-
-void *memcpy_forward_nocheck(void *dst, const void *src, size_t len)
-{
-  return __memcpy_forward(dst, src, len);
-}
-
-void *memcpy_nocheck(void * restrict dst, const void * restrict src, size_t len)
-{
-  return __memcpy_forward(dst, src, len);
-}
 
 
 /**

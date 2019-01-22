@@ -10,7 +10,6 @@
 /* early include due to dependency */
 #include <mcube/config.h>
 #include <mcube/types.h>
-#include <mcube/atomic.h>
 #include <mcube/stdarg.h>
 #include <mcube/stdio.h>
 #include <mcube/stddef.h>
@@ -42,6 +41,7 @@
 #include <mcube/errno.h>
 #include <mcube/fs.h>
 #include <mcube/io.h>
+#include <mcube/kmalloc.h>
 #include <mcube/metric.h>
 #include <mcube/mm.h>
 #include <mcube/mt.h>

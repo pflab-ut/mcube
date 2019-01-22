@@ -5,6 +5,7 @@
  */
 #include <mcube/mcube.h>
 
+#if CONFIG_ARCH_X86
 
 static void test_strnlen(const char *str, int len, int expected_len, bool print)
 {
@@ -94,3 +95,12 @@ void test_string(void)
   test_memcpy_overlaps();
 }
 
+
+#else
+
+void test_string(void)
+{
+}
+
+
+#endif

@@ -1,0 +1,156 @@
+/**
+ * @file user/test/test_kmalloc.c
+ *
+ * @author Hiroyuki Chishiro
+ */
+#include <mcube/mcube.h>
+
+#if CONFIG_ARCH_X86
+
+/*
+ * Kernel memory allocator test cases.
+ *
+ * Thanks to NewOS's Travis Geiselbrecht (giest) for aiding
+ * me in outlying different MM testing scenarious over IRC!
+ *
+ * Those tests can get more harnessed once we have a random
+ * number generator ready.
+ */
+
+
+/*
+ * Max # of allocations to do during testing
+ */
+#define ALLOCS_COUNT  100000
+
+/*
+ * Big array of pointers to allocated addresses and
+ * their area sizes.
+ */
+static struct {
+  int size;
+  void *p;
+} p[ALLOCS_COUNT];
+
+static char tmpbuf[PAGE_SIZE];
+
+/*
+ * As a way of memory allocator disruption, allocate,
+ * memset, then free a given @(size)ed memory buffer.
+ */
+static void _disrupt(int size)
+{
+  char *p;
+
+  p = kmalloc(size);
+  memset(p, 0xff, size);
+  kfree(p);
+}
+
+/*
+ * @count: number of allocations to perform
+ * @rounded: if true, only do power-of-2-rounded allocs
+ */
+void _test_allocs(int count, int rounded)
+{
+  int i, size;
+
+  size = (rounded) ? MINALLOC_SZ : 1;
+
+  for (i = 0; i < count; i++) {
+    _disrupt(size);
+
+    p[i].p = kmalloc(size);
+    assert(is_aligned((uintptr_t)p[i].p, 16));
+    p[i].size = size;
+
+    if (rounded) {
+      memset32(p[i].p, i, size);
+      size *= 2;
+      size = (size > MAXALLOC_SZ) ? MINALLOC_SZ : size;
+    } else {
+      memset(p[i].p, i, size);
+      size++;
+      size = (size > MAXALLOC_SZ) ? 1 : size;
+    }
+  }
+
+  for (i = 0; i < count; i++) {
+    size = p[i].size;
+    _disrupt(size);
+
+    (rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
+    if (__builtin_memcmp(p[i].p, tmpbuf, size)) {
+      panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
+            "%d bytes got corrupted", i, p[i].p, size);
+    }
+    
+    kfree(p[i].p);
+
+    size = ((size / 2) > 1) ? size / 2 : MINALLOC_SZ;
+    p[i].p = kmalloc(size);
+    assert(is_aligned((uintptr_t)p[i].p, 16));
+    p[i].size = size;
+    (rounded) ? memset32(p[i].p, i, size) : memset(p[i].p, i, size);
+
+    _disrupt(size);
+  }
+
+  for (i = 0; i < count; i++) {
+    _disrupt(45);
+
+    size = p[i].size;
+    (rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
+    if (__builtin_memcmp(p[i].p, tmpbuf, size)) {
+      panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
+            "%d bytes got corrupted", i, p[i].p, size);
+    }
+    
+    kfree(p[i].p);
+    _disrupt(32);
+  }
+
+  printk("_Bucket: %s: Success\n", __FUNCTION__);
+}
+
+
+/*
+ * Memory allocator tests driver
+ *
+ * For extra fun, after removing the thread-unsafe
+ * globals, call this 3 or 4 times in parallel.
+ */
+int test_kmalloc(void)
+{
+  uint64_t i, count, repeat;
+
+  count = ALLOCS_COUNT;
+  repeat = 100;
+
+  for (i = 0; i < repeat; i++) {
+    printk("[%d] ", i);
+    _test_allocs(count, 1);
+  }
+
+  memset(p, 0, sizeof(p));
+  for (i = 0; i < repeat; i++) {
+    printk("[%d] ", i);
+    _test_allocs(count, 0);
+  }
+
+  for (i = MINBUCKET_IDX; i <= MAXBUCKET_IDX; i++) {
+    printk("Buf size = %d: free bufs = %d, total pages requested "
+           "= %d\n", 1 << i, kmembuckets[i].totalfree,
+           kmembuckets[i].totalpages);
+  }
+  return 0;
+}
+
+#else
+
+int test_kmalloc(void)
+{
+  return 0;
+}
+
+#endif /* CONFIG_ARCH_X86 */

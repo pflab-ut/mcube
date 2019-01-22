@@ -32,7 +32,6 @@
 #include <x86/hash.h>
 #include <x86/ioapic.h>
 #include <x86/keyboard.h>
-#include <x86/kmalloc.h>
 #include <x86/mm.h>
 #include <x86/mptables.h>
 #include <x86/percpu.h>

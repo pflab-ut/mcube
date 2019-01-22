@@ -12,13 +12,14 @@
  */
 #define printk_assert(condition)                \
   do {                                          \
-    if (__unlikely(!(condition)))               \
+    if (__unlikely(!(condition))) {             \
       printk_panic("!(" #condition ")");        \
+    }                                           \
   } while (0);
 
 /*
  * A panic() that can be safely used by printk().
- * We use putc() as it directly invokes the VGA code.
+ * We use putchar() as it directly invokes the VGA code.
  * NOTE! Don't use any assert()s in this function!
  */
 static char panic_prefix[] = "PANIC: printk: ";
@@ -27,12 +28,14 @@ static __no_return void printk_panic(const char *str)
   const char *prefix;
 
   prefix = panic_prefix;
-  while (*prefix != 0)
-    putc(*prefix++);
-
-  while (*str != 0)
-    putc(*str++);
-
+  while (*prefix != 0) {
+    putchar(*prefix++);
+  }
+  
+  while (*str != 0) {
+    putchar(*str++);
+  }
+  
   halt();
 }
 
@@ -51,11 +54,13 @@ static int ultoa(unsigned long num, char *buf, int size, unsigned radix)
   printk_assert(radix > 2 && radix <= PRINTK_MAX_RADIX);
 
   digits = 0;
-  if (num == 0)
+  if (num == 0) {
     digits++;
-
-  for (typeof(num) c = num; c != 0; c /= radix)
+  }
+  
+  for (typeof(num) c = num; c != 0; c /= radix) {
     digits++;
+  }
 
   ret = digits;
 
@@ -165,12 +170,14 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
   }
 
  out:
-  if (complete != 1)
+  if (complete != 1) {
     printk_panic("Unknown/incomplete expression");
-
+  }
+  
   /* Bypass last expression char */
-  if (*fmt != 0)
+  if (*fmt != 0) {
     fmt++;
+  }
 
   return fmt;
 }
@@ -180,7 +187,8 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
  * @va_list with the the help of type info from the argument
  * descriptor @desc. @size: output buffer size
  */
-static int print_arg(char *buf, int size, struct printf_argdesc *desc,
+static int print_arg(char *buf, int size,
+                     struct printf_argdesc *desc,
                      va_list args)
 {
   long num;
@@ -194,29 +202,32 @@ static int print_arg(char *buf, int size, struct printf_argdesc *desc,
 
   switch (desc->type) {
   case SIGNED:
-    if (desc->len == LONG)
+    if (desc->len == LONG) {
       num = va_arg(args, long);
-    else
+    } else {
       num = va_arg(args, int);
+    }
     len = ltoa(num, buf, size, desc->radix);
     break;
   case UNSIGNED:
-    if (desc->len == LONG)
+    if (desc->len == LONG) {
       unum = va_arg(args, unsigned long);
-    else
+    } else {
       unum = va_arg(args, unsigned int);
+    }
     len = ultoa(unum, buf, size, desc->radix);
     break;
   case STRING:
     str = va_arg(args, char *);
-    if (!str)
+    if (!str) {
       str = "<*NULL*>";
+    }
     len = strlen(str);
     len = min(size, len);
     strncpy(buf, str, len);
     break;
   case CHAR:
-    ch = (unsigned char)va_arg(args, int);
+    ch = (unsigned char) va_arg(args, int);
     *buf++ = ch;
     len = 1;
     break;
@@ -243,9 +254,10 @@ int vsnprintf(char *buf, int size, const char *fmt, va_list args)
   char *str;
   int len;
 
-  if (size < 1)
+  if (size < 1) {
     return 0;
-
+  }
+  
   str = buf;
   while (*fmt) {
     while (*fmt != 0 && *fmt != '%' && size != 0) {
@@ -254,8 +266,9 @@ int vsnprintf(char *buf, int size, const char *fmt, va_list args)
     }
 
     /* Mission complete */
-    if (*fmt == 0 || size == 0)
+    if (*fmt == 0 || size == 0) {
       break;
+    }
 
     printk_assert(*fmt == '%');
     fmt = parse_arg(fmt, &desc);
@@ -287,7 +300,7 @@ int vsnprintf(char *buf, int size, const char *fmt, va_list args)
  * Do not use any assert()s in VGA code! (stack overflow)
  */
 
-#define VGA_BASE    ((char *)VIRTUAL(0xb8000))
+#define VGA_BASE    ((char *) VIRTUAL(0xb8000))
 #define VGA_MAXROWS    25
 #define VGA_MAXCOLS    80
 #define VGA_DEFAULT_COLOR  VGA_COLOR(VGA_BLACK, VGA_WHITE)
@@ -313,8 +326,9 @@ static void vga_scrollup(int color) {
   memcpy_forward_nocheck(dst, src, rows_24);
 
   vgap = (uint16_t *)(vga_buffer + rows_24);
-  for (int i = 0; i < VGA_MAXCOLS; i++)
+  for (int i = 0; i < VGA_MAXCOLS; i++) {
     *vgap++ = (color << 8) + ' ';
+  }
 
   memcpy_nocheck(VGA_BASE, vga_buffer, VGA_AREA);
   vga_xpos = 0;
@@ -349,7 +363,7 @@ static void vga_write(char *buf, int n, int color)
 
     if (*buf != '\n') {
       writew((color << 8) + *buf,
-             vga_buffer + 2*(vga_xpos + vga_ypos * max_xpos));
+             vga_buffer + 2 * (vga_xpos + vga_ypos * max_xpos));
       ++vga_xpos;
     }
 
@@ -375,19 +389,20 @@ static void vga_write(char *buf, int n, int color)
  * @color: VGA_COLOR(bg, fg); check vga.h
  */
 
-void putc_colored(char c, int color)
+void putchar_colored(char c, int color)
 {
   vga_write(&c, 1, color);
 }
 
-void putc(char c)
-{
-  putc_colored(c, VGA_DEFAULT_COLOR);
-}
-
 int putchar(int c)
 {
-  putc_colored(c, VGA_DEFAULT_COLOR);
+  putchar_colored(c, VGA_DEFAULT_COLOR);
+  return c;
+}
+
+int putcharhar(int c)
+{
+  putchar_colored(c, VGA_DEFAULT_COLOR);
   return 0;
 }
 
@@ -396,7 +411,7 @@ int puts(const char *s)
   int i;
   int n = strlen(s);
   for (i = 0; i < n; i++) {
-    putc(s[i]);
+    putchar(s[i]);
   }
   return n;
 }
@@ -467,34 +482,38 @@ void printk_bust_all_locks(void)
 
 #if PRINTS_TESTS
 #define printk(fmt, ...)  prints(fmt, ##__VA_ARGS__)
-#define putc_colored(ch, col)  serial_putc(ch)
-#define putc(ch)    serial_putc(ch)
+#define putchar_colored(ch, col)  serial_putchar(ch)
+#define putchar(ch)    serial_putchar(ch)
 #endif /* PRINTS_TESTS */
 
 static void printk_test_int(void)
 {
   printk("(-10, 10): ");
-  for (int i = -10; i <= 10; i++)
+  for (int i = -10; i <= 10; i++) {
     printk("%d ", i);
+  }
   printk("\n");
 
   printk("(INT64_MIN, 0xINT64_MIN + 10): ");
   int64_t start = (INT64_MAX * -1) - 1;
-  for (int64_t i = start; i <= start + 10; i++)
+  for (int64_t i = start; i <= start + 10; i++) {
     printk("%ld ", i);
+  }
   printk("\n");
 }
 
 static void printk_test_hex(void)
 {
   printk("(0x0, 0x100): ");
-  for (int i = 0; i <= 0x100; i++)
+  for (int i = 0; i <= 0x100; i++) {
     printk("0x%x ", i);
+  }
   printk("\n");
 
   printk("(0xUINT64_MAX, 0xUINT64_MAX - 0x10): ");
-  for (uint64_t i = UINT64_MAX; i >= UINT64_MAX - 0x10; i--)
+  for (uint64_t i = UINT64_MAX; i >= UINT64_MAX - 0x10; i--) {
     printk("0x%lx ", i);
+  }
   printk("\n");
 }
 
@@ -510,8 +529,9 @@ static void printk_test_string(void)
   printk("\n");
 
   printk("(a, z): ");
-  for (char c = 'a'; c <= 'z'; c++)
+  for (char c = 'a'; c <= 'z'; c++) {
     printk("%c ", c);
+  }
   printk("\n");
 
   test1 = "Test1";
@@ -530,8 +550,9 @@ static void __unused printk_test_format(void)
   const char *fmt;
   int len;
 
-  for (int i = 0; i < 0x1000; i++)
+  for (int i = 0; i < 0x1000; i++) {
     printk("");
+  }
 
   /* This code is expected to panic.
    * Modify loop counter manually */
@@ -555,22 +576,22 @@ static void printk_test_colors(void)
   color = VGA_COLOR(VGA_BLACK, 0);
 
   printk("Colored text: ");
-  putc_colored('A', color | VGA_BLACK);
-  putc_colored('A', color | VGA_BLUE);
-  putc_colored('A', color | VGA_GREEN);
-  putc_colored('A', color | VGA_CYAN);
-  putc_colored('A', color | VGA_RED);
-  putc_colored('A', color | VGA_MAGNETA);
-  putc_colored('A', color | VGA_BROWN);
-  putc_colored('A', color | VGA_LIGHT_GRAY);
-  putc_colored('A', color | VGA_GRAY);
-  putc_colored('A', color | VGA_LIGHT_BLUE);
-  putc_colored('A', color | VGA_LIGHT_GREEN);
-  putc_colored('A', color | VGA_LIGHT_CYAN);
-  putc_colored('A', color | VGA_LIGHT_RED);
-  putc_colored('A', color | VGA_LIGHT_MAGNETA);
-  putc_colored('A', color | VGA_YELLOW);
-  putc_colored('A', color | VGA_WHITE);
+  putchar_colored('A', color | VGA_BLACK);
+  putchar_colored('A', color | VGA_BLUE);
+  putchar_colored('A', color | VGA_GREEN);
+  putchar_colored('A', color | VGA_CYAN);
+  putchar_colored('A', color | VGA_RED);
+  putchar_colored('A', color | VGA_MAGNETA);
+  putchar_colored('A', color | VGA_BROWN);
+  putchar_colored('A', color | VGA_LIGHT_GRAY);
+  putchar_colored('A', color | VGA_GRAY);
+  putchar_colored('A', color | VGA_LIGHT_BLUE);
+  putchar_colored('A', color | VGA_LIGHT_GREEN);
+  putchar_colored('A', color | VGA_LIGHT_CYAN);
+  putchar_colored('A', color | VGA_LIGHT_RED);
+  putchar_colored('A', color | VGA_LIGHT_MAGNETA);
+  putchar_colored('A', color | VGA_YELLOW);
+  putchar_colored('A', color | VGA_WHITE);
   printk("\n");
 }
 

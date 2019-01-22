@@ -215,7 +215,7 @@ void __kb_handler(void)
 
   ascii = scancodes[code][shifted];
   if (ascii) {
-    putc(ascii);
+    putchar(ascii);
   }
 }
 

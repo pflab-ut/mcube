@@ -1,5 +1,10 @@
-#ifndef _KERNEL_H
-#define _KERNEL_H
+/**
+ * @file include/mcube/kernel.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_MCUBE_KERNEL_H__
+#define __MCUBE_MCUBE_KERNEL_H__
 
 /*
  * Common methods and definitions
@@ -102,6 +107,8 @@ static inline uint64_t ceil_div(uint64_t a, uint64_t b)
   return ((a - 1) / b) + 1;
 }
 
+void __no_return panic(const char *fmt, ...);
+
 #if CONFIG_ARCH_SIM
 
 #include <assert.h>
@@ -111,12 +118,10 @@ static inline uint64_t ceil_div(uint64_t a, uint64_t b)
 /*
  * C99
  */
-//#define NULL  ((void *)0)
+#define NULL  ((void *)0)
 #define bool  _Bool
 #define true    ((_Bool) 1)
 #define false   ((_Bool) 0)
-
-#define NULL ((void *) 0)
 
 
 #undef EOF
@@ -147,7 +152,6 @@ static void __unused printk_run_tests(void) { }
 /*
  * Critical failures
  */
-void __no_return panic(const char *fmt, ...);
 extern void halt_cpu_ipi_handler(void);
 
 #define assert(condition)                       \
@@ -217,4 +221,4 @@ void __no_return kernel_start(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _KERNEL_H */
+#endif /* __MCUBE_MCUBE_KERNEL_H__ */

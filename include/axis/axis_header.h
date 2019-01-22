@@ -9,6 +9,7 @@
 #include <axis/addr.h>
 #include <axis/special_regs.h>
 
+#include <axis/atomic.h>
 #include <axis/cpu.h>
 #include <axis/spinlock.h>
 #include <axis/irq.h>

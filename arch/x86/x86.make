@@ -211,7 +211,6 @@ SRCS +=	\
  $(TOP_DIR)/arch/x86/mm/e820.c	\
  $(TOP_DIR)/arch/x86/mm/page_alloc.c	\
  $(TOP_DIR)/arch/x86/mm/vm_map.c	\
- $(TOP_DIR)/arch/x86/mm/kmalloc.c
 
 # Devices
 SRCS +=	\
@@ -246,7 +245,6 @@ SRCS +=		\
  $(TOP_DIR)/arch/x86/kern/smpboot.c	\
  $(TOP_DIR)/arch/x86/kern/sched.c	\
  $(TOP_DIR)/arch/x86/kern/kthread.c	\
- $(TOP_DIR)/arch/x86/kern/panic.c	\
  $(TOP_DIR)/arch/x86/kern/percpu.c	\
  $(TOP_DIR)/arch/x86/kern/ramdisk.c	\
  $(TOP_DIR)/arch/x86/kern/main.c

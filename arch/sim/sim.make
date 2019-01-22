@@ -36,6 +36,5 @@ SRCS += \
  $(TOP_DIR)/arch/sim/utils.c \
  $(TOP_DIR)/arch/sim/thread.c \
  $(TOP_DIR)/arch/sim/syscall.c \
- $(TOP_DIR)/arch/sim/kmalloc.c \
 
 SRCS += $(TOP_DIR)/user/sim/user_sim.c \

@@ -1,10 +1,10 @@
 /**
- * @file include/x86/kmalloc.h
+ * @file include/mcube/kmalloc.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_X86_KMALLOC_H__
-#define __MCUBE_X86_KMALLOC_H__
+#ifndef __MCUBE_MCUBE_KMALLOC_H__
+#define __MCUBE_MCUBE_KMALLOC_H__
 
 /*
  * Kernel Memory Allocator
@@ -57,20 +57,36 @@
 #ifndef __ASSEMBLY__
 
 /*
+ * A kernel memory bucket for each power-of-2 list
+ *
+ * A Bucket with index 'x' holds all the information for the
+ * free bufs list of size (1 << x) bytes, including its head.
+ */
+struct bucket {
+  spinlock_t lock;    /* Bucket lock */
+  void *head;      /* Free blocks list head */
+  int totalpages;      /* # of pages requested from page allocator */
+  int totalfree;      /* # of free buffers */
+};
+
+extern struct bucket kmembuckets[MAXBUCKET_IDX + 1];
+
+/*
  * Take care not to mess with the first 8-byte pointer
  * area while signing the buffer
  */
 static inline void sign_buf(void *buf, uint32_t signature)
 {
-  buf = (char *)buf + sizeof(void *);
-  *(uint32_t *)buf = signature;
+  buf = (char *) buf + sizeof(void *);
+  *(uint32_t *) buf = signature;
 }
 
 static inline int is_free_buf(void *buf)
 {
-  buf = (char *)buf + sizeof(void *);
-  if (*(uint32_t *)buf == FREEBUF_SIG)
+  buf = (char *) buf + sizeof(void *);
+  if (*(uint32_t *) buf == FREEBUF_SIG) {
     return 1;
+  }
 
   return 0;
 }
@@ -79,21 +95,8 @@ void *__kmalloc(int bucket_idx);
 
 void kmalloc_init(void);
 
-/*
- * Test cases driver
- */
-
-#if KMALLOC_TESTS
-
-void kmalloc_run_tests(void);
-
-#else
-
-static void __unused kmalloc_run_tests(void) { }
-
-#endif /* !KMALLOC_TESTS */
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MCUBE_X86_KMALLOC_H__ */
+#endif /* __MCUBE_MCUBE_KMALLOC_H__ */
 

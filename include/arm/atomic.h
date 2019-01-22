@@ -12,7 +12,7 @@
 
 #define LOCK_PREFIX LOCK_PREFIX_HERE
 
-static inline void compare_and_swap(volatile int *ptr, int new, int old)
+static inline void compare_and_swap(volatile uint64_t *ptr, int new, int old)
 {
   int tmp;
 #if 1
@@ -32,38 +32,38 @@ static inline void compare_and_swap(volatile int *ptr, int new, int old)
 }
 
 
-static inline void atomic_inc(atomic_t *v)
+static inline void atomic_inc(uint64_t *val)
 {
-  int new, old;
-  new = v->counter + 1;
-  old = v->counter;
-  compare_and_swap(&v->counter, new, old);
+  uint64_t new, old;
+  new = *val + 1;
+  old = *val;
+  compare_and_swap(val, new, old);
 }
 
-static inline void atomic_dec(atomic_t *v)
+static inline void atomic_dec(uint64_t *val)
 {
-  int new, old;
-  new = v->counter - 1;
-  old = v->counter;
-  compare_and_swap(&v->counter, new, old);
+  uint64_t new, old;
+  new = *val - 1;
+  old = *val;
+  compare_and_swap(val, new, old);
 }
 
-static inline int fetch_and_inc(int *i)
+static inline uint64_t fetch_and_inc(uint64_t *val)
 {
-  int new, old;
-  new = *i + 1;
-  old = *i;
-  compare_and_swap(i, new, old);
-  return *i;
+  uint64_t new, old;
+  new = *val + 1;
+  old = *val;
+  compare_and_swap(val, new, old);
+  return *val;
 }
 
-static inline int fetch_and_dec(int *i)
+static inline uint64_t fetch_and_dec(uint64_t *val)
 {
-  int new, old;
-  new = *i - 1;
-  old = *i;
-  compare_and_swap(i, new, old);
-  return *i;
+  uint64_t new, old;
+  new = *val - 1;
+  old = *val;
+  compare_and_swap(val, new, old);
+  return *val;
 }
 
 #endif /* !__ASSEMBLY__ */
