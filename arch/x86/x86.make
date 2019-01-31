@@ -23,6 +23,7 @@ ifeq ($(CC), clang)
   CROSS_PREFIX = llvm-
   CC	= $(CCACHE) clang
   LD = ld.bfd
+#  LD = ld.lld
 #  AS = $(CROSS_PREFIX)as
   AS = nasm
 #  ASFLAGS = -f elf64

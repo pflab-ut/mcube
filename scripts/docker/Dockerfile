@@ -8,9 +8,9 @@ ENV HOME=/home/mcube
 RUN set -x \
     && apt-get update \
     && apt-get install -y \
-               ccache gcc clang llvm gcc-aarch64-linux-gnu nasm \
+               ccache gcc clang llvm gcc-aarch64-linux-gnu \
                python3 python3-pip \
-               git samba make doxygen sendmail git genisoimage \
+               git samba make doxygen sendmail git \
                dvi2ps-fontdesc-morisawa5 \
                qemu qemu-system \
     && pip3 install pyflakes pylint \
