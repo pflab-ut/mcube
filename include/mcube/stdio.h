@@ -29,6 +29,10 @@ int getc(void);
 int putchar(int c);
 int puts(const char *s);
 
+#if CONFIG_ARCH_X86
+void putchar_colored(char c, int color);
+#endif /* CONFIG_ARCH_X86 */
+
 /* print for user mode. */
 int printf(const char *fmt, ...);
 

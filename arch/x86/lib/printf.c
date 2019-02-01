@@ -400,11 +400,6 @@ int putchar(int c)
   return c;
 }
 
-int putcharhar(int c)
-{
-  putchar_colored(c, VGA_DEFAULT_COLOR);
-  return 0;
-}
 
 int puts(const char *s)
 {

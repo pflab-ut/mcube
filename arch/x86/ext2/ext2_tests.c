@@ -158,7 +158,7 @@ static __unused void path_get_parent(const char *path, char *parent, char *child
 
   sub_idx = 0;
   state = EXT2_S_NONE;
-  for (int i = 0; i <= strlen(path); i++) {
+  for (size_t i = 0; i <= strlen(path); i++) {
     prev_state = state;
     if (path[i] == '/') {
       state = EXT2_SLASH;
