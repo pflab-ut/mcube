@@ -5,7 +5,7 @@
  * This code is STILL kept in the repository: we may use it if
  * more complex parsing requirements arose!
  *
- * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.co>
+ * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
  */
 
 #include <mcube/mcube.h>

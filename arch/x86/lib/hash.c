@@ -28,9 +28,10 @@ struct hash *hash_new(uint len)
 
   hash = kmalloc(sizeof(*hash));
   hash->nodes_array = kmalloc(len * sizeof(*hash->nodes_array));
-  for (uint i = 0; i < len; i++)
+  for (uint i = 0; i < len; i++) {
     list_init(&hash->nodes_array[i]);
-
+  }
+  
   hash->len = len;
   return hash;
 }
@@ -57,8 +58,9 @@ static void *hash_find_elem(struct hash *hash, uint elem_id)
   assert(hash != NULL);
   idx = elem_id % hash->len;
   list_for_each(&hash->nodes_array[idx], helem, node) {
-    if (helem->id == elem_id)
+    if (helem->id == elem_id) {
       return helem;
+    }
   }
   return NULL;
 }
@@ -73,10 +75,11 @@ void hash_insert(struct hash *hash, void *elem)
   int idx;
 
   helem = elem;
-  if (hash_find_elem(hash, helem->id) != NULL)
+  if (hash_find_elem(hash, helem->id) != NULL) {
     panic("Hash: Inserting element with ID #%lu, which "
           "already exists!", helem->id);
-
+  }
+  
   idx = helem->id % hash->len;
   assert(list_empty(&helem->node));
   list_add(&hash->nodes_array[idx], &helem->node);
@@ -152,22 +155,25 @@ static void test_hash(int hash_size)
   }
   for (int i = count - 1; i >= 0; i--) {
     elem = hash_find(hash, i);
-    if (elem == NULL)
+    if (elem == NULL) {
       panic("_Hash: Cannot find element #%u, although "
             "it was previously inserted!", i);
-    if (elem->num != (unsigned)i)
+    }
+    if (elem->num != (unsigned) i) {
       panic("_Hash: Element returned by searching hash for "
             "id #%lu returned element with id #%lu!", i,
             elem->num);
-    if (elem->payload != i)
+    }
+    if (elem->payload != i) {
       panic("_Hash: Element returned by searching hash for "
             "id #%lu has a valid id, but its payload got "
             "corrupted from %d to %d!", i, i, elem->payload);
+    }
   }
-  elem = hash_find(hash, INT32_MAX);
-  if (elem != NULL)
+  if ((elem = hash_find(hash, INT32_MAX)) != NULL) {
     panic("_Hash: Returning non-existing element with id %d as "
           "found, with payload = %d", INT32_MAX, elem->payload);
+  }
   hash_print_info(hash);
 
   hash_free(hash);

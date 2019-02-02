@@ -27,6 +27,7 @@ SRCS += \
  $(TOP_DIR)/lib/ctype.c \
  $(TOP_DIR)/lib/math.c \
  $(TOP_DIR)/lib/mm.c \
+ $(TOP_DIR)/lib/spinlock.c \
  $(TOP_DIR)/lib/stdlib.c \
  $(TOP_DIR)/lib/string.c \
  $(TOP_DIR)/ipc/semaphore.c \
@@ -61,10 +62,9 @@ ifeq ($(ARCH_NAME), x86)
 	$(OBJCOPY) -O binary $(BOOTSECT_TARGET) $(BOOTSECT_BIN)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
 	$(CAT) $(BOOTSECT_BIN) $(BIN) > $(TARGET).img
-	$(PYTHON) scripts/misc/build-hdimage.py
+	$(PYTHON) scripts/misc/build_hdimage.py
 #	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
 else ifeq ($(ARCH_NAME), axis)
-	$(SIZE) $@
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
 	$(DUMP) $(BIN) $(DUMPARG) $(ROMFILE)
 endif

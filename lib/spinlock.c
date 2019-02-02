@@ -1,3 +1,8 @@
+/**
+ * @file lib/spinlock.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * SMP spinlocks
  *
@@ -59,8 +64,8 @@
  * SPIN_UNLOCKED = 1, SPIN_LOCKED = 0
  */
 
-void spin_init(struct lock_spin *lock)
+void spin_init(spinlock_t *lock)
 {
-  lock->val = SPIN_UNLOCKED;
+  *lock = INIT_SPINLOCK;
 }
 

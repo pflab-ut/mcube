@@ -26,11 +26,6 @@ void exit_irq(void)
 }
 
 
-void init_spinlock(void)
-{
-  sched_lock = INIT_SPINLOCK;
-  global_malloc_lock = INIT_SPINLOCK;
-}
 
 
 /**
@@ -38,7 +33,6 @@ void init_spinlock(void)
  */
 void init_arch(void)
 {
-  init_spinlock();
   init_irq();
   init_cpu();
   init_malloc();

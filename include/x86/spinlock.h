@@ -29,7 +29,7 @@
  * spinning loop; i.e. reentrant execution of below code, possibly
  * using the very same parameter or lock!
  */
-static inline void spin_lock(struct lock_spin *lock)
+static inline void spin_lock(spinlock_t *lock)
 {
   union x86_rflags rflags;
 
@@ -61,7 +61,7 @@ static inline void spin_lock(struct lock_spin *lock)
  *
  * Return 'true' if @lock was acquired from the _first_ try.
  */
-static inline bool spin_trylock(struct lock_spin *lock)
+static inline bool spin_trylock(spinlock_t *lock)
 {
   union x86_rflags rflags;
 
@@ -79,7 +79,7 @@ static inline bool spin_trylock(struct lock_spin *lock)
 /*
  * Mark the lock as available
  */
-static inline void spin_unlock(struct lock_spin *lock)
+static inline void spin_unlock(spinlock_t *lock)
 {
   union x86_rflags rflags;
 

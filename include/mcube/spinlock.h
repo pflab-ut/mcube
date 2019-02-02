@@ -49,7 +49,7 @@ union x86_rflags {
  * Careful! Spinlocks, ironically enough, are globals and thus
  * must be themselves protected against concurrent SMP access!
  */
-typedef struct lock_spin {
+typedef struct spinlock {
   uint32_t val;
 
   /*
