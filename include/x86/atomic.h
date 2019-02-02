@@ -17,9 +17,10 @@ static inline uint8_t atomic_bit_test_and_set(uint32_t *val)
 {
   uint8_t ret;
 
-  asm volatile (
-    "LOCK bts $0, %0;"
-    "     setc    %1;"
+  asm volatile(//"LOCK bts $0, %0;"
+              "LOCK btr $0, %0;"
+              "     setc    %1;"
+              //"     setnc    %1;" 
     : "+m" (*val), "=qm" (ret)
     :
     : "cc", "memory");
@@ -35,11 +36,10 @@ static inline uint64_t atomic_inc(uint64_t *val)
 {
   uint64_t i = 1;
 
-  asm volatile (
-    "LOCK xaddq %0, %1"
-    : "+r"(i), "+m" (*val)
-    :
-    : "cc");
+  asm volatile("LOCK xaddq %0, %1"
+               : "+r"(i), "+m" (*val)
+               :
+               : "cc");
 
   return i;
 }

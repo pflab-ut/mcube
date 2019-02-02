@@ -143,11 +143,7 @@ int prints(const char *fmt, ...);
 void putc(char c);
 void putc_colored(char c, int color);
 
-#if  PRINTK_TESTS || PRINTS_TESTS
 void printk_run_tests(void);
-#else
-static void __unused printk_run_tests(void) { }
-#endif
 
 /*
  * Critical failures

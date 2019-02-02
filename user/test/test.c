@@ -10,6 +10,7 @@ int test_bitmap(void);
 int test_string(void);
 int test_atomic(void);
 int test_kmalloc(void);
+int test_printk(void); 
 
 int user_test_main(void)
 {

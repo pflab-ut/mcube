@@ -18,7 +18,7 @@
  * If the area of memory being locked is cached in the processor and is
  * completely contained in a cache line, the CPU may not assert LOCK# on
  * the bus. Instead, it will modify the location internally and depend
- * on the “cache locking” feature of the x86 cache coherency mechanism.
+ * on the "cache locking" feature of the x86 cache coherency mechanism.
  *
  * During cache locking, cache coherency prevents two or more cores that
  * have cached the same area of memory from simultaneously moifying data
@@ -27,7 +27,7 @@
  * NOTE1: Always use x86 'pause' for busy-wait loops, check cpu_pause()
  * [kernel.h] for rationale; it's is an agnostic REP NOP for old cores.
  *
- * Please check the “Intel 64 and IA-32 Optimization Reference Manual”,
+ * Please check the "Intel 64 and IA-32 Optimization Reference Manual",
  * Chapter 8: Multicore and Hyper-Threading Tech, for further details.
  *
  * NOTE2: Without caution, it's possible to interrupt the very core
