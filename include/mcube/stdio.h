@@ -18,6 +18,14 @@ int printk(const char *fmt, ...);
 /* print for both kernel and user modes. */
 int print(const char *fmt, ...);
 
+void serial_putc(char c);
+int print_uart(const char *fmt, ...);
+
+
+/* print for user mode. */
+int printf(const char *fmt, ...);
+
+
 #if CONFIG_ARCH_SIM
 
 #include <stdio.h>
@@ -32,9 +40,6 @@ int puts(const char *s);
 #if CONFIG_ARCH_X86
 void putchar_colored(char c, int color);
 #endif /* CONFIG_ARCH_X86 */
-
-/* print for user mode. */
-int printf(const char *fmt, ...);
 
 
 

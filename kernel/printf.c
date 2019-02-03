@@ -6,6 +6,19 @@
 
 #include <mcube/mcube.h>
 
+
+static char kbuf[1024];
+static char sbuf[1024];
+
+#if CONFIG_ARCH_AXIS
+spinlock_t kbuf_lock;
+spinlock_t sbuf_lock;
+#else
+spinlock_t kbuf_lock = INIT_SPINLOCK;
+spinlock_t sbuf_lock = INIT_SPINLOCK;
+#endif
+
+
 /*
  * We cannot use assert() for below printk() code as
  * the assert code istelf internally calls printk().
@@ -248,7 +261,7 @@ static int print_arg(char *buf, int size,
  * within at most @size bytes. This version does *NOT* append
  * a NULL to output buffer @buf; it's for internal use only.
  */
-int vsnprintf(char *buf, int size, const char *fmt, va_list args)
+int vsnprint(char *buf, int size, const char *fmt, va_list args)
 {
   struct printf_argdesc desc = {0};
   char *str;
@@ -299,6 +312,8 @@ int vsnprintf(char *buf, int size, const char *fmt, va_list args)
  *
  * Do not use any assert()s in VGA code! (stack overflow)
  */
+
+#if CONFIG_ARCH_X86
 
 #define VGA_BASE    ((char *) VIRTUAL(0xb8000))
 #define VGA_MAXROWS    25
@@ -401,6 +416,21 @@ int putchar(int c)
 }
 
 
+/*
+ * Do not permit any access to screen state after calling
+ * this method.  This is for panic(), which is important
+ * not to scroll away its critical messages afterwards.
+ */
+void printk_bust_all_locks(void)
+{
+  spin_lock(&vga_lock);
+  spin_lock(&kbuf_lock);
+}
+
+
+
+#endif
+
 int puts(const char *s)
 {
   int i;
@@ -416,8 +446,6 @@ int puts(const char *s)
  * Kernel print, for VGA and serial outputs
  */
 
-static char kbuf[1024];
-static spinlock_t kbuf_lock = INIT_SPINLOCK;
 int printk(const char *fmt, ...)
 {
   va_list args;
@@ -429,18 +457,22 @@ int printk(const char *fmt, ...)
   spin_lock(&kbuf_lock);
 
   va_start(args, fmt);
-  n = vsnprintf(kbuf, sizeof(kbuf), fmt, args);
+  n = vsnprint(kbuf, sizeof(kbuf), fmt, args);
   va_end(args);
 
+#if CONFIG_ARCH_X86
   vga_write(kbuf, n, VGA_DEFAULT_COLOR);
-
+#elif CONFIG_ARCH_AXIS
+  puts(kbuf);
+#else
+  puts(kbuf);
+#endif
+  
   spin_unlock(&kbuf_lock);
   return n;
 }
 
-static char sbuf[1024];
-static spinlock_t sbuf_lock = INIT_SPINLOCK;
-int prints(const char *fmt, ...)
+int print_uart(const char *fmt, ...)
 {
   va_list args;
   int n;
@@ -448,24 +480,18 @@ int prints(const char *fmt, ...)
   spin_lock(&sbuf_lock);
 
   va_start(args, fmt);
-  n = vsnprintf(sbuf, sizeof(sbuf), fmt, args);
+  n = vsnprint(sbuf, sizeof(sbuf), fmt, args);
   va_end(args);
 
+#if CONFIG_ARCH_X86
   serial_write(sbuf, n);
-
+#elif CONFIG_ARCH_AXIS
+  puts(sbuf);
+#else
+  uart_write(sbuf, n, NULL);
+#endif
+  
   spin_unlock(&sbuf_lock);
   return n;
-}
-
-
-/*
- * Do not permit any access to screen state after calling
- * this method.  This is for panic(), which is important
- * not to scroll away its critical messages afterwards.
- */
-void printk_bust_all_locks(void)
-{
-  spin_lock(&vga_lock);
-  spin_lock(&kbuf_lock);
 }
 

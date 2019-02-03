@@ -197,8 +197,7 @@ void serial_init(void)
   divisor = MAX_BAUD / DESIRED_BAUD;
   assert(divisor <= UINT16_MAX);
 
-  port_base = *(uint16_t *)VIRTUAL(BDA_COM1_ENTRY);
-  if (port_base == 0) {
+  if ((port_base = *(uint16_t *) VIRTUAL(BDA_COM1_ENTRY)) == 0) {
     printk("COM1: BIOS-reported I/O address = 0; "
            "no serial port attached\n");
     return;
@@ -214,7 +213,9 @@ void serial_init(void)
   disable_DLAB();
 
   outb(0x00, port_base + UART_FIFO_CTRL);
-  reg.raw = 0, reg.dt_ready = 1, reg.req_send = 1;
+  reg.raw = 0;
+  reg.dt_ready = 1;
+  reg.req_send = 1;
   outb(reg.raw, port_base + UART_MODEM_CTRL);
 }
 
@@ -287,7 +288,7 @@ out:
   spin_unlock(&port_lock);
 }
 
-void serial_putc(char ch)
+void serial_putc(char c)
 {
-  serial_write(&ch, 1);
+  serial_write(&c, 1);
 }

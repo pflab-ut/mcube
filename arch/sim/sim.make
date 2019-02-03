@@ -32,6 +32,7 @@ SRCS += \
  $(TOP_DIR)/arch/sim/cpu.c \
  $(TOP_DIR)/arch/sim/init.c \
  $(TOP_DIR)/arch/sim/irq.c \
+ $(TOP_DIR)/arch/sim/stdio.c \
  $(TOP_DIR)/arch/sim/timer.c \
  $(TOP_DIR)/arch/sim/utils.c \
  $(TOP_DIR)/arch/sim/thread.c \

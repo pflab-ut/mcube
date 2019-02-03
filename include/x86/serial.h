@@ -16,7 +16,7 @@
 
 void serial_init(void);
 void serial_write(const char *buf, int len);
-void serial_putc(char ch);
+void serial_putc(char c);
 
 #endif /* !__ASSEMBLY__ */
 

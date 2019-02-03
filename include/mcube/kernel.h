@@ -136,7 +136,7 @@ void __no_return panic(const char *fmt, ...);
 /*
  * Main kernel print methods
  */
-int vsnprintf(char *buf, int size, const char *fmt, va_list args);
+int vsnprint(char *buf, int size, const char *fmt, va_list args);
 void printk_bust_all_locks(void);
 //void printk(const char *fmt, ...);
 int prints(const char *fmt, ...);

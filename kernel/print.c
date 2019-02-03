@@ -468,7 +468,8 @@ int __vsnprint(char *buf, size_t size, const char *fmt, va_list ap)
   return n;
 }
 
-#if !CONFIG_ARCH_X86
+//#if !CONFIG_ARCH_X86
+#if 0
 /**
  * The printk() function produces output according to @b CONSOLE or @b UART
  * for kernel level.
@@ -588,7 +589,7 @@ void __no_return panic(const char *fmt, ...)
   }
   
   va_start(args, fmt);
-  n = vsnprintf(buf, sizeof(buf) - 1, fmt, args);
+  n = vsnprint(buf, sizeof(buf) - 1, fmt, args);
   va_end(args);
 
   buf[n] = 0;

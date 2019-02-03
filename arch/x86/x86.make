@@ -235,7 +235,6 @@ SRCS +=	\
  $(TOP_DIR)/arch/x86/lib/list.c	\
  $(TOP_DIR)/arch/x86/lib/unrolled_list.c	\
  $(TOP_DIR)/arch/x86/lib/hash.c	\
- $(TOP_DIR)/arch/x86/lib/printf.c	\
  $(TOP_DIR)/arch/x86/lib/buffer_dumper.c
 
 # All other kernel objects

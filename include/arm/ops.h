@@ -63,6 +63,11 @@ static inline void sev(void)
   asm volatile("sev");
 }
 
+static inline void __attribute__((__noreturn__)) halt(void)
+{
+  printk("halt\n");
+  inf_loop();
+}
 
 
 #endif /* !__ASSEMBLY__ */

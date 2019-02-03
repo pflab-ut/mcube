@@ -70,6 +70,9 @@ static inline bool spin_trylock(spinlock_t *lock);
 static inline void spin_unlock(spinlock_t *lock);
 
 extern spinlock_t sched_lock;
+extern spinlock_t kbuf_lock;
+extern spinlock_t sbuf_lock;
+
 
 
 void init_spinlock(void);

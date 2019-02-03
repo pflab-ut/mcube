@@ -18,8 +18,8 @@ static void test_strnlen(const char *str, int len, int expected_len, bool print)
           expected_len);
   }
 
-  prints("_STRING - strnlen(\"%s\", %d) = %d. Success!\n",
-         (print) ? str : "<binary>", len, res);
+  print_uart("_STRING - strnlen(\"%s\", %d) = %d. Success!\n",
+             (print) ? str : "<binary>", len, res);
 }
 
 #define _ARRAY_LEN  100

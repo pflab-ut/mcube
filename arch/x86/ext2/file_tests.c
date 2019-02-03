@@ -34,15 +34,15 @@ static uint64_t _test_chdir_on_path(const char *path)
   int64_t inum;
 
   assert(path != NULL);
-  prints("Testing path: '%s'\n", path);
+  print_uart("Testing path: '%s'\n", path);
 
   assert(*path == '/');
   while (*path == '/') {
     path++;
   }
-  prints("Changing to dir: '/' .");
+  print_uart("Changing to dir: '/' .");
   ret = sys_chdir("/");
-  prints(". returned '%s'\n", errno_to_str(ret));
+  print_uart(". returned '%s'\n", errno_to_str(ret));
   if (ret < 0) {
     return ret;
   }
@@ -65,9 +65,9 @@ static uint64_t _test_chdir_on_path(const char *path)
       if (*ch != '\0') {
         i = 0;
       }
-      prints("Changing to dir: '%s/' .", str);
+      print_uart("Changing to dir: '%s/' .", str);
       ret = sys_chdir(str);
-      prints(". returned '%s'\n", errno_to_str(ret));
+      print_uart(". returned '%s'\n", errno_to_str(ret));
       if (ret < 0) {
         return ret;
       }
@@ -85,7 +85,7 @@ static uint64_t _test_chdir_on_path(const char *path)
           str, errno_to_str(inum));
   }
  out:
-  prints("Inode num for relative path '%s' = %lu\n\n", str, inum);
+  print_uart("Inode num for relative path '%s' = %lu\n\n", str, inum);
   kfree(str);
   return inum;
 }
@@ -123,12 +123,12 @@ static void __unused _test_open(void)
 
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     file = &ext2_files_list[i];
-    prints("_FILE: Open()-ing path '%s': ", file->path);
+    print_uart("_FILE: Open()-ing path '%s': ", file->path);
     file->fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
     if (file->fd < 0) {
       panic("..error: '%s'\n", errno_to_str(file->fd));
     } else {
-      prints("..success! fd = %d\n", file->fd);
+      print_uart("..success! fd = %d\n", file->fd);
     }
   }
 }
@@ -140,7 +140,7 @@ static void __unused _test_close(void)
   
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     file = &ext2_files_list[i];
-    prints("_FILE: Close()-ing path '%s': ", file->path);
+    print_uart("_FILE: Close()-ing path '%s': ", file->path);
     file->fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
     sys_close(file->fd);
     fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
@@ -148,7 +148,7 @@ static void __unused _test_close(void)
       panic("open()=%d, close(%d), open()=%d [should be "
             "%d]", file->fd, file->fd, fd, file->fd);
     } else {
-      prints("..success! fd = %d\n", file->fd);
+      print_uart("..success! fd = %d\n", file->fd);
     }
   }
 }
@@ -162,24 +162,24 @@ static void __unused _test_read(int read_chunk)
   buf = kmalloc(4096);
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     file = &ext2_files_list[i];
-    prints("\n_FILE: Read()-ing path '%s': ", file->path);
+    print_uart("\n_FILE: Read()-ing path '%s': ", file->path);
     sys_close(file->fd);
     file->fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
     assert(file->fd >= 0);
     while ((len = sys_read(file->fd, buf, read_chunk)) > 0) {
-      prints("\n@@@@ returned %d bytes @@@@; Data:\n", len);
+      print_uart("\n@@@@ returned %d bytes @@@@; Data:\n", len);
       buf_char_dump(buf, len);
-      prints("\n");
+      print_uart("\n");
     }
     if (len < 0) switch(len) {
       case -EISDIR:
-        prints("directory!\n");
+        print_uart("directory!\n");
         break;
       default:
         panic("Read()-ing path '%s' returned '%s'",
               file->path, errno_to_str(len));
       }
-    prints("----------------------- EOF -----------------------\n");
+    print_uart("----------------------- EOF -----------------------\n");
   }
   kfree(buf);
 }
@@ -204,7 +204,7 @@ static void __unused _test_write(void)
   const int BUF_LEN = 4096;
   char *buf, *buf2;
 
-  pr = prints;
+  pr = print_uart;
   buf = kmalloc(BUF_LEN);
   buf2 = kmalloc(BUF_LEN);
   statbuf = kmalloc(sizeof(*statbuf));
@@ -328,7 +328,7 @@ static void __unused _test_write(void)
 #define _test_lseek_state(SEEK_WHENCE, EXPECTED_VALUE)              \
   sys_lseek(p->fd, 0, SEEK_SET);                                    \
   for (uint64_t i = 0; i < inode_get(file->inum)->size_low; i++) {  \
-    prints("seek(%d, %lu, " #SEEK_WHENCE "): ", p->fd, i);          \
+    print_uart("seek(%d, %lu, " #SEEK_WHENCE "): ", p->fd, i);      \
     uint64_t old_offset = file->offset;                             \
     if ((ret = sys_lseek(p->fd, i, SEEK_WHENCE)) < 0) {             \
       panic("failure: '%s'", errno_to_str(ret));                    \
@@ -338,7 +338,7 @@ static void __unused _test_write(void)
             ",%lu), old offset = %lu, returned offset = %lu",       \
             p->path, i, old_offset, file->offset);                  \
     }                                                               \
-    prints("offset = %lu, Success!\n", file->offset);               \
+    print_uart("offset = %lu, Success!\n", file->offset);           \
   }
 
 static void __unused _test_lseek(void)
@@ -363,7 +363,7 @@ static void __unused _test_lseek(void)
 
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     p = &ext2_files_list[i];
-    prints("\n_FILE: Lseek()-ing path '%s': ", p->path);
+    print_uart("\n_FILE: Lseek()-ing path '%s': ", p->path);
     p->fd = sys_open(p->path, O_RDONLY | O_CREAT, 0);
     assert(p->fd >= 0);
     file = unrolled_lookup(&current->fdtable, p->fd);
@@ -403,7 +403,7 @@ static void __unused _test_stat(void)
   statbuf = kmalloc(sizeof(*statbuf));
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     file = &ext2_files_list[i];
-    prints("_FILE: stat()-ing path '%s': ", file->path);
+    print_uart("_FILE: stat()-ing path '%s': ", file->path);
     if ((ret = sys_stat(file->path, statbuf)) < 0) {
       panic("stat('%s', buf=0x%lx) = '%s'", file->path,
             statbuf, errno_to_str(ret));
@@ -413,17 +413,17 @@ static void __unused _test_stat(void)
             errno_to_str(inum));
     }
     __validate_statbuf(inum, statbuf);
-    prints("Success!\n");
+    print_uart("Success!\n");
 
     fd = sys_open(file->path, O_RDONLY | O_CREAT, 0);
-    prints("_FILE: Fstat()-ing path '%s': ", file->path);
+    print_uart("_FILE: Fstat()-ing path '%s': ", file->path);
     if ((ret = sys_fstat(fd, statbuf)) < 0) {
       panic("stat('%s', buf=0x%lx) = '%s'", file->path,
             statbuf, errno_to_str(ret));
     }
     __validate_statbuf(statbuf->st_ino, statbuf);
     sys_close(fd);
-    prints("Success!\n");
+    print_uart("Success!\n");
   }
   kfree(statbuf);
 }
@@ -442,15 +442,15 @@ static void __unused file_test_path_parsing(void)
     path[PAGE_SIZE - 1] = '\0';
 
     leaf_idx = path_get_leaf(path, &file_type);
-    prints("_FILE: Checking path '%s':\n", path);
+    print_uart("_FILE: Checking path '%s':\n", path);
     if (leaf_idx == 0) {
-      prints("NO Leaf node exist!\n");
-      prints("Parent = '/'\n");
+      print_uart("NO Leaf node exist!\n");
+      print_uart("Parent = '/'\n");
     } else {
-      prints("Leaf node name = '%s'\n", &path[leaf_idx]);
+      print_uart("Leaf node name = '%s'\n", &path[leaf_idx]);
       tmp = path[leaf_idx];
       path[leaf_idx] = '\0';
-      prints("Parent of that node: '%s'\n", path);
+      print_uart("Parent of that node: '%s'\n", path);
       path[leaf_idx] = tmp;
     }
   }
@@ -465,15 +465,15 @@ static void __unused file_test_creation(void)
   /* Assure -EEXIST on all existing Ext2 volume files */
   for (uint j = 0; ext2_files_list[j].path != NULL; j++) {
     file = &ext2_files_list[j];
-    prints("Testing Path '%s':\n", file->path);
+    print_uart("Testing Path '%s':\n", file->path);
     fd = sys_open(file->path, O_CREAT | O_EXCL | O_RDWR, 0);
     if (fd >= 0) {
       panic("File with path '%s' already exists, but "
             "open(EXCL) allocated a new fd %d for it!",
             file->path, fd);
     }
-    prints("Success: file creation returned %s\n",
-           errno_to_str(fd));
+    print_uart("Success: file creation returned %s\n",
+               errno_to_str(fd));
   }
 
   /* Now just create a random set of regular files */
@@ -482,13 +482,13 @@ static void __unused file_test_creation(void)
     for (char ch = '0'; ch <= '~'; ch++) {
       name[0] = p;
       name[1] = ch;
-      prints("Creating new file '%s': ", name);
+      print_uart("Creating new file '%s': ", name);
       fd = sys_open(name, O_CREAT | O_EXCL | O_RDWR, 0);
       if (fd < 0) {
-        prints("Returned %s", errno_to_str(fd));
+        print_uart("Returned %s", errno_to_str(fd));
         panic("File creation error; check log");
       }
-      prints("Success!\n");
+      print_uart("Success!\n");
     }
 
   /* Assure -EEXIST on recreation of files created above */
@@ -508,33 +508,33 @@ static void __unused file_test_creation(void)
   memset(longname, 'a', EXT2_FILENAME_LEN);
   longname[EXT2_FILENAME_LEN] = '\0';
   fd = sys_open(longname, O_CREAT | O_RDWR | O_EXCL, 0);
-  prints("Creating file '%s': ", longname);
+  print_uart("Creating file '%s': ", longname);
   if (fd > 0) {
     panic("Tried to create long file name of len %d, but it was "
           "accepted and inode %lu returned;  ENAMETOOLONG should"
           "'ve been returned!", EXT2_FILENAME_LEN, fd);
   }
-  prints("returned %s\n", errno_to_str(fd));
+  print_uart("returned %s\n", errno_to_str(fd));
   longname[EXT2_FILENAME_LEN - 1] = '\0';
   fd = sys_open(longname, O_CREAT | O_RDWR | O_EXCL, 0);
-  prints("Creating file '%s': ", longname);
+  print_uart("Creating file '%s': ", longname);
   if (fd < 0) {
     panic("Tried to create max possible len (%d) file name, but "
           "error %s was returned!", EXT2_FILENAME_LEN - 1,
           errno_to_str(fd));
   }
-  prints("returned %d\n", fd);
+  print_uart("returned %d\n", fd);
 #else
   /* Enable this code if and only if the files list have all of
    * their parent directories already created */
   for (uint j = 0; ext2_files_list[j].path != NULL; j++) {
     file = &ext2_files_list[j];
-    prints("Creating file '%s':\n", file->path);
+    print_uart("Creating file '%s':\n", file->path);
     fd = sys_open(file->path, O_CREAT|O_EXCL|O_RDWR|O_TRUNC, 0);
     if (fd < 0) {
-      prints("FAILURE! Error %s\n", errno_to_str(fd));
+      print_uart("FAILURE! Error %s\n", errno_to_str(fd));
     } else {
-      prints("SUCCESS! returned fd = %d\n", fd);
+      print_uart("SUCCESS! returned fd = %d\n", fd);
     }
     sys_close(fd);
   }
@@ -551,12 +551,12 @@ static void __unused file_test_deletion(void)
   name = kmalloc(2); name[1] = '\0';
   for (char ch = 'A'; ch <= 'z'; ch++) {
     name[0] = ch;
-    prints("Deleting non-existing file '%s': ", name);
+    print_uart("Deleting non-existing file '%s': ", name);
     ret = sys_unlink(name);
     if (ret != -ENOENT) {
-      prints("FAILURE: returned '%s'\n", errno_to_str(ret));
+      print_uart("FAILURE: returned '%s'\n", errno_to_str(ret));
     } else {
-      prints("SUCCESS: returned '-ENOENT'\n");
+      print_uart("SUCCESS: returned '-ENOENT'\n");
     }
   }
   kfree(name);
@@ -564,26 +564,26 @@ static void __unused file_test_deletion(void)
   statbuf = kmalloc(sizeof(*statbuf));
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     file = &ext2_files_list[i];
-    prints("Deleting file '%s': ", file->path);
+    print_uart("Deleting file '%s': ", file->path);
     ret = sys_stat(file->path, statbuf);
     if (ret < 0) {
-      prints("Stat() FAILURE: '%s'\n", errno_to_str(ret));
+      print_uart("Stat() FAILURE: '%s'\n", errno_to_str(ret));
       continue;
     }
     if (S_ISDIR(statbuf->st_mode)) {
-      prints("Directory!\n");
+      print_uart("Directory!\n");
       continue;
     }
     if (S_ISLNK(statbuf->st_mode)) {
-      prints("Symbolic Link!\n");
+      print_uart("Symbolic Link!\n");
       continue;
     }
     ret = sys_unlink(file->path);
     if (ret < 0) {
-      prints("Unlink() FAILURE: '%s'\n", errno_to_str(ret));
+      print_uart("Unlink() FAILURE: '%s'\n", errno_to_str(ret));
       continue;
     }
-    prints("Success!\n");
+    print_uart("Success!\n");
   }
   kfree(statbuf);
 }
@@ -597,16 +597,16 @@ static void file_test_hard_links(void)
 
   /* Hard links to directories */
   name = kmalloc(2); name[1] = '\0'; name[0] = '@';
-  prints("Creating hard link to root directory:\n");
+  print_uart("Creating hard link to root directory:\n");
   for (uint i = 0;
        ext2_root_list[i] != NULL && name[0] != 0x7F;
        i++, name[0]++) {
     path = ext2_root_list[i];
-    prints("Creating hard link from '%s' to '%s': ", path, name);
+    print_uart("Creating hard link from '%s' to '%s': ", path, name);
     if ((ret = sys_link(path, name)) < 0) {
-      prints("FAILURE: %s\n", errno_to_str(ret));
+      print_uart("FAILURE: %s\n", errno_to_str(ret));
     } else {
-      prints("Success!\n");
+      print_uart("Success!\n");
     }
   }
   kfree(name);
@@ -616,27 +616,27 @@ static void file_test_hard_links(void)
 
   /* Hard links to a regular file */
   dst = "destination";
-  prints("Creating hard link to regular file:\n");
+  print_uart("Creating hard link to regular file:\n");
   if ((fd = sys_open(dst, O_WRONLY|O_CREAT|O_EXCL, 0)) < 0) {
-    prints("FAILURE: cannot creat reg file '%s': %s\n", dst,
-           errno_to_str(fd));
+    print_uart("FAILURE: cannot creat reg file '%s': %s\n", dst,
+               errno_to_str(fd));
     return;
   }
   name = kmalloc(2);
   for (name[0] = '@', name[1] = '\0'; name[0] != 0x7f; name[0]++) {
     ret = sys_unlink(name);
-    prints("Deleting older link '%s': ", name);
+    print_uart("Deleting older link '%s': ", name);
     if (ret < 0) {
-      prints("Error %s\n", errno_to_str(ret));
+      print_uart("Error %s\n", errno_to_str(ret));
       return;
     }
-    prints("Success!\n");
-    prints("Creating hard link from '%s' to '%s': ", dst, name);
+    print_uart("Success!\n");
+    print_uart("Creating hard link from '%s' to '%s': ", dst, name);
     ret = sys_link(dst, name);
     if (ret < 0) {
-      prints("FAILURE: %s\n", errno_to_str(ret));
+      print_uart("FAILURE: %s\n", errno_to_str(ret));
     } else {
-      prints("Success!\n");
+      print_uart("Success!\n");
     }
   }
   kfree(name);
@@ -645,7 +645,7 @@ static void file_test_hard_links(void)
 void file_run_tests(void)
 {
   /* Extract the modified ext2 volume out of the virtual machine: */
-  prints("Ramdisk start at: 0x%lx, with len = %ld\n",
+  print_uart("Ramdisk start at: 0x%lx, with len = %ld\n",
          ramdisk_get_buf(), ramdisk_get_len());
 #if TEST_CHDIR
   _test_chdir();
@@ -655,7 +655,7 @@ void file_run_tests(void)
 #endif
 #if TEST_READ
   for (int chunk = 4096; chunk != 0; chunk /= 2) {
-    prints("*** Issuing read()s with chunk len of %d bytes!", chunk);
+    print_uart("*** Issuing read()s with chunk len of %d bytes!", chunk);
     _test_read(chunk);
   }
 #endif
@@ -682,7 +682,7 @@ void file_run_tests(void)
   file_test_hard_links();
 #endif
 
-  prints("%s: Sucess!", __func__);
+  print_uart("%s: Sucess!", __func__);
   printk("%s: Sucess!", __func__);
 }
 

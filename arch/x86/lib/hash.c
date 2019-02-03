@@ -117,16 +117,16 @@ static void hash_print_info(struct hash *hash)
   struct hash_elem *helem;
   uint64_t count;
 
-  prints("Printing Hash info:\n");
-  prints("Hash Address: 0x%lx\n", hash);
-  prints("Hash Array Length: %d\n", hash->len);
+  print_uart("Printing Hash info:\n");
+  print_uart("Hash Address: 0x%lx\n", hash);
+  print_uart("Hash Array Length: %d\n", hash->len);
   for (int i = 0; i < hash->len; i++) {
-    prints("Number of Elemenets in Hash List #%d = ", i);
+    print_uart("Number of Elemenets in Hash List #%d = ", i);
     count = 0;
     list_for_each(&hash->nodes_array[i], helem, node) {
       count++;
     }
-    prints("%lu\n", count);
+    print_uart("%lu\n", count);
   }
 }
 

@@ -42,7 +42,6 @@
 #include <x86/sections.h>
 #include <x86/serial.h>
 #include <x86/smpboot.h>
-#include <x86/tests.h>
 #include <x86/thread.h>
 #include <x86/timer.h>
 #include <x86/uart.h>

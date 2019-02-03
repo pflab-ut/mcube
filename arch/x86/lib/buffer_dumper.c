@@ -9,7 +9,7 @@
 /*
  * Possible functions for the printer:
  * - printk(fmt, ...)
- * - prints(fmt, ...)
+ * - print_uart(fmt, ...)
  * - Below null printer
  */
 

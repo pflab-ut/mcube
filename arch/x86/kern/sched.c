@@ -38,67 +38,67 @@
 void sched_percpu_area_init(void)
 {
 
-/* CPU ticks counter; incremented for every tick */
+  /* CPU ticks counter; incremented for every tick */
   PS->sys_ticks = 0;
 
-/*
- * A multi-level feedback queue with strict fairness:
- *
- * A classical problem with MLFQs is starvation: a number of threads
- * can influx the high priority queues, starving the low-priority ones
- * for a considerable time (if not infinitely).
- *
- * To handle this, we add fairness to the design. If a thread finishes
- * its entire slice, it's put into the 'expired' queue  with decreased
- * priority.
- *
- * No thread in the expired queue can run till all other tasks in the
- * 'active' queue had a chance to run. Once the active queue get
- * emptied, we swap it with the expired one, and rerun the algorithm.
- * Thus, we have a starvation upper bound = N * RR_INTERVAL, where N =
- * # of runnable threads.
- *
- * If a task slept during its interval, it's popped from the runqueue.
- * After wakeup, it re-runs with same old priority up to end of the
- * _remaining_ part of its slice. [*]
- *
- * If a runqueue swap occurred during thread sleep, its slice usage is
- * reset after wake-up and it's also put in a priority higher than the
- * new active queue's default one. [+]
- *
- * Above design rationale is to maintain low-latency for interactive
- * threads while providing strict fair treatment, runtime-wise, to all
- * jobs in the system.
- *
- * [*] After wakeup, such task will immediately preempt the currently
- * running thread, or wait one RR_INTERVAL at max.
- *
- * [+] If we put such thread in the new rq with its original old prio-
- * rity, it'd be punished heavily (latency-wise) for its sleep. This
- * is especially true for low-priority tasks where the chance of a rq
- * swap during their sleep is high.
- */
+  /*
+   * A multi-level feedback queue with strict fairness:
+   *
+   * A classical problem with MLFQs is starvation: a number of threads
+   * can influx the high priority queues, starving the low-priority ones
+   * for a considerable time (if not infinitely).
+   *
+   * To handle this, we add fairness to the design. If a thread finishes
+   * its entire slice, it's put into the 'expired' queue  with decreased
+   * priority.
+   *
+   * No thread in the expired queue can run till all other tasks in the
+   * 'active' queue had a chance to run. Once the active queue get
+   * emptied, we swap it with the expired one, and rerun the algorithm.
+   * Thus, we have a starvation upper bound = N * RR_INTERVAL, where N =
+   * # of runnable threads.
+   *
+   * If a task slept during its interval, it's popped from the runqueue.
+   * After wakeup, it re-runs with same old priority up to end of the
+   * _remaining_ part of its slice. [*]
+   *
+   * If a runqueue swap occurred during thread sleep, its slice usage is
+   * reset after wake-up and it's also put in a priority higher than the
+   * new active queue's default one. [+]
+   *
+   * Above design rationale is to maintain low-latency for interactive
+   * threads while providing strict fair treatment, runtime-wise, to all
+   * jobs in the system.
+   *
+   * [*] After wakeup, such task will immediately preempt the currently
+   * running thread, or wait one RR_INTERVAL at max.
+   *
+   * [+] If we put such thread in the new rq with its original old prio-
+   * rity, it'd be punished heavily (latency-wise) for its sleep. This
+   * is especially true for low-priority tasks where the chance of a rq
+   * swap during their sleep is high.
+   */
   PS->rq_active = &PS->rrq[0];
   PS->rq_expired = &PS->rrq[1];
   rq_init(PS->rq_active);
   rq_init(PS->rq_expired);
 
-/*
- * If we just allowed new runnable threads to get added to the active
- * rq, we can starve its lower-prio threads. If we added them to the
- * expired rq instead, we will fsck up their response time up to
- * N*RR_INTERVAL ms, where N = # of runnable threads in the active rq.
- *
- * As a middle solution to this, we add them to a special list, and
- * alternate dispatching between this list and the active runqueue.
- *
- * Once the active rq get emptied and swapped, we move all the tasks
- * of that list to the new active runqueue at the head of its default
- * priority list.
- *
- * Thus, the new scheduler starvation upper bound = 2*N*RR_INTERVAL
- * ms, where N = number of runnable threads in the active rq.
- */
+  /*
+   * If we just allowed new runnable threads to get added to the active
+   * rq, we can starve its lower-prio threads. If we added them to the
+   * expired rq instead, we will fsck up their response time up to
+   * N*RR_INTERVAL ms, where N = # of runnable threads in the active rq.
+   *
+   * As a middle solution to this, we add them to a special list, and
+   * alternate dispatching between this list and the active runqueue.
+   *
+   * Once the active rq get emptied and swapped, we move all the tasks
+   * of that list to the new active runqueue at the head of its default
+   * priority list.
+   *
+   * Thus, the new scheduler starvation upper bound = 2*N*RR_INTERVAL
+   * ms, where N = number of runnable threads in the active rq.
+   */
   list_init(&PS->just_queued);
   PS->just_queued_turn = 1;
 }
@@ -123,7 +123,7 @@ enum enqueue_type {
 };
 
 static void __rq_add_proc(struct runqueue *rq, struct proc *proc, int prio,
-          enum enqueue_type type)
+                          enum enqueue_type type)
 {
   assert(VALID_PRIO(prio));
 
@@ -300,7 +300,7 @@ struct proc *sched_tick(void)
           "did we reach here?");
 
     new_proc = list_entry(PS->rq_active->head[new_prio].next,
-              struct proc, pnode);
+                          struct proc, pnode);
     list_del(&new_proc->pnode);
 
     rq_return_proc(PS->rq_active, current, PS->current_prio);
@@ -401,13 +401,13 @@ static void print_proc_stats(struct proc *proc, int prio)
     rqwait_overall += PS->sys_ticks - proc->enter_runqueue_ts;
   }
   
-  prints("%lu:%d:%lu:%lu:%lu:%lu:%u:%u ", proc->pid, prio,
-         proc->stats.runtime_overall,
-         proc->stats.runtime_overall / dispatch_count,
-         rqwait_overall,
-         rqwait_overall / dispatch_count,
-         proc->stats.preempt_high_prio,
-         proc->stats.preempt_slice_end);
+  print_uart("%lu:%d:%lu:%lu:%lu:%lu:%u:%u ", proc->pid, prio,
+             proc->stats.runtime_overall,
+             proc->stats.runtime_overall / dispatch_count,
+             rqwait_overall,
+             rqwait_overall / dispatch_count,
+             proc->stats.preempt_high_prio,
+             proc->stats.preempt_slice_end);
 }
 
 static void print_sched_stats(void)
@@ -416,7 +416,7 @@ static void print_sched_stats(void)
 
   spin_lock(&printstats_lock);
 
-  prints("%lu ", PS->sys_ticks);
+  print_uart("%lu ", PS->sys_ticks);
   print_proc_stats(current, PS->current_prio);
   for (int i = MIN_PRIO; i <= MAX_PRIO; i++) {
     list_for_each(&PS->rq_active->head[i], proc, pnode)
@@ -426,7 +426,7 @@ static void print_sched_stats(void)
   }
   list_for_each(&PS->just_queued, proc, pnode)
     print_proc_stats(proc, DEFAULT_PRIO);
-  prints("\n");
+  print_uart("\n");
 
   spin_unlock(&printstats_lock);
 }
@@ -443,14 +443,14 @@ static void rq_dump(struct runqueue *rq)
   const char *name;
 
   name = (rq == rq_active) ? "active" : "expired";
-  prints("Dumping %s table:\n", name);
+  print_uart("Dumping %s table:\n", name);
   for (int i = MAX_PRIO; i >= MIN_PRIO; i--) {
     if (!list_empty(&rq->head[i])) {
       list_for_each(&rq->head[i], proc, pnode)
-        prints("%lu ", proc->pid);
+        print_uart("%lu ", proc->pid);
     }
   }
-  prints("\n");
+  print_uart("\n");
 }
 #endif  /* !SCHED_TRACE */
 

@@ -32,7 +32,7 @@
 struct runqueue;
 
 #if SCHED_TRACE
-#define  sched_dbg(fmt, ...)    prints(fmt, ##__VA_ARGS__)
+#define  sched_dbg(fmt, ...)    print_uart(fmt, ##__VA_ARGS__)
 static void rq_dump(struct runqueue *rq);
 #else
 #define sched_dbg(fmt, ...)    { }

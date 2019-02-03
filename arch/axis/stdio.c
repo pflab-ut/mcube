@@ -11,12 +11,7 @@ int putchar(int c)
   return c;
 }
 
-int puts(const char *s)
+void serial_putc(char c)
 {
-  const char *t = s;
-  while (*t) {
-    putchar(*t++);
-  }
-  return t - s;
+  putchar(c);
 }
-

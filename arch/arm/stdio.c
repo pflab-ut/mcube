@@ -18,13 +18,8 @@ int putchar(int c)
   return c;
 }
 
-int puts(const char *s)
-{
-  int i;
-  int len = strlen(s);
-  for (i = 0; i < len; i++) {
-    putchar(s[i]);
-  }
-  return 0;
-}
 
+void serial_putc(char c)
+{
+  putchar(c);
+}

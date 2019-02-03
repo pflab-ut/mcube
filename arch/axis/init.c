@@ -26,6 +26,12 @@ void exit_irq(void)
 }
 
 
+void init_spinlock(void)
+{
+  kbuf_lock = INIT_SPINLOCK;
+  sbuf_lock = INIT_SPINLOCK;
+}
+
 
 
 /**
@@ -33,6 +39,7 @@ void exit_irq(void)
  */
 void init_arch(void)
 {
+  init_spinlock();
   init_irq();
   init_cpu();
   init_malloc();

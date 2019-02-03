@@ -24,17 +24,17 @@ __unused static struct buffer_dumper vga_char_dumper = {
 };
 
 __unused static struct buffer_dumper vga_null_dumper = {
-  .pr = prints,
+  .pr = print_uart,
   .formatter = buf_null_dump,
 };
 
 __unused static struct buffer_dumper serial_hex_dumper = {
-  .pr = prints,
+  .pr = print_uart,
   .formatter = buf_hex_dump,
 };
 
 __unused static struct buffer_dumper serial_null_dumper = {
-  .pr = prints,
+  .pr = print_uart,
   .formatter = buf_null_dump,
 };
 
@@ -91,7 +91,7 @@ void superblock_dump(union super_block *sb)
 }
 
 void blockgroup_dump(int idx, struct group_descriptor *bgd,
-         uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks)
+                     uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks)
 {
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
   bd->pr("Group #%d: (Blocks %u-%u)\n", idx, firstb, lastb);
@@ -372,7 +372,7 @@ __unused static void test_file_reads(void)
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
   assert(bd != NULL);
-  prints("c%d t%lu fr start\n", percpu_get(apic_id), current->pid);
+  print_uart("c%d t%lu fr start\n", percpu_get(apic_id), current->pid);
 
   buf = kmalloc(BUF_LEN);
   for (uint i = 1; i <= isb.sb->inodes_count; i++) {
@@ -401,7 +401,7 @@ __unused static void test_file_reads(void)
   }
   kfree(buf);
 
-  prints("c%d t%lu fr end!\n", percpu_get(apic_id), current->pid);
+  print_uart("c%d t%lu fr end!\n", percpu_get(apic_id), current->pid);
   if (percpu_get(halt_thread_at_end) == true)
     halt();
 }
@@ -418,14 +418,14 @@ __unused static void test_block_reads(void)
   bd = (void *)percpu_get(dumper);
   buf = kmalloc(BUF_LEN);
 
-  prints("c%d t%lu br start\n", percpu_get(apic_id), current->pid);
+  print_uart("c%d t%lu br start\n", percpu_get(apic_id), current->pid);
 
   /* All possible permumations: Burn, baby, Burn! */
   for (uint i = 0; i < isb.sb->blocks_count; i++) {
     for (uint off = 0; off < isb.block_size; off++) {
       for (uint len = 0; len <= (isb.block_size - off); len++) {
         bd->pr("Reading Block #%d, offset = %d, "
-              "len = %d:\n", i, off, len);
+               "len = %d:\n", i, off, len);
         block_read(i, buf, off, len);
         printbuf(bd, buf, len);
       }
@@ -433,7 +433,7 @@ __unused static void test_block_reads(void)
   }
   kfree(buf);
 
-  prints("c%d t%lu br end!\n", percpu_get(apic_id), current->pid);
+  print_uart("c%d t%lu br end!\n", percpu_get(apic_id), current->pid);
   if (percpu_get(halt_thread_at_end) == true) {
     halt();
   }
@@ -460,7 +460,7 @@ __unused static void test_file_existence(void)
 
   bd = (void *)percpu_get(dumper);
 
-  prints("c%d t%ld ex start\n", percpu_get(apic_id), current->pid);
+  print_uart("c%d t%ld ex start\n", percpu_get(apic_id), current->pid);
   parent = kmalloc(4096);
   child = kmalloc(EXT2_FILENAME_LEN + 1);
   for (uint j = 0; ext2_files_list[j].path != NULL; j++) {
@@ -483,7 +483,7 @@ __unused static void test_file_existence(void)
   }
   kfree(parent);
   kfree(child);
-  prints("c%d t%ld ex end\n", percpu_get(apic_id), current->pid);
+  print_uart("c%d t%ld ex end\n", percpu_get(apic_id), current->pid);
   if (percpu_get(halt_thread_at_end) == true) {
     halt();
   }
@@ -516,7 +516,7 @@ __unused static void test_file_creation(void)
 
   char prefix[64];
   __vsnprintf(prefix, sizeof(prefix) - 1, "c%d_t%lu_",
-        percpu_get(apic_id), current->pid);
+              percpu_get(apic_id), current->pid);
 
   bd = &serial_char_dumper;
 
@@ -549,7 +549,7 @@ __unused static void test_file_creation(void)
       bd->pr("Success!\n");
     }
   }
-out:
+ out:
   /* Assure -EEXIST on recreation of files created above */
   len = strlen(prefix) - 2;
   for (char p = 'a'; p <= l1; p++) {
@@ -649,8 +649,8 @@ void ext2_run_tests()
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
   /* Extract the modified ext2 volume out of the virtual machine: */
-  prints("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
-        ramdisk_get_len());
+  print_uart("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
+             ramdisk_get_len());
 
   test_inodes();
   test_block_reads();
@@ -672,21 +672,21 @@ void ext2_run_tests()
 
   test_path_conversion();
 
-/*
- * Allocate all of the free system inodes (x), then deallocate half of
- * the allocated quantity (x/2).  Allocate the deallocated half again,
- * then deallocate half of it (x/4). Do so, till all the FS inodes are
- * allocated. This should hopefully provide good __serial__ test cases.
- *
- * This test must run on a single thread, __without__ any other code
- * allocating inodes behind our back.
- */
+  /*
+   * Allocate all of the free system inodes (x), then deallocate half of
+   * the allocated quantity (x/2).  Allocate the deallocated half again,
+   * then deallocate half of it (x/4). Do so, till all the FS inodes are
+   * allocated. This should hopefully provide good __serial__ test cases.
+   *
+   * This test must run on a single thread, __without__ any other code
+   * allocating inodes behind our back.
+   */
 #if TEST_INODE_ALLOC_DEALLOC
   nfree = isb.sb->free_inodes_count;
   struct unrolled_head all_allocated;
   void *void_ino, *void_inum;
   bool first_run = true;
-again:   unrolled_init(&head, 64);
+ again:   unrolled_init(&head, 64);
   if (first_run) {
     unrolled_init(&all_allocated, 64);
   }
@@ -712,7 +712,7 @@ again:   unrolled_init(&head, 64);
     panic("We've allocated all %lu inodes, how can a new "
           "allocation returns inode #%lu?", nfree, inode->inum);
   }
-  prints("Success! All inodes now allocated; inode_alloc() got NULL!\n");
+  print_uart("Success! All inodes now allocated; inode_alloc() got NULL!\n");
 
   /* Deallocate half of the allocated inodes */
   for (uint i = 0; i < nfree / 2; i++) {
@@ -743,24 +743,24 @@ again:   unrolled_init(&head, 64);
     goto again;
   }
 
-  prints("\n");
-  prints("NOTE! All disk inodes are now allocated. Meanwhile, the ones "
-         "we've manually allocated are not linked by any dir entries "
-         "and have a dtime = 0. To make fsck happy, we'll deallocate "
-         "all of those 'malformed' inodes now :-)\n\n");
+  print_uart("\n");
+  print_uart("NOTE! All disk inodes are now allocated. Meanwhile, the ones "
+             "we've manually allocated are not linked by any dir entries "
+             "and have a dtime = 0. To make fsck happy, we'll deallocate "
+             "all of those 'malformed' inodes now :-)\n\n");
   unrolled_for_each(&all_allocated, void_inum) {
     inode = inode_get((uint64_t)void_inum);
-    prints("Deallocating inode #%lu\n", inode->inum);
+    print_uart("Deallocating inode #%lu\n", inode->inum);
     inode_mark_delete(inode);
     inode_put(inode);
   }
-  prints("Done!\n");
+  print_uart("Done!\n");
 #endif
 
 #if TEST_BLOCK_ALLOC_DEALLOC
   nfree = isb.sb->free_blocks_count;
   count = 5;
-bagain:  unrolled_init(&head, 64);
+ bagain:  unrolled_init(&head, 64);
   for (uint i = 0; i < nfree; i++) {
     block = block_alloc();
     if (block == 0) {
@@ -873,7 +873,7 @@ bagain:  unrolled_init(&head, 64);
     inode_put(inode);
     bd->pr("Done!\n");
   }
-out1:
+ out1:
   bd->pr("**** NOW TESTING THE WRITTEN DATA!\n");
 
   for (uint j = 0; ext2_files_list[j].path != NULL; j++) {
@@ -903,9 +903,9 @@ out1:
       if (memcmp(buf, buf2, BUF_LEN) != 0) {
         bd->pr("Data written differs from what's read!\n");
         bd->pr("We've written the following into file:\n");
-//        buf_hex_dump(buf2, BUF_LEN);
+        //        buf_hex_dump(buf2, BUF_LEN);
         bd->pr("But found the following when reading:\n");
-//        buf_hex_dump(buf, BUF_LEN);
+        //        buf_hex_dump(buf, BUF_LEN);
         panic("Data corruption detected!");
       }
       memset32(buf2, ++inum, BUF_LEN);
@@ -955,13 +955,13 @@ out1:
       continue;
     }
     path_get_parent(file->path, parent, child);
-    prints("Parent: '%s'\n", parent);
-    prints("Child: '%s'\n", child);
+    print_uart("Parent: '%s'\n", parent);
+    print_uart("Child: '%s'\n", child);
     parent_inum = (*parent == '\0') ?
       (int64_t)current->working_dir : name_i(parent);
     if (parent_inum < 0) {
       bd->pr("FAILURE: Parent pathname resolution returned "
-            "%s\n", errno_to_str(parent_inum));
+             "%s\n", errno_to_str(parent_inum));
       continue;
     }
     inode = inode_get(parent_inum);
@@ -1008,7 +1008,7 @@ static void __no_return test_alloc_dealloc(void)
   void *inode_ptr;
   bool complete = true;
 
-  prints("c%d t%lu a start\n", percpu_get(apic_id), current->pid);
+  print_uart("c%d t%lu a start\n", percpu_get(apic_id), current->pid);
   unrolled_init(&head, 64);
 
   for (int i = 0; i < 100; i++) {
@@ -1023,8 +1023,8 @@ static void __no_return test_alloc_dealloc(void)
     inode_mark_delete(inode_ptr);
     inode_put(inode_ptr);
   }
-  prints("c%d t%lu a %s\n", percpu_get(apic_id), current->pid,
-         (complete) ? "end!" : "no ino!");
+  print_uart("c%d t%lu a %s\n", percpu_get(apic_id), current->pid,
+             (complete) ? "end!" : "no ino!");
   halt();
 }
 
@@ -1055,8 +1055,8 @@ void ext2_run_smp_tests(void)
 
   /* Extract the modified ext2 volume out of the virtual machine: */
   if (percpu_get(apic_id) == 0) {
-    prints("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
-           ramdisk_get_len());
+    print_uart("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
+               ramdisk_get_len());
   }
   for (int i = 0; i < 200; i++) {
     kthread_create(test_alloc_dealloc);
