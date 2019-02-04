@@ -20,6 +20,10 @@ int ap_main(void)
 
 int user_arch_main(void)
 {
-  //  test_ring_buf();
+  long l = -1234;
+  printk("%d\n", l);
+  printk("%09d\n", l);
+  printk("0x%lx\n", l);
+  printk("0x%016lx\n", l);
   return 0;
 }

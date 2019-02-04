@@ -20,6 +20,38 @@ spinlock_t sbuf_lock = INIT_SPINLOCK;
 
 
 /*
+ * Definitions for parsing printk arguments. Each argument
+ * is described by its descriptor (argdesc) structure.
+ */
+enum printf_arglen {
+  INT = 0,
+  LONG,
+};
+enum printf_argtype {
+  NONE = 0,
+  SIGNED,
+  UNSIGNED,
+  STRING,
+  CHAR,
+  PERCENT,
+};
+
+enum printf_pad {
+  PAD_NO = 0,
+  PAD_BLANK,
+  PAD_ZERO,
+};
+
+struct printf_argdesc {
+  int radix;
+  enum printf_arglen len;
+  enum printf_argtype type;
+  enum printf_pad pad;
+  int digit;
+};
+
+
+/*
  * We cannot use assert() for below printk() code as
  * the assert code istelf internally calls printk().
  */
@@ -59,29 +91,51 @@ static __no_return void printk_panic(const char *str)
  * desired radix. Return the number of ascii chars printed.
  * @size: output buffer size
  */
-static int ultoa(unsigned long num, char *buf, int size, unsigned radix)
+static int ultoa(unsigned long num, char *buf, int size, struct printf_argdesc *desc)
 {
+  static char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
   int ret, digits;
-  char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
+  int i;
 
-  printk_assert(radix > 2 && radix <= PRINTK_MAX_RADIX);
+  printk_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
 
   digits = 0;
   if (num == 0) {
     digits++;
   }
   
-  for (typeof(num) c = num; c != 0; c /= radix) {
+  for (typeof(num) c = num; c != 0; c /= desc->radix) {
     digits++;
   }
-
-  ret = digits;
+  printf("digits = %d\n", digits);
 
   printk_assert(digits > 0);
   printk_assert(digits <= size);
-  for (; digits != 0; digits--) {
-    buf[digits - 1] = digit[num % radix];
-    num = num / radix;
+  printk_assert(desc->digit <= size);
+  if (desc->digit == -1) {
+    ret = digits;
+    for (; digits != 0; digits--) {
+      buf[digits - 1] = digit[num % desc->radix];
+      num = num / desc->radix;
+    }
+  } else {
+    ret = desc->digit;
+    printf("desc->digit = %d\n", desc->digit);
+    for (i = 0; i < desc->digit - digits; i++) {
+      switch (desc->pad) {
+      case PAD_BLANK:
+        buf[i] = ' ';
+        break;
+      case PAD_ZERO:
+        buf[i] = '0';
+      default:
+        break;
+      }
+    }
+    for (i = 0; i < digits; i++) {
+      buf[desc->digit - i - 1] = digit[num % desc->radix];
+      num = num / desc->radix;
+    }
   }
 
   return ret;
@@ -92,9 +146,9 @@ static int ultoa(unsigned long num, char *buf, int size, unsigned radix)
  * desired radix. Return the number of ascii chars printed.
  * @size: output buffer size
  */
-static int ltoa(signed long num, char *buf, int size, int radix)
+static int ltoa(signed long num, char *buf, int size, struct printf_argdesc *desc)
 {
-  printk_assert(radix > 2 && radix <= PRINTK_MAX_RADIX);
+  printk_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
 
   if (num < 0) {
     /* Make room for the '-' */
@@ -103,33 +157,11 @@ static int ltoa(signed long num, char *buf, int size, int radix)
     num *= -1;
     buf[0] = '-';
 
-    return ultoa(num, buf+1, size-1, radix) + 1;
+    return ultoa(num, buf + 1, size - 1, desc) + 1;
   }
 
-  return ultoa(num, buf, size, radix);
+  return ultoa(num, buf, size, desc);
 }
-
-/*
- * Definitions for parsing printk arguments. Each argument
- * is described by its descriptor (argdesc) structure.
- */
-enum printf_arglen {
-  INT = 0,
-  LONG,
-};
-enum printf_argtype {
-  NONE = 0,
-  SIGNED,
-  UNSIGNED,
-  STRING,
-  CHAR,
-  PERCENT,
-};
-struct printf_argdesc {
-  int radix;
-  enum printf_arglen len;
-  enum printf_argtype type;
-};
 
 /*
  * Parse given printf argument expression (@fmt) and save
@@ -143,39 +175,69 @@ struct printf_argdesc {
 static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
 {
   int complete;
+  unsigned int digit_size;
 
+  printf("parse_arg()\n");
   printk_assert(*fmt == '%');
 
   complete = 0;
   desc->len = INT;
   desc->type = NONE;
   desc->radix = 10;
-
+  desc->pad = PAD_NO;
+  desc->digit = -1;
+  
   while (*++fmt) {
     switch (*fmt) {
     case 'l':
       desc->len = LONG;
       break;
     case 'd':
-      desc->type = SIGNED, complete = 1;
+      printf("signed\n");
+      desc->type = SIGNED;
+      complete = 1;
       goto out;
     case 'u':
-      desc->type = UNSIGNED, complete = 1;
+      desc->type = UNSIGNED;
+      complete = 1;
       goto out;
     case 'x':
-      desc->type = UNSIGNED, desc->radix = 16, complete = 1;
+      desc->type = UNSIGNED;
+      desc->radix = 16;
+      complete = 1;
       goto out;
     case 's':
-      desc->type = STRING, complete = 1;
+      desc->type = STRING;
+      complete = 1;
       goto out;
     case 'c':
-      desc->type = CHAR, complete = 1;
+      desc->type = CHAR;
+      complete = 1;
       goto out;
     case '%':
-      desc->type = PERCENT, complete = 1;
+      desc->type = PERCENT;
+      complete = 1;
       goto out;
+    case '0' ... '9':
+      if (*fmt == '0') {
+        printf("true\n");
+        desc->pad = PAD_ZERO;
+        fmt++;
+      } else {
+        desc->pad = PAD_BLANK;
+      }
+      digit_size = 0;
+      while ((*fmt >= '0') && (*fmt <= '9')) {
+        digit_size = digit_size * 10 + (*fmt - '0');
+        fmt++;
+      }
+      fmt--;
+      desc->digit = digit_size;
+      printf("desc->digit = %d\n", desc->digit);
+      break;
     default:
       /* Unknown mark: complete by definition */
+      printf("Unknown mark: %d\n", *fmt);
       desc->type = NONE;
       complete = 1;
       goto out;
@@ -200,7 +262,8 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
  * @va_list with the the help of type info from the argument
  * descriptor @desc. @size: output buffer size
  */
-static int print_arg(char *buf, int size,
+static int print_arg(char *buf,
+                     int size,
                      struct printf_argdesc *desc,
                      va_list args)
 {
@@ -220,7 +283,7 @@ static int print_arg(char *buf, int size,
     } else {
       num = va_arg(args, int);
     }
-    len = ltoa(num, buf, size, desc->radix);
+    len = ltoa(num, buf, size, desc);
     break;
   case UNSIGNED:
     if (desc->len == LONG) {
@@ -228,7 +291,7 @@ static int print_arg(char *buf, int size,
     } else {
       unum = va_arg(args, unsigned int);
     }
-    len = ultoa(unum, buf, size, desc->radix);
+    len = ultoa(unum, buf, size, desc);
     break;
   case STRING:
     str = va_arg(args, char *);
@@ -275,7 +338,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
   while (*fmt) {
     while (*fmt != 0 && *fmt != '%' && size != 0) {
       *str++ = *fmt++;
-      --size;
+      size--;
     }
 
     /* Mission complete */
@@ -379,7 +442,7 @@ static void vga_write(char *buf, int n, int color)
     if (*buf != '\n') {
       writew((color << 8) + *buf,
              vga_buffer + 2 * (vga_xpos + vga_ypos * max_xpos));
-      ++vga_xpos;
+      vga_xpos++;
     }
 
     if (vga_xpos == max_xpos || *buf == '\n') {
@@ -462,9 +525,8 @@ int printk(const char *fmt, ...)
 
 #if CONFIG_ARCH_X86
   vga_write(kbuf, n, VGA_DEFAULT_COLOR);
-#elif CONFIG_ARCH_AXIS
-  puts(kbuf);
 #else
+  kbuf[n] = '\0';
   puts(kbuf);
 #endif
   
@@ -485,9 +547,10 @@ int print_uart(const char *fmt, ...)
 
 #if CONFIG_ARCH_X86
   serial_write(sbuf, n);
-#elif CONFIG_ARCH_AXIS
+#elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
+  sbuf[n] = '\0';
   puts(sbuf);
-#else
+#elif CONFIG_ARCH_ARM
   uart_write(sbuf, n, NULL);
 #endif
   
