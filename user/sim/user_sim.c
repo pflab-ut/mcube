@@ -20,7 +20,7 @@ int ap_main(void)
 
 int user_arch_main(void)
 {
-  long l = -1234;
+  long l = 1234;
   printk("%d\n", l);
   printk("%09d\n", l);
   printk("0x%lx\n", l);

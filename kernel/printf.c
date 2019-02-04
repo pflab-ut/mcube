@@ -107,7 +107,6 @@ static int ultoa(unsigned long num, char *buf, int size, struct printf_argdesc *
   for (typeof(num) c = num; c != 0; c /= desc->radix) {
     digits++;
   }
-  printf("digits = %d\n", digits);
 
   printk_assert(digits > 0);
   printk_assert(digits <= size);
@@ -119,8 +118,8 @@ static int ultoa(unsigned long num, char *buf, int size, struct printf_argdesc *
       num = num / desc->radix;
     }
   } else {
+    printk_assert(digits <= desc->digit);
     ret = desc->digit;
-    printf("desc->digit = %d\n", desc->digit);
     for (i = 0; i < desc->digit - digits; i++) {
       switch (desc->pad) {
       case PAD_BLANK:
@@ -177,7 +176,6 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
   int complete;
   unsigned int digit_size;
 
-  printf("parse_arg()\n");
   printk_assert(*fmt == '%');
 
   complete = 0;
@@ -193,7 +191,6 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
       desc->len = LONG;
       break;
     case 'd':
-      printf("signed\n");
       desc->type = SIGNED;
       complete = 1;
       goto out;
@@ -220,7 +217,6 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
       goto out;
     case '0' ... '9':
       if (*fmt == '0') {
-        printf("true\n");
         desc->pad = PAD_ZERO;
         fmt++;
       } else {
@@ -233,11 +229,10 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
       }
       fmt--;
       desc->digit = digit_size;
-      printf("desc->digit = %d\n", desc->digit);
       break;
     default:
       /* Unknown mark: complete by definition */
-      printf("Unknown mark: %d\n", *fmt);
+      //      printf("Unknown mark: %d\n", *fmt);
       desc->type = NONE;
       complete = 1;
       goto out;
