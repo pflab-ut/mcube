@@ -91,7 +91,7 @@ static __no_return void printk_panic(const char *str)
  * desired radix. Return the number of ascii chars printed.
  * @size: output buffer size
  */
-static int ultoa(unsigned long num, char *buf, int size, struct printf_argdesc *desc)
+static int ulout(unsigned long num, char *buf, int size, struct printf_argdesc *desc)
 {
   static char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
   int ret, digits;
@@ -145,7 +145,7 @@ static int ultoa(unsigned long num, char *buf, int size, struct printf_argdesc *
  * desired radix. Return the number of ascii chars printed.
  * @size: output buffer size
  */
-static int ltoa(signed long num, char *buf, int size, struct printf_argdesc *desc)
+static int lout(signed long num, char *buf, int size, struct printf_argdesc *desc)
 {
   printk_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
 
@@ -156,10 +156,10 @@ static int ltoa(signed long num, char *buf, int size, struct printf_argdesc *des
     num *= -1;
     buf[0] = '-';
 
-    return ultoa(num, buf + 1, size - 1, desc) + 1;
+    return ulout(num, buf + 1, size - 1, desc) + 1;
   }
 
-  return ultoa(num, buf, size, desc);
+  return ulout(num, buf, size, desc);
 }
 
 /*
@@ -252,67 +252,6 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
   return fmt;
 }
 
-/*
- * Print to @buf the printk argument stored in the untyped
- * @va_list with the the help of type info from the argument
- * descriptor @desc. @size: output buffer size
- */
-static int print_arg(char *buf,
-                     int size,
-                     struct printf_argdesc *desc,
-                     va_list args)
-{
-  long num;
-  unsigned long unum;
-  const char *str;
-  unsigned char ch;
-  int len;
-
-  len = 0;
-  printk_assert(size > 0);
-
-  switch (desc->type) {
-  case SIGNED:
-    if (desc->len == LONG) {
-      num = va_arg(args, long);
-    } else {
-      num = va_arg(args, int);
-    }
-    len = ltoa(num, buf, size, desc);
-    break;
-  case UNSIGNED:
-    if (desc->len == LONG) {
-      unum = va_arg(args, unsigned long);
-    } else {
-      unum = va_arg(args, unsigned int);
-    }
-    len = ultoa(unum, buf, size, desc);
-    break;
-  case STRING:
-    str = va_arg(args, char *);
-    if (!str) {
-      str = "<*NULL*>";
-    }
-    len = strlen(str);
-    len = min(size, len);
-    strncpy(buf, str, len);
-    break;
-  case CHAR:
-    ch = (unsigned char) va_arg(args, int);
-    *buf++ = ch;
-    len = 1;
-    break;
-  case PERCENT:
-    *buf++ = '%';
-    len = 1;
-    break;
-  default:
-    break;
-    /* No-op */
-  }
-
-  return len;
-}
 
 /*
  * Formt given printf-like string (@fmt) and store the result
@@ -322,7 +261,11 @@ static int print_arg(char *buf,
 int vsnprint(char *buf, int size, const char *fmt, va_list args)
 {
   struct printf_argdesc desc = {0};
+  const char *s;
   char *str;
+  long num;
+  unsigned long unum;
+  unsigned char ch;
   int len;
 
   if (size < 1) {
@@ -344,7 +287,46 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
     printk_assert(*fmt == '%');
     fmt = parse_arg(fmt, &desc);
 
-    len = print_arg(str, size, &desc, args);
+    len = 0;
+    switch (desc.type) {
+    case SIGNED:
+      if (desc.len == LONG) {
+        num = va_arg(args, long);
+      } else {
+        num = va_arg(args, int);
+      }
+      len = lout(num, str, size, &desc);
+      break;
+    case UNSIGNED:
+      if (desc.len == LONG) {
+        unum = va_arg(args, unsigned long);
+      } else {
+        unum = va_arg(args, unsigned int);
+      }
+      len = ulout(unum, str, size, &desc);
+      break;
+    case STRING:
+      s = va_arg(args, char *);
+      if (!s) {
+        s = "<*NULL*>";
+      }
+      len = strlen(s);
+      len = min(size, len);
+      strncpy(str, s, len);
+      break;
+    case CHAR:
+      ch = (unsigned char) va_arg(args, int);
+      *str++ = ch;
+      len = 1;
+      break;
+    case PERCENT:
+      *str++ = '%';
+      len = 1;
+      break;
+    default:
+      break;
+      /* No-op */
+    }
     str += len;
     size -= len;
   }

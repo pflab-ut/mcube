@@ -8,6 +8,21 @@
 
 #ifndef __ASSEMBLY__
 
+
+static inline uint64_t compare_and_swap(uint64_t *ptr, uint64_t new, uint64_t old)
+{
+  uint64_t out;
+
+  // newline after `lock' for the work around of apple's gas(?) bug.
+  asm volatile("lock cmpxchgq %2,%1"
+                       : "=a" (out), "+m" (*ptr)
+                       : "q" (new), "0" (old)
+                       : "cc");
+
+  return out;
+}
+
+
 /*
  * Atomically execute:
  *  old = *val & 0x1; *val |= 0x1;
@@ -35,13 +50,17 @@ static inline uint8_t atomic_bit_test_and_set(uint32_t *val)
 static inline uint64_t atomic_inc(uint64_t *val)
 {
   uint64_t i = 1;
+#if 1
+  compare_and_swap(val, *val + i, *val);
+#else
 
   asm volatile("LOCK xaddq %0, %1"
                : "+r"(i), "+m" (*val)
                :
                : "cc");
 
-  return i;
+#endif
+  return *val;
 }
 
 

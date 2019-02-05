@@ -19,14 +19,6 @@ size_t strnlen(const char *str, int n);
 //char *strncpy(char *dst, const char *src, size_t n);
 //int strncmp(const char *s1, const char *s2, int n);
 
-//void *memcpy(void * restrict dst, const void * restrict src, size_t len);
-void *memcpy_nocheck(void * restrict dst, const void * restrict src, size_t len);
-void *memcpy_forward(void *dst, const void *src, size_t len);
-void *memcpy_forward_nocheck(void *dst, const void *src, size_t len);
-
-//void *memset(void *dst, uint8_t ch, size_t len);
-void *memset32(void *dst, uint32_t val, uint64_t len);
-void *memset64(void *dst, uint64_t val, uint64_t len);
 
 //int memcmp(const void *s1, const void *s2, size_t len);
 

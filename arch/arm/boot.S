@@ -79,7 +79,7 @@ change_el2_to_el1:
   msr elr_el2, x0 // EL1 code.
   eret
 
-  
+
 start_el1:
   // set up stack in el1
   get_cpu_id x0, x1
@@ -89,12 +89,6 @@ start_el1:
   add x2, x0, x1
   mov sp, x2
   
-clear_bss:  
-  cbnz x0, begin_main
-  adr     x0, __bss_begin
-  adr     x1, __bss_end
-  sub     x1, x1, x0
-  bl      memzero
 begin_main: 
   bl      main
 

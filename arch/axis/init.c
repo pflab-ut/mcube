@@ -32,13 +32,19 @@ void init_spinlock(void)
   sbuf_lock = INIT_SPINLOCK;
 }
 
-
+void clear_bss(void)
+{
+  extern unsigned long __bss_begin, __bss_end;
+  printk("&__bss_begin = 0x%lx &__bss_end = 0x%lx\n", &__bss_begin, &__bss_end);
+  memset64(&__bss_begin, 0, (&__bss_end - &__bss_begin) / sizeof(unsigned long));
+}
 
 /**
  * The init_arch() function initializes architecture-dependent features.
  */
 void init_arch(void)
 {
+  clear_bss();
   init_spinlock();
   init_irq();
   init_cpu();

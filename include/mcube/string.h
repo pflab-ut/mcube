@@ -16,10 +16,16 @@
 #elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
 
 void *memset(void *s, int c, size_t n);
-void *memsetw(void *s, int c, size_t n);
-void *memsetd(void *s, int c, size_t n);
+void *memset32(void *dst, uint32_t val, uint64_t len);
+void *memset64(void *dst, uint64_t val, uint64_t len);
+
 int memcmp(const void *s1, const void *s2, size_t n);
+
 void *memcpy(void *dest, const void *src, size_t n);
+void *memcpy_nocheck(void * restrict dst, const void * restrict src, size_t len);
+void *memcpy_forward(void *dst, const void *src, size_t len);
+void *memcpy_forward_nocheck(void *dst, const void *src, size_t len);
+
 void *memmove(void *dest, const void *src, size_t n);
 size_t strlen(const char *s);
 int strcmp(const char *s, const char *t);
