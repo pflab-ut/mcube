@@ -14,6 +14,11 @@ void *kmalloc(size_t size);
 void kfree(void *addr);
 
 
+char *itoa(int val, char *buf, int radix);
+char *ltoa(long val, char *buf, int radix);
+char *ultoa(unsigned long val, char *buf, int radix);
+
+
 #if CONFIG_ARCH_SIM
 
 #include <stdlib.h>
@@ -22,9 +27,6 @@ void kfree(void *addr);
 
 long strtol(const char *cp, char **endp, int base);
 unsigned long strtoul(const char *cp, char **endp, int base);
-char *itoa(int val, char *buf, int radix);
-char *mcube_ltoa(long val, char *buf, int radix);
-char *mcube_ultoa(unsigned long val, char *buf, int radix);
 void exit(int status);
 
 

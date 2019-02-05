@@ -12,11 +12,11 @@
 
 #define LOCK_PREFIX LOCK_PREFIX_HERE
 
-static inline void compare_and_swap(volatile uint64_t *ptr, int new, int old)
+static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new, uint64_t old)
 {
-  int tmp;
+  uint64_t tmp;
 #if 1
-  int oldval;
+  uint64_t oldval;
   //  asm volatile("prfm    pstl1strm, %0" :: "r"(&v->counter));
   asm volatile("1: ldaxr %w0, [%1]" : "=&r"(oldval) : "r"(ptr));
   asm volatile("eor %w0, %w1, %w2" : "=r"(tmp) : "r"(oldval), "r"(old));

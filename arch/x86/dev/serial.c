@@ -192,9 +192,7 @@ static void disable_DLAB(void)
 void serial_init(void)
 {
   union modem_control_reg reg;
-  uint16_t divisor;
-
-  divisor = MAX_BAUD / DESIRED_BAUD;
+  uint16_t divisor = MAX_BAUD / DESIRED_BAUD;
   assert(divisor <= UINT16_MAX);
 
   if ((port_base = *(uint16_t *) VIRTUAL(BDA_COM1_ENTRY)) == 0) {

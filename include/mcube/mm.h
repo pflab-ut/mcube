@@ -28,7 +28,6 @@ extern unsigned short *mem_map;
 void init_mm(void);
 
 void memdump(void *ptr, size_t n);
-void *memzero(void *dst, size_t num);
 
 #endif /* !__ASSEMBLY__ */
 

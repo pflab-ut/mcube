@@ -15,7 +15,6 @@
 #include <x86/atomic.h>
 #include <x86/spinlock.h>
 #include <x86/stat.h>
-#include <x86/string.h>
 #include <x86/unrolled_list.h>
 #include <x86/vm.h>
 

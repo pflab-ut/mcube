@@ -236,7 +236,7 @@ double strtod(const char *nptr, char **endptr)
 }
 
 
-#endif /* !CONFIG_ARCH_AXIS */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
 
 unsigned long strtoul(const char *cp, char **endp, int base)
 {
@@ -302,15 +302,15 @@ static void xtoa(unsigned long val, char *buf, unsigned radix, int negative)
   firstdig = p;
 
   do {
-      digval = (unsigned) (val % radix);
-      val /= radix;
+    digval = (unsigned) (val % radix);
+    val /= radix;
 
-      /* Convert to ascii and store */
-      if (digval > 9) {
-        *p++ = (char) (digval - 10 + 'a');
-      } else {
-        *p++ = (char) (digval + '0');
-      }
+    /* Convert to ascii and store */
+    if (digval > 9) {
+      *p++ = (char) (digval - 10 + 'a');
+    } else {
+      *p++ = (char) (digval + '0');
+    }
   } while (val > 0);
 
   /* We now have the digit of the number in the buffer, but in reverse
@@ -400,4 +400,4 @@ void qsort(void *base, size_t num, size_t size, sortcmp cmp)
 }
 
 
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
+#endif /* !CONFIG_ARCH_SIM */

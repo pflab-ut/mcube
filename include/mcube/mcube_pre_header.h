@@ -27,7 +27,6 @@
 #include <mcube/seqlock.h>
 
 /* alphabetical order */
-#include <mcube/attribute.h>
 #include <mcube/barrier.h>
 #include <mcube/bitops.h>
 #include <mcube/buffer.h>

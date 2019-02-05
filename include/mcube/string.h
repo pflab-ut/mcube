@@ -28,6 +28,7 @@ void *memcpy_forward_nocheck(void *dst, const void *src, size_t len);
 
 void *memmove(void *dest, const void *src, size_t n);
 size_t strlen(const char *s);
+size_t strnlen(const char *str, int n);
 int strcmp(const char *s, const char *t);
 int strncmp(const char *s1, const char *s2, size_t n);
 char *strcpy(char *s, const char *t);
