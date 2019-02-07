@@ -144,7 +144,6 @@ int ap_main(void)
 void user_atomic_main(void)
 {
   uint64_t v;
-  uint64_t i = 10;
   v = 1;
   print("v = %d\n", v);
   atomic_inc(&v);
@@ -152,11 +151,6 @@ void user_atomic_main(void)
   atomic_dec(&v);
   print("v = %d\n", v);
 
-  print("i = %d\n", i);
-  fetch_and_inc(&i);
-  print("i = %d\n", i);
-  fetch_and_dec(&i);
-  print("i = %d\n", i);
 }
 
 

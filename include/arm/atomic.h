@@ -15,56 +15,34 @@
 static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new, uint64_t old)
 {
   uint64_t tmp;
+  //  printk("new = 0x%lx old = 0x%lx\n", new, old);
 #if 1
   uint64_t oldval;
   //  asm volatile("prfm    pstl1strm, %0" :: "r"(&v->counter));
-  asm volatile("1: ldaxr %w0, [%1]" : "=&r"(oldval) : "r"(ptr));
-  asm volatile("eor %w0, %w1, %w2" : "=r"(tmp) : "r"(oldval), "r"(old));
-  asm volatile("cbnz %w0, 2f" :: "r"(tmp));
-  asm volatile("stxr %w0, %w2, [%1]" : "=&r"(tmp) : "r"(ptr), "r"(new));
-  asm volatile("cbnz %w0, 1b" :: "r"(tmp));
+  asm volatile("1: ldaxr %x0, [%1]" : "=&r"(oldval) : "r"(ptr));
+  asm volatile("eor %x0, %x1, %x2" : "=r"(tmp) : "r"(oldval), "r"(old));
+  asm volatile("cbnz %x0, 2f" :: "r"(tmp));
+  asm volatile("stxr %w0, %x2, [%1]" : "=&r"(tmp) : "r"(ptr), "r"(new));
+  asm volatile("cbnz %x0, 1b" :: "r"(tmp));
   asm volatile("2:");
 #else  
   /* Large System Extension (LSE) in ARMv8.1 */
-  asm volatile("mov %w0, %w1" : "=r"(tmp) : "r"(old));
-  asm volatile("cas %w0, %w1, [%2]" : "=r"(tmp), "=r"(new), "=r"(*ptr));
+  asm volatile("mov %x0, %x1" : "=r"(tmp) : "r"(old));
+  asm volatile("cas %x0, %x1, [%2]" : "=r"(tmp), "=r"(new), "=r"(*ptr));
 #endif
 }
 
 
 static inline void atomic_inc(uint64_t *val)
 {
-  uint64_t new, old;
-  new = *val + 1;
-  old = *val;
-  compare_and_swap(val, new, old);
+  compare_and_swap(val, *val + 1, *val);
 }
 
 static inline void atomic_dec(uint64_t *val)
 {
-  uint64_t new, old;
-  new = *val - 1;
-  old = *val;
-  compare_and_swap(val, new, old);
+  compare_and_swap(val, *val - 1, *val);
 }
 
-static inline uint64_t fetch_and_inc(uint64_t *val)
-{
-  uint64_t new, old;
-  new = *val + 1;
-  old = *val;
-  compare_and_swap(val, new, old);
-  return *val;
-}
-
-static inline uint64_t fetch_and_dec(uint64_t *val)
-{
-  uint64_t new, old;
-  new = *val - 1;
-  old = *val;
-  compare_and_swap(val, new, old);
-  return *val;
-}
 
 #endif /* !__ASSEMBLY__ */
 

@@ -11,7 +11,7 @@
  * above get substituted with optimized x86-64 ops!
  */
 
-int test_bitmap(void)
+bool test_bitmap(void)
 {
   char *buf;
   uint buflen_bytes, buflen_bits;
@@ -25,18 +25,15 @@ int test_bitmap(void)
   memset(buf, 0, buflen_bytes);
   bit = find_first_bit8(buf, buflen_bytes);
   if (bit != -1) {
-    panic("Zeroed buf at 0x%lx, but first_set_bit returned "
-          "bit #%u as set!", buf, bit);
+    panic("Zeroed buf at 0x%lx, but first_set_bit returned bit #%u as set!", buf, bit);
   }
   bit = find_first_zero_bit8(buf, buflen_bytes);
   if (bit != 0) {
-    panic("Zeroed buf at 0x%lx, but first_zero_bit returned "
-          "bit #%u instead of bit #0!", buf, bit);
+    panic("Zeroed buf at 0x%lx, but first_zero_bit returned bit #%u instead of bit #0!", buf, bit);
   }
   for (uint i = 0; i < buflen_bits; i++) {
     if (bitmap_bit_is_set(buf, i, buflen_bytes)) {
-      panic("Zeroed buf at 0x%lx, but bit_is_set?() returned "
-            "bit #%u as set!", buf, i);
+      panic("Zeroed buf at 0x%lx, but bit_is_set?() returned bit #%u as set!", buf, i);
     }
     assert(bitmap_bit_is_clear(buf, i, buflen_bytes));
   }
@@ -83,6 +80,6 @@ int test_bitmap(void)
 
   printk("%s: Sucess!\n", __func__);
   kfree(buf);
-  return 0;
+  return true;
 }
 

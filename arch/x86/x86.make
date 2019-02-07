@@ -223,7 +223,7 @@ SRCS +=	\
  $(TOP_DIR)/arch/x86/dev/keyboard.c
 
 # Ext2 file system
-SRCS +=	\
+#SRCS +=	\
  $(TOP_DIR)/arch/x86/ext2/ext2.c	\
  $(TOP_DIR)/arch/x86/ext2/ext2_tests.c	\
  $(TOP_DIR)/arch/x86/ext2/file.c	\

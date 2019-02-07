@@ -131,12 +131,22 @@ menu Option
     title Debug
     default y
     defs -DCONFIG_DEBUG
+  config CONFIG_FS_EXT2
+    title Ext2 File System
+    default n
+    cfiles $(TOP_DIR)/fs/ext2/ext2.c
+    cfiles $(TOP_DIR)/fs/ext2/file.c
+    cfiles $(TOP_DIR)/fs/ext2/files_list.c
+    defs -DCONFIG_FS_EXT2
+    depends CONFIG_ARCH_X86
+    conflicts CONFIG_FS_FAT
   config CONFIG_FS_FAT
     title Fat File System
     default n
-    cfiles $(TOP_DIR)/fs/fat.c
+    cfiles $(TOP_DIR)/fs/fat/fat.c
     defs -DCONFIG_FS_FAT
     depends CONFIG_ARCH_ARM_RASPI3
+    conflicts CONFIG_FS_EXT2
 endmenu
 
 menu Memory

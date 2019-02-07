@@ -17,6 +17,8 @@ vpath %.c $(TOP_DIR)/arch/$(ARCH_NAME) \
  $(TOP_DIR)/kernel/queue \
  $(TOP_DIR)/lib \
  $(TOP_DIR)/fs \
+ $(TOP_DIR)/fs/ext2 \
+ $(TOP_DIR)/fs/fat \
  $(TOP_DIR)/user \
  $(TOP_DIR)/user/$(ARCH_NAME)/ \
  $(TOP_DIR)/user/test/ \

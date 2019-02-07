@@ -406,7 +406,7 @@ struct dir_entry {
   char    filename[EXT2_FILENAME_LEN];
 } __packed;
 
-void ext2_init(void);
+void init_ext2(void);
 uint64_t file_read(struct inode *, char *buf, uint64_t offset, uint64_t len);
 int64_t file_write(struct inode *, char *buf, uint64_t offset, uint64_t len);
 int64_t ext2_new_dir_entry(struct inode *parent, struct inode *entry_ino,

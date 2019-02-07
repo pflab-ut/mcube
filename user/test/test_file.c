@@ -642,7 +642,7 @@ static void file_test_hard_links(void)
   kfree(name);
 }
 
-void file_run_tests(void)
+bool test_file(void)
 {
   /* Extract the modified ext2 volume out of the virtual machine: */
   print_uart("Ramdisk start at: 0x%lx, with len = %ld\n",
@@ -684,6 +684,7 @@ void file_run_tests(void)
 
   print_uart("%s: Sucess!", __func__);
   printk("%s: Sucess!", __func__);
+  return true;
 }
 
 #endif /* FILE_TESTS */

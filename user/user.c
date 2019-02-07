@@ -12,7 +12,7 @@ int user_test_main(void);
 
 int user_main(void)
 {
-  user_arch_main();
-  //  user_test_main();
+  //  user_arch_main();
+  user_test_main();
   return 0;
 }

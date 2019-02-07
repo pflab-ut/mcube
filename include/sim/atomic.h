@@ -8,40 +8,61 @@
 
 #ifndef __ASSEMBLY__
 
-#define LOCK_PREFIX_HERE                        \
-  ".section .smp_locks,\"a\"\n"                 \
-  ".balign 4\n"                                 \
-  ".long 671f - .\n" /* offset */               \
-  ".previous\n"                                 \
-  "671:"
-
-#define LOCK_PREFIX LOCK_PREFIX_HERE "\n\tlock; "
-
-static inline void atomic_inc(uint64_t *val)
+static inline uint64_t compare_and_swap(uint64_t *ptr, uint64_t new, uint64_t old)
 {
-  asm volatile(LOCK_PREFIX "incl %0"
-               : "+m" (*val));
+  uint64_t out;
+
+  // newline after `lock' for the work around of apple's gas(?) bug.
+  asm volatile("lock cmpxchgq %2,%1"
+                       : "=a" (out), "+m" (*ptr)
+                       : "q" (new), "0" (old)
+                       : "cc");
+
+  return out;
 }
 
-static inline void atomic_dec(uint64_t *val)
+
+/*
+ * Atomically execute:
+ *  old = *val & 0x1; *val |= 0x1;
+ *  return old;
+ */
+static inline uint8_t atomic_bit_test_and_set(uint32_t *val)
 {
-  asm volatile(LOCK_PREFIX "decl %0"
-               : "+m" (*val));
+  uint8_t ret;
+
+  asm volatile(//"LOCK bts $0, %0;"
+              "LOCK btr $0, %0;"
+              "     setc    %1;"
+              //"     setnc    %1;" 
+    : "+m" (*val), "=qm" (ret)
+    :
+    : "cc", "memory");
+
+  return ret;
 }
 
-static inline int fetch_and_inc(uint64_t *val)
+/*
+ * Atomically execute:
+ *  return *++val;
+ */
+static inline uint64_t atomic_inc(uint64_t *val)
 {
-  asm volatile(LOCK_PREFIX "incl %0"
-               : "+m" (*val));
+  compare_and_swap(val, *val + 1, *val);
   return *val;
 }
 
-static inline int fetch_and_dec(int *i)
+/*
+ * Atomically execute:
+ *  return *--val;
+ */
+static inline uint64_t atomic_dec(uint64_t *val)
 {
-  asm volatile(LOCK_PREFIX "decl %0"
-               : "+m" (*i));
-  return *i;
+  compare_and_swap(val, *val - 1, *val);
+  return *val;
 }
+
+
 
 #endif /* !__ASSEMBLY__ */
 

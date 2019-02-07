@@ -43,23 +43,24 @@ static inline uint8_t atomic_bit_test_and_set(uint32_t *val)
   return ret;
 }
 
+
 /*
  * Atomically execute:
- *  return *val++;
+ *  return *++val;
  */
 static inline uint64_t atomic_inc(uint64_t *val)
 {
-  uint64_t i = 1;
-#if 1
-  compare_and_swap(val, *val + i, *val);
-#else
+  compare_and_swap(val, *val + 1, *val);
+  return *val;
+}
 
-  asm volatile("LOCK xaddq %0, %1"
-               : "+r"(i), "+m" (*val)
-               :
-               : "cc");
-
-#endif
+/*
+ * Atomically execute:
+ *  return *--val;
+ */
+static inline uint64_t atomic_dec(uint64_t *val)
+{
+  compare_and_swap(val, *val - 1, *val);
   return *val;
 }
 

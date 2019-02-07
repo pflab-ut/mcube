@@ -1,3 +1,8 @@
+/**
+ * @file user/test/test_ext2.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * The Second Extended File System - Test cases & Debugging methods
  *
@@ -7,7 +12,9 @@
  * for checking FS drivers write-support validity.  Use it often.
  */
 
+#if CONFIG_FS_EXT2
 #include <mcube/mcube.h>
+
 
 /**
  * Public interface:
@@ -993,7 +1000,6 @@ void ext2_run_tests()
  * the code, defeating our original purpose.
  */
 
-#if  EXT2_SMP_TESTS
 /*
  * To test file-system code locks, run several hundred threads
  * of this function:
@@ -1044,7 +1050,7 @@ static void __no_return smp_fuzz(void)
   }
 }
 
-void ext2_run_smp_tests(void)
+bool test_ext2(void)
 {
   /* Avoid serialization - minimize serial port output */
   ext2_debug_init(&null_null_dumper);
@@ -1089,5 +1095,7 @@ void ext2_run_smp_tests(void)
   for (int i = 0; i < 10; i++) {
     kthread_create(smp_fuzz);
   }
+  return true;
 }
-#endif /* EXT2_SMP_TESTS */
+#endif /* CONFIG_FS_EXT2 */
+

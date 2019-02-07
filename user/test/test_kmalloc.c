@@ -120,7 +120,7 @@ void _test_allocs(int count, int rounded)
  * For extra fun, after removing the thread-unsafe
  * globals, call this 3 or 4 times in parallel.
  */
-int test_kmalloc(void)
+bool test_kmalloc(void)
 {
   uint64_t i, count, repeat;
 
@@ -143,14 +143,14 @@ int test_kmalloc(void)
            "= %d\n", 1 << i, kmembuckets[i].totalfree,
            kmembuckets[i].totalpages);
   }
-  return 0;
+  return true;
 }
 
 #else
 
-int test_kmalloc(void)
+bool test_kmalloc(void)
 {
-  return 0;
+  return true;
 }
 
 #endif /* CONFIG_ARCH_X86 */

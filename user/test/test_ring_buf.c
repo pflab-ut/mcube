@@ -7,12 +7,12 @@
 
 #define EXAMPLE_BUFFER_SIZE 10
 
-int test_ring_buf(void)
+bool test_ring_buf(void)
 {
   uint8_t *buffer;
   if (!(buffer = kmalloc(EXAMPLE_BUFFER_SIZE * sizeof(uint8_t)))) {
     printf("Error: cannot allocate memory %lu\n", EXAMPLE_BUFFER_SIZE * sizeof(uint8_t));
-    return 1;
+    return false;
   }
   printf("\n=== C Ring Buffer Check ===\n");
 
@@ -98,7 +98,7 @@ int test_ring_buf(void)
   kfree(buffer);
   ring_buf_free(cbuf);
 
-  return 0;
+  return true;
 }
 
 

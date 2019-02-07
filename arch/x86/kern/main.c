@@ -40,9 +40,9 @@ static void print_info(void)
 /*
  * Run compiled testcases, if any
  */
+#if 0
 static void run_test_cases(void)
 {
-#if 0
   list_run_tests();
   unrolled_run_tests();
   hash_run_tests();
@@ -60,8 +60,8 @@ static void run_test_cases(void)
   ext2_run_tests();
   ext2_run_smp_tests();
   file_run_tests();
-#endif
 }
+#endif
 
 /*
  * Bootstrap-CPU start; we came from head.S
@@ -137,14 +137,17 @@ void __no_return kernel_start(void)
    * Second part of kernel initialization (Scheduler is now on!)
    */
 
-  ext2_init();
+  init_ext2();
 
+
+  
   // Signal the secondary cores to run their own test-cases code.
   // They've been waiting for us (thread 0) till all of kernel
   // subsystems has been properly initialized.  Wait No More!
   smpboot_trigger_secondary_cores_testcases();
 
-  run_test_cases();
+  //  run_test_cases();
+  user_main();
 
   halt();
 }

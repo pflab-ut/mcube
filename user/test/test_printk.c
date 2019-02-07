@@ -150,12 +150,12 @@ static void printk_test_colors(void)
   printk("\n");
 }
 
-int test_printk(void)
+bool test_printk(void)
 {
   printk_test_int();
   printk_test_hex();
   printk_test_string();
   //  printk_test_format();
   printk_test_colors();
-  return 0;
+  return true;
 }

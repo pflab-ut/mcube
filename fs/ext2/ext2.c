@@ -1116,7 +1116,7 @@ int64_t name_i(const char *path)
 /*
  * Mount the ramdisk File System
  */
-void ext2_init(void)
+void init_ext2(void)
 {
   union super_block *sb;
   struct group_descriptor *bgd;

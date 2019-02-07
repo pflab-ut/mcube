@@ -55,7 +55,7 @@ static void test_memcpy_overlaps(void)
   /* memcpy_forward(_arr + 20, _arr, 21);  /\* Bad overlap, bounds *\/ */
 }
 
-void test_string(void)
+bool test_string(void)
 {
   char *str;
   int i;
@@ -87,19 +87,22 @@ void test_string(void)
   
   kfree(str);
   memset(_arr, 0x01, _ARRAY_LEN);
-  for (i = 0; i <= _ARRAY_LEN; i++)
+  for (i = 0; i <= _ARRAY_LEN; i++) {
     test_strnlen((char *)_arr, i, i, 0);   /* Without NULL suffix! */
-
+  }
+  
   /* Memcpy() tests */
 
   test_memcpy_overlaps();
+  return true;
 }
 
 
 #else
 
-void test_string(void)
+bool test_string(void)
 {
+  return true;
 }
 
 
