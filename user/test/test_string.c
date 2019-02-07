@@ -1,5 +1,5 @@
 /**
- * @file user/user/test_string.c
+ * @file user/test/test_string.c
  *
  * @author Hiroyuki Chishiro
  */

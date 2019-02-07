@@ -1,5 +1,5 @@
 /**
- * @file user/user/test_bitmap.c
+ * @file user/test/test_bitmap.c
  *
  * @author Hiroyuki Chishiro
  */

@@ -1,3 +1,8 @@
+/**
+ * @file user/test/test_list.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Type-generic doubly-linked lists
  *
@@ -9,7 +14,6 @@
 
 #include <mcube/mcube.h>
 
-#if  LIST_TESTS
 
 struct test {
   uint64_t x;
@@ -128,7 +132,7 @@ static void test_several_elements(int count, int type)
          type == STACK ? "stack" : "queue");
 }
 
-void list_run_tests(void)
+bool test_list(void)
 {
   test_0_elements();
 
@@ -146,6 +150,5 @@ void list_run_tests(void)
   test_several_elements(5, QUEUE);
   test_several_elements(10, QUEUE);
   test_several_elements(20, QUEUE);
+  return true;
 }
-
-#endif /* LIST_TESTS */

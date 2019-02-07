@@ -222,20 +222,7 @@ SRCS +=	\
  $(TOP_DIR)/arch/x86/dev/pit.c	\
  $(TOP_DIR)/arch/x86/dev/keyboard.c
 
-# Ext2 file system
-#SRCS +=	\
- $(TOP_DIR)/arch/x86/ext2/ext2.c	\
- $(TOP_DIR)/arch/x86/ext2/ext2_tests.c	\
- $(TOP_DIR)/arch/x86/ext2/file.c	\
- $(TOP_DIR)/arch/x86/ext2/file_tests.c	\
- $(TOP_DIR)/arch/x86/ext2/files_list.c
 
-# Isolated library code
-SRCS +=	\
- $(TOP_DIR)/arch/x86/lib/list.c	\
- $(TOP_DIR)/arch/x86/lib/unrolled_list.c	\
- $(TOP_DIR)/arch/x86/lib/hash.c	\
- $(TOP_DIR)/arch/x86/lib/buffer_dumper.c
 
 # All other kernel objects
 SRCS +=		\

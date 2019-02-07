@@ -11,7 +11,7 @@ TOP_DIR = .
 
 include $(TOP_DIR)/Rules.make
 
-SRCS += \
+KERNEL_SRCS = \
  $(TOP_DIR)/kernel/main.c \
 	$(TOP_DIR)/kernel/print.c \
  $(TOP_DIR)/kernel/printf.c \
@@ -24,26 +24,46 @@ SRCS += \
  $(TOP_DIR)/kernel/syscall.c \
  $(TOP_DIR)/kernel/queue.c \
  $(TOP_DIR)/kernel/irq.c \
+
+LIB_SRCS = \
  $(TOP_DIR)/lib/buffer.c \
+ $(TOP_DIR)/lib/buffer_dumper.c \
  $(TOP_DIR)/lib/ctype.c \
+ $(TOP_DIR)/lib/hash.c \
  $(TOP_DIR)/lib/math.c \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/lib/spinlock.c \
  $(TOP_DIR)/lib/stdlib.c \
  $(TOP_DIR)/lib/string.c \
+ $(TOP_DIR)/lib/unrolled_list.c \
+
+IPC_SRCS = \
  $(TOP_DIR)/ipc/semaphore.c \
+
+FS_SRCS = \
  $(TOP_DIR)/fs/init.c \
+
+USER_SRCS = \
  $(TOP_DIR)/user/user.c \
  $(TOP_DIR)/user/test/test.c \
  $(TOP_DIR)/user/test/test_atomic.c \
  $(TOP_DIR)/user/test/test_bitmap.c \
  $(TOP_DIR)/user/test/test_ext2.c \
  $(TOP_DIR)/user/test/test_file.c \
+ $(TOP_DIR)/user/test/test_hash.c \
  $(TOP_DIR)/user/test/test_kmalloc.c \
+ $(TOP_DIR)/user/test/test_list.c \
  $(TOP_DIR)/user/test/test_printk.c \
  $(TOP_DIR)/user/test/test_ring_buf.c \
  $(TOP_DIR)/user/test/test_string.c \
+ $(TOP_DIR)/user/test/test_unrolled_list.c \
 
+SRCS += \
+	$(KERNEL_SRCS) \
+	$(LIB_SRCS) \
+	$(IPC_SRCS) \
+	$(FS_SRCS) \
+	$(USER_SRCS) \
 
 
 ifeq ($(ARCH_NAME), arm)

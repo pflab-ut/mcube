@@ -1,10 +1,10 @@
 /**
- * @file include/x86/unrolled_list.h
+ * @file include/mcube/unrolled_list.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_X86_UNROLLED_LIST_H__
-#define __MCUBE_X86_UNROLLED_LIST_H__
+#ifndef __MCUBE_MCUBE_UNROLLED_LIST_H__
+#define __MCUBE_MCUBE_UNROLLED_LIST_H__
 
 /*
  * Unrolled Linked List -- A linked list of small arrays!
@@ -80,12 +80,7 @@ void unrolled_remove_key(struct unrolled_head *head, uint key);
                __i++; val;                                              \
            }))
 
-#if UNROLLED_TESTS
-void unrolled_run_tests(void);
-#else
-static void __unused unrolled_run_tests(void) { }
-#endif /* UNROLLED_TESTS */
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MCUBE_X86_UNROLLED_LIST_H__ */
+#endif /* __MCUBE_MCUBE_UNROLLED_LIST_H__ */

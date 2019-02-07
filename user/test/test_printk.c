@@ -1,5 +1,5 @@
 /**
- * @file user/user/test_printk.c
+ * @file user/test/test_printk.c
  *
  * @author Hiroyuki Chishiro
  */

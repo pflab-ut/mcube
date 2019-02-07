@@ -30,6 +30,7 @@
 #include <mcube/barrier.h>
 #include <mcube/bitops.h>
 #include <mcube/buffer.h>
+#include <mcube/buffer_dumper.h>
 #include <mcube/byteops.h>
 #include <mcube/cache.h>
 #include <mcube/compiler.h>
@@ -39,6 +40,7 @@
 #include <mcube/errno-base.h>
 #include <mcube/errno.h>
 #include <mcube/fs.h>
+#include <mcube/hash.h>
 #include <mcube/io.h>
 #include <mcube/kmalloc.h>
 #include <mcube/metric.h>
@@ -52,6 +54,7 @@
 #include <mcube/syscall.h>
 #include <mcube/timer.h>
 #include <mcube/uart.h>
+#include <mcube/unrolled_list.h>
 #include <mcube/user.h>
 
 

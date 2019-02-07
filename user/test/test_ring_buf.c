@@ -1,5 +1,5 @@
 /**
- * @file user/user/test_ring_buf.c
+ * @file user/test/test_ring_buf.c
  *
  * @author Hiroyuki Chishiro
  */

@@ -15,11 +15,9 @@
 #include <x86/atomic.h>
 #include <x86/spinlock.h>
 #include <x86/stat.h>
-#include <x86/unrolled_list.h>
 #include <x86/vm.h>
 
 #include <x86/apic.h>
-#include <x86/buffer_dumper.h>
 #include <x86/conf_sched.h>
 #include <x86/cpu.h>
 #include <x86/e820.h>
@@ -27,7 +25,6 @@
 #include <x86/ext2.h>
 #include <x86/fcntl.h>
 #include <x86/file.h>
-#include <x86/hash.h>
 #include <x86/ioapic.h>
 #include <x86/irq.h>
 #include <x86/keyboard.h>

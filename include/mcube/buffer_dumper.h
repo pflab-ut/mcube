@@ -1,10 +1,10 @@
 /**
- * @file include/x86/buffer_dumper.h
+ * @file include/mcube/buffer_dumper.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_X86_BUFFER_DUMPER_H__
-#define __MCUBE_X86_BUFFER_DUMPER_H__
+#ifndef __MCUBE_MCUBE_BUFFER_DUMPER_H__
+#define __MCUBE_MCUBE_BUFFER_DUMPER_H__
 
 #ifndef __ASSEMBLY__
 
@@ -44,4 +44,4 @@ void printbuf(struct buffer_dumper*, void *buf, uint len);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MCUBE_X86_BUFFER_DUMPER_H__ */
+#endif /* __MCUBE_MCUBE_BUFFER_DUMPER_H__ */
