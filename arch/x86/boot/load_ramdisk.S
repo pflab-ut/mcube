@@ -25,15 +25,15 @@
 
 /*
  * Ramdisk header format:
- * o start signature, "CUTE-STA", 8-bytes
+ * o start signature, "McubeSta", 8-bytes
  * o ramdisk size in number of 512-byte sectors, 4-bytes
  * o ramdisk length (minus the header) in bytes, 4-bytes
- * o end signature, "CUTE-END", 8-bytes
+ * o end signature, "McubeEnd", 8-bytes
  */
-.equ start_sigl, ('C' | 'U' << (1*8) | 'T' << (2*8) | 'E' << (3*8))  # low
-.equ start_sigh, ('-' | 'S' << (1*8) | 'T' << (2*8) | 'A' << (3*8))  # high
-.equ end_sigl,   ('C' | 'U' << (1*8) | 'T' << (2*8) | 'E' << (3*8))  # low
-.equ end_sigh,   ('-' | 'E' << (1*8) | 'N' << (2*8) | 'D' << (3*8))  # high
+.equ start_sigl, ('M' | 'c' << (1*8) | 'u' << (2*8) | 'b' << (3*8))  # low
+.equ start_sigh, ('e' | 'S' << (1*8) | 't' << (2*8) | 'a' << (3*8))  # high
+.equ end_sigl,   ('M' | 'c' << (1*8) | 'u' << (2*8) | 'b' << (3*8))  # low
+.equ end_sigh,   ('e' | 'E' << (1*8) | 'n' << (2*8) | 'd' << (3*8))  # high
 
   .globl load_ramdisk
   .type  load_ramdisk, @function

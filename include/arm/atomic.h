@@ -8,10 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-#define LOCK_PREFIX_HERE
-
-#define LOCK_PREFIX LOCK_PREFIX_HERE
-
 static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new, uint64_t old)
 {
   uint64_t tmp;

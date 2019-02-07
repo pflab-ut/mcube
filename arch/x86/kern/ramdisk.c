@@ -17,8 +17,8 @@
  * Ramdisk header format.
  */
 #define RDSIG_LEN    8
-#define RDSIG_START    "CUTE-STA"
-#define RDSIG_END    "CUTE-END"
+#define RDSIG_START    "McubeSta"
+#define RDSIG_END    "McubeEnd"
 
 static struct ramdisk_header {
   char start_signature[RDSIG_LEN];

@@ -16,10 +16,10 @@
 #  o and, the Ramdisk image itself (if any)
 #
 # The 24-byte Ramdisk header consists of:
-#  o start signature, "CUTE-STA", 8-bytes
+#  o start signature, "McubeSta", 8-bytes
 #  o ramdisk size in number of 512-byte sectors, 4-bytes
 #  o ramdisk length (minus the header) in bytes, 4-bytes
-#  o end signature, "CUTE-END", 8-bytes
+#  o end signature, "McubeEnd", 8-bytes
 #
 # As seen above, ramdisk length is expressed in two terms:
 # o in 512-byte sectors (including header len), for the real-mode
@@ -64,10 +64,10 @@ else:
   RAMDISK_BUFFER = b''
 RAMDISK_SECTORS = (RAMDISK_LENGTH - 1)//512 + 1
 RAMDISK_HEADER = struct.pack('=8cII8c',
-                             b'C', b'U', b'T', b'E', b'-', b'S', b'T', b'A',
+                             b'M', b'c', b'u', b'b', b'e', b'S', b't', b'a',
                              RAMDISK_SECTORS,
                              RAMDISK_LENGTH - HEADER_LENGTH,
-                             b'C', b'U', b'T', b'E', b'-', b'E', b'N', b'D')
+                             b'M', b'c', b'u', b'b', b'e', b'E', b'n', b'd')
 assert len(RAMDISK_HEADER) == HEADER_LENGTH
 
 # Expand final disk image beyond 1MB: some virtual
