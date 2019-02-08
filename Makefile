@@ -57,6 +57,7 @@ USER_SRCS = \
  $(TOP_DIR)/user/test/test_ring_buf.c \
  $(TOP_DIR)/user/test/test_string.c \
  $(TOP_DIR)/user/test/test_unrolled_list.c \
+ $(TOP_DIR)/user/test/test_vm.c \
 
 SRCS += \
 	$(KERNEL_SRCS) \

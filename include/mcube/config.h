@@ -8,11 +8,11 @@
 /* Don't edit this file.
  * Please edit configure then do make configure. */
 /** Architecture. */
-#define CONFIG_ARCH_ARM_RASPI3 1
+#define CONFIG_ARCH_X86 1
 /** Compiler. */
 #define CONFIG_COMPILER_GCC 1
 /** Print. */
-#define CONFIG_PRINT2UART 1
+#define CONFIG_PRINT2CONSOLE 1
 /** Algorithm. */
 #define CONFIG_ALGO_FP 1
 /** Task Queue. */

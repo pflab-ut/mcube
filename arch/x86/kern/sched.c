@@ -385,7 +385,6 @@ void sched_init(void)
 
 #if SCHED_STATS
 
-#include <spinlock.h>
 spinlock_t printstats_lock = INIT_SPINLOCK;
 
 static void print_proc_stats(struct proc *proc, int prio)
@@ -460,7 +459,6 @@ static void rq_dump(struct runqueue *rq)
  */
 
 #if SCHED_TESTS
-#include <vga.h>
 
 void __no_return loop_print(char ch, int color)
 {

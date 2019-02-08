@@ -12,8 +12,8 @@
  * for checking FS drivers write-support validity.  Use it often.
  */
 
-#if CONFIG_FS_EXT2
 #include <mcube/mcube.h>
+#if CONFIG_FS_EXT2
 
 
 /**
@@ -1097,5 +1097,12 @@ bool test_ext2(void)
   }
   return true;
 }
+#else
+
+bool test_ext2(void)
+{
+  return true;
+}
+
 #endif /* CONFIG_FS_EXT2 */
 

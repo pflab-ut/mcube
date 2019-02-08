@@ -58,6 +58,8 @@ typedef uint64_t clock_t;
 #endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
 
 
+
 #endif /* !__ASSEMBLY__ */
+
 
 #endif /* __MCUBE_MCUBE_TYPES_H__ */

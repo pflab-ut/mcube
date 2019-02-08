@@ -31,10 +31,8 @@ void percpu_area_init(enum cpu_type t)
  * Only use it for inspecting per-CPU accessors assembly output
  * at different GCC optimization levels, especially -O3 and -Os.
  */
-#if  PERCPU_TESTS
+#if PERCPU_TESTS
 
-#include <string.h>
-#include <stdint.h>
 
 void percpu_inspect_current(void);
 uint64_t percpu_inspect_size(void);
@@ -132,8 +130,7 @@ void percpu_run_tests(void)
   self = percpu_get(self);
   gs = get_gs();
 
-  printk("_PerCPU#%d: area address: self = 0x%lx, %%gs = 0x%lx\n",
-    id, self, gs);
+  printk("_PerCPU#%d: area address: self = 0x%lx, %%gs = 0x%lx\n", id, self, gs);
   if (self != gs) {
     panic("_PerCPU#%d: self reference '0x%lx' != %%gs", id, self);
   }

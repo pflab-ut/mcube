@@ -82,8 +82,8 @@ static struct mpf_struct *search_for_mpf(void *base, uint32_t len)
     }
     checksum = mpf_checksum(mpf, sizeof(*mpf));
     if (checksum != 0) {
-      printk("MP: buggy MP floating pointer struct at 0x%lx "
-             "with checksum = %d\n", PHYS(mpf), checksum);
+      printk("MP: buggy MP floating pointer struct at 0x%lx with checksum = %d\n",
+             PHYS(mpf), checksum);
       continue;
     }
 
@@ -133,19 +133,16 @@ static int mpc_check(struct mpc_table *mpc)
   uint8_t checksum;
 
   if (mpc->signature != MPC_SIGNATURE) {
-    printk("MP: Wrong configuration table signature = 0x%x\n",
-           mpc->signature);
+    printk("MP: Wrong configuration table signature = 0x%x\n", mpc->signature);
     return 0;
   }
   if (mpc->version != 0x01 && mpc->version != 0x04) {
-    printk("MP: Wrong configuration table version = 0x%x\n",
-           mpc->version);
+    printk("MP: Wrong configuration table version = 0x%x\n", mpc->version);
     return 0;
   }
   checksum = mpf_checksum(mpc, mpc->length);
   if (checksum != 0) {
-    printk("MP: buggy configuration table checksum = 0x%x\n",
-           checksum);
+    printk("MP: buggy configuration table checksum = 0x%x\n", checksum);
     return 0;
   }
 
@@ -203,18 +200,19 @@ static void parse_cpu(void *addr)
   }
 
   if (cpu->bsc) {
-    if (bsc_entry_filled)
-      panic("Two `bootstrap' cores in the MP tables! "
-            "Either the BIOS or our parser is buggy.");
-
+    if (bsc_entry_filled) {
+      panic("Two `bootstrap' cores in the MP tables! Either the BIOS or our parser is buggy.");
+    }
+    
     cpus[0].apic_id = cpu->lapic_id;
     bsc_entry_filled = 1;
     return;
   }
 
-  if (nr_cpus >= CPUS_MAX)
+  if (nr_cpus >= CPUS_MAX) {
     panic("Only %d logical CPU cores supported\n", nr_cpus);
-
+  }
+  
   cpus[nr_cpus].apic_id = cpu->lapic_id;
 
   ++nr_cpus;
@@ -298,8 +296,7 @@ static int parse_mpc(struct mpc_table *mpc)
       entry += sizeof(struct mpc_linterrupt);
       break;
     default:
-      printk("MP: Unknown conf table entry type = %d\n",
-            *entry);
+      printk("MP: Unknown conf table entry type = %d\n", *entry);
       return 0;
     }
   }

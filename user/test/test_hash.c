@@ -38,7 +38,7 @@ struct test_struct {
   int payload;
 };
 
-static void test_hash(int hash_size)
+static void test_hash_op(int hash_size)
 {
   struct hash *hash;
   struct test_struct *array;
@@ -82,11 +82,11 @@ static void test_hash(int hash_size)
   kfree(array);
 }
 
-void hash_run_tests(void)
+bool test_hash(void)
 {
   for (int i = 1; i <= 256; i++) {
     printk("_Hash: Testing hash with size '%d': ", i);
-    test_hash(i);
+    test_hash_op(i);
     printk("Success!\n");
   }
 
@@ -95,5 +95,6 @@ void hash_run_tests(void)
   /* struct test_struct element; element.num = 5; */
   /* list_init(&element.node); */
   /* hash_insert(hash, &element); hash_insert(hash, &element); */
+  return true;
 }
 

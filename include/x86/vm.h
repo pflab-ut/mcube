@@ -16,16 +16,7 @@
 
 void vm_init(void);
 void *vm_kmap(uintptr_t pstart, uint64_t len);
-
-#if VM_TESTS
-
-void vm_run_tests(void);
-
-#else /* !VM_TESTS */
-
-static inline void vm_run_tests(void) { }
-
-#endif /* VM_TESTS */
+bool vaddr_is_mapped(void *vaddr);
 
 #endif /* !__ASSEMBLY__ */
 
