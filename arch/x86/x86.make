@@ -6,10 +6,6 @@
 
 #LDFLAGS	=  $(shell $(CC) $(CFLAGS) -print-file-name=libgcc_eh.a)
 TEXT_ADDR = 0x00007c00
-#TEXT_ADDR = 0x00017c00
-
-#DATA_ADDR = 0x00010000
-#BSS_ADDR = 0x00018000
 
 
 #PRIVATE_LDFLAGS = -Ttext=$(TEXT_ADDR) -N -Bstatic
@@ -44,14 +40,8 @@ else
 #  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
 #  LDFLAGS += -nostdlib
 #  CFLAGS += -masm=intel
-# MonkOS's CFLAGS and LDFLAGS
-#CFLAGS +=  -Qn -g  -m64 -mno-red-zone -mno-mmx -mfpmath=sse  \
-#     -ffreestanding -fno-asynchronous-unwind-tables -Wall  -fPIC
-#LDFLAGS  += -g -nostdlib -m64 -mno-red-zone -ffreestanding -lgcc -z max-page-size=0x1000   
-#		LDFLAGS  +=  -z max-page-size=0x1000
 #  LDFLAGS += -N -T scripts/linker/x86-elf.ldp
   LDFLAGS += -nostdinc -nostdlib -T scripts/linker/x86-elf.ldp
-#  LDFLAGS += -N -T scripts/linker/x86-elf.ld.org
 endif
 
 #CFLAGS += -D__LITTLE_ENDIAN__
@@ -242,34 +232,6 @@ BOOTSECT_TARGET = $(TOP_DIR)/build/bootsect
 BOOTSECT_BIN = $(BOOTSECT_TARGET).bin
 
 
-#MBR_TARGET = $(TOP_DIR)/build/mbr
-#BOOTMON_TARGET = $(TOP_DIR)/build/bootmon
-
-#MBR_ASMS = $(TOP_DIR)/arch/x86/mbr.S
-
-#BOOTMON_ASMS = $(TOP_DIR)/arch/x86/bootmon.S \
-	$(TOP_DIR)/arch/x86/entry16.S \
-	$(TOP_DIR)/arch/x86/entry32.S \
-	$(TOP_DIR)/arch/x86/entry64.S \
-
-
-#ASMS = \
-	$(TOP_DIR)/arch/x86/asm.S \
-	$(TOP_DIR)/arch/x86/trampoline.S \
-	$(TOP_DIR)/arch/x86/ap_entry32.S \
-
-#SRCS += \
-	$(TOP_DIR)/arch/x86/memory.c \
-	$(TOP_DIR)/arch/x86/physmem.c \
-	$(TOP_DIR)/arch/x86/slab.c \
-	$(TOP_DIR)/arch/x86/arch.c \
-	$(TOP_DIR)/arch/x86/acpi.c \
-	$(TOP_DIR)/arch/x86/apic.c \
-	$(TOP_DIR)/arch/x86/desc.c \
-	$(TOP_DIR)/arch/x86/i8254.c \
-	$(TOP_DIR)/arch/x86/pgt.c \
-	$(TOP_DIR)/arch/x86/strfmt.c \
-	$(TOP_DIR)/arch/x86/kernel.c \
 
 #SRCS += \
 	$(TOP_DIR)/arch/x86/stdio.c \

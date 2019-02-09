@@ -21,9 +21,17 @@ int ap_main(void)
 int user_arch_main(void)
 {
   long l = 1234;
+  //  printk("user_arch_main()\n");
+  printk("%%\n");
+  printk("%c%%\n", 'a');
+  //  printk("%% %% %% \n\n");
+  //  printf("%% %% %% \n\n");
+  // fprintf(stdout, "%% %% %% \n\n");
+#if 0
   printk("%d\n", l);
   printk("%09d\n", l);
   printk("0x%lx\n", l);
   printk("0x%016lx\n", l);
+#endif
   return 0;
 }

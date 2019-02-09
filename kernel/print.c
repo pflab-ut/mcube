@@ -484,6 +484,7 @@ int printk(const char *fmt, ...)
   va_start(ap, fmt);
   n = __vsnprint(buf, sizeof(buf), fmt, ap);
   va_end(ap);
+  buf[n] = '\0';
   puts(buf);
   return n;
 }
@@ -518,6 +519,7 @@ int print(const char *fmt, ...)
  * @param fmt specifies how subsequent arguments.
  * @return Number of characters printed.
  */
+#if 0
 int printf(const char *fmt, ...)
 {
   char buf[FOUT_SIZE];
@@ -530,6 +532,7 @@ int printf(const char *fmt, ...)
   
   return n;
 }
+#endif
 
 #if CONFIG_ARCH_X86
 

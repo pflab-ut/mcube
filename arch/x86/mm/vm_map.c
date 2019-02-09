@@ -191,8 +191,8 @@ bool vaddr_is_mapped(void *vaddr)
   struct pml2e *pml2e;
 
   assert(kernel_pml4_table != NULL);
-  assert((uintptr_t)vaddr >= KERN_PAGE_OFFSET);
-  assert((uintptr_t)vaddr < KERN_PAGE_END_MAX);
+  assert((uintptr_t) vaddr >= KERN_PAGE_OFFSET);
+  assert((uintptr_t) vaddr < KERN_PAGE_END_MAX);
 
   pml4e = kernel_pml4_table + pml4_index(vaddr);
   if (!pml4e->present) {
@@ -265,7 +265,7 @@ void vm_init(void)
   phys_end = e820_get_phys_addr_end();
   phys_end = round_up(phys_end, PAGE_SIZE_2MB);
   map_kernel_range(KERN_PAGE_OFFSET, phys_end, KERN_PHYS_OFFSET);
-  printk("Memory: Mappnig range 0x%lx -> 0x%lx to physical 0x0\n",
+  printk("Memory: Mapping range 0x%lx -> 0x%lx to physical 0x0\n",
          KERN_PAGE_OFFSET, KERN_PAGE_OFFSET + phys_end);
 
   /* Heaven be with us .. */

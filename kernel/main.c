@@ -17,11 +17,11 @@ unsigned int Debug = false;
 
 unsigned long CPU_CLOCK;
 unsigned long CPU_CLOCK_MHZ_PER_USEC;
-#if !CONFIG_ARCH_AXIS
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
 double CPU_USEC_PER_CLOCK_MHZ;
 double CPU_CLOCK_MHZ_PER_NSEC;
 double CPU_NSEC_PER_CLOCK_MHZ;
-#endif /* !CONFIG_ARCH_AXIS */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
 
 volatile static unsigned int IsInitialized = false;
 

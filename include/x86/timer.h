@@ -34,12 +34,12 @@ void timer_disable(void);
 
 static inline unsigned long tsc2usec(unsigned long tsc)
 {
-	return ((unsigned long) ((tsc) * CPU_USEC_PER_CLOCK_MHZ + 0.5));
+  return tsc / CPU_CLOCK_MHZ_PER_USEC;
 }
 
 static inline unsigned long tsc2nsec(unsigned long tsc)
 {
-	return ((unsigned long) ((tsc) * CPU_NSEC_PER_CLOCK_MHZ + 0.5));
+  return (1000 * tsc) / CPU_CLOCK_MHZ_PER_USEC;
 }
 
 static inline unsigned long usec2tsc(unsigned long usec)
@@ -49,7 +49,7 @@ static inline unsigned long usec2tsc(unsigned long usec)
 
 static inline unsigned long nsec2tsc(unsigned long nsec)
 {
-	return nsec * CPU_CLOCK_MHZ_PER_NSEC;
+	return (nsec * CPU_CLOCK_MHZ_PER_USEC) / 1000;
 }
 
 static inline void delay(unsigned long us)
@@ -63,8 +63,8 @@ static inline void delay(unsigned long us)
 
 static inline unsigned long get_current_cpu_time(void)
 {
-  //	return rdtscp();
-	return rdtsc();
+  //  return rdtscp();
+  return rdtsc();
 	//	return read_HPET_counter();
 }
 

@@ -22,7 +22,7 @@ static void clear_bss(void)
 
 static void print_info(void)
 {
-  printk("Mcube Kernel 0.0\n\n");
+  printk("Mcube Kernel\n\n");
 
   printk("Text start = 0x%lx\n", __text_start);
   printk("Text end   = 0x%lx\n", __text_end);

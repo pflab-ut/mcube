@@ -173,12 +173,12 @@ static int lout(signed long num, char *buf, int size, struct printf_argdesc *des
  */
 static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
 {
-  int complete;
+  bool complete;
   unsigned int digit_size;
 
   printk_assert(*fmt == '%');
 
-  complete = 0;
+  complete = false;
   desc->len = INT;
   desc->type = NONE;
   desc->radix = 10;
@@ -192,28 +192,28 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
       break;
     case 'd':
       desc->type = SIGNED;
-      complete = 1;
+      complete = true;
       goto out;
     case 'u':
       desc->type = UNSIGNED;
-      complete = 1;
+      complete = true;
       goto out;
     case 'x':
       desc->type = UNSIGNED;
       desc->radix = 16;
-      complete = 1;
+      complete = true;
       goto out;
     case 's':
       desc->type = STRING;
-      complete = 1;
+      complete = true;
       goto out;
     case 'c':
       desc->type = CHAR;
-      complete = 1;
+      complete = true;
       goto out;
     case '%':
       desc->type = PERCENT;
-      complete = 1;
+      complete = true;
       goto out;
     case '0' ... '9':
       if (*fmt == '0') {
@@ -232,23 +232,23 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
       break;
     default:
       /* Unknown mark: complete by definition */
-      //      printf("Unknown mark: %d\n", *fmt);
+      //printf("Unknown mark: %d\n", *fmt);
       desc->type = NONE;
-      complete = 1;
+      complete = true;
       goto out;
     }
   }
 
  out:
-  if (complete != 1) {
+  if (!complete) {
     printk_panic("Unknown/incomplete expression");
   }
   
   /* Bypass last expression char */
-  if (*fmt != 0) {
+  if (*fmt != '\0') {
     fmt++;
   }
-
+  
   return fmt;
 }
 
@@ -274,13 +274,13 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
   
   str = buf;
   while (*fmt) {
-    while (*fmt != 0 && *fmt != '%' && size != 0) {
+    while (*fmt != '\0' && *fmt != '%' && size != 0) {
       *str++ = *fmt++;
       size--;
     }
 
     /* Mission complete */
-    if (*fmt == 0 || size == 0) {
+    if (*fmt == '\0' || size == 0) {
       break;
     }
 
@@ -316,14 +316,15 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
       break;
     case CHAR:
       ch = (unsigned char) va_arg(args, int);
-      *str++ = ch;
+      *str = ch;
       len = 1;
       break;
     case PERCENT:
-      *str++ = '%';
+      *str = '%';
       len = 1;
       break;
     default:
+      // fprintf(stderr, "Error: Unknown print type %d\n", desc.type);
       break;
       /* No-op */
     }
@@ -481,11 +482,37 @@ int puts(const char *s)
   return n;
 }
 
+int printf(const char *fmt, ...)
+{
+  va_list args;
+  int n;
+
+  /* NOTE! This will deadlock if the code enclosed
+   * by this lock triggered exceptions: the default
+   * exception handlers already call printk() */
+  spin_lock(&kbuf_lock);
+
+  va_start(args, fmt);
+  n = vsnprint(kbuf, sizeof(kbuf), fmt, args);
+  va_end(args);
+  kbuf[n] = '\0';
+
+  /* TODO: call_sys_write() */
+#if CONFIG_ARCH_X86
+  vga_write(kbuf, n, VGA_DEFAULT_COLOR);
+#else
+  puts(kbuf);
+#endif
+  
+  spin_unlock(&kbuf_lock);
+  return n;
+}
+
 
 /*
  * Kernel print, for VGA and serial outputs
  */
-
+#if 1
 int printk(const char *fmt, ...)
 {
   va_list args;
@@ -499,17 +526,18 @@ int printk(const char *fmt, ...)
   va_start(args, fmt);
   n = vsnprint(kbuf, sizeof(kbuf), fmt, args);
   va_end(args);
+  kbuf[n] = '\0';
 
 #if CONFIG_ARCH_X86
   vga_write(kbuf, n, VGA_DEFAULT_COLOR);
 #else
-  kbuf[n] = '\0';
   puts(kbuf);
 #endif
   
   spin_unlock(&kbuf_lock);
   return n;
 }
+#endif
 
 int print_uart(const char *fmt, ...)
 {
@@ -521,11 +549,11 @@ int print_uart(const char *fmt, ...)
   va_start(args, fmt);
   n = vsnprint(sbuf, sizeof(sbuf), fmt, args);
   va_end(args);
+  sbuf[n] = '\0';
 
 #if CONFIG_ARCH_X86
   serial_write(sbuf, n);
 #elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
-  sbuf[n] = '\0';
   puts(sbuf);
 #elif CONFIG_ARCH_ARM
   uart_write(sbuf, n, NULL);

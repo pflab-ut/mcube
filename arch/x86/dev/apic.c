@@ -211,7 +211,10 @@ void apic_init(void)
   cpu_clock = pit_calibrate_cpu(10);
   printk("APIC: Detected %d.%d MHz processor\n",
          cpu_clock / 1000000, (uint8_t)(cpu_clock % 1000000));
-
+  CPU_CLOCK = cpu_clock;
+  CPU_CLOCK_MHZ_PER_USEC = CPU_CLOCK / 1000000;
+  //  printk("CPU_CLOCK = %lu CPU_CLOCK_MHZ_PER_USEC = %lu\n", CPU_CLOCK, CPU_CLOCK_MHZ_PER_USEC);
+  
   apic_clock = pit_calibrate_apic_timer();
   printk("APIC: Detected %d.%d MHz bus clock\n",
          apic_clock / 1000000, (uint8_t)(apic_clock % 1000000));
