@@ -27,7 +27,7 @@ int user_arch_main(void)
   //  printk("%% %% %% \n\n");
   //  printf("%% %% %% \n\n");
   // fprintf(stdout, "%% %% %% \n\n");
-#if 0
+#if 1
   printk("%d\n", l);
   printk("%09d\n", l);
   printk("0x%lx\n", l);
