@@ -75,7 +75,7 @@ MAKE = make
 
 ROMFILE = rom.txt
 
-DOC_DIR = doc
+DOC_DIR = docs
 
 
 BUILD_DIR = $(TOP_DIR)/build
