@@ -192,6 +192,16 @@ void apic_local_regs_init(void)
   msr_apicbase_enable();
 }
 
+void set_cpu_clock(void)
+{
+  cpu_clock = pit_calibrate_cpu(10);
+  printk("APIC: Detected %d.%d MHz processor\n",
+         cpu_clock / 1000000, (uint8_t)(cpu_clock % 1000000));
+  CPU_CLOCK = cpu_clock;
+  CPU_CLOCK_MHZ_PER_USEC = CPU_CLOCK / 1000000;
+  //  printk("CPU_CLOCK = %lu CPU_CLOCK_MHZ_PER_USEC = %lu\n", CPU_CLOCK, CPU_CLOCK_MHZ_PER_USEC);
+}
+
 void apic_init(void)
 {
   /*
@@ -208,12 +218,8 @@ void apic_init(void)
 
   apic_virt_base = vm_kmap(APIC_PHBASE, APIC_MMIO_SPACE);
 
-  cpu_clock = pit_calibrate_cpu(10);
-  printk("APIC: Detected %d.%d MHz processor\n",
-         cpu_clock / 1000000, (uint8_t)(cpu_clock % 1000000));
-  CPU_CLOCK = cpu_clock;
-  CPU_CLOCK_MHZ_PER_USEC = CPU_CLOCK / 1000000;
-  //  printk("CPU_CLOCK = %lu CPU_CLOCK_MHZ_PER_USEC = %lu\n", CPU_CLOCK, CPU_CLOCK_MHZ_PER_USEC);
+  set_cpu_clock();
+  
   
   apic_clock = pit_calibrate_apic_timer();
   printk("APIC: Detected %d.%d MHz bus clock\n",

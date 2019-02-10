@@ -8,9 +8,9 @@
 /* Don't edit this file.
  * Please edit configure then do make configure. */
 /** Architecture. */
-#define CONFIG_ARCH_SIM 1
+#define CONFIG_ARCH_SIM 0
 /** Architecture. */
-#define CONFIG_ARCH_X86 0
+#define CONFIG_ARCH_X86 1
 /** Architecture. */
 #define CONFIG_ARCH_ARM_RASPI3 0
 /** Architecture. */

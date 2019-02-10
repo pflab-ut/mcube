@@ -30,6 +30,7 @@
 #include <x86/keyboard.h>
 #include <x86/mm.h>
 #include <x86/mptables.h>
+#include <x86/page_alloc.h>
 #include <x86/percpu.h>
 #include <x86/pic.h>
 #include <x86/pit.h>

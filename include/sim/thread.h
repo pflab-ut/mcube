@@ -28,15 +28,13 @@ static inline int get_pthread_id(void)
   return syscall(SYS_gettid);
 }
 
-#if CONFIG_USER_TASK_PTHREAD
-
 /**
  * @struct pthread_arg
  * @brief POSIX thread argument
  */
 struct pthread_arg {
   /** Thread ID. */
-  uint32_t thid;
+  unsigned long thid;
   /** Function pointer to execution. */
   int (*func)(void *arg);
 };
@@ -44,7 +42,7 @@ struct pthread_arg {
 typedef struct pthread_arg pthread_arg;
 
 void *pthread_func(void *arg);
-#endif /* CONFIG_USER_TASK_PTHREAD */
+
 
 void exec_thread(void);
 

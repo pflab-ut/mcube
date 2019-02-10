@@ -53,6 +53,7 @@ USER_SRCS = \
  $(TOP_DIR)/user/test/test_hash.c \
  $(TOP_DIR)/user/test/test_kmalloc.c \
  $(TOP_DIR)/user/test/test_list.c \
+ $(TOP_DIR)/user/test/test_page_alloc.c \
  $(TOP_DIR)/user/test/test_printk.c \
  $(TOP_DIR)/user/test/test_ring_buf.c \
  $(TOP_DIR)/user/test/test_string.c \

@@ -107,15 +107,6 @@ struct proc *sched_tick(void);  /* Avoid GCC warning */
 void kthread_create(void (* func)(void));
 uint64_t kthread_alloc_pid(void);
 
-void smpboot_run_tests(void);
-
-#if  SCHED_TESTS
-void sched_run_tests(void);
-void __no_return loop_print(char ch, int color);
-#else
-static void __unused sched_run_tests(void) { }
-#endif
-
 
 
 /* sys_jiffies: the world clock. */
@@ -263,15 +254,6 @@ struct sched_info {
 
   /** Time when entering semaphore. */
   unsigned long enter_sem[NR_RESOURCES];
-
-#if !CONFIG_SYNC_NONE
-  /** Length of accessing semaphore. */
-  unsigned int sem[NR_RESOURCES];
-  /** Maximum blocking time. */
-  unsigned int block;
-  /** Preemption level. */
-  unsigned int prlevel;
-#endif
 
 
   /** Budget policy. */

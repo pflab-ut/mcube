@@ -141,8 +141,7 @@ CWARN_FLAGS =				\
   -Wdisabled-optimization		\
   -Wno-type-limits			\
   -Wno-missing-field-initializers \
-
-#  -Wundef				\
+  -Wundef				\
 
 
 CFLAGS +=				\

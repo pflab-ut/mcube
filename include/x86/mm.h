@@ -91,6 +91,9 @@ enum zone_id {
 
   /* Undefined; the `NULL' zone! */
   ZONE_UNASSIGNED = 2,
+  
+  /* Number of zones */
+  NR_ZONES = 3,
 };
 
 /*
@@ -115,6 +118,12 @@ struct page {
              bucket index in the kmembuckets table */
   };
 };
+
+
+extern struct page *pfdtable;
+extern struct page *pfdtable_top;
+extern struct page *pfdtable_end;
+
 
 static inline void page_init(struct page *page, uintptr_t phys_addr)
 {
@@ -169,19 +178,7 @@ struct page *addr_to_page(void *addr);
 
 void pagealloc_init(void);
 
-/*
- * Test cases driver
- */
 
-#if PAGEALLOC_TESTS
-
-void pagealloc_run_tests(void);
-
-#else
-
-static void __unused pagealloc_run_tests(void) { }
-
-#endif /* !PAGEALLOC_TESTS */
 
 #endif /* !__ASSEMBLY__ */
 

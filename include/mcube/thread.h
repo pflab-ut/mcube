@@ -106,10 +106,6 @@ struct thread_struct {
   struct sched_info sched;
   /** Address of stack top. */
   unsigned long stack_top;
-#if CONFIG_SYNC_SRP
-  /** Number of stack resource. */
-  unsigned long nr_stack_resources;
-#endif /* CONFIG_SYNC_SRP */
 
 #if CONFIG_TQ_BHEAP
   /** Pointer to node. */

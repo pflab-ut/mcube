@@ -451,7 +451,7 @@ __unused static void test_file_existence(void)
     bd->pr("Parent: '%s'\n", parent);
     bd->pr("Child: '%s'\n", child);
     parent_inum = (*parent == '\0') ?
-      (int64_t)current->working_dir : name_i(parent);
+      (int64_t) current->working_dir : name_i(parent);
     parent_ino = inode_get(parent_inum);
     inum = file_new(parent_ino, child, EXT2_FT_REG_FILE);
     if (inum != -EEXIST) {
@@ -730,7 +730,7 @@ void ext2_run_tests()
              "and have a dtime = 0. To make fsck happy, we'll deallocate "
              "all of those 'malformed' inodes now :-)\n\n");
   unrolled_for_each(&all_allocated, void_inum) {
-    inode = inode_get((uint64_t)void_inum);
+    inode = inode_get((uint64_t) void_inum);
     print_uart("Deallocating inode #%lu\n", inode->inum);
     inode_mark_delete(inode);
     inode_put(inode);
@@ -765,7 +765,7 @@ void ext2_run_tests()
         continue;
       }
       nblocks = ceil_div(inode->size_low, isb.block_size);
-      nblocks = min(nblocks, (uint64_t)EXT2_INO_NR_BLOCKS);
+      nblocks = min(nblocks, (uint64_t) EXT2_INO_NR_BLOCKS);
       for (uint ino_blk = 0; ino_blk < nblocks; ino_blk++) {
         if (inode->blocks[ino_blk] == 0) {
           continue;
@@ -791,7 +791,7 @@ void ext2_run_tests()
   
   /* Deallocate all of the allocated blocks */
   for (uint i = 0; i < nfree; i++) {
-    block = (uint64_t)unrolled_lookup(&head, i);
+    block = (uint64_t) unrolled_lookup(&head, i);
     assert(block != 0);
 
     bd->pr("Deallocating block %ld\n", block);
@@ -939,7 +939,7 @@ void ext2_run_tests()
     print_uart("Parent: '%s'\n", parent);
     print_uart("Child: '%s'\n", child);
     parent_inum = (*parent == '\0') ?
-      (int64_t)current->working_dir : name_i(parent);
+      (int64_t) current->working_dir : name_i(parent);
     if (parent_inum < 0) {
       bd->pr("FAILURE: Parent pathname resolution returned "
              "%s\n", errno_to_str(parent_inum));

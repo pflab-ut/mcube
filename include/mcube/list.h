@@ -187,15 +187,6 @@ static inline void list_del(struct list_node *node)
 }
 
 
-#if LIST_TESTS
-
-void list_run_tests(void);
-
-#else
-
-static void __unused list_run_tests(void) { }
-
-#endif /* LIST_TESTS */
 
 #endif /* !__ASSEMBLY__ */
 

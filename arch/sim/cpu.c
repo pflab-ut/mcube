@@ -19,7 +19,9 @@ int get_nr_cpu_cores(void)
 }
 
 
-void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg)
+void copy_arch_process(__unused struct task_struct *p,
+                       __unused unsigned long func,
+                       __unused unsigned long arg)
 {
 }
 

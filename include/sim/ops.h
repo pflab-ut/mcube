@@ -44,7 +44,7 @@ static inline void cpuid(unsigned int op,
 }
 
  
-static inline void trap(uint32_t trap_code)
+static inline void trap(__unused uint32_t trap_code)
 {
   /* do nothing */
 }

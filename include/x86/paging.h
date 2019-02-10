@@ -284,6 +284,7 @@ static inline uint64_t get_cr3(void)
   return cr3;
 }
 
+
 #else /* __ASSEMBLY__ */
 
 #define KTEXT_PAGE_OFFSET  0xffffffff80000000

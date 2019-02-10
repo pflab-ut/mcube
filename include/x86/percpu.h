@@ -297,11 +297,6 @@ static __always_inline __pure_const struct proc *percpu_current_proc(void)
 
 void percpu_area_init(enum cpu_type);
 
-#if PERCPU_TESTS
-void percpu_run_tests(void);
-#else
-static void __unused percpu_run_tests(void) { }
-#endif
 
 #else
 

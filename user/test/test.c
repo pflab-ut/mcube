@@ -19,5 +19,6 @@ int user_test_main(void)
   test_string();
   test_vm();
 #endif
+  test_page_alloc();
   return 0;
 }

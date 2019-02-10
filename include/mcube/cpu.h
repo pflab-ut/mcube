@@ -38,6 +38,8 @@ extern double CPU_NSEC_PER_CLOCK_MHZ;
 
 extern unsigned long ap_start;
 
+void set_cpu_clock(void);
+
 int ap_main(void);
 int ap_usermain(void);
 
