@@ -85,26 +85,28 @@ FOUT3.write("#ifndef __MCUBE_MCUBE_CONFIG_H__\n"
 
 
 for k, v, in tools.CONFIGURES.items():
+  if k.find("CONFIG_ARCH") == 0:
+    FOUT3.write("/** Architecture. */\n")
+  elif k.find("CONFIG_COMPILER") == 0:
+    FOUT3.write("/** Compiler. */\n")
+  elif k.find("CONFIG_ALGO") == 0:
+    FOUT3.write("/** Algorithm. */\n")
+  elif k.find("CONFIG_PRINT") == 0:
+    FOUT3.write("/** Print. */\n")
+  elif k.find("CONFIG_TQ") == 0:
+    FOUT3.write("/** Task Queue. */\n")
+  elif k.find("CONFIG_TIE_BREAK") == 0:
+    FOUT3.write("/** Tie-Break. */\n")
+  elif k.find("CONFIG_OPTION") == 0:
+    FOUT3.write("/** Option. */\n")
+  elif k.find("CONFIG_TARGET_DRIVE") == 0:
+    FOUT3.write("/** Target Drive. */\n")
+  elif k.find("CONFIG_MEMORY") == 0:
+    FOUT3.write("/** Memory. */\n")
   if v == "y":
-    if k.find("CONFIG_ARCH") == 0:
-      FOUT3.write("/** Architecture. */\n")
-    elif k.find("CONFIG_COMPILER") == 0:
-      FOUT3.write("/** Compiler. */\n")
-    elif k.find("CONFIG_ALGO") == 0:
-      FOUT3.write("/** Algorithm. */\n")
-    elif k.find("CONFIG_PRINT") == 0:
-      FOUT3.write("/** Print. */\n")
-    elif k.find("CONFIG_TQ") == 0:
-      FOUT3.write("/** Task Queue. */\n")
-    elif k.find("CONFIG_TIE_BREAK") == 0:
-      FOUT3.write("/** Tie-Break. */\n")
-    elif k.find("CONFIG_OPTION") == 0:
-      FOUT3.write("/** Option. */\n")
-    elif k.find("CONFIG_TARGET_DRIVE") == 0:
-      FOUT3.write("/** Target Drive. */\n")
-    elif k.find("CONFIG_MEMORY") == 0:
-      FOUT3.write("/** Memory. */\n")
     FOUT3.write("#define " + k + " 1\n")
-
+  else:
+    FOUT3.write("#define " + k + " 0\n")
+  
 FOUT3.write("#endif /* __MCUBE_MCUBE_CONFIG_H__ */\n")
 FOUT3.close()

@@ -9,7 +9,7 @@
 #ifndef __ASSEMBLY__
 
 struct hash_elem {
-  uint64_t id; /* Unique ID for each hash element */
+  unsigned long id; /* Unique ID for each hash element */
   struct list_node node; /* List node for hash fn collision */
 };
 

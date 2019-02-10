@@ -21,7 +21,7 @@
  * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
  * @return Floor of @c size/unit.
  */
-#define  FLOOR(size, unit)  ((size) / (unit))
+#define FLOOR(size, unit)  ((size) / (unit))
 
 #else
 /**
@@ -35,7 +35,7 @@
  * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
  * @return Floor of @c size/unit.
  */
-#define  FLOOR(size, unit)  ((size) / (unit) > 0 ? (size) / (unit) :    \
+#define FLOOR(size, unit)  ((size) / (unit) > 0 ? (size) / (unit) :    \
                            (int64_t) (size) / (unit) > (double) (size) / (unit) ?  \
                            (size) / (unit) - 1 : (size) / (unit))
 #endif /* CONFIG_ARCH_AXIS */
@@ -46,7 +46,7 @@
 
 #if CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM
 
-#ifdef CONFIG_ARCH_SIM
+#if CONFIG_ARCH_SIM
 #include <math.h>
 #endif /* CONFIG_ARCH_SIM */
 
