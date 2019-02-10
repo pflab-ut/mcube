@@ -6,9 +6,6 @@
 #include <mcube/mcube.h>
 
 
-int user_arch_main(void);
-int user_test_main(void);
-
 
 int user_main(void)
 {

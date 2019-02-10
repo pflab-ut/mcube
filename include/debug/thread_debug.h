@@ -9,7 +9,7 @@
 /* Never include this file directly. Include <debug/debug.h> instead. */
 #ifndef __ASSEMBLY__
 
-#if CONFIG_DEBUG
+#if CONFIG_OPTION_DEBUG
 
 static inline void print_thread_queue(struct thread_struct *th)
 {
@@ -58,7 +58,7 @@ static inline void print_thread_by_id(int id)
 #define pdebug_thread(th)
 #define pdebug_thread_byid(id)
 
-#endif /* CONFIG_DEBUG */
+#endif /* CONFIG_OPTION_DEBUG */
 
 #endif /* !__ASSEMBLY__ */
 

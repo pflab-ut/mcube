@@ -7,7 +7,7 @@
 #define __MCUBE_DEBUG_DEBUG_HEADER_H__
 
 #ifndef __ASSEMBLY__
-#if CONFIG_DEBUG
+#if CONFIG_OPTION_DEBUG
 
 extern unsigned int Debug;
 
@@ -38,7 +38,7 @@ extern unsigned int Debug;
 
 #define mcube_assert(expr)
 
-#endif /* CONFIG_DEBUG */
+#endif /* CONFIG_OPTION_DEBUG */
 #endif /* __ASSEMBLY__ */
 
 #include <debug/regs_debug.h>

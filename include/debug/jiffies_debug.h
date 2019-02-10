@@ -9,7 +9,7 @@
 /* Never include this file directly. Include <debug/debug.h> instead. */
 #ifndef __ASSEMBLY__
 
-#if CONFIG_DEBUG
+#if CONFIG_OPTION_DEBUG
 
 static inline void print_jiffies(void)
 {
@@ -26,7 +26,7 @@ static inline void print_jiffies(void)
 
 #else
 #define pdebug_jiffies()
-#endif /* CONFIG_DEBUG */
+#endif /* CONFIG_OPTION_DEBUG */
 
 #endif /* !__ASSEMBLY__ */
 

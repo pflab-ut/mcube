@@ -48,6 +48,18 @@
 
 #if CONFIG_ARCH_SIM
 #include <math.h>
+#else
+double __ieee754_sqrt(double x);
+double copysign(double x, double y);
+double pow(double x, double y);
+
+double cos(double x);
+double sin(double x);
+double tan(double x);
+
+double sqrt(double x);
+double cbrt(double x);
+
 #endif /* CONFIG_ARCH_SIM */
 
 
@@ -74,17 +86,6 @@
 
 #define D 4.4544551033807686783083602485579e-6
 
-
-double __ieee754_sqrt(double x);
-double copysign(double x, double y);
-double pow(double x, double y);
-
-double cos(double x);
-double sin(double x);
-double tan(double x);
-
-double sqrt(double x);
-double cbrt(double x);
 
 
 #elif CONFIG_ARCH_AXIS

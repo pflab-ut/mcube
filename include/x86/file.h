@@ -30,8 +30,6 @@ enum parsing_state {
   EOL,      /* End of line */
 };
 
-#if FILE_TESTS
-
 
 #define FSTATIC    extern
 uint path_get_leaf(const char *path, mode_t *leaf_type);
@@ -46,12 +44,6 @@ struct test_file {
 
 void file_run_tests(void);
 
-#else  /* !_FILE_TESTS */
-
-#define FSTATIC    static
-static void __unused file_run_tests(void) { }
-
-#endif /* _FILE_TESTS */
 
 #endif /* !__ASSEMBLY__ */
 

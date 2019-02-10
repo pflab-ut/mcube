@@ -93,25 +93,9 @@
 
 #include <mcube/mcube.h>
 
-/*
- * In-memory Super Block - Global State for our FS code
- *
- * NOTE! The inodes repository hash lock could be fine-grained
- * by having a lock on each hash collision linked-list instead.
- */
-struct {
-  union super_block  *sb;    /* On-disk Superblock */
-  struct group_descriptor *bgd;    /* On-disk Group Desc Table */
-  char      *buf;    /* Ramdisk buffer */
-  uint64_t    block_size;  /* 1, 2, or 4K */
-  uint64_t    frag_size;  /* 1, 2, or 4K */
-  uint64_t    blockgroups_count;
-  uint64_t    last_blockgroup;
-  spinlock_t    inode_allocation_lock;
-  spinlock_t    block_allocation_lock;
-  struct hash    *inodes_hash;
-  spinlock_t    inodes_hash_lock;
-} isb;
+
+struct isb isb;
+
 
 __unused static struct buffer_dumper serial_char_dumper = {
   .pr = print_uart,
@@ -1113,6 +1097,8 @@ int64_t name_i(const char *path)
   return inum;
 }
 
+#if CONFIG_OPTION_FS_EXT2
+
 /*
  * Mount the ramdisk File System
  */
@@ -1263,3 +1249,6 @@ void init_ext2(void)
   printk("Ext2: Passed all sanity checks!\n");
   printk("EXT2: File system label is `%s'\n", sb->volume_label);
 }
+
+#endif /* CONFIG_OPTION_FS_EXT2 */
+

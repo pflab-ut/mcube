@@ -116,16 +116,12 @@ struct percpu {
   int apic_id;      /* Local APIC ID */
   uintptr_t self;      /* Address of this per-CPU area */
   struct percpu_sched sched;
-#if PERCPU_TESTS
   uint64_t x64;      /* A 64-bit value (testing) */
   uint32_t x32;      /* A 32-bit value (testing) */
   uint16_t x16;      /* A 16-bit value (testing) */
   uint8_t x8;      /* An 8-bit value (testing) */
-#endif
   uintptr_t dumper;    /* How are the testing messages printed */
-#if EXT2_TESTS || EXT2_SMP_TESTS
   bool halt_thread_at_end;  /* We're running SMP version of tests? */
-#endif
 } __aligned(CACHE_LINE_SIZE);
 
 /*

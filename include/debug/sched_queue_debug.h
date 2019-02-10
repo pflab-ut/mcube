@@ -10,7 +10,7 @@
 
 #ifndef __ASSEMBLY__
 
-#if CONFIG_DEBUG
+#if CONFIG_OPTION_DEBUG
 
 
 static inline void print_array(struct thread_struct array[NR_PRIORITIES])
@@ -135,7 +135,7 @@ static inline void print_queue(struct thread_struct *head, char *name, unsigned 
 #define pdebug_sleep_tq()
 #define pdebug_bheap(rq, th)
 
-#endif /* CONFIG_DEBUG */
+#endif /* CONFIG_OPTION_DEBUG */
 
 #endif /* !__ASSEMBLY__ */
 

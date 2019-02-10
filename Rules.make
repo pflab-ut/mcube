@@ -45,15 +45,111 @@ ifeq ($(CC), $(CCACHE) clang)
 endif
 
 CFLAGS += -Iinclude -Wall
-#CFLAGS += -Wextra
 #CFLAGS += -O3
 #CFLAGS += -O2
 #CFLAGS += -O0
 
 CFLAGS += -std=gnu11
-CFLAGS += -nostdlib -fno-stack-protector -ffreestanding
-CFLAGS += -fno-builtin 
 CFLAGS += -fno-strict-aliasing
+CFLAGS += -fPIC
+
+#
+# GCC C dialect flags:
+#
+# We're a freestanding environment by ISO C99 definition:
+# - Code get executed without benefit of an OS (it's a kernel).
+# - Program startup and termination is implementation-defined.
+# - Any library facilities outside C99 'strict conformance'
+#   options are also implementation defined.
+#
+# Poking GCC with the 'freestanding' flag assures it won't
+# presume availability of any 'hosted' facilities like libc.
+#
+# After using -nostdinc, we add compiler's specific includes
+# back (stdarg.h, etc) using the -iwithprefix flag.
+#
+CDIALECT_FLAGS =			\
+  -ffreestanding			\
+  -fno-stack-protector			\
+  -fno-builtin				\
+  -iwithprefix include
+
+ifneq ($(ARCH_NAME), sim)
+CDIALECT_FLAGS += \
+	-fno-pie		\
+	-nostdlib	\
+
+#CDIALECT_FLAGS += \
+	-nostdinc	
+
+endif
+
+
+#  -std=gnu99				\
+
+#-I ../../include/
+
+#
+# C Optimization flags:
+#
+# Use -O3 to catch any weird bugs early on
+#
+# Note-1! Fallback to -O2 at official releases
+# Note-2! Shouldn't we disable strict aliasing?
+#
+COPT_FLAGS =				\
+  -O3					\
+  -pipe
+
+#
+# Warnings request and dismissal flags:
+#
+# - We've previously caught 2 bugs causeed by an implicit cast
+# to a smaller-width type: carefully inspect warnings reported
+# by the '-Wconversion' flag.
+#
+# - We may like to warn about aggregate returns cause we don't
+# want to explode the stack if the structure type returned got
+# _innocently_ bigger over time. Check '-Waggregate-return'.
+#
+# Options are printed in GCC HTML documentation order.
+#
+CWARN_FLAGS =				\
+  -Wall					\
+
+# -Wextra and other warning
+#CWARN_FLAGS += -Wextra				\
+		-Wchar-subscripts			\
+  -Wformat=2				\
+  -Wmissing-include-dirs		\
+  -Wparentheses				\
+  -Wtrigraphs				\
+  -Wunused				\
+  -Wstrict-aliasing=2			\
+  -Wpointer-arith			\
+  -Wcast-qual				\
+  -Wwrite-strings			\
+  -Waddress				\
+  -Wlogical-op				\
+  -Wstrict-prototypes			\
+  -Wmissing-prototypes			\
+  -Wmissing-declarations		\
+  -Wmissing-noreturn			\
+  -Wnormalized=nfc			\
+  -Wredundant-decls			\
+  -Wvla					\
+  -Wdisabled-optimization		\
+  -Wno-type-limits			\
+  -Wno-missing-field-initializers \
+
+#  -Wundef				\
+
+
+CFLAGS +=				\
+  $(CMACH_FLAGS)			\
+  $(CDIALECT_FLAGS)			\
+  $(COPT_FLAGS)				\
+  $(CWARN_FLAGS)
 
 
 SIZE = $(CROSS_PREFIX)size

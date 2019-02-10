@@ -308,5 +308,5 @@ static void run_secondary_core_testcases(void)
   }
 #endif
 
-  ext2_run_smp_tests();
+  test_ext2();
 }

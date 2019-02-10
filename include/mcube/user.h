@@ -9,6 +9,18 @@
 #ifndef __ASSEMBLY__
 
 int user_main(void);
+int user_arch_main(void);
+int user_test_main(void);
+
+bool test_atomic(void);
+bool test_bitmap(void);
+bool test_ext2(void);
+bool test_hash(void);
+bool test_kmalloc(void);
+bool test_printk(void);
+bool test_ring_buf(void);
+bool test_string(void);
+bool test_vm(void);
 
 #endif /* __ASSEMBLY__ */
 

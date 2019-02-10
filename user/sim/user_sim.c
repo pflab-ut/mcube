@@ -4,7 +4,6 @@
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
-#include "../user.h"
 
 
 int ap_main(void)

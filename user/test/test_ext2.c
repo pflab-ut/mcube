@@ -13,8 +13,7 @@
  */
 
 #include <mcube/mcube.h>
-#if CONFIG_FS_EXT2
-
+#if CONFIG_ARCH_X86 && CONFIG_OPTION_FS_EXT2
 
 /**
  * Public interface:
@@ -199,7 +198,6 @@ static __unused void path_get_parent(const char *path, char *parent, char *child
  * File System test cases (I)
  */
 
-#if EXT2_TESTS || EXT2_SMP_TESTS
 
 #define TEST_INODES      0
 #define TEST_BLOCK_READS    0
@@ -222,15 +220,7 @@ static __unused void path_get_parent(const char *path, char *parent, char *child
 #error  Cannot run serial 'block allocation' tests with the SMP ones
 #endif
 
-extern struct {
-  union super_block  *sb;    /* On-disk Superblock */
-  struct group_descriptor *bgd;    /* On-disk Group Desc Table */
-  char      *buf;    /* Ramdisk buffer */
-  uint64_t    block_size;  /* 1, 2, or 4K */
-  uint64_t    frag_size;  /* 1, 2, or 4K */
-  uint64_t    blockgroups_count;
-  uint64_t    last_blockgroup;
-} isb;
+
 
 enum {
   BUF_LEN      = 4096,
@@ -286,7 +276,6 @@ static void __unused list_files(uint64_t dir_inum)
   inode_put(dir);
 }
 
-#if TEST_INODES
 __unused static void test_inodes(void)
 {
   struct inode *inode, *inode2, *inode3;
@@ -312,11 +301,7 @@ __unused static void test_inodes(void)
     inode_put(inode3);
   }
 }
-#else
-__unused static void test_inodes(void) { }
-#endif  /* TEST_INODES */
 
-#if TEST_PATH_CONVERSION
 __unused static void test_path_conversion(void)
 {
   int64_t inum;
@@ -366,11 +351,7 @@ __unused static void test_path_conversion(void)
     bd->pr("FAILURE: '%s', Inode = %ld\n", path, inum);
   }
 }
-#else
-__unused static void test_path_conversion(void) { }
-#endif  /* TEST_PATH_CONVERSION */
 
-#if TEST_FILE_READS
 __unused static void test_file_reads(void)
 {
   struct inode *inode;
@@ -412,11 +393,7 @@ __unused static void test_file_reads(void)
   if (percpu_get(halt_thread_at_end) == true)
     halt();
 }
-#else
-__unused static void test_file_reads(void) { }
-#endif  /* TEST_FILE_READS */
 
-#if TEST_BLOCK_READS
 __unused static void test_block_reads(void)
 {
   char *buf;
@@ -445,9 +422,6 @@ __unused static void test_block_reads(void)
     halt();
   }
 }
-#else
-__unused static void test_block_reads(void) { }
-#endif  /* TEST_BLOCK_READS */
 
 #if TEST_FILE_EXISTENCE
 /*
@@ -991,7 +965,6 @@ void ext2_run_tests()
   kfree(buf);
   kfree(buf2);
 }
-#endif /* EXT2_TESTS */
 
 /*
  * File System test cases (II) - stressing the SMP side
@@ -1104,5 +1077,5 @@ bool test_ext2(void)
   return true;
 }
 
-#endif /* CONFIG_FS_EXT2 */
+#endif /* CONFIG_ARCH_X86 && CONFIG_OPTION_FS_EXT2 */
 

@@ -9,7 +9,7 @@
 /* Never include this file directly. Include <debug/debug.h> instead. */
 #ifndef __ASSEMBLY__
 
-#if CONFIG_DEBUG
+#if CONFIG_OPTION_DEBUG
 
 static inline void print_thread_in_line(void)
 {
@@ -60,7 +60,7 @@ static inline void print_task_bythid(int thid)
 #define pdebug_thread_in_line()
 #define pdebug_task(tk)
 #define pdebug_task_bythid(id)
-#endif /* CONFIG_DEBUG */
+#endif /* CONFIG_OPTION_DEBUG */
 
 #endif /* !__ASSEMBLY__ */
 

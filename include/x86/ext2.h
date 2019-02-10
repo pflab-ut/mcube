@@ -421,7 +421,6 @@ enum block_op {
   BLOCK_WRTE,
 };
 
-#if EXT2_TESTS || EXT2_SMP_TESTS || FILE_TESTS
 /*
  * Pahtname translation - Used for testing ext2 code.
  *
@@ -436,13 +435,11 @@ struct path_translation {
   uint64_t absolute_inum;
   int fd;
 };
-#endif  /* EXT2_TESTS || FILE_TESTS */
 
 /*
  * Globally export some internal methods if the test-cases
  * driver was enabled.
  */
-#if EXT2_TESTS || EXT2_SMP_TESTS
 
 #define STATIC  extern
 void block_read(uint64_t block, char *buf, uint blk_offset, uint len);
@@ -454,21 +451,6 @@ uint64_t block_alloc(void);
 bool dir_entry_valid(struct inode *, struct dir_entry *, uint64_t off, uint64_t len);
 int64_t find_dir_entry(struct inode *inode, const char *name,uint name_len,
                        struct dir_entry **dentry, int64_t *offset);
-#else
-#define STATIC  static
-#endif  /* EXT2_TESTS || EXT2_SMP_TESTS */
-
-#if EXT2_TESTS
-void ext2_run_tests(void);
-#else
-static void __unused ext2_run_tests(void) { }
-#endif  /* EXT2_TESTS */
-
-#if EXT2_SMP_TESTS
-void ext2_run_smp_tests(void);
-#else
-static void __unused ext2_run_smp_tests(void) { }
-#endif  /* EXT2_SMP_TESTS */
 
 /*
  * Dump file system On-Disk structures;  useful for testing.
