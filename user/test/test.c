@@ -9,16 +9,17 @@
 int user_test_main(void)
 {
   test_atomic();
-#if 0
   test_bitmap();
   test_ext2();
+  test_file();
   test_hash();
   test_kmalloc();
+  test_list();
+  test_page_alloc();
   test_printk();
   test_ring_buf();
   test_string();
+  test_unrolled_list();
   test_vm();
-#endif
-  test_page_alloc();
   return 0;
 }

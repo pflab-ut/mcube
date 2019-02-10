@@ -101,8 +101,7 @@ static void vm_check_kmap2(void)
 
     /* To let the test be effective, assure we're
      * mapping previously unmapped address */
-    assert(!vaddr_is_mapped((void *)round_up((uintptr_t)
-                                             VIRTUAL(paddr), PAGE_SIZE_2MB)));
+    assert(!vaddr_is_mapped((void *) round_up((uintptr_t) VIRTUAL(paddr), PAGE_SIZE_2MB)));
 
     vaddr = vm_kmap(paddr, len);
     assert(vaddr == VIRTUAL(paddr));

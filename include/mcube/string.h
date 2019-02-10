@@ -12,8 +12,7 @@
 
 #include <string.h>
 
-
-#elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
+#elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER || CONFIG_ARCH_AXIS
 
 void *memset(void *s, int c, size_t n);
 void *memset32(void *dst, uint32_t val, uint64_t len);

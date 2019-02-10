@@ -166,19 +166,6 @@ static inline int page_is_free(struct page *page)
   return page->free;
 }
 
-/*
- * Page Allocator
- */
-
-struct page *get_free_page(enum zone_id zid);
-struct page *get_zeroed_page(enum zone_id zid);
-void free_page(struct page *page);
-
-struct page *addr_to_page(void *addr);
-
-void pagealloc_init(void);
-
-
 
 #endif /* !__ASSEMBLY__ */
 

@@ -397,62 +397,6 @@ void *memset64(void *s, uint64_t c, uint64_t n)
 #endif /* CONFIG_ARCH_X86 */
 
 
-/**
- * The memsetw() function fills the first @c n bytes of the memory area pointed to
- * by @c s with the constant byte @c c (16-bit value).
- * @param s is a pointer of @c void.
- * @param c is an integer to fill the memory area.
- * @param n is the number of bytes filled by @c c.
- * @return Pointer to the memory area @c s.
- */
-void *memsetw(void *s, int c, size_t n)
-{
-  /* NOTE: volatile is required for -O3 option of GCC. */
-#if CONFIG_COMPILER_GCC
-  volatile uint16_t *xs = s;
-#elif CONFIG_COMPILER_CLANG
-  uint16_t *xs = s;
-#else
-#error "Unknown Compiler"
-#endif /* CONFIG_COMPILER_GCC */
-  /* mask lower 1-bit */
-  n &= ~0x1;
-  while (n) {
-    *xs++ = c;
-    n -= 2;
-  }
-  return s;
-
-}
-
-/**
- * The memsetd() function fills the first @c n bytes of the memory area pointed to
- * by @c s with the constant byte @c c (32-bit value).
- * @param s is a pointer of @c void.
- * @param c is an integer to fill the memory area.
- * @param n is the number of bytes filled by @c c.
- * @return Pointer to the memory area @c s.
- */
-void *memsetd(void *s, int c, size_t n)
-{
-  /* NOTE: volatile is required for -O3 option of GCC. */
-#if CONFIG_COMPILER_GCC
-  volatile uint32_t *xs = s;
-#elif CONFIG_COMPILER_CLANG
-  uint32_t *xs = s;
-#else
-#error "Unknown Compiler"
-#endif /* CONFIG_COMPILER_GCC */
-  /* mask lower 2-bit */
-  n &= ~0x3;
-  while (n) {
-    *xs++ = c;
-    n -= 4;
-  }
-  return s;
-}
-
-
 #if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
 
 

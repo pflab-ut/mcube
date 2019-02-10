@@ -49,7 +49,7 @@ asmlinkage int sys_get_cpu_id(void)
 
 asmlinkage int sys_get_mode_level(void)
 {
-#if CONFIG_ARCH_ARM
+#if CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
   unsigned long spsr;
   asm volatile("mrs %0, spsr_el1" : "=r"(spsr));
   //  printk("spsr_el1 = 0x%lx\n", spsr);
@@ -61,12 +61,12 @@ asmlinkage int sys_get_mode_level(void)
   
 #else
   return KERNEL_LEVEL;
-#endif
+#endif /* CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER */
 }
 
 asmlinkage int sys_move_to_kernel_level(void)
 {
-#if CONFIG_ARCH_ARM
+#if CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
   /* NOTE: this implementation does not work well and this problem may depend on Qemu. */
   unsigned long spsr;
   unsigned long elr;
@@ -82,7 +82,7 @@ asmlinkage int sys_move_to_kernel_level(void)
   asm volatile("mrs %0, elr_el1" : "=r"(elr));
   printk("elr = 0x%x\n", elr);
   //  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
-#endif
+#endif /* CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER */
   return 0;
 }
 

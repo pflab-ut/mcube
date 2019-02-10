@@ -54,31 +54,6 @@ void set_priority(struct thread_struct *th)
 #error "Error: unknown priority"
 #endif
 
-void do_sync(void)
-{
-#if CONFIG_SYNC_PCP || CONFIG_SYNC_SRP
-  int i;
-  int cpu = get_cpu_id();
-  for (i = 0; i < nr_resources; i++) {
-    print("current_th: remaining = %llu wcmt[0] = %llu enter_sem = %llu sem = %u\n",
-           current_th[cpu]->sched.remaining, current_th[cpu]->sched.wcmt[0], current_th[cpu]->sched.enter_sem[i], current_th[cpu]->sched.sem[i]);
-    /* check if current_th enters critical section of sem[j] */
-    if (current_th[cpu]->sched.sem[i] > 0) {
-      if (current_th[cpu]->sched.remaining == current_th[cpu]->sched.enter_sem[i]) {
-        /* Now enter critical section of sem[i] */
-        print("th->id = %llu enter critical section %d\n", current_th[cpu]->id, i);
-        sync_sem_down(&sync_sem[i]);
-      }
-      if (current_th[cpu]->sched.remaining == current_th[cpu]->sched.enter_sem[i] + current_th[cpu]->sched.sem[i]) {
-        /* Now exit critical section of sem[j] */
-        print("th->id = %llu exit critical section %d\n", current_th[cpu]->id, i);
-        sync_sem_up(&sync_sem[i]);
-      }
-    }
-  }
-#endif
-}
-
 
 void do_release(void)
 {

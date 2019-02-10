@@ -27,7 +27,7 @@ vpath %.S $(TOP_DIR)/arch/$(ARCH_NAME)
 vpath %.asm $(TOP_DIR)/arch/$(ARCH_NAME)
 
 ifeq ($(ARCH_NAME), x86)
-IMG_TARGET = $(TOP_DIR)/build/mcube.img
+ IMG_TARGET = $(TOP_DIR)/build/mcube.img
 endif
 
 TARGET = $(TOP_DIR)/build/mcube
@@ -40,8 +40,8 @@ CCACHE = $(shell which ccache)
 
 
 ifeq ($(CC), $(CCACHE) clang)
-  CLANG = $(shell which clang)
-  CC = $(CCACHE) $(CLANG)
+	CLANG = $(shell which clang)
+	CC = $(CCACHE) $(CLANG)
 endif
 
 CFLAGS += -Iinclude -Wall
@@ -97,9 +97,9 @@ endif
 # Note-1! Fallback to -O2 at official releases
 # Note-2! Shouldn't we disable strict aliasing?
 #
-COPT_FLAGS =				\
-  -O3					\
-  -pipe
+COPT_FLAGS =	\
+	-O3	\
+ -pipe
 
 #
 # Warnings request and dismissal flags:
@@ -117,8 +117,7 @@ COPT_FLAGS =				\
 CWARN_FLAGS =				\
   -Wall					\
 
-# -Wextra and other warning
-#CWARN_FLAGS += -Wextra				\
+CWARN_FLAGS += -Wextra				\
 		-Wchar-subscripts			\
   -Wformat=2				\
   -Wmissing-include-dirs		\

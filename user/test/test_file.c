@@ -11,7 +11,7 @@
 
 #include <mcube/mcube.h>
 
-#if  FILE_TESTS
+#if CONFIG_ARCH_X86
 
 #define TEST_CHDIR  0
 #define TEST_OPEN  0
@@ -692,4 +692,11 @@ bool test_file(void)
   return true;
 }
 
-#endif /* FILE_TESTS */
+#else
+
+bool test_file(void)
+{
+  return true;
+}
+
+#endif /* CONFIG_ARCH_X86 */

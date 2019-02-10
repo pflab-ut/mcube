@@ -31,6 +31,7 @@ struct isb {
 
 extern struct isb isb;
 
+
 #endif /* !__ASSEMBLY__ */
 
 

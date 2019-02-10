@@ -37,11 +37,9 @@ struct thread_struct *compare_thread(struct thread_struct *th,
   if (th_val < n_val) {
     return th;
   } else if (th_val == n_val) {
-#if !CONFIG_TIE_BREAK_NONE
     if (thread_tie_break(th, n)) {
       return th;
     }
-#endif 
   }
   return NULL;
 }

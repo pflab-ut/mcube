@@ -555,7 +555,7 @@ int print_uart(const char *fmt, ...)
   serial_write(sbuf, n);
 #elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
   puts(sbuf);
-#elif CONFIG_ARCH_ARM
+#elif CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
   uart_write(sbuf, n, NULL);
 #endif
   

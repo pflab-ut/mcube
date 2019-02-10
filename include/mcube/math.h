@@ -44,7 +44,7 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
 
 #if CONFIG_ARCH_SIM
 #include <math.h>

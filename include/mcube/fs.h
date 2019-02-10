@@ -12,4 +12,11 @@
 #include <mcube/fs/ext2.h>
 #endif /* CONFIG_OPTION_FS_FAT */
 
+#ifndef __ASSEMBLY__
+
+void init_fat(void);
+void init_ext2(void);
+
+#endif /* !__ASSEMBLY__ */
+
 #endif /* __MCUBE_MCUBE_FS_H__ */

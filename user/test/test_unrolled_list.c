@@ -95,11 +95,12 @@ static void _test_keys_removal(struct unrolled_head *head)
   void *val;
 
   printk("_UNROLLED: _test_keys_removal(): ");
-  for (uintptr_t i = 0; i < nr_elements; i++)
-    unrolled_insert(head, (void *)(i+1));
+  for (uintptr_t i = 0; i < nr_elements; i++) {
+    unrolled_insert(head, (void *)(i + 1));
+  }
   for (intptr_t i = nr_elements - 1; i >= 0; i--) {
     val = unrolled_lookup(head, i);
-    if (i+1 != (intptr_t)val) {
+    if (i + 1 != (intptr_t) val) {
       panic("_UNROLLED: Value for key %u got corrupted; returned = %u, actual = %u",
             i, val, i + 1);
     }
@@ -109,12 +110,14 @@ static void _test_keys_removal(struct unrolled_head *head)
     unrolled_for_each(head, val) {
       j++;
     }
-    if (j != nr_elements - 1)
+    if (j != nr_elements - 1) {
       panic("_UNROLLED: List iterator returned %u elements although actual len is %u!",
             j, nr_elements - 1);
-    key = unrolled_insert(head, (void *)(i+1));
-    if (key != i)
+    }
+    key = unrolled_insert(head, (void *)(i + 1));
+    if (key != i) {
       panic("_UNROLLED: Returned key should've been %u, but it's %u", i, key);
+    }
   }
   printk("Success!\n");
 }
@@ -129,8 +132,9 @@ static void _test_keys_removal2(struct unrolled_head *head)
 
   printk("_UNROLLED: _test_keys_removal2(): ");
   nr_deleted_keys = 0;
-  for (uintptr_t i = 0; i < nr_elements; i++)
-    unrolled_insert(head, (void *)(i+1));
+  for (uintptr_t i = 0; i < nr_elements; i++) {
+    unrolled_insert(head, (void *)(i + 1));
+  }
   for (uint key = 0; key < nr_elements; key++) {
     if (key % 2 == 0) {
       unrolled_remove_key(head, key);
@@ -193,11 +197,12 @@ static void _unrolled_run_tests(uint array_len)
   unrolled_free(&head);
 }
 
-void test_unrolled_list(void)
+bool test_unrolled_list(void)
 {
   /* Note the performance increase with bigger node array sizes! */
   for (uint array_len = 1; array_len <= 32; array_len++) {
     _unrolled_run_tests(array_len);
   }
+  return true;
 }
 

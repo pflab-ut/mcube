@@ -6,13 +6,6 @@
 #include <mcube/mcube.h>
 
 
-void set_initial_context(struct thread_struct *th,
-                         void (*pc)(void *),
-                         void *func,
-                         unsigned long bottom)
-{
-}
-
 
 void __attribute__((noreturn)) run_user_thread(void)
 {
@@ -37,10 +30,8 @@ void __attribute__((noreturn)) run_user_thread(void)
 
 void wait(unsigned long count)
 {
-#if 0
   while (get_current_cpu_time() < count)
     ;
-#endif
 }
 
 

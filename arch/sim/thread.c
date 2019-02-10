@@ -5,26 +5,8 @@
  */
 #include <mcube/mcube.h>
 
-#if CONFIG_USER_TASK_PTHREAD
 #include <pthread.h>
-#endif /* CONFIG_USER_TASK_PTHREAD */
 
-
-void sim_wait(uint64_t count)
-{
-  while (rdtsc() < count)
-    ;  
-}
-
-
-void __attribute__((noreturn)) sim_exit(int status)
-{
-#if CONFIG_USER_TASK_PTHREAD
-  pthread_exit(NULL);
-#else
-  exit(status);
-#endif /* CONFIG_USER_TASK_PTHREAD */
-}
 
 
 /* %eax = number, %ebx = arg1 */

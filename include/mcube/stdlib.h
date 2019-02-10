@@ -23,7 +23,7 @@ char *ultoa(unsigned long val, char *buf, int radix);
 
 #include <stdlib.h>
 
-#elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM || CONFIG_ARCH_AXIS
+#elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER || CONFIG_ARCH_AXIS
 
 long strtol(const char *cp, char **endp, int base);
 unsigned long strtoul(const char *cp, char **endp, int base);

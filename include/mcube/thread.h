@@ -307,11 +307,6 @@ static inline void end_budget(struct thread_struct *th)
   }
 
 
-/* make the context and allocate a stack:
- * initially, the stack holds one context area for the initial context. */
-//void set_initial_context(struct thread_struct *th, void (*pc)(void *),
-//                                void *func, unsigned long bottom);
-
 
 int get_tq_util(struct thread_struct *head, unsigned long cpu);
 void switch_to(struct thread_struct *next_thread);
