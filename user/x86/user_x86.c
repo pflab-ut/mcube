@@ -62,7 +62,7 @@ int ap_main(void)
 }
 
 
-int user_arch_main(void)
+int user_arch_main(int argc, char *argv[])
 {
   //  user_thread_main();
   //  user_level_main();

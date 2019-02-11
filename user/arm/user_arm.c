@@ -156,7 +156,7 @@ void user_atomic_main(void)
 void user_raspi3_main(void);
 
 
-int user_arch_main(void)
+int user_arch_main(int argc, char *argv[])
 {
   //  print("user_arch_main()\n");
   //  user_thread_main();

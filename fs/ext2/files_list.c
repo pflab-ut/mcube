@@ -1,5 +1,9 @@
-/*  -*- mode: Fundamental; -*-
+/**
+ * @file user/test/test_ext2.c
  *
+ * @author Hiroyuki Chishiro
+ */
+/*
  * List of file paths for testing the file system driver ('UNIX path' to inode)
  * pathname translation code.  Put as much file pathes as you like here!
  *
@@ -9,7 +13,6 @@
 
 #include <mcube/mcube.h>
 
-#if  EXT2_TESTS || EXT2_SMP_TESTS || FILE_TESTS
 
 struct path_translation ext2_files_list[] = {
   {.path = NULL, },    /* DO NOT REMOVE - End of List mark */
@@ -43,4 +46,3 @@ const char *ext2_root_list[] = {
   NULL,
 };
 
-#endif /* EXT2_TESTS || FILE_TESTS */

@@ -17,13 +17,13 @@ unsigned int Debug = false;
 
 unsigned long CPU_CLOCK;
 unsigned long CPU_CLOCK_MHZ_PER_USEC;
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
+#if defined(ENABLE_FPU)
 double CPU_USEC_PER_CLOCK_MHZ;
 double CPU_CLOCK_MHZ_PER_NSEC;
 double CPU_NSEC_PER_CLOCK_MHZ;
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
+#endif /* ENABLE_FPU */
 
-volatile static unsigned int IsInitialized = false;
+static volatile bool IsInitialized = false;
 
 int main(int argc, char *argv[])
 {
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     init_rq();
     init_sched();
     IsInitialized = true;
-    user_main();
+    user_main(argc, argv);
     exit_arch();
     print("main() end\n");
   } else {    

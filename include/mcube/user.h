@@ -8,9 +8,9 @@
 
 #ifndef __ASSEMBLY__
 
-int user_main(void);
-int user_arch_main(void);
-int user_test_main(void);
+int user_main(int argc, char *argv[]);
+int user_arch_main(int argc, char *argv[]);
+int user_test_main(int argc, char *argv[]);
 
 bool test_atomic(void);
 bool test_bitmap(void);

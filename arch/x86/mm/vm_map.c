@@ -208,7 +208,7 @@ bool vaddr_is_mapped(void *vaddr)
   if (!pml2e->present) {
     return false;
   }
-  assert((uintptr_t)page_base(pml2e) == round_down((uintptr_t) vaddr, PAGE_SIZE_2MB));
+  assert((uintptr_t) page_base(pml2e) == round_down((uintptr_t) vaddr, PAGE_SIZE_2MB));
   return true;
 }
 

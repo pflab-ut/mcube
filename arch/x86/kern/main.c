@@ -147,7 +147,7 @@ void __no_return kernel_start(void)
   smpboot_trigger_secondary_cores_testcases();
 
   //  run_test_cases();
-  user_main();
+  user_main(0, NULL);
 
   halt();
 }

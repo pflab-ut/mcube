@@ -91,7 +91,7 @@ static void vm_check_kmap1(void)
 static void vm_check_kmap2(void)
 {
   uintptr_t paddr;
-  void *vaddr;
+  uintptr_t *vaddr;
   int count, len;
 
   count = PAGE_SIZE_2MB * 10;
@@ -107,7 +107,7 @@ static void vm_check_kmap2(void)
     assert(vaddr == VIRTUAL(paddr));
 
     for (int i = 0; i < len; i++) {
-      if (!vaddr_is_mapped(vaddr)) {
+      if (!vaddr_is_mapped((void *) vaddr)) {
         panic("_VM: Reporting supposedly mapped "
               "address 0x%lx as unmapped", vaddr);
       }

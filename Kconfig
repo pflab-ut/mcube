@@ -12,6 +12,7 @@ menu Architecture
     aname sim
     mname none
     defs -DCONFIG_ARCH_SIM
+    defs -DENABLE_FPU
   config CONFIG_ARCH_X86
     title X86
     default n
@@ -26,6 +27,7 @@ menu Architecture
     mname raspi3
     defs -DCONFIG_ARCH_ARM
     defs -DCONFIG_ARCH_ARM_RASPI3
+    defs -DENABLE_FPU
   config CONFIG_ARCH_ARM_SYNQUACER
     title ARM for SynQuacer
     default n
@@ -33,6 +35,7 @@ menu Architecture
     mname synquacer
     defs -DCONFIG_ARCH_ARM
     defs -DCONFIG_ARCH_ARM_SYNQUACER
+    defs -DENABLE_FPU
   config CONFIG_ARCH_AXIS
     title AXIS
     default n
@@ -135,7 +138,6 @@ menu Option
     title Ext2 File System
     default n
     cfiles $(TOP_DIR)/fs/ext2/ext2.c
-    cfiles $(TOP_DIR)/fs/ext2/file.c
     cfiles $(TOP_DIR)/fs/ext2/files_list.c
     defs -DCONFIG_OPTION_FS_EXT2
     depends CONFIG_ARCH_X86

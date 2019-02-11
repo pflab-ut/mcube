@@ -12,7 +12,6 @@ TEXT_ADDR = 0x00007c00
 
 #CFLAGS += -fPIC
 #CFLAGS += -fPIE
-#CFLAGS += -m64
 #LDFLAGS += -Ttext=$(TEXT_ADDR)
 
 ifeq ($(CC), clang)
@@ -39,7 +38,6 @@ else
   OBJCOPY = $(CROSS_PREFIX)objcopy
 #  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
 #  LDFLAGS += -nostdlib
-#  CFLAGS += -masm=intel
 #  LDFLAGS += -N -T scripts/linker/x86-elf.ldp
   LDFLAGS += -nostdinc -nostdlib -T scripts/linker/x86-elf.ldp
 endif
@@ -103,26 +101,26 @@ PROCESSED_LD_SCRIPT = kern/kernel.ldp
 
 # Core and Secondary CPUs bootstrap
 ASMS = \
-	$(TOP_DIR)/arch/x86/boot/head.S	\
-	$(TOP_DIR)/arch/x86/boot/trampoline.S	\
-	$(TOP_DIR)/arch/x86/boot/rmcall.S	\
-	$(TOP_DIR)/arch/x86/boot/e820.S	\
-	$(TOP_DIR)/arch/x86/boot/load_ramdisk.S
+  $(TOP_DIR)/arch/x86/boot/head.S	\
+  $(TOP_DIR)/arch/x86/boot/trampoline.S	\
+  $(TOP_DIR)/arch/x86/boot/rmcall.S	\
+  $(TOP_DIR)/arch/x86/boot/e820.S	\
+  $(TOP_DIR)/arch/x86/boot/load_ramdisk.S
 
 # Memory management
 SRCS +=	\
- $(TOP_DIR)/arch/x86/mm/e820.c	\
- $(TOP_DIR)/arch/x86/mm/page_alloc.c	\
- $(TOP_DIR)/arch/x86/mm/vm_map.c	\
+  $(TOP_DIR)/arch/x86/mm/e820.c	\
+  $(TOP_DIR)/arch/x86/mm/page_alloc.c	\
+  $(TOP_DIR)/arch/x86/mm/vm_map.c	\
 
 # Devices
 SRCS +=	\
- $(TOP_DIR)/arch/x86/dev/serial.c	\
-	$(TOP_DIR)/arch/x86/dev/pic.c	\
-	$(TOP_DIR)/arch/x86/dev/apic.c	\
- $(TOP_DIR)/arch/x86/dev/ioapic.c	\
- $(TOP_DIR)/arch/x86/dev/pit.c	\
- $(TOP_DIR)/arch/x86/dev/keyboard.c
+  $(TOP_DIR)/arch/x86/dev/serial.c	\
+  $(TOP_DIR)/arch/x86/dev/pic.c	\
+  $(TOP_DIR)/arch/x86/dev/apic.c	\
+  $(TOP_DIR)/arch/x86/dev/ioapic.c	\
+  $(TOP_DIR)/arch/x86/dev/pit.c	\
+  $(TOP_DIR)/arch/x86/dev/keyboard.c
 
 
 

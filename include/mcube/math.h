@@ -8,22 +8,8 @@
 
 #ifndef __ASSEMBLY__
 
-#if CONFIG_ARCH_AXIS
+#if defined(ENABLE_FPU)
 
-/**
- * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
- * @return Ceiling of @c size/unit.
- */
-#define CEIL(size, unit) (((int32_t) (size) * (int32_t) (unit) < 0) \
-                          || ((int32_t) (size) % (int32_t) (unit)) == 0 ? \
-                          (size) / (unit) : (size) / (unit) + 1)
-/**
- * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
- * @return Floor of @c size/unit.
- */
-#define FLOOR(size, unit)  ((size) / (unit))
-
-#else
 /**
  * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
  * @return Ceiling of @c size/unit.
@@ -38,13 +24,28 @@
 #define FLOOR(size, unit)  ((size) / (unit) > 0 ? (size) / (unit) :    \
                            (int64_t) (size) / (unit) > (double) (size) / (unit) ?  \
                            (size) / (unit) - 1 : (size) / (unit))
-#endif /* CONFIG_ARCH_AXIS */
+
+#else
+/**
+ * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
+ * @return Ceiling of @c size/unit.
+ */
+#define CEIL(size, unit) (((int32_t) (size) * (int32_t) (unit) < 0) \
+                          || ((int32_t) (size) % (int32_t) (unit)) == 0 ? \
+                          (size) / (unit) : (size) / (unit) + 1)
+/**
+ * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
+ * @return Floor of @c size/unit.
+ */
+#define FLOOR(size, unit)  ((size) / (unit))
+
+#endif /* ENABLE_FPU */
 
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
+#if defined(ENABLE_FPU)
 
 #if CONFIG_ARCH_SIM
 #include <math.h>
@@ -60,7 +61,7 @@ double tan(double x);
 double sqrt(double x);
 double cbrt(double x);
 
-#endif /* CONFIG_ARCH_SIM */
+#endif /* ENABLE_FPU */
 
 
 /**
@@ -87,13 +88,7 @@ double cbrt(double x);
 #define D 4.4544551033807686783083602485579e-6
 
 
-
-#elif CONFIG_ARCH_AXIS
-
-
-#else
-#error "Unknown Architecture"
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+#endif /* ENABLE_FPU */
 
 long lpow(long x, long y);
 

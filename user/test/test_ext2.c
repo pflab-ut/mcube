@@ -469,9 +469,9 @@ __unused static void test_file_existence(void)
     halt();
   }
 }
-#else  /* !TEST_FILE_EXISTENCE */
+#else /* !TEST_FILE_EXISTENCE */
 __unused static void test_file_existence(void) { }
-#endif  /* TEST_FILE_EXISTENCE */
+#endif /* TEST_FILE_EXISTENCE */
 
 #if TEST_FILE_CREATION
 __unused static int __vsnprintf(char*buf, int size, const char *fmt, ...)
@@ -611,7 +611,7 @@ __unused static void test_file_creation(void) { }
 #endif  /* EXT2_TESTS || EXT2_SMP_TESTS */
 
 #if EXT2_TESTS
-void ext2_run_tests()
+void ext2_run_tests(void)
 {
   union super_block __unused *sb;
   struct inode __unused *inode;

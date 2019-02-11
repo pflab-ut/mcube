@@ -31,6 +31,7 @@ enum printf_argtype {
   NONE = 0,
   SIGNED,
   UNSIGNED,
+  FLOAT,
   STRING,
   CHAR,
   PERCENT,
@@ -91,7 +92,7 @@ static __no_return void printk_panic(const char *str)
  * desired radix. Return the number of ascii chars printed.
  * @size: output buffer size
  */
-static int ulout(unsigned long num, char *buf, int size, struct printf_argdesc *desc)
+static int luout(unsigned long num, char *buf, int size, struct printf_argdesc *desc)
 {
   static char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
   int ret, digits;
@@ -140,6 +141,7 @@ static int ulout(unsigned long num, char *buf, int size, struct printf_argdesc *
   return ret;
 }
 
+
 /*
  * Convert given signed long integer (@num) to ascii using
  * desired radix. Return the number of ascii chars printed.
@@ -156,11 +158,73 @@ static int lout(signed long num, char *buf, int size, struct printf_argdesc *des
     num *= -1;
     buf[0] = '-';
 
-    return ulout(num, buf + 1, size - 1, desc) + 1;
+    return luout(num, buf + 1, size - 1, desc) + 1;
   }
 
-  return ulout(num, buf, size, desc);
+  return luout(num, buf, size, desc);
 }
+
+
+#if defined(ENABLE_FPU)
+
+/* TODO: update implementation */
+static inline int lfout(double lf, char *dst, int n, struct printf_argdesc *desc)
+{
+  int base = 10;
+  int i;
+  char tmp[MAX_DIGIT];
+  char pad = ' ';
+  double ulf;
+  uint64_t u64;
+  if (base == 10 && lf < 0) {
+    dst[n++] = '-';
+    ulf = lf * -1;
+  } else {
+    ulf = lf;
+  }
+  u64 = ulf;
+  for (i = 1; i < MAX_DIGIT; i++) {
+    tmp[i] = u64 % base;
+    if (tmp[i] < 10) {
+      tmp[i] += '0';
+    } else {
+      tmp[i] += 'a' - 10;
+    }
+
+    if ((u64 /= base) == 0) {
+
+#if 0
+      if (cf->pad) {
+        pad = '0';
+      }
+      if (FOUT_SIZE < n + cf->digit) {
+        return -1;
+      }
+      while (i < cf->digit) {
+        dst[n++] = pad;
+        cf->digit--;
+      }
+#endif
+      if (FOUT_SIZE < n + i) {
+        return -1;
+      }
+      while (i) {
+        dst[n++] = tmp[i--];
+      }
+      break;
+    }
+  }
+  dst[n++] = '.';
+
+  for (i = 0, ulf = (ulf - (uint64_t) ulf) * 10; i < 6; i++) {
+    dst[n++] = (uint64_t) ulf % 10 + '0';
+    ulf = ulf * 10 - (uint64_t) ulf * 10;
+  }
+
+  return n;
+}
+
+#endif /* ENABLE_FPU */
 
 /*
  * Parse given printf argument expression (@fmt) and save
@@ -201,6 +265,10 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
     case 'x':
       desc->type = UNSIGNED;
       desc->radix = 16;
+      complete = true;
+      goto out;
+    case 'f':
+      desc->type = FLOAT;
       complete = true;
       goto out;
     case 's':
@@ -266,6 +334,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
   long num;
   unsigned long unum;
   unsigned char ch;
+  double dnum;
   int len;
 
   if (size < 1) {
@@ -303,8 +372,18 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
       } else {
         unum = va_arg(args, unsigned int);
       }
-      len = ulout(unum, str, size, &desc);
+      len = luout(unum, str, size, &desc);
       break;
+#if defined(ENABLE_FPU)
+    case FLOAT:
+      if (desc.len == LONG) {
+        dnum = va_arg(args, double);
+      } else {
+        dnum = va_arg(args, float);
+      }
+      len = lfout(dnum, str, size, &desc);
+      break;
+#endif /* ENABLE_FPU */
     case STRING:
       s = va_arg(args, char *);
       if (!s) {

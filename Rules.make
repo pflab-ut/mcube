@@ -126,7 +126,6 @@ CWARN_FLAGS += -Wextra				\
   -Wunused				\
   -Wstrict-aliasing=2			\
   -Wpointer-arith			\
-  -Wcast-qual				\
   -Wwrite-strings			\
   -Waddress				\
   -Wlogical-op				\
@@ -141,6 +140,8 @@ CWARN_FLAGS += -Wextra				\
   -Wno-type-limits			\
   -Wno-missing-field-initializers \
   -Wundef				\
+
+#  -Wcast-qual				\
 
 
 CFLAGS +=				\

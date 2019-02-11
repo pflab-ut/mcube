@@ -30,11 +30,11 @@
 /* [usec/clock] */
 extern unsigned long CPU_CLOCK;
 extern unsigned long CPU_CLOCK_MHZ_PER_USEC; /* [MHz]=[clock/usec] */
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
+#if defined(ENABLE_FPU)
 extern double CPU_USEC_PER_CLOCK_MHZ;
 extern double CPU_CLOCK_MHZ_PER_NSEC;
 extern double CPU_NSEC_PER_CLOCK_MHZ;
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
+#endif /* ENABLE_FPU */
 
 extern unsigned long ap_start;
 

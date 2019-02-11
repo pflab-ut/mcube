@@ -6,12 +6,11 @@
 #include <mcube/mcube.h>
 
 
-int user_test_main(void)
+int user_test_main(int argc, char *argv[])
 {
   test_atomic();
   test_bitmap();
   test_ext2();
-  test_file();
   test_hash();
   test_kmalloc();
   test_list();
