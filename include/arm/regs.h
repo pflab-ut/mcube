@@ -20,7 +20,7 @@
 struct context_regs {
   /** General purpose registers in ARM. */
   uint64_t gpr[32];
-} __attribute__((packed));
+} __packed;
 
 typedef struct context_regs context_regs;
 
@@ -36,7 +36,7 @@ struct full_regs {
   uint64_t elr;
   /** Saved program status register */
   uint64_t spsr;
-} __attribute__((packed));
+} __packed;
 
 typedef struct full_regs full_regs;
 

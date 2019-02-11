@@ -42,7 +42,7 @@ enum _count_type {
 static uint64_t _get_all_freepages_count(enum _count_type type)
 {
   uint64_t count;
-  struct zone *zone;
+  struct zone *zone = NULL;
 
   count = 0;
   ascending_prio_for_each(zone) {
@@ -62,8 +62,8 @@ static uint64_t _get_all_freepages_count(enum _count_type type)
  */
 static int _test_boot_freepages_count(void)
 {
-  struct e820_range *range;
   uint64_t count, reported_count, pfdtable_count;
+  struct e820_range *range = NULL;
 
   count = 0;
   e820_for_each(range) {
@@ -112,12 +112,12 @@ static int _test_boot_freepages_count(void)
  * Prerequisite-2: Do NOT call this after the allocator got
  * used: it _erases_ and re-creates all of its sturcutres!!
  */
-static int __unused _torture_pfdtable_add_range(void)
+__unused static int _torture_pfdtable_add_range(void)
 {
   uint64_t old_end, old_count, count, repeat, ranges;
   struct e820_range *range, subrange;
   struct rmap *rmap;
-  struct zone *zone;
+  struct zone *zone = NULL;
 
   ascending_prio_for_each(zone) {
     assert(zone->freepages_count == zone->boot_freepages);
@@ -187,7 +187,7 @@ static int __unused _torture_pfdtable_add_range(void)
 static int _page_is_free(struct page *page)
 {
   uintptr_t start, end, paddr;
-  struct e820_range *range;
+  struct e820_range *range = NULL;
 
   paddr = page_phys_addr(page);
   if (paddr < PHYS(kmem_end)) {
@@ -308,7 +308,7 @@ static int _test_pagealloc_coherency(int nr_pages)
  * Consume all given zone's pages then observe the result
  * of overallocation. Use ZONE_ANY to consume all memory.
  */
-static void __unused _test_zone_exhaustion(enum zone_id zid)
+__unused static void _test_zone_exhaustion(enum zone_id zid)
 {
   struct page *page;
   struct zone *zone;

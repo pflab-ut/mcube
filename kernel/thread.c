@@ -30,7 +30,7 @@ int alloc_thread_id(void)
   return th_id++;
 }
 
-int thread_tie_break(struct thread_struct *x, struct thread_struct *y)
+int thread_tie_break(__unused struct thread_struct *x, __unused struct thread_struct *y)
 {
 #if CONFIG_TIE_BREAK_FIFO
   /* always false */
@@ -43,7 +43,7 @@ int thread_tie_break(struct thread_struct *x, struct thread_struct *y)
 }
 
 
-void thread_main(struct thread_struct *th)
+void thread_main(__unused struct thread_struct *th)
 {
 }
 

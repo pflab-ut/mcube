@@ -6,7 +6,7 @@
 #include <mcube/mcube.h>
 
 
-int user_test_main(int argc, char *argv[])
+int user_test_main(__unused int argc, __unused char *argv[])
 {
   test_atomic();
   test_bitmap();

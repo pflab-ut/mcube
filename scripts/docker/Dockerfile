@@ -8,16 +8,17 @@ ENV HOME=/home/mcube
 RUN set -x \
     && apt-get update \
     && apt-get install -y \
-               ccache gcc clang llvm gcc-aarch64-linux-gnu \
-               python3 python3-pip \
+               ccache gcc clang llvm gcc-aarch64-linux-gnu cppcheck \
                git samba make doxygen sendmail git \
-               dvi2ps-fontdesc-morisawa5 \
                qemu qemu-system \
+               python3 python3-pip \
     && pip3 install pyflakes pylint \
     && mkdir -p $HOME
 
+# for LaTeX
 #               tetex-* texlive-latex* texlive-science ptex-jtex \
 #               texlive-lang-japanese texlive-fonts-recommended \
+#               dvi2ps-fontdesc-morisawa5 \
 
 VOLUME $HOME
 

@@ -243,8 +243,7 @@ static struct proc *preempt(struct proc *new_proc, int new_prio)
 
   new_proc->state = TD_ONCPU;
   new_proc->stats.dispatch_count++;
-  new_proc->stats.rqwait_overall += PS->sys_ticks -
-    new_proc->enter_runqueue_ts;
+  new_proc->stats.rqwait_overall += PS->sys_ticks - new_proc->enter_runqueue_ts;
 
   sched_dbg("dispatching T%d\n", new_proc->pid);
   return new_proc;
@@ -383,7 +382,6 @@ void sched_init(void)
  * @@@ Statistics: @@@
  */
 
-#if SCHED_STATS
 
 spinlock_t printstats_lock = INIT_SPINLOCK;
 
@@ -409,8 +407,16 @@ static void print_proc_stats(struct proc *proc, int prio)
              proc->stats.preempt_slice_end);
 }
 
-static void print_sched_stats(void)
+
+#if 1
+void print_sched_stats(void)
 {
+}
+
+#else
+void print_sched_stats(void)
+{
+  /* NOTE: print sched stats information. */
   struct proc *proc;
 
   spin_lock(&printstats_lock);
@@ -429,19 +435,27 @@ static void print_sched_stats(void)
 
   spin_unlock(&printstats_lock);
 }
-#endif /* SCHED_STATS */
+#endif
+
 
 /*
  * @@@ Tracing: @@@
  */
 
-#if SCHED_TRACE
-static void rq_dump(struct runqueue *rq)
+#if 1
+void rq_dump(struct runqueue *rq)
 {
+}
+
+#else
+void rq_dump(struct runqueue *rq)
+{
+  /* FIXME: not work well */
   struct proc *proc;
   const char *name;
 
-  name = (rq == rq_active) ? "active" : "expired";
+  //  name = (rq == rq_active) ? "active" : "expired";
+  name = (rq == PS->rq_active) ? "active" : "expired";
   print_uart("Dumping %s table:\n", name);
   for (int i = MAX_PRIO; i >= MIN_PRIO; i--) {
     if (!list_empty(&rq->head[i])) {
@@ -451,31 +465,30 @@ static void rq_dump(struct runqueue *rq)
   }
   print_uart("\n");
 }
-#endif  /* !SCHED_TRACE */
+#endif
 
 
 /*
  * @@@ Testing: @@@
  */
 
-#if SCHED_TESTS
 
-void __no_return loop_print(char ch, int color)
+void __noreturn loop_print(char ch, int color)
 {
   while (true) {
-    putc_colored(ch, color);
+    putchar_colored(ch, color);
     for (int i = 0; i < 0xffff; i++) {
       cpu_pause();
     }
   }
 }
 
-static void __no_return test0(void) { loop_print('A', VGA_LIGHT_BLUE); }
-static void __no_return test1(void) { loop_print('B', VGA_LIGHT_BLUE); }
-static void __no_return test2(void) { loop_print('C', VGA_LIGHT_BLUE); }
-static void __no_return test3(void) { loop_print('D', VGA_LIGHT_CYAN); }
-static void __no_return test4(void) { loop_print('E', VGA_LIGHT_CYAN); }
-static void __no_return test5(void) { loop_print('F', VGA_LIGHT_CYAN); }
+static void __noreturn test0(void) { loop_print('A', VGA_LIGHT_BLUE); }
+static void __noreturn test1(void) { loop_print('B', VGA_LIGHT_BLUE); }
+static void __noreturn test2(void) { loop_print('C', VGA_LIGHT_BLUE); }
+static void __noreturn test3(void) { loop_print('D', VGA_LIGHT_CYAN); }
+static void __noreturn test4(void) { loop_print('E', VGA_LIGHT_CYAN); }
+static void __noreturn test5(void) { loop_print('F', VGA_LIGHT_CYAN); }
 
 void sched_run_tests(void)
 {
@@ -488,4 +501,3 @@ void sched_run_tests(void)
     kthread_create(test5);
   }
 }
-#endif /* SCHED_TESTS */

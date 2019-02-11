@@ -169,7 +169,7 @@ void *realloc(void *block, size_t size)
 }
 
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
+#if defined(ENABLE_FPU)
 
 double strtod(const char *nptr, char **endptr)
 {
@@ -236,7 +236,7 @@ double strtod(const char *nptr, char **endptr)
 }
 
 
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
+#endif /* ENABLE_FPU */
 
 unsigned long strtoul(const char *cp, char **endp, int base)
 {
@@ -353,7 +353,7 @@ void qsort(void *base, size_t num, size_t size, sortcmp cmp)
 {
   uint8_t pivot[size], tmp[size]; // use C99 VLAs instead of alloca.
 
-  uint8_t *b = (uint8_t *)base;
+  uint8_t *b = (uint8_t *) base;
   for (;;) {
     if (num < 2) {
       return;

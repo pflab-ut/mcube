@@ -67,6 +67,8 @@ extern unsigned char user_malloc[MALLOC_SIZE];
 
 extern spinlock_t global_malloc_lock;
 
+struct mem_block_header *get_free_block(size_t size);
+
 
 #endif /* !__ASSEMBLY__ */
 

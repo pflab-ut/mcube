@@ -66,7 +66,7 @@ static void run_test_cases(void)
 /*
  * Bootstrap-CPU start; we came from head.S
  */
-void __no_return kernel_start(void)
+void __noreturn kernel_start(void)
 {
   /* Before anything else, zero the bss section. As said by C99:
    * “All objects with static storage duration shall be inited
@@ -144,7 +144,7 @@ void __no_return kernel_start(void)
   // Signal the secondary cores to run their own test-cases code.
   // They've been waiting for us (thread 0) till all of kernel
   // subsystems has been properly initialized.  Wait No More!
-  smpboot_trigger_secondary_cores_testcases();
+  //  smpboot_trigger_secondary_cores_testcases();
 
   //  run_test_cases();
   user_main(0, NULL);

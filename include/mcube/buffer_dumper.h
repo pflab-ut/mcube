@@ -23,6 +23,8 @@ struct buffer_dumper {
   void (*formatter)(struct buffer_dumper *dumper, void *buf, uint len);
 };
 
+extern struct buffer_dumper serial_char_dumper;
+ 
 /*
  * Possible functions for the printer:
  * - printk(fmt, ...)

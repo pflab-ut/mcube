@@ -62,11 +62,13 @@ struct thread_struct *enqueue_thread(struct thread_struct *head,
     }
     p = n;
   }
-  th->prev = p;
-  th->next = n;
-
-  if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
-    n->prev = th;
+  if (th) {
+    th->prev = p;
+    th->next = n;
+    
+    if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
+      n->prev = th;
+    }
   }
 
   if (p) {
@@ -95,11 +97,13 @@ struct thread_struct *enqueue_deadline_thread(struct thread_struct *head,
     }
     p = n;
   }
-  th->dprev = p;
-  th->dnext = n;
-  //  PDEBUG("p = %x n = %x\n", p, n);
-  if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
-    n->dprev = th;
+  if (th) {
+    th->dprev = p;
+    th->dnext = n;
+    //  PDEBUG("p = %x n = %x\n", p, n);
+    if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
+      n->dprev = th;
+    }
   }
 
   if (p) {

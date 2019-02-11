@@ -216,7 +216,7 @@ void smpboot_trigger_secondary_cores_testcases(void)
  * which has assigned us a unique stack, the per-CPU area
  * addr in %gs, and bootstrap's gdt, idt, and page tables.
  */
-void __no_return secondary_start(void)
+void __noreturn secondary_start(void)
 {
   union apic_id id;
 
@@ -281,15 +281,15 @@ void smpboot_init(void)
   assert(nr_alive_cpus == nr_cpus);
 }
 
+#if 1
+/* testcases */
 
-#if  SCHED_TESTS
-static void __no_return test0(void)  { loop_print('G', VGA_LIGHT_GREEN); }
-static void __no_return test1(void)  { loop_print('H', VGA_LIGHT_GREEN); }
-static void __no_return test2(void)  { loop_print('I', VGA_LIGHT_GREEN); }
-static void __no_return test3(void)  { loop_print('J', VGA_LIGHT_MAGNETA); }
-static void __no_return test4(void)  { loop_print('K', VGA_LIGHT_MAGNETA); }
-static void __no_return test5(void)  { loop_print('L', VGA_LIGHT_MAGNETA); }
-#endif
+static void __noreturn test0(void)  { loop_print('G', VGA_LIGHT_GREEN); }
+static void __noreturn test1(void)  { loop_print('H', VGA_LIGHT_GREEN); }
+static void __noreturn test2(void)  { loop_print('I', VGA_LIGHT_GREEN); }
+static void __noreturn test3(void)  { loop_print('J', VGA_LIGHT_MAGNETA); }
+static void __noreturn test4(void)  { loop_print('K', VGA_LIGHT_MAGNETA); }
+static void __noreturn test5(void)  { loop_print('L', VGA_LIGHT_MAGNETA); }
 
 /*
  * This code runs on each secondary core after finishing its
@@ -297,7 +297,6 @@ static void __no_return test5(void)  { loop_print('L', VGA_LIGHT_MAGNETA); }
  */
 static void run_secondary_core_testcases(void)
 {
-#if  SCHED_TESTS
   for (int i = 0; i < 20; i++) {
     kthread_create(test0);
     kthread_create(test1);
@@ -306,7 +305,8 @@ static void run_secondary_core_testcases(void)
     kthread_create(test4);
     kthread_create(test5);
   }
-#endif
 
-  test_ext2();
+  //  test_ext2();
 }
+
+#endif

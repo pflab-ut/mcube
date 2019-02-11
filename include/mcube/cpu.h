@@ -40,15 +40,10 @@ extern unsigned long ap_start;
 
 void set_cpu_clock(void);
 
-int ap_main(void);
-int ap_usermain(void);
-
 void init_fpu(void);
 void init_cpu(void);
 void init_ap(void);
 void init_smp(void);
-
-void vector(void);
 
 
 

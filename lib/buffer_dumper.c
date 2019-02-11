@@ -69,7 +69,7 @@ void buf_char_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
  * NULL buffer printer. Useful for ignoring big debugging dumps, etc.
  */
 void buf_null_dump(__unused struct buffer_dumper *dumper,
-                   __unused void __unused *given_buf, __unused uint len)
+                   __unused void *given_buf, __unused uint len)
 {
 }
 

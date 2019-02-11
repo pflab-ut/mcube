@@ -16,7 +16,7 @@
 
 /* Optimization barrier */
 /* The "volatile" is due to gcc bugs */
-#define barrier() __asm__ __volatile__("": : :"memory")
+#define barrier() asm volatile("": : :"memory")
 
 /* This macro obfuscates arithmetic on a variable address so that gcc
    shouldn't recognize the original var, and make assumptions about it */
@@ -26,9 +26,9 @@
  * the inline assembly constraint from =g to =r, in this particular
  * case either is valid.
  */
-#define RELOC_HIDE(ptr, off)                    \
-  ({ unsigned long __ptr;                       \
-    __asm__ ("" : "=r"(__ptr) : "0"(ptr));      \
+#define RELOC_HIDE(ptr, off)                        \
+  ({ unsigned long __ptr;                           \
+    asm volatile("" : "=r"(__ptr) : "0"(ptr));      \
     (typeof(ptr)) (__ptr + (off)); })
 
 

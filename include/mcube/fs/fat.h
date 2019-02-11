@@ -37,7 +37,7 @@ struct bios_parameter_block {
   char            fst[8];
   char            dmy[20];
   char            fst2[8];
-} __attribute__((packed));
+} __packed;
 
 typedef struct bios_parameter_block bpb_t;
 
@@ -54,7 +54,7 @@ struct fatdir {
   unsigned int    attr2;
   unsigned short  cl;
   unsigned int    size;
-} __attribute__((packed));
+} __packed;
 
 typedef struct fatdir fatdir_t;
 

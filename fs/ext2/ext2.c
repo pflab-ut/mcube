@@ -97,7 +97,7 @@
 struct isb isb;
 
 
-__unused static struct buffer_dumper serial_char_dumper = {
+__unused struct buffer_dumper serial_char_dumper = {
   .pr = print_uart,
   .formatter = buf_char_dump,
 };

@@ -41,7 +41,7 @@
 #define TRAMPOLINE_START  VIRTUAL(SMPBOOT_START)
 #define TRAMPOLINE_PARAMS  VIRTUAL(SMPBOOT_PARAMS)
 
-void __no_return secondary_start(void); /* Silence-out GCC */
+void __noreturn secondary_start(void); /* Silence-out GCC */
 int smpboot_get_nr_alive_cpus(void);
 void smpboot_init(void);
 void smpboot_trigger_secondary_cores_testcases(void);

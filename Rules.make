@@ -38,6 +38,8 @@ BIN = $(TARGET).bin
 
 CCACHE = $(shell which ccache)
 
+JOBS=$(shell grep processor /proc/cpuinfo | wc -l)
+
 
 ifeq ($(CC), $(CCACHE) clang)
 	CLANG = $(shell which clang)

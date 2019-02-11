@@ -31,19 +31,10 @@
 
 struct runqueue;
 
-#if SCHED_TRACE
 #define  sched_dbg(fmt, ...)    print_uart(fmt, ##__VA_ARGS__)
-static void rq_dump(struct runqueue *rq);
-#else
-#define sched_dbg(fmt, ...)    { }
-static void __unused rq_dump(struct runqueue __unused *rq) { }
-#endif /* SCHED_TRACE */
+void rq_dump(struct runqueue *rq);
 
-#if SCHED_STATS
-static void print_sched_stats(void);
-#else
-static void __unused print_sched_stats(void) { }
-#endif /* SCHED_STATS */
+void print_sched_stats(void);
 
 #endif /* !__ASSEMBLY__ */
 

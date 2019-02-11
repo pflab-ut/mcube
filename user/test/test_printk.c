@@ -83,7 +83,7 @@ static void printk_test_string(void)
  * C printf expressions
  */
 static char tmpbuf[100];
-static void __unused printk_test_format(void)
+__unused static void printk_test_format(void)
 {
   const char *fmt;
   int len;

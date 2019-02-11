@@ -28,8 +28,8 @@
 #define __error(msg)  __attribute__((error(msg)))
 #define __likely(exp)  __builtin_expect((exp), 1)
 #define __unlikely(exp)  __builtin_expect((exp), 0)
-#define __no_inline  __attribute__((noinline))
-#define __no_return  __attribute__((noreturn))
+#define __noinline  __attribute__((noinline))
+#define __noreturn  __attribute__((noreturn))
 
 /* Mark the 'always_inline' attributed function as C99
  * 'inline' cause the attribute by itself is worthless.
@@ -107,7 +107,7 @@ static inline uint64_t ceil_div(uint64_t a, uint64_t b)
   return ((a - 1) / b) + 1;
 }
 
-void __no_return panic(const char *fmt, ...);
+void __noreturn panic(const char *fmt, ...);
 
 #if CONFIG_ARCH_SIM
 
@@ -183,7 +183,7 @@ extern void halt_cpu_ipi_handler(void);
  * We would've been better using GCC's error(msg) attribute,
  * but it doesn't work with my current GCC build :(.
  */
-void __unused __undefined_method(void);
+__unused void __undefined_method(void);
 #define compiler_assert(condition)              \
   do {                                          \
     if (!(condition))                           \
@@ -210,7 +210,7 @@ void __unused __undefined_method(void);
     (int32_t)__arr_size(arr);                                 \
   })
 
-void __no_return kernel_start(void);
+void __noreturn kernel_start(void);
 
 #endif /* !CONFIG_ARCH_SIM */
 

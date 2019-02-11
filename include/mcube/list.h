@@ -127,7 +127,7 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
 #define list_entry(node, type, node_name)       \
   ({                                            \
     size_t offset;                              \
-    struct list_node __unused *m;               \
+    __unused struct list_node *m;               \
                                                 \
     m = (node);                                 \
                                                 \

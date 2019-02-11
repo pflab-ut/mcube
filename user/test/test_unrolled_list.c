@@ -37,7 +37,7 @@
  */
 static void _test_N_elements(struct unrolled_head *head, uint len)
 {
-  void *val;
+  void *val = NULL;
   uintptr_t ret;
 
   printk("_UNROLLED: _test_N_elements(%u): ", len);
@@ -63,7 +63,7 @@ static void _test_N_elements(struct unrolled_head *head, uint len)
 static void _test_generated_keys(struct unrolled_head *head)
 {
   uint idx, nr_elements;
-  void *val;
+  void *val = NULL;
 
   printk("_UNROLLED: _test_generated_keys(): ");
   nr_elements = head->array_len * 10;
@@ -75,7 +75,7 @@ static void _test_generated_keys(struct unrolled_head *head)
   }
   uint i = 0;
   unrolled_for_each(head, val) {
-    if ((uintptr_t)val != i + 5)
+    if ((uintptr_t) val != i + 5)
       panic("_UNROLLED: Value for key %u got corrupted; returned = %u, actual = %u",
             i, val, i + 5);
     i++;
@@ -92,7 +92,7 @@ static void _test_generated_keys(struct unrolled_head *head)
 static void _test_keys_removal(struct unrolled_head *head)
 {
   uint key, nr_elements = 10000;
-  void *val;
+  void *val = NULL;
 
   printk("_UNROLLED: _test_keys_removal(): ");
   for (uintptr_t i = 0; i < nr_elements; i++) {
@@ -128,7 +128,7 @@ static void _test_keys_removal(struct unrolled_head *head)
 static void _test_keys_removal2(struct unrolled_head *head)
 {
   uint key, nr_elements = 10000, nr_deleted_keys;
-  void *val;
+  void *val = NULL;
 
   printk("_UNROLLED: _test_keys_removal2(): ");
   nr_deleted_keys = 0;
@@ -167,7 +167,7 @@ static void _unrolled_run_tests(uint array_len)
 {
   struct unrolled_head head;
   uint i;
-  void *val;
+  void *val = NULL;
 
   unrolled_init(&head, array_len);
   unrolled_free(&head);

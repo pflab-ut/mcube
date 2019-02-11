@@ -107,6 +107,6 @@ for k, v, in tools.CONFIGURES.items():
     FOUT3.write("#define " + k + " 1\n")
   else:
     FOUT3.write("#define " + k + " 0\n")
-  
+
 FOUT3.write("#endif /* __MCUBE_MCUBE_CONFIG_H__ */\n")
 FOUT3.close()

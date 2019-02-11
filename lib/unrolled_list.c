@@ -64,7 +64,7 @@ static uint __unode_array_find_free_idx(struct __node *node)
 }
 
 static void __unode_store_val_in_array(struct __node *node, uint array_idx,
-               void *val)
+                                       void *val)
 {
   assert(val != NULL);
   assert(array_idx < node->array_len);
@@ -74,8 +74,8 @@ static void __unode_store_val_in_array(struct __node *node, uint array_idx,
   node->array[array_idx] = val;
 }
 
-static void __unused __unode_update_val_in_array(struct __node *node,
-             uint array_idx, void *val)
+__unused static void __unode_update_val_in_array(struct __node *node,
+                                                 uint array_idx, void *val)
 {
   assert(val != NULL);
   assert(array_idx < node->array_len);
@@ -90,7 +90,7 @@ static void __unused __unode_update_val_in_array(struct __node *node,
  * was out of range.
  */
 static struct __node *__get_node(struct unrolled_head *head, uint key,
-         uint *array_idx)
+                                 uint *array_idx)
 {
   struct __node *node;
   uint node_num;

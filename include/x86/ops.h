@@ -39,7 +39,7 @@ struct registers4 {
   uint32_t ebx;
   uint32_t ecx;
   uint32_t edx;
-} __attribute__ ((packed));
+} __packed;
 
 typedef struct registers4 registers4_t;
 

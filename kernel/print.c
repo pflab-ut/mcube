@@ -550,7 +550,7 @@ static spinlock_t panic_lock = INIT_SPINLOCK;
  * and disabling interrupts, scrolling-away the caller panic
  * message and losing information FOREVER.
  */
-void __no_return panic(const char *fmt, ...)
+void __noreturn panic(const char *fmt, ...)
 {
   va_list args;
   int n;
@@ -609,7 +609,7 @@ halt:
 
 #else
 
-void __no_return panic(const char *fmt, ...)
+void __noreturn panic(const char *fmt, ...)
 {
   char buf[FOUT_SIZE];
   va_list ap;

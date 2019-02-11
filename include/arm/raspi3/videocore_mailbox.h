@@ -184,7 +184,7 @@ struct pc_screen_font_info {
   unsigned int height;
   unsigned int width;
   unsigned char glyphs;
-} __attribute__((packed));
+} __packed;
 
 typedef struct pc_screen_font_info psf_t;
 

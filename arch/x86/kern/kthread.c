@@ -22,7 +22,7 @@ uint64_t kthread_alloc_pid(void)
  *
  * NOTE! given function must never exit!
  */
-void kthread_create(void (* /* __no_return */ func)(void))
+void kthread_create(void (* /* __noreturn */ func)(void))
 {
   struct proc *proc;
   struct irq_ctx *irq_ctx;
@@ -32,8 +32,7 @@ void kthread_create(void (* /* __no_return */ func)(void))
   proc_init(proc);
 
   /* New thread stack, moving down */
-  stack = kmalloc(STACK_SIZE);
-  stack = stack + STACK_SIZE;
+  stack = kmalloc(STACK_SIZE) + STACK_SIZE;
 
   /* Reserve space for our IRQ stack protocol */
   irq_ctx = (struct irq_ctx *)(stack - sizeof(*irq_ctx));

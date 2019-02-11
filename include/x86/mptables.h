@@ -176,11 +176,8 @@ int __pure_const mptables_get_nr_cpus(void);
  * Dump tables in case of critical errors
  */
 
-#ifndef MP_DEBUG
+static inline void mpc_dump(__unused struct mpc_table *mpc) { }
 
-static void __unused mpc_dump(struct mpc_table *mpc) { }
-
-#endif /* MP_DEBUG */
 
 #endif /* !__ASSEMBLY__ */
 

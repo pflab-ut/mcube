@@ -76,7 +76,7 @@ FONT_OBJ =
 endif
 
 
-.PHONY: all configure testconfig defaultconfig pylint pyflakes
+.PHONY: all configure testconfig defaultconfig
 all: $(TARGET)
 
 
@@ -140,11 +140,20 @@ defaultconfig:
 docker:
 	@$(TOP_DIR)/scripts/docker/docker.sh
 
+.PHONY: pylint pyflakes cppcheck scan-build
+
+cppcheck:
+	@$(FIND) $(TOP_DIR) -name "*.c" | xargs cppcheck
+
+scan-build:
+	@scan-build make -j$(JOBS)
+
 pylint:
 	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pylint #--py3k
 
 pyflakes:
 	@$(FIND) $(TOP_DIR) -name "*.py" | xargs pyflakes3
+
 
 
 .PHONY: run grun mrun line size

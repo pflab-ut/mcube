@@ -97,11 +97,12 @@ static int dirTree(const char *pathname, const struct stat *sbuf, int type, stru
   len = 4096 * 3;
   if ((buf = malloc(len)) == NULL) {
     perror("malloc");
-    return -1;
+    return 1;
   }
   if ((readbuf = malloc(len)) == NULL) {
     perror("malloc");
-    return -1;
+    free(buf);
+    return 2;
   }
   memset32(buf, sbuf->st_ino, 4096);    /* Check top comment */
   memset32(buf + 4096, sbuf->st_ino + 1, 4096);  /* Check top comment */
@@ -109,14 +110,19 @@ static int dirTree(const char *pathname, const struct stat *sbuf, int type, stru
 
   if ((fd = open(pathname, O_RDONLY)) < 0) {
     perror("open");
-    return -1;
+    free(readbuf);
+    free(buf);
+    return 3;
   }
 
   n = 0;
   do {
     if ((ret = read(fd, readbuf, len - n)) < 0) {
       perror("read");
-      return -1;
+      close(fd);
+      free(readbuf);
+      free(buf);
+      return 4;
     }
     n += ret;
   } while (n < len && ret != 0);
@@ -127,12 +133,16 @@ static int dirTree(const char *pathname, const struct stat *sbuf, int type, stru
     printf("But we found this:\n");
     buf_hex_dump(readbuf, len);
     printf("Failure!");
-    return 0;
+    close(fd);
+    free(readbuf);
+    free(buf);
+    return 5;
   }
   printf("Success!\n");
 
   close(fd);
-  free(buf), free(readbuf);
+  free(buf);
+  free(readbuf);
   return 0;
 }
 

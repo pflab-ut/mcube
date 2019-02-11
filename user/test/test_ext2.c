@@ -13,6 +13,7 @@
  */
 
 #include <mcube/mcube.h>
+
 #if CONFIG_ARCH_X86 && CONFIG_OPTION_FS_EXT2
 
 /**
@@ -157,7 +158,7 @@ void dentry_dump(struct dir_entry *dentry)
  * path leading to that leaf in @parent (Mini-stateful parser)
  */
 enum ext2_state { EXT2_S_NONE, EXT2_SLASH, EXT2_FILENAME, EXT2_EOL };
-static __unused void path_get_parent(const char *path, char *parent, char *child)
+__unused static void path_get_parent(const char *path, char *parent, char *child)
 {
   enum ext2_state state, prev_state;
   int sub_idx;
@@ -241,7 +242,7 @@ extern const char *ext2_root_list[];
 /*
  * List all files located under given directory
  */
-static void __unused list_files(uint64_t dir_inum)
+__unused static void list_files(uint64_t dir_inum)
 {
   struct inode *dir;
   struct dir_entry *dentry;
@@ -423,7 +424,6 @@ __unused static void test_block_reads(void)
   }
 }
 
-#if TEST_FILE_EXISTENCE
 /*
  * Assure -EEXIST on all existing Ext2 volume files
  *
@@ -469,18 +469,14 @@ __unused static void test_file_existence(void)
     halt();
   }
 }
-#else /* !TEST_FILE_EXISTENCE */
-__unused static void test_file_existence(void) { }
-#endif /* TEST_FILE_EXISTENCE */
 
-#if TEST_FILE_CREATION
-__unused static int __vsnprintf(char*buf, int size, const char *fmt, ...)
+__unused static int __vsnprint(char*buf, int size, const char *fmt, ...)
 {
   va_list args;
   int n;
 
   va_start(args, fmt);
-  n = vsnprintf(buf, size - 1, fmt, args);
+  n = vsnprint(buf, size - 1, fmt, args);
   va_end(args);
   buf[n] = 0;
   return n;
@@ -496,8 +492,8 @@ __unused static void test_file_creation(void)
   bd = &null_null_dumper;
 
   char prefix[64];
-  __vsnprintf(prefix, sizeof(prefix) - 1, "c%d_t%lu_",
-              percpu_get(apic_id), current->pid);
+  __vsnprint(prefix, sizeof(prefix) - 1, "c%d_t%lu_",
+             percpu_get(apic_id), current->pid);
 
   bd = &serial_char_dumper;
 
@@ -604,23 +600,18 @@ __unused static void test_file_creation(void)
   inode_put(parent_ino);
 #endif
 }
-#else  /* !TEST_FILE_CREATION */
-__unused static void test_file_creation(void) { }
-#endif  /* TEST_FILE_CREATION */
 
-#endif  /* EXT2_TESTS || EXT2_SMP_TESTS */
 
-#if EXT2_TESTS
 void ext2_run_tests(void)
 {
-  union super_block __unused *sb;
-  struct inode __unused *inode;
-  struct dir_entry __unused *dentry;
-  struct unrolled_head __unused head;
-  struct path_translation __unused *file;
-  uint64_t __unused len, block, nblocks, nfree;
-  int64_t __unused ilen, inum, count, parent_inum;
-  char __unused *buf, *buf2, *parent, *child;
+  __unused union super_block *sb;
+  __unused struct inode *inode;
+  __unused struct dir_entry *dentry;
+  __unused struct unrolled_head head;
+  __unused struct path_translation *file;
+  __unused uint64_t len, block, nblocks, nfree;
+  __unused int64_t ilen, inum, count, parent_inum;
+  __unused char *buf, *buf2, *parent, *child;
 
   buf = kmalloc(BUF_LEN);
   buf2 = kmalloc(BUF_LEN);
@@ -980,7 +971,7 @@ void ext2_run_tests(void)
  * TODO: Once semaphores are ready, don't quit, but sleep when no
  * more disk inodes are available.
  */
-static void __no_return test_alloc_dealloc(void)
+static void __noreturn test_alloc_dealloc(void)
 {
   struct inode *inode;
   struct unrolled_head head;
@@ -1011,7 +1002,7 @@ static void __no_return test_alloc_dealloc(void)
  * Fuzz: Constantly Fetch and put inodes from disk, offering enough
  * SMP fuzz-testing against code accessing the file system.
  */
-static void __no_return smp_fuzz(void)
+static void __noreturn smp_fuzz(void)
 {
   struct inode *inode;
 

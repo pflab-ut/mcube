@@ -69,7 +69,7 @@ struct printf_argdesc {
  * NOTE! Don't use any assert()s in this function!
  */
 static char panic_prefix[] = "PANIC: printk: ";
-static __no_return void printk_panic(const char *str)
+static __noreturn void printk_panic(const char *str)
 {
   const char *prefix;
 
@@ -173,7 +173,6 @@ static inline int lfout(double lf, char *dst, int n, struct printf_argdesc *desc
   int base = 10;
   int i;
   char tmp[MAX_DIGIT];
-  char pad = ' ';
   double ulf;
   uint64_t u64;
   if (base == 10 && lf < 0) {
@@ -193,18 +192,6 @@ static inline int lfout(double lf, char *dst, int n, struct printf_argdesc *desc
 
     if ((u64 /= base) == 0) {
 
-#if 0
-      if (cf->pad) {
-        pad = '0';
-      }
-      if (FOUT_SIZE < n + cf->digit) {
-        return -1;
-      }
-      while (i < cf->digit) {
-        dst[n++] = pad;
-        cf->digit--;
-      }
-#endif
       if (FOUT_SIZE < n + i) {
         return -1;
       }
@@ -334,8 +321,10 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
   long num;
   unsigned long unum;
   unsigned char ch;
-  double dnum;
   int len;
+#if defined(ENABLE_FPU)
+  double dnum;
+#endif /* ENABLE_FPU */
 
   if (size < 1) {
     return 0;
@@ -379,7 +368,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
       if (desc.len == LONG) {
         dnum = va_arg(args, double);
       } else {
-        dnum = va_arg(args, float);
+        dnum = (float) va_arg(args, double);
       }
       len = lfout(dnum, str, size, &desc);
       break;

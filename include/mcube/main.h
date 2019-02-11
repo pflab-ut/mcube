@@ -21,30 +21,6 @@
 
 #ifndef  __ASSEMBLY__
 
-#define ARRSIZE(x)           ((int)(sizeof(x) / sizeof(x[0])))
-
-// Division macros, rounding (a/b) up or down
-#define DIV_DN(a, b)         ((a) / (b))
-#define DIV_UP(a, b)         (((a) + (b) - 1) / (b))
-
-// Alignment macros, align a to the nearest multiple of b.
-#define ALIGN_DN(a, b)       (div_dn(a, b) * (b))
-#define ALIGN_UP(a, b)       (div_up(a, b) * (b))
-
-#define PTR_ADD(t, p, o)     ((t *)((uint8_t *)(p) + (o)))
-#define PTR_SUB(t, p, o)     ((t *)((uint8_t *)(p) - (o)))
-
-
-/// Forced structure packing (use only when absolutely necessary)
-#define PACKSTRUCT           __attribute__((packed, aligned(1)))
-
-/// Compile-time static assertion
-#define STATIC_ASSERT(a, b)  _Static_assert(a, b)
-
-
-#define __stringify_1(x...)   #x
-#define __stringify(x...)    __stringify_1(x)
-
 
 /**
  * @struct arg_parameter
@@ -112,9 +88,6 @@ struct conv_flag {
 };
 
 typedef struct conv_flag conv_flag;
-
-int usermain(void);
-int usertask(void *arg);
 
 #define inf_loop() do {                                                 \
     print("%s:%s():%d %s\n", __FILE__, __func__, __LINE__, "inf_loop()"); \
