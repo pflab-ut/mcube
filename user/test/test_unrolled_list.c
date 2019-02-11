@@ -4,24 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 /*
- * Unrolled Linked List -- A linked list of small arrays!
- *
  * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
- *
- * This is an ad-hoc UnrolledLinkedList-like structure for storing a
- * thread's File Descriptor Table.  Its core advantages are:
- *
- *  - Semi-random access using indices as the search keys,  which is
- *        suitable for the Unix file descriptors [0->N] continuous range.
- *  - Automatic and efficient reuse of deleted keys (i.e., close()-d
- *        descriptors), thus saving memory space as much as possible.
- *
- * NOTE! This is mostly how it's done on Solaris: "The process-level [file
- * descriptor table] entries are allocated dynamically in groups of 24 as
- * files are opened, up to the per-process open file limit." --Jim Mauro
- *
- * NOTE! In Linux, a dynamic array is used with an incrementing pointer
- * that wraps at end, thus minimizing search time for a free FD number/idx.
  */
 
 #include <mcube/mcube.h>

@@ -3,6 +3,9 @@
  *
  * @author Hiroyuki Chishiro
  */
+/*
+ * Copyright (C) 2011 Ahmed S. Darwish <darwish.07@gmail.com>
+ */
 #include <mcube/mcube.h>
 
 bool test_atomic(void)

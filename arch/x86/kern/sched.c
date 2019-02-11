@@ -183,7 +183,7 @@ void sched_enqueue(struct proc *proc)
  */
 static struct proc *dispatch_runnable_proc(int *ret_prio)
 {
-  struct proc *proc, *spare;
+  struct proc *proc, *spare = NULL;
   int h_prio;
 
   if (PS->just_queued_turn && !list_empty(&PS->just_queued)) {

@@ -3,6 +3,9 @@
  *
  * @author Hiroyuki Chishiro
  */
+/*
+ * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
+ */
 #include <mcube/mcube.h>
 
 

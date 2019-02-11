@@ -37,31 +37,6 @@ static void print_info(void)
   printk("BSS size   = %d bytes\n\n", __bss_end - __bss_start);
 }
 
-/*
- * Run compiled testcases, if any
- */
-#if 0
-static void run_test_cases(void)
-{
-  list_run_tests();
-  unrolled_run_tests();
-  hash_run_tests();
-  bitmap_run_tests();
-  string_run_tests();
-  printk_run_tests();
-  vm_run_tests();
-  pagealloc_run_tests();
-  kmalloc_run_tests();
-  pit_run_tests();
-  apic_run_tests();
-  percpu_run_tests();
-  atomic_run_tests();
-  sched_run_tests();
-  ext2_run_tests();
-  ext2_run_smp_tests();
-  file_run_tests();
-}
-#endif
 
 /*
  * Bootstrap-CPU start; we came from head.S

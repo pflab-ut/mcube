@@ -158,7 +158,7 @@ static int mpc_check(struct mpc_table *mpc)
 /*
  * Dump MP conf table header
  */
-static void mpc_dump(struct mpc_table *mpc)
+void mpc_dump(struct mpc_table *mpc)
 {
   char signature[5];
 

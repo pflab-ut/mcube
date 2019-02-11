@@ -4,12 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 /*
- * Type-generic doubly-linked lists
- *
  * Copyright (C) 2010 Ahmed S. Darwish <darwish.07@gmail.com>
- *
- * The real code is in the headers: this is only test-cases. Nonetheless,
- * below code serves as a nice demonstration of linked stacks and queues.
  */
 
 #include <mcube/mcube.h>
@@ -25,7 +20,10 @@ static void test_0_elements(void)
   struct test *t1, *t2, *t3, *spare;
   uint64_t x;
 
-  t1 = kmalloc(sizeof(struct test));
+  if (!(t1 = kmalloc(sizeof(struct test)))) {
+    printk("Error: cannot allocate memory %lu\n", sizeof(struct test));
+    return;
+  }
   t1->x = x = UINT64_MAX;
   list_init(&t1->node);
   assert(list_empty(&t1->node));
@@ -54,17 +52,25 @@ enum list_type {
 static void test_1_element(int type)
 {
   struct list_node head;
-  struct test *t1, *t2, *t3, *spare;
+  struct test *t1, *t2, *t3, *spare = NULL;
 
   list_init(&head);
   assert(list_empty(&head));
 
-  t1 = kmalloc(sizeof(struct test));
+  if (!(t1 = kmalloc(sizeof(struct test)))) {
+    printk("Error: cannot allocate memory %lu\n", sizeof(struct test));
+    return;
+  }
   t1->x = UINT64_MAX;
   switch(type) {
-  case STACK: list_add(&head, &t1->node); break;
-  case QUEUE: list_add_tail(&head, &t1->node); break;
-  default: assert(false);
+  case STACK:
+    list_add(&head, &t1->node);
+    break;
+  case QUEUE:
+    list_add_tail(&head, &t1->node);
+    break;
+  default:
+    assert(false);
   }
 
   assert(!list_empty(&head));
@@ -89,26 +95,33 @@ static void test_1_element(int type)
   kfree(t2);
 
   assert(list_empty(&head));
-  printk("%s(%s): SUCCESS\n", __func__,
-         type == STACK ? "stack" : "queue");
+  printk("%s(%s): SUCCESS\n", __func__, type == STACK ? "stack" : "queue");
 }
 
 static void test_several_elements(int count, int type)
 {
   struct list_node head;
-  struct test **t, *te, *spare;
+  struct test **t, *te = NULL, *spare = NULL;
 
   list_init(&head);
   assert(list_empty(&head));
 
-  t = kmalloc(sizeof(struct test *) * count);
+  if (!(t = kmalloc(sizeof(struct test *) * count))) {
+    printk("Error: cannot allocate memory %lu\n", sizeof(struct test *) * count);
+    return;
+  }
   for (int i = 0; i < count; i++) {
     t[i] = kmalloc(sizeof(struct test));
     t[i]->x = i;
     switch (type) {
-    case STACK: list_add(&head, &t[i]->node); break;
-    case QUEUE: list_add_tail(&head, &t[i]->node); break;
-    default:    assert(false);
+    case STACK:
+      list_add(&head, &t[i]->node);
+      break;
+    case QUEUE:
+      list_add_tail(&head, &t[i]->node);
+      break;
+    default:
+      assert(false);
     }
     assert(!list_empty(&head));
   }
@@ -125,6 +138,7 @@ static void test_several_elements(int count, int type)
     list_del(&te->node);
     kfree(te);
   }
+  kfree(t);
   printk("\n");
 
   assert(list_empty(&head));

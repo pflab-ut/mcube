@@ -102,8 +102,10 @@ static struct __node *__get_node(struct unrolled_head *head, uint key,
   node_num = key / node->array_len;
   *array_idx = key % node->array_len;
   while (node_num--) {
-    if (!node)      /* Out of Range key */
+    if (!node) {
+      /* Out of Range key */
       return NULL;
+    }
     node = node->next;
   }
 

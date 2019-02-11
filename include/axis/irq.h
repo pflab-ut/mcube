@@ -93,6 +93,7 @@ static inline void restore_local_irq(unsigned long *flags)
 
 void common_interrupt_handler(void);
 void do_sched_by_software_interrupt(void);
+void interrupt_vector(void);
 
 #endif /* !__ASSEMBLY__ */
 

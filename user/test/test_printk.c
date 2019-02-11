@@ -4,8 +4,6 @@
  * @author Hiroyuki Chishiro
  */
 /*
- * printf()-like methods: vsnprintf(), etc
- *
  * Copyright (C) 2009-2010 Ahmed S. Darwish <darwish.07@gmail.com>
  */
 

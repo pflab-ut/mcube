@@ -126,7 +126,7 @@ uint64_t kmem_end = -1;
 struct zone *page_assign_zone(struct page* page)
 {
   uint64_t start, end;
-  struct zone *zone;
+  struct zone *zone = NULL;
 
   assert(page->free == 1);
   assert(page->zone_id == ZONE_UNASSIGNED);
@@ -144,8 +144,7 @@ struct zone *page_assign_zone(struct page* page)
     }
   }
 
-  panic("Memory - Physical page 0x%lx cannot be attached "
-        "to any zone", start);
+  panic("Memory - Physical page 0x%lx cannot be attached to any zone", start);
 }
 
 /*
@@ -249,7 +248,7 @@ out:
 
 struct page *get_free_page(enum zone_id zid)
 {
-  struct zone *zone;
+  struct zone *zone = NULL;
   struct page *page;
   uint64_t start, end;
 
@@ -355,9 +354,9 @@ struct page *addr_to_page(void *addr)
  */
 void pagealloc_init(void)
 {
-  struct e820_range *range;
+  struct e820_range *range = NULL;
   struct e820_setup *setup;
-  struct zone *zone;
+  struct zone *zone = NULL;
   uint64_t avail_pages, avail_ranges;
 
   zones_init();

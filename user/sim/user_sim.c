@@ -23,7 +23,7 @@ int user_arch_main(int argc, char *argv[])
   //  printk("user_arch_main()\n");
   printk("%%\n");
   printk("%c%%\n", 'a');
-  //  printk("%% %% %% \n\n");
+  printk("%% %% %%\n");
   //  printf("%% %% %% \n\n");
   // fprintf(stdout, "%% %% %% \n\n");
 #if 1

@@ -4,12 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 /*
- * The Second Extended File System - Test cases & Debugging methods
- *
  * Copyright (C) 2012-2013 Ahmed S. Darwish <darwish.07@gmail.com>
- *
- * NOTE! The venerable e2fsprogs 'fsck' tool is one hell of a utility
- * for checking FS drivers write-support validity.  Use it often.
  */
 
 #include <mcube/mcube.h>

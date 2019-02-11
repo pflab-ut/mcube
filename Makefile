@@ -13,9 +13,8 @@ include $(TOP_DIR)/Rules.make
 
 KERNEL_SRCS = \
  $(TOP_DIR)/kernel/main.c \
-	$(TOP_DIR)/kernel/print.c \
- $(TOP_DIR)/kernel/printf.c \
-	$(TOP_DIR)/kernel/thread.c \
+ $(TOP_DIR)/kernel/print.c \
+ $(TOP_DIR)/kernel/thread.c \
  $(TOP_DIR)/kernel/task.c \
  $(TOP_DIR)/kernel/kmalloc.c \
  $(TOP_DIR)/kernel/sched.c \
@@ -143,7 +142,7 @@ docker:
 .PHONY: pylint pyflakes cppcheck scan-build
 
 cppcheck:
-	@$(FIND) $(TOP_DIR) -name "*.c" | xargs cppcheck
+	@$(FIND) $(TOP_DIR) -name "*.c" -or -name "*.h" | xargs cppcheck
 
 scan-build:
 	@scan-build make -j$(JOBS)

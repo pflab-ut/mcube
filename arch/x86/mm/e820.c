@@ -139,7 +139,7 @@ static void validate_e820h_struct(void)
 static void build_memory_setup(void)
 {
   uint64_t avail_len, avail_ranges, phys_end, end;
-  struct e820_range *range;
+  struct e820_range *range = NULL;
 
   assert(memory_setup.valid == 0);
 

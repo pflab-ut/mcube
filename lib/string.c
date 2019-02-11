@@ -157,8 +157,8 @@ char *strcpy(char *dest, const char *src)
 {
   char *tmp = dest;
 
-  while ((*dest++ = *src++))
-    ;
+  while ((*dest++ = *src++)) {
+  }
   return tmp;
 }
 
@@ -204,8 +204,8 @@ char *strcat(char *dest, const char *src)
   while (*dest) {
     dest++;
   }
-  while ((*dest++ = *src++))
-    ;
+  while ((*dest++ = *src++)) {
+  }
   return tmp;
 }
 
@@ -223,8 +223,9 @@ char *strncat(char *dest, const char *src, size_t n)
   char *tmp = dest;
 
   if (n) {
-    while (*dest)
+    while (*dest) {
       dest++;
+    }
     while ((*dest++ = *src++) != 0) {
       if (--n == 0) {
         *dest = '\0';
@@ -307,11 +308,10 @@ void *memset32(void *dst, uint32_t val, uint64_t len)
   len = len / 8;
 
   uval = ((uint64_t)val << 32) + val;
-  asm volatile (
-    "rep stosq"      /* rdi, rcx */
-    :"=&D" (d0), "+&c" (len)
-    :"0" (dst), "a" (uval)
-    :"memory");
+  asm volatile("rep stosq"      /* rdi, rcx */
+               :"=&D" (d0), "+&c" (len)
+               :"0" (dst), "a" (uval)
+               :"memory");
 
   return dst;
 }
@@ -327,12 +327,11 @@ void *memset64(void *dst, uint64_t val, uint64_t len)
   assert((len % 8) == 0);
   len = len / 8;
 
-  asm volatile (
-    "rep stosq"      /* rdi, rcx */
-    :"=&D" (d0), "+&c" (len)
-    :"0" (dst), "a" (val)
-    :"memory");
-
+  asm volatile("rep stosq"      /* rdi, rcx */
+               :"=&D" (d0), "+&c" (len)
+               :"0" (dst), "a" (val)
+               :"memory");
+  
   return dst;
 }
 
@@ -428,14 +427,13 @@ static void *__memcpy_forward(void *dst, const void *src, size_t len)
 {
   uintptr_t d0;
 
-  asm volatile (
-    "mov %3, %%rcx;"
-    "rep movsb;"      /* rdi, rsi, rcx */
-    "mov %4, %%rcx;"
-    "rep movsq;"      /* ~~~ */
-    :"=&D" (d0), "+&S" (src)
-    :"0" (dst), "ir" (len & 7), "ir" (len >> 3)
-    :"rcx", "memory");
+  asm volatile("mov %3, %%rcx;"
+               "rep movsb;"      /* rdi, rsi, rcx */
+               "mov %4, %%rcx;"
+               "rep movsq;"      /* ~~~ */
+               :"=&D" (d0), "+&S" (src)
+               :"0" (dst), "ir" (len & 7), "ir" (len >> 3)
+               :"rcx", "memory");
 
   return dst;
 }
@@ -450,14 +448,14 @@ void *memcpy_forward(void *dst, const void *src, size_t len)
   uintptr_t udst, usrc;
   bool bad_overlap;
 
-  udst = (uintptr_t)dst;
-  usrc = (uintptr_t)src;
+  udst = (uintptr_t) dst;
+  usrc = (uintptr_t) src;
 
   bad_overlap = (udst + 8 > usrc) && (usrc + len > udst);
-  if (__unlikely(bad_overlap))
+  if (__unlikely(bad_overlap)) {
     panic("%s: badly-overlapped regions, src=0x%lx, dst"
           "=0x%lx, len=0x%lx", __func__, src, dst, len);
-
+  }
   return __memcpy_forward(dst, src, len);
 }
 
@@ -471,14 +469,14 @@ void *memcpy(void * restrict dst, const void * restrict src, size_t len)
   uintptr_t udst, usrc;
   bool overlap;
 
-  udst = (uintptr_t)dst;
-  usrc = (uintptr_t)src;
+  udst = (uintptr_t) dst;
+  usrc = (uintptr_t) src;
 
   overlap = (udst + len > usrc) && (usrc + len > udst);
-  if (__unlikely(overlap))
-    panic("%s: overlapped regions, src=0x%lx, dst=0x"
-          "%lx, len=0x%lx", __func__, src, dst, len);
-
+  if (__unlikely(overlap)) {
+    panic("%s: overlapped regions, src=0x%lx, dst=0x%lx, len=0x%lx",
+          __func__, src, dst, len);
+  }
   return __memcpy_forward(dst, src, len);
 }
 

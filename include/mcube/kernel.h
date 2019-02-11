@@ -133,17 +133,6 @@ void __noreturn panic(const char *fmt, ...);
 #define FAILURE 0
 
 
-/*
- * Main kernel print methods
- */
-int vsnprint(char *buf, int size, const char *fmt, va_list args);
-void printk_bust_all_locks(void);
-//void printk(const char *fmt, ...);
-int prints(const char *fmt, ...);
-void putc(char c);
-void putc_colored(char c, int color);
-
-void printk_run_tests(void);
 
 /*
  * Critical failures

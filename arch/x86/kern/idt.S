@@ -302,24 +302,18 @@ halt_cpu_ipi_handler:
 /*
  * PIT periodic mode test handler
  */
-#if  PIT_TESTS
-.globl pit_periodic_handler
-pit_periodic_handler:
+ENTRY(pit_periodic_handler)
   PUSH_REGS
   call   __pit_periodic_handler
   jmp    irq_end
-#endif  /* PIT_TESTS */
 
 /*
  * APIC periodic mode test handler
  */
-#if  APIC_TESTS
-.globl apic_timer_handler
-apic_timer_handler:
+ENTRY(apic_timer_handler)
   PUSH_REGS
   call   __apic_timer_handler
   jmp    irq_end
-#endif  /* APIC_TESTS */
 
 .data
 

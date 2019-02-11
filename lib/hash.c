@@ -48,7 +48,7 @@ void hash_free(struct hash *hash)
  */
 static void *hash_find_elem(struct hash *hash, uint elem_id)
 {
-  struct hash_elem *helem;
+  struct hash_elem *helem = NULL;
   int idx;
 
   assert(hash != NULL);

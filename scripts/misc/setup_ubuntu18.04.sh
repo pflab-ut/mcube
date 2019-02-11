@@ -8,7 +8,7 @@
 prefix="sudo apt-get -y install"
 
 # compiler
-$prefix ccache gcc clang llvm gcc-aarch64-linux-gnu nasm
+$prefix ccache gcc clang clang-tools llvm gcc-aarch64-linux-gnu nasm
 
 # python
 $prefix python3 python3-pip

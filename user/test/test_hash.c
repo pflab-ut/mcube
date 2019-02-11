@@ -4,11 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 /*
- * A Simple Hash Table Implementation
- *
  * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
- *
- * The modulo operator is used as the hash function.
  */
 
 #include <mcube/mcube.h>
@@ -16,7 +12,7 @@
 
 static void hash_print_info(struct hash *hash)
 {
-  struct hash_elem *helem;
+  struct hash_elem *helem = NULL;
   uint64_t count;
 
   print_uart("Printing Hash info:\n");
