@@ -8,10 +8,14 @@
 prefix="sudo apt-get -y install"
 
 # compiler
-$prefix ccache gcc clang clang-tools llvm gcc-aarch64-linux-gnu nasm
+$prefix ccache gcc clang clang-tools llvm gcc-aarch64-linux-gnu
+
+# C analyze tool
+$prefix cppcheck flawfinder
 
 # python
 $prefix python3 python3-pip
+# python analyze tool
 pip3 install pyflakes pylint 
 
 # tool

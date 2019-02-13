@@ -42,7 +42,7 @@
 #define __noreturn      __attribute__((noreturn))
 #define __pure        __attribute__((pure))
 #define __aligned(x)      __attribute__((aligned(x)))
-#define __printf(a,b)      __attribute__((format(printf,a,b)))
+//#define __printf(a,b)      __attribute__((format(printf,a,b)))
 #define  noinline      __attribute__((noinline))
 //#define __attribute_pure__    __attribute__((pure))
 #ifdef __attribute_const__

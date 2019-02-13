@@ -72,10 +72,6 @@ void init_pit_timer(unsigned long tick_us);
 void start_pit_timer(unsigned int ch);
 void stop_pit_timer(unsigned int ch);
 
-extern unsigned long cpu_bus_freq_mhz;
-
-//extern unsigned long timer_count[NR_CPUS];
-//extern unsigned long tcur[NR_CPUS], tprev[NR_CPUS];
 
 
 #endif	/* !__ASSEMBLY__ */

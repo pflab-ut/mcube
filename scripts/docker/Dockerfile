@@ -8,7 +8,8 @@ ENV HOME=/home/mcube
 RUN set -x \
     && apt-get update \
     && apt-get install -y \
-               ccache gcc clang clang-tools llvm gcc-aarch64-linux-gnu cppcheck \
+               ccache gcc clang clang-tools llvm gcc-aarch64-linux-gnu \
+               cppcheck flawfinder \
                git samba make doxygen sendmail git \
                qemu qemu-system \
                python3 python3-pip \

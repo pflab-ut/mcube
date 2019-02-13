@@ -139,10 +139,13 @@ defaultconfig:
 docker:
 	@$(TOP_DIR)/scripts/docker/docker.sh
 
-.PHONY: pylint pyflakes cppcheck scan-build
+.PHONY: cppcheck flawfinder scan-build pylint pyflakes
 
 cppcheck:
 	@$(FIND) $(TOP_DIR) -name "*.c" -or -name "*.h" | xargs cppcheck
+
+flawfinder:
+	@$(FIND) $(TOP_DIR) -name "*.c" -or -name "*.h" | xargs flawfinder
 
 scan-build:
 	@scan-build make -j$(JOBS)
