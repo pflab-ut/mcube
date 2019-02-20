@@ -966,7 +966,7 @@ void ext2_run_tests(void)
  * TODO: Once semaphores are ready, don't quit, but sleep when no
  * more disk inodes are available.
  */
-static void __noreturn test_alloc_dealloc(void)
+__noreturn static void test_alloc_dealloc(void)
 {
   struct inode *inode;
   struct unrolled_head head;
@@ -997,7 +997,7 @@ static void __noreturn test_alloc_dealloc(void)
  * Fuzz: Constantly Fetch and put inodes from disk, offering enough
  * SMP fuzz-testing against code accessing the file system.
  */
-static void __noreturn smp_fuzz(void)
+__noreturn static void smp_fuzz(void)
 {
   struct inode *inode;
 

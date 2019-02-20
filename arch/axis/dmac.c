@@ -8,7 +8,7 @@
 void do_local_dmac(uint32_t dst,
                    uint32_t src,
                    size_t n,
-                   unsigned int ch,
+                   __unused unsigned int ch,
                    enum dmac policy)
 {
   if (policy >= DMAC_END) {

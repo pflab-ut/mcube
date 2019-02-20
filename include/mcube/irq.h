@@ -26,6 +26,7 @@ static inline void restore_local_irq(unsigned long *flags);
 
 void wait_until_next_interrupt(void);
 void init_irq(void);
+void exit_irq(void);
 
 struct full_regs;
 

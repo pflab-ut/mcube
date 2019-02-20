@@ -31,7 +31,7 @@ int bidleindex;
 unsigned long sched_time;
 volatile uint32_t sched_end = false;
 
-#if SCHED_FP
+#if defined(SCHED_FP)
 void set_priority(struct thread_struct *th)
 {
   /* the priority of idle thread is ULONG_MAX */
@@ -44,7 +44,7 @@ void set_priority(struct thread_struct *th)
   //              th->priority = th->sched.period / 100 - 1;
 }
 
-#elif SCHED_DP
+#elif defined(SCHED_DP)
 
 void set_priority(struct thread_struct *th)
 {

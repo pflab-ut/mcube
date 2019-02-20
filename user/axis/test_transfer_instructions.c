@@ -4,6 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
+#include "user_axis.h"
 
 #define BASE_ADDR (MEMORY_SIZE / 2)
 #define OFFSET_ADDR 0x12

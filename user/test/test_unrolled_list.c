@@ -74,11 +74,11 @@ static void _test_generated_keys(struct unrolled_head *head)
  */
 static void _test_keys_removal(struct unrolled_head *head)
 {
-  uint key, nr_elements = 10000;
+  int key, nr_elements = 10000;
   void *val = NULL;
 
   printk("_UNROLLED: _test_keys_removal(): ");
-  for (uintptr_t i = 0; i < nr_elements; i++) {
+  for (intptr_t i = 0; i < nr_elements; i++) {
     unrolled_insert(head, (void *)(i + 1));
   }
   for (intptr_t i = nr_elements - 1; i >= 0; i--) {
@@ -89,7 +89,7 @@ static void _test_keys_removal(struct unrolled_head *head)
     }
     unrolled_remove_key(head, i);
 
-    uint j = 0;
+    int j = 0;
     unrolled_for_each(head, val) {
       j++;
     }

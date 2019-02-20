@@ -107,7 +107,7 @@ static inline uint64_t ceil_div(uint64_t a, uint64_t b)
   return ((a - 1) / b) + 1;
 }
 
-void __noreturn panic(const char *fmt, ...);
+__noreturn void panic(const char *fmt, ...);
 
 #if CONFIG_ARCH_SIM
 

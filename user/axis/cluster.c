@@ -4,7 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
-
+#include "user_axis.h"
 
 #define PARALLEL_NUM 8
 #define CLUSTER_NUM 8
@@ -28,7 +28,7 @@ volatile unsigned long array[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 volatile unsigned long src[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 volatile unsigned long src2[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 
-void print_mat(void)
+static void print_mat(void)
 {
   int i, j, k;
   for (i = 0; i < PARALLEL_NUM; i++) {
@@ -44,10 +44,10 @@ void print_mat(void)
 
 #define INIT_NUM 10
 
-#define INIT_VAL(i, j, k) (INIT_NUM * (i) + ((j) * INIT_NUM / 10) + k)
+#define INIT_VAL(i, j, k) (unsigned long) (INIT_NUM * (i) + ((j) * INIT_NUM / 10) + k)
 
 
-void init_array(void)
+static void init_array(void)
 {
   int i, j, k;
   for (i = 0; i < PARALLEL_NUM; i++) {
@@ -61,7 +61,7 @@ void init_array(void)
   }
 }
 
-void init_src_array(void)
+static void init_src_array(void)
 {
   int i, j, k;
   for (i = 0; i < PARALLEL_NUM; i++) {
@@ -77,9 +77,9 @@ void init_src_array(void)
 
 
 
-void mul(volatile unsigned long dst[MAT_SIZE][MAT_SIZE],
-         volatile unsigned long a[MAT_SIZE][MAT_SIZE],
-         volatile unsigned long b[MAT_SIZE][MAT_SIZE])
+static void do_mul(volatile unsigned long dst[MAT_SIZE][MAT_SIZE],
+                   volatile unsigned long a[MAT_SIZE][MAT_SIZE],
+                   volatile unsigned long b[MAT_SIZE][MAT_SIZE])
 {
   int i, j, k;
   for (i = 0; i < MAT_SIZE; i++) {
@@ -92,7 +92,7 @@ void mul(volatile unsigned long dst[MAT_SIZE][MAT_SIZE],
 }
 
 
-void wait_until_loop_completion(void)
+static void wait_until_loop_completion(void)
 {
   int loop;
   int i;
@@ -112,7 +112,7 @@ void wait_until_loop_completion(void)
 
 
 
-void do_sequential(void)
+static void do_sequential(void)
 {
   int i;
   unsigned long cpu_id;
@@ -126,15 +126,15 @@ void do_sequential(void)
     begin = get_time_stamp_counter();
     
     for (i = 0; i < PARALLEL_NUM; i++) {
-      mul(array[i], src[i], src2[i]);
+      do_mul(array[i], src[i], src2[i]);
     }
     end = get_time_stamp_counter();
     print("begin = %lu end = %lu end - begin = %lu\n", begin, end, end - begin);
-    //    print_mat();
+    print_mat();
   }
 }
 
-void do_callback(volatile int index)
+static void do_callback(volatile int index)
 {
   volatile unsigned long high_addr;
   volatile unsigned long low_addr;
@@ -154,7 +154,7 @@ void do_callback(volatile int index)
   } while (array[index][MAT_SIZE-1][MAT_SIZE-1] == 0);
   //  print("start (%d, %d)\n", own.x, own.y);
   /* calculate array[own.cluster_id] in (own.x, own.y) */
-  mul(array[index], src[index], src2[index]);
+  do_mul(array[index], src[index], src2[index]);
   //  print("write\n");
   for (i = 0; i < MAT_SIZE; i++) {
     //    print("i = %d\n", i);
@@ -187,7 +187,7 @@ void do_callback(volatile int index)
     }
   }
   //  print("start (%d, %d)\n", own.x, own.y);
-  mul(array[index], src[index], src2[index]);
+  do_mul(array[index], src[index], src2[index]);
   print("write\n");
   for (i = 0; i < MAT_SIZE; i++) {
     for (j = 0; j < MAT_SIZE; j++) {
@@ -204,7 +204,7 @@ void do_callback(volatile int index)
 #endif
 }
 
-int is_cluster_active(struct cluster *c)
+static int is_cluster_active(struct cluster *c)
 {
   if (c->cluster_id < CLUSTER_NUM) {
     return 1;
@@ -213,7 +213,7 @@ int is_cluster_active(struct cluster *c)
 }
 
 
-void do_parallel(void)
+static void do_parallel(void)
 {
   unsigned long cpu_id;
   int i;
@@ -251,9 +251,9 @@ void do_parallel(void)
     //    print("mul\n");
     for (i = 0; i < LOOP_PER_CLUSTER; i++) {
       /* increment own array data */
-      mul(array[own.cluster_id * LOOP_PER_CLUSTER + i],
-          src[own.cluster_id * LOOP_PER_CLUSTER + i],
-          src2[own.cluster_id * LOOP_PER_CLUSTER + i]);
+      do_mul(array[own.cluster_id * LOOP_PER_CLUSTER + i],
+             src[own.cluster_id * LOOP_PER_CLUSTER + i],
+             src2[own.cluster_id * LOOP_PER_CLUSTER + i]);
     }
     
     //    print("do while (0, 0)\n");
@@ -277,7 +277,7 @@ void do_parallel(void)
 
 void cluster_main(void)
 {
-  //  do_sequential();
+  do_sequential();
   do_parallel();
 }
 

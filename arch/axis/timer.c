@@ -8,7 +8,7 @@
 /**
  * The start_timer() function starts timer.
  */
-void start_timer(unsigned int ch)
+void start_timer(__unused unsigned int ch)
 {
   printk("start_timer()\n");
   enable_timer_interrupt();
@@ -18,7 +18,7 @@ void start_timer(unsigned int ch)
 /**
  * The stop_timer() function stops timer.
  */
-void stop_timer(unsigned int ch)
+void stop_timer(__unused unsigned int ch)
 {
   disable_timer();
   disable_timer_interrupt();

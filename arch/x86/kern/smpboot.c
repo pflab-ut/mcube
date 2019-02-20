@@ -216,7 +216,7 @@ void smpboot_trigger_secondary_cores_testcases(void)
  * which has assigned us a unique stack, the per-CPU area
  * addr in %gs, and bootstrap's gdt, idt, and page tables.
  */
-void __noreturn secondary_start(void)
+__noreturn void secondary_start(void)
 {
   union apic_id id;
 

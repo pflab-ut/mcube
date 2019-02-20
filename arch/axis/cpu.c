@@ -115,7 +115,9 @@ void get_cluster_from_index(struct cluster *c, volatile int index, volatile int 
 
 
 
-void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg)
+void copy_arch_process(__unused struct task_struct *p,
+                       __unused unsigned long func,
+                       __unused unsigned long arg)
 {
 }
 

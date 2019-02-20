@@ -10,13 +10,13 @@
 /** Architecture. */
 #define CONFIG_ARCH_SIM 0
 /** Architecture. */
-#define CONFIG_ARCH_X86 1
+#define CONFIG_ARCH_X86 0
 /** Architecture. */
 #define CONFIG_ARCH_ARM_RASPI3 0
 /** Architecture. */
 #define CONFIG_ARCH_ARM_SYNQUACER 0
 /** Architecture. */
-#define CONFIG_ARCH_AXIS 0
+#define CONFIG_ARCH_AXIS 1
 /** Compiler. */
 #define CONFIG_COMPILER_CLANG 0
 /** Compiler. */

@@ -41,7 +41,7 @@ static void print_info(void)
 /*
  * Bootstrap-CPU start; we came from head.S
  */
-void __noreturn kernel_start(void)
+__noreturn void kernel_start(void)
 {
   /* Before anything else, zero the bss section. As said by C99:
    * “All objects with static storage duration shall be inited

@@ -14,7 +14,6 @@ void *user_func(void *arg)
     print("%lu", id);
     //  do_end_job(&ths[id]);
   }
-  return NULL;
 }
 
 int user_thread_main(void)
@@ -42,7 +41,7 @@ int user_thread_main(void)
 }
 
 
-int timer_main(void)
+void timer_main(void)
 {
   set_timer_period(USEC_TO_CPU_CLOCK(100));
   print("USEC_TO_CPU_CLOCK(100) = %lu\n", USEC_TO_CPU_CLOCK(100));
@@ -53,7 +52,6 @@ int timer_main(void)
     //    wi();
     //    wait_until_next_interrupt();
   }
-  return 0;
 }
 
 int dmac_main(void)
@@ -146,13 +144,13 @@ int ap_main(void)
 }
 
 
-int user_arch_main(int argc, char *argv[])
+int user_arch_main(__unused int argc, __unused char *argv[])
 {
   //  user_thread_main();
   //  timer_main();
   //  dmac_main();
-  //  test_main();
-  callback_main();
+  test_main();
+  //  callback_main();
   //  multi_cpus_main();
   //  tsc_main();
   //  cluster_main();

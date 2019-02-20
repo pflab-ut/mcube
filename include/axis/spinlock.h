@@ -9,18 +9,18 @@
 #ifndef __ASSEMBLY__
 
 
-static inline void spin_lock(spinlock_t *lock)
+static inline void spin_lock(__unused spinlock_t *lock)
 {
   /* TODO: implement */
 }
 
-static inline bool spin_trylock(spinlock_t *lock)
+static inline bool spin_trylock(__unused spinlock_t *lock)
 {
   /* TODO: implement */
   return 0;
 }
 
-static inline void spin_unlock(spinlock_t *lock)
+static inline void spin_unlock(__unused spinlock_t *lock)
 {
   /* TODO: implement */
 }

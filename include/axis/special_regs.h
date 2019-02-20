@@ -8,8 +8,8 @@
 
 #ifndef __ASSEMBLY__
 
-#define NR_SOFTWARE_INTERRUPTS 8UL
-#define SOFTWARE_INTERRUPT_OFFSET 8UL
+#define NR_SOFTWARE_INTERRUPTS 8
+#define SOFTWARE_INTERRUPT_OFFSET 8
 
 
 static inline unsigned long get_cpu_id(void)

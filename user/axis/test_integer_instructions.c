@@ -4,6 +4,7 @@
  * @author Hiroyuki Chishiro
  */
 #include <mcube/mcube.h>
+#include "user_axis.h"
 
 static void test_add(void)
 {

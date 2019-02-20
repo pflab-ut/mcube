@@ -133,13 +133,13 @@ CWARN_FLAGS += -Wextra				\
   -Wstrict-prototypes			\
   -Wmissing-prototypes			\
   -Wmissing-declarations		\
-  -Wmissing-noreturn			\
   -Wredundant-decls			\
   -Wdisabled-optimization		\
   -Wno-type-limits			\
   -Wno-missing-field-initializers \
   -Wundef				\
 
+#  -Wmissing-noreturn			\
 #  -Wvla					\
 #  -Wcast-qual				\
 
