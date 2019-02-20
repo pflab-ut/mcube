@@ -16,8 +16,7 @@ void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long 
 }
 
 
-
-void enable_pmu(void)
+static void enable_pmu(void)
 {
   unsigned long val = 0;
   

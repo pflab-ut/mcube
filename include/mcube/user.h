@@ -12,6 +12,8 @@ int user_main(int argc, char *argv[]);
 int user_arch_main(int argc, char *argv[]);
 int user_test_main(int argc, char *argv[]);
 
+int ap_main(void);
+
 bool test_atomic(void);
 bool test_bitmap(void);
 bool test_ext2(void);
@@ -22,9 +24,17 @@ bool test_list(void);
 bool test_page_alloc(void);
 bool test_printk(void);
 bool test_ring_buf(void);
+bool test_sched(void);
 bool test_string(void);
 bool test_unrolled_list(void);
 bool test_vm(void);
+
+#if CONFIG_ARCH_X86
+bool test_apic(void);
+bool test_percpu(void);
+bool test_pit(void);
+
+#endif /* CONFIG_ARCH_X86 */
 
 #endif /* __ASSEMBLY__ */
 

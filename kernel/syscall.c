@@ -90,8 +90,6 @@ asmlinkage int sys_bad_syscall(int number)
 {
   print("sys_bad_syscall()\n");
   print("number = %d\n", number);
-  inf_loop();
-  /* not reached */
   return -1;
 }
 

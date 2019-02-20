@@ -54,7 +54,7 @@ static void _disrupt(int size)
  * @count: number of allocations to perform
  * @rounded: if true, only do power-of-2-rounded allocs
  */
-void _test_allocs(int count, int rounded)
+static void _test_allocs(int count, int rounded)
 {
   int i, size;
 

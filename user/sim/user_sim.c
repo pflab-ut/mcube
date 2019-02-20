@@ -17,7 +17,7 @@ int ap_main(void)
   return 0;
 }
 
-int user_arch_main(int argc, char *argv[])
+int user_arch_main(__unused int argc, __unused char *argv[])
 {
   long l = 1234;
   //  printk("user_arch_main()\n");

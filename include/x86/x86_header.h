@@ -18,7 +18,6 @@
 #include <x86/vm.h>
 
 #include <x86/apic.h>
-#include <x86/conf_sched.h>
 #include <x86/cpu.h>
 #include <x86/e820.h>
 #include <x86/errno.h>
@@ -36,6 +35,7 @@
 #include <x86/pit.h>
 #include <x86/proc.h>
 #include <x86/ramdisk.h>
+#include <x86/sched.h>
 #include <x86/sections.h>
 #include <x86/serial.h>
 #include <x86/smpboot.h>

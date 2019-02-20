@@ -192,5 +192,6 @@ SRCS += \
 
 SRCS += \
  $(TOP_DIR)/user/x86/test_apic.c \
+ $(TOP_DIR)/user/x86/test_percpu.c \
  $(TOP_DIR)/user/x86/test_pit.c \
  $(TOP_DIR)/user/x86/user_x86.c \

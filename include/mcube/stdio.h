@@ -11,6 +11,7 @@
 #define FOUT_SIZE 0x200
 #define MAX_DIGIT 64
 
+void printk_bust_all_locks(void);
 /* print for only kernel mode. */
 //int printk(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 int printk(const char *fmt, ...);

@@ -7,7 +7,7 @@
 
 static unsigned long uart_wait_tsc = 0x10000;
 
-uint8_t uart_pol_getc(uint8_t ch)
+uint8_t uart_pol_getc(__unused uint32_t ch)
 {
   while (!(inb(COM1_LINE_STATUS) & UART_LINE_STATUS_RECV_DATA))
     ;
@@ -15,7 +15,7 @@ uint8_t uart_pol_getc(uint8_t ch)
   return inb(COM1_START);
 }
 
-void uart_pol_putc(uint8_t c, int32_t ch)
+void uart_pol_putc(uint8_t c, __unused uint32_t ch)
 {
   while (!(inb(COM1_LINE_STATUS) & UART_LINE_STATUS_SEND_DATA_COMP))
     ;

@@ -258,7 +258,7 @@ static int lout(signed long num, char *buf, int size, struct printf_argdesc *des
 #if defined(ENABLE_FPU)
 
 /* TODO: update implementation */
-static inline int lfout(double lf, char *dst, int n, struct printf_argdesc *desc)
+static inline int lfout(double lf, char *dst, int n, __unused struct printf_argdesc *desc)
 {
   int base = 10;
   int i;

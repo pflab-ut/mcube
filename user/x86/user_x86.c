@@ -62,10 +62,13 @@ int ap_main(void)
 }
 
 
-int user_arch_main(int argc, char *argv[])
+int user_arch_main(__unused int argc, __unused char *argv[])
 {
   //  user_thread_main();
   //  user_level_main();
+  test_apic();
+  test_page_alloc();
+  test_percpu();
   
   return 0;
 }

@@ -350,7 +350,8 @@ bool test_page_alloc(void)
 {
   uint64_t count;
 
-  _validate_zones_data();
+  // NOTE: avoid warning: function might be candidate for attribute 'noreturn' [-Wsuggest-attribute=noreturn]
+  //  _validate_zones_data();
   _test_boot_freepages_count();
 
   /* Beware of the pre-requisites first */
@@ -361,15 +362,13 @@ bool test_page_alloc(void)
     count = PAGES_COUNT;
   }
 
-  printk("_Memory: Allocating (and seeding) %ld pages on "
-         "each run\n", count);
+  printk("_Memory: Allocating (and seeding) %ld pages on each run\n", count);
 
   /* Burn, baby, burn */
   for (int i = 0; i < 100; i++) {
     printk("[%d] ", i);
     _test_pagealloc_coherency(count);
   }
-
   /* Pick one: */
   /* _test_zone_exhaustion(ZONE_1GB); */
   /* _test_zone_exhaustion(ZONE_ANY); */

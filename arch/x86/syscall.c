@@ -47,6 +47,8 @@ int call_sys_get_mode_level(void)
   return ret;
 }
 
+
+#if 0
 int call_user_sys_write(char *buf)
 {
   int ret;
@@ -57,7 +59,6 @@ int call_user_sys_write(char *buf)
 }
 
 
-#if 0
 static void handle_syscall(interrupt_context_t *context)
 {
   /*

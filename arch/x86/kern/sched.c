@@ -385,7 +385,7 @@ void sched_init(void)
 
 spinlock_t printstats_lock = INIT_SPINLOCK;
 
-static void print_proc_stats(struct proc *proc, int prio)
+void print_proc_stats(struct proc *proc, int prio)
 {
   uint dispatch_count;
   clock_t rqwait_overall;
@@ -408,14 +408,9 @@ static void print_proc_stats(struct proc *proc, int prio)
 }
 
 
-#if 1
 void print_sched_stats(void)
 {
-}
-
-#else
-void print_sched_stats(void)
-{
+#if 0
   /* NOTE: print sched stats information. */
   struct proc *proc;
 
@@ -434,22 +429,17 @@ void print_sched_stats(void)
   print_uart("\n");
 
   spin_unlock(&printstats_lock);
-}
 #endif
+}
 
 
 /*
  * @@@ Tracing: @@@
  */
 
-#if 1
-void rq_dump(struct runqueue *rq)
+void rq_dump(__unused struct runqueue *rq)
 {
-}
-
-#else
-void rq_dump(struct runqueue *rq)
-{
+#if 0
   /* FIXME: not work well */
   struct proc *proc;
   const char *name;
@@ -464,40 +454,6 @@ void rq_dump(struct runqueue *rq)
     }
   }
   print_uart("\n");
-}
 #endif
-
-
-/*
- * @@@ Testing: @@@
- */
-
-
-void __noreturn loop_print(char ch, int color)
-{
-  while (true) {
-    putchar_colored(ch, color);
-    for (int i = 0; i < 0xffff; i++) {
-      cpu_pause();
-    }
-  }
 }
 
-static void __noreturn test0(void) { loop_print('A', VGA_LIGHT_BLUE); }
-static void __noreturn test1(void) { loop_print('B', VGA_LIGHT_BLUE); }
-static void __noreturn test2(void) { loop_print('C', VGA_LIGHT_BLUE); }
-static void __noreturn test3(void) { loop_print('D', VGA_LIGHT_CYAN); }
-static void __noreturn test4(void) { loop_print('E', VGA_LIGHT_CYAN); }
-static void __noreturn test5(void) { loop_print('F', VGA_LIGHT_CYAN); }
-
-void sched_run_tests(void)
-{
-  for (int i = 0; i < 20; i++) {
-    kthread_create(test0);
-    kthread_create(test1);
-    kthread_create(test2);
-    kthread_create(test3);
-    kthread_create(test4);
-    kthread_create(test5);
-  }
-}

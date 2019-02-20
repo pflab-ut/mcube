@@ -330,8 +330,10 @@ void apic_broadcast_ipi(int del_mode, int vector);
 bool apic_ipi_acked(void);
 
 
-void apic_run_tests(void);
+void __apic_timer_handler(void);
 
+
+extern volatile int apic_ticks_count;
 
 #else
 

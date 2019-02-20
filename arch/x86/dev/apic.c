@@ -22,6 +22,21 @@ static uint64_t apic_clock;
  */
 static void *apic_virt_base;
 
+
+/*
+ * Test APIC timer periodic ticks against PIT delays
+ */
+
+/*
+ * Increase the counter for each periodic timer tick.
+ */
+volatile int apic_ticks_count;
+
+void __apic_timer_handler(void)
+{
+  apic_ticks_count++;
+}
+
 /*
  * Clock calibrations
  */
@@ -399,4 +414,3 @@ void *apic_vrbase(void)
 
   return apic_virt_base;
 }
-

@@ -8,7 +8,7 @@
 /**
  * The run_user_thread() function runs user thread.
  */
-void __attribute__((noreturn)) run_user_thread(void)
+__noreturn void run_user_thread(void)
 {
   unsigned long cpu = get_cpu_id();
   void *ret = NULL;
@@ -23,7 +23,7 @@ void __attribute__((noreturn)) run_user_thread(void)
   inf_loop();
 }
 
-void __attribute__((noreturn)) exit(int status)
+__noreturn void exit(__unused int status)
 {
   disable_local_irq();
   stop_cpu(0);

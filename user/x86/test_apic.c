@@ -75,10 +75,6 @@ static void apic_test_delay(void)
  */
 static volatile int ticks_count;
 
-void __apic_timer_handler(void)
-{
-  ticks_count++;
-}
 
 /*
  * ticks[i]: number of periodic timer ticks triggered after
@@ -111,7 +107,7 @@ static void apic_test_periodic_mode(void)
   local_irq_enable();
   for (i = 0; i < DELAY_TESTS; i++) {
     pit_mdelay(ms);
-    ticks[i] = ticks_count;
+    ticks[i] = apic_ticks_count;
   }
 
   /* This should print a list of ones */
@@ -122,9 +118,10 @@ static void apic_test_periodic_mode(void)
   printk("\n\n");
 }
 
-void apic_run_tests(void)
+bool test_apic(void)
 {
   apic_test_periodic_mode();
   apic_test_delay();
+  return true;
 }
 

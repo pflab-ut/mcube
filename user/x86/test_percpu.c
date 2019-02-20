@@ -100,7 +100,7 @@ uint64_t percpu_inspect_order(void)
 /*
  * Blackbox testing of the per-CPU accessors.
  */
-void percpu_run_tests(void)
+bool test_percpu(void)
 {
   int id;
   uintptr_t self, gs;
@@ -127,5 +127,6 @@ void percpu_run_tests(void)
          id, percpu_addr(x16), percpu_get(x16));
   printk("_PerCPU#%d: x8  address = 0x%lx, val = 0x%x\n",
          id, percpu_addr(x8 ), percpu_get(x8 ));
+  return true;
 }
 

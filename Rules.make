@@ -130,20 +130,25 @@ CWARN_FLAGS += -Wextra				\
   -Wpointer-arith			\
   -Wwrite-strings			\
   -Waddress				\
-  -Wlogical-op				\
   -Wstrict-prototypes			\
   -Wmissing-prototypes			\
   -Wmissing-declarations		\
   -Wmissing-noreturn			\
-  -Wnormalized=nfc			\
   -Wredundant-decls			\
-  -Wvla					\
   -Wdisabled-optimization		\
   -Wno-type-limits			\
   -Wno-missing-field-initializers \
   -Wundef				\
 
+#  -Wvla					\
 #  -Wcast-qual				\
+
+ifeq ($(CC), gcc)
+CWARN_FLAGS +=
+  -Wlogical-op				\
+  -Wnormalized=nfc			\
+
+endif
 
 
 CFLAGS +=				\

@@ -29,6 +29,7 @@ long strtol(const char *cp, char **endp, int base);
 unsigned long strtoul(const char *cp, char **endp, int base);
 void exit(int status);
 
+void *sbrk(intptr_t increment);
 
 void *malloc(size_t size);
 void *calloc(size_t num, size_t nsize);

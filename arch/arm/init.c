@@ -6,7 +6,7 @@
 #include <mcube/mcube.h>
 
 
-void shell(void)
+__noreturn void shell(void)
 {
   int c;
   while (1) {

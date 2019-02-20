@@ -5,15 +5,15 @@
  */
 #include <mcube/mcube.h>
 
-void init_timer(unsigned long tick_us)
+void init_timer(__unused unsigned long tick_us)
 {
 }
 
 
-void start_timer(unsigned int ch)
+void start_timer(__unused unsigned int ch)
 {
 }
 
-void stop_timer(unsigned int ch)
+void stop_timer(__unused unsigned int ch)
 {
 }

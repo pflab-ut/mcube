@@ -15,7 +15,7 @@ static void setup_idt(void)
   load_idt(&idtdesc);
 }
 
-static void clear_bss(void)
+void clear_bss(void)
 {
   memset(__bss_start , 0, __bss_end - __bss_start);
 }

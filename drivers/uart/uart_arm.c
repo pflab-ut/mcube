@@ -9,7 +9,7 @@
 
 /* PL011 UART in Raspberry Pi3 and SynQuacer */
 
-uint8_t uart_pol_getc(uint8_t ch)
+uint8_t uart_pol_getc(__unused uint32_t ch)
 {
   // Wait for UART to have received something.
   while (mmio_in64(UART0_FLAG_REG) & UART_FLAG_REG_RECEIVE_FIFO_EMPTY)
@@ -17,7 +17,7 @@ uint8_t uart_pol_getc(uint8_t ch)
   return mmio_in64(UART0_DATA_REG) & UART_DATA_REG_DATA_MASK;
 }
 
-void uart_pol_putc(uint8_t c, int32_t ch)
+void uart_pol_putc(uint8_t c, __unused uint32_t ch)
 {
   // Wait for UART to become ready to transmit.
   while (mmio_in64(UART0_FLAG_REG) & UART_FLAG_REG_TRANSMIT_FIFO_FULL)
@@ -100,14 +100,14 @@ void init_uart(void)
 
 /* Mini UART in Raspberry Pi3 */
 
-uint8_t uart_pol_getc(uint8_t ch)
+uint8_t uart_pol_getc(__unused uint32_t ch)
 {
   while (mmio_in32(IRQ_PENDING1) & IRQ_PENDINGn_SRC(MINI_UART_IRQ))
     ;
   return mmio_in8(AUX_MU_IO_REG);
 }
 
-void uart_pol_putc(uint8_t c, int32_t ch)
+void uart_pol_putc(uint8_t c, __unused uint32_t ch)
 {
   while (!(mmio_in8(AUX_MU_LSR_REG) & AUX_MU_LSR_REG_TRANSMITTER_EMPTY))
     ;

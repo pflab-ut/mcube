@@ -16,9 +16,9 @@
  */
 struct uart_devdata {
   /** Channel. */
-  unsigned int ch;
+  uint32_t ch;
   /** Baudrate. */
-  unsigned int baudrate;
+  uint32_t baudrate;
 };
 
 typedef struct uart_devdata uart_devdata;
@@ -30,8 +30,8 @@ void uart_putc(char c, uint8_t port);
 ssize_t uart_write(const void *input_data, size_t length, void *devdata);
 ssize_t uart_read(void *output_data, size_t length, void *devdata);
 
-uint8_t uart_pol_getc(uint8_t ch);
-void uart_pol_putc(uint8_t c, int32_t ch);
+uint8_t uart_pol_getc(uint32_t ch);
+void uart_pol_putc(uint8_t c, uint32_t ch);
 
 void init_uart(void);
 

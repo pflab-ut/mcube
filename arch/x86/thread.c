@@ -6,8 +6,7 @@
 #include <mcube/mcube.h>
 
 
-
-void __attribute__((noreturn)) run_user_thread(void)
+__noreturn void run_user_thread(void)
 {
 #if 0
   unsigned long cpu = get_cpu_id();
@@ -35,7 +34,7 @@ void wait(unsigned long count)
 }
 
 
-void __attribute__((noreturn)) exit(int status)
+__noreturn void exit(__unused int status)
 {
   cli();
   hlt();

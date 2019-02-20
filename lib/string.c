@@ -251,7 +251,7 @@ char *strchr(const char *s, int c)
       return NULL;
     }
   }
-  return s;
+  return (char *) s;
 }
 
 

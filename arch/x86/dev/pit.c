@@ -88,6 +88,21 @@ enum {
   MODE_3 =  0x3,    /* Square-wave mode */
 };
 
+
+/*
+ * Test PIT's monotonic mode code
+ */
+
+/*
+ * Increase the counter for each periodic PIT tick.
+ */
+volatile int pit_ticks_count;
+
+void __pit_periodic_handler(void)
+{
+  pit_ticks_count++;
+}
+
 /*
  * Start counter 2: raise the GATE-2 pin.
  * Disable glue between OUT-2 and the speaker in the process

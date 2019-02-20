@@ -5,7 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
 
 
 /**

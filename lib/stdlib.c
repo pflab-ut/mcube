@@ -40,7 +40,7 @@ void init_malloc(void)
 }
 
 
-void *sbrk(intptr_t increment)
+void *sbrk(__unused intptr_t increment)
 {
   /* TODO: implement */
   return (void *) -1;

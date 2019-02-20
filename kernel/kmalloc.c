@@ -247,12 +247,12 @@ void kmalloc_init(void)
 
 #else
 
-void *kmalloc(size_t size)
+void *kmalloc(__unused size_t size)
 {
   return NULL;
 }
 
-void kfree(void *addr)
+void kfree(__unused void *addr)
 {
 }
 

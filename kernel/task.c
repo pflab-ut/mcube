@@ -9,7 +9,7 @@ static struct task_struct init_task = INIT_TASK;
 struct task_struct *current_task = &(init_task);
 struct task_struct *tasks[NR_TASKS] = {&init_task, };
 
-int copy_process(unsigned long func, unsigned long arg)
+int copy_process(__unused unsigned long func, __unused unsigned long arg)
 {
 #if 0
   struct task_struct *p;

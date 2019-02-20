@@ -189,7 +189,7 @@ static inline unsigned long get_util(struct thread_struct *th)
   return (th->sched.wcet * 100) / th->sched.period;
 }
 
-void __attribute__((noreturn)) run_user_thread(void);
+void run_user_thread(void);
 
 
 void set_priority(struct thread_struct *th);

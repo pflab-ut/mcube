@@ -108,6 +108,10 @@ void init_arch_ap(void);
 void exit_arch(void);
 void exit_arch_ap(void);
 
+void clear_bss(void);
+
+void shell(void);
+
 
 #endif /* !__ASSEMBLY__ */
 

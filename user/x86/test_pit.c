@@ -57,20 +57,6 @@ static void pit_test_mdelay(void)
 }
 
 /*
- * Test PIT's monotonic mode code
- */
-
-/*
- * Increase the counter for each periodic PIT tick.
- */
-static volatile int ticks_count;
-
-void __pit_periodic_handler(void)
-{
-  ticks_count++;
-}
-
-/*
  * ticks[i]: number of periodic timer ticks triggered after
  * the `i'th independently-programmed delay interval.
  */
@@ -104,7 +90,7 @@ static void pit_test_periodic_irq(void)
   local_irq_enable();
   for (i = 0; i < DELAY_TESTS; i++) {
     pit_mdelay(ms);
-    ticks[i] = ticks_count;
+    ticks[i] = pit_ticks_count;
   }
 
   /* This should print a list of ones */
@@ -115,9 +101,10 @@ static void pit_test_periodic_irq(void)
   printk("\n\n");
 }
 
-void pit_run_tests(void)
+bool test_pit(void)
 {
   pit_test_periodic_irq();
   pit_test_mdelay();
+  return true;
 }
 

@@ -179,6 +179,8 @@ void init_sched(void);
 void do_sched_algo(void);
 void do_sched(void);
 
+void schedule_tail(void);
+
 void do_release(void);
 
 
