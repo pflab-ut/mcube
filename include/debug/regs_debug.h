@@ -31,7 +31,7 @@
   } while (0)
 
       
-#elif CONFIG_ARCH_ARM
+#elif CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
 
 #define pdebug_registers(ptr) do {              \
   } while (0)

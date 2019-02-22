@@ -318,7 +318,7 @@ extern volatile unsigned char _binary___lib_font_psf_start;
 /**
  * Display a string
  */
-void fb_print(int x, int y, char *s)
+void fb_print(int x, int y, const char *s)
 {
   // get our font
   psf_t *font = (psf_t *) &_binary___lib_font_psf_start;
@@ -332,7 +332,8 @@ void fb_print(int x, int y, char *s)
     // calculate the offset on screen
     int offs = (y * font->height * fb_pitch) + (x * (font->width + 1) * 4);
     // variables
-    int i,j, line, mask, bytesperline = (font->width + 7) / 8;
+    unsigned int i, j;
+    int line, mask, bytesperline = (font->width + 7) / 8;
     // handle carrige return
     if (*s == '\r') {
       x = 0;

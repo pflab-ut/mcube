@@ -8,6 +8,12 @@
 
 #ifndef __ASSEMBLY__
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+long lpow(long x, long y);
+
+
 #if defined(ENABLE_FPU)
 
 /**
@@ -24,44 +30,6 @@
 #define FLOOR(size, unit)  ((size) / (unit) > 0 ? (size) / (unit) :    \
                            (int64_t) (size) / (unit) > (double) (size) / (unit) ?  \
                            (size) / (unit) - 1 : (size) / (unit))
-
-#else
-/**
- * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
- * @return Ceiling of @c size/unit.
- */
-#define CEIL(size, unit) (((int32_t) (size) * (int32_t) (unit) < 0) \
-                          || ((int32_t) (size) % (int32_t) (unit)) == 0 ? \
-                          (size) / (unit) : (size) / (unit) + 1)
-/**
- * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
- * @return Floor of @c size/unit.
- */
-#define FLOOR(size, unit)  ((size) / (unit))
-
-#endif /* ENABLE_FPU */
-
-
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-
-#if defined(ENABLE_FPU)
-
-#if CONFIG_ARCH_SIM
-#include <math.h>
-#else
-double __ieee754_sqrt(double x);
-double copysign(double x, double y);
-double pow(double x, double y);
-
-double cos(double x);
-double sin(double x);
-double tan(double x);
-
-double sqrt(double x);
-double cbrt(double x);
-
-#endif /* ENABLE_FPU */
 
 
 /**
@@ -87,10 +55,40 @@ double cbrt(double x);
 
 #define D 4.4544551033807686783083602485579e-6
 
+#if CONFIG_ARCH_SIM
+#include <math.h>
+#else
+double __ieee754_sqrt(double x);
+double copysign(double x, double y);
+double pow(double x, double y);
+
+double cos(double x);
+double sin(double x);
+double tan(double x);
+double atan(double x);
+
+double sqrt(double x);
+double cbrt(double x);
+double remainder(double x, double y);
+double strtod(const char *nptr, char **endptr);
+
+#endif /* CONFIG_ARCH_SIM */
+
+#else
+/**
+ * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
+ * @return Ceiling of @c size/unit.
+ */
+#define CEIL(size, unit) (((int32_t) (size) * (int32_t) (unit) < 0) \
+                          || ((int32_t) (size) % (int32_t) (unit)) == 0 ? \
+                          (size) / (unit) : (size) / (unit) + 1)
+/**
+ * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
+ * @return Floor of @c size/unit.
+ */
+#define FLOOR(size, unit)  ((size) / (unit))
 
 #endif /* ENABLE_FPU */
-
-long lpow(long x, long y);
 
 
 #endif /* !__ASSEMBLY__ */

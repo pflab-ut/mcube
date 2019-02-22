@@ -7,6 +7,7 @@
 #define __MCUBE_ARM_SYNQUACER_UART_H__
 
 #define PL011_UART 1
+#define MINI_UART 0
 
 
 #endif /* __MCUBE_ARM_SYNQUACER_UART_H__ */

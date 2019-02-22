@@ -17,7 +17,7 @@ int handle_dmac_interrupt(void)
 }
 
 
-asmlinkage int do_irq(struct full_regs *regs)
+asmlinkage int do_irq(__unused struct full_regs *regs)
 {
   printk("do_irq()\n");
   do_switch_thread();

@@ -95,14 +95,18 @@
 
 
 #define SD_OK                0
-#define SD_TIMEOUT          -1
-#define SD_ERROR            -2
+#define SD_TIMEOUT           1
+#define SD_ERROR             2
 
 
 #ifndef __ASSEMBLY__
 
-int init_sd(void);
+int sd_status(unsigned int mask);
+int sd_int(unsigned int mask);
+int sd_cmd(unsigned int code, unsigned int arg);
 int sd_readblock(unsigned int lba, unsigned char *buffer, unsigned int num);
+int sd_clk(unsigned int f);
+int init_sd(void);
 
 
 #endif /* !__ASSEMBLY__ */

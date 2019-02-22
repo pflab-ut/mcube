@@ -740,7 +740,7 @@ int print_uart(const char *fmt, ...)
 #elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
   puts(sbuf);
 #elif CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
-  uart_write(sbuf, n, NULL);
+  uart_write(NULL, sbuf, n);
 #endif
   
   spin_unlock(&sbuf_lock);

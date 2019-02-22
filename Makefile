@@ -5,7 +5,7 @@
 #
 
 .SUFFIXES:
-.SUFFIXES: .c .o .S .asm
+.SUFFIXES: .c .o .S .h
 
 TOP_DIR = .
 

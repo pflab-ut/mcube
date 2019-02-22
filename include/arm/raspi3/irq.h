@@ -176,6 +176,10 @@ static inline void disable_timer_interrupt(void)
                  | LP_LOCAL_TIMER_CTRL_STATUS_TIMER_ENABLE));
 }
 
+void handle_gpu_interrupt(void);
+void handle_mailbox_interrupt(unsigned int cpu, unsigned int mb);
+void do_irq_mailbox(unsigned int cpu, unsigned int mb);
+
 
 #endif /* !__ASSEMBLY__ */
 

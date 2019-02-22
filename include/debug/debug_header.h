@@ -9,8 +9,6 @@
 #ifndef __ASSEMBLY__
 #if CONFIG_OPTION_DEBUG
 
-extern unsigned int Debug;
-
 /** The PDEBUG() macro. */
 #define PDEBUG(fmt, args...) do {                    \
     if (Debug == true) {                             \

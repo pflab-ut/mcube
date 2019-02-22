@@ -75,7 +75,7 @@ int sd_int(unsigned int mask)
  */
 int sd_cmd(unsigned int code, unsigned int arg)
 {
-  int r = 0;
+  unsigned int r = 0;
   sd_err = SD_OK;
   if (code & CMD_NEED_APP) {
     r = sd_cmd(CMD_APP_CMD | (sd_rca ? CMD_RSPNS_48 : 0), sd_rca);
@@ -134,7 +134,8 @@ int sd_cmd(unsigned int code, unsigned int arg)
  */
 int sd_readblock(unsigned int lba, unsigned char *buffer, unsigned int num)
 {
-  int r, c = 0, d;
+  int r, d;
+  unsigned int c = 0;
   if (num < 1) {
     num = 1;
   }

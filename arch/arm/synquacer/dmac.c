@@ -10,10 +10,10 @@ void init_dmac(void)
 {
 }
 
-void do_local_dmac(uint32_t dst,
-                   uint32_t src,
-                   size_t n,
-                   unsigned int ch,
-                   enum dmac policy)
+void do_local_dmac(__unused uint32_t dst,
+                   __unused uint32_t src,
+                   __unused size_t n,
+                   __unused unsigned int ch,
+                   __unused enum dmac policy)
 {
 }

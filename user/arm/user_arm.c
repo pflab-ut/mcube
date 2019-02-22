@@ -5,6 +5,18 @@
  */
 #include <mcube/mcube.h>
 
+void kernel_level_main(void);
+void *user_func(void *arg);
+int user_thread_main(void);
+void process(const char *array);
+int user_ap_main(void);
+int user_dmac_main(void);
+void user_process(void);
+void user_atomic_main(void);
+void user_raspi3_main(void);
+
+
+
 void kernel_level_main(void)
 {
   unsigned long ret;
@@ -153,10 +165,8 @@ void user_atomic_main(void)
 }
 
 
-void user_raspi3_main(void);
 
-
-int user_arch_main(int argc, char *argv[])
+int user_arch_main(__unused int argc, __unused char *argv[])
 {
   //  print("user_arch_main()\n");
   //  user_thread_main();

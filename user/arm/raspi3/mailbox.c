@@ -7,12 +7,18 @@
 
 #include "homer.c"
 
+void raspi3_mailbox_main(void);
+void raspi3_frame_buffer_main(void);
+void raspi3_sd_main(void);
+void callback_func(void);
+void raspi3_irq_main(void);
+int user_raspi3_main(void);
+
 void raspi3_mailbox_main(void)
 {
   print("get_serial_number() = 0x%016lu\n", get_serial_number());
   print("random number = %u\n", rand_raspi3(0, UINT_MAX));
 }
-
 
 void raspi3_frame_buffer_main(void)
 {

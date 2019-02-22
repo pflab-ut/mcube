@@ -27,8 +27,8 @@ extern volatile spinlock_t uart_getc_lock, uart_putc_lock;
 
 uint8_t uart_getc(uint8_t port);
 void uart_putc(char c, uint8_t port);
-ssize_t uart_write(const void *input_data, size_t length, void *devdata);
-ssize_t uart_read(void *output_data, size_t length, void *devdata);
+size_t uart_write(void *dev, const void *data, size_t length);
+size_t uart_read(void *dev, void *data, size_t length);
 
 uint8_t uart_pol_getc(uint32_t ch);
 void uart_pol_putc(uint8_t c, uint32_t ch);

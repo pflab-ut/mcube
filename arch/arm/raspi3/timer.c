@@ -11,7 +11,8 @@ void init_timer(unsigned long tick_us)
   unsigned long cpu = get_cpu_id();
   timer_cntfrq = get_cntfrq_el0();
     
-  timer_tick = (timer_cntfrq * TICK_USEC) / (1000 * 1000);
+  timer_tick = (timer_cntfrq * tick_us) / (1000 * 1000);
+  printk("timer_cntfrq = %d timer_tick = %d\n", timer_cntfrq, timer_tick);
   /* clear interrupt flag and reload local timer */
   mmio_out32(LP_LOCAL_TIMER_WRITE_FLAGS,
              LP_LOCAL_TIMER_WRITE_FLAGS_INTERRUPT_FLAG_CLEAR

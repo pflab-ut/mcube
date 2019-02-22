@@ -62,7 +62,7 @@ typedef struct fatdir fatdir_t;
 int fat_getpartition(void);
 void fat_listdirectory(void);
 
-unsigned int fat_getcluster(char *fn);
+unsigned int fat_getcluster(const char *fn);
 char *fat_readfile(unsigned int cluster);
 
 #endif /* !__ASSEMBLY__ */

@@ -597,7 +597,7 @@ __unused static void test_file_creation(void)
 }
 
 
-void ext2_run_tests(void)
+static void test_ext2_up(void)
 {
   __unused union super_block *sb;
   __unused struct inode *inode;
@@ -1009,7 +1009,7 @@ __noreturn static void smp_fuzz(void)
   }
 }
 
-bool test_ext2(void)
+static bool test_ext2_smp(void)
 {
   /* Avoid serialization - minimize serial port output */
   ext2_debug_init(&null_null_dumper);
@@ -1054,6 +1054,14 @@ bool test_ext2(void)
   for (int i = 0; i < 10; i++) {
     kthread_create(smp_fuzz);
   }
+  return true;
+}
+
+
+bool test_ext2(void)
+{
+  test_ext2_up();
+  test_ext2_smp();
   return true;
 }
 #else

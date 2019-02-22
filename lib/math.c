@@ -5,8 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
-
+#if defined(ENABLE_FPU)
 
 /**
  * The cos() function returns the cosine of @c x, where @c x is given in radians.
@@ -259,7 +258,7 @@ double cbrt(double x)
   }
 }
 
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 || CONFIG_ARCH_ARM */
+#endif /* ENABLE_FPU */
 
 long lpow(long x, long y)
 {

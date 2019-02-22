@@ -134,7 +134,7 @@ void fat_listdirectory(void)
 /**
  * Find a file in root directory entries
  */
-unsigned int fat_getcluster(char *fn)
+unsigned int fat_getcluster(const char *fn)
 {
   bpb_t *bpb = (bpb_t *) &__end;
   fatdir_t *dir = (fatdir_t *)(&__end + 512);
