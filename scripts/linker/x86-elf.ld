@@ -33,17 +33,17 @@ SECTIONS
    */
 
   .text.head : {
-        ./build/./arch/x86/boot/head.o(.text)
-        ./build/./arch/x86/boot/rmcall.o(.text)
-        ./build/./arch/x86/boot/e820.o(.text)
-        ./build/./arch/x86/boot/load_ramdisk.o(.text)
+        ./build/./arch/x86/head.o(.text)
+        ./build/./arch/x86/rmcall.o(.text)
+        ./build/./arch/x86/e820.o(.text)
+        ./build/./arch/x86/load_ramdisk.o(.text)
   }
 
   .data.head : {
-        ./build/./arch/x86/boot/head.o(.data)
-        ./build/./arch/x86/boot/rmcall.o(.data)
-        ./build/./arch/x86/boot/e820.o(.data)
-        ./build/./arch/x86/boot/load_ramdisk.o(.data)
+        ./build/./arch/x86/head.o(.data)
+        ./build/./arch/x86/rmcall.o(.data)
+        ./build/./arch/x86/e820.o(.data)
+        ./build/./arch/x86/load_ramdisk.o(.data)
   }
 
   /* Putting the bootstrap BSS in the middle will force
@@ -53,10 +53,10 @@ SECTIONS
    * cd618e752a which led to 0 executable bytes wasted,
    * with the tradeoff price of much extra complexity */
   .bss.head (NOLOAD) : {
-        ./build/./arch/x86/boot/head.o(.bss)
-        ./build/./arch/x86/boot/rmcall.o(.bss)
-        ./build/./arch/x86/boot/e820.o(.bss)
-        ./build/./arch/x86/boot/load_ramdisk.o(.bss)
+        ./build/./arch/x86/head.o(.bss)
+        ./build/./arch/x86/rmcall.o(.bss)
+        ./build/./arch/x86/e820.o(.bss)
+        ./build/./arch/x86/load_ramdisk.o(.bss)
   }
 
   /*
@@ -67,16 +67,16 @@ SECTIONS
 
   .text : AT(ADDR(.text) - 0xffffffff80000000) {
          __text_start = .;
-         *(EXCLUDE_FILE (*./build/./arch/x86/boot/head.o *./build/./arch/x86/boot/rmcall.o \
-             *./build/./arch/x86/boot/e820.o *./build/./arch/x86/boot/load_ramdisk.o)
+         *(EXCLUDE_FILE (*./build/./arch/x86/head.o *./build/./arch/x86/rmcall.o \
+             *./build/./arch/x86/e820.o *./build/./arch/x86/load_ramdisk.o)
              .text)
          __text_end = .;
   }
 
   .data : {
          __data_start = .;
-         *(EXCLUDE_FILE (*./build/./arch/x86/boot/head.o *./build/./arch/x86/boot/rmcall.o \
-             *./build/./arch/x86/boot/e820.o *./build/./arch/x86/boot/load_ramdisk.o)
+         *(EXCLUDE_FILE (*./build/./arch/x86/head.o *./build/./arch/x86/rmcall.o \
+             *./build/./arch/x86/e820.o *./build/./arch/x86/load_ramdisk.o)
              .data)
          *(.rodata)
          __data_end = .;
@@ -84,11 +84,11 @@ SECTIONS
 
   .bss : {
     __bss_start = .;
-         *(EXCLUDE_FILE (*./build/./arch/x86/boot/head.o *./build/./arch/x86/boot/rmcall.o \
-             *./build/./arch/x86/boot/e820.o *./build/./arch/x86/boot/load_ramdisk.o)
+         *(EXCLUDE_FILE (*./build/./arch/x86/head.o *./build/./arch/x86/rmcall.o \
+             *./build/./arch/x86/e820.o *./build/./arch/x86/load_ramdisk.o)
              .bss)
-         *(EXCLUDE_FILE (*./build/./arch/x86/boot/head.o *./build/./arch/x86/boot/rmcall.o \
-             *./build/./arch/x86/boot/e820.o *./build/./arch/x86/boot/load_ramdisk.o)
+         *(EXCLUDE_FILE (*./build/./arch/x86/head.o *./build/./arch/x86/rmcall.o \
+             *./build/./arch/x86/e820.o *./build/./arch/x86/load_ramdisk.o)
              COMMON)
     __bss_end = .;
   }

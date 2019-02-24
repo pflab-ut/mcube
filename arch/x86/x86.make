@@ -101,42 +101,41 @@ PROCESSED_LD_SCRIPT = kern/kernel.ldp
 
 # Core and Secondary CPUs bootstrap
 ASMS = \
-  $(TOP_DIR)/arch/x86/boot/head.S	\
-  $(TOP_DIR)/arch/x86/boot/trampoline.S	\
-  $(TOP_DIR)/arch/x86/boot/rmcall.S	\
-  $(TOP_DIR)/arch/x86/boot/e820.S	\
-  $(TOP_DIR)/arch/x86/boot/load_ramdisk.S
+  $(TOP_DIR)/arch/x86/head.S	\
+  $(TOP_DIR)/arch/x86/trampoline.S	\
+  $(TOP_DIR)/arch/x86/rmcall.S	\
+  $(TOP_DIR)/arch/x86/e820.S	\
+  $(TOP_DIR)/arch/x86/load_ramdisk.S
 
 # Memory management
 SRCS +=	\
-  $(TOP_DIR)/arch/x86/mm/e820.c	\
-  $(TOP_DIR)/arch/x86/mm/page_alloc.c	\
-  $(TOP_DIR)/arch/x86/mm/vm_map.c	\
+  $(TOP_DIR)/arch/x86/e820_map.c	\
+  $(TOP_DIR)/arch/x86/page_alloc.c	\
+  $(TOP_DIR)/arch/x86/vm_map.c	\
 
 # Devices
 SRCS +=	\
-  $(TOP_DIR)/arch/x86/dev/serial.c	\
-  $(TOP_DIR)/arch/x86/dev/pic.c	\
-  $(TOP_DIR)/arch/x86/dev/apic.c	\
-  $(TOP_DIR)/arch/x86/dev/ioapic.c	\
-  $(TOP_DIR)/arch/x86/dev/pit.c	\
-  $(TOP_DIR)/arch/x86/dev/keyboard.c
-
+  $(TOP_DIR)/drivers/acpi/apic.c	\
+  $(TOP_DIR)/drivers/acpi/ioapic.c	\
+  $(TOP_DIR)/drivers/misc/keyboard.c \
+  $(TOP_DIR)/drivers/uart/serial.c	\
+  $(TOP_DIR)/arch/x86/pic.c	\
+  $(TOP_DIR)/arch/x86/pit.c
 
 
 # All other kernel objects
 SRCS +=		\
- $(TOP_DIR)/arch/x86/kern/idt.c	\
- $(TOP_DIR)/arch/x86/kern/mptables.c	\
- $(TOP_DIR)/arch/x86/kern/smpboot.c	\
- $(TOP_DIR)/arch/x86/kern/sched.c	\
- $(TOP_DIR)/arch/x86/kern/kthread.c	\
- $(TOP_DIR)/arch/x86/kern/percpu.c	\
- $(TOP_DIR)/arch/x86/kern/ramdisk.c	\
- $(TOP_DIR)/arch/x86/kern/main.c
+ $(TOP_DIR)/arch/x86/idt.c	\
+ $(TOP_DIR)/arch/x86/mptables.c	\
+ $(TOP_DIR)/arch/x86/smpboot.c	\
+ $(TOP_DIR)/arch/x86/sched.c	\
+ $(TOP_DIR)/arch/x86/kthread.c	\
+ $(TOP_DIR)/arch/x86/percpu.c	\
+ $(TOP_DIR)/arch/x86/ramdisk.c	\
+ $(TOP_DIR)/arch/x86/main.c
 
 BOOTSECT_ASMS =		\
- $(TOP_DIR)/arch/x86/boot/bootsect.S
+ $(TOP_DIR)/arch/x86/bootsect.S
 
 BOOTSECT_TARGET = $(TOP_DIR)/build/bootsect
 BOOTSECT_BIN = $(BOOTSECT_TARGET).bin

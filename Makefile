@@ -76,7 +76,7 @@ FONT_OBJ =
 endif
 
 
-.PHONY: all configure testconfig defaultconfig
+.PHONY: all configure testconfig defaultconfig docker setup
 all: $(TARGET)
 
 
@@ -124,9 +124,6 @@ $(BUILD_DIR)/%.o: %.S
 	$(CC) -D__ASSEMBLY__ $(CFLAGS) -o $@ -c -MMD -MP -MF $(@:%.o=%.d) $<
 
 
-setup: 
-	@$(TOP_DIR)/scripts/misc/setup_ubuntu18.04.sh
-
 configure: buildclean
 	@$(PYTHON) $(TOP_DIR)/scripts/kconfig/configure.py
 
@@ -139,6 +136,9 @@ defaultconfig:
 
 docker:
 	@$(TOP_DIR)/scripts/docker/docker.sh
+
+setup: 
+	@$(TOP_DIR)/scripts/misc/setup_ubuntu18.04.sh
 
 .PHONY: cppcheck flawfinder scan-build pylint pyflakes
 
@@ -159,7 +159,7 @@ pyflakes:
 
 
 
-.PHONY: run grun mrun line size
+.PHONY: run grun mrun crun cmrun
 
 run:
 ifeq ($(ARCH_NAME), sim)
@@ -218,6 +218,8 @@ crun:
 cmrun:
 	$(RUN_AXIS_CLUSTER) "+define+MONITOR_ALL +define+PRINT_ALL"
 
+
+.PHONY: line size
 
 line:
 	@$(PYTHON) $(TOP_DIR)/scripts/misc/line.py
