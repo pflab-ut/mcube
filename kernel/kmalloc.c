@@ -3,6 +3,10 @@
  *
  * @author Hiroyuki Chishiro
  */
+
+#include <mcube/mcube.h>
+
+#if CONFIG_ARCH_X86
 /*
  * Kernel Memory Allocator
  *
@@ -56,10 +60,6 @@
  * ning pages to the page allocator. Nonetheless, the algorithm is still a
  * super-fast O(1), and it does handle small requests effeciently :)
  */
-
-#include <mcube/mcube.h>
-
-#if CONFIG_ARCH_X86
 
 struct bucket kmembuckets[MAXBUCKET_IDX + 1];
 

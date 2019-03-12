@@ -10,4 +10,9 @@ set up default configuration.
 
 import tools
 
-tools.save_configure("Kconfig")
+def main():
+  "main function"
+  tools.save_configure("Kconfig")
+
+if __name__ == "__main__":
+  main()

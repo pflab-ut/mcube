@@ -17,40 +17,17 @@ import datetime
 import errno
 import tools
 
-
-BEGIN = datetime.datetime.now()
-
-
-# mkdir testconfig directory
-CWD = os.getcwd()
-PATH = CWD + "/testconfig/"
-
-if os.path.exists(os.path.dirname(PATH)):
-  try:
-    shutil.rmtree(PATH)
-  except OSError as exc:
-    if exc.errno != errno.EEXIST:
-      raise
-
-if not os.path.exists(os.path.dirname(PATH)):
-  try:
-    os.makedirs(os.path.dirname(PATH))
-  except OSError as exc:
-    if exc.errno != errno.EEXIST:
-      raise
-
-# count number of configs
-CINFO, NUM = tools.scan_all_configures("Kconfig")
-print("NUM = ", NUM)
-
-print(len(CINFO))
-
+VALS = [0, 0, 0, 0, 0, 0, 0, 0]
 INDEX = 0
 MESSAGE = ""
+PATH = ""
+CINFO = []
+NUM = 0
 
 def do_testconfig(cinfo, val):
   "do testconfig"
   global INDEX
+  global NUM
   global MESSAGE
   print(INDEX, "/", NUM)
   configure_file = open("configure", "w")
@@ -91,65 +68,83 @@ def do_testconfig(cinfo, val):
     # fout.write(stdout.decode() + "\n" + stderr.decode())
     # fout.close()
 
-VALS = [0, 0, 0, 0, 0, 0, 0, 0]
 
-# nested for loop
-"""
-#for a in range(1, CINFO[0].num-1):
-#for a in range(3, CINFO[0].num):
-for VALS[0] in range(0, CINFO[0].num):
-  for VALS[1] in range(0, CINFO[1].num):
-    for VALS[2] in range(0, CINFO[2].num):
-      for VALS[3] in range(0, CINFO[3].num):
-        for VALS[4] in range(0, CINFO[4].num):
-          for VALS[5] in range(0, CINFO[5].num):
-            for VALS[6] in range(0, CINFO[6].num):
-              for VALS[7]  in range(0, CINFO[7].num):
-                do_testconfig(CINFO, VALS)
-
-
-"""
-def recursive_for_loop(index, depth):
-  "Recursive for loop"
+def do_recursive_for_loop(index, depth):
+  "do recursive for loop"
+  global CINFO
   global VALS
   for VALS[index] in range(0, CINFO[index].get_num()):
     if depth > 0:
-      recursive_for_loop(index + 1, depth - 1)
+      do_recursive_for_loop(index + 1, depth - 1)
     else:
 #      print(VALS)
       do_testconfig(CINFO, VALS)
 
-recursive_for_loop(0, 7)
+def main():
+  "main function"
+  global PATH
+  global NUM
+  global CINFO
+  global MESSAGE
+
+  begin = datetime.datetime.now()
+
+  # mkdir testconfig directory
+  cwd = os.getcwd()
+  PATH = cwd + "/testconfig/"
+
+  if os.path.exists(os.path.dirname(PATH)):
+    try:
+      shutil.rmtree(PATH)
+    except OSError as exc:
+      if exc.errno != errno.EEXIST:
+        raise
+
+  if not os.path.exists(os.path.dirname(PATH)):
+    try:
+      os.makedirs(os.path.dirname(PATH))
+    except OSError as exc:
+      if exc.errno != errno.EEXIST:
+        raise
+
+  # count number of configs
+  CINFO, NUM = tools.scan_all_configures("Kconfig")
+  print("NUM = ", NUM)
+
+  print(len(CINFO))
+
+  do_recursive_for_loop(0, 7)
+
+  if MESSAGE == "":
+    MESSAGE = "Build Test is successful."
+
+  end = datetime.datetime.now()
+
+  elapsed = end - begin
+  MESSAGE = "Begin Time: " + str(begin) + "\n" \
+            + "End Time: " + str(end) + "\n" \
+            + "Elapsed Time: " + str(elapsed) + "\n\n" \
+            + MESSAGE
+  print(MESSAGE)
+
+  fin = open(cwd + "/message.log", "w")
+  fin.write(MESSAGE)
+  fin.close()
 
 
-if MESSAGE == "":
-  MESSAGE = "Build Test is successful."
+  if os.environ.get("EMAIL_FROM_ADDRESS"):
+    email_from_address = os.environ["EMAIL_FROM_ADDRESS"]
+  else:
+    sys.exit("Unknown Environment Variable: EMAIL_FROM_ADDRESS")
 
-END = datetime.datetime.now()
+  if os.environ.get("EMAIL_FROM_ADDRESS"):
+    email_to_address = os.environ["EMAIL_TO_ADDRESS"]
+  else:
+    sys.exit("Unknown Environment Variable: EMAIL_TO_ADDRESS")
 
-ELAPSED = END - BEGIN
-MESSAGE = "Begin Time: " + str(BEGIN) + "\n" \
-          + "End Time: " + str(END) + "\n" \
-          + "Elapsed Time: " + str(ELAPSED) + "\n\n" \
-          + MESSAGE
-print(MESSAGE)
+  subject = "Build Test"
 
-FIN = open(CWD + "/message.log", "w")
-FIN.write(MESSAGE)
-FIN.close()
+  tools.sendmail(email_to_address, email_from_address, subject, MESSAGE)
 
-
-if os.environ.get("EMAIL_FROM_ADDRESS"):
-  EMAIL_FROM_ADDRESS = os.environ["EMAIL_FROM_ADDRESS"]
-else:
-  sys.exit("Unknown Environment Variable: EMAIL_FROM_ADDRESS")
-
-if os.environ.get("EMAIL_FROM_ADDRESS"):
-  EMAIL_TO_ADDRESS = os.environ["EMAIL_TO_ADDRESS"]
-else:
-  sys.exit("Unknown Environment Variable: EMAIL_TO_ADDRESS")
-
-
-SUBJECT = "Build Test"
-
-tools.sendmail(EMAIL_TO_ADDRESS, EMAIL_FROM_ADDRESS, SUBJECT, MESSAGE)
+if __name__ == "__main__":
+  main()
