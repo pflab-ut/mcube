@@ -23,8 +23,13 @@ def count_line(files):
     TOTAL_LEN += len(fname.readlines())
     fname.close()
 
-count_line(glob.glob("*/*.c"))
-count_line(glob.glob("*/*/*.h"))
-count_line(glob.glob("*/*/*.py"))
+def main():
+  "main function"
+  count_line(glob.glob("*/*.c"))
+  count_line(glob.glob("*/*/*.h"))
+  count_line(glob.glob("*/*/*.py"))
 
-print(TOTAL_LEN)
+  print(TOTAL_LEN)
+
+if __name__ == "__main__":
+  main()

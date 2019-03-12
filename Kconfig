@@ -48,12 +48,12 @@ menu Compiler
   type exclusive
   config CONFIG_COMPILER_CLANG
     title Clang Compiler
-    default y
+    default n
     ccname clang
     defs -DCONFIG_COMPILER_CLANG
   config CONFIG_COMPILER_GCC
     title GCC Compiler
-    default n
+    default y
     ccname gcc
     defs -DCONFIG_COMPILER_GCC
 endmenu

@@ -10,36 +10,39 @@ transform binary file to dump file with considering big/little endian.
 
 import sys
 
+def main():
+  "main function"
+  argv = sys.argv
+  argc = len(argv)
 
-ARGV = sys.argv
-ARGC = len(ARGV)
+  if argc != 4:
+    print("Usage: %s filename eb[el]" % argv[0])
+    quit()
 
-if ARGC != 4:
-  print("Usage: %s filename eb[el]" % ARGV[0])
-  quit()
+  #print(argv[1])
+  fin = open(argv[1], "rb")
+  fout = open(argv[3], "w")
+  #data = fin.read()
+  addr = 0
+  while True:
+    #  bytes_data = fin.read(4)
+    data = fin.read(4)
+    if not data:
+      break
+    if argv[2] == "eb":
+      data = int.from_bytes(data, 'big')
+    else:
+      data = int.from_bytes(data, 'little')
+    fout.write("{:08x}".format(data))
+    fout.write(" // 0x{:08x}".format(addr))
+    fout.write('\n')
+    addr += 4
+    #  print(format(data, "08x"))
+    #  print("str = ", s)
+    #  fout.write("{:08x}".format(data))
+    #  fout.write('\n')
+  fout.close()
+  fin.close()
 
-
-#print(argv[1])
-FIN = open(ARGV[1], "rb")
-FOUT = open(ARGV[3], "w")
-#data = fin.read()
-ADDR = 0
-while True:
-#  bytes_data = fin.read(4)
-  DATA = FIN.read(4)
-  if not DATA:
-    break
-  if ARGV[2] == "eb":
-    DATA = int.from_bytes(DATA, 'big')
-  else:
-    DATA = int.from_bytes(DATA, 'little')
-  FOUT.write("{:08x}".format(DATA))
-  FOUT.write(" // 0x{:08x}".format(ADDR))
-  FOUT.write('\n')
-  ADDR += 4
-#  print(format(data, "08x"))
-#  print("str = ", s)
-#  FOUT.write("{:08x}".format(data))
-#  FOUT.write('\n')
-#FOUT.close()
-FIN.close()
+if __name__ == "__main__":
+  main()

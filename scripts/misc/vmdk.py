@@ -12,78 +12,80 @@ import sys
 import struct
 import os
 
-ARGV = sys.argv
-ARGC = len(ARGV)
+def main():
+  "main function"
+  argv = sys.argv
+  argc = len(argv)
 
-if ARGC != 4:
-  print("Usage: %s filename eb[el]" % ARGV[0])
-  quit()
+  if argc != 4:
+    print("Usage: %s filename eb[el]" % argv[0])
+    quit()
 
+  fin = open(argv[1], "rb")
+  fout = open(argv[2], "wb")
+  fout2 = open(argv[3], "w")
 
-FIN = open(ARGV[1], "rb")
-FOUT = open(ARGV[2], "wb")
-FOUT2 = open(ARGV[3], "w")
+  while True:
+    byte_data = fin.read(4)
+    if not byte_data:
+      break
+    fout.write(byte_data)
 
-while True:
-  BYTE_DATA = FIN.read(4)
-  if not BYTE_DATA:
-    break
-  FOUT.write(BYTE_DATA)
+  sector_size = 512
+  nr_sectors = 63
+  nr_heads = 4
+  #nr_cylinders = 16
+  nr_cylinders = 1
+  #nr_cylinders = 2
 
-SECTOR_SIZE = 512
-NR_SECTORS = 63
-NR_HEADS = 4
-#NR_CYLINDERS = 16
-NR_CYLINDERS = 1
-#NR_CYLINDERS = 2
+  # kernel size's upper bound
+  kbound = sector_size * nr_sectors * nr_heads * nr_cylinders
+  ksize = os.path.getsize(argv[1])
+  padsize = kbound - ksize
+  #padsize = sector_size - ksize % sector_size
+  #print("padsize = ", padsize)
+  if padsize >= 0:
+    while padsize > 0:
+      #fout.putc(0x5a)
+      fout.write(struct.pack("B", 0))
+      padsize -= 1
+    ksize += 1
+  else:
+    print("Error: too much kernel size > vmdksize: {0} > {1}".format(ksize, kbound))
+    quit()
 
+  #CYLINDERS = (ksize / sector_size / nr_sectors / nr_heads).ceil
+  val = int(kbound / sector_size)
 
-# kernel size's upper bound
-KBOUND = SECTOR_SIZE * NR_SECTORS * NR_HEADS * NR_CYLINDERS
+  string = f"""
+  # Disk DescriptorFile
+  version=1
+  encoding="Shift_JIS"
+  CID=fffffffe
+  parentCID=ffffffff
+  isNativeSnapshot="no"
+  createType="monolithicFlat"
+  
+  # Extent description
+  RW {val} FLAT "mcube-flat.vmdk" 0
+  
+  # The Disk Data Base 
+  #DDB
+  
+  ddb.virtualHWVersion = "7"
+  ddb.longContentID = "43f26955e1fda75f021ce55bfffffffe"
+  ddb.uuid = "60 00 C2 97 a9 2c 72 18-0e 68 57 c2 ea 07 7a 6a"
+  ddb.geometry.sectors = "{nr_sectors}"
+  ddb.geometry.heads = "{nr_heads}"
+  ddb.geometry.cylinders = "{nr_cylinders}"
+  ddb.adapterType = "ide"
+  """
 
-KSIZE = os.path.getsize(ARGV[1])
-PADSIZE = KBOUND - KSIZE
-#PADSIZE = SECTOR_SIZE - KSIZE % SECTOR_SIZE
-#print("PADSIZE = ", PADSIZE)
-if PADSIZE >= 0:
-  while PADSIZE > 0:
-    #FOUT.putc(0x5a)
-    FOUT.write(struct.pack("B", 0))
-    PADSIZE -= 1
-  KSIZE += 1
-else:
-  print("Error: too much kernel size > vmdksize: {0} > {1}".format(KSIZE, KBOUND))
-  quit()
+  fout2.write(string)
 
-#CYLINDERS = (KSIZE / SECTOR_SIZE / NR_SECTORS / NR_HEADS).ceil
-VAL = int(KBOUND / SECTOR_SIZE)
+  fout2.close()
+  fout.close()
+  fin.close()
 
-STRING = f"""
-# Disk DescriptorFile
-version=1
-encoding="Shift_JIS"
-CID=fffffffe
-parentCID=ffffffff
-isNativeSnapshot="no"
-createType="monolithicFlat"
-
-# Extent description
-RW {VAL} FLAT "mcube-flat.vmdk" 0
-
-# The Disk Data Base 
-#DDB
-
-ddb.virtualHWVersion = "7"
-ddb.longContentID = "43f26955e1fda75f021ce55bfffffffe"
-ddb.uuid = "60 00 C2 97 a9 2c 72 18-0e 68 57 c2 ea 07 7a 6a"
-ddb.geometry.sectors = "{NR_SECTORS}"
-ddb.geometry.heads = "{NR_HEADS}"
-ddb.geometry.cylinders = "{NR_CYLINDERS}"
-ddb.adapterType = "ide"
-"""
-
-FOUT2.write(STRING)
-
-FOUT2.close()
-FOUT.close()
-FIN.close()
+if __name__ == "__main__":
+  main()

@@ -37,43 +37,48 @@ build HD image.
 import os.path
 import struct
 
-BUILD_FOLDER = 'build/'
-KERNEL_FILE = BUILD_FOLDER + 'mcube.img'
-RAMDISK_FILE = './ramdisk'
-FINAL_IMAGE = BUILD_FOLDER + 'mcube-hd.img'
+def main():
+  "main function"
+  build_folder = 'build/'
+  kernel_file = build_folder + 'mcube.img'
+  ramdisk_file = './ramdisk'
+  final_image = build_folder + 'mcube-hd.img'
 
-if not os.path.exists(BUILD_FOLDER):
-  os.makedirs(BUILD_FOLDER)
+  if not os.path.exists(build_folder):
+    os.makedirs(build_folder)
 
-# Expand kernel image to 512 Kbytes
-SIZE_512K = 512 * 1024
-with open(KERNEL_FILE, 'rb') as f:
-  BUF1 = f.read()
-with open(FINAL_IMAGE, 'wb') as f:
-  f.write(BUF1)
-  f.write(b'0' * SIZE_512K)
-  f.truncate(SIZE_512K)
+  # Expand kernel image to 512 Kbytes
+  size_512k = 512 * 1024
+  with open(kernel_file, 'rb') as kfile:
+    buf = kfile.read()
+  with open(final_image, 'wb') as fimage:
+    fimage.write(buf)
+    fimage.write(b'0' * size_512k)
+    fimage.truncate(size_512k)
 
-# Build ramdisk header, and its buffer
-HEADER_LENGTH = 8 + 4 + 4 + 8
-RAMDISK_LENGTH = HEADER_LENGTH
-if os.path.exists(RAMDISK_FILE):
-  RAMDISK_LENGTH += os.path.getsize(RAMDISK_FILE)
-  RAMDISK_BUFFER = open(RAMDISK_FILE, 'rb').read()
-else:
-  RAMDISK_BUFFER = b''
-RAMDISK_SECTORS = (RAMDISK_LENGTH - 1)//512 + 1
-RAMDISK_HEADER = struct.pack('=8cII8c',
-                             b'M', b'c', b'u', b'b', b'e', b'S', b't', b'a',
-                             RAMDISK_SECTORS,
-                             RAMDISK_LENGTH - HEADER_LENGTH,
-                             b'M', b'c', b'u', b'b', b'e', b'E', b'n', b'd')
-assert len(RAMDISK_HEADER) == HEADER_LENGTH
+  # Build ramdisk header, and its buffer
+  header_length = 8 + 4 + 4 + 8
+  ramdisk_length = header_length
+  if os.path.exists(ramdisk_file):
+    ramdisk_length += os.path.getsize(ramdisk_file)
+    ramdisk_buffer = open(ramdisk_file, 'rb').read()
+  else:
+    ramdisk_buffer = b''
+  ramdisk_sectors = (ramdisk_length - 1)//512 + 1
+  ramdisk_header = struct.pack('=8cII8c',
+                               b'M', b'c', b'u', b'b', b'e', b'S', b't', b'a',
+                               ramdisk_sectors,
+                               ramdisk_length - header_length,
+                               b'M', b'c', b'u', b'b', b'e', b'E', b'n', b'd')
+  assert len(ramdisk_header) == header_length
 
-# Expand final disk image beyond 1MB: some virtual
-# machine BIOSes fail if that image len is < 1MB
-SIZE_1MB = 1024 * 1024
-with open(FINAL_IMAGE, 'ab') as f:
-  f.write(RAMDISK_HEADER)
-  f.write(RAMDISK_BUFFER)
-  f.write(b'#' * SIZE_1MB)
+  # Expand final disk image beyond 1MB: some virtual
+  # machine BIOSes fail if that image len is < 1MB
+  size_1mb = 1024 * 1024
+  with open(final_image, 'ab') as fimage:
+    fimage.write(ramdisk_header)
+    fimage.write(ramdisk_buffer)
+    fimage.write(b'#' * size_1mb)
+
+if __name__ == "__main__":
+  main()
