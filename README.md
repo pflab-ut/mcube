@@ -90,9 +90,9 @@ $ make testconfig
 After configuration test, send the results to your e-mail.
 
 ## Documentations
-* [System](docs/system.md)
-* [Misc](docs/misc.md)
-* [Acknowledgments](docs/acknowledgments.md)
+* [System](docs/System.md)
+* [Misc](docs/Misc.md)
+* [Acknowledgments](docs/Acknowledgments.md)
 
 
 ## License
