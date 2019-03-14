@@ -1,34 +1,23 @@
-\section{Acknowledgments}
+# Acknowledgments
 
-\subsection{Sponsors}
+## Sponsors
 
-\begin{itemize}
-\item NEDO
-\end{itemize}
+* NEDO IoT
 
-\subsection{Operating Systems}
 
-\begin{itemize}
-\item Raph\_Kernel
-  \url{https://github.com/PFLab-OS/Raph_Kernel}
-\item raspberry-pi-os
-  \url{https://github.com/s-matyukevich/raspberry-pi-os}
-\item Raspberry Pi bare metal code for qemu raspi2 and raspi3
-  \url{https://github.com/eggman/raspberrypi}
-\item Bare metal Raspberry Pi 3 tutorials
-  \url{https://github.com/bztsrc/raspi3-tutorial}
-\item advos
-  \url{https://github.com/drpnd/advos}
-\item cuteOS
-  \url{https://github.com/a-darwish/cuteOS}
-\item SHMALL - Simple Heap Memory ALLocator
-  \url{https://github.com/CCareaga/heap_allocator}
-\end{itemize}
+## Operating Systems
 
-\subsection{Documentations}
+* [Raph_Kernel](https://github.com/PFLab-OS/Raph_Kernel)
+* [raspberry-pi-os](https://github.com/s-matyukevich/raspberry-pi-os)
+* [Raspberry Pi bare metal code for qemu raspi2 and raspi3](https://github.com/eggman/raspberrypi)
+* [Bare metal Raspberry Pi 3 tutorials](https://github.com/bztsrc/raspi3-tutorial)
+* [advos](https://github.com/drpnd/advos)
+* [cuteOS](https://github.com/a-darwish/cuteOS)
+* [SHMALL - Simple Heap Memory ALLocator](https://github.com/CCareaga/heap_allocator)
 
-\begin{itemize}
-\item Bare-metal Boot Code for ARMv8-A Processors
-  \url{http://infocenter.arm.com/help/topic/com.arm.doc.dai0527a/DAI0527A_baremetal_boot_code_for_ARMv8_A_processors.pdf}
-\end{itemize}
 
+## Documentations
+
+* [Bare-metal Boot Code for ARMv8-A Processors]
+  (http://infocenter.arm.com/help/topic/com.arm.doc.dai0527a/DAI0527A_baremetal_boot_code_for_ARMv8_A_processors.pdf)
+  
