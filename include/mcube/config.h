@@ -8,9 +8,9 @@
 /* Don't edit this file.
  * Please edit configure then do make configure. */
 /** Architecture. */
-#define CONFIG_ARCH_SIM 1
+#define CONFIG_ARCH_SIM 0
 /** Architecture. */
-#define CONFIG_ARCH_X86 0
+#define CONFIG_ARCH_X86 1
 /** Architecture. */
 #define CONFIG_ARCH_ARM_RASPI3 0
 /** Architecture. */
@@ -42,15 +42,15 @@
 /** Tie-Break. */
 #define CONFIG_TIE_BREAK_ID 0
 /** Option. */
-#define CONFIG_OPTION_DEBUG 1
+#define CONFIG_OPTION_DEBUG 0
 /** Option. */
 #define CONFIG_OPTION_FS_EXT2 0
 /** Option. */
 #define CONFIG_OPTION_FS_FAT 0
 /** Memory. */
-#define CONFIG_MEMORY_VARIABLE 1
+#define CONFIG_MEMORY_VARIABLE 0
 /** Memory. */
-#define CONFIG_MEMORY_256KB 0
+#define CONFIG_MEMORY_256KB 1
 /** Memory. */
 #define CONFIG_MEMORY_1MB 0
 /** Memory. */

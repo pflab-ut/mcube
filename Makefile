@@ -234,10 +234,10 @@ size:
 doxygen: doxygenclean
 	@$(DOXYGEN) Doxyfile
 
-clean: doxygenclean buildclean docclean
-	@for file in $(CLEANFILES); do $(FIND) . -name $$file -delete || exit 1; done
-	@$(RM) $(TARGET) $(TARGET).elf $(OBJS) $(DEPS) $(DMPFILE) $(MAP)
-	@$(RM) $(ROMFILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
+clean: doxygenclean buildclean
+#	@for file in $(CLEANFILES); do $(FIND) . -name $$file -delete || exit 1; done
+#	@$(RM) $(TARGET) $(TARGET).elf $(OBJS) $(DEPS) $(DMPFILE) $(MAP)
+#	@$(RM) $(ROMFILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
 	@$(RM) -r INCA_libs testconfig
 
 buildclean:
@@ -245,9 +245,6 @@ buildclean:
 
 doxygenclean:
 	@$(RM) -r html latex
-
-docclean:
-	@cd $(DOC_DIR); make clean; cd ..
 
 # dependencies
 ifneq ($(DEPS),)

@@ -111,7 +111,7 @@ def main():
   if not tools.check_exclusives(kconfig_file):
     sys.exit("Error: check_exclusives()")
 
-    tools.scan_dependencies(kconfig_file)
+  tools.scan_dependencies(kconfig_file)
 
   if not tools.check_conflicts_and_dependencies():
     sys.exit("Error: check_conflicts_and_dependencies()")
