@@ -2,7 +2,7 @@
 
 ## Sponsors
 
-* NEDO IoT
+* NEDO IoT: Research and Development of Domain-Specific IoT Platforms
 
 
 ## Operating Systems

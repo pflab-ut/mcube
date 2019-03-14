@@ -30,12 +30,3 @@ ramdisk
 *.dd
 *.org
 
-# latex suffixes
-*.aux
-*.dvi
-*.out
-*.toc
-*.lot
-*.lof
-*.bbl
-*.blg
