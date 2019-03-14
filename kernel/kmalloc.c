@@ -238,7 +238,7 @@ void kfree(void *addr)
   spin_unlock(&bucket->lock);
 }
 
-void kmalloc_init(void)
+void init_kmalloc(void)
 {
   for (int i = 0; i <= MAXBUCKET_IDX; i++) {
     spin_init(&kmembuckets[i].lock);
@@ -247,17 +247,22 @@ void kmalloc_init(void)
 
 #else
 
-void *kmalloc(__unused size_t size)
+heap_t heap = {0};
+uint8_t region[HEAP_INIT_SIZE] = {0};
+
+void *kmalloc(size_t size)
 {
-  return NULL;
+  return heap_alloc(&heap, size);
 }
 
-void kfree(__unused void *addr)
+void kfree(void *addr)
 {
+  heap_free(&heap, addr);
 }
 
-void kmalloc_init(void)
+void init_kmalloc(void)
 {
+  init_heap(&heap, (long) region);
 }
 
 #endif

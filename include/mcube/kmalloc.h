@@ -93,7 +93,7 @@ static inline int is_free_buf(void *buf)
 
 void *__kmalloc(int bucket_idx);
 
-void kmalloc_init(void);
+void init_kmalloc(void);
 
 
 #endif /* !__ASSEMBLY__ */

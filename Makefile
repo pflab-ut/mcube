@@ -29,6 +29,8 @@ LIB_SRCS = \
  $(TOP_DIR)/lib/buffer_dumper.c \
  $(TOP_DIR)/lib/ctype.c \
  $(TOP_DIR)/lib/hash.c \
+ $(TOP_DIR)/lib/heap.c \
+ $(TOP_DIR)/lib/llist.c \
  $(TOP_DIR)/lib/math.c \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/lib/spinlock.c \

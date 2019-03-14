@@ -80,7 +80,7 @@ __noreturn void kernel_start(void)
 
   /* MM basics done, enable dynamic heap memory to kernel code
    * early on .. */
-  kmalloc_init();
+  init_kmalloc();
 
   /*
    * Secondary-CPUs startup

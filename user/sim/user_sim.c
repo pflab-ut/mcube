@@ -32,5 +32,6 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   printk("0x%lx\n", l);
   printk("0x%016lx\n", l);
 #endif
+  test_kmalloc();
   return 0;
 }

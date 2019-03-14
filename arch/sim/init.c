@@ -9,6 +9,7 @@
 void init_arch(void)
 {
   init_cpu();
+  init_kmalloc();
 }
 
 void init_arch_ap(void)

@@ -138,6 +138,7 @@ CWARN_FLAGS += -Wextra				\
   -Wno-type-limits			\
   -Wno-missing-field-initializers \
   -Wundef				\
+		-Wno-int-to-pointer-cast \
 
 #  -Wmissing-noreturn			\
 #  -Wvla					\

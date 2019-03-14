@@ -41,9 +41,10 @@
 #include <mcube/errno.h>
 #include <mcube/fs.h>
 #include <mcube/hash.h>
+#include <mcube/heap.h>
 #include <mcube/io.h>
+#include <mcube/llist.h>
 #include <mcube/kmalloc.h>
-#include <mcube/metric.h>
 #include <mcube/mm.h>
 #include <mcube/mt.h>
 #include <mcube/rand.h>

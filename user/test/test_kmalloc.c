@@ -153,6 +153,10 @@ bool test_kmalloc(void)
 
 bool test_kmalloc(void)
 {
+  printk("test_kmalloc()\n");
+  void *a = kmalloc(8);
+  printk("a = %d size: 8\n", (long) a);
+  kfree(a);
   return true;
 }
 

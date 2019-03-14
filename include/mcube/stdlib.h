@@ -39,7 +39,6 @@ void free(void *objp);
 
 void qsort(void *base, size_t num, size_t size, sortcmp cmp);
 
-void init_malloc(void);
 
 #endif /* CONFIG_ARCH_SIM */
 

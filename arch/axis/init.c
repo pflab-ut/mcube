@@ -48,7 +48,7 @@ void init_arch(void)
   init_spinlock();
   init_irq();
   init_cpu();
-  init_malloc();
+  init_kmalloc();
 }
 
 void init_arch_ap(void)
