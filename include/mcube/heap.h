@@ -3,6 +3,7 @@
  *
  * @author Hiroyuki Chishiro
  */
+/* This code is from https://github.com/CCareaga/heap_allocator */
 #ifndef __MCUBE_MCUBE_HEAP_H__
 #define __MCUBE_MCUBE_HEAP_H__
 
@@ -46,10 +47,10 @@ void init_heap(heap_t *heap, long start);
 
 void *heap_alloc(heap_t *heap, size_t size);
 void heap_free(heap_t *heap, void *p);
-int expand(heap_t *heap, size_t sz);
+uint expand(heap_t *heap, size_t sz);
 void contract(heap_t *heap, size_t sz);
 
-int get_bin_index(size_t sz);
+uint get_bin_index(size_t sz);
 void create_foot(node_t *head);
 footer_t *get_foot(node_t *head);
 

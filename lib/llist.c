@@ -3,6 +3,7 @@
  *
  * @author Hiroyuki Chishiro
  */
+/* This code is from https://github.com/CCareaga/heap_allocator */
 #include <mcube/mcube.h>
 
 void add_node(bin_t *bin, node_t *node)

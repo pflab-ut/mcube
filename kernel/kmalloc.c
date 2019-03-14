@@ -262,7 +262,11 @@ void kfree(void *addr)
 
 void init_kmalloc(void)
 {
+  printk("init_kmalloc()\n");
+  memset(&heap, 0, sizeof(heap_t));
+  memset(region, 0, HEAP_INIT_SIZE);
   init_heap(&heap, (long) region);
 }
 
-#endif
+#endif /* CONFIG_ARCH_X86 */
+

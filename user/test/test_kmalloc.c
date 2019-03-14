@@ -155,8 +155,49 @@ bool test_kmalloc(void)
 {
   printk("test_kmalloc()\n");
   void *a = kmalloc(8);
-  printk("a = %d size: 8\n", (long) a);
+  printk("a = %lu size: 8\n", (unsigned long) a);
   kfree(a);
+  void *b = kmalloc(128);
+  printk("b = %lu size: 128\n", (unsigned long) b);
+  void *c = kmalloc(8);
+  printk("c = %lu size: 8\n", (unsigned long) c);
+
+  printk("\nfreeing b \n");
+  kfree(b);
+
+  void* d = kmalloc(8);
+  printk("d = %lu size: 8\n", (unsigned long) d);
+
+  void* e = kmalloc(16);
+  printk("e = %lu size: 16\n", (unsigned long) e);
+
+  void* f = kmalloc(8);
+  printk("f = %lu size: 8\n", (unsigned long) f);
+
+  void* g = kmalloc(8);
+  printk("g = %lu size: 8\n", (unsigned long) g);
+
+  printk("\nfreeing d and f\n");
+  kfree(d);
+  kfree(f);
+
+  printk("\nfreeing e\n");
+  kfree(e);
+
+  void* h = kmalloc(128);
+  printk("h = %lu size: 128\n", (unsigned long) h);
+  printk("\n");
+
+  for (int i = 1; i <= 2048; i += i) {
+    printk("size: %lu -> bin: %lu\n", i, get_bin_index(i));
+  }
+
+  printk("\nfreeing a, c, g, h\n");
+  kfree(a);
+  kfree(c);
+  kfree(g);
+  kfree(h);
+  
   return true;
 }
 

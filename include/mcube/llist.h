@@ -3,6 +3,7 @@
  *
  * @author Hiroyuki Chishiro
  */
+/* This code is from https://github.com/CCareaga/heap_allocator */
 #ifndef __MCUBE_MCUBE_LLIST_H__
 #define __MCUBE_MCUBE_LLIST_H__
 
