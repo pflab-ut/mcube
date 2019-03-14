@@ -31,8 +31,11 @@ Details of "configure" file are explained in "Kconfig".
 
 ## How to Build
 
-First of all you check and modify "configure" file, and then please
-execute the following command.
+First of all you check and modify "configure" file.
+If "CONFIG_XXX=y", the configuration is enabled.
+If "CONFIG_XXX=n", the configuration is disabled.
+Then please execute the following command.
+
 ```
 $ make configure
 ```
@@ -85,6 +88,11 @@ $ make testconfig
 ```
 
 After configuration test, send the results to your e-mail.
+
+## Documentations
+* [System](docs/system.md)
+* [Misc](docs/misc.md)
+* [Acknowledgments](docs/acknowledgments.md)
 
 
 ## License

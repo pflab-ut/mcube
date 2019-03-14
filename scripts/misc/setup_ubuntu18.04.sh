@@ -1,5 +1,4 @@
 #!/bin/sh
-# -*- coding: utf-8 -*-
 # @file scripts/misc/setup_ubuntu18.04.sh
 #
 # @author Hiroyuki Chishiro
