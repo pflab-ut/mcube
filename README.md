@@ -25,7 +25,9 @@ $ make setup
 
 ## Set up Configuration
 
-Please edit "configure" file.
+Please edit "configure" file or copy "docs/config/ARCH_configure" file
+to "configure" file. ARCH of ARCH_configure is changed to architecture
+name of small characters.
 Details of "configure" file are explained in "Kconfig".
 
 
