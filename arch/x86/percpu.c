@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/percpu.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Per-CPU Data Area Init
  *

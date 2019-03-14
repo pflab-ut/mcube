@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/pic.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * The i8259A PIC
  *

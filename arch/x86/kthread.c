@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/kthread.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Kernel threads
  *

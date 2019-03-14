@@ -1,5 +1,8 @@
-#ifndef _RMCALL_H
-#define _RMCALL_H
+/**
+ * @file arch/x86/rmcall.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 
 /*
  * Macros for the real-mode functions which are called using the
@@ -26,4 +29,3 @@
 #define ABS_ADDR(addr)          \
   (addr - PMODE16_START)
 
-#endif /* _RMCALL_H */

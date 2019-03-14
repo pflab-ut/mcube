@@ -1,6 +1,8 @@
-#ifndef _RMCOMMON_H
-#define _RMCOMMON_H
-
+/**
+ * @file arch/x86/rmcommon.h
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Commonly used x86 real-mode patterns
  *
@@ -120,4 +122,3 @@ print_string:                                             \
  jmp    print_string;                                     \
 1:  ret;
 
-#endif /* _RMCOMMON_H */

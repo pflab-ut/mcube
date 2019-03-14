@@ -1,3 +1,8 @@
+/**
+ * @file kernel/print.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * printf()-like methods: vsnprintf(), etc
  *

@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/ramdisk.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Ramdisk-header parsing
  *

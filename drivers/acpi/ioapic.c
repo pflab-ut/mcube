@@ -1,3 +1,8 @@
+/**
+ * @file drivers/acpi/ioapic.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * I/O APIC setup
  *

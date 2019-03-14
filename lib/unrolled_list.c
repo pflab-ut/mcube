@@ -1,3 +1,8 @@
+/**
+ * @file lib/unrolled_list.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Unrolled Linked List -- A linked list of small arrays!
  *

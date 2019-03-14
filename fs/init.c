@@ -1,5 +1,5 @@
 /**
- * @file user/user.c
+ * @file fs/init.c
  *
  * @author Hiroyuki Chishiro
  */

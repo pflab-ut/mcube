@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/e820_map.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * E820h maps (Check e820.h)
  *

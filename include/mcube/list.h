@@ -1,6 +1,10 @@
-#ifndef _LIST_H
-#define _LIST_H
-
+/**
+ * @file include/mcube/list.h
+ *
+ * @author Hiroyuki Chishiro
+ */
+#ifndef __MCUBE_MCUBE_LIST_H__
+#define __MCUBE_MCUBE_LIST_H__
 /*
  * Type-generic doubly-linked lists
  *
@@ -190,4 +194,5 @@ static inline void list_del(struct list_node *node)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _LIST_H */
+#endif /* __MCUBE_MCUBE_LIST_H__ */
+

@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/mptables.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Intel MultiProcessor Specification tables parsing
  *

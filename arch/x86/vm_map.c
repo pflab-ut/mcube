@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/vm_map.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Memory Management: kernel virtual memory
  *

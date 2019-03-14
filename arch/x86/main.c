@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/main.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Copyright (C) 2009-2011 Ahmed S. Darwish <darwish.07@gmail.com>
  */

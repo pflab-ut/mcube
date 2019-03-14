@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#
+# -*- coding: utf-8 -*-
 # @file scripts/misc/vmdk.py
 #
 # @author Hiroyuki Chishiro

@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/page_alloc.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Memory Management: the page allocator
  *

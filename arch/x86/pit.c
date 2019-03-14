@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/pit.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * i8253/i8254-compatible PIT
  *

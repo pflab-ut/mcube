@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/smpboot.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Multiple-Processor (MP) Initialization
  *

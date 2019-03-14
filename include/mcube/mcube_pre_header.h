@@ -37,7 +37,7 @@
 #include <mcube/core_state.h>
 #include <mcube/ctype.h>
 #include <mcube/dmac.h>
-#include <mcube/errno-base.h>
+#include <mcube/errno_base.h>
 #include <mcube/errno.h>
 #include <mcube/fs.h>
 #include <mcube/hash.h>

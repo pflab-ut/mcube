@@ -1,5 +1,5 @@
 /**
- * @file user/test_integer_instructions.c
+ * @file user/axis/test_integer_instructions.c
  *
  * @author Hiroyuki Chishiro
  */

@@ -1,3 +1,8 @@
+/**
+ * @file fs/ext2/_unused_namei_parser.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * This is a stateful parser for hierarchial file system paths.
  * For simplicity, an ad-hoc parser is now used instead.

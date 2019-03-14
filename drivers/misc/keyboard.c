@@ -1,3 +1,8 @@
+/**
+ * @file drivers/misc/keyboard.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Barebones PS/2 keyboard
  * Motherboard and on-keyboard i8042-compatible controllers

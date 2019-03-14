@@ -1,5 +1,5 @@
 /**
- * @file user/test_transfer_instructions.c
+ * @file user/axis/test_transfer_instructions.c
  *
  * @author Hiroyuki Chishiro
  */

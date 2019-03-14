@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/sched.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Uniprocessor scheduling
  *

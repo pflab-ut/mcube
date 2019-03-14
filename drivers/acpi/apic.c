@@ -1,3 +1,8 @@
+/**
+ * @file drivers/acpi/apic.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Local APIC configuration
  *

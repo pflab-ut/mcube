@@ -1,5 +1,5 @@
 /**
- * @file user/test/test_ext2.c
+ * @file fs/ext2/files_list.c
  *
  * @author Hiroyuki Chishiro
  */

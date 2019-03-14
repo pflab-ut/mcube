@@ -1,3 +1,8 @@
+/**
+ * @file drivers/uart/serial.c
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Serial Port, 8250/16550 UART
  *
