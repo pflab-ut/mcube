@@ -2,7 +2,10 @@
 
 ## Sponsors
 
-* NEDO IoT: Research and Development of Domain-Specific IoT Platforms
+* NEDO IoT July 2017- March 2019: Research and Development of
+  Domain-Specific IoT Platforms,  
+* NEDO AI April 2019 - Present: Research and Development of System on
+  a Chip and Software Platforms for Fully Autonomous Driving
 
 
 ## Operating Systems

@@ -33,3 +33,17 @@ systems.
 * O(1)
 * Binominal Heap
 * Double Circular Linked List
+
+# Directories
+
+* `arch/`: Architecture-dependence codes
+* `docs/`: Documentations
+* `drivers/`: Device driver codes
+* `fs/`: File systems
+* `include/`: header codes
+* `ipc/`: Inter-Process Communication codes
+* `kernel/`: Kernel codes
+* `lib/`: Library codes
+* `scripts/`: Script codes
+* `user/`: User-implemented codes
+* `vmdk/`: VMware-related files
