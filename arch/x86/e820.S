@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/e820.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * BIOS E820h - Query System Address Map service.
  *

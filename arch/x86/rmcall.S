@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/rmcall.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * From 32-bit mode, call given real-mode function, THEN RETURN BACK!
  *

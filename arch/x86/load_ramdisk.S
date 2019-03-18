@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/load_ramdisk.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Load Ramdisk.
  *

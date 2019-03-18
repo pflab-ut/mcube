@@ -1,5 +1,5 @@
 /**
- * @file include/mcube/errno-base.h
+ * @file include/mcube/errno_base.h
  *
  * @author Hiroyuki Chishiro
  */

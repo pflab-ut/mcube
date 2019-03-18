@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/trampoline.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * SMP trampoline
  *

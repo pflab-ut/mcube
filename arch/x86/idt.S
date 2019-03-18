@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/idt.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * 64-bit IDT table and interrupt handlers
  *

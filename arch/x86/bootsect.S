@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/bootsect.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
  *

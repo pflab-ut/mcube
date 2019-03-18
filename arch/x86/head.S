@@ -1,3 +1,8 @@
+/**
+ * @file arch/x86/head.S
+ *
+ * @author Hiroyuki Chishiro
+ */
 /*
  * 64-bit bootstrap code
  *

@@ -1,5 +1,5 @@
 /**
- * @file fs/fat.c
+ * @file fs/fat/fat.c
  *
  * @author Hiroyuki Chishiro
  */
