@@ -29,8 +29,8 @@ Please edit `configure` file or execute the following command.
 ```
 $ cp docs/config/ARCH_configure configure
 ```
-where ARCH_configure is arm_raspi3_configure, arm_synquacer_configure,
-axis_configure, sim_configure, or x86_configure.
+where ARCH_configure is `arm_raspi3_configure`, `arm_synquacer_configure`,
+`axis_configure`, `sim_configure`, or `x86_configure`.
 
 
 to `configure` file. ARCH of ARCH_configure is changed to architecture

@@ -30,9 +30,11 @@ systems.
 
 # Task Queues
 
-* O(1)
-* Binominal Heap
-* Double Circular Linked List
+* O(1): Each priority task queue has priority-based double circular
+  linked list like O(1) scheduler in Linux.  
+* O(logN) Binominal Heap: One priority task queue manages binominal heap.
+* O(N) Double Circular Linked List: One priority task queue has
+  priority-based double circular linked list.
 
 # Directories
 
@@ -47,3 +49,15 @@ systems.
 * `scripts/`: Script codes
 * `user/`: User-implemented codes
 * `vmdk/`: VMware-related files
+
+# Files in Top Directory
+
+* `Doxyfile`: Doxygen file
+* `Kconfig`: Kernel configuration file
+* `LICENSE`: Licnese file
+* `Makefile`: Makefile
+* `README.md`: Readme file
+* `Rules.mak`: Makefile-related rule file
+* `configure`: configuration file
+* `pylintrc`: `pylint` configuration file
+
