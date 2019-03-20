@@ -235,9 +235,9 @@ doxygen: doxygenclean
 	@$(DOXYGEN) Doxyfile
 
 clean: doxygenclean buildclean
-#	@for file in $(CLEANFILES); do $(FIND) . -name $$file -delete || exit 1; done
-#	@$(RM) $(TARGET) $(TARGET).elf $(OBJS) $(DEPS) $(DMPFILE) $(MAP)
-#	@$(RM) $(ROMFILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
+	@for file in $(CLEANFILES); do $(FIND) . -name $$file -delete || exit 1; done
+	@$(RM) $(TARGET) $(TARGET).elf $(OBJS) $(DEPS) $(DMPFILE) $(MAP)
+	@$(RM) $(ROMFILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
 	@$(RM) -r INCA_libs testconfig
 
 buildclean:
