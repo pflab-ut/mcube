@@ -4,7 +4,7 @@
 
 * NEDO IoT June 2017- March 2019: Research and Development of
   Domain-Specific IoT Platforms,  
-* NEDO AI April 2019 - Present: Research and Development of System on
+* NEDO AI April 2019 - March 2021: Research and Development of System on
   a Chip and Software Platforms for Fully Autonomous Driving
 
 
