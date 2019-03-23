@@ -19,7 +19,7 @@ systems.
 
 # Compilers
 
-* Clang
+* LLVM
 * GCC
 
 # Scheduling
