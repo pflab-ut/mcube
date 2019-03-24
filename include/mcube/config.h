@@ -1,5 +1,5 @@
 /**
- * @file include/mcube/config.h 
+ * @file include/mcube/config.h
  *
  * @author Hiroyuki Chishiro
  */

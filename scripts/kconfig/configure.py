@@ -57,7 +57,7 @@ def init_config():
   "initialize config"
   fout = open("./include/mcube/config.h", "w")
   fout.write("/**\n"
-             + " * @file include/mcube/config.h \n"
+             + " * @file include/mcube/config.h\n"
              + " *\n"
              + " * @author Hiroyuki Chishiro\n"
              + " */\n")

@@ -67,7 +67,7 @@ int fat_getpartition(void)
     /* should be this, but compiler generates bad code... */
     // partitionlba = *((unsigned int*)((unsigned long) &__end + 0x1c6));
     partitionlba = mbr[0x1c6] + (mbr[0x1c7] << 8) + (mbr[0x1c8] << 16)
-      + (mbr[0x1c9] << 24);
+                   + (mbr[0x1c9] << 24);
     printk("\nFAT partition starts at: 0x%x\n", partitionlba);
 
     /* read the boot record */
