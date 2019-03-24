@@ -4,7 +4,7 @@
 
 
 |Makefile Commands|Descriptions|
-|:--|--:|
+|:--|:--|
 |`make all`|build target file|
 |`make buildclean`|clean build files and directories|
 |`make clean`|clean build and doxygen files and directories|
