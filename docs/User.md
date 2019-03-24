@@ -5,6 +5,7 @@
 |Makefile Commands|Descriptions|
 |:--|:--|
 |`make all`|build target file|
+|`make astyle`|format codes with `astyle`|
 |`make buildclean`|clean build files and directories|
 |`make clean`|clean build and doxygen files and directories|
 |`make cmrun`|execute Mcube Kernel with `MONITOR_ALL` and `PRINT_ALL` in AXIS cluster|

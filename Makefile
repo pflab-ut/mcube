@@ -142,7 +142,10 @@ docker:
 setup: 
 	@$(TOP_DIR)/scripts/misc/setup_ubuntu18.04.sh
 
-.PHONY: cppcheck flawfinder scan-build pylint pyflakes
+.PHONY: astyle cppcheck flawfinder scan-build pylint pyflakes
+
+astyle:
+	$(ASTYLE) --options=astylerc
 
 cppcheck:
 	@$(FIND) $(TOP_DIR) -name "*.c" -or -name "*.h" | xargs cppcheck

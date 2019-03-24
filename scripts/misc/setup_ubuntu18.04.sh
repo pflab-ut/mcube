@@ -10,10 +10,11 @@ prefix="sudo apt-get -y install"
 $prefix ccache gcc clang clang-tools llvm gcc-aarch64-linux-gnu
 
 # C analyze tool
-$prefix cppcheck flawfinder
+$prefix astyle cppcheck flawfinder
 
 # python
 $prefix python3 python3-pip
+
 # python analyze tool
 pip3 install pyflakes pylint 
 

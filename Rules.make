@@ -159,6 +159,7 @@ CFLAGS +=				\
   $(CWARN_FLAGS)
 
 
+ASTYLE = astyle
 SIZE = $(CROSS_PREFIX)size
 
 DOXYGEN = doxygen

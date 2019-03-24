@@ -1,0 +1,15 @@
+style=1tbs
+indent=spaces=2
+break-blocks
+pad-oper
+pad-comma
+pad-header
+unpad-paren
+align-pointer=name
+align-reference=name
+break-one-line-headers
+add-braces
+attach-return-type
+attach-return-type-decl
+max-code-length=80
+mode=c
