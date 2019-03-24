@@ -2,7 +2,6 @@
 
 ## Makefile
 
-
 |Makefile Commands|Descriptions|
 |:--|:--|
 |`make all`|build target file|
@@ -43,3 +42,5 @@ Then please execute the following command.
 ```
 $ make testconfig
 ```
+
+After testing all configurations, the report will be sent to your e-mail address.
