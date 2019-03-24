@@ -2,20 +2,20 @@
 
 ## Sponsors
 
-* NEDO IoT June 2017- March 2019: Research and Development of
-  Domain-Specific IoT Platforms,  
 * NEDO AI April 2019 - March 2021: Research and Development of System on
   a Chip and Software Platforms for Fully Autonomous Driving
+* NEDO IoT June 2017- March 2019: Research and Development of
+  Domain-Specific IoT Platforms,  
 
 
 ## Operating Systems
 
+* [advos](https://github.com/drpnd/advos)
+* [Bare metal Raspberry Pi 3 tutorials](https://github.com/bztsrc/raspi3-tutorial)
+* [cuteOS](https://github.com/a-darwish/cuteOS)
 * [Raph_Kernel](https://github.com/PFLab-OS/Raph_Kernel)
 * [raspberry-pi-os](https://github.com/s-matyukevich/raspberry-pi-os)
 * [Raspberry Pi bare metal code for qemu raspi2 and raspi3](https://github.com/eggman/raspberrypi)
-* [Bare metal Raspberry Pi 3 tutorials](https://github.com/bztsrc/raspi3-tutorial)
-* [advos](https://github.com/drpnd/advos)
-* [cuteOS](https://github.com/a-darwish/cuteOS)
 * [SHMALL - Simple Heap Memory ALLocator](https://github.com/CCareaga/heap_allocator)
 
 

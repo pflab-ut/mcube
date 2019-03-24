@@ -78,26 +78,11 @@ Please execute the following command in GUI.
 $ make grun
 ```
 
-
-## How to Test Configuration
-
-Please set following environment variables for your e-mail address.
-
-```
-export EMAIL_FROM_ADDRESS=YOUR_EMAIL_FROM_ADDRESS
-export EMAIL_TO_ADDRESS=YOUR_EMAIL_TO_ADDRESS
-```
-
-Please execute the following command.
-
-```
-$ make testconfig
-```
-
 After configuration test, send the results to your e-mail.
 
 ## Documentations
 * [System](docs/System.md)
+* [User](docs/User.md)
 * [Misc](docs/Misc.md)
 * [Acknowledgments](docs/Acknowledgments.md)
 
