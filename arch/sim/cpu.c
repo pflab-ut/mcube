@@ -12,9 +12,11 @@ int get_nr_cpu_cores(void)
 {
   cpuid_info cinfo;
   cpuid(0x4, &cinfo.eax, &cinfo.ebx, &cinfo.ecx, &cinfo.edx);
+
   if (cinfo.eax & 0x1f) {
     return ((cinfo.eax >> 26) + 1);
   }
+
   return 1;
 }
 
@@ -38,6 +40,7 @@ void set_cpu_clock(void)
   begin_clk = rdtsc();
 
   base_time = time(NULL);
+
   do {
     end_clk = rdtsc();
   } while (base_time == time(NULL));

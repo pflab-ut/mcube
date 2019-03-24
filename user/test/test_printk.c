@@ -25,31 +25,39 @@
 static void printk_test_int(void)
 {
   printk("(-10, 10): ");
+
   for (int i = -10; i <= 10; i++) {
     printk("%d ", i);
   }
+
   printk("\n");
 
   printk("(INT64_MIN, 0xINT64_MIN + 10): ");
   int64_t start = (INT64_MAX * -1) - 1;
+
   for (int64_t i = start; i <= start + 10; i++) {
     printk("%ld ", i);
   }
+
   printk("\n");
 }
 
 static void printk_test_hex(void)
 {
   printk("(0x0, 0x100): ");
+
   for (int i = 0; i <= 0x100; i++) {
     printk("0x%x ", i);
   }
+
   printk("\n");
 
   printk("(0xUINT64_MAX, 0xUINT64_MAX - 0x10): ");
+
   for (uint64_t i = UINT64_MAX; i >= UINT64_MAX - 0x10; i--) {
     printk("0x%lx ", i);
   }
+
   printk("\n");
 }
 
@@ -65,9 +73,11 @@ static void printk_test_string(void)
   printk("\n");
 
   printk("(a, z): ");
+
   for (char c = 'a'; c <= 'z'; c++) {
     printk("%c ", c);
   }
+
   printk("\n");
 
   test1 = "Test1";
@@ -94,6 +104,7 @@ __unused static void printk_test_format(void)
    * Modify loop counter manually */
   fmt = "%d %x %ld";
   len = strlen(fmt);
+
   for (int i = 0; i <= len; i++) {
     printk("[%d] ", i);
 

@@ -54,7 +54,7 @@
 /* 5: GPU1 halted IRQ pending */
 #define IRQ_BASIC_PENDING_GPU1_HALTED_IRQ_PENDING (0x1 << 5)
 /* 4: GPU0 halted IRQ pending
- * (Or GPU1 halted if bit 10 of control register 1 is set) 
+ * (Or GPU1 halted if bit 10 of control register 1 is set)
  */
 #define IRQ_BASIC_PENDING_GPU0_HALTED_IRQ_PENDING (0x1 << 4)
 /* 3: ARM Doorbell 1 IRQ pending */
@@ -83,7 +83,7 @@
 /* 7: FIQ enable.
  * Set this bit to 1 to enable FIQ generation.
  * If set to 0 bits 6:0 are don't care.
- */  
+ */
 #define FIQ_CTRL_ENABLE (0x1 << 7)
 /* 6-0: Select FIQ Source */
 #define FIQ_CTRL_SELECT_FIQ_SRC(x) (0x1 << (x))

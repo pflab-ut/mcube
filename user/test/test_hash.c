@@ -18,6 +18,7 @@ static void hash_print_info(struct hash *hash)
   print_uart("Printing Hash info:\n");
   print_uart("Hash Address: 0x%lx\n", hash);
   print_uart("Hash Array Length: %d\n", hash->len);
+
   for (int i = 0; i < hash->len; i++) {
     print_uart("Number of Elemenets in Hash List #%d = ", i);
     count = 0;
@@ -51,27 +52,33 @@ static void test_hash_op(int hash_size)
     list_init(&array[i].node);
     hash_insert(hash, &array[i]);
   }
+
   for (int i = count - 1; i >= 0; i--) {
     elem = hash_find(hash, i);
+
     if (elem == NULL) {
       panic("_Hash: Cannot find element #%u, although "
             "it was previously inserted!", i);
     }
+
     if (elem->num != (unsigned) i) {
       panic("_Hash: Element returned by searching hash for "
             "id #%lu returned element with id #%lu!", i,
             elem->num);
     }
+
     if (elem->payload != i) {
       panic("_Hash: Element returned by searching hash for "
             "id #%lu has a valid id, but its payload got "
             "corrupted from %d to %d!", i, i, elem->payload);
     }
   }
+
   if ((elem = hash_find(hash, INT32_MAX)) != NULL) {
     panic("_Hash: Returning non-existing element with id %d as "
           "found, with payload = %d", INT32_MAX, elem->payload);
   }
+
   hash_print_info(hash);
 
   hash_free(hash);

@@ -14,24 +14,29 @@ volatile unsigned int __attribute__((aligned(32))) mbox[VIDEOCORE_MAILBOX_SIZE];
 static int call_mbox(unsigned char ch)
 {
   unsigned int r = (((unsigned int)((unsigned long) &mbox) & ~0xf) | (ch & 0xf));
+
   /* wait until we can write to the mailbox */
   do {
     nop();
   } while (mmio_in32(VIDEOCORE_MAILBOX_STATUS) & VIDEOCORE_MAILBOX_FULL);
+
   /* write the address of our message to the mailbox with channel identifier */
   mmio_out32(VIDEOCORE_MAILBOX_WRITE, r);
+
   /* now wait for the response */
   while (1) {
     /* is there a response? */
     do {
       nop();
     } while (mmio_in32(VIDEOCORE_MAILBOX_STATUS) & VIDEOCORE_MAILBOX_EMPTY);
+
     /* is it a response to our message? */
     if (mmio_in32(VIDEOCORE_MAILBOX_READ) == r) {
       /* is it a valid successful response? */
       return VIDEOCORE_MAILBOX_RESPONSE == mbox[1];
     }
   }
+
   return 0;
 }
 
@@ -61,7 +66,7 @@ unsigned long get_serial_number(void)
    ** b30-b0: reserved
    * Response codes:
    ** b31 set: response
-   ** b30-b0: value length in bytes        
+   ** b30-b0: value length in bytes
    */
   mbox[4] = 0;
   /* clear output buffer */
@@ -78,6 +83,7 @@ unsigned long get_serial_number(void)
     print("Unable to query serial!\n");
     serial_number = ~0x0UL;
   }
+
   return serial_number;
 }
 
@@ -105,7 +111,7 @@ void setup_pl011_uart(void)
    ** b30-b0: reserved
    * Response codes:
    ** b31 set: response
-   ** b30-b0: value length in bytes        
+   ** b30-b0: value length in bytes
    */
   mbox[4] = 0;
   /* UART clock ID */
@@ -113,7 +119,7 @@ void setup_pl011_uart(void)
   /* Rate (in Hz) */
   mbox[6] = PL011_UART_HZ;
   /* skip setting turbo */
-  mbox[7] = 0;           
+  mbox[7] = 0;
   mbox[8] = VIDEOCORE_MAILBOX_TAG_LAST;
   call_mbox(VIDEOCORE_MAILBOX_CH_PROPERTY_TAGS_ARM_TO_VC);
 
@@ -149,7 +155,7 @@ void power_off(void)
     ** b30-b0: reserved
     * Response codes:
     ** b31 set: response
-    ** b30-b0: value length in bytes        
+    ** b30-b0: value length in bytes
     */
     mbox[4] = 8;
     /* device id */
@@ -159,6 +165,7 @@ void power_off(void)
     mbox[7] = VIDEOCORE_MAILBOX_TAG_LAST;
     call_mbox(VIDEOCORE_MAILBOX_CH_PROPERTY_TAGS_ARM_TO_VC);
   }
+
   // power off gpio pins (but not VCC pins)
   mmio_out32(GPFSEL0, 0);
   mmio_out32(GPFSEL1, 0);
@@ -181,7 +188,8 @@ void power_off(void)
   r |= 0x555;    // partition 63 used to indicate halt
   mmio_out32(POWER_MANAGEMENT_RSTS, POWER_MANAGEMENT_WDOG_MAGIC | r);
   mmio_out32(POWER_MANAGEMENT_WDOG, POWER_MANAGEMENT_WDOG_MAGIC | 10);
-  mmio_out32(POWER_MANAGEMENT_RSTC, POWER_MANAGEMENT_WDOG_MAGIC | POWER_MANAGEMENT_RSTC_FULLRST);
+  mmio_out32(POWER_MANAGEMENT_RSTC,
+             POWER_MANAGEMENT_WDOG_MAGIC | POWER_MANAGEMENT_RSTC_FULLRST);
 }
 
 
@@ -242,13 +250,13 @@ void init_frame_buffer(struct frame_buffer *fb)
   mbox[9] = 8;
   mbox[10] = fb->virtual_width;        //FrameBufferInfo.virtual_width
   mbox[11] = fb->virtual_height;         //FrameBufferInfo.virtual_height
-    
+
   mbox[12] = VIDEOCORE_MAILBOX_TAG_SET_VIRTUAL_OFFSET; //set virt offset
   mbox[13] = 8;
   mbox[14] = 8;
   mbox[15] = fb->x_offset;           //FrameBufferInfo.x_offset
   mbox[16] = fb->y_offset;           //FrameBufferInfo.y_offset
-    
+
   mbox[17] = VIDEOCORE_MAILBOX_TAG_SET_DEPTH; //set depth
   mbox[18] = 4;
   mbox[19] = 4;
@@ -259,7 +267,8 @@ void init_frame_buffer(struct frame_buffer *fb)
   mbox[23] = 4;
   mbox[24] = fb->state;           //RGB, not BGR preferably
 
-  mbox[25] = VIDEOCORE_MAILBOX_TAG_ALLOCATE_BUFFER; //get framebuffer, gets alignment on request
+  mbox[25] =
+    VIDEOCORE_MAILBOX_TAG_ALLOCATE_BUFFER; //get framebuffer, gets alignment on request
   mbox[26] = 8;
   mbox[27] = 8;
   mbox[28] = fb->pointer;        //FrameBufferInfo.pointer
@@ -278,7 +287,7 @@ void init_frame_buffer(struct frame_buffer *fb)
     fb_width = mbox[5];
     fb_height = mbox[6];
     fb_pitch = mbox[33];
-    fb_ptr = (void*)((unsigned long) mbox[28]);
+    fb_ptr = (void *)((unsigned long) mbox[28]);
   } else {
     printk("Unable to set screen resolution to 1024x768x32\n");
   }
@@ -300,14 +309,16 @@ void fb_show_picture(char *data, int width, int height)
 {
   int x, y;
   char pixel[4];
-  
+
   fb_ptr += ((fb_height - height) / 2) * fb_pitch + (fb_width - width) * 2;
+
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
       HEADER_PIXEL(data, pixel);
       *((unsigned int *) fb_ptr) = *((unsigned int *) &pixel);
       fb_ptr += 4;
     }
+
     fb_ptr += fb_pitch - width * 4;
   }
 }
@@ -322,22 +333,25 @@ void fb_print(int x, int y, const char *s)
 {
   // get our font
   psf_t *font = (psf_t *) &_binary___lib_font_psf_start;
+
   //  psf_t *font = (psf_t *) &_binary_font_psf_start;
   // draw next character if it's not zero
   while (*s) {
     // get the offset of the glyph. Need to adjust this to support unicode table
-    unsigned char *glyph = (unsigned char*) &_binary___lib_font_psf_start
-      + font->headersize + (*((unsigned char*) s) < font->numglyph ? *s : 0)
-      * font->bytesperglyph;
+    unsigned char *glyph = (unsigned char *) &_binary___lib_font_psf_start
+                           + font->headersize + (*((unsigned char *) s) < font->numglyph ? *s : 0)
+                           * font->bytesperglyph;
     // calculate the offset on screen
     int offs = (y * font->height * fb_pitch) + (x * (font->width + 1) * 4);
     // variables
     unsigned int i, j;
     int line, mask, bytesperline = (font->width + 7) / 8;
+
     // handle carrige return
     if (*s == '\r') {
       x = 0;
     } else
+
       // new line
       if (*s == '\n') {
         x = 0;
@@ -348,18 +362,22 @@ void fb_print(int x, int y, const char *s)
           // display one row
           line = offs;
           mask = 1 << (font->width - 1);
+
           for (i = 0; i < font->width; i++) {
             // if bit set, we use white color, otherwise black
-            *((unsigned int*)(fb_ptr + line)) = ((int) *glyph) & mask ? 0xffffff : 0;
+            *((unsigned int *)(fb_ptr + line)) = ((int) * glyph) & mask ? 0xffffff : 0;
             mask >>= 1;
             line += 4;
           }
+
           // adjust to next line
           glyph += bytesperline;
           offs += fb_pitch;
         }
+
         x++;
       }
+
     // next character
     s++;
   }

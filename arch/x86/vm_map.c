@@ -45,14 +45,17 @@ static void map_pml2_range(struct pml2e *pml2_base, uintptr_t vstart,
     panic("A PML2 table cant map ranges > 1-GByte. "
           "Given range: 0x%lx - 0x%lx", vstart, vend);
   }
+
   for (pml2e = pml2_base + pml2_index(vstart);
        pml2e <= pml2_base + pml2_index(vend - 1);
        pml2e++) {
     assert((char *)pml2e < (char *)pml2_base + PAGE_SIZE);
+
     if (pml2e->present) {
       panic("Mapping virtual 0x%lx to already mapped physical "
             "page at 0x%lx", vstart, pml2e->page_base);
     }
+
     pml2e->present = 1;
     pml2e->read_write = 1;
     pml2e->user_supervisor = 0;
@@ -88,10 +91,12 @@ static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
     panic("A PML3 table can't map ranges > 512-GBytes. "
           "Given range: 0x%lx - 0x%lx", vstart, vend);
   }
+
   for (pml3e = pml3_base + pml3_index(vstart);
        pml3e <= pml3_base + pml3_index(vend - 1);
        pml3e++) {
     assert((char *)pml3e < (char *)pml3_base + PAGE_SIZE);
+
     if (!pml3e->present) {
       pml3e->present = 1;
       pml3e->read_write = 1;
@@ -108,6 +113,7 @@ static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
     } else {
       end = vstart + PML3_ENTRY_MAPPING_SIZE;
     }
+
     map_pml2_range(pml2_base, vstart, end, pstart);
 
     pstart += PML3_ENTRY_MAPPING_SIZE;
@@ -139,10 +145,12 @@ static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
     panic("Mapping a virtual range that exceeds the 48-bit "
           "architectural limit: 0x%lx - 0x%lx", vstart, vend);
   }
+
   for (pml4e = pml4_base + pml4_index(vstart);
        pml4e <= pml4_base + pml4_index(vend - 1);
        pml4e++) {
     assert((char *)pml4e < (char *)pml4_base + PAGE_SIZE);
+
     if (!pml4e->present) {
       pml4e->present = 1;
       pml4e->read_write = 1;
@@ -159,6 +167,7 @@ static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
     } else {
       end = vstart + PML4_ENTRY_MAPPING_SIZE;
     }
+
     map_pml3_range(pml3_base, vstart, end, pstart);
 
     pstart += PML4_ENTRY_MAPPING_SIZE;
@@ -200,20 +209,27 @@ bool vaddr_is_mapped(void *vaddr)
   assert((uintptr_t) vaddr < KERN_PAGE_END_MAX);
 
   pml4e = kernel_pml4_table + pml4_index(vaddr);
+
   if (!pml4e->present) {
     return false;
   }
+
   pml3e = pml3_base(pml4e);
   pml3e += pml3_index(vaddr);
+
   if (!pml3e->present) {
     return false;
   }
+
   pml2e = pml2_base(pml3e);
   pml2e += pml2_index(vaddr);
+
   if (!pml2e->present) {
     return false;
   }
-  assert((uintptr_t) page_base(pml2e) == round_down((uintptr_t) vaddr, PAGE_SIZE_2MB));
+
+  assert((uintptr_t) page_base(pml2e) == round_down((uintptr_t) vaddr,
+                                                    PAGE_SIZE_2MB));
   return true;
 }
 
@@ -235,16 +251,19 @@ void *vm_kmap(uintptr_t pstart, uint64_t len)
           ">= max supported physical addresses end 0x%lx",
           pstart, pend, KERN_PHYS_END_MAX);
   }
+
   ret = VIRTUAL(pstart);
   pstart = round_down(pstart, PAGE_SIZE_2MB);
   pend = round_up(pend, PAGE_SIZE_2MB);
 
   while (pstart < pend) {
     vstart = VIRTUAL(pstart);
+
     if (!vaddr_is_mapped(vstart)) {
       map_kernel_range((uintptr_t)vstart,
                        PAGE_SIZE_2MB, pstart);
     }
+
     pstart += PAGE_SIZE_2MB;
   }
 

@@ -24,7 +24,7 @@ struct buffer_dumper {
 };
 
 extern struct buffer_dumper serial_char_dumper;
- 
+
 /*
  * Possible functions for the printer:
  * - printk(fmt, ...)
@@ -38,11 +38,11 @@ int null_printer(const char *fmt, ...);
  */
 void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len);
 void buf_char_dump(struct buffer_dumper *dumper, void *given_buf, uint len);
-void buf_null_dump( __unused struct buffer_dumper *dumper,
-        __unused void *given_buf, __unused uint len);
+void buf_null_dump(__unused struct buffer_dumper *dumper,
+                   __unused void *given_buf, __unused uint len);
 
 
-void printbuf(struct buffer_dumper*, void *buf, uint len);
+void printbuf(struct buffer_dumper *, void *buf, uint len);
 
 #endif /* !__ASSEMBLY__ */
 

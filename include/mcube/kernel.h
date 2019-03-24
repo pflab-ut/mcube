@@ -102,8 +102,10 @@
  */
 static inline uint64_t ceil_div(uint64_t a, uint64_t b)
 {
-  if (a == 0)
+  if (a == 0) {
     return a;
+  }
+
   return ((a - 1) / b) + 1;
 }
 

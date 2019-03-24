@@ -94,7 +94,7 @@ static void test_bltu(void)
   asm volatile("label_bltu:");
   asm volatile("bgtu $15, $16, label_bgtu");
   asm volatile("label_bgtu:");
-  
+
 }
 
 static void test_bge(void)

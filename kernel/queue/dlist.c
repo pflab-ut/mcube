@@ -14,12 +14,14 @@ static void enqueue_rq_dlist(struct rt_runqueue *rq,
   /* p is necessary because n could be the idle thread */
   struct thread_struct *p, *n;
   unsigned long cpu = get_cpu_id();
-  
+
   /* first search the place */
-  for (p = &rq->array[0], n = rq->array[0].next; n != &rq->array[0]; n = n->next) {
+  for (p = &rq->array[0], n = rq->array[0].next; n != &rq->array[0];
+       n = n->next) {
     if (compare_thread(th, n, offset)) {
       break;
     }
+
     p = n;
   }
 
@@ -66,20 +68,23 @@ void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
   }
 
   th->next->prev = th->prev;
+
   if (rq->array[0].next == &rq->array[0]) {
     clear_bit32(rq->bitmap, 0);
-  }   
+  }
 }
 
 struct thread_struct *pick_next_task(void)
 {
   struct thread_struct *th = NULL;
   unsigned long cpu = get_cpu_id();
+
   /* use only the highest priority */
   if (run_tq[cpu].array[0].next != &run_tq[cpu].array[0]) {
     //    th = run_tq[cpu].array[bindex].next;
     th = run_tq[cpu].array[0].next;
   }
+
   return th;
 }
 
@@ -87,6 +92,7 @@ struct thread_struct *pick_next_task(void)
 void init_rq(void)
 {
   int i, j;
+
   /* NOTE: other members in run_tq are initialized at compile time.  */
   for (i = 0; i < NR_CPUS; i++) {
     for (j = 0; j < NR_PRIORITIES; j++) {

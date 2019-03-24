@@ -33,36 +33,44 @@ static void apic_test_delay(void)
   apic_5secs_delay();
 
   printk("Note: Delay interval started \n");
+
   for (int i = 0; i < 1000; i++) {
     apic_mdelay(10);
   }
+
   printk("Note: Delay end \n\n");
 
   printk("Testing a 10-second delay using u-seconds\n");
   apic_5secs_delay();
 
   printk("Note: Delay interval started \n");
+
   for (int i = 0; i < 100000; i++) {
     apic_udelay(100);
   }
+
   printk("Note: Delay end \n\n");
 
   printk("Testing a 5-second delay after notice\n");
   apic_5secs_delay();
 
   printk("Note: Delay interval started \n");
+
   for (int i = 0; i < 5000; i++) {
     apic_mdelay(1);
   }
+
   printk("Note: Delay end \n\n");
 
   printk("Testing another 5-second delay after notice\n");
   apic_5secs_delay();
 
   printk("Note: Delay interval started \n");
+
   for (int i = 0; i < 5; i++) {
     apic_mdelay(1000);
   }
+
   printk("Note: Delay end \n\n");
 }
 
@@ -105,6 +113,7 @@ static void apic_test_periodic_mode(void)
 
   /* After each delay, store ticks triggered so far */
   local_irq_enable();
+
   for (i = 0; i < DELAY_TESTS; i++) {
     pit_mdelay(ms);
     ticks[i] = apic_ticks_count;
@@ -112,9 +121,11 @@ static void apic_test_periodic_mode(void)
 
   /* This should print a list of ones */
   printk("Number of ticks triggered on each delay period: ");
+
   for (i = 1; i < DELAY_TESTS; i++) {
     printk("%ld ", ticks[i] - ticks[i - 1]);
   }
+
   printk("\n\n");
 }
 

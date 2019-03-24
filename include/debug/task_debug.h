@@ -15,9 +15,11 @@ static inline void print_thread_in_line(void)
 {
   struct thread_struct *tmp;
   unsigned long cpu = get_cpu_id();
+
   for (tmp = current_th[cpu]->tk->top_thread; tmp; tmp = tmp->line) {
     PDEBUG("%lu-> ", tmp->id);
   }
+
   PDEBUG("\n");
 }
 
@@ -40,11 +42,13 @@ static inline void print_task_bythid(int thid)
 {
   struct thread_struct *th;
   unsigned long cpu = get_cpu_id();
+
   if (thid == 0) {
     th = &kernel_th[cpu];
   } else {
     th = &ths[thid];
   }
+
   if (th && th->tk) {
     pdebug_task(th->tk);
   }

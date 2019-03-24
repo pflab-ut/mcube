@@ -70,7 +70,7 @@ static void handle_syscall(interrupt_context_t *context)
    * R8:  5th Argument
    * R9:  6th Argument
    */
-  
+
   //  unsigned long cpu = get_cpu_id();
   //  unsigned long rcx;
   //asm volatile("movq %0, rcx" : "=r"(rcx));

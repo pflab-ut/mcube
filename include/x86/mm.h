@@ -91,7 +91,7 @@ enum zone_id {
 
   /* Undefined; the `NULL' zone! */
   ZONE_UNASSIGNED = 2,
-  
+
   /* Number of zones */
   NR_ZONES = 3,
 };
@@ -107,10 +107,11 @@ enum zone_id {
  * erved memory area like the legacy ISA and PCI holes.
  */
 struct page {
-  uint64_t pfn:(64 - PAGE_SHIFT),  /* Phys addr = pfn << PAGE_SHIFT */
-    free:1,      /* Not allocated? */
-    in_bucket:1,    /* Used by the bucket-allocator? */
-    zone_id:2;    /* The zone we're assigned to */
+uint64_t pfn:
+  (64 - PAGE_SHIFT),  /* Phys addr = pfn << PAGE_SHIFT */
+  free: 1,     /* Not allocated? */
+  in_bucket: 1,   /* Used by the bucket-allocator? */
+  zone_id: 2;   /* The zone we're assigned to */
 
   union {
     struct page *next;  /* If in pfdfree_head, next free page */

@@ -52,15 +52,18 @@ void ramdisk_init(void)
 {
   /* Ramdisk header is loaded directly after kernel image */
   rdheader = VIRTUAL(KTEXT_PHYS(__kernel_end));
+
   if (memcmp(rdheader->start_signature, RDSIG_START, RDSIG_LEN)) {
     panic("Ramdisk: Invalid header start signature");
   }
+
   if (memcmp(rdheader->end_signature, RDSIG_END, RDSIG_LEN)) {
     panic("Ramdisk: Invalid header end signature");
   }
 
   ramdisk.buf = (char *)(rdheader + 1);
   ramdisk.len = rdheader->length;
+
   if (ramdisk.len != 0) {
     printk("Ramdisk: start address = 0x%lx, length = %d KB\n",
            ramdisk.buf, ramdisk.len / 1024);

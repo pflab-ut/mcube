@@ -83,6 +83,7 @@ static uint32_t e820_checksum(void *base, int len)
 
   p = base;
   sum = 0;
+
   while (len--) {
     sum += *p++;
   }
@@ -102,15 +103,18 @@ static void validate_e820h_struct(void)
   struct e820_range *range;
 
   entry = E820_BASE;
+
   if (*entry != E820_INIT_SIG) {
     panic("E820h - Invalid buffer start signature");
   }
+
   entry++;
 
   while (*entry != E820_END) {
     if (entry >= (uint32_t *)E820_MAX) {
       panic("E820h - Unterminated buffer structure");
     }
+
     entry_len = *entry++;
     range = (struct e820_range *) entry;
     printk("Memory: E820 range: 0x%lx - 0x%lx (%s)\n", range->base,
@@ -118,20 +122,25 @@ static void validate_e820h_struct(void)
 
     entry = (uint32_t *)((char *) entry + entry_len);
   }
+
   entry++;
 
   err = *entry;
+
   if (err != E820_SUCCESS) {
     panic("E820h error - %s", e820_errstr(err));
   }
+
   entry++;
 
   chksum2 = *entry;
   chksum1 = e820_checksum(E820_BASE, (char *)entry - (char *)E820_BASE);
+
   if (chksum1 != chksum2) {
     panic("E820h error - calculated checksum = 0x%lx, "
           "found checksum = 0x%lx\n", chksum1, chksum2);
   }
+
   entry++;
 
   assert(entry <= (uint32_t *)E820_MAX);
@@ -160,6 +169,7 @@ static void build_memory_setup(void)
     avail_ranges++;
 
     end = range->base + range->len;
+
     if (end > phys_end) {
       phys_end = end;
     }
@@ -195,9 +205,11 @@ int e820_sanitize_range(struct e820_range *range, uint64_t kmem_end)
   }
 
   assert(page_aligned(kmem_end));
+
   if (end <= PHYS(kmem_end)) {
     return -1;
   }
+
   if (start < PHYS(kmem_end)) {
     start = PHYS(kmem_end);
   }

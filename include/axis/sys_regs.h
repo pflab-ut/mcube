@@ -29,6 +29,7 @@ static inline void start_cpu(volatile unsigned long id)
     printk("Error: cpu id %lu exceeds %d\n", id, NR_CPUS);
     return;
   }
+
   printk("SYS_CPU_CTRL(%lu) = 0x%lx\n", id, SYS_CPU_CTRL(id));
   mmio_out32(SYS_CPU_CTRL(id), 0);
 }
@@ -39,27 +40,32 @@ static inline void stop_cpu(volatile unsigned long id)
     printk("Error: cpu id %lu exceeds %d\n", id, NR_CPUS);
     return;
   }
+
   //  printk("stop_cpu()\n");
   printk("SYS_CPU_CTRL(%lu) = 0x%lx\n", id, SYS_CPU_CTRL(id));
   mmio_out32(SYS_CPU_CTRL(id), 1);
 }
 
-static inline void set_program_counter(volatile unsigned long id, volatile unsigned long pc)
+static inline void set_program_counter(volatile unsigned long id,
+                                       volatile unsigned long pc)
 {
   if (id > NR_CPUS) {
     printk("Error: cpu id %lu exceeds %d\n", id, NR_CPUS);
     return;
   }
+
   mmio_out32(SYS_CPU_CTRL(id), pc);
 }
 
 static inline unsigned long get_program_counter(volatile unsigned long id)
 {
   volatile unsigned long data;
+
   if (id > NR_CPUS) {
     printk("Error: cpu id %lu exceeds %d\n", id, NR_CPUS);
     return -1;
   }
+
   data = mmio_in32(SYS_CPU_STATUS(id));
   return data;
 }
@@ -67,40 +73,48 @@ static inline unsigned long get_program_counter(volatile unsigned long id)
 static inline unsigned long get_net_base_address(volatile unsigned long id)
 {
   volatile unsigned long data;
+
   if (id > NR_CPUS) {
     printk("Error: cpu id %lu exceeds %d\n", id, NR_CPUS);
     return -1;
   }
+
   data = mmio_in32(SYS_NET_BASE(id));
   return data;
 }
 
-static inline void set_net_base_address(volatile unsigned long id, volatile unsigned long addr)
+static inline void set_net_base_address(volatile unsigned long id,
+                                        volatile unsigned long addr)
 {
   if (id > NR_CPUS) {
     printk("Error: cpu id %lu exceeds %d\n", id, NR_CPUS);
     return;
   }
+
   mmio_out32(SYS_NET_BASE(id), addr);
 }
 
 static inline unsigned long get_net_ctrl_address(volatile unsigned long id)
 {
   volatile unsigned long data;
+
   if (id > NR_CPUS) {
     printk("Error: cpu id %lu exceeds %d\n", id, NR_CPUS);
     return -1;
   }
+
   data = mmio_in32(SYS_NET_CTRL(id));
   return data;
 }
 
-static inline void set_net_ctrl_address(volatile unsigned long id, volatile unsigned long addr)
+static inline void set_net_ctrl_address(volatile unsigned long id,
+                                        volatile unsigned long addr)
 {
   if (id > NR_CPUS) {
     printk("Error: cpu id %lu exceeds %d\n", id, NR_CPUS);
     return;
   }
+
   mmio_out32(SYS_NET_CTRL(id), addr);
 }
 
@@ -117,6 +131,7 @@ static inline void set_common_interrupt_generation(volatile unsigned long id)
     printk("Error: cpu id %lu exceeds %lu\n", id, NR_SOFTWARE_INTERRUPTS);
     return;
   }
+
   mmio_out32(SYS_COMMON_INTERRUPT_GENERATION, 0x1 << id);
 }
 
@@ -131,6 +146,7 @@ static inline void set_common_interrupt_clear(volatile unsigned long id)
     printk("Error: cpu id %lu exceeds %lu\n", id, NR_SOFTWARE_INTERRUPTS);
     return;
   }
+
   mmio_out32(SYS_COMMON_INTERRUPT_CLEAR, 0x1 << id);
 }
 

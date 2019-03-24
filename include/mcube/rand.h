@@ -21,10 +21,12 @@ static inline uint64_t get_acet(uint64_t x)
   uint64_t tmp;
 
   tmp = x * GET_ACET();
+
   //  tmp = (uint64_t) (x * GET_ACET());
   while (tmp < (x * arg_param.emin) / 100 || tmp == 0) {
     tmp++;
   }
+
   return tmp;
 }
 

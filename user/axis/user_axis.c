@@ -10,6 +10,7 @@
 void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
+
   while (1) {
     print("%lu", id);
     //  do_end_job(&ths[id]);
@@ -24,7 +25,7 @@ int user_thread_main(void)
   struct th_attr thas[NR_THREADS] = INIT_THAS;
   sched_time = 5;
   print("user_thread_main()\n");
-  
+
   for (i = 0; i < nr_threads; i++) {
     ids[i] = i + 1;
     thas[i].type = PERIODIC_TH | HARD_REAL_TIME;
@@ -34,6 +35,7 @@ int user_thread_main(void)
     thas[i].relative_deadline = thas[i].period;
     do_create_thread(user_func, &ids[i], &thas[i]);
   }
+
   set_timer_period(USEC_TO_CPU_CLOCK(100));
   print("USEC_TO_CPU_CLOCK(100) = %lu\n", USEC_TO_CPU_CLOCK(100));
   run(nr_threads);
@@ -47,6 +49,7 @@ void timer_main(void)
   print("USEC_TO_CPU_CLOCK(100) = %lu\n", USEC_TO_CPU_CLOCK(100));
   enable_timer_interrupt();
   enable_timer();
+
   while (1) {
     print("get_timer_count() = %lu\n", get_timer_count());
     //    wi();
@@ -61,18 +64,21 @@ int dmac_main(void)
   uint32_t src = 0;
   uint32_t n = 16;
   uint32_t i;
-  
+
   //  do_local_dmac(dst, src, n, 0, DMAC_POLLING);
   //  do_local_dmac(dst, src, n, 0, DMAC_SYNC_INTERRUPT);
   do_local_dmac(dst, src, n, 0, DMAC_ASYNC_INTERRUPT);
+
   for (i = 0; i < n; i += 4) {
     print("src 0x%x\n", mmio_in32(i));
     print("dst 0x%x\n", mmio_in32(dst + i));
   }
+
   while (1) {
     sync();
     //print("hoge\n");
   }
+
   return 0;
 }
 
@@ -112,8 +118,9 @@ void multi_cpus_main(void)
   // NOTE: work well if CPU2 is implemented.
   // set_program_counter(2, 0);
   // start_cpu(2);
-  
+
   volatile int i = 0;
+
   while (1) {
     i++;
     print("i = %d\n", i);
@@ -123,9 +130,11 @@ void multi_cpus_main(void)
 void tsc_main(void)
 {
   int i = 0;
+
   while (1) {
     print("get_time_stamp_counter() = %lu\n", get_time_stamp_counter());
     i++;
+
     if (i == 10) {
       set_time_stamp_counter(0);
     }

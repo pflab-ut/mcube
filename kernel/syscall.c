@@ -15,7 +15,7 @@ asmlinkage int sys_sched(void)
 
 asmlinkage int sys_end_job(unsigned long *id_ptr)
 {
-  struct thread_struct *th = &ths[*id_ptr-1];
+  struct thread_struct *th = &ths[*id_ptr - 1];
   print("sys_end_job()\n");
   print("id_ptr = %lu\n", *id_ptr);
   th->sched.remaining = 0;
@@ -24,9 +24,10 @@ asmlinkage int sys_end_job(unsigned long *id_ptr)
 }
 
 
-asmlinkage int sys_get_exec_time(unsigned long *id_ptr, unsigned long *cputime_ptr)
+asmlinkage int sys_get_exec_time(unsigned long *id_ptr,
+                                 unsigned long *cputime_ptr)
 {
-  struct thread_struct *th = &ths[*id_ptr-1];
+  struct thread_struct *th = &ths[*id_ptr - 1];
   print("sys_get_cputime()\n");
 #if 0
   print("id_ptr = 0x%lx id = %lu\n", id_ptr, *id_ptr);
@@ -52,13 +53,14 @@ asmlinkage int sys_get_mode_level(void)
 #if CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
   unsigned long spsr;
   asm volatile("mrs %0, spsr_el1" : "=r"(spsr));
+
   //  printk("spsr_el1 = 0x%lx\n", spsr);
   if ((spsr & SPSR_ELx_MODE_FIELD_MASK) == SPSR_ELx_MODE_FIELD_EL0t) {
     return USER_LEVEL;
   } else {
     return KERNEL_LEVEL;
   }
-  
+
 #else
   return KERNEL_LEVEL;
 #endif /* CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER */

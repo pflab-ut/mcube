@@ -117,7 +117,7 @@ struct proc {
     clock_t runtime_overall;/* Overall runtime (in ticks) */
     uint dispatch_count;  /* # got chosen from the runqueue */
     clock_t rqwait_overall;  /* Overall wait in runqueue (ticks) */
-    clock_t prio_map[MAX_PRIO+1];/* # runtime ticks at priority i */
+    clock_t prio_map[MAX_PRIO + 1]; /* # runtime ticks at priority i */
     uint preempt_high_prio;  /* cause of a higher-priority thread */
     uint preempt_slice_end; /* cause of timeslice end */
   } stats;
@@ -219,17 +219,17 @@ static inline void pcb_validate_offsets(void)
 
   compiler_assert(IRQCTX_R11 == offsetof(struct irq_ctx, r11));
   compiler_assert(IRQCTX_R10 == offsetof(struct irq_ctx, r10));
-  compiler_assert(IRQCTX_R9  == offsetof(struct irq_ctx, r9 ));
-  compiler_assert(IRQCTX_R8  == offsetof(struct irq_ctx, r8 ));
+  compiler_assert(IRQCTX_R9  == offsetof(struct irq_ctx, r9));
+  compiler_assert(IRQCTX_R8  == offsetof(struct irq_ctx, r8));
   compiler_assert(IRQCTX_RSI == offsetof(struct irq_ctx, rsi));
   compiler_assert(IRQCTX_RDI == offsetof(struct irq_ctx, rdi));
   compiler_assert(IRQCTX_RDX == offsetof(struct irq_ctx, rdx));
   compiler_assert(IRQCTX_RCX == offsetof(struct irq_ctx, rcx));
   compiler_assert(IRQCTX_RAX == offsetof(struct irq_ctx, rax));
   compiler_assert(IRQCTX_RIP == offsetof(struct irq_ctx, rip));
-  compiler_assert(IRQCTX_CS  == offsetof(struct irq_ctx, cs ));
+  compiler_assert(IRQCTX_CS  == offsetof(struct irq_ctx, cs));
   compiler_assert(IRQCTX_RSP == offsetof(struct irq_ctx, rsp));
-  compiler_assert(IRQCTX_SS  == offsetof(struct irq_ctx, ss ));
+  compiler_assert(IRQCTX_SS  == offsetof(struct irq_ctx, ss));
   compiler_assert(IRQCTX_RFLAGS == offsetof(struct irq_ctx, rflags));
   compiler_assert(IRQCTX_SIZE == sizeof(struct irq_ctx));
 }

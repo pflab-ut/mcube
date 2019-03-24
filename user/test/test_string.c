@@ -15,6 +15,7 @@ static void test_strnlen(const char *str, int len, int expected_len, bool print)
   int res;
 
   res = strnlen(str, len);
+
   if (res != expected_len) {
     panic("_STRING - strnlen(\"%s\", %d) returned %d, while %d "
           "is expected", (print) ? str : "<binary>", len, res,
@@ -68,9 +69,10 @@ bool test_string(void)
   for (i = 0; i <= 10; i++) {
     test_strnlen("", i, 0, true);  /* Bounds, 1 */
   }
-  
+
   i = 1;
   str = kmalloc(1024);
+
   for (char ch = 'A'; ch <= 'Z'; ch++, i++) {
     str[i - 1] = ch;
     str[i] = '\0';
@@ -78,6 +80,7 @@ bool test_string(void)
   }
 
   i = 1;
+
   for (char ch = 'A'; ch <= 'Z'; ch++, i++) {
     str[i - 1] = ch;
     str[i] = '\0';
@@ -87,13 +90,14 @@ bool test_string(void)
   for (i = 0; i <= 'Z' - 'A' + 1; i++) {
     test_strnlen(str, i, i, true);  /* The the 'n' part of strnlen */
   }
-  
+
   kfree(str);
   memset(_arr, 0x01, _ARRAY_LEN);
+
   for (i = 0; i <= _ARRAY_LEN; i++) {
     test_strnlen((char *)_arr, i, i, 0);   /* Without NULL suffix! */
   }
-  
+
   /* Memcpy() tests */
 
   test_memcpy_overlaps();

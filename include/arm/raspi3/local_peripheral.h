@@ -64,7 +64,7 @@
  * 01 = GPU FIQ goes to FIQ input of core 1
  * 10 = GPU FIQ goes to FIQ input of core 2
  * 11 = GPU FIQ goes to FIQ input of core 3
- */ 
+ */
 #define LP_GPU_INTERRUPT_ROUTING_FIQ_CORE(cpu) ((cpu) << 2)
 
 /* 1-0: GPU IRQ routing:
@@ -192,7 +192,7 @@
 #define LP_LOCAL_TIMER_WRITE_FLAGS_INTERRUPT_FLAG_CLEAR (0x1 << 31)
 /* 30: Local timer-reloaded when written as 1 (write only) */
 #define LP_LOCAL_TIMER_WRITE_FLAGS_LOCAL_TIMER_RELOADED (0x1 << 30)
-/* 29-0: reserved */  
+/* 29-0: reserved */
 
 
 /* Core Timers Interrupt Control Registers */
@@ -350,13 +350,14 @@
 #define LP_MAILBOX0_INTERRUPT_CALLBACK5 (0x1 << 7)
 #define LP_MAILBOX0_INTERRUPT_CALLBACK6 (0x1 << 8)
 #define LP_MAILBOX0_INTERRUPT_CALLBACK7 (0x1 << 9)
- 
+
 
 #ifndef __ASSEMBLY__
 
 static inline void enable_mailbox_interrupt(void)
 {
   int i;
+
   for (i = 0; i < 4; i++) {
     mmio_out32(LP_CORE_MAILBOXES_INTERRUPT_CTRL(i), 0xf);
   }
@@ -365,6 +366,7 @@ static inline void enable_mailbox_interrupt(void)
 static inline void disable_mailbox_interrupt(void)
 {
   int i;
+
   for (i = 0; i < 4; i++) {
     mmio_out32(LP_CORE_MAILBOXES_INTERRUPT_CTRL(i), 0x0);
   }

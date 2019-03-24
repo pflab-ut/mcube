@@ -22,6 +22,7 @@ static inline unsigned long tsc2nsec(unsigned long tsc)
 static inline void delay(unsigned long us)
 {
   volatile unsigned long cur = get_time_stamp_counter();
+
   while (tsc2usec(get_time_stamp_counter() - cur) < us)
     ;
 }

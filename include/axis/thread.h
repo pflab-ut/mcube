@@ -7,7 +7,7 @@
 #define __MCUBE_AXIS_THREAD_H__
 
 /** Stack frame size for interrupt enter/exit. */
-#define STACK_FRAME_SIZE 128 
+#define STACK_FRAME_SIZE 128
 
 /* CPU context's stack frame size for context switch. */
 #define CPU_CONTEXT_STACK_FRAME_SIZE 56

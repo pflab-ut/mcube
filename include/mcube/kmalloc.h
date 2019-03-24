@@ -84,6 +84,7 @@ static inline void sign_buf(void *buf, uint32_t signature)
 static inline int is_free_buf(void *buf)
 {
   buf = (char *) buf + sizeof(void *);
+
   if (*(uint32_t *) buf == FREEBUF_SIG) {
     return 1;
   }

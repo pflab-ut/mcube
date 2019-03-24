@@ -18,7 +18,7 @@
 
 #define PL011_UART_HZ (4 * 1000 * 1000)
 
-  
+
 // The offsets for reach register for the UART.
 #define UART0_DATA_REG (UART0_BASE + 0x00)
 #define UART0_RSRECR_REG (UART0_BASE + 0x04)
@@ -117,7 +117,7 @@
  * If the FIFO is disabled, this bit is set when the transmit holding register is empty.
  * If the FIFO is enabled, the TXFE bit is set when the transmit FIFO is empty.
  * This bit does not indicate if there is data in the transmit shift register.
- */  
+ */
 #define UART_FLAG_REG_TRANSMIT_FIFO_EMPTY (0x1 << 7)
 /* 6: Receive FIFO full.
  * The meaning of this bit depends on the state of the FEN bit
@@ -186,7 +186,7 @@
  * 10 = 7 bits
  * 01 = 6 bits
  * 00 = 5 bits.
- */  
+ */
 #define UART_LCRH_REG_WORD_LENGTH_MASK (0x3 << 5)
 /* 4: Enable FIFOs.
  * 0 = FIFOs are disabled (character mode) that is, the FIFOs become 1-byte-deep

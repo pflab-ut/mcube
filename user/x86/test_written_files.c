@@ -53,10 +53,10 @@ void *memset32(void *dst, uint32_t val, uint64_t len)
   len = len / 8;
 
   uval = ((uint64_t) val << 32) + val;
-  asm volatile ("rep stosq"      /* rdi, rcx */
-                :"=&D" (d0), "+&c" (len)
-                :"0" (dst), "a" (uval)
-                :"memory");
+  asm volatile("rep stosq"       /* rdi, rcx */
+               :"=&D"(d0), "+&c"(len)
+               :"0"(dst), "a"(uval)
+               :"memory");
 
   return dst;
 }
@@ -74,12 +74,15 @@ void buf_hex_dump(void *given_buf, int len)
 
   for (int i = 0; i < len; i++) {
     printf(" ");
+
     if (buf[i] < 0x10) {
       printf("0");
     }
+
     printf("%x", buf[i]);
 
     n++;
+
     if (n == bytes_perline || i == len - 1) {
       printf("\n");
       n = 0;
@@ -89,7 +92,8 @@ void buf_hex_dump(void *given_buf, int len)
 
 /* ********** End of the Library Functions ********** */
 
-static int dirTree(const char *pathname, const struct stat *sbuf, int type, struct FTW *ftwb)
+static int dirTree(const char *pathname, const struct stat *sbuf, int type,
+                   struct FTW *ftwb)
 {
   char *buf, *readbuf;
   int len, n, fd, ret;
@@ -97,18 +101,22 @@ static int dirTree(const char *pathname, const struct stat *sbuf, int type, stru
   if (!S_ISREG(sbuf->st_mode)) {
     return 0;
   }
+
   printf("Testing file '%s' with ino %lu: ", pathname, sbuf->st_ino);
 
   len = 4096 * 3;
+
   if ((buf = malloc(len)) == NULL) {
     perror("malloc");
     return 1;
   }
+
   if ((readbuf = malloc(len)) == NULL) {
     perror("malloc");
     free(buf);
     return 2;
   }
+
   memset32(buf, sbuf->st_ino, 4096);    /* Check top comment */
   memset32(buf + 4096, sbuf->st_ino + 1, 4096);  /* Check top comment */
   memset32(buf + 8192, sbuf->st_ino + 2, 4096);  /* Check top comment */
@@ -121,6 +129,7 @@ static int dirTree(const char *pathname, const struct stat *sbuf, int type, stru
   }
 
   n = 0;
+
   do {
     if ((ret = read(fd, readbuf, len - n)) < 0) {
       perror("read");
@@ -129,6 +138,7 @@ static int dirTree(const char *pathname, const struct stat *sbuf, int type, stru
       free(buf);
       return 4;
     }
+
     n += ret;
   } while (n < len && ret != 0);
 
@@ -143,6 +153,7 @@ static int dirTree(const char *pathname, const struct stat *sbuf, int type, stru
     free(buf);
     return 5;
   }
+
   printf("Success!\n");
 
   close(fd);

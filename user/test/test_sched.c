@@ -14,6 +14,7 @@ __noreturn void loop_print(char ch, int color)
 {
   while (true) {
     putchar_colored(ch, color);
+
     for (int i = 0; i < 0xffff; i++) {
       cpu_pause();
     }
@@ -60,6 +61,7 @@ bool test_sched(void)
     kthread_create(test4);
     kthread_create(test5);
   }
+
   return true;
 }
 

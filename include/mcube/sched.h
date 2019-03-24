@@ -50,23 +50,26 @@ struct runqueue {
 
 static inline void rq_init(struct runqueue *rq)
 {
-  for (int i = MIN_PRIO; i <= MAX_PRIO; i++)
+  for (int i = MIN_PRIO; i <= MAX_PRIO; i++) {
     list_init(&rq->head[i]);
+  }
 }
 
 static inline int rq_get_highest_prio(struct runqueue *rq)
 {
   for (int i = MAX_PRIO; i >= MIN_PRIO; i--)
-    if (!list_empty(&rq->head[i]))
+    if (!list_empty(&rq->head[i])) {
       return i;
+    }
 
   return UNDEF_PRIO;
 }
 
 static inline bool rq_empty(struct runqueue *rq)
 {
-  if (rq_get_highest_prio(rq) == UNDEF_PRIO)
+  if (rq_get_highest_prio(rq) == UNDEF_PRIO) {
     return true;
+  }
 
   return false;
 }
@@ -146,6 +149,7 @@ static inline unsigned long tsc2nsec(unsigned long tsc);
 
 
 extern int bindex[NR_CPUS];
+
 extern int try;
 
 
@@ -228,7 +232,7 @@ struct sched_info {
   unsigned long release;
   /** Absolute deadline. */
   unsigned long deadline;
-  
+
   /** Period. */
   /**
    * @note Period for periodic thread,

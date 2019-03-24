@@ -40,6 +40,7 @@ static inline void readers_unlock(rwlock *lock)
 static inline void writers_lock(rwlock *lock)
 {
   spin_lock(&lock->wlock);
+
   while (lock->nread > 0) {
     spin_unlock(&lock->wlock);
     spin_lock(&lock->wlock);
@@ -58,6 +59,7 @@ static inline int try_readers_lock(rwlock *lock)
     spin_unlock(&lock->wlock);
     return true;
   }
+
   return false;
 }
 
@@ -68,8 +70,10 @@ static inline int try_writers_lock(rwlock *lock)
       spin_unlock(&lock->wlock);
       return false;
     }
+
     return true;
   }
+
   return false;
 }
 

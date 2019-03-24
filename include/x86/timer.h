@@ -44,17 +44,18 @@ static inline unsigned long tsc2nsec(unsigned long tsc)
 
 static inline unsigned long usec2tsc(unsigned long usec)
 {
-	return usec * CPU_CLOCK_MHZ_PER_USEC;
+  return usec * CPU_CLOCK_MHZ_PER_USEC;
 }
 
 static inline unsigned long nsec2tsc(unsigned long nsec)
 {
-	return (nsec * CPU_CLOCK_MHZ_PER_USEC) / 1000;
+  return (nsec * CPU_CLOCK_MHZ_PER_USEC) / 1000;
 }
 
 static inline void delay(unsigned long us)
 {
   volatile unsigned long cur = rdtsc();
+
   while (tsc2usec(rdtsc() - cur) < us) {
     pause();
   }
@@ -65,7 +66,7 @@ static inline unsigned long get_current_cpu_time(void)
 {
   //  return rdtscp();
   return rdtsc();
-	//	return read_HPET_counter();
+  //	return read_HPET_counter();
 }
 
 void init_pit_timer(unsigned long tick_us);

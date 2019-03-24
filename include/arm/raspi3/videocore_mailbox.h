@@ -161,7 +161,7 @@ struct frame_buffer {
   unsigned int depth;
 
   unsigned int state;
-  
+
   unsigned int pointer;
   unsigned int size;
 

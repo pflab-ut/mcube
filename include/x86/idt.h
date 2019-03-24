@@ -24,11 +24,11 @@ struct idt_gate {
   uint16_t offset_low;
   uint16_t selector;
   uint16_t ist: 3,
-    reserved0: 5,
-    type: 4,
-    reserved0_1: 1,
-    dpl: 2,
-    p: 1;
+           reserved0: 5,
+           type: 4,
+           reserved0_1: 1,
+           dpl: 2,
+           p: 1;
   uint16_t offset_middle;
   uint32_t offset_high;
   uint32_t reserved0_2;
@@ -60,7 +60,8 @@ extern struct idt_gate idt[IDT_GATES];
 extern const char idt_exception_stubs[EXCEPTION_GATES][IDT_STUB_SIZE];
 extern void default_irq_handler(void);
 
-static inline void pack_idt_gate(struct idt_gate *gate, uint8_t type, void *addr)
+static inline void pack_idt_gate(struct idt_gate *gate, uint8_t type,
+                                 void *addr)
 {
   gate->offset_low = (uintptr_t)addr & 0xffff;
   gate->selector = KERNEL_CS;
@@ -76,7 +77,7 @@ static inline void pack_idt_gate(struct idt_gate *gate, uint8_t type, void *addr
 }
 
 static inline void write_idt_gate(struct idt_gate *gate, struct idt_gate *idt,
-          unsigned offset)
+                                  unsigned offset)
 {
   assert(offset < IDT_GATES);
   idt[offset] = *gate;
@@ -105,8 +106,8 @@ static inline void set_intr_gate(unsigned int n, void *addr)
 static inline void load_idt(const struct idt_descriptor *idt_desc)
 {
   asm volatile("lidt %0"
-         :
-         :"m"(*idt_desc));
+               :
+               :"m"(*idt_desc));
 }
 
 static inline struct idt_descriptor get_idt(void)
@@ -114,24 +115,24 @@ static inline struct idt_descriptor get_idt(void)
   struct idt_descriptor idt_desc;
 
   asm volatile("sidt %0"
-         :"=m"(idt_desc)
-         :);
+               :"=m"(idt_desc)
+               :);
 
   return idt_desc;
 }
 
 static inline void local_irq_disable(void)
 {
-  asm volatile ("cli"
-          ::
-          :"cc", "memory");
+  asm volatile("cli"
+               ::
+               :"cc", "memory");
 }
 
 static inline void local_irq_enable(void)
 {
-  asm volatile ("sti"
-          ::
-          :"cc", "memory");
+  asm volatile("sti"
+               ::
+               :"cc", "memory");
 }
 
 /*
@@ -144,6 +145,7 @@ static inline union x86_rflags local_irq_disable_save(void)
   union x86_rflags flags;
 
   flags = get_rflags();
+
   if (flags.irqs_enabled) {
     local_irq_disable();
   }

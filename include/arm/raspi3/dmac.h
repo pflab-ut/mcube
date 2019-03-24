@@ -234,7 +234,7 @@
  * by the current Control Block completes.
  * 0 = Do not generate an interrupt.
  */
-#define DMAC_CH_TI_INTEN (0x1 << 0) 
+#define DMAC_CH_TI_INTEN (0x1 << 0)
 
 
 /* DMA Transfer Information (Channels 7-14) */
@@ -484,7 +484,7 @@ struct dmac_info {
   uint32_t next_control_block;
   uint32_t debug;
   uint32_t padding;
-} __attribute__ ((aligned(32)));
+} __attribute__((aligned(32)));
 
 #endif /* !__ASSEMBLY__ */
 

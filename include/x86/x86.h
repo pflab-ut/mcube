@@ -22,10 +22,10 @@ static inline union x86_rflags get_rflags(void)
 {
   union x86_rflags flags;
 
-  asm volatile ("pushfq;"
-          "popq %0;"
-          :"=rm"(flags.raw)
-          :);
+  asm volatile("pushfq;"
+               "popq %0;"
+               :"=rm"(flags.raw)
+               :);
 
   return flags;
 }
@@ -38,11 +38,11 @@ static inline union x86_rflags get_rflags(void)
  */
 static inline void set_rflags(union x86_rflags flags)
 {
-  asm volatile ("pushq %0;"
-          "popfq;"
-          :
-          :"g"(flags.raw)
-          :"cc", "memory");
+  asm volatile("pushq %0;"
+               "popfq;"
+               :
+               :"g"(flags.raw)
+               :"cc", "memory");
 }
 
 /*

@@ -16,7 +16,7 @@ static inline uint64_t rdtsc(void)
   asm volatile("rdtsc\n\t"
                "shlq       $32, %%rdx\n\t"
                "orq        %%rdx, %%rax\n\t"
-               "movq       %%rax, %0" : "=g" (x) : : "rax", "rdx");
+               "movq       %%rax, %0" : "=g"(x) : : "rax", "rdx");
 
   return x;
 }
@@ -36,14 +36,14 @@ static inline void cpuid(unsigned int op,
   *eax = op;
   *ecx = 0;
   asm volatile("cpuid"
-               : "=a" (*eax),
-                 "=b" (*ebx),
-                 "=c" (*ecx),
-                 "=d" (*edx)
-               : "0" (*eax), "2" (*ecx));
+               : "=a"(*eax),
+               "=b"(*ebx),
+               "=c"(*ecx),
+               "=d"(*edx)
+               : "0"(*eax), "2"(*ecx));
 }
 
- 
+
 static inline void trap(__unused uint32_t trap_code)
 {
   /* do nothing */

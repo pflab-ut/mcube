@@ -47,6 +47,7 @@ static inline struct zone *get_zone(enum zone_id zid)
   if (zid != ZONE_1GB && zid != ZONE_ANY) {
     panic("Memory - invalid zone id = %d", zid);
   }
+
   return &zones[zid];
 }
 
@@ -82,7 +83,7 @@ extern struct rmap *pfdrmap;
 extern struct rmap *pfdrmap_top;
 extern struct rmap *pfdrmap_end;
 
-struct zone *page_assign_zone(struct page* page);
+struct zone *page_assign_zone(struct page *page);
 void rmap_add_range(struct e820_range *range, struct page *start);
 void pfdtable_add_range(struct e820_range *range);
 struct page *get_free_page(enum zone_id zid);

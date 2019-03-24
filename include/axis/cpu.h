@@ -44,7 +44,8 @@ void encode_cluster_address(volatile unsigned long *high_addr,
 
 void set_cpu_id(struct cluster *c, unsigned long cpu_id);
 
-void get_cluster_from_index(struct cluster *c, volatile int index, volatile int cpu);
+void get_cluster_from_index(struct cluster *c, volatile int index,
+                            volatile int cpu);
 
 
 

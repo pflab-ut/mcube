@@ -26,19 +26,24 @@ double strtod(const char *nptr, char **endptr)
     sign = -1.0;
     nptr++;
   }
+
   if (isdigit((unsigned char) *nptr)) {
     valid = true;
+
     do {
       value = value * 10.0 + (*nptr - '0');
       nptr++;
     } while (isdigit((unsigned char) *nptr));
   }
+
   if (*nptr == '.') {
     valid = false;
     nptr++;
+
     if (isdigit((unsigned char) *nptr)) {
       small = 0.1;
       valid = true;
+
       do {
         value += small * (*nptr - '0');
         small *= 0.1;
@@ -46,31 +51,38 @@ double strtod(const char *nptr, char **endptr)
       } while (isdigit((unsigned char) *nptr));
     }
   }
+
   if (valid && (*nptr == 'e' || *nptr == 'E')) {
     nptr++;
     valid = false;
     psign = +1.0;
+
     if (*nptr == '+') {
       nptr++;
     } else if (*nptr == '-') {
       psign = -1.0;
       nptr++;
     }
+
     if (isdigit((unsigned char) *nptr)) {
       valid = true;
       p = 0.0;
+
       do {
         p = p * 10.0 + (*nptr - '0');
         nptr++;
       } while (isdigit((unsigned char) *nptr));
+
       value *= pow(10.0, psign * p);
     }
   }
+
   if (valid) {
-    *endptr = (char*) nptr;
+    *endptr = (char *) nptr;
   } else {
-    *endptr = (char*) org;
+    *endptr = (char *) org;
   }
+
   return sign * value;
 }
 
@@ -84,9 +96,11 @@ unsigned long strtoul(const char *cp, char **endp, int base)
 
   if (!base) {
     base = 10;
+
     if (*cp == '0') {
       base = 8;
       cp++;
+
       if ((toupper(*cp) == 'X') && isxdigit(cp[1])) {
         cp++;
         base = 16;
@@ -97,19 +111,24 @@ unsigned long strtoul(const char *cp, char **endp, int base)
       cp += 2;
     }
   }
+
   while (isxdigit(*cp)
-         && (value = isdigit(*cp) ? *cp - '0' : toupper(*cp)- 'A' + 10) < (unsigned long) base) {
+         && (value = isdigit(*cp) ? *cp - '0' : toupper(*cp) - 'A' + 10) <
+         (unsigned long) base) {
     //    print("*cp = %c\n", *cp);
     result = result * base + value;
     cp++;
   }
+
   if (endp) {
     *endp = (char *) cp;
   }
+
   if (ep != cp) {
     //    print("Error!\n");
     return ULONG_MAX;
   }
+
   //  print("result = %d\n", result);
   return result;
 }
@@ -119,6 +138,7 @@ long strtol(const char *cp, char **endp, int base)
   if (*cp == '-') {
     return -strtoul(cp + 1, endp, base);
   }
+
   return strtoul(cp, endp, base);
 }
 
@@ -136,19 +156,19 @@ static void xtoa(unsigned long val, char *buf, unsigned radix, int negative)
     *p++ = '-';
     val = (unsigned long)(-(long) val);
   }
-  
+
   /* Save pointer to first digit */
   firstdig = p;
 
   do {
-    digval = (unsigned) (val % radix);
+    digval = (unsigned)(val % radix);
     val /= radix;
 
     /* Convert to ascii and store */
     if (digval > 9) {
-      *p++ = (char) (digval - 10 + 'a');
+      *p++ = (char)(digval - 10 + 'a');
     } else {
-      *p++ = (char) (digval + '0');
+      *p++ = (char)(digval + '0');
     }
   } while (val > 0);
 
@@ -156,6 +176,7 @@ static void xtoa(unsigned long val, char *buf, unsigned radix, int negative)
    * order.  Thus we reverse them now.
    */
   *p-- = '\0';
+
   do  {
     temp = *p;
     *p = *firstdig;
@@ -172,6 +193,7 @@ char *itoa(int val, char *buf, int radix)
   } else {
     xtoa((unsigned long)(unsigned int) val, buf, radix, 0);
   }
+
   return buf;
 }
 
@@ -193,6 +215,7 @@ void qsort(void *base, size_t num, size_t size, sortcmp cmp)
   uint8_t pivot[size], tmp[size]; // use C99 VLAs instead of alloca.
 
   uint8_t *b = (uint8_t *) base;
+
   for (;;) {
     if (num < 2) {
       return;

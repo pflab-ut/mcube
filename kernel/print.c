@@ -113,7 +113,7 @@ void __noreturn panic(const char *fmt, ...)
   if (smpboot_get_nr_alive_cpus() > 1) {
     apic_broadcast_ipi(APIC_DELMOD_FIXED, HALT_CPU_IPI_VECTOR);
   }
-  
+
   va_start(args, fmt);
   n = vsnprint(buf, sizeof(buf) - 1, fmt, args);
   va_end(args);
@@ -140,8 +140,9 @@ void __noreturn panic(const char *fmt, ...)
   vsnprint(buf, sizeof(buf), fmt, ap);
   call_sys_write(buf);
   va_end(ap);
+
   for (;;)
-    ;  
+    ;
 }
 
 #endif
@@ -169,14 +170,15 @@ static __noreturn void printk_panic(const char *str)
   const char *prefix;
 
   prefix = panic_prefix;
+
   while (*prefix != 0) {
     putchar(*prefix++);
   }
-  
+
   while (*str != 0) {
     putchar(*str++);
   }
-  
+
   halt();
 }
 
@@ -187,7 +189,8 @@ static __noreturn void printk_panic(const char *str)
  * desired radix. Return the number of ascii chars printed.
  * @size: output buffer size
  */
-static int luout(unsigned long num, char *buf, int size, struct printf_argdesc *desc)
+static int luout(unsigned long num, char *buf, int size,
+                 struct printf_argdesc *desc)
 {
   static char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
   int ret, digits;
@@ -196,10 +199,11 @@ static int luout(unsigned long num, char *buf, int size, struct printf_argdesc *
   printk_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
 
   digits = 0;
+
   if (num == 0) {
     digits++;
   }
-  
+
   for (typeof(num) c = num; c != 0; c /= desc->radix) {
     digits++;
   }
@@ -207,8 +211,10 @@ static int luout(unsigned long num, char *buf, int size, struct printf_argdesc *
   printk_assert(digits > 0);
   printk_assert(digits <= size);
   printk_assert(desc->digit <= size);
+
   if (desc->digit == -1) {
     ret = digits;
+
     for (; digits != 0; digits--) {
       buf[digits - 1] = digit[num % desc->radix];
       num = num / desc->radix;
@@ -216,17 +222,21 @@ static int luout(unsigned long num, char *buf, int size, struct printf_argdesc *
   } else {
     printk_assert(digits <= desc->digit);
     ret = desc->digit;
+
     for (i = 0; i < desc->digit - digits; i++) {
       switch (desc->pad) {
       case PAD_BLANK:
         buf[i] = ' ';
         break;
+
       case PAD_ZERO:
         buf[i] = '0';
+
       default:
         break;
       }
     }
+
     for (i = 0; i < digits; i++) {
       buf[desc->digit - i - 1] = digit[num % desc->radix];
       num = num / desc->radix;
@@ -242,7 +252,8 @@ static int luout(unsigned long num, char *buf, int size, struct printf_argdesc *
  * desired radix. Return the number of ascii chars printed.
  * @size: output buffer size
  */
-static int lout(signed long num, char *buf, int size, struct printf_argdesc *desc)
+static int lout(signed long num, char *buf, int size,
+                struct printf_argdesc *desc)
 {
   printk_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
 
@@ -263,22 +274,27 @@ static int lout(signed long num, char *buf, int size, struct printf_argdesc *des
 #if defined(ENABLE_FPU)
 
 /* TODO: update implementation */
-static inline int lfout(double lf, char *dst, int n, __unused struct printf_argdesc *desc)
+static inline int lfout(double lf, char *dst, int n,
+                        __unused struct printf_argdesc *desc)
 {
   int base = 10;
   int i;
   char tmp[MAX_DIGIT];
   double ulf;
   uint64_t u64;
+
   if (base == 10 && lf < 0) {
     dst[n++] = '-';
     ulf = lf * -1;
   } else {
     ulf = lf;
   }
+
   u64 = ulf;
+
   for (i = 1; i < MAX_DIGIT; i++) {
     tmp[i] = u64 % base;
+
     if (tmp[i] < 10) {
       tmp[i] += '0';
     } else {
@@ -290,12 +306,15 @@ static inline int lfout(double lf, char *dst, int n, __unused struct printf_argd
       if (FOUT_SIZE < n + i) {
         return -1;
       }
+
       while (i) {
         dst[n++] = tmp[i--];
       }
+
       break;
     }
   }
+
   dst[n++] = '.';
 
   for (i = 0, ulf = (ulf - (uint64_t) ulf) * 10; i < 6; i++) {
@@ -330,41 +349,49 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
   desc->radix = 10;
   desc->pad = PAD_NO;
   desc->digit = -1;
-  
+
   while (*++fmt) {
     switch (*fmt) {
     case 'l':
       desc->len = LONG;
       break;
+
     case 'd':
       desc->type = SIGNED;
       complete = true;
       goto out;
+
     case 'u':
       desc->type = UNSIGNED;
       complete = true;
       goto out;
+
     case 'x':
       desc->type = UNSIGNED;
       desc->radix = 16;
       complete = true;
       goto out;
+
     case 'f':
       desc->type = FLOAT;
       complete = true;
       goto out;
+
     case 's':
       desc->type = STRING;
       complete = true;
       goto out;
+
     case 'c':
       desc->type = CHAR;
       complete = true;
       goto out;
+
     case '%':
       desc->type = PERCENT;
       complete = true;
       goto out;
+
     case '0' ... '9':
       if (*fmt == '0') {
         desc->pad = PAD_ZERO;
@@ -372,14 +399,18 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
       } else {
         desc->pad = PAD_BLANK;
       }
+
       digit_size = 0;
+
       while ((*fmt >= '0') && (*fmt <= '9')) {
         digit_size = digit_size * 10 + (*fmt - '0');
         fmt++;
       }
+
       fmt--;
       desc->digit = digit_size;
       break;
+
     default:
       /* Unknown mark: complete by definition */
       //printf("Unknown mark: %d\n", *fmt);
@@ -389,16 +420,17 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
     }
   }
 
- out:
+out:
+
   if (!complete) {
     printk_panic("Unknown/incomplete expression");
   }
-  
+
   /* Bypass last expression char */
   if (*fmt != '\0') {
     fmt++;
   }
-  
+
   return fmt;
 }
 
@@ -424,8 +456,9 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
   if (size < 1) {
     return 0;
   }
-  
+
   str = buf;
+
   while (*fmt) {
     while (*fmt != '\0' && *fmt != '%' && size != 0) {
       *str++ = *fmt++;
@@ -441,6 +474,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
     fmt = parse_arg(fmt, &desc);
 
     len = 0;
+
     switch (desc.type) {
     case SIGNED:
       if (desc.len == LONG) {
@@ -448,49 +482,61 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
       } else {
         num = va_arg(args, int);
       }
+
       len = lout(num, str, size, &desc);
       break;
+
     case UNSIGNED:
       if (desc.len == LONG) {
         unum = va_arg(args, unsigned long);
       } else {
         unum = va_arg(args, unsigned int);
       }
+
       len = luout(unum, str, size, &desc);
       break;
 #if defined(ENABLE_FPU)
+
     case FLOAT:
       if (desc.len == LONG) {
         dnum = va_arg(args, double);
       } else {
         dnum = (float) va_arg(args, double);
       }
+
       len = lfout(dnum, str, size, &desc);
       break;
 #endif /* ENABLE_FPU */
+
     case STRING:
       s = va_arg(args, char *);
+
       if (!s) {
         s = "<*NULL*>";
       }
+
       len = strlen(s);
       len = min(size, len);
       strncpy(str, s, len);
       break;
+
     case CHAR:
       ch = (unsigned char) va_arg(args, int);
       *str = ch;
       len = 1;
       break;
+
     case PERCENT:
       *str = '%';
       len = 1;
       break;
+
     default:
       // fprintf(stderr, "Error: Unknown print type %d\n", desc.type);
       break;
       /* No-op */
     }
+
     str += len;
     size -= len;
   }
@@ -533,7 +579,8 @@ static char vga_buffer[VGA_AREA];
  * Scroll the screen up by one row.
  * NOTE! only call while the vga lock is held
  */
-static void vga_scrollup(int color) {
+static void vga_scrollup(int color)
+{
   char *src, *dst;
   int rows_24;
   uint16_t *vgap;
@@ -545,6 +592,7 @@ static void vga_scrollup(int color) {
   memcpy_forward_nocheck(dst, src, rows_24);
 
   vgap = (uint16_t *)(vga_buffer + rows_24);
+
   for (int i = 0; i < VGA_MAXCOLS; i++) {
     *vgap++ = (color << 8) + ' ';
   }
@@ -639,9 +687,11 @@ int puts(const char *s)
 {
   int i;
   int n = strlen(s);
+
   for (i = 0; i < n; i++) {
     putchar(s[i]);
   }
+
   return n;
 }
 
@@ -666,7 +716,7 @@ int printf(const char *fmt, ...)
 #else
   puts(kbuf);
 #endif
-  
+
   spin_unlock(&kbuf_lock);
   return n;
 }
@@ -692,7 +742,7 @@ int print(const char *fmt, ...)
 #else
   puts(kbuf);
 #endif
-  
+
   spin_unlock(&kbuf_lock);
   return n;
 }
@@ -722,7 +772,7 @@ int printk(const char *fmt, ...)
 #else
   puts(kbuf);
 #endif
-  
+
   spin_unlock(&kbuf_lock);
   return n;
 }
@@ -747,7 +797,7 @@ int print_uart(const char *fmt, ...)
 #elif CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
   uart_write(NULL, sbuf, n);
 #endif
-  
+
   spin_unlock(&sbuf_lock);
   return n;
 }

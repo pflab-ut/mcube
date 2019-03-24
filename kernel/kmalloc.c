@@ -84,11 +84,13 @@ static void *get_tokenized_page(int bucket_idx)
 
   buf = start;
   buf_len = 1 << bucket_idx;
+
   while (buf < (end - buf_len)) {
     *(void **) buf = buf + buf_len;
     sign_buf(buf, FREEBUF_SIG);
     buf += buf_len;
   }
+
   *(void **) buf = NULL;
   sign_buf(buf, FREEBUF_SIG);
 
@@ -157,32 +159,41 @@ void *kmalloc(size_t size)
   if (size <= MINALLOC_SZ) {
     return __kmalloc(MINBUCKET_IDX);
   }
+
   if (size <= MINALLOC_SZ *   2) {
     return __kmalloc(MINBUCKET_IDX + 1);
   }
+
   if (size <= MINALLOC_SZ *   4) {
     return __kmalloc(MINBUCKET_IDX + 2);
   }
+
   if (size <= MINALLOC_SZ *   8) {
     return __kmalloc(MINBUCKET_IDX + 3);
   }
+
   if (size <= MINALLOC_SZ *  16) {
     return __kmalloc(MINBUCKET_IDX + 4);
   }
+
   if (size <= MINALLOC_SZ *  32) {
     return __kmalloc(MINBUCKET_IDX + 5);
   }
+
   if (size <= MINALLOC_SZ *  64) {
     return __kmalloc(MINBUCKET_IDX + 6);
   }
+
   if (size <= MINALLOC_SZ * 128) {
     return __kmalloc(MINBUCKET_IDX + 7);
   }
+
   if (size <= MINALLOC_SZ * 256) {
     return __kmalloc(MINBUCKET_IDX + 8);
   }
 
-  panic("Malloc: %d bytes requested; can't support > %d bytes", size, MAXALLOC_SZ);
+  panic("Malloc: %d bytes requested; can't support > %d bytes", size,
+        MAXALLOC_SZ);
 
   return NULL;
 }
@@ -210,23 +221,24 @@ void kfree(void *addr)
     panic("Bucket: Freeing address 0x%lx which resides in "
           "an unallocated page frame", buf);
   }
-  
+
   if (!page->in_bucket) {
     panic("Bucket: Freeing address 0x%lx which resides in "
           "a foreign page frame (not allocated by us)", buf);
   }
-  
+
   buf_size = 1 << page->bucket_idx;
+
   if (!is_aligned((uintptr_t) buf, buf_size)) {
     panic("Bucket: Freeing invalidly-aligned 0x%lx address; "
           "bucket buffer size = 0x%lx\n", buf, buf_size);
   }
-  
+
   if (is_free_buf(buf)) {
     panic("Bucket: Freeing already free buffer at 0x%lx, "
           "with size = 0x%lx bytes", buf, buf_size);
   }
-  
+
   sign_buf(buf, FREEBUF_SIG);
 
   spin_lock(&bucket->lock);

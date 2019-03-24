@@ -145,7 +145,7 @@ setup:
 .PHONY: astyle cppcheck flawfinder scan-build pylint pyflakes
 
 astyle:
-	$(ASTYLE) --options=astylerc
+	@$(FIND) $(TOP_DIR) -name "*.c" -or -name "*.h" | xargs $(ASTYLE) --options=astylerc
 
 cppcheck:
 	@$(FIND) $(TOP_DIR) -name "*.c" -or -name "*.h" | xargs cppcheck

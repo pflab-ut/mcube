@@ -285,7 +285,7 @@ static __always_inline __pure_const struct proc *percpu_current_proc(void)
 {
   struct proc *curproc;
 
-  asm ("mov %%gs:0, %0" : "=r" (curproc));
+  asm("mov %%gs:0, %0" : "=r"(curproc));
 
   return curproc;
 }

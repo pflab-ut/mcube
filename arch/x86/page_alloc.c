@@ -128,7 +128,7 @@ uint64_t kmem_end = -1;
  * FIXME: we need to mark early boot functions like this,
  * and statically assure not being called afterwards.
  */
-struct zone *page_assign_zone(struct page* page)
+struct zone *page_assign_zone(struct page *page)
 {
   uint64_t start, end;
   struct zone *zone = NULL;
@@ -260,6 +260,7 @@ struct page *get_free_page(enum zone_id zid)
   if (zid == ZONE_ANY) {
     ascending_prio_for_each(zone) {
       page = __get_free_page(zone->id);
+
       if (page != NULL) {
         break;
       }
@@ -267,7 +268,7 @@ struct page *get_free_page(enum zone_id zid)
   } else {
     page = __get_free_page(zid);
   }
-  
+
   if (page == NULL) {
     panic("Memory - No more free pages available at "
           "`%s'", get_zone(zid)->description);
@@ -308,6 +309,7 @@ void free_page(struct page *page)
     panic("Memory - Freeing already free page at 0x%lx\n",
           page_address(page));
   }
+
   page->free = 1;
 
   spin_unlock(&zone->freelist_lock);
@@ -331,6 +333,7 @@ struct page *addr_to_page(void *addr)
 
   paddr = PHYS(addr);
   paddr = round_down(paddr, PAGE_SIZE);
+
   for (rmap = pfdrmap; rmap != pfdrmap_top; rmap++) {
     range = &(rmap->range);
     start = range->base;
@@ -339,6 +342,7 @@ struct page *addr_to_page(void *addr)
     if (paddr < start) {
       continue;
     }
+
     if (paddr >= end) {
       continue;
     }
@@ -411,6 +415,7 @@ void pagealloc_init(void)
     if (range->type != E820_AVAIL) {
       continue;
     }
+
     if (e820_sanitize_range(range, kmem_end)) {
       continue;
     }

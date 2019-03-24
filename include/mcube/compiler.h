@@ -44,7 +44,7 @@
 
 #if CONFIG_COMPILER_CLANG
 
-#define FALLTHROUGH /* fall through */ 
+#define FALLTHROUGH /* fall through */
 
 #elif CONFIG_COMPILER_GCC
 

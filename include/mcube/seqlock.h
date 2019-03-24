@@ -29,9 +29,9 @@ static inline void write_seqlock(seqlock *sl)
 {
   spin_lock(&sl->lock);
   ++sl->sequence;
-}   
+}
 
-static inline void write_sequnlock(seqlock *sl) 
+static inline void write_sequnlock(seqlock *sl)
 {
   sl->sequence++;
   spin_unlock(&sl->lock);
@@ -44,6 +44,7 @@ static inline int write_tryseqlock(seqlock *sl)
   if (ret) {
     ++sl->sequence;
   }
+
   return ret;
 }
 

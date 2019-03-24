@@ -17,11 +17,13 @@ int get_tq_util(struct thread_struct *head, unsigned long cpu)
 {
   struct thread_struct *p;
   int sum_util = 0;
+
   //  print("get_tq_util()\n");
   for (p = head; p != &kernel_th[cpu]; p = p->next) {
     //    print("p->id = %llu\n", p->id);
     sum_util += p->util;
   }
+
   return sum_util;
 }
 
@@ -30,7 +32,8 @@ int alloc_thread_id(void)
   return th_id++;
 }
 
-int thread_tie_break(__unused struct thread_struct *x, __unused struct thread_struct *y)
+int thread_tie_break(__unused struct thread_struct *x,
+                     __unused struct thread_struct *y)
 {
 #if CONFIG_TIE_BREAK_FIFO
   /* always false */
@@ -63,6 +66,7 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
   unsigned long index;
   id = alloc_thread_id();
   index = id - 1;
+
   if (index < NR_THREADS) {
     ths[index].id = id;
     ths[index].state = UNADMITTED;
@@ -70,7 +74,7 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
     ths[index].type = attr->type;
     ths[index].thflags = 0;
     ths[index].arg = arg;
-    
+
     ths[index].sched.release = 0;
     ths[index].sched.period = attr->period;
     ths[index].sched.relative_deadline = attr->relative_deadline;
@@ -80,7 +84,7 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
     ths[index].stack_top = USER_THREAD_STACK_ADDR(ths[index].id);
     ths[index].run_func = run_user_thread;
     ths[index].run_user_func = func;
-    
+
     return &ths[index];
   } else {
     print("do_create_thread(): Error: %lu exceed NR_THREADS %d\n", id, NR_THREADS);

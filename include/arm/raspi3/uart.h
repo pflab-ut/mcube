@@ -225,7 +225,7 @@
  * 01 = De-assert RTS when the receive FIFO has 2 empty spaces left.
  * 10 = De-assert RTS when the receive FIFO has 1 empty space left.
  * 11 = De-assert RTS when the receive FIFO has 4 empty spaces left.
- */  
+ */
 #define AUX_MU_CTRL_REG_RTS_AUTO_FLOW_LEVEL_MASK (0x3 << 5)
 /* 3: Enable transmit Auto flow-control using CTS.
  * If this bit is set the transmitter will stop if the CTS line is de-asserted.
@@ -247,7 +247,7 @@
 /* 0: Receiver enable.
  * If this bit is set the mini UART receiver is enabled.
  * If this bit is clear the mini UART receiver is disabled.
- */  
+ */
 #define AUX_MU_CTRL_REG_RECEIVER_ENABLE (0x1 << 0)
 
 /* 31-28: reserved */

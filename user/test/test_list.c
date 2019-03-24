@@ -24,6 +24,7 @@ static void test_0_elements(void)
     printk("Error: cannot allocate memory %lu\n", sizeof(struct test));
     return;
   }
+
   t1->x = x = UINT64_MAX;
   list_init(&t1->node);
   assert(list_empty(&t1->node));
@@ -32,10 +33,10 @@ static void test_0_elements(void)
   assert(t1 == t2);
 
   list_for_each(&t1->node, t3, node)
-    assert(false);
+  assert(false);
 
   list_for_each_safe(&t1->node, t3, spare, node)
-    assert(false);
+  assert(false);
 
   list_del(&t1->node);
   assert(t2->x == x);
@@ -61,14 +62,18 @@ static void test_1_element(int type)
     printk("Error: cannot allocate memory %lu\n", sizeof(struct test));
     return;
   }
+
   t1->x = UINT64_MAX;
-  switch(type) {
+
+  switch (type) {
   case STACK:
     list_add(&head, &t1->node);
     break;
+
   case QUEUE:
     list_add_tail(&head, &t1->node);
     break;
+
   default:
     assert(false);
   }
@@ -82,7 +87,7 @@ static void test_1_element(int type)
   assert(t1 == t2);
 
   list_for_each(&head, t3, node)
-    assert(t1 == t3);
+  assert(t1 == t3);
 
   list_for_each_safe(&head, t3, spare, node) {
     assert(t1 == t3);
@@ -110,19 +115,24 @@ static void test_several_elements(int count, int type)
     printk("Error: cannot allocate memory %lu\n", sizeof(struct test *) * count);
     return;
   }
+
   for (int i = 0; i < count; i++) {
     t[i] = kmalloc(sizeof(struct test));
     t[i]->x = i;
+
     switch (type) {
     case STACK:
       list_add(&head, &t[i]->node);
       break;
+
     case QUEUE:
       list_add_tail(&head, &t[i]->node);
       break;
+
     default:
       assert(false);
     }
+
     assert(!list_empty(&head));
   }
 

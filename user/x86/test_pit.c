@@ -32,27 +32,33 @@ static void pit_test_mdelay(void)
   pit_5secs_delay();
 
   printk("Note: Delay interval started \n");
+
   for (int i = 0; i < 1000; i++) {
     pit_mdelay(10);
   }
+
   printk("Note: Delay end \n\n");
 
   printk("Testing a 5-second delay after notice\n");
   pit_5secs_delay();
 
   printk("Note: Delay interval started \n");
+
   for (int i = 0; i < 5000; i++) {
     pit_mdelay(1);
   }
+
   printk("Note: Delay end \n\n");
 
   printk("Testing another 5-second delay after notice\n");
   pit_5secs_delay();
 
   printk("Note: Delay interval started \n");
+
   for (int i = 0; i < 100; i++) {
     pit_mdelay(50);
   }
+
   printk("Note: Delay end \n\n");
 }
 
@@ -88,6 +94,7 @@ static void pit_test_periodic_irq(void)
 
   /* After each delay, store ticks triggered so far */
   local_irq_enable();
+
   for (i = 0; i < DELAY_TESTS; i++) {
     pit_mdelay(ms);
     ticks[i] = pit_ticks_count;
@@ -95,9 +102,11 @@ static void pit_test_periodic_irq(void)
 
   /* This should print a list of ones */
   printk("Number of ticks triggered on each delay period: ");
+
   for (i = 1; i < DELAY_TESTS; i++) {
     printk("%ld ", ticks[i] - ticks[i - 1]);
   }
+
   printk("\n\n");
 }
 

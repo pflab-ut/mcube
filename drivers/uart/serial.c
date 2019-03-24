@@ -84,13 +84,13 @@
 union line_control_reg {
   uint8_t raw;
   struct {
-    uint8_t data_len:2,  /* # data bits in frame */
-      stop_bit:1,  /* # stop bits in frame */
-      parity_on:1,  /* Enable parity bit? */
-      even_parity:1,  /* Even parity (if parity_on = 1) */
-      sticky_parity:1,/* Unused */
-      break_ctrl:1,  /* Unused */
-      DLAB:1;    /* the DLAB control bit (see above) */
+    uint8_t data_len: 2, /* # data bits in frame */
+            stop_bit: 1, /* # stop bits in frame */
+            parity_on: 1, /* Enable parity bit? */
+            even_parity: 1, /* Even parity (if parity_on = 1) */
+            sticky_parity: 1, /* Unused */
+            break_ctrl: 1, /* Unused */
+            DLAB: 1;   /* the DLAB control bit (see above) */
   } __packed;
 };
 
@@ -116,11 +116,11 @@ enum {
 union modem_control_reg {
   uint8_t raw;
   struct {
-    uint8_t dt_ready:1,  /* RS-232 Data Termainal Ready */
-      req_send:1,  /* RS-232 Request To Send */
-      unused0:2,  /* Unused */
-      loopback:1,  /* Loopback between tx and rx */
-      unused1:3;  /* Unused */
+    uint8_t dt_ready: 1, /* RS-232 Data Termainal Ready */
+            req_send: 1, /* RS-232 Request To Send */
+            unused0: 2, /* Unused */
+            loopback: 1, /* Loopback between tx and rx */
+            unused1: 3; /* Unused */
   } __packed;
 };
 
@@ -131,14 +131,14 @@ union modem_control_reg {
 union line_status_reg {
   uint8_t raw;
   struct {
-    uint8_t rx_avail:1,  /* Received data available */
-      err_overrun:1,  /* A byte was lost (busy CPU) */
-      err_parity:1,  /* Parity mismatch */
-      err_frame:1,  /* frame corruption; noisy signal */
-      rx_break:1,  /* If 1, a break signal received */
-      tx_empty:1,  /* ALL tx buffers are empty */
-      tx_has_byte:1,  /* holding reg or shift reg has a byte */
-      unused:1;  /* Unused */
+    uint8_t rx_avail: 1, /* Received data available */
+            err_overrun: 1, /* A byte was lost (busy CPU) */
+            err_parity: 1, /* Parity mismatch */
+            err_frame: 1, /* frame corruption; noisy signal */
+            rx_break: 1, /* If 1, a break signal received */
+            tx_empty: 1, /* ALL tx buffers are empty */
+            tx_has_byte: 1, /* holding reg or shift reg has a byte */
+            unused: 1; /* Unused */
   } __packed;
 };
 
@@ -151,10 +151,10 @@ union line_status_reg {
 union modem_status_reg {
   uint8_t raw;
   struct {
-    uint8_t unused0:4,  /* Unused */
-      clr_to_send:1,  /* RS-232 Clear to Send */
-      remote_ready:1,  /* RS-232 Data Set Ready */
-      unused1:2;  /* Unused */
+    uint8_t unused0: 4, /* Unused */
+            clr_to_send: 1, /* RS-232 Clear to Send */
+            remote_ready: 1, /* RS-232 Data Set Ready */
+            unused1: 2; /* Unused */
   } __packed;
 };
 
@@ -255,6 +255,7 @@ static int __putc(uint8_t byte)
   }
 
   timeout = 0xfffff;
+
   while (!tx_buffer_empty() && timeout--) {
     cpu_pause();
   }
@@ -283,6 +284,7 @@ void serial_write(const char *buf, int len)
   }
 
   ret = 0;
+
   while (*buf && len-- && ret == 0) {
     ret = __putc(*buf++);
   }

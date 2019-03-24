@@ -29,4 +29,5 @@ ramdisk
 *.log
 *.dd
 *.org
+*.orig
 

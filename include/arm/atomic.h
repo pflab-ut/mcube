@@ -8,7 +8,8 @@
 
 #ifndef __ASSEMBLY__
 
-static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new, uint64_t old)
+static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new,
+                                    uint64_t old)
 {
   uint64_t tmp;
   //  printk("new = 0x%lx old = 0x%lx\n", new, old);
@@ -21,7 +22,7 @@ static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new, uint64
   asm volatile("stxr %w0, %x2, [%1]" : "=&r"(tmp) : "r"(ptr), "r"(new));
   asm volatile("cbnz %x0, 1b" :: "r"(tmp));
   asm volatile("2:");
-#else  
+#else
   /* Large System Extension (LSE) in ARMv8.1 */
   asm volatile("mov %x0, %x1" : "=r"(tmp) : "r"(old));
   asm volatile("cas %x0, %x1, [%2]" : "=r"(tmp), "=r"(new), "=r"(*ptr));

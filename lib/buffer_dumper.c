@@ -40,12 +40,15 @@ void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
 
   for (uint i = 0; i < len; i++) {
     dumper->pr(" ");
+
     if (buf[i] < 0x10) {
       dumper->pr("0");
     }
+
     dumper->pr("%x", buf[i]);
 
     n++;
+
     if (n == bytes_perline || i == len - 1) {
       dumper->pr("\n");
       n = 0;
@@ -77,7 +80,7 @@ void buf_null_dump(__unused struct buffer_dumper *dumper,
  * Public interface:
  */
 
-void printbuf(struct buffer_dumper* dumper, void *buf, uint len)
+void printbuf(struct buffer_dumper *dumper, void *buf, uint len)
 {
   assert(dumper != NULL);
   dumper->formatter(dumper, buf, len);

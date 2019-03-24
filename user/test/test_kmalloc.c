@@ -83,11 +83,12 @@ static void _test_allocs(int count, int rounded)
     _disrupt(size);
 
     (rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
+
     if (__builtin_memcmp(p[i].p, tmpbuf, size)) {
       panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
             "%d bytes got corrupted", i, p[i].p, size);
     }
-    
+
     kfree(p[i].p);
 
     size = ((size / 2) > 1) ? size / 2 : MINALLOC_SZ;
@@ -104,11 +105,12 @@ static void _test_allocs(int count, int rounded)
 
     size = p[i].size;
     (rounded) ? memset32(tmpbuf, i, size) : memset(tmpbuf, i, size);
+
     if (__builtin_memcmp(p[i].p, tmpbuf, size)) {
       panic("_Bucket: FAIL: [%d] buffer at 0x%lx, with size "
             "%d bytes got corrupted", i, p[i].p, size);
     }
-    
+
     kfree(p[i].p);
     _disrupt(32);
   }
@@ -136,6 +138,7 @@ bool test_kmalloc(void)
   }
 
   memset(p, 0, sizeof(p));
+
   for (i = 0; i < repeat; i++) {
     printk("[%d] ", i);
     _test_allocs(count, 0);
@@ -146,6 +149,7 @@ bool test_kmalloc(void)
            "= %d\n", 1 << i, kmembuckets[i].totalfree,
            kmembuckets[i].totalpages);
   }
+
   return true;
 }
 
@@ -165,16 +169,16 @@ bool test_kmalloc(void)
   printk("\nfreeing b \n");
   kfree(b);
 
-  void* d = kmalloc(8);
+  void *d = kmalloc(8);
   printk("d = %lu size: 8\n", (unsigned long) d);
 
-  void* e = kmalloc(16);
+  void *e = kmalloc(16);
   printk("e = %lu size: 16\n", (unsigned long) e);
 
-  void* f = kmalloc(8);
+  void *f = kmalloc(8);
   printk("f = %lu size: 8\n", (unsigned long) f);
 
-  void* g = kmalloc(8);
+  void *g = kmalloc(8);
   printk("g = %lu size: 8\n", (unsigned long) g);
 
   printk("\nfreeing d and f\n");
@@ -184,7 +188,7 @@ bool test_kmalloc(void)
   printk("\nfreeing e\n");
   kfree(e);
 
-  void* h = kmalloc(128);
+  void *h = kmalloc(128);
   printk("h = %lu size: 128\n", (unsigned long) h);
   printk("\n");
 
@@ -197,7 +201,7 @@ bool test_kmalloc(void)
   kfree(c);
   kfree(g);
   kfree(h);
-  
+
   return true;
 }
 

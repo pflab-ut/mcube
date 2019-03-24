@@ -20,7 +20,7 @@ void init_arch(void)
 #else
 #error "Unknown Print to Output"
 #endif /* CONFIG_PRINT2UART */
-  
+
   //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
   //  tty_clear(TTY_ID);
 
@@ -29,12 +29,12 @@ void init_arch(void)
   init_acpi();
   init_pmap();
   init_page();
-  
+
   init_irq();
   init_exception();
   init_syscall();
-  
-  
+
+
   init_keyboard();
   init_apic();
   init_kmalloc();
@@ -46,13 +46,13 @@ void init_arch(void)
 
   sched_time = 100;
 
-  
+
   init_timer(TICK_USEC);
-  
-  
+
+
   enable_local_irq();
 
-  
+
   //asm volatile("int 0x0");
   //  asm volatile("int 0x12");
   //  asm volatile("int 0x32");
@@ -60,11 +60,13 @@ void init_arch(void)
   //  init_cache();
   printk("init_end()\n");
 #if 1
+
   for (;;) {
     //    printk("a");
     //printk("read_hpet_counter() = %lu\n", read_hpet_counter());
     //    printk("TIMER_COMPARATOR_64(0) = %lu\n", mmio_in64(TIMER_COMPARATOR_64(0)));
   }
+
 #endif
 #endif
 #endif

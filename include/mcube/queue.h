@@ -76,17 +76,21 @@ struct thread_struct *enqueue_thread(struct thread_struct *head,
 struct thread_struct *enqueue_deadline_thread(struct thread_struct *head,
                                               struct thread_struct *th,
                                               unsigned long offset);
-struct thread_struct *dequeue_thread(struct thread_struct *head, struct thread_struct *th);
-struct thread_struct *dequeue_deadline_thread(struct thread_struct *head, struct thread_struct *th);
+struct thread_struct *dequeue_thread(struct thread_struct *head,
+                                     struct thread_struct *th);
+struct thread_struct *dequeue_deadline_thread(struct thread_struct *head,
+                                              struct thread_struct *th);
 void dequeue_rq(struct rt_runqueue *rq, struct thread_struct *th);
 void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th);
 
 
 struct thread_struct *pick_next_task(void);
-int do_partitioned(struct thread_struct *th, int (*func)(struct thread_struct *, struct thread_struct *, int));
+int do_partitioned(struct thread_struct *th, int (*func)(struct thread_struct *,
+                                                         struct thread_struct *, int));
 void init_global(void);
 void assign_global(void);
-int partitioned_test(struct thread_struct *head, struct thread_struct *th, int cpu);
+int partitioned_test(struct thread_struct *head, struct thread_struct *th,
+                     int cpu);
 
 #if CONFIG_TQ_BHEAP
 #define NOT_IN_BHEAP ULONG_MAX
@@ -101,12 +105,14 @@ int empty_bheap(struct rt_runqueue *rq);
 void link_bheap(struct bheap_node *root, struct bheap_node *child);
 void union_bheap(struct rt_runqueue *rq, struct bheap_node *h2);
 void insert_bheap(struct rt_runqueue *rq, struct bheap_node *node);
-void min_bheap(struct rt_runqueue *rq, struct bheap_node **prev, struct bheap_node **node);
+void min_bheap(struct rt_runqueue *rq, struct bheap_node **prev,
+               struct bheap_node **node);
 struct bheap_node *min_bheap_extract(struct rt_runqueue *rq);
 void min_bheap_uncache(struct rt_runqueue *rq);
 void init_bheap_node(struct bheap_node *h, struct thread_struct *value);
 void min_uncache(struct rt_runqueue *rq);
-void union_bheap_uncache(struct rt_runqueue *target, struct rt_runqueue *addition);
+void union_bheap_uncache(struct rt_runqueue *target,
+                         struct rt_runqueue *addition);
 struct bheap_node *reverse_bheap(struct bheap_node *h);
 struct bheap_node *extract_min_bheap(struct rt_runqueue *rq);
 struct bheap_node *take_bheap(struct rt_runqueue *rq);

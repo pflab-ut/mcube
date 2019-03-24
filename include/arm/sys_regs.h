@@ -110,7 +110,7 @@
 #define ESR_ELx_IL_16BIT_INSTRUCTION_TRAPPED (0x0 << 25)
 #define ESR_ELx_IL_32BIT_INSTRUCTION_TRAPPED (0x1 << 25)
 /* 24-0: Instruction Specific Syndrome.
- * Architecturally, this field can be defined independently for each defined 
+ * Architecturally, this field can be defined independently for each defined
  * Exception class. However, in practice, some ISS encodings are used for more than
  * one Exception class. See the description of the EC field for more information
  * about the ISS formats.
@@ -417,7 +417,7 @@
 #define SCTLR_ELx_nTWI (0x1 << 16)
 /* 15: When set, enables EL0 access in AArch64 to the CTR_EL0 register.
  * Reset value is architecturally UNKNOWN.
- */  
+ */
 #define SCTLR_ELx_UCT (0x1 << 15)
 /* 14: Access to DC ZVA instruction at EL0. The possible values of this bit are:
  * 0 : Execution of the DC ZVA instruction is prohibited at EL0, and it is treated as
@@ -494,7 +494,7 @@
  * 1 : T32EE is enabled.
  * If T32EE is not implemented, this bit is RES0.
  * Reset value is architecturally UNKNOWN.
- */  
+ */
 #define SCTLR_ELx_THEE (0x1 << 6)
 /* 5: CP15 barrier enable.
  * If implemented, this is an enable bit for the AArch32 CP15 DMB, DSB, and

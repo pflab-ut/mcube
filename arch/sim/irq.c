@@ -8,6 +8,6 @@
 
 void wait_until_next_interrupt(void)
 {
-  
+
 }
 

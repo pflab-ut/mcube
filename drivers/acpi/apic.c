@@ -66,12 +66,14 @@ static uint64_t pit_calibrate_cpu(int repeat)
 
   ms_delay = 5;
   diff_min = UINT64_MAX;
+
   for (int i = 0; i < repeat; i ++) {
     tsc1 = rdtsc();
     pit_mdelay(ms_delay);
     tsc2 = rdtsc();
 
     diff = tsc2 - tsc1;
+
     if (diff < diff_min) {
       diff_min = diff;
     }
@@ -115,6 +117,7 @@ static uint64_t pit_calibrate_apic_timer(void)
 
     assert(counter1 > counter2);
     ticks = counter1 - counter2;
+
     if (ticks < ticks_min) {
       ticks_min = ticks;
     }
@@ -239,8 +242,8 @@ void apic_init(void)
   apic_virt_base = vm_kmap(APIC_PHBASE, APIC_MMIO_SPACE);
 
   set_cpu_clock();
-  
-  
+
+
   apic_clock = pit_calibrate_apic_timer();
   printk("APIC: Detected %d.%d MHz bus clock\n",
          apic_clock / 1000000, (uint8_t)(apic_clock % 1000000));
@@ -337,7 +340,7 @@ void apic_monotonic(int ms, uint8_t vector)
 /* NOTE! This function is implicitly called by panic
  * code: it should not include any asserts or panics. */
 static void __apic_send_ipi(int dst_apic_id, int delivery_mode,
-          int vector, enum irq_dest dest)
+                            int vector, enum irq_dest dest)
 {
   union apic_icr icr = { .value = 0 };
 
@@ -348,10 +351,12 @@ static void __apic_send_ipi(int dst_apic_id, int delivery_mode,
   case IRQ_BROADCAST:
     icr.dest_shorthand = APIC_DEST_SHORTHAND_ALL_BUT_SELF;
     break;
+
   case IRQ_SINGLE:
     icr.dest_mode = APIC_DESTMOD_PHYSICAL;
     icr.dest = dst_apic_id;
     break;
+
   default:
     compiler_assert(false);
   }

@@ -14,12 +14,14 @@ int copy_process(__unused unsigned long func, __unused unsigned long arg)
 #if 0
   struct task_struct *p;
   int pid;
-  
+
   preempt_disable();
+
   if (!(p = (struct task_struct *) get_free_page())) {
     print("Error: cannot create task\n");
     return 1;
   }
+
   p->priority = current_task->priority;
   p->state = RUNNING;
   p->counter = p->priority;
@@ -50,8 +52,10 @@ void delete_thread_from_task(struct thread_struct *th)
     while (p->line != th) {
       p = p->line;
     }
+
     p->line = th->line;
   }
+
   /* the top_thread cannot be released:
    * otherwise we don't know which thread and the task reside in the
    * same memory block. */
@@ -73,8 +77,9 @@ struct task_struct *do_create_task(struct th_attr *attr)
     print("Error: cannot create task\n");
     return NULL;
   }
+
   tk = tasks[task_index++];
-  tk->id = alloc_task_id();  
+  tk->id = alloc_task_id();
 
   tk->top_thread = do_create_thread(NULL, NULL, attr);
   tk->top_thread->line = NULL;

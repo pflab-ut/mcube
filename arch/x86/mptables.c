@@ -63,7 +63,7 @@ static uint8_t mpf_checksum(void *mp, uint32_t len)
   while (len--) {
     sum += *buf++;
   }
-  
+
   return sum;
 }
 
@@ -76,16 +76,21 @@ static struct mpf_struct *search_for_mpf(void *base, uint32_t len)
     if (len < sizeof(*mpf)) {
       continue;
     }
+
     if (mpf->signature != MPF_SIGNATURE) {
       continue;
     }
+
     if (mpf->length != 0x01) {
       continue;
     }
+
     if (mpf->version != 0x01 && mpf->version != 0x04) {
       continue;
     }
+
     checksum = mpf_checksum(mpf, sizeof(*mpf));
+
     if (checksum != 0) {
       printk("MP: buggy MP floating pointer struct at 0x%lx with checksum = %d\n",
              PHYS(mpf), checksum);
@@ -114,6 +119,7 @@ static struct mpf_struct *get_mpf(void)
   struct mpf_struct *mpf;
 
   ebda = (*(uint16_t *)VIRTUAL(0x40e)) << 4;
+
   if ((mpf = search_for_mpf(VIRTUAL(ebda), 0x400)) != NULL) {
     return mpf;
   }
@@ -141,11 +147,14 @@ static int mpc_check(struct mpc_table *mpc)
     printk("MP: Wrong configuration table signature = 0x%x\n", mpc->signature);
     return 0;
   }
+
   if (mpc->version != 0x01 && mpc->version != 0x04) {
     printk("MP: Wrong configuration table version = 0x%x\n", mpc->version);
     return 0;
   }
+
   checksum = mpf_checksum(mpc, mpc->length);
+
   if (checksum != 0) {
     printk("MP: buggy configuration table checksum = 0x%x\n", checksum);
     return 0;
@@ -208,7 +217,7 @@ static void parse_cpu(void *addr)
     if (bsc_entry_filled) {
       panic("Two `bootstrap' cores in the MP tables! Either the BIOS or our parser is buggy.");
     }
-    
+
     cpus[0].apic_id = cpu->lapic_id;
     bsc_entry_filled = 1;
     return;
@@ -217,7 +226,7 @@ static void parse_cpu(void *addr)
   if (nr_cpus >= CPUS_MAX) {
     panic("Only %d logical CPU cores supported\n", nr_cpus);
   }
-  
+
   cpus[nr_cpus].apic_id = cpu->lapic_id;
 
   ++nr_cpus;
@@ -250,7 +259,7 @@ static void parse_irq(void *addr)
   if (nr_mpcirqs >= MAX_IRQS) {
     panic("Only %d IRQ sources supported", MAX_IRQS);
   }
-  
+
   mp_irqs[nr_mpcirqs] = *irq;
 
   ++nr_mpcirqs;
@@ -280,26 +289,32 @@ static int parse_mpc(struct mpc_table *mpc)
 
   for (int i = 0; i < mpc->entries; i++) {
     entry = vm_kmap(PHYS(entry), MPC_ENTRY_MAX_LEN);
+
     switch (*entry) {
     case MP_PROCESSOR:
       parse_cpu(entry);
       entry += sizeof(struct mpc_cpu);
       break;
+
     case MP_BUS:
       parse_bus(entry);
       entry += sizeof(struct mpc_bus);
       break;
+
     case MP_IOAPIC:
       parse_ioapic(entry);
       entry += sizeof(struct mpc_ioapic);
       break;
+
     case MP_IOINTERRUPT:
       parse_irq(entry);
       entry += sizeof(struct mpc_irq);
       break;
+
     case MP_LINTERRUPT:
       entry += sizeof(struct mpc_linterrupt);
       break;
+
     default:
       printk("MP: Unknown conf table entry type = %d\n", *entry);
       return 0;
@@ -324,10 +339,11 @@ void mptables_init(void)
   mptables_check();
 
   mpf = get_mpf();
+
   if (!mpf) {
     panic("No compliant MP pointer found");
   }
-  
+
   if (mpf->feature1) {
     panic("MP: Spec `default configuration' is not supported");
   }
@@ -335,7 +351,7 @@ void mptables_init(void)
   if (mpf->conf_physaddr == 0) {
     panic("MP: Spec configuration table does not exist");
   }
-  
+
   mpc = vm_kmap(mpf->conf_physaddr, sizeof(*mpc));
 
   if (!mpc_check(mpc)) {

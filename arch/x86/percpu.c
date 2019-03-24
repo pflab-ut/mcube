@@ -21,7 +21,7 @@ void percpu_area_init(enum cpu_type t)
   if (t == BOOTSTRAP) {
     set_gs(BOOTSTRAP_PERCPU_AREA);
   }
-  
+
   /* else, we're on a secondary core where %gs
    * is already set-up by the trampoline. */
 

@@ -23,7 +23,7 @@ struct core_state {
    * Transmit message;
    */
   struct ring_buf message_tx[NR_CPUS];
-  
+
   /**
    * Receive message;
    */

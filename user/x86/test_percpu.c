@@ -31,7 +31,7 @@ void percpu_inspect_current(void)
   current->enter_runqueue_ts = 0x33;
 
   memcpy(str1, str2, 100);
-  memcpy(str1+100, str2+100, 100);
+  memcpy(str1 + 100, str2 + 100, 100);
 
   if (current->pid == 0) {
     current->pid = 0x55;
@@ -110,10 +110,11 @@ bool test_percpu(void)
   gs = get_gs();
 
   printk("_PerCPU#%d: area address: self = 0x%lx, %%gs = 0x%lx\n", id, self, gs);
+
   if (self != gs) {
     panic("_PerCPU#%d: self reference '0x%lx' != %%gs", id, self);
   }
-  
+
   *percpu_addr(x64) = 0x6464646464646464;
   percpu_set(x32, 0x32323232);
   percpu_set(x16, 0x1616);
@@ -126,7 +127,7 @@ bool test_percpu(void)
   printk("_PerCPU#%d: x16 address = 0x%lx, val = 0x%x\n",
          id, percpu_addr(x16), percpu_get(x16));
   printk("_PerCPU#%d: x8  address = 0x%lx, val = 0x%x\n",
-         id, percpu_addr(x8 ), percpu_get(x8 ));
+         id, percpu_addr(x8), percpu_get(x8));
   return true;
 }
 

@@ -44,18 +44,19 @@ void kernel_level_main(void)
   print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
   call_sys_move_to_kernel_level();
   print("kernel_level_main(): EL %d\n", call_sys_get_mode_level());
-  
+
 }
 
 
 void *user_func(void *arg)
 {
-  unsigned long id = *(int *) arg; 
+  unsigned long id = *(int *) arg;
 
   while (1) {
     print("%lu\n", id);
     //    delay(1000);
   }
+
   return NULL;
 }
 
@@ -67,7 +68,7 @@ int user_thread_main(void)
   struct th_attr thas[NR_THREADS] = INIT_THAS;
   sched_time = 5;
   print("user_thread_main()\n");
-  
+
   for (i = 0; i < nr_threads; i++) {
     ids[i] = i + 1;
     thas[i].type = PERIODIC_TH | HARD_REAL_TIME;
@@ -77,6 +78,7 @@ int user_thread_main(void)
     thas[i].relative_deadline = thas[i].period;
     do_create_thread(user_func, &ids[i], &thas[i]);
   }
+
   init_timer(TICK_USEC);
   //  set_timer_period(USEC_TO_CPU_CLOCK(100));
   run(nr_threads);
@@ -97,15 +99,19 @@ int user_ap_main(void)
   int ret;
   print("user_ap_main()\n");
   ret = copy_process((unsigned long) &process, (unsigned long) "12345");
+
   if (ret != 0) {
     print("Error while starting process1\n");
     return 1;
   }
+
   ret = copy_process((unsigned long) &process, (unsigned long) "abcde");
+
   if (ret != 0) {
     print("Error while starting process 2");
     return 2;
   }
+
   return 0;
 }
 
@@ -115,7 +121,7 @@ int user_dmac_main(void)
 {
   char src[BUFSIZE] = "hello world\n";
   char dst[BUFSIZE] = {0};
-  
+
   print("user_dmac_main()\n");
   print("dst = 0x%lx\n", (unsigned long) dst);
 #if 1
@@ -125,10 +131,12 @@ int user_dmac_main(void)
   do_local_dmac((unsigned long) dst, (unsigned long) src, sizeof(dst),
                 0, DMAC_POLLING);
 #endif
+
   while (1) {
     print("dst = %s\n", dst);
     wfi();
   }
+
   return 0;
 }
 
@@ -136,7 +144,7 @@ int user_dmac_main(void)
 
 void user_process(void)
 {
-  
+
 }
 
 
@@ -146,8 +154,10 @@ int ap_main(void)
   delay(100000 * cpu);
   printk("ap_main()\n");
 #if 1
+
   for (;;)
     ;
+
 #endif
   return 0;
 }

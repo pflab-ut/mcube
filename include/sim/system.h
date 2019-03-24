@@ -10,7 +10,8 @@
 #ifndef __ASSEMBLY__
 
 
-static inline void generate_software_interrupt(__unused volatile unsigned long id)
+static inline void generate_software_interrupt(__unused volatile unsigned long
+                                               id)
 {
 }
 

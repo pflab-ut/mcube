@@ -50,6 +50,7 @@ static inline int64_t find_first_bit8(char *buf, uint len)
       }
     }
   }
+
   return -1;
 }
 
@@ -64,6 +65,7 @@ static inline int64_t find_first_zero_bit8(char *buf, uint len)
       }
     }
   }
+
   return -1;
 }
 
@@ -73,7 +75,8 @@ static inline int64_t find_first_zero_bit8(char *buf, uint len)
  * in terms of a @byte_offset within the buffer, and a
  * @bit_offset within that byte.  @len is the buf length.
  */
-static inline void set_offsets8(uint bit, uint *byte_offset, uint *bit_offset, uint len)
+static inline void set_offsets8(uint bit, uint *byte_offset, uint *bit_offset,
+                                uint len)
 {
   /* 8 bits per byte */
   assert(bit < len  * 8);
@@ -139,21 +142,26 @@ static inline uint32_t ffb32(uint32_t bitmap)
     num += 16;
     bitmap >>= 16;
   }
+
   if ((bitmap & 0xff) == 0) {
     num += 8;
     bitmap >>= 8;
   }
+
   if ((bitmap & 0xf) == 0) {
     num += 4;
     bitmap >>= 4;
   }
+
   if ((bitmap & 0x3) == 0) {
     num += 2;
     bitmap >>= 2;
   }
+
   if ((bitmap & 0x1) == 0) {
     num += 1;
   }
+
   return num;
 }
 
@@ -161,22 +169,26 @@ static inline uint32_t ffb32(uint32_t bitmap)
 static inline uint32_t find_first_bit32(uint32_t *b, int nr)
 {
   int i;
+
   for (i = 0; i < nr; i++) {
     if (b[i]) {
       return 32 * i + ffb32(b[i]);
     }
   }
+
   return 32 * nr;
 }
 
 static inline uint32_t find_first_zero_bit32(uint32_t *b, int nr)
 {
   int i;
+
   for (i = 0; i < nr; i++) {
     if (~b[i]) {
       return 32 * i + ffb32(~b[i]);
     }
   }
+
   return 32 * nr;
 }
 
@@ -190,31 +202,39 @@ static inline uint32_t flb32(uint32_t bitmap)
     num -= 16;
     bitmap <<= 16;
   }
+
   if (!(bitmap & (~0ul << 24))) {
     num -= 8;
     bitmap <<= 8;
   }
+
   if (!(bitmap & (~0ul << 28))) {
     num -= 4;
     bitmap <<= 4;
   }
+
   if (!(bitmap & (~0ul << 30))) {
     num -= 2;
     bitmap <<= 2;
   }
-  if (!(bitmap & (~0ul << 31)))
+
+  if (!(bitmap & (~0ul << 31))) {
     num -= 1;
+  }
+
   return num;
 }
 
 static inline uint32_t find_last_bit32(uint32_t *b, int nr)
 {
   int i;
+
   for (i = nr - 1; i >= 0; i--) {
     if (b[i]) {
       return 32 * i + flb32(b[i]);
     }
   }
+
   return 32 * nr;
 }
 
@@ -314,51 +334,62 @@ static inline uint64_t ffb64(uint64_t bitmap)
     num += 64;
     bitmap = 0;
   }
+
   if ((bitmap & 0xffffffff) == 0) {
     num += 32;
     bitmap >>= 32;
   }
+
   if ((bitmap & 0xffff) == 0) {
     num += 16;
     bitmap >>= 16;
   }
+
   if ((bitmap & 0xff) == 0) {
     num += 8;
     bitmap >>= 8;
   }
+
   if ((bitmap & 0xf) == 0) {
     num += 4;
     bitmap >>= 4;
   }
+
   if ((bitmap & 0x3) == 0) {
     num += 2;
     bitmap >>= 2;
   }
+
   if ((bitmap & 0x1) == 0) {
     num += 1;
   }
+
   return num;
 }
 
 static inline uint64_t find_first_bit64(uint64_t *b, int nr)
 {
   int i;
+
   for (i = 0; i < nr; i++) {
     if (b[i]) {
       return 64 * i + ffb64(b[i]);
     }
   }
+
   return NR_PRIORITIES;
 }
 
 static inline uint64_t find_first_zero_bit64(uint64_t *b, int nr)
 {
   int i;
+
   for (i = 0; i < nr; i++) {
     if (~b[i]) {
       return 64 * i + ffb64(~b[i]);
     }
   }
+
   return NR_PRIORITIES;
 }
 
@@ -373,47 +404,57 @@ static inline uint64_t flb64(uint64_t bitmap)
     num -= 32;
     bitmap <<= 32;
   }
+
   if (!(bitmap & 0xffffffffffff0000)) {
     num -= 16;
     bitmap <<= 16;
   }
+
   if (!(bitmap & 0xffffffffffffff00)) {
     num -= 8;
     bitmap <<= 8;
   }
+
   if (!(bitmap & 0xfffffffffffffff0)) {
     num -= 4;
     bitmap <<= 4;
   }
+
   if (!(bitmap & 0xfffffffffffffffc)) {
     num -= 2;
     bitmap <<= 2;
   }
+
   if (!(bitmap & 0xfffffffffffffffe)) {
     num -= 1;
   }
+
   return num;
 }
 
 static inline uint64_t find_last_bit64(uint64_t *b, int nr)
 {
   int i;
+
   for (i = nr - 1; i >= 0; i--) {
     if (b[i]) {
       return 64 * i + flb64(b[i]);
     }
   }
+
   return NR_PRIORITIES;
 }
 
 static inline uint64_t find_last_zero_bit64(uint64_t *b, int nr)
 {
   int i;
+
   for (i = nr - 1; i >= 0; i--) {
     if (~b[i]) {
       return 64 * i + flb64(b[i]);
     }
   }
+
   return NR_PRIORITIES;
 }
 

@@ -14,20 +14,20 @@
 #ifdef __ASSEMBLY__
 
 .macro get_cpu_id
-  movl $0x1, %eax
-	cpuid
-  movl %ebx, %eax
-	andl $0x0f000000, %eax
-	/* virtual machine */
-  shrl $0x18, %eax
-  /* real machine */
-  /* omit logical cpu id */
-   //  shrl $0x19, %eax
+movl $0x1, % eax
+cpuid
+movl % ebx, % eax
+andl $0x0f000000, % eax
+/* virtual machine */
+shrl $0x18, % eax
+/* real machine */
+/* omit logical cpu id */
+//  shrl $0x19, %eax
 .endm
 
 #else
 
-   
+
 // CPU EFLAGS register values
 #define CPU_EFLAGS_CARRY       (1 << 0)
 #define CPU_EFLAGS_BIT1        (1 << 1) /* bit1 is always 1 */
@@ -56,7 +56,7 @@
 #define CPU_EFLAGS_BIT (CPU_EFLAGS_BIT1 | CPU_EFLAGS_BIT3 | CPU_EFLAGS_BIT5 | CPU_EFLAGS_BIT15)
 
 #define INIT_CPU_EFLAGS (CPU_EFLAGS_IF | CPU_EFLAGS_BIT)
-   
+
 
 #if 0
 static inline unsigned long get_lapic_id(void)
@@ -64,10 +64,10 @@ static inline unsigned long get_lapic_id(void)
   registers4_t regs4;
   cpuid(0x1, &regs4);
 
-	/* real machine */
-	/* NOTE: omit logical processor id */
+  /* real machine */
+  /* NOTE: omit logical processor id */
   return (regs4.ebx & 0x0f000000) >> 25;
-	/* virtual machine */
+  /* virtual machine */
   //  return (regs4.ebx & 0x0f000000) >> 24;
 }
 #endif
@@ -85,14 +85,16 @@ static inline uint32_t get_lapic_id(void)
 #if 0
 static inline int get_nr_cpu_cores(void)
 {
-	registers4_t regs4;
+  registers4_t regs4;
   cpuid(0x4, &regs4);
+
   if (regs4.eax & 0x1f) {
-		/* omit logical cpu id */
+    /* omit logical cpu id */
     return ((regs4.eax >> 27) + 1);
-		/* virtual machine */
+    /* virtual machine */
     //    return ((regs4.eax >> 26) + 1);
   }
+
   return 1;
 }
 #endif

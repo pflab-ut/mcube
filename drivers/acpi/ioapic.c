@@ -40,6 +40,7 @@ static struct ioapic_pin ioapic_get_8259A_pin(void)
 
   for (int apic = 0; apic < nr_ioapics; apic++) {
     max_irq = ioapic_descs[apic].max_irq;
+
     for (int irq = 0; irq <= max_irq; irq++) {
       entry = ioapic_read_irqentry(apic, irq);
 
@@ -122,10 +123,12 @@ void ioapic_setup_isairq(uint8_t irq, uint8_t vector, enum irq_dest dest)
     entry.dest_mode = IOAPIC_DESTMOD_PHYSICAL;
     entry.dest = apic_bootstrap_id();
     break;
+
   case IRQ_BROADCAST:
     entry.dest_mode = IOAPIC_DESTMOD_LOGICAL;
     entry.dest = IOAPIC_DEST_BROADCAST;
     break;
+
   default:
     assert(false);
   }
@@ -145,6 +148,7 @@ void ioapic_init(void)
    * partially initialized using MP table parsers */
   for (int apic = 0; apic < nr_ioapics; apic++) {
     id.value = ioapic_read(apic, IOAPIC_ID);
+
     if (id.id != ioapic_descs[apic].id) {
       printk("IOAPIC[%d]: BIOS tables apic_id=0x%x, "
              "chip's apic_id=0x%x\n", apic,

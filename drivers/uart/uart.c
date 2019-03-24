@@ -22,16 +22,18 @@ void uart_putc(char c, uint8_t ch)
   if (c == '\n') {
     uart_pol_putc('\r', ch);
   }
+
   uart_pol_putc(c, ch);
 }
 
 size_t uart_write(void *dev, const void *data, size_t length)
 {
   size_t num;
+
   for (num = 0; num < length; num++) {
     uart_putc(((unsigned char *) data)[num], ((uart_devdata *) dev)->ch);
   }
-        
+
   return num;
 }
 

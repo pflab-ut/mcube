@@ -135,14 +135,16 @@ static void __rq_add_proc(struct runqueue *rq, struct proc *proc, int prio,
   proc->enter_runqueue_ts = PS->sys_ticks;
   proc->state = TD_RUNNABLE;
 
-  switch(type) {
+  switch (type) {
   case ENQ_NORMAL:
     proc->runtime = 0;
     list_add_tail(&rq->head[prio], &proc->pnode);
     break;
+
   case ENQ_RETURN:
     list_add(&rq->head[prio], &proc->pnode);
     break;
+
   default:
     assert(false);
   }
@@ -283,6 +285,7 @@ struct proc *sched_tick(void)
     current->stats.preempt_slice_end++;
 
     new_proc = dispatch_runnable_proc(&new_prio);
+
     if (new_proc == NULL) {
       return current;
     }
@@ -298,6 +301,7 @@ struct proc *sched_tick(void)
    * FIXME: what about the just_queued threads response time?
    */
   new_prio = rq_get_highest_prio(PS->rq_active);
+
   if (new_prio > PS->current_prio) {
     current->stats.preempt_high_prio++;
     panic("Sleep support in not yet in the kernel; how "
@@ -399,10 +403,11 @@ void print_proc_stats(struct proc *proc, int prio)
   dispatch_count = max(1u, dispatch_count);
 
   rqwait_overall = proc->stats.rqwait_overall;
+
   if (proc != current) {
     rqwait_overall += PS->sys_ticks - proc->enter_runqueue_ts;
   }
-  
+
   print_uart("%lu:%d:%lu:%lu:%lu:%lu:%u:%u ", proc->pid, prio,
              proc->stats.runtime_overall,
              proc->stats.runtime_overall / dispatch_count,
@@ -423,14 +428,19 @@ void print_sched_stats(void)
 
   print_uart("%lu ", PS->sys_ticks);
   print_proc_stats(current, PS->current_prio);
+
   for (int i = MIN_PRIO; i <= MAX_PRIO; i++) {
-    list_for_each(&PS->rq_active->head[i], proc, pnode)
+    list_for_each(&PS->rq_active->head[i], proc, pnode) {
       print_proc_stats(proc, i);
-    list_for_each(&PS->rq_expired->head[i], proc, pnode)
+    }
+    list_for_each(&PS->rq_expired->head[i], proc, pnode) {
       print_proc_stats(proc, i);
+    }
   }
-  list_for_each(&PS->just_queued, proc, pnode)
+
+  list_for_each(&PS->just_queued, proc, pnode) {
     print_proc_stats(proc, DEFAULT_PRIO);
+  }
   print_uart("\n");
 
   spin_unlock(&printstats_lock);
@@ -452,12 +462,14 @@ void rq_dump(__unused struct runqueue *rq)
   //  name = (rq == rq_active) ? "active" : "expired";
   name = (rq == PS->rq_active) ? "active" : "expired";
   print_uart("Dumping %s table:\n", name);
+
   for (int i = MAX_PRIO; i >= MIN_PRIO; i--) {
     if (!list_empty(&rq->head[i])) {
       list_for_each(&rq->head[i], proc, pnode)
-        print_uart("%lu ", proc->pid);
+      print_uart("%lu ", proc->pid);
     }
   }
+
   print_uart("\n");
 #endif
 }

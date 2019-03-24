@@ -10,7 +10,7 @@
 #define RAM_BASE                  0x00000000
 #define GPU_BASE                  0x37000000
 #define PERIPHERAL_BASE           0x3f000000
- /* NOTE: qemu does not support system timer */
+/* NOTE: qemu does not support system timer */
 #define SYSTEM_TIMER_BASE         0x3f003000
 #define DMAC_BASE                 0x3f007000
 #define INTERRUPT_CONTROLLER_BASE 0x3f00b000
@@ -21,9 +21,9 @@
 #define RANDOM_NUMBER_GEN_BASE    0x3f104000
 #define GPIO_CONTROLLER_BASE      0x3f200000
 /* UART0 (serial port, PL011) */
-/* for raspi2 & 3, 0x20201000 for raspi1 */ 
+/* for raspi2 & 3, 0x20201000 for raspi1 */
 #define UART0_BASE                0x3f201000
- /* UART1 (serial port, AUX mini UART) */
+/* UART1 (serial port, AUX mini UART) */
 #define UART1_BASE                0x3f215000
 #define EMMC_BASE                 0x3f300000
 #define USB_BASE                  0x3f980000

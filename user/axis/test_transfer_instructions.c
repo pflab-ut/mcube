@@ -96,7 +96,7 @@ static void test_sw(void)
 
 void test_transfer_instructions(void)
 {
-  *((uint32_t *) (BASE_ADDR + OFFSET_ADDR)) = 0x12345678;
+  *((uint32_t *)(BASE_ADDR + OFFSET_ADDR)) = 0x12345678;
   test_mts();
   test_mfs();
   test_lb();

@@ -55,7 +55,7 @@ static inline void msr_apicbase_enable(void)
 #define APIC_ID    0x20  /* APIC ID Register */
 union apic_id {
   struct {
-    uint32_t reserved:24, id:8;
+    uint32_t reserved: 24, id: 8;
   } __packed;
   uint32_t raw;
 };
@@ -65,7 +65,7 @@ union apic_id {
 #define APIC_TPR  0x80    /* Task Priority Register */
 union apic_tpr {
   struct {
-    uint32_t subclass:4, priority:4, reserved:24;
+    uint32_t subclass: 4, priority: 4, reserved: 24;
   } __packed;
   uint32_t value;
 };
@@ -78,7 +78,7 @@ union apic_tpr {
 #define APIC_LDR  0xd0  /* Logical Desitination Register */
 union apic_ldr {
   struct {
-    uint32_t reserved:24, logical_id:8;
+    uint32_t reserved: 24, logical_id: 8;
   } __packed;
   uint32_t value;
 };
@@ -86,7 +86,7 @@ union apic_ldr {
 #define APIC_DFR  0xe0  /* Destination Format Register */
 union apic_dfr {
   struct {
-    uint32_t reserved:28, apic_model:4;
+    uint32_t reserved: 28, apic_model: 4;
   } __packed;
   uint32_t value;
 };
@@ -94,7 +94,7 @@ union apic_dfr {
 #define APIC_SPIV  0xf0  /* Spurious Interrupt Vector Register */
 union apic_spiv {
   struct {
-    uint32_t vector:8, apic_enable:1, focus:1, reserved:22;
+    uint32_t vector: 8, apic_enable: 1, focus: 1, reserved: 22;
   } __packed;
   uint32_t value;
 };
@@ -105,11 +105,11 @@ union apic_spiv {
 #define APIC_ICRH  0x310   /* Interrupt Command Register High [63:32] */
 union apic_icr {
   struct {
-    uint32_t vector:8, delivery_mode:3, dest_mode:1,
-      delivery_status:1, reserved0:1, level:1,
-      trigger:1, reserved1:2, dest_shorthand:2,
-      reserved2:12;
-    uint32_t reserved3:24, dest:8;
+    uint32_t vector: 8, delivery_mode: 3, dest_mode: 1,
+             delivery_status: 1, reserved0: 1, level: 1,
+             trigger: 1, reserved1: 2, dest_shorthand: 2,
+             reserved2: 12;
+    uint32_t reserved3: 24, dest: 8;
   } __packed;
 
   /* Writing the low word of the ICR causes the
@@ -129,13 +129,13 @@ union apic_icr {
 #define APIC_LVTT  0x320   /* Timer LVT Entry */
 union apic_lvt_timer {
   struct {
-    uint32_t vector:8,
-      reserved0:4,
-      delivery_status:1,  /* read-only */
-      reserved1:3,
-      mask:1,
-      timer_mode:1,
-      reserved2:14;
+    uint32_t vector: 8,
+             reserved0: 4,
+             delivery_status: 1, /* read-only */
+             reserved1: 3,
+             mask: 1,
+             timer_mode: 1,
+             reserved2: 14;
   } __packed;
   uint32_t value;
 };
@@ -143,8 +143,8 @@ union apic_lvt_timer {
 #define APIC_LVTTHER  0x330   /* Thermal LVT Entry */
 union apic_lvt_thermal {
   struct {
-    unsigned vector:8, delivery_mode:3, reserved0:1,
-      delivery_status:1, reserved1:3, mask:1, reserved3:15;
+    unsigned vector: 8, delivery_mode: 3, reserved0: 1,
+             delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
   } __packed;
   uint32_t value;
 };
@@ -152,8 +152,8 @@ union apic_lvt_thermal {
 #define APIC_LVTPC  0x340   /* Performance Counter LVT Entry */
 union apic_lvt_perfc {
   struct {
-    unsigned vector:8, delivery_mode:3, reserved0:1,
-      delivery_status:1, reserved1:3, mask:1, reserved3:15;
+    unsigned vector: 8, delivery_mode: 3, reserved0: 1,
+             delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
   } __packed;
   uint32_t value;
 };
@@ -162,9 +162,9 @@ union apic_lvt_perfc {
 #define APIC_LVT1  0x360  /* Local Interrupt 1 LVT Entry */
 union apic_lvt_lint {
   struct {
-    unsigned vector:8, delivery_mode:3, reserved0:1,
-      delivery_status:1, reserved1:1, remote_irr:1, trigger:1,
-      mask:1, reserved3:15;
+    unsigned vector: 8, delivery_mode: 3, reserved0: 1,
+             delivery_status: 1, reserved1: 1, remote_irr: 1, trigger: 1,
+             mask: 1, reserved3: 15;
   } __packed;
   uint32_t value;
 };
@@ -172,8 +172,8 @@ union apic_lvt_lint {
 #define APIC_LVTERR  0x370   /* Error LVT Entry */
 union apic_lvt_error {
   struct {
-    unsigned vector:8, delivery_mode:3, reserved0:1,
-      delivery_status:1, reserved1:3, mask:1, reserved3:15;
+    unsigned vector: 8, delivery_mode: 3, reserved0: 1,
+             delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
   } __packed;
   uint32_t value;
 };
@@ -184,8 +184,8 @@ union apic_lvt_error {
 #define APIC_DCR    0x3e0  /* Timer Divide Configuration register */
 union apic_dcr {
   struct {
-    uint32_t divisor:4,  /* NOTE! bit-2 MUST be zero */
-      reserved0:28;
+    uint32_t divisor: 4, /* NOTE! bit-2 MUST be zero */
+             reserved0: 28;
   } __packed;
   uint32_t value;
 };
@@ -225,7 +225,7 @@ enum {
   APIC_DELMOD_NMI   = 0x4,  /* deliver NMI; vector ignored */
   APIC_DELMOD_INIT  = 0x5,  /* IPI INIT; vector should be zero */
   APIC_DELMOD_START = 0x6,  /* Startup IPI; core starts at 0xVV000 */
-  APIC_DELMOD_ExtINT= 0x7,  /* Get IRQ vector by PIC's INTA cycle */
+  APIC_DELMOD_ExtINT = 0x7, /* Get IRQ vector by PIC's INTA cycle */
 };
 
 /* IPI destination mode */

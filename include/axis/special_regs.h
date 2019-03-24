@@ -100,10 +100,12 @@ static inline void disable_dmac_interrupt(void)
 static inline void enable_software_interrupt(unsigned long id)
 {
   unsigned long data;
+
   if (id > NR_SOFTWARE_INTERRUPTS) {
     printk("Error: cpu id %lu exceeds %lu\n", id, NR_SOFTWARE_INTERRUPTS);
     return;
   }
+
   asm volatile("mfs %0, $5" : "=r"(data));
   data |= (0x1 << (id + SOFTWARE_INTERRUPT_OFFSET));
   asm volatile("mts $5, %0" :: "r"(data));
@@ -112,10 +114,12 @@ static inline void enable_software_interrupt(unsigned long id)
 static inline void disable_software_interrupt(unsigned long id)
 {
   unsigned long data;
+
   if (id > NR_SOFTWARE_INTERRUPTS) {
     printk("Error: cpu id %lu exceeds %lu\n", id, NR_SOFTWARE_INTERRUPTS);
     return;
   }
+
   asm volatile("mfs %0, $5" : "=r"(data));
   data &= ~(0x1 << (id + SOFTWARE_INTERRUPT_OFFSET));
   asm volatile("mts $5, %0" :: "r"(data));

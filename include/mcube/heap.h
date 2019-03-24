@@ -24,16 +24,16 @@
 typedef struct node {
   unsigned int hole;
   unsigned int size;
-  struct node* next;
-  struct node* prev;
+  struct node *next;
+  struct node *prev;
 } node_t;
 
-typedef struct { 
+typedef struct {
   node_t *header;
 } footer_t;
 
 typedef struct {
-  node_t* head;
+  node_t *head;
 } bin_t;
 
 typedef struct {

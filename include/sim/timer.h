@@ -24,20 +24,22 @@
 
 static inline uint64_t tsc2usec(uint64_t tsc)
 {
-  return ((uint64_t) ((tsc) * CPU_USEC_PER_CLOCK_MHZ + 0.5));
+  return ((uint64_t)((tsc) * CPU_USEC_PER_CLOCK_MHZ + 0.5));
 }
 
 static inline uint64_t tsc2nsec(uint64_t tsc)
 {
-  return ((uint64_t) ((tsc) * CPU_NSEC_PER_CLOCK_MHZ + 0.5));
+  return ((uint64_t)((tsc) * CPU_NSEC_PER_CLOCK_MHZ + 0.5));
 }
 
 
 static inline void delay(unsigned long us)
 {
   volatile unsigned long cur = rdtsc();
-  while (tsc2usec(rdtsc() - cur) < us)
+
+  while (tsc2usec(rdtsc() - cur) < us) {
     pause();
+  }
 }
 
 void init_tsc(void);

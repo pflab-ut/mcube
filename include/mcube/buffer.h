@@ -24,14 +24,14 @@ struct ring_buf {
 typedef struct ring_buf ring_buf_t;
 
 
-typedef ring_buf_t* cbuf_handle_t;
+typedef ring_buf_t *cbuf_handle_t;
 
 
 /**
  * Pass in a storage buffer and size
  * Returns a ring buffer handle
  */
-cbuf_handle_t ring_buf_init(uint8_t* buffer, size_t size);
+cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size);
 
 /**
  * Free a ring buffer structure.
@@ -60,7 +60,7 @@ int ring_buf_put2(cbuf_handle_t cbuf, uint8_t data);
  * Retrieve a value from the buffer
  * Returns 0 on success, -1 if the buffer is empty
  */
-int ring_buf_get(cbuf_handle_t cbuf, uint8_t * data);
+int ring_buf_get(cbuf_handle_t cbuf, uint8_t *data);
 
 /**
  * Returns true if the buffer is empty

@@ -29,6 +29,7 @@ int memcmp(const void *s1, const void *s2, size_t n)
       break;
     }
   }
+
   return res;
 }
 
@@ -51,6 +52,7 @@ void *memmove(void *dest, const void *src, size_t n)
   if (dest <= src) {
     tmp = dest;
     s = src;
+
     while (n--) {
       *tmp++ = *s++;
     }
@@ -59,10 +61,12 @@ void *memmove(void *dest, const void *src, size_t n)
     tmp += n;
     s = src;
     s += n;
+
     while (n--) {
       *--tmp = *--s;
     }
   }
+
   return dest;
 }
 
@@ -76,9 +80,11 @@ void *memmove(void *dest, const void *src, size_t n)
 size_t strlen(const char *s)
 {
   size_t num = 0;
+
   while (*s++) {
     num++;
   }
+
   return num;
 }
 
@@ -87,9 +93,12 @@ size_t strnlen(const char *str, int n)
   const char *tmp;
 
   tmp = str;
+
   while (n) {
-    if (*tmp == '\0')
+    if (*tmp == '\0') {
       break;
+    }
+
     tmp++;
     n--;
   }
@@ -109,11 +118,13 @@ size_t strnlen(const char *str, int n)
 int strcmp(const char *s1, const char *s2)
 {
   int res;
+
   while (1) {
     if ((res = *s1 - *s2++) != 0 || !*s1++) {
       break;
     }
   }
+
   return res;
 }
 
@@ -137,8 +148,10 @@ int strncmp(const char *s1, const char *s2, size_t n)
     if ((res = *s1 - *s2++) != 0 || !*s1++) {
       break;
     }
+
     n--;
   }
+
   return res;
 }
 
@@ -159,6 +172,7 @@ char *strcpy(char *dest, const char *src)
 
   while ((*dest++ = *src++)) {
   }
+
   return tmp;
 }
 
@@ -181,9 +195,11 @@ char *strncpy(char *dest, const char *src, size_t n)
     if ((*tmp = *src) != 0) {
       src++;
     }
+
     tmp++;
     n--;
   }
+
   return dest;
 }
 
@@ -200,12 +216,14 @@ char *strncpy(char *dest, const char *src, size_t n)
 char *strcat(char *dest, const char *src)
 {
   char *tmp = dest;
-  
+
   while (*dest) {
     dest++;
   }
+
   while ((*dest++ = *src++)) {
   }
+
   return tmp;
 }
 
@@ -226,6 +244,7 @@ char *strncat(char *dest, const char *src, size_t n)
     while (*dest) {
       dest++;
     }
+
     while ((*dest++ = *src++) != 0) {
       if (--n == 0) {
         *dest = '\0';
@@ -233,6 +252,7 @@ char *strncat(char *dest, const char *src, size_t n)
       }
     }
   }
+
   return tmp;
 }
 
@@ -251,6 +271,7 @@ char *strchr(const char *s, int c)
       return NULL;
     }
   }
+
   return (char *) s;
 }
 
@@ -281,14 +302,14 @@ void *memset(void *dst, int ch, size_t len)
   uintptr_t d0;
 
   uch = ch;
-  asm volatile (
+  asm volatile(
     "mov  %3, %%rcx;"
     "rep  stosb;"      /* rdi, rcx */
     "mov  %4, %%rcx;"
     "rep  stosq;"      /* ~~~ */
-    :"=&D" (d0)
-    :"0" (dst), "a" (uch * 0x0101010101010101),
-     "ir" (len & 7), "ir" (len >> 3)
+    :"=&D"(d0)
+    :"0"(dst), "a"(uch * 0x0101010101010101),
+    "ir"(len & 7), "ir"(len >> 3)
     :"rcx", "memory");
 
   return dst;
@@ -309,8 +330,8 @@ void *memset32(void *dst, uint32_t val, uint64_t len)
 
   uval = ((uint64_t)val << 32) + val;
   asm volatile("rep stosq"      /* rdi, rcx */
-               :"=&D" (d0), "+&c" (len)
-               :"0" (dst), "a" (uval)
+               :"=&D"(d0), "+&c"(len)
+               :"0"(dst), "a"(uval)
                :"memory");
 
   return dst;
@@ -328,10 +349,10 @@ void *memset64(void *dst, uint64_t val, uint64_t len)
   len = len / 8;
 
   asm volatile("rep stosq"      /* rdi, rcx */
-               :"=&D" (d0), "+&c" (len)
-               :"0" (dst), "a" (val)
+               :"=&D"(d0), "+&c"(len)
+               :"0"(dst), "a"(val)
                :"memory");
-  
+
   return dst;
 }
 
@@ -347,9 +368,11 @@ void *memset(void *s, int c, size_t n)
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
+
   while (n--) {
     *xs++ = c;
   }
+
   return s;
 }
 
@@ -367,9 +390,11 @@ void *memset32(void *s, uint32_t c, uint64_t n)
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
+
   while (n--) {
     *xs++ = c;
   }
+
   return s;
 }
 
@@ -387,9 +412,11 @@ void *memset64(void *s, uint64_t c, uint64_t n)
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
+
   while (n--) {
     *xs++ = c;
   }
+
   return s;
 }
 
@@ -431,8 +458,8 @@ static void *__memcpy_forward(void *dst, const void *src, size_t len)
                "rep movsb;"      /* rdi, rsi, rcx */
                "mov %4, %%rcx;"
                "rep movsq;"      /* ~~~ */
-               :"=&D" (d0), "+&S" (src)
-               :"0" (dst), "ir" (len & 7), "ir" (len >> 3)
+               :"=&D"(d0), "+&S"(src)
+               :"0"(dst), "ir"(len & 7), "ir"(len >> 3)
                :"rcx", "memory");
 
   return dst;
@@ -452,10 +479,12 @@ void *memcpy_forward(void *dst, const void *src, size_t len)
   usrc = (uintptr_t) src;
 
   bad_overlap = (udst + 8 > usrc) && (usrc + len > udst);
+
   if (__unlikely(bad_overlap)) {
     panic("%s: badly-overlapped regions, src=0x%lx, dst"
           "=0x%lx, len=0x%lx", __func__, src, dst, len);
   }
+
   return __memcpy_forward(dst, src, len);
 }
 
@@ -464,7 +493,7 @@ void *memcpy_forward(void *dst, const void *src, size_t len)
 /*
  * C99-compliant, with extra sanity checks.
  */
-void *memcpy(void * restrict dst, const void * restrict src, size_t len)
+void *memcpy(void *restrict dst, const void *restrict src, size_t len)
 {
   uintptr_t udst, usrc;
   bool overlap;
@@ -473,10 +502,12 @@ void *memcpy(void * restrict dst, const void * restrict src, size_t len)
   usrc = (uintptr_t) src;
 
   overlap = (udst + len > usrc) && (usrc + len > udst);
+
   if (__unlikely(overlap)) {
     panic("%s: overlapped regions, src=0x%lx, dst=0x%lx, len=0x%lx",
           __func__, src, dst, len);
   }
+
   return __memcpy_forward(dst, src, len);
 }
 
@@ -496,7 +527,7 @@ void *memcpy_forward_nocheck(void *dst, const void *src, size_t len)
   return __memcpy_forward(dst, src, len);
 }
 
-void *memcpy_nocheck(void * restrict dst, const void * restrict src, size_t len)
+void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t len)
 {
   return __memcpy_forward(dst, src, len);
 }
@@ -520,6 +551,7 @@ void *memcpy(void *dest, const void *src, size_t n)
   while (n--) {
     *d++ = *s++;
   }
+
   return dest;
 }
 
@@ -547,11 +579,13 @@ char *strtok(char *str, const char *delim)
   if (!str && !(str = last)) {
     return NULL;
   }
+
   /*
    * Skip (span) leading delimiters (s += strspn(s, delim), sort of).
    */
- cont:
+cont:
   c = *str++;
+
   for (spanp = (char *) delim; (sc = *spanp++) != 0;) {
     if (c == sc) {
       goto cont;
@@ -562,6 +596,7 @@ char *strtok(char *str, const char *delim)
     last = NULL;
     return NULL;
   }
+
   tok = str - 1;
 
   /*
@@ -571,6 +606,7 @@ char *strtok(char *str, const char *delim)
   for (;;) {
     c = *str++;
     spanp = (char *) delim;
+
     do {
       if ((sc = *spanp++) == c) {
         if (c == 0) {
@@ -578,11 +614,13 @@ char *strtok(char *str, const char *delim)
         } else {
           str[-1] = 0;
         }
+
         last = str;
         return tok;
       }
     } while (sc != 0);
   }
+
   /* not reached */
 }
 

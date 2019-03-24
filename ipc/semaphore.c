@@ -27,6 +27,7 @@ void sem_down(struct sem_struct *sem)
 {
   int cpu = get_cpu_id();
   lock_scheduler();
+
   if (--sem->counter < 0) {
 
     dequeue_rq(&run_tq[cpu], current_th[cpu]);
@@ -41,6 +42,7 @@ void sem_down(struct sem_struct *sem)
     unlock_scheduler();
     lock_scheduler();
   }
+
   current_th[cpu]->nr_resources++;
   sem->owner = current_th[cpu];
   unlock_scheduler();
@@ -54,20 +56,25 @@ void sem_up(struct sem_struct *sem)
 
   sem->counter++;
   th = sem->ewq;
+
   if (th != &kernel_th[cpu]) {
     sem->ewq = th->next;
     th->sched.release = th->sched.deadline;
+
     if (th->sched.deadline < sys_jiffies) {
-      th->sched.release += CEIL(sys_jiffies - th->sched.deadline, th->sched.period) * th->sched.period;
+      th->sched.release += CEIL(sys_jiffies - th->sched.deadline,
+                                th->sched.period) * th->sched.period;
     }
+
     th->sched.deadline = th->sched.release + th->sched.relative_deadline;
     //    chk_nattr(th);
-    
+
     th->state = NON_INT_SLEEP;
     sleep_tq[cpu] = enqueue_thread(sleep_tq[cpu],
-                                       th,
-                                       offsetof(struct thread_struct, sched.release));
+                                   th,
+                                   offsetof(struct thread_struct, sched.release));
   }
+
   current_th[cpu]->nr_resources--;
   sem->owner = NULL;
   unlock_scheduler();

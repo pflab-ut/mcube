@@ -10,7 +10,7 @@
 
 static inline void nop(void)
 {
-  asm volatile ("nop");
+  asm volatile("nop");
 }
 
 static inline void sync(void)

@@ -17,19 +17,19 @@
 #ifdef __ASSEMBLY__
 
 .macro get_cpu_id reg reg2
-  mrs \reg2, mpidr_el1
-  lsr \reg, \reg2, #8
-  and \reg2, \reg2, #0xffffff
-  and \reg, \reg, #0xff000000
-  orr \reg, \reg, \reg2
+mrs \reg2, mpidr_el1
+lsr \reg, \reg2, #8
+and \reg2, \reg2, #0xffffff
+and \reg, \reg, #0xff000000
+orr \reg, \reg, \reg2
 .endm
 
 .macro get_el
-  mrs x0, CurrentEL
-  lsr x0, x0, #2
-  ret
+mrs x0, CurrentEL
+lsr x0, x0, #2
+ret
 .endm
-   
+
 #else
 static inline unsigned long get_cpu_id(void)
 {

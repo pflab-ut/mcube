@@ -48,8 +48,8 @@ static inline uint8_t inb(uint16_t port)
 {
   uint8_t val;
 
-  asm volatile("inb %[port], %[val]" : [val] "=a" (val) : [port] "Nd" (port));
-  
+  asm volatile("inb %[port], %[val]" : [val] "=a"(val) : [port] "Nd"(port));
+
   return val;
 }
 
@@ -57,8 +57,8 @@ static inline uint16_t inw(uint16_t port)
 {
   uint16_t val;
 
-  asm volatile("inw %[port], %[val]" : [val] "=a" (val) : [port] "Nd" (port));
-  
+  asm volatile("inw %[port], %[val]" : [val] "=a"(val) : [port] "Nd"(port));
+
   return val;
 }
 
@@ -66,8 +66,8 @@ static inline uint32_t inl(uint32_t port)
 {
   uint32_t val;
 
-  asm volatile("inl %[port], %[val]" : [val] "=a" (val) : [port] "Nd" (port));
-  
+  asm volatile("inl %[port], %[val]" : [val] "=a"(val) : [port] "Nd"(port));
+
   return val;
 }
 
@@ -75,29 +75,29 @@ static inline uint64_t ind(uint64_t port)
 {
   uint64_t val;
 
-  asm volatile("ind %[port], %[val]" : [val] "=a" (val) : [port] "Nd" (port));
-  
+  asm volatile("ind %[port], %[val]" : [val] "=a"(val) : [port] "Nd"(port));
+
   return val;
 }
 
 static inline void outb(uint8_t val, uint16_t port)
 {
-  asm volatile("outb %[val], %[port]" :: [val] "a" (val), [port] "Nd" (port));
+  asm volatile("outb %[val], %[port]" :: [val] "a"(val), [port] "Nd"(port));
 }
 
 static inline void outw(uint16_t val, uint16_t port)
 {
-  asm volatile("outw %[val], %[port]" :: [val] "a" (val), [port] "Nd" (port));
+  asm volatile("outw %[val], %[port]" :: [val] "a"(val), [port] "Nd"(port));
 }
 
 static inline void outl(uint32_t val, uint32_t port)
 {
-  asm volatile("outl %[val], %[port]" :: [val] "a" (val), [port] "Nd" (port));
+  asm volatile("outl %[val], %[port]" :: [val] "a"(val), [port] "Nd"(port));
 }
 
 static inline void outd(uint64_t val, uint64_t port)
 {
-  asm volatile("outd %[val], %[port]" :: [val] "a" (val), [port] "Nd" (port));
+  asm volatile("outd %[val], %[port]" :: [val] "a"(val), [port] "Nd"(port));
 }
 
 
@@ -107,7 +107,7 @@ static inline void outd(uint64_t val, uint64_t port)
  */
 static inline void io_delay(void)
 {
-  asm volatile ("outb %al, $0xed");
+  asm volatile("outb %al, $0xed");
 }
 
 static inline void finit(void)
@@ -191,7 +191,7 @@ static inline uint64_t rdtsc(void)
   uint64_t x;
 
   asm volatile("cpuid" ::: "rax", "rbx", "rcx", "rdx");
-  asm volatile("rdtsc" : "=A" (x));
+  asm volatile("rdtsc" : "=A"(x));
   return x;
 }
 
@@ -200,7 +200,7 @@ static inline uint64_t rdtscp(void)
 {
   uint64_t x;
   asm volatile("cpuid" ::: "rax", "rbx", "rcx", "rdx");
-  asm volatile("rdtscp" : "=A" (x));
+  asm volatile("rdtscp" : "=A"(x));
   return x;
 }
 
@@ -208,14 +208,14 @@ static inline uint64_t rdtscp(void)
 /* bit search forward */
 static inline uint32_t bsf(uint32_t bitmap)
 {
-  asm volatile("bsf %1, %0" : "=r" (bitmap) : "rm" (bitmap));
+  asm volatile("bsf %1, %0" : "=r"(bitmap) : "rm"(bitmap));
   return bitmap;
 }
 
 /* bit search reverse */
 static inline uint32_t bsr(uint32_t bitmap)
 {
-  asm volatile("bsr %1, %0" : "=r" (bitmap) : "rm" (bitmap));
+  asm volatile("bsr %1, %0" : "=r"(bitmap) : "rm"(bitmap));
   return bitmap;
 }
 
@@ -255,14 +255,14 @@ static inline uint64_t rdmsr(uint32_t msr)
   asm volatile("rdmsr"
                : "=&a"(low), "=&d"(high)
                : "c"(msr));
-  
+
   return ((uint64_t) high << 32) + low;
 }
 
 
 static inline void invalidate_page(void *vaddr)
 {
-  asm volatile("invlpg %0\n" :: "m" (vaddr) : "memory");
+  asm volatile("invlpg %0\n" :: "m"(vaddr) : "memory");
 }
 
 

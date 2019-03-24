@@ -28,6 +28,7 @@ static volatile bool IsInitialized = false;
 int main(int argc, char *argv[])
 {
   unsigned long cpu = get_cpu_id();
+
   if (cpu == 0) {
     init_arch();
     print("main()\n");
@@ -37,15 +38,18 @@ int main(int argc, char *argv[])
     user_main(argc, argv);
     exit_arch();
     print("main() end\n");
-  } else {    
+  } else {
     //    print("get_cpu_id() = %lu\n", get_cpu_id());
     init_arch_ap();
+
     /* wait until init_arch() is finished. */
     while (IsInitialized == false) {
     }
+
     /* execute the specific code of application processors (except bootstrap processor). */
     ap_main();
     exit_arch_ap();
   }
+
   return 0;
 }

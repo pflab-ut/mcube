@@ -85,6 +85,7 @@ void do_release(void)
     th->sched.remaining = th->sched.wcet;
     //    pdebug_jiffies();
   }
+
   spin_unlock(&sched_lock);
   pdebug_array(run_tq[cpu].array);
 }
@@ -103,11 +104,13 @@ void do_sched(void)
 
   /* assign the highest priority task to cpu */
   th = pick_next_task();
+
   if (th) {
     current_th[cpu] = th;
   } else {
     current_th[cpu] = &kernel_th[cpu];
   }
+
   printk("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
 
   if (prev_th[cpu] != &kernel_th[cpu] && is_preempted(prev_th[cpu])) {
@@ -118,9 +121,11 @@ void do_sched(void)
 
   //  switch_to(tasks[next]);
   current_th[cpu]->state = RUNNING;
+
   if (prev_th[cpu] != current_th[cpu]) {
     begin_budget(current_th[cpu]);
   }
+
   spin_unlock(&sched_lock);
   //  switch_to(current_th[cpu]);
   //  pdebug_jiffies();
@@ -131,6 +136,7 @@ void do_sched(void)
 int check_deadline_miss(void)
 {
   unsigned long cpu = get_cpu_id();
+
   if (deadline_tq[cpu]->sched.deadline <= get_current_jiffies()) {
     PDEBUG("cpu %lu get_current_jiffies() %lu\n", cpu, get_current_jiffies());
     PDEBUG("task %lu missed deadline\n", deadline_tq[cpu]->id);
@@ -139,6 +145,7 @@ int check_deadline_miss(void)
     PDEBUG("current_th->sched.deadline = %lu\n", deadline_tq[cpu]->sched.deadline);
     return false;
   }
+
   return true;
 }
 
@@ -150,9 +157,10 @@ int run(unsigned long nr_threads)
   print("run()\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
   //  print("current_fp = 0x%x\n", current_fp);
-  
+
   //  pdebug_array(run_tq[cpu].array);
 #if 1
+
   for (i = 0; i < nr_threads; i++) {
     //    current_cpu = i;
     /* check feasibility and activate */
@@ -160,20 +168,24 @@ int run(unsigned long nr_threads)
       //      print("Error: do_activate(): %d\n", ret);
       return 1;
     }
+
     //    do_sched_trace_thread_name(&ths[i]);
   }
+
 #endif
 
   sys_jiffies = 0;
   sched_end = false;
 
   print("run()2\n");
+
   for (i = 0; i < NR_CPUS; i++) {
     current_th[i] = prev_th[i] = &kernel_th[i];
     current_th[i]->id = 0;
     current_th[i]->stack_top = KERNEL_THREAD_STACK_ADDR(i);
     print("current_th[%u]->stack.top = 0x%lx\n", i, current_th[i]->stack_top);
   }
+
   //    print("current_th[%d] = %x\n", i, current_th[i]);
 
   //  inf_loop();
@@ -182,14 +194,14 @@ int run(unsigned long nr_threads)
   do_release();
   start_timer(0);
 
-  
+
   //  generate_software_interrupt(0);
-  
+
   /* idle thread start */
   while (sched_end == false) {
     //print("");
     // print("get_timer_count() = %lu\n", get_timer_count());
-    // printk("CNTV_TVAL: %lu\n", get_cntvct_el0()); 
+    // printk("CNTV_TVAL: %lu\n", get_cntvct_el0());
     //    print("0");
     //    halt();
     //    print("sched_end = %d\n", sched_end);
@@ -200,6 +212,7 @@ int run(unsigned long nr_threads)
     //    delay(1000);
     //    wait_until_next_interrupt();
   }
+
   stop_timer(0);
 
   print("run() end\n");
@@ -207,7 +220,7 @@ int run(unsigned long nr_threads)
   //  print("current_fp = 0x%x\n", current_fp);
   //  asm volatile("move %0, $sp" : "=r"(current_sp));
   //  print("current_sp = 0x%x\n", current_sp);
-  
+
   return 0;
 }
 
@@ -229,10 +242,12 @@ void init_sched(void)
     kernel_th[i].thflags = THFLAGS_START_TH;
     run_tq[i].util = 0;
     run_tq[i].nr_threads = 0;
+
     for (j = 0; j < NR_PRIORITY_BITMAPS; j++) {
       run_tq[i].bitmap[j] = 0;
     }
   }
+
   current_th[cpu] = prev_th[cpu] = &kernel_th[cpu];
   deadline_tq[cpu] = &kernel_th[cpu];
   sleep_tq[cpu] = &kernel_th[cpu];

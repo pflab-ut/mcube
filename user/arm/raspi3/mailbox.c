@@ -43,16 +43,20 @@ void raspi3_sd_main(void)
 {
 #if CONFIG_OPTION_FS_FAT
   unsigned int cluster;
+
   // initialize EMMC and detect SD card type
   if (init_sd() == SD_OK) {
     // read the master boot record after our bss segment
 #if 0
     extern unsigned char __end;
+
     if (sd_readblock(0, &__end, 1)) {
       // dump it to serial console
       memdump(&__end, 512);
     }
+
 #endif
+
     // read the master boot record and find our partition
     if (fat_getpartition()) {
       /* XXX: fat_getcluster() does not work well if fat_listdirectory() is called. */
@@ -60,6 +64,7 @@ void raspi3_sd_main(void)
       //      fat_listdirectory();
       /* find out file in root directory entries */
       cluster = fat_getcluster("HOGE    TXT");
+
       if (cluster) {
         // read into memory
         memdump(fat_readfile(cluster), 512);
@@ -68,6 +73,7 @@ void raspi3_sd_main(void)
       printk("FAT partition not found???\n");
     }
   }
+
 #endif /* CONFIG_OPTION_FS_FAT */
 }
 
@@ -86,11 +92,12 @@ void raspi3_irq_main(void)
 
   dst_cpu = 0;
   dst_mb = 0;
-  
+
   register_callback_handler(callback_func, 0);
   //  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(1, 0), LP_MAILBOX0_INTERRUPT_DEBUG);
   //  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(0, 0), LP_MAILBOX0_INTERRUPT_SCHED);
-  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(dst_cpu, dst_mb), LP_MAILBOX0_INTERRUPT_CALLBACK0);
+  mmio_out32(LP_CORE_MAILBOX_WRITE_SET(dst_cpu, dst_mb),
+             LP_MAILBOX0_INTERRUPT_CALLBACK0);
 
   //disable_mailbox_interrupt();
 }

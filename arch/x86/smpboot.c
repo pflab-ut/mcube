@@ -36,39 +36,39 @@ struct smpboot_params {
  */
 static inline void smpboot_params_validate_offsets(void)
 {
-  compiler_assert(SMPBOOT_CR3 ==
-         offsetof(struct smpboot_params, cr3));
+  compiler_assert(SMPBOOT_CR3
+                  == offsetof(struct smpboot_params, cr3));
 
-  compiler_assert(SMPBOOT_IDTR ==
-         offsetof(struct smpboot_params, idtr));
+  compiler_assert(SMPBOOT_IDTR
+                  == offsetof(struct smpboot_params, idtr));
 
-  compiler_assert(SMPBOOT_IDTR_LIMIT ==
-         offsetof(struct smpboot_params, idtr) +
-         offsetof(struct idt_descriptor, limit));
+  compiler_assert(SMPBOOT_IDTR_LIMIT
+                  == offsetof(struct smpboot_params, idtr)
+                  + offsetof(struct idt_descriptor, limit));
 
-  compiler_assert(SMPBOOT_IDTR_BASE ==
-         offsetof(struct smpboot_params, idtr) +
-         offsetof(struct idt_descriptor, base));
+  compiler_assert(SMPBOOT_IDTR_BASE
+                  == offsetof(struct smpboot_params, idtr)
+                  + offsetof(struct idt_descriptor, base));
 
-  compiler_assert(SMPBOOT_GDTR ==
-         offsetof(struct smpboot_params, gdtr));
+  compiler_assert(SMPBOOT_GDTR
+                  == offsetof(struct smpboot_params, gdtr));
 
-  compiler_assert(SMPBOOT_GDTR_LIMIT ==
-         offsetof(struct smpboot_params, gdtr) +
-         offsetof(struct gdt_descriptor, limit));
+  compiler_assert(SMPBOOT_GDTR_LIMIT
+                  == offsetof(struct smpboot_params, gdtr)
+                  + offsetof(struct gdt_descriptor, limit));
 
-  compiler_assert(SMPBOOT_GDTR_BASE ==
-         offsetof(struct smpboot_params, gdtr) +
-         offsetof(struct gdt_descriptor, base));
+  compiler_assert(SMPBOOT_GDTR_BASE
+                  == offsetof(struct smpboot_params, gdtr)
+                  + offsetof(struct gdt_descriptor, base));
 
-  compiler_assert(SMPBOOT_STACK_PTR ==
-         offsetof(struct smpboot_params, stack_ptr));
+  compiler_assert(SMPBOOT_STACK_PTR
+                  == offsetof(struct smpboot_params, stack_ptr));
 
-  compiler_assert(SMPBOOT_PERCPU_PTR ==
-         offsetof(struct smpboot_params, percpu_area_ptr));
+  compiler_assert(SMPBOOT_PERCPU_PTR
+                  == offsetof(struct smpboot_params, percpu_area_ptr));
 
-  compiler_assert(SMPBOOT_PARAMS_SIZE ==
-         sizeof(struct smpboot_params));
+  compiler_assert(SMPBOOT_PARAMS_SIZE
+                  == sizeof(struct smpboot_params));
 }
 
 /*
@@ -118,7 +118,8 @@ static inline void send_startup_ipi(int apic_id, uint32_t start_vector)
  * FIXME: 200 micro-second delay between the SIPIs
  * FIXME: fine-grained timeouts using micro-seconds
  */
-static int start_secondary_cpu(struct percpu *cpu, struct smpboot_params *params)
+static int start_secondary_cpu(struct percpu *cpu,
+                               struct smpboot_params *params)
 {
   int count, acked, timeout, apic_id;
 
@@ -148,6 +149,7 @@ static int start_secondary_cpu(struct percpu *cpu, struct smpboot_params *params
    * halted state and let it wait for the SIPIs */
   send_init_ipi(apic_id);
   acked = apic_ipi_acked();
+
   if (!acked) {
     printk("SMP: Failed to deliver INIT to CPU#%d\n", apic_id);
     goto fail;
@@ -158,6 +160,7 @@ static int start_secondary_cpu(struct percpu *cpu, struct smpboot_params *params
   for (int j = 1; j <= MAX_SIPI_RETRY; j++) {
     send_startup_ipi(apic_id, SMPBOOT_START);
     acked = apic_ipi_acked();
+
     if (acked) {
       break;
     }
@@ -176,10 +179,12 @@ static int start_secondary_cpu(struct percpu *cpu, struct smpboot_params *params
   /* The just-started AP core should now signal us
    * by incrementing the active-CPUs counter by one */
   timeout = 1000;
+
   while (timeout-- && count == nr_alive_cpus) {
     barrier();
     pit_mdelay(1);
   }
+
   if (timeout == -1) {
     printk("SMP: Timeout waiting for CPU#%d to start\n",
            apic_id);
@@ -238,6 +243,7 @@ __noreturn void secondary_start(void)
   printk("SMP: CPU apic_id=%d started\n", id.id);
 
   local_irq_enable();
+
   while (start_running_testcases == false) {
     cpu_pause();
   }
@@ -289,12 +295,30 @@ void smpboot_init(void)
 #if 1
 /* testcases */
 
-static void __noreturn test0(void)  { loop_print('G', VGA_LIGHT_GREEN); }
-static void __noreturn test1(void)  { loop_print('H', VGA_LIGHT_GREEN); }
-static void __noreturn test2(void)  { loop_print('I', VGA_LIGHT_GREEN); }
-static void __noreturn test3(void)  { loop_print('J', VGA_LIGHT_MAGNETA); }
-static void __noreturn test4(void)  { loop_print('K', VGA_LIGHT_MAGNETA); }
-static void __noreturn test5(void)  { loop_print('L', VGA_LIGHT_MAGNETA); }
+static void __noreturn test0(void)
+{
+  loop_print('G', VGA_LIGHT_GREEN);
+}
+static void __noreturn test1(void)
+{
+  loop_print('H', VGA_LIGHT_GREEN);
+}
+static void __noreturn test2(void)
+{
+  loop_print('I', VGA_LIGHT_GREEN);
+}
+static void __noreturn test3(void)
+{
+  loop_print('J', VGA_LIGHT_MAGNETA);
+}
+static void __noreturn test4(void)
+{
+  loop_print('K', VGA_LIGHT_MAGNETA);
+}
+static void __noreturn test5(void)
+{
+  loop_print('L', VGA_LIGHT_MAGNETA);
+}
 
 /*
  * This code runs on each secondary core after finishing its

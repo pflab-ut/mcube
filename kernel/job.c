@@ -19,7 +19,7 @@ void end_periodic_job(struct thread_struct *th)
   //  print("end_periodic_job(): current_time() = %llu\n", current_time());
   //  th->sched.earliness = current_time() + 1 - th->sched.deadline;
   //  assert(SU2EU(sys_jiffies) < current_th->sched.deadline);
-  
+
   deadline_tq[cpu] = dequeue_deadline_thread(deadline_tq[cpu], th);
 
 
@@ -41,6 +41,7 @@ void end_periodic_job(struct thread_struct *th)
 void end_aperiodic_job(struct thread_struct *th)
 {
   unsigned long cpu = get_cpu_id();
+
   if (th->type & SOFT_REAL_TIME) {
     assert(sys_jiffies <= th->sched.deadline);
   }

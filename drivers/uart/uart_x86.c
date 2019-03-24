@@ -11,6 +11,7 @@ uint8_t uart_pol_getc(__unused uint32_t ch)
 {
   while (!(inb(COM1_LINE_STATUS) & UART_LINE_STATUS_RECV_DATA))
     ;
+
   wait(uart_wait_tsc);
   return inb(COM1_START);
 }
@@ -19,13 +20,16 @@ void uart_pol_putc(uint8_t c, __unused uint32_t ch)
 {
   while (!(inb(COM1_LINE_STATUS) & UART_LINE_STATUS_SEND_DATA_COMP))
     ;
+
   wait(uart_wait_tsc);
   outb(COM1_START, c);
   wait(uart_wait_tsc);
+
   /* wait until sending character */
   while (!(inb(COM1_LINE_STATUS) &
            (UART_LINE_STATUS_SEND_DATA_EMPTY | UART_LINE_STATUS_BREAK_RECV)))
     ;
+
   wait(uart_wait_tsc);
 }
 
@@ -42,7 +46,8 @@ void init_uart(void)
   outb(COM1_LINE_CTRL, UART_LINE_CTRL_SEND_RECV_DATA_8BIT);
   /* control pin */
   outb(COM1_MODEM_CTRL,
-       UART_MODEM_CTRL_INT_ENABLE | UART_MODEM_CTRL_ASSERT_RTS | UART_MODEM_CTRL_ASSERT_DTR);
+       UART_MODEM_CTRL_INT_ENABLE | UART_MODEM_CTRL_ASSERT_RTS
+       | UART_MODEM_CTRL_ASSERT_DTR);
   /* clear interrupt */
   //  outb(0x00, COM1_INT_ENABLE);
   /* init uart_data */

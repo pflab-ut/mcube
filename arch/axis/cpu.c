@@ -76,7 +76,8 @@ void set_cpu_id(struct cluster *c, unsigned long cpu_id)
   }
 }
 
-void get_cluster_from_index(struct cluster *c, volatile int index, volatile int cpu)
+void get_cluster_from_index(struct cluster *c, volatile int index,
+                            volatile int cpu)
 {
   //  printk("index = %d cpu = %d\n", index, cpu);
   /* NOTE: (x, y) = (1, 1) means gateway and does not implement CPU. */
@@ -108,6 +109,7 @@ void get_cluster_from_index(struct cluster *c, volatile int index, volatile int 
     c->x = -1;
     c->y = -1;
   }
+
   c->cluster_id = index;
   c->local_cpu_id = cpu;
   //  printk("c->x = %d c->y = %d\n", c->x, c->y);

@@ -24,14 +24,14 @@ enum {
 union i8042_status {
   uint8_t raw;
   struct {
-    uint8_t output_ready:1,  /* 1: a byte's waiting to be read */
-      input_busy:1,  /* 1: full input buffer (0x60|0x64) */
-      reset:1,  /* 1: self-test successful */
-      last:1,    /* 0: data sent last. 1: command */
-      __unused0:1,
-      tx_timeout:1,  /* 1: transmit to keyboard timeout */
-      rx_timeout:1,  /* 1: receive from keyboard timeout */
-      parity_error:1;  /* 1: parity error on serial link */
+    uint8_t output_ready: 1, /* 1: a byte's waiting to be read */
+            input_busy: 1, /* 1: full input buffer (0x60|0x64) */
+            reset: 1, /* 1: self-test successful */
+            last: 1,   /* 0: data sent last. 1: command */
+            __unused0: 1,
+            tx_timeout: 1, /* 1: transmit to keyboard timeout */
+            rx_timeout: 1, /* 1: receive from keyboard timeout */
+            parity_error: 1; /* 1: parity error on serial link */
   } __packed;
 };
 
@@ -56,14 +56,14 @@ enum i8042_cmd {
 union i8042_p2 {
   uint8_t raw;
   struct {
-    uint8_t reset:1,        /* Write 0 to system reset */
-      a20:1,    /* If 0, A20 line is zeroed */
-      __unused0:1,
-      __unused1:1,
-      irq1:1,    /* Output Buffer Full (IRQ1 high) */
-      input:1,  /* Input buffer empty */
-      clock:1,  /* PS/2 keyboard clock line */
-      data:1;    /* PS/2 keyboard data line */
+    uint8_t reset: 1,       /* Write 0 to system reset */
+            a20: 1,   /* If 0, A20 line is zeroed */
+            __unused0: 1,
+            __unused1: 1,
+            irq1: 1,   /* Output Buffer Full (IRQ1 high) */
+            input: 1, /* Input buffer empty */
+            clock: 1, /* PS/2 keyboard clock line */
+            data: 1;   /* PS/2 keyboard data line */
   } __packed;
 };
 
@@ -101,7 +101,7 @@ enum {
  * AT+ (set 2) keyboard scan codes table
  */
 static uint8_t scancodes[][2] = {
-  [0x01] = {  0 ,  0 , },  /* escape (ESC) */
+  [0x01] = {  0,  0, },    /* escape (ESC) */
   [0x02] = { '1', '!', },
   [0x03] = { '2', '@', },
   [0x04] = { '3', '#', },
@@ -114,8 +114,8 @@ static uint8_t scancodes[][2] = {
   [0x0b] = { '0', ')', },
   [0x0c] = { '-', '_', },
   [0x0d] = { '=', '+', },
-  [0x0e] = { '\b', 0 , },  /* FIXME: VGA backspace support */
-  [0x0f] = { '\t', 0 , },  /* FIXME: VGA tab support */
+  [0x0e] = { '\b', 0, },   /* FIXME: VGA backspace support */
+  [0x0f] = { '\t', 0, },   /* FIXME: VGA tab support */
   [0x10] = { 'q', 'Q', },
   [0x11] = { 'w', 'W', },
   [0x12] = { 'e', 'E', },
@@ -128,8 +128,8 @@ static uint8_t scancodes[][2] = {
   [0x19] = { 'p', 'P', },
   [0x1a] = { '[', '{', },
   [0x1b] = { ']', '}', },
-  [0x1c] = { '\n', 0 , },  /* Enter */
-  [0x1d] = {  0 ,  0 , },  /* Ctrl; good old days position */
+  [0x1c] = { '\n', 0, },   /* Enter */
+  [0x1d] = {  0,  0, },    /* Ctrl; good old days position */
   [0x1e] = { 'a', 'A', },
   [0x1f] = { 's', 'S', },
   [0x20] = { 'd', 'D', },
@@ -154,7 +154,7 @@ static uint8_t scancodes[][2] = {
   [0x33] = { ',', '<', },
   [0x34] = { '.', '>', },
   [0x35] = { '/', '?', },
-  [0x36] = {  0 ,  0 , },  /* Right shift */
+  [0x36] = {  0,  0, },    /* Right shift */
   [0x39] = { ' ', ' ', },  /* Space */
 };
 
@@ -166,10 +166,11 @@ static uint8_t kbd_read_input(void)
   union i8042_status status;
 
   status.raw = inb(KBD_STATUS_REG);
+
   if (status.output_ready) {
     return inb(KBD_DATA_REG);
   }
-  
+
   return KEY_NONE;
 }
 
@@ -185,6 +186,7 @@ static void kbd_flush_buffer(void)
     if (kbd_read_input() == KEY_NONE) {
       break;
     }
+
     apic_udelay(50);
   }
 }
@@ -203,11 +205,12 @@ void __kb_handler(void)
    * the  IRQ1 pin) to low -- deasserting the IRQ. */
   code = kbd_read_input();
 
-  switch(code) {
+  switch (code) {
   case KEY_LSHIFT:
   case KEY_RSHIFT:
     shifted = 1;
     break;
+
   case RELEASE(KEY_LSHIFT):
   case RELEASE(KEY_RSHIFT):
     shifted = 0;
@@ -219,6 +222,7 @@ void __kb_handler(void)
   }
 
   ascii = scancodes[code][shifted];
+
   if (ascii) {
     putchar(ascii);
   }

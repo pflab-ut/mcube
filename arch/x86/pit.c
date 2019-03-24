@@ -66,10 +66,10 @@ enum {
 union pit_cmd {
   uint8_t raw;
   struct {
-    uint8_t bcd:1,    /* BCD format for counter divisor? */
-      mode:3,    /* Counter modes 0 to 5 */
-      rw:2,    /* Read/Write latch, LSB, MSB, or 16-bit */
-      timer:2;  /* Which timer of the three (0-2) */
+    uint8_t bcd: 1,   /* BCD format for counter divisor? */
+            mode: 3,   /* Counter modes 0 to 5 */
+            rw: 2,   /* Read/Write latch, LSB, MSB, or 16-bit */
+            timer: 2; /* Which timer of the three (0-2) */
   } __packed;
 };
 
@@ -207,7 +207,7 @@ void pit_oneshot(int ms)
     panic("PIT: Programming timer0 as one-shot will "
           "stop currently setup monotonic mode");
   }
-  
+
   cmd.bcd = 0;
   cmd.mode = MODE_0;
   cmd.rw = RW_16bit;

@@ -14,7 +14,7 @@ static void setup_idt(void)
   for (int i = 0; i < EXCEPTION_GATES; i ++) {
     set_intr_gate(i, (void *) &idt_exception_stubs[i]);
   }
-  
+
   set_intr_gate(HALT_CPU_IPI_VECTOR, halt_cpu_ipi_handler);
 
   load_idt(&idtdesc);
@@ -22,7 +22,7 @@ static void setup_idt(void)
 
 void clear_bss(void)
 {
-  memset(__bss_start , 0, __bss_end - __bss_start);
+  memset(__bss_start, 0, __bss_end - __bss_start);
 }
 
 static void print_info(void)
@@ -120,7 +120,7 @@ __noreturn void kernel_start(void)
   init_ext2();
 
 
-  
+
   // Signal the secondary cores to run their own test-cases code.
   // They've been waiting for us (thread 0) till all of kernel
   // subsystems has been properly initialized.  Wait No More!

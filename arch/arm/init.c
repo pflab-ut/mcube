@@ -9,8 +9,10 @@
 __noreturn void shell(void)
 {
   int c;
+
   while (1) {
     c = uart_getc(0);
+
     if (c == '\r') {
       uart_putc('\n', 0);
     } else {
@@ -41,7 +43,7 @@ void init_arch(void)
 }
 
 void init_arch_ap(void)
-{  
+{
   //  init_timer(TICK_USEC);
   init_irq();
 }

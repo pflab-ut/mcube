@@ -137,7 +137,7 @@ extern unsigned long idt_descriptor_size;
 #define ICW2_INT_VECTOR_ADDRESS_T(x) ((x) << 0)
 
 /* Initialization Command Words (ICW)3 */
-/* This word is read only when there is more than one 8259A in the system and cascading is used, in which 
+/* This word is read only when there is more than one 8259A in the system and cascading is used, in which
 	 case ICW1_SINGLE = 0. It will load the 8-bit slave register.
 	 a. In the master mode (either when SP e 1, or in buffered mode when M/S e 1 in ICW4) a "1" is
 	 set for each slave in the system.
@@ -287,12 +287,12 @@ extern uint32_t system_call;
 
 static inline void enable_local_irq(void)
 {
-	sti();
+  sti();
 }
 
 static inline void disable_local_irq(void)
 {
-	cli();
+  cli();
 }
 
 static inline int is_irq_enabled(unsigned long flags)
@@ -303,11 +303,12 @@ static inline int is_irq_enabled(unsigned long flags)
 
 static inline void save_local_irq(unsigned long *flags)
 {
-	asm volatile("# raw_save_flags\n\t"
-							 "pushf ; pop %0"
-							 : "=rm" (*flags)
-							 :
-							 : "memory");
+  asm volatile("# raw_save_flags\n\t"
+               "pushf ; pop %0"
+               : "=rm"(*flags)
+               :
+               : "memory");
+
   if (is_irq_enabled(*flags)) {
     disable_local_irq();
   }
@@ -316,10 +317,11 @@ static inline void save_local_irq(unsigned long *flags)
 
 static inline void restore_local_irq(unsigned long *flags)
 {
-	asm volatile("push %0 ; popf"
-							 :
-							 :"g" (*flags)
-							 :"memory", "cc");
+  asm volatile("push %0 ; popf"
+               :
+               :"g"(*flags)
+               :"memory", "cc");
+
   if (is_irq_enabled(*flags)) {
     enable_local_irq();
   }
@@ -347,13 +349,13 @@ static inline void fatal(void)
  */
 struct interrupt_context {
   //    registers_t regs;            ///< all general-purpose registers.
-    uint64_t    error;           ///< exception error identifier.
-    uint64_t    interrupt;       ///< interrupt vector number.
-    uint64_t    retaddr;         ///< interrupt return address.
-    uint64_t    cs;              ///< code segment.
-    uint64_t    rflags;          ///< flags register.
-    uint64_t    rsp;             ///< stack pointer.
-    uint64_t    ss;              ///< stack segment.
+  uint64_t    error;           ///< exception error identifier.
+  uint64_t    interrupt;       ///< interrupt vector number.
+  uint64_t    retaddr;         ///< interrupt return address.
+  uint64_t    cs;              ///< code segment.
+  uint64_t    rflags;          ///< flags register.
+  uint64_t    rsp;             ///< stack pointer.
+  uint64_t    ss;              ///< stack segment.
 };
 
 typedef struct interrupt_context interrupt_context_t;
@@ -406,7 +408,7 @@ void disable_irq(uint8_t irq);
 
 static inline uint8_t clear_irq(uint8_t irq)
 {
-	return OCW2_SPEC_EOI | irq;
+  return OCW2_SPEC_EOI | irq;
 }
 
 

@@ -78,6 +78,7 @@ static inline int is_irq_enabled(__unused unsigned long flags)
 static inline void save_local_irq(unsigned long *flags)
 {
   asm volatile("mfs %0, $0" : "=r"(*flags));
+
   if (is_irq_enabled(*flags)) {
     disable_local_irq();
   }
@@ -86,6 +87,7 @@ static inline void save_local_irq(unsigned long *flags)
 static inline void restore_local_irq(unsigned long *flags)
 {
   asm volatile("mts $0, %0" :: "r"(*flags));
+
   if (is_irq_enabled(*flags)) {
     enable_local_irq();
   }

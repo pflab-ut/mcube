@@ -18,12 +18,15 @@ static inline void print_array(struct thread_struct array[NR_PRIORITIES])
   int i;
   struct thread_struct *th;
   PDEBUG("pdebug_array()\n");
+
   for (i = 0; i < NR_PRIORITIES; i++) {
     if (array[i].next != &array[i]) {
       PDEBUG("\tarray[%d]: ", i);
+
       for (th = array[i].next; th != &array[i]; th = th->next) {
         PDEBUG("id(%lu)->", th->id);
       }
+
       PDEBUG("[head]\n");
     }
   }
@@ -44,17 +47,21 @@ static inline void print_bitmap(uint32_t bitmap[NR_PRIORITY_BITMAPS])
   uint32_t word;
   int len;
   PDEBUG("pdebug_bitmap()\n");
+
   for (i = 0; i < NR_PRIORITY_BITMAPS; i++) {
     len = BITMAP_LENGTH;
     word = bitmap[i];
+
     /* priority levels in each queue and output '_' every 8bit. */
     for (j = 0; j < len; j++) {
-      bitstr[j] = (char) (word & 0x1) + '0';
+      bitstr[j] = (char)(word & 0x1) + '0';
       word >>= 1;
+
       if ((j % 9) == 7) {
         bitstr[++j] = '_';
       }
     }
+
     bitstr[--j] = '\0';
     PDEBUG("\tbitmap[%d]:%s\n", i, bitstr);
   }
@@ -71,9 +78,11 @@ static inline void print_deadline_tq(void)
   struct thread_struct *p;
   unsigned long cpu = get_cpu_id();
   PDEBUG("[deadline_tq]: ");
+
   for (p = deadline_tq[cpu]; p; p = p->dnext) {
     PDEBUG("id(%lu)[%lu]->", p->id, p->sched.deadline);
   }
+
   PDEBUG("NULL\n");
 }
 
@@ -87,9 +96,11 @@ static inline void print_sleep_tq(void)
   struct thread_struct *p;
   unsigned long cpu = get_cpu_id();
   PDEBUG("[sleep_tq]: ");
+
   for (p = sleep_tq[cpu]; p; p = p->next) {
     PDEBUG("id(%lu)->", p->id);
   }
+
   PDEBUG("NULL\n");
 }
 
@@ -98,13 +109,16 @@ static inline void print_sleep_tq(void)
     print_sleep_tq();                           \
   } while (0)
 
-static inline void print_queue(struct thread_struct *head, char *name, unsigned long cpu)
+static inline void print_queue(struct thread_struct *head, char *name,
+                               unsigned long cpu)
 {
   struct thread_struct *p;
   PDEBUG("[%s]: ", name);
+
   for (p = head; p && p != &kernel_th[cpu] && p->id != 0; p = p->next) {
     PDEBUG("id(%lu)->", p->id);
   }
+
   PDEBUG("NULL\n");
 }
 

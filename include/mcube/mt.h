@@ -35,7 +35,7 @@ typedef struct W128_T w128_t;
 /*-----------------
   BASIC DEFINITIONS
   -----------------*/
-/** Mersenne Exponent. The period of the sequence 
+/** Mersenne Exponent. The period of the sequence
  *  is a multiple of 2^MEXP-1.
  * #define MEXP 19937 */
 /** SFMT generator has an internal state array of 128-bit integers,

@@ -10,7 +10,7 @@ void init_timer(unsigned long tick_us)
 {
   timer_cntfrq = get_cntfrq_el0();
   //  printk("get_timer_frequency() = %lu\n", timer_cntfrq);
-  
+
   timer_tick = (timer_cntfrq * tick_us) / (1000 * 1000);
   //  printk("timer_tick = %lu\n", timer_tick);
 #if 0
@@ -23,7 +23,7 @@ void init_timer(unsigned long tick_us)
   /* local timer interrupt goes to Core 0 IRQ */
   mmio_out32(TIMER_LOCAL_INTERRUPT_ROUTING, 0);
 #endif
-  
+
   enable_timer_interrupt();
 }
 

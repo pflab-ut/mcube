@@ -14,6 +14,7 @@ uint8_t uart_pol_getc(__unused uint32_t ch)
   // Wait for UART to have received something.
   while (mmio_in64(UART0_FLAG_REG) & UART_FLAG_REG_RECEIVE_FIFO_EMPTY)
     ;
+
   return mmio_in64(UART0_DATA_REG) & UART_DATA_REG_DATA_MASK;
 }
 
@@ -22,6 +23,7 @@ void uart_pol_putc(uint8_t c, __unused uint32_t ch)
   // Wait for UART to become ready to transmit.
   while (mmio_in64(UART0_FLAG_REG) & UART_FLAG_REG_TRANSMIT_FIFO_FULL)
     ;
+
   mmio_out64(UART0_DATA_REG, c & UART_DATA_REG_DATA_MASK);
 }
 
@@ -35,7 +37,7 @@ void init_uart(void)
 
   /* disable uart */
   mmio_out32(UART0_CTRL_REG, 0);
-  
+
   /* setup pl011 uart by mailbox */
   setup_pl011_uart();
 
@@ -73,13 +75,13 @@ void init_uart(void)
 
   /* 5. Write to GPPUD to remove the control signal. */
   /* Nothing */
-  
+
   /* 6. Write to GPPUDCLK0/1 to remove the clock */
   mmio_out32(GPPUDCLK0, 0);
 
   /* clear interrupt */
   mmio_out32(UART0_ICR_REG, 0x7ff);
-  
+
   /* set UART interrupt routing */
   mmio_out32(ENABLE_IRQS2, IRQ_PENDINGn_SRC(PL011_UART_IRQ));
 #elif CONFIG_ARCH_ARM_SYNQUACER
@@ -93,7 +95,7 @@ void init_uart(void)
   /* enable uart */
   mmio_out32(UART0_CTRL_REG,
              mmio_in32(UART0_CTRL_REG) | UART_CTRL_REG_UART_ENABLE);
-  
+
 }
 
 #elif MINI_UART
@@ -104,6 +106,7 @@ uint8_t uart_pol_getc(__unused uint32_t ch)
 {
   while (mmio_in32(IRQ_PENDING1) & IRQ_PENDINGn_SRC(MINI_UART_IRQ))
     ;
+
   return mmio_in8(AUX_MU_IO_REG);
 }
 
@@ -111,6 +114,7 @@ void uart_pol_putc(uint8_t c, __unused uint32_t ch)
 {
   while (!(mmio_in8(AUX_MU_LSR_REG) & AUX_MU_LSR_REG_TRANSMITTER_EMPTY))
     ;
+
   mmio_out8(AUX_MU_IO_REG, c);
 }
 
@@ -128,7 +132,7 @@ void init_uart(void)
   selector &= ~GPFSEL_FSELn5_MASK;
   /* set alt5 for gpio15 */
   selector |= GPIO_PINn_ALT5 << GPFSEL_FSELn5_SHIFT;
-  
+
   mmio_out32(GPFSEL1, selector);
 
   /* 1. Write to GPPUD to set the required control signal
@@ -152,10 +156,10 @@ void init_uart(void)
 
   /* 5. Write to GPPUD to remove the control signal. */
   /* Nothing */
-  
+
   /* 6. Write to GPPUDCLK0/1 to remove the clock */
   mmio_out32(GPPUDCLK0, 0);
-  
+
   /* enable mini UART */
   mmio_out32(AUX_ENABLES, AUX_ENABLES_MINI_UART_ENABLE);
 
@@ -166,7 +170,8 @@ void init_uart(void)
   mmio_out32(AUX_MU_IER_REG, 0);
 
   /* enable 8 bit mode */
-  mmio_out32(AUX_MU_LCR_REG, mmio_in32(AUX_MU_LCR_REG) | AUX_MU_LCR_REG_8BIT_MODE);
+  mmio_out32(AUX_MU_LCR_REG,
+             mmio_in32(AUX_MU_LCR_REG) | AUX_MU_LCR_REG_8BIT_MODE);
 
   /* set RTS line to be always high */
   mmio_out32(AUX_MU_MCR_REG, 0);
@@ -180,7 +185,7 @@ void init_uart(void)
              mmio_in32(AUX_MU_CTRL_REG)
              | AUX_MU_CTRL_REG_TRANSMITTER_ENABLE
              | AUX_MU_CTRL_REG_RECEIVER_ENABLE);
-  
+
   /* clear transmit/receive FIFOs */
   mmio_out32(AUX_MU_IIR_REG,
              AUX_MU_IIR_REG_CLEAR_TRANSMIT_FIFO
@@ -188,7 +193,7 @@ void init_uart(void)
 
   /* enable receive interrupt */
   mmio_out32(AUX_MU_IER_REG, AUX_MU_IER_REG_ENABLE_RECV_INTERRUPTS);
-  
+
   /* set UART interrupt routing */
   mmio_out32(ENABLE_IRQS1, IRQ_PENDINGn_SRC(MINI_UART_IRQ));
 

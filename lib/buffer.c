@@ -29,10 +29,12 @@ static void retreat_pointer(cbuf_handle_t cbuf)
 cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
 {
   cbuf_handle_t cbuf;
+
   if (!(cbuf = kmalloc(sizeof(ring_buf_t)))) {
     print("Error: cannot allocate memory %lu\n", sizeof(ring_buf_t));
     return NULL;
   }
+
   cbuf->buffer = buffer;
   cbuf->max = size;
   cbuf->lock = INIT_SPINLOCK;
@@ -66,9 +68,10 @@ size_t ring_buf_size(cbuf_handle_t cbuf)
       size = cbuf->head - cbuf->tail;
     } else {
       size = cbuf->max + cbuf->head - cbuf->tail;
-    }    
+    }
   }
-  spin_unlock(&cbuf->lock);  
+
+  spin_unlock(&cbuf->lock);
   return size;
 }
 
@@ -83,18 +86,20 @@ void ring_buf_put(cbuf_handle_t cbuf, uint8_t data)
   cbuf->buffer[cbuf->head] = data;
 
   advance_pointer(cbuf);
-  spin_unlock(&cbuf->lock);  
+  spin_unlock(&cbuf->lock);
 }
 
 int ring_buf_put2(cbuf_handle_t cbuf, uint8_t data)
 {
   int r = -1;
   spin_lock(&cbuf->lock);
+
   if (!ring_buf_full(cbuf)) {
     cbuf->buffer[cbuf->head] = data;
     advance_pointer(cbuf);
     r = 0;
   }
+
   spin_unlock(&cbuf->lock);
   return r;
 }
@@ -103,12 +108,14 @@ int ring_buf_get(cbuf_handle_t cbuf, uint8_t *data)
 {
   int r = -1;
   spin_lock(&cbuf->lock);
+
   if (!ring_buf_empty(cbuf)) {
     *data = cbuf->buffer[cbuf->tail];
     retreat_pointer(cbuf);
     r = 0;
   }
-  spin_unlock(&cbuf->lock);  
+
+  spin_unlock(&cbuf->lock);
   return r;
 }
 

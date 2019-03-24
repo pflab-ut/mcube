@@ -9,7 +9,9 @@ align-pointer=name
 align-reference=name
 break-one-line-headers
 add-braces
+indent-col1-comments
 attach-return-type
 attach-return-type-decl
 max-code-length=80
+max-continuation-indent=80
 mode=c

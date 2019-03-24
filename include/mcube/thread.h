@@ -39,7 +39,7 @@
 #define SOFT_REAL_TIME (0x1 << 5)
 #define NON_REAL_TIME (0x1 << 6)
 
-/* 
+/*
  * -- Thread flags --
  */
 #define THFLAGS_START_TH (0x1 << 0)
@@ -114,7 +114,7 @@ struct thread_struct {
 
   /** Argument. */
   void *arg;
-  
+
 #if CONFIG_ARCH_AXIS
   /** Current frame pointer. */
   unsigned long current_fp;
@@ -123,12 +123,12 @@ struct thread_struct {
   unsigned long current_sp;
   /** Interrupt program counter. */
   unsigned long interrupt_program_counter;
-  
+
   /** Number of preemptions per job. */
   unsigned long preemptions;
   /** Number of migrations per job. */
   unsigned long migrations;
-  
+
   /** Function pointer to running thread function. */
   void (*run_func)(void);
   /** Function pointer to running user thread function. */
@@ -138,7 +138,7 @@ struct thread_struct {
 typedef struct thread_struct thread_struct;
 
 /**
- * @brief Thread attribute for task set 
+ * @brief Thread attribute for task set
  *
  * The th_attr structure sets up task set for scheduling.
  */
@@ -164,7 +164,8 @@ void init_sched_info(struct thread_struct *th, struct th_attr *attr);
 
 static inline int is_budget_enforced(struct thread_struct *th)
 {
-  return th->sched.budget_policy == TICK_ENFORCEMENT || th->sched.budget_policy == PRECISE_ENFORCEMENT;
+  return th->sched.budget_policy == TICK_ENFORCEMENT
+         || th->sched.budget_policy == PRECISE_ENFORCEMENT;
 }
 
 static inline int is_budget_exhausted(struct thread_struct *th)
@@ -233,16 +234,18 @@ extern void (*th_mains[NR_THREADS])(void);
 
 int thread_tie_break(struct thread_struct *x, struct thread_struct *y);
 
-static inline int thread_is_high_prio(struct thread_struct *x, struct thread_struct *y)
+static inline int thread_is_high_prio(struct thread_struct *x,
+                                      struct thread_struct *y)
 {
   return x->priority < y->priority
-    || ((x->priority == y->priority) && thread_tie_break(x, y));
+         || ((x->priority == y->priority) && thread_tie_break(x, y));
 }
 
-static inline int thread_is_low_prio(struct thread_struct *x, struct thread_struct *y)
+static inline int thread_is_low_prio(struct thread_struct *x,
+                                     struct thread_struct *y)
 {
   return (x->priority > y->priority)
-    || ((x->priority == y->priority) && thread_tie_break(x, y));
+         || ((x->priority == y->priority) && thread_tie_break(x, y));
 }
 
 void wait(unsigned long count);
@@ -260,9 +263,11 @@ static inline void end_budget(struct thread_struct *th)
   if (th->id > 0) {
     unsigned long ctime = get_current_cpu_time();
     unsigned long exec_time = tsc2nsec(ctime - th->sched.begin_cpu_time);
-    printk("end_budget(): th->id = %lu th->sched.remaining = %ld\n", th->id, th->sched.remaining);
+    printk("end_budget(): th->id = %lu th->sched.remaining = %ld\n", th->id,
+           th->sched.remaining);
     th->sched.remaining -= exec_time;
-    printk("end_budget(): th->id = %lu th->sched.remaining = %ld\n", th->id, th->sched.remaining);
+    printk("end_budget(): th->id = %lu th->sched.remaining = %ld\n", th->id,
+           th->sched.remaining);
     th->sched.sum_exec_time += exec_time;
   }
 }

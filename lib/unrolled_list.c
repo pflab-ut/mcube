@@ -101,16 +101,20 @@ static struct __node *__get_node(struct unrolled_head *head, uint key,
   uint node_num;
 
   node = head->node;
-  if (!node)        /* Empty list */
+
+  if (!node) {      /* Empty list */
     return NULL;
+  }
 
   node_num = key / node->array_len;
   *array_idx = key % node->array_len;
+
   while (node_num--) {
     if (!node) {
       /* Out of Range key */
       return NULL;
     }
+
     node = node->next;
   }
 
@@ -141,6 +145,7 @@ void unrolled_free(struct unrolled_head *head)
   struct __node *node, *prev;
 
   node = head->node;
+
   while (node != NULL) {
     prev = node;
     node = node->next;
@@ -170,12 +175,14 @@ uint unrolled_insert(struct unrolled_head *head, void *val)
 
   assert(val != NULL);
   assert(head->node != NULL);
+
   for (node = head->node; node != NULL; node = node->next) {
     if (node->array_nrfree > 0) {
       idx = __unode_array_find_free_idx(node);
       __unode_store_val_in_array(node, idx, val);
       return (node->num * node->array_len) + idx;
     }
+
     prev = node;
   }
 
@@ -198,6 +205,7 @@ void *unrolled_lookup(struct unrolled_head *head, uint key)
   uint array_idx;
 
   node = __get_node(head, key, &array_idx);
+
   if (node == NULL) {
     return node;
   }
@@ -214,6 +222,7 @@ void unrolled_remove_key(struct unrolled_head *head, uint key)
   uint array_idx;
 
   node = __get_node(head, key, &array_idx);
+
   if (node == NULL || node->array[array_idx] == NULL) {
     panic("UNROLLED: Tried  to remove non-existing mapping structure key %u", key);
   }

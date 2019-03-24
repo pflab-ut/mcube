@@ -32,8 +32,8 @@ struct gdt_descriptor {
 static inline void load_gdt(const struct gdt_descriptor *gdt_desc)
 {
   asm volatile("lgdt %0"
-         :
-         :"m"(*gdt_desc));
+               :
+               :"m"(*gdt_desc));
 }
 
 static inline struct gdt_descriptor get_gdt(void)
@@ -41,8 +41,8 @@ static inline struct gdt_descriptor get_gdt(void)
   struct gdt_descriptor gdt_desc;
 
   asm volatile("sgdt %0"
-         :"=m"(gdt_desc)
-         :);
+               :"=m"(gdt_desc)
+               :);
 
   return gdt_desc;
 }

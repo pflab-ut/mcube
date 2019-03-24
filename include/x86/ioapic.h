@@ -42,7 +42,7 @@ extern struct ioapic_desc ioapic_descs[IOAPICS_MAX];
 union ioapic_id {
   uint32_t value;
   struct {
-    uint32_t reserved0:24, id:8;
+    uint32_t reserved0: 24, id: 8;
   } __packed;
 };
 
@@ -50,8 +50,8 @@ union ioapic_id {
 union ioapic_ver {
   uint32_t value;
   struct {
-    uint32_t version:8, reserved0:8,
-      max_irq:8, reserved1:8;
+    uint32_t version: 8, reserved0: 8,
+             max_irq: 8, reserved1: 8;
   } __packed;
 };
 
@@ -59,8 +59,8 @@ union ioapic_ver {
 union ioapic_arb {
   uint32_t value;
   struct {
-    uint32_t reserved0:24, arbitration:4,
-      reserved1:4;
+    uint32_t reserved0: 24, arbitration: 4,
+             reserved1: 4;
   } __packed;
 };
 
@@ -108,11 +108,11 @@ static inline void ioapic_write(int apic, uint8_t reg, uint32_t value)
  * 32 bit registers -- Intel 82093AA datasheet */
 union ioapic_irqentry {
   struct {
-    uint32_t vector:8, delivery_mode:3, dest_mode:1,
-      delivery_status:1, polarity:1, remote_irr:1,
-      trigger:1, mask:1, reserved0:15;
+    uint32_t vector: 8, delivery_mode: 3, dest_mode: 1,
+             delivery_status: 1, polarity: 1, remote_irr: 1,
+             trigger: 1, mask: 1, reserved0: 15;
 
-    uint32_t reserved1:24, dest:8;
+    uint32_t reserved1: 24, dest: 8;
   } __packed;
   struct {
     uint32_t value_low;
@@ -128,7 +128,7 @@ enum ioapic_delmod {
   IOAPIC_DELMOD_SMI   = 0x2,
   IOAPIC_DELMOD_NMI   = 0x4,
   IOAPIC_DELMOD_INIT  = 0x5,
-  IOAPIC_DELMOD_EXTINT= 0x7,
+  IOAPIC_DELMOD_EXTINT = 0x7,
 };
 /* Destination mode (R/W) */
 enum ioapic_destmod {
@@ -152,17 +152,17 @@ enum {
 };
 /* Message Destination Address (APIC logical destination mode) */
 enum {
-   /* Each local APIC performs a logical AND of chosen
-    * address and its logical APIC ID. If a 'true'
-    * condition was detected, the IRQ is accepted. */
+  /* Each local APIC performs a logical AND of chosen
+   * address and its logical APIC ID. If a 'true'
+   * condition was detected, the IRQ is accepted. */
   IOAPIC_DEST_BROADCAST = 0xff,
 };
 
 static inline union ioapic_irqentry ioapic_read_irqentry(int apic, uint8_t irq)
 {
   union ioapic_irqentry entry = { .value = 0 };
-  entry.value_low = ioapic_read(apic, IOAPIC_REDTBL0 + 2*irq);
-  entry.value_high = ioapic_read(apic, IOAPIC_REDTBL0 + 2*irq + 1);
+  entry.value_low = ioapic_read(apic, IOAPIC_REDTBL0 + 2 * irq);
+  entry.value_high = ioapic_read(apic, IOAPIC_REDTBL0 + 2 * irq + 1);
   return entry;
 }
 
@@ -174,16 +174,16 @@ static inline union ioapic_irqentry ioapic_read_irqentry(int apic, uint8_t irq)
 static inline void ioapic_write_irqentry(int apic, uint8_t irq,
                                          union ioapic_irqentry entry)
 {
-  ioapic_write(apic, IOAPIC_REDTBL0 + 2*irq + 1, entry.value_high);
-  ioapic_write(apic, IOAPIC_REDTBL0 + 2*irq, entry.value_low);
+  ioapic_write(apic, IOAPIC_REDTBL0 + 2 * irq + 1, entry.value_high);
+  ioapic_write(apic, IOAPIC_REDTBL0 + 2 * irq, entry.value_low);
 }
 
 static inline void ioapic_mask_irq(int apic, uint8_t irq)
 {
   union ioapic_irqentry entry = { .value = 0 };
-  entry.value_low = ioapic_read(apic, IOAPIC_REDTBL0 + 2*irq);
+  entry.value_low = ioapic_read(apic, IOAPIC_REDTBL0 + 2 * irq);
   entry.mask = IOAPIC_MASK;
-  ioapic_write(apic, IOAPIC_REDTBL0 + 2*irq, entry.value_low);
+  ioapic_write(apic, IOAPIC_REDTBL0 + 2 * irq, entry.value_low);
 }
 
 /*

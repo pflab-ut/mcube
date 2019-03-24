@@ -52,49 +52,66 @@ uint64_t name_i(const char *path)
   buf_len = 0;
   inum = 0;
   buf = kmalloc(EXT2_FILENAME_LEN + 2);
+
   for (int i = 0; i <= strlen(path); i++) {
     prev_state = state;
+
     switch (path[i]) {
     case '/':
       state = SLASH;
+
       if (prev_state == SLASH) {
         break;
       }
+
       if (prev_state == NONE) {
         inum = EXT2_ROOT_INODE;    /* Absolute */
       }
+
       if (prev_state == NAME) {
         inum = handle(buf, &buf_len, inum);
+
         if (inum == 0 || !is_dir(inum)) {
           goto notfound;
         }
       }
+
       break;
+
     case '\0':
       state = EOL;
+
       if (prev_state == NONE) {
         goto notfound;
       }
+
       if (prev_state == NAME) {
         inum = handle(buf, &buf_len, inum);
+
         if (inum == 0) {
           goto notfound;
         }
       }
+
       break;
+
     default:
       state = NAME;
+
       if (prev_state == NONE) {
         /* Relative */
         panic("EXT2: Relative paths aren't supported!");
       }
+
       if (buf_len > EXT2_FILENAME_LEN) {
         goto notfound;
       }
+
       buf[buf_len] = path[i];
       buf_len++;
     }
   }
+
   goto found;
 
 notfound:

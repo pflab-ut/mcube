@@ -113,7 +113,8 @@ int copy_process(unsigned long func, unsigned long arg);
  * @param[in]  func Pointer to function.
  * @param[in]  argument
  */
-void copy_arch_process(struct task_struct *p, unsigned long func, unsigned long arg);
+void copy_arch_process(struct task_struct *p, unsigned long func,
+                       unsigned long arg);
 void ret_from_fork(void);
 
 

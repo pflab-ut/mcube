@@ -35,6 +35,7 @@ static void vm_check_phys_memory(void)
     if (!vaddr_is_mapped((char *) vaddr)) {
       panic("_VM: Reporting supposedly mapped address 0x%lx as unmapped", vaddr);
     }
+
     /* Limit the output a bit .. */
     if (vaddr > (KERN_PAGE_OFFSET + 0x20000) && is_aligned(vaddr, 0x200000)) {
       printk("Success: e820-avail phys range [0x%lx - 0x%lx] mapped\n",
@@ -63,9 +64,11 @@ static void vm_check_kmap1(void)
     if (!vaddr_is_mapped(vaddr)) {
       panic("_VM: Reporting supposedly mapped address 0x%lx as unmapped", vaddr);
     }
+
     if (is_aligned(paddr, 0x200000)) {
       printk("Success: phys addrs [0x%lx - 0x%lx] mapped\n", paddr - 0x200000, paddr);
     }
+
     paddr++;
   }
 }
@@ -87,7 +90,8 @@ static void vm_check_kmap2(void)
 
     /* To let the test be effective, assure we're
      * mapping previously unmapped address */
-    assert(!vaddr_is_mapped((void *) round_up((uintptr_t) VIRTUAL(paddr), PAGE_SIZE_2MB)));
+    assert(!vaddr_is_mapped((void *) round_up((uintptr_t) VIRTUAL(paddr),
+                                              PAGE_SIZE_2MB)));
 
     vaddr = vm_kmap(paddr, len);
     assert(vaddr == VIRTUAL(paddr));
@@ -96,6 +100,7 @@ static void vm_check_kmap2(void)
       if (!vaddr_is_mapped((void *) vaddr)) {
         panic("_VM: Reporting supposedly mapped address 0x%lx as unmapped", vaddr);
       }
+
       vaddr++;
     }
 

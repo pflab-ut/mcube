@@ -33,6 +33,7 @@ struct thread_struct *compare_thread(struct thread_struct *th,
   uint64_t th_val, n_val;
   th_val = *(uint64_t *)((unsigned long)(th) + offset);
   n_val = *(uint64_t *)((unsigned long)(n) + offset);
+
   //    PDEBUG("first: th_val = %llu, n_val = %lu\n", th_val, n_val);
   if (th_val < n_val) {
     return th;
@@ -41,6 +42,7 @@ struct thread_struct *compare_thread(struct thread_struct *th,
       return th;
     }
   }
+
   return NULL;
 }
 
@@ -60,12 +62,14 @@ struct thread_struct *enqueue_thread(struct thread_struct *head,
     if (compare_thread(th, n, offset)) {
       break;
     }
+
     p = n;
   }
+
   if (th) {
     th->prev = p;
     th->next = n;
-    
+
     if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
       n->prev = th;
     }
@@ -76,6 +80,7 @@ struct thread_struct *enqueue_thread(struct thread_struct *head,
   } else {
     head = th;
   }
+
   return head;
 }
 
@@ -95,11 +100,14 @@ struct thread_struct *enqueue_deadline_thread(struct thread_struct *head,
     if (compare_thread(th, n, offset)) {
       break;
     }
+
     p = n;
   }
+
   if (th) {
     th->dprev = p;
     th->dnext = n;
+
     //  PDEBUG("p = %x n = %x\n", p, n);
     if (((th->state & (READY | RUNNING)) || n != &kernel_th[cpu]) && n) {
       n->dprev = th;
@@ -111,6 +119,7 @@ struct thread_struct *enqueue_deadline_thread(struct thread_struct *head,
   } else {
     head = th;
   }
+
   return head;
 }
 
@@ -120,9 +129,11 @@ void dequeue_rq(struct rt_runqueue *rq, struct thread_struct *th)
 }
 
 
-struct thread_struct *dequeue_thread(struct thread_struct *head, struct thread_struct *th)
+struct thread_struct *dequeue_thread(struct thread_struct *head,
+                                     struct thread_struct *th)
 {
   unsigned long cpu = get_cpu_id();
+
   if (head == th) {
     head = head->next;
   } else {
@@ -136,9 +147,11 @@ struct thread_struct *dequeue_thread(struct thread_struct *head, struct thread_s
   return head;
 }
 
-struct thread_struct *dequeue_deadline_thread(struct thread_struct *head, struct thread_struct *th)
+struct thread_struct *dequeue_deadline_thread(struct thread_struct *head,
+                                              struct thread_struct *th)
 {
   unsigned long cpu = get_cpu_id();
+
   if (head == th) {
     head = head->dnext;
   } else {
@@ -148,6 +161,7 @@ struct thread_struct *dequeue_deadline_thread(struct thread_struct *head, struct
   if (th->state & (READY | RUNNING) || th->dnext != &kernel_th[cpu]) {
     th->dnext->dprev = th->dprev;
   }
+
   return head;
 }
 

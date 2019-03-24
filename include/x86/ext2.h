@@ -110,18 +110,25 @@ static inline mode_t dir_entry_type_to_inode_mode(enum file_type type)
   switch (type) {
   case EXT2_FT_REG_FILE:
     return S_IFREG;
+
   case EXT2_FT_DIR:
     return S_IFDIR;
+
   case EXT2_FT_CHRDEV:
     return S_IFCHR;
+
   case EXT2_FT_BLKDEV:
     return S_IFBLK;
+
   case EXT2_FT_FIFO:
     return S_IFIFO;
+
   case EXT2_FT_SOCK:
     return S_IFSOCK;
+
   case EXT2_FT_SYMLINK:
     return S_IFLNK;
+
   default:
     assert(false);
   }
@@ -131,19 +138,26 @@ static inline enum file_type inode_mode_to_dir_entry_type(mode_t mode)
 {
   switch (mode & S_IFMT) {
   case S_IFREG:
-    return EXT2_FT_REG_FILE;
+        return EXT2_FT_REG_FILE;
+
   case S_IFDIR:
     return EXT2_FT_DIR;
+
   case S_IFCHR:
     return EXT2_FT_CHRDEV;
+
   case S_IFBLK:
     return EXT2_FT_BLKDEV;
+
   case S_IFIFO:
     return EXT2_FT_FIFO;
+
   case S_IFSOCK:
     return EXT2_FT_SOCK;
+
   case S_IFLNK:
     return EXT2_FT_SYMLINK;
+
   default:
     assert(false);
   }
@@ -447,8 +461,9 @@ void block_dealloc(uint block);
 struct inode *inode_alloc(enum file_type type);
 STATIC void inode_mark_delete(struct inode *inode);
 uint64_t block_alloc(void);
-bool dir_entry_valid(struct inode *, struct dir_entry *, uint64_t off, uint64_t len);
-int64_t find_dir_entry(struct inode *inode, const char *name,uint name_len,
+bool dir_entry_valid(struct inode *, struct dir_entry *, uint64_t off,
+                     uint64_t len);
+int64_t find_dir_entry(struct inode *inode, const char *name, uint name_len,
                        struct dir_entry **dentry, int64_t *offset);
 
 /*

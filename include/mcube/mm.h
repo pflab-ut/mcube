@@ -8,7 +8,7 @@
 
 
 /* 4KB */
-#define PAGE_SHIFT    12 
+#define PAGE_SHIFT    12
 #define PAGE_SIZE (0x1 << PAGE_SHIFT)
 
 /* 2MB */
