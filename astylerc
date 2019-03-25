@@ -1,17 +1,130 @@
+#
+# Astyle for Mcube Kernel
+#
+# Hiroyuki Chishiro
+#
+
+# "One True Brace Style" uses linux braces and adds braces to unbraced
+# one line conditional statements. Opening braces are broken from
+# namespaces, classes, and function definitions. The braces are attached
+# to everything else, including arrays, structs, enums, and statements
+# within a function.
 style=1tbs
+
+# Indent using # spaces per indent (e.g. -s3 --indent=spaces=3). #
+# must be between 2 and 20. Not specifying # will result in a default of
+# 4 spaces per indent.
 indent=spaces=2
+
+# Pad empty lines around header blocks (e.g. 'if', 'for', 'while'...).
 break-blocks
+
+# Insert space padding around operators. This will also pad
+# commas. Any end of line comments will remain in the original column,
+# if possible. Note that there is no option to unpad. Once padded, they
+# stay padded.
 pad-oper
+
+# Insert space padding after commas. This is not needed if pad-oper is
+# used. Any end of line comments will remain in the original column, if
+# possible. Note that there is no option to unpad. Once padded, they
+# stay padded.
 pad-comma
+
+# Insert space padding between a header (e.g. 'if', 'for', 'while'...)
+# and the following paren. Any end of line comments will remain in the
+# original column, if possible. This can be used with unpad-paren to
+# remove unwanted spaces.
 pad-header
+
+# Remove extra space padding around parens on the inside and
+# outside. Any end of line comments will remain in the original column,
+# if possible. This option can be used in combination with the paren
+# padding options pad?paren, pad?paren?out, pad?paren?in, and pad?header
+# above. Only padding that has not been requested by other options will
+# be removed.
+
+# For example, if a source has parens padded on both the inside and
+# outside, and you want inside only. You need to use unpad-paren to
+# remove the outside padding, and pad?paren?in to retain the inside
+# padding. Using only pad?paren?in> would not remove the outside
+# padding.
 unpad-paren
+
+# Attach a pointer or reference operator (*, &, or ^) to either the
+# variable type (left) or variable name (right), or place it between the
+# type and name (middle). The spacing between the type and name will be
+# preserved, if possible. This option is for C/C++, C++/CLI, and C#
+# files. To format references separately, use the following
+# align-reference option.
 align-pointer=name
+
+# This option will align references separate from pointers. Pointers are
+# not changed by this option. If pointers and references are to be
+# aligned the same, use the previous align-pointer option. The option
+# align-reference=none will not change the reference alignment. The
+# other options are the same as for align-pointer. This option is for
+# C/C++, C++/CLI, and C# files.
 align-reference=name
+
+# Break one line headers (e.g. 'if', 'while', 'else', ...) from a
+# statement residing on the same line. If the statement is enclosed in
+# braces, the braces will be formatted according to the requested
+# brace style.
+# A multi-statement line will NOT be broken if keep-one-line-statements
+# is requested. One line blocks will NOT be broken if
+# keep-one-line-blocks is requested and the header is enclosed in the
+# block.
 break-one-line-headers
+
+# Add braces to unbraced one line conditional statements (e.g. 'if',
+# 'for', 'while'...). The statement must be on a single line. The
+# braces will be added according to the requested brace style. If no
+# style is requested the braces will be attached.
+# Braces will NOT be added to a multi-statement line if
+# keep-one-line-statements is requested. Braces will NOT be added to a
+# one line block if keep-one-line-blocks is requested. If used with
+# --add-one-line-braces, the result will be one line braces.
 add-braces
+
+# Indent C++ comments beginning in column one. By default C++ comments
+# beginning in column one are assumed to be commented?out code and not
+# indented. This option will allow the comments to be indented with the
+# code.
 indent-col1-comments
+
+# Attach the return type to the function name. The two options are for
+# the function definitions (-xf), and the function declarations or
+# signatures (-xh). They are intended to undo the --break-return-type
+# options. If used with --break-return-type, the result will be to
+# break the return type. This option has no effect on Objective-C functions.
 attach-return-type
 attach-return-type-decl
+
+# The option max-code-length will break a line if the code exceeds #
+# characters. The valid values are 50 thru 200. Lines without logical
+# conditionals will break on a logical conditional (||, &&, ...),
+# comma, paren, semicolon, or space.
+# Some code will not be broken, such as comments, quotes, and arrays. If
+# used with keep?one?line?blocks or add-one-line-braces the blocks will
+# NOT be broken. If used with keep?one?line?statements the statements
+# will be broken at a semicolon if the line goes over the maximum
+# length. If there is no available break point within the max code
+# length, the line will be broken at the first available break point
+# after the max code length.
+# By default logical conditionals will be placed first in the new
+# line. The option break-after-logical will cause the logical
+# conditionals to be placed last on the previous line. This option has
+# no effect without max-code-length.
 max-code-length=80
+break-after-logical
+
 max-continuation-indent=80
+
+# Indent a C type, C#, or Java file. C type files are C, C++, C++/CLI,
+# and Objective-C. The option is usually set from the file extension
+# for each file. You can override the setting with this entry. It will
+# be used for all files, regardless of the file extension. It allows
+# the formatter to identify language specific syntax such as C++
+# classes, templates, and keywords.
 mode=c

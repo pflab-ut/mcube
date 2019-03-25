@@ -1,7 +1,7 @@
 #
-#  Mcube Kernel
-# 
-#  Hiroyuki Chishiro
+# Mcube Kernel
+#
+# Hiroyuki Chishiro
 #
 
 .SUFFIXES:

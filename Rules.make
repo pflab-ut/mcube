@@ -168,7 +168,7 @@ DUMPARG = eb
 RM = rm -f
 FIND = find
 CAT = cat
-CLEANFILES = *.o *~ *.o.* *.log *.pyc *.tmp __pycache__
+CLEANFILES = *.o *~ *.o.* *.log *.pyc *.tmp *.orig __pycache__
 
 
 DUMP = $(TOP_DIR)/scripts/misc/dump.py
