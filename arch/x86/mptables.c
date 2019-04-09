@@ -118,7 +118,7 @@ static struct mpf_struct *get_mpf(void)
   uintptr_t ebda;
   struct mpf_struct *mpf;
 
-  ebda = (*(uint16_t *)VIRTUAL(0x40e)) << 4;
+  ebda = (*(uint16_t *) VIRTUAL(0x40e)) << 4;
 
   if ((mpf = search_for_mpf(VIRTUAL(ebda), 0x400)) != NULL) {
     return mpf;
