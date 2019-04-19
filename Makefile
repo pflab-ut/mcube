@@ -179,7 +179,8 @@ else ifeq ($(ARCH_NAME), x86)
 	-device ahci,id=ahci \
 	-device ide-drive,drive=disk,bus=ahci.0 \
 	-boot a -display curses
-	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 4
+#	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 4
+	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 1
 #	qemu-system-x86_64 build/mcube-hd.img -curses -smp 4 -nographic
 #	qemu-system-x86_64 -m 1024 -smp cores=2,threads=1,sockets=1 \
 	-drive id=disk,format=raw,file=./build/mcube.img,if=none \

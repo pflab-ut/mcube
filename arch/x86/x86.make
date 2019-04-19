@@ -94,6 +94,12 @@ LDFLAGS += --warn-common
 # 'cpp' pre-processed from the *.ld source
 PROCESSED_LD_SCRIPT = kern/kernel.ldp
 
+BOOTSECT_ASMS =		\
+ $(TOP_DIR)/arch/x86/bootsect.S
+
+BOOTSECT_TARGET = $(TOP_DIR)/build/bootsect
+BOOTSECT_BIN = $(BOOTSECT_TARGET).bin
+
 
 #
 # Object files listings
@@ -132,56 +138,10 @@ SRCS +=		\
  $(TOP_DIR)/arch/x86/kthread.c	\
  $(TOP_DIR)/arch/x86/percpu.c	\
  $(TOP_DIR)/arch/x86/ramdisk.c	\
- $(TOP_DIR)/arch/x86/main.c
-
-BOOTSECT_ASMS =		\
- $(TOP_DIR)/arch/x86/bootsect.S
-
-BOOTSECT_TARGET = $(TOP_DIR)/build/bootsect
-BOOTSECT_BIN = $(BOOTSECT_TARGET).bin
-
-
-
-#SRCS += \
-	$(TOP_DIR)/arch/x86/stdio.c \
-	$(TOP_DIR)/arch/x86/init.c \
-	$(TOP_DIR)/arch/x86/syscall.c \
 	$(TOP_DIR)/arch/x86/thread.c \
-	$(TOP_DIR)/arch/x86/timer.c \
-	$(TOP_DIR)/arch/x86/cpu.c \
-	$(TOP_DIR)/arch/x86/irq.c \
-
-
-#SRCS += \
- $(TOP_DIR)/arch/x86/mm.c \
- $(TOP_DIR)/arch/x86/acpi.c \
- $(TOP_DIR)/arch/x86/apic.c \
- $(TOP_DIR)/arch/x86/dump.c \
- $(TOP_DIR)/arch/x86/exception.c \
- $(TOP_DIR)/arch/x86/syscall.c \
- $(TOP_DIR)/arch/x86/keyboard.c \
- $(TOP_DIR)/arch/x86/page.c \
- $(TOP_DIR)/arch/x86/cache.c \
- $(TOP_DIR)/arch/x86/cpu.c \
- $(TOP_DIR)/arch/x86/heap.c \
- $(TOP_DIR)/arch/x86/init.c \
- $(TOP_DIR)/arch/x86/irq.c \
- $(TOP_DIR)/arch/x86/thread.c \
- $(TOP_DIR)/arch/x86/pmap.c \
- $(TOP_DIR)/arch/x86/mmu.c \
- $(TOP_DIR)/arch/x86/stdio.c \
- $(TOP_DIR)/arch/x86/shell.c \
- $(TOP_DIR)/arch/x86/timer.c \
-	$(TOP_DIR)/arch/x86/tty.c \
- $(TOP_DIR)/arch/x86/hpet.c \
- $(TOP_DIR)/arch/x86/lapic.c \
- $(TOP_DIR)/arch/x86/pit.c \
-
-SRCS += \
-	$(TOP_DIR)/arch/x86/init.c \
 	$(TOP_DIR)/arch/x86/syscall.c \
-	$(TOP_DIR)/arch/x86/thread.c \
-	$(TOP_DIR)/arch/x86/timer.c \
+	$(TOP_DIR)/arch/x86/init.c
+
 
 
 #SRCS += \

@@ -101,7 +101,7 @@ enum {
 /*
  * Increase the counter for each periodic PIT tick.
  */
-volatile int pit_ticks_count;
+volatile int pit_ticks_count = 0;
 
 void __pit_periodic_handler(void)
 {
@@ -142,19 +142,21 @@ static inline void timer2_stop(void)
  *
  * Countdown begins once counter is set and GATE-x is up.
  */
-static void pit_set_counter(int ms, int counter_reg)
+static void pit_set_counter(uint32_t us, int counter_reg)
 {
   uint32_t counter;
   uint8_t counter_low, counter_high;
 
   /* counter = ticks per second * seconds to delay
-   *         = PIT_CLOCK_RATE * (ms / 1000)
-   *         = PIT_CLOCK_RATE / (1000 / ms)
+   *         = PIT_CLOCK_RATE * (us / (1000 * 1000))
+   *         = PIT_CLOCK_RATE / ((1000 * 1000) / us)
    * We use last form to avoid float arithmetic */
-  assert(ms > 0);
-  assert((1000 / ms) > 0);
-  counter = PIT_CLOCK_RATE / (1000 / ms);
-
+  assert(us > 0);
+  assert(((1000 * 1000) / us) > 0);
+  //  printk("us = %d\n", us);
+  counter = PIT_CLOCK_RATE / ((1000 * 1000) / us);
+  //  printk("counter = %u\n", counter);
+  
   assert(counter <= UINT16_MAX);
   counter_low = counter & 0xff;
   counter_high = counter >> 8;
@@ -169,9 +171,9 @@ static void pit_set_counter(int ms, int counter_reg)
 static bool timer0_monotonic;
 
 /*
- * Delay/busy-loop for @ms milliseconds.
+ * Delay/busy-loop for @us milliseconds.
  */
-void pit_mdelay(int ms)
+void pit_mdelay(uint32_t us)
 {
   union pit_cmd cmd = { .raw = 0 };
 
@@ -184,7 +186,7 @@ void pit_mdelay(int ms)
   cmd.timer = 2;
   outb(cmd.raw, PIT_CONTROL);
 
-  pit_set_counter(ms, PIT_COUNTER2);
+  pit_set_counter(us, PIT_COUNTER2);
 
   /* GATE-2 up */
   timer2_start();
@@ -197,7 +199,7 @@ void pit_mdelay(int ms)
 /*
  * Trigger PIT IRQ pin (OUT-0) after given timeout
  */
-void pit_oneshot(int ms)
+void pit_oneshot(uint32_t us)
 {
   union pit_cmd cmd = { .raw = 0 };
 
@@ -214,16 +216,17 @@ void pit_oneshot(int ms)
   cmd.timer = 0;
   outb(cmd.raw, PIT_CONTROL);
 
-  pit_set_counter(ms, PIT_COUNTER0);
+  pit_set_counter(us, PIT_COUNTER0);
 }
 
-/*
- * Let the PIT fire at monotonic rate.
- */
-void pit_monotonic(int ms)
+void init_timer(unsigned long tick_us)
+{
+  pit_set_counter(tick_us, PIT_COUNTER0);
+}
+
+void start_timer(__unused unsigned int ch)
 {
   union pit_cmd cmd = { .raw = 0 };
-
   /* No control over GATE-0: it's always positive */
 
   timer0_monotonic = true;
@@ -233,7 +236,16 @@ void pit_monotonic(int ms)
   cmd.rw = RW_16bit;
   cmd.timer = 0;
   outb(cmd.raw, PIT_CONTROL);
-
-  pit_set_counter(ms, PIT_COUNTER0);
+  //  outb(inb(PIC0_IMR) & unmask_irq(PIT_IRQ), PIC0_IMR);
 }
 
+void stop_timer(__unused unsigned int ch)
+{
+  union pit_cmd cmd = { .raw = 0 };
+
+  cmd.bcd = 0;
+  cmd.mode = MODE_0;
+  cmd.rw = RW_16bit;
+  cmd.timer = 0;
+  outb(cmd.raw, PIT_CONTROL);
+}

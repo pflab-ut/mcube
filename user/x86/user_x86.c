@@ -67,11 +67,16 @@ int ap_main(void)
 
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
+  printk("user_arch_main()\n");
+  //  start_timer(0);
   //  user_thread_main();
+  //  test_pit();
+  for (;;)
+    ;
   //  user_level_main();
-  test_apic();
-  test_page_alloc();
-  test_percpu();
+  //  test_apic();
+  //  test_page_alloc();
+  //  test_percpu();
 
   return 0;
 }

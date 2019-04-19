@@ -10,9 +10,9 @@
 
 extern volatile int pit_ticks_count;
 
-void pit_mdelay(int ms);
-void pit_oneshot(int ms);
-void pit_monotonic(int ms);
+void pit_mdelay(uint32_t us);
+void pit_oneshot(uint32_t us);
+void pit_monotonic(uint32_t us);
 
 void __pit_periodic_handler(void);
 

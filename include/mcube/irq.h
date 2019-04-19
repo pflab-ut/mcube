@@ -28,6 +28,7 @@ void wait_until_next_interrupt(void);
 void init_irq(void);
 void exit_irq(void);
 
+
 struct full_regs;
 
 asmlinkage int do_irq(struct full_regs *regs);

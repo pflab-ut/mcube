@@ -90,7 +90,11 @@ static void pit_test_periodic_irq(void)
   /* Testing showed that big delay values catches
    * more periodic timer accuracy errors .. */
   ms = 50;
-  pit_monotonic(ms);
+
+  //  pit_monotonic(ms);
+  init_timer(ms);
+  start_timer(0);
+  
 
   /* After each delay, store ticks triggered so far */
   local_irq_enable();

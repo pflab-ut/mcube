@@ -155,7 +155,7 @@ static int start_secondary_cpu(struct percpu *cpu,
     goto fail;
   }
 
-  pit_mdelay(10);
+  pit_mdelay(10 * 1000);
 
   for (int j = 1; j <= MAX_SIPI_RETRY; j++) {
     send_startup_ipi(apic_id, SMPBOOT_START);
@@ -182,7 +182,7 @@ static int start_secondary_cpu(struct percpu *cpu,
 
   while (timeout-- && count == nr_alive_cpus) {
     barrier();
-    pit_mdelay(1);
+    pit_mdelay(1 * 1000);
   }
 
   if (timeout == -1) {

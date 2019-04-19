@@ -263,7 +263,14 @@ struct proc *sched_tick(void)
 {
   struct proc *new_proc;
   int new_prio;
-
+  //  printk("pit_ticks_count = %lu\n", pit_ticks_count);
+  //  printk("PS->sys_ticks = %lu\n", PS->sys_ticks);
+  //  printk("((1 * 1000 * 1000) / TICK_USEC) = %lu\n", ((1 * 1000 * 1000) / TICK_USEC));
+  if (TICK_USEC <= 1 * 1000 * 1000 * 1000
+      && PS->sys_ticks % ((1 * 1000 * 1000) / TICK_USEC) == 0) {
+    printk("One second has elapsed...\n");
+    //    stop_timer(0);
+  }
   PS->sys_ticks++;
   current->runtime++;
 
@@ -383,7 +390,9 @@ void sched_init(void)
    * method sounds a bit risky: if a single edge trigger got
    * lost, the entire kernel will halt.
    */
-  pit_monotonic(1000 / HZ);
+  //  pit_monotonic((1000 * 1000) / HZ);
+  init_timer(TICK_USEC);
+  start_timer(0);
 }
 
 
