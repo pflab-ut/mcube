@@ -135,7 +135,11 @@ void dentry_dump(struct dir_entry *dentry)
 
   assert(dentry->filename_len != 0);
   assert(dentry->filename_len <= EXT2_FILENAME_LEN);
-  name = kmalloc(dentry->filename_len + 1);
+
+  if ((name = kmalloc(dentry->filename_len + 1)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", dentry->filename_len + 1);
+  }
+
   memcpy(name, dentry->filename, dentry->filename_len);
   name[dentry->filename_len] = '\0';
 
@@ -255,10 +259,16 @@ __unused static void list_files(uint64_t dir_inum)
   struct buffer_dumper *bd = (void *) percpu_get(dumper);
 
   dir = inode_get(dir_inum);
-  dentry = kmalloc(sizeof(*dentry));
-  name = kmalloc(EXT2_FILENAME_LEN + 1);
 
-  for (offset = 0;  ; offset += dentry->record_len) {
+  if ((dentry = kmalloc(sizeof(*dentry))) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(*dentry));
+  }
+
+  if ((name = kmalloc(EXT2_FILENAME_LEN + 1)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
+  }
+
+  for (offset = 0; ; offset += dentry->record_len) {
     len = file_read(dir, (char *)dentry, offset, sizeof(*dentry));
 
     if (len == 0) {
@@ -340,7 +350,12 @@ __unused static void test_path_conversion(void)
   }
 
   /* Path file name length tests */
-  char *path = kmalloc(EXT2_FILENAME_LEN + 4);
+  char *path;
+
+  if ((path = kmalloc(EXT2_FILENAME_LEN + 4)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 4);
+  }
+
   path[0] = '/';
   char *p = &path[1];
 
@@ -380,7 +395,9 @@ __unused static void test_file_reads(void)
   assert(bd != NULL);
   print_uart("c%d t%lu fr start\n", percpu_get(apic_id), current->pid);
 
-  buf = kmalloc(BUF_LEN);
+  if ((buf = kmalloc(BUF_LEN)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", BUF_LEN);
+  }
 
   for (uint i = 1; i <= isb.sb->inodes_count; i++) {
     bd->pr("Trying inode #%u: ", i);
@@ -426,7 +443,10 @@ __unused static void test_block_reads(void)
   struct buffer_dumper *bd;
 
   bd = (void *)percpu_get(dumper);
-  buf = kmalloc(BUF_LEN);
+
+  if ((buf = kmalloc(BUF_LEN)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", BUF_LEN);
+  }
 
   print_uart("c%d t%lu br start\n", percpu_get(apic_id), current->pid);
 
@@ -469,8 +489,14 @@ __unused static void test_file_existence(void)
   bd = (void *)percpu_get(dumper);
 
   print_uart("c%d t%ld ex start\n", percpu_get(apic_id), current->pid);
-  parent = kmalloc(4096);
-  child = kmalloc(EXT2_FILENAME_LEN + 1);
+
+  if ((parent = kmalloc(4096)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 4096);
+  }
+
+  if ((child = kmalloc(EXT2_FILENAME_LEN + 1)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
+  }
 
   for (uint j = 0; ext2_files_list[j].path != NULL; j++) {
     file = &ext2_files_list[j];
@@ -664,8 +690,14 @@ static void test_ext2_up(void)
   __unused int64_t ilen, inum, count, parent_inum;
   __unused char *buf, *buf2, *parent, *child;
 
-  buf = kmalloc(BUF_LEN);
-  buf2 = kmalloc(BUF_LEN);
+  if ((buf = kmalloc(BUF_LEN)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", BUF_LEN);
+  }
+
+  if ((buf2 = kmalloc(BUF_LEN)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", BUF_LEN);
+  }
+
   sb = isb.sb;
 
   ext2_debug_init(&null_null_dumper);
@@ -680,8 +712,12 @@ static void test_ext2_up(void)
   test_file_reads();
 
 #if TEST_DIR_ENTRIES
+
   /* Most of these fields are invalid, on purpose */
-  dentry = kmalloc(sizeof(*dentry));
+  if ((dentry = kmalloc(sizeof(*dentry))) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(*dentry));
+  }
+
   dentry->inode_num = 0xffffffff;
   dentry->record_len = 3;
   dentry->filename_len = 5;
@@ -1020,8 +1056,14 @@ out1:
 #endif
 
 #if TEST_FILE_DELETION
-  parent = kmalloc(4096);
-  child = kmalloc(EXT2_FILENAME_LEN + 1);
+
+  if ((parent = kmalloc(4096)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 4096);
+  }
+
+  if ((child = kmalloc(EXT2_FILENAME_LEN + 1)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
+  }
 
   for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
     file = &ext2_files_list[i];

@@ -44,7 +44,10 @@ static void test_hash_op(int hash_size)
 
   count = 128;
   hash = hash_new(hash_size);
-  array = kmalloc(count * sizeof(*array));
+
+  if ((array = kmalloc(count * sizeof(*array))) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(*array));
+  }
 
   for (int i = 0; i < count; i++) {
     array[i].num = i;

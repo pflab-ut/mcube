@@ -263,6 +263,7 @@ struct proc *sched_tick(void)
 {
   struct proc *new_proc;
   int new_prio;
+
   //  printk("pit_ticks_count = %lu\n", pit_ticks_count);
   //  printk("PS->sys_ticks = %lu\n", PS->sys_ticks);
   //  printk("((1 * 1000 * 1000) / TICK_USEC) = %lu\n", ((1 * 1000 * 1000) / TICK_USEC));
@@ -271,6 +272,7 @@ struct proc *sched_tick(void)
     printk("One second has elapsed...\n");
     //    stop_timer(0);
   }
+
   PS->sys_ticks++;
   current->runtime++;
 

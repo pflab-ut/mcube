@@ -22,7 +22,10 @@ struct hash *hash_new(uint len)
 {
   struct hash *hash;
 
-  hash = kmalloc(sizeof(*hash));
+  if ((hash = kmalloc(sizeof(*hash))) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(*hash));
+  }
+
   hash->nodes_array = kmalloc(len * sizeof(*hash->nodes_array));
 
   for (uint i = 0; i < len; i++) {

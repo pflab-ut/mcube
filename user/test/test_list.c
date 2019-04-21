@@ -112,12 +112,14 @@ static void test_several_elements(int count, int type)
   assert(list_empty(&head));
 
   if (!(t = kmalloc(sizeof(struct test *) * count))) {
-    printk("Error: cannot allocate memory %lu\n", sizeof(struct test *) * count);
-    return;
+    panic("Error: cannot allocate memory %lu\n", sizeof(struct test *) * count);
   }
 
   for (int i = 0; i < count; i++) {
-    t[i] = kmalloc(sizeof(struct test));
+    if ((t[i] = kmalloc(sizeof(struct test))) == NULL) {
+      panic("Error: cannot allocate memory %lu\n", sizeof(struct test));
+    }
+
     t[i]->x = i;
 
     switch (type) {

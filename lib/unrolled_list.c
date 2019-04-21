@@ -33,7 +33,10 @@ static struct __node *__unode_new(uint node_num, uint array_len)
 {
   struct __node *node;
 
-  node = kmalloc(sizeof(struct __node));
+  if ((node = kmalloc(sizeof(struct __node))) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(struct __node));
+  }
+
   node->array = kmalloc(array_len * sizeof(void *));
   memset(node->array, 0, array_len * sizeof(void *));
   node->array_len = array_len;

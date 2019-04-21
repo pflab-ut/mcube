@@ -134,7 +134,7 @@ void exit_arch(void)
  */
 __noreturn void kernel_start(void)
 {
-  main(0, NULL);  
+  main(0, NULL);
   halt();
 }
 

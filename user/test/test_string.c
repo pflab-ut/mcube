@@ -71,7 +71,10 @@ bool test_string(void)
   }
 
   i = 1;
-  str = kmalloc(1024);
+
+  if ((str = kmalloc(1024)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 1024);
+  }
 
   for (char ch = 'A'; ch <= 'Z'; ch++, i++) {
     str[i - 1] = ch;

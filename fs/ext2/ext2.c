@@ -148,7 +148,10 @@ struct inode *inode_get(uint64_t inum)
   inode = hash_find(isb.inodes_hash, inum);
 
   if (inode == NULL) {
-    inode = kmalloc(sizeof(*inode));
+    if ((inode = kmalloc(sizeof(*inode))) == NULL) {
+      panic("Error: cannot allocate memory %lu\n", sizeof(*inode));
+    }
+
     inode_init(inode, inum);
     memcpy(dino_off(inode), inode_diskimage(inum), dino_len());
     hash_insert(isb.inodes_hash, inode);
@@ -285,7 +288,10 @@ STATIC struct inode *inode_alloc(enum file_type type)
   uint64_t inum;
 
   bgd = isb.bgd;
-  buf = kmalloc(isb.block_size);
+
+  if ((buf = kmalloc(isb.block_size)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  }
 
   for (uint i = 0; i < isb.blockgroups_count; i++, bgd++) {
     spin_lock(&isb.inode_allocation_lock);
@@ -370,7 +376,10 @@ static void __inode_dealloc(struct inode *inode)
   group  = (inode->inum - 1) / isb.sb->inodes_per_group;
   groupi = (inode->inum - 1) % isb.sb->inodes_per_group;
   bgd = &isb.bgd[group];
-  buf = kmalloc(isb.block_size);
+
+  if ((buf = kmalloc(isb.block_size)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  }
 
   spin_lock(&isb.inode_allocation_lock);
   isb.sb->free_inodes_count++;
@@ -404,7 +413,10 @@ STATIC uint64_t block_alloc(void)
 
   sb = isb.sb;
   bgd = isb.bgd;
-  buf = kmalloc(isb.block_size);
+
+  if ((buf = kmalloc(isb.block_size)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  }
 
   for (uint i = 0; i < isb.blockgroups_count; i++, bgd++) {
     spin_lock(&isb.block_allocation_lock);
@@ -465,7 +477,10 @@ STATIC void block_dealloc(uint block)
   group  = (block - sb->first_data_block) / sb->blocks_per_group;
   groupi = (block - sb->first_data_block) % sb->blocks_per_group;
   bgd = &isb.bgd[group];
-  buf = kmalloc(isb.block_size);
+
+  if ((buf = kmalloc(isb.block_size)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  }
 
   spin_lock(&isb.block_allocation_lock);
   sb->free_blocks_count++;
@@ -718,7 +733,10 @@ STATIC int64_t find_dir_entry(struct inode *dir, const char *name,
 
   assert(S_ISDIR(dir->mode));
   dentry_len = sizeof(struct dir_entry);
-  dentry = *entry = kmalloc(dentry_len);
+
+  if ((dentry = *entry = kmalloc(dentry_len)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", dentry_len);
+  }
 
   if (name_len == 0 || name_len > EXT2_FILENAME_LEN) {
     return -ENOENT;
@@ -878,7 +896,10 @@ int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
    * empty, with no entries at all!
    */
 
-  lastentry = kmalloc(sizeof(*lastentry));
+  if ((lastentry = kmalloc(sizeof(*lastentry))) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", lastentry);
+  }
+
   memset(lastentry, 0, sizeof(*lastentry));
 
   for (offset = 0;  ; offset += lastentry->record_len) {
@@ -953,9 +974,16 @@ no_lastentry:
    * dir entries traversal from parsing uninitialized data.
    */
 
-  zeroes = kmalloc(isb.block_size);
+  if ((zeroes = kmalloc(isb.block_size)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  }
+
   memset(zeroes, 0, isb.block_size);
-  newentry = kmalloc(sizeof(*newentry));
+
+  if ((newentry = kmalloc(sizeof(*newentry))) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(*newentry));
+  }
+
   newentry->inode_num = entry_ino->inum;
   newentry->record_len = isb.block_size - blk_offset;
   newentry->filename_len = filename_len;
@@ -1081,7 +1109,10 @@ static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
     return;
   }
 
-  buf = kmalloc(isb.block_size);
+  if ((buf = kmalloc(isb.block_size)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  }
+
   entries_count = isb.block_size / sizeof(*entry);
   block_read(block, buf, 0, isb.block_size);
 

@@ -45,7 +45,10 @@ static void _disrupt(int size)
 {
   char *p;
 
-  p = kmalloc(size);
+  if ((p = kmalloc(size)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", size);
+  }
+
   memset(p, 0xff, size);
   kfree(p);
 }
@@ -63,7 +66,10 @@ static void _test_allocs(int count, int rounded)
   for (i = 0; i < count; i++) {
     _disrupt(size);
 
-    p[i].p = kmalloc(size);
+    if ((p[i].p = kmalloc(size)) == NULL) {
+      panic("Error: cannot allocate memory %lu\n", size);
+    }
+
     assert(is_aligned((uintptr_t)p[i].p, 16));
     p[i].size = size;
 
@@ -92,7 +98,11 @@ static void _test_allocs(int count, int rounded)
     kfree(p[i].p);
 
     size = ((size / 2) > 1) ? size / 2 : MINALLOC_SZ;
-    p[i].p = kmalloc(size);
+
+    if ((p[i].p = kmalloc(size)) == NULL) {
+      panic("Error: cannot allocate memory %lu\n", size);
+    }
+
     assert(is_aligned((uintptr_t)p[i].p, 16));
     p[i].size = size;
     (rounded) ? memset32(p[i].p, i, size) : memset(p[i].p, i, size);
@@ -157,28 +167,53 @@ bool test_kmalloc(void)
 
 bool test_kmalloc(void)
 {
+  void *a, *b, *c, *d, *e, *f, *g, *h;
   printk("test_kmalloc()\n");
-  void *a = kmalloc(8);
+
+  if ((a = kmalloc(8)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 8);
+  }
+
   printk("a = %lu size: 8\n", (unsigned long) a);
   kfree(a);
-  void *b = kmalloc(128);
+
+  if ((b = kmalloc(128)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 1028);
+  }
+
   printk("b = %lu size: 128\n", (unsigned long) b);
-  void *c = kmalloc(8);
+
+  if ((c = kmalloc(8)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 8);
+  }
+
   printk("c = %lu size: 8\n", (unsigned long) c);
 
   printk("\nfreeing b \n");
   kfree(b);
 
-  void *d = kmalloc(8);
+  if ((d = kmalloc(8)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 8);
+  }
+
   printk("d = %lu size: 8\n", (unsigned long) d);
 
-  void *e = kmalloc(16);
+  if ((e = kmalloc(16)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 16);
+  }
+
   printk("e = %lu size: 16\n", (unsigned long) e);
 
-  void *f = kmalloc(8);
+  if ((f = kmalloc(8)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 8);
+  }
+
   printk("f = %lu size: 8\n", (unsigned long) f);
 
-  void *g = kmalloc(8);
+  if ((g = kmalloc(8)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 8);
+  }
+
   printk("g = %lu size: 8\n", (unsigned long) g);
 
   printk("\nfreeing d and f\n");
@@ -188,7 +223,10 @@ bool test_kmalloc(void)
   printk("\nfreeing e\n");
   kfree(e);
 
-  void *h = kmalloc(128);
+  if ((h = kmalloc(128)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", 128);
+  }
+
   printk("h = %lu size: 128\n", (unsigned long) h);
   printk("\n");
 

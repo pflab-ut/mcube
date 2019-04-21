@@ -156,7 +156,7 @@ static void pit_set_counter(uint64_t us, int counter_reg)
   //  printk("us = %d\n", us);
   counter = PIT_CLOCK_RATE / ((1000 * 1000) / us);
   //  printk("counter = %u\n", counter);
-  
+
   assert(counter <= UINT16_MAX);
   counter_low = counter & 0xff;
   counter_high = counter >> 8;

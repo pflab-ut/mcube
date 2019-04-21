@@ -22,7 +22,10 @@ bool test_bitmap(void)
 
   buflen_bytes = 4096;
   buflen_bits = buflen_bytes * 8;
-  buf = kmalloc(buflen_bytes);
+
+  if ((buf = kmalloc(buflen_bytes)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", buflen_bytes);
+  }
 
   /* An all-zeroes buffer */
   memset(buf, 0, buflen_bytes);

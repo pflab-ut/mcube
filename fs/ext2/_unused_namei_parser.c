@@ -51,7 +51,10 @@ uint64_t name_i(const char *path)
   state = NONE;
   buf_len = 0;
   inum = 0;
-  buf = kmalloc(EXT2_FILENAME_LEN + 2);
+
+  if ((buf = kmalloc(EXT2_FILENAME_LEN + 2)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 2);
+  }
 
   for (int i = 0; i <= strlen(path); i++) {
     prev_state = state;

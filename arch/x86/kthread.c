@@ -32,12 +32,20 @@ void kthread_create(void (* /* __noreturn */ func)(void))
   struct proc *proc;
   struct irq_ctx *irq_ctx;
   char *stack;
+  char *stack_start;
 
-  proc = kmalloc(sizeof(*proc));
+  if ((proc = kmalloc(sizeof(*proc))) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(*proc));
+  }
+
   proc_init(proc);
 
   /* New thread stack, moving down */
-  stack = (char *) kmalloc(STACK_SIZE) + STACK_SIZE;
+  if ((stack_start = (char *) kmalloc(STACK_SIZE)) == NULL) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(STACK_SIZE));
+  }
+
+  stack = stack_start + STACK_SIZE;
 
   /* Reserve space for our IRQ stack protocol */
   irq_ctx = (struct irq_ctx *)(stack - sizeof(*irq_ctx));
