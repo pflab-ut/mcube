@@ -142,7 +142,7 @@ static inline void timer2_stop(void)
  *
  * Countdown begins once counter is set and GATE-x is up.
  */
-static void pit_set_counter(uint32_t us, int counter_reg)
+static void pit_set_counter(uint64_t us, int counter_reg)
 {
   uint32_t counter;
   uint8_t counter_low, counter_high;
@@ -171,9 +171,9 @@ static void pit_set_counter(uint32_t us, int counter_reg)
 static bool timer0_monotonic;
 
 /*
- * Delay/busy-loop for @us milliseconds.
+ * Delay/busy-loop for @us microseconds.
  */
-void pit_mdelay(uint32_t us)
+void pit_udelay(uint64_t us)
 {
   union pit_cmd cmd = { .raw = 0 };
 
@@ -199,7 +199,7 @@ void pit_mdelay(uint32_t us)
 /*
  * Trigger PIT IRQ pin (OUT-0) after given timeout
  */
-void pit_oneshot(uint32_t us)
+void pit_oneshot(uint64_t us)
 {
   union pit_cmd cmd = { .raw = 0 };
 

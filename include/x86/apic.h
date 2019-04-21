@@ -322,8 +322,7 @@ void apic_local_regs_init(void);
 uint8_t apic_bootstrap_id(void);
 
 void apic_udelay(uint64_t us);
-void apic_mdelay(int ms);
-void apic_monotonic(int ms, uint8_t vector);
+void apic_monotonic(uint64_t ms, uint8_t vector);
 
 void apic_send_ipi(int dst_id, int del_mode, int vector);
 void apic_broadcast_ipi(int del_mode, int vector);

@@ -17,7 +17,7 @@
 static void apic_5secs_delay(void)
 {
   for (int i = 0; i < 500; i++) {
-    apic_mdelay(10);
+    apic_udelay(10 * 1000);
   }
 }
 
@@ -35,7 +35,7 @@ static void apic_test_delay(void)
   printk("Note: Delay interval started \n");
 
   for (int i = 0; i < 1000; i++) {
-    apic_mdelay(10);
+    apic_udelay(10 * 1000);
   }
 
   printk("Note: Delay end \n\n");
@@ -57,7 +57,7 @@ static void apic_test_delay(void)
   printk("Note: Delay interval started \n");
 
   for (int i = 0; i < 5000; i++) {
-    apic_mdelay(1);
+    apic_udelay(1 * 1000);
   }
 
   printk("Note: Delay end \n\n");
@@ -68,7 +68,7 @@ static void apic_test_delay(void)
   printk("Note: Delay interval started \n");
 
   for (int i = 0; i < 5; i++) {
-    apic_mdelay(1000);
+    apic_udelay(1000 * 1000);
   }
 
   printk("Note: Delay end \n\n");
@@ -98,7 +98,7 @@ static uint64_t ticks[DELAY_TESTS];
 extern void apic_timer_handler(void);
 static void apic_test_periodic_mode(void)
 {
-  int i, ms, vector;
+  int i, us, vector;
 
   printk("APIC: Testing periodic interrupts\n\n");
 
@@ -108,14 +108,14 @@ static void apic_test_periodic_mode(void)
 
   /* Testing showed that big delay values catches
    * more periodic timer accuracy errors .. */
-  ms = 50;
-  apic_monotonic(ms, vector);
+  us = 50 * 1000;
+  apic_monotonic(us, vector);
 
   /* After each delay, store ticks triggered so far */
   local_irq_enable();
 
   for (i = 0; i < DELAY_TESTS; i++) {
-    pit_mdelay(ms);
+    pit_udelay(us);
     ticks[i] = apic_ticks_count;
   }
 

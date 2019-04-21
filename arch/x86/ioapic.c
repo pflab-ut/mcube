@@ -1,5 +1,5 @@
 /**
- * @file drivers/acpi/ioapic.c
+ * @file arch/x86/ioapic.c
  *
  * @author Hiroyuki Chishiro
  */

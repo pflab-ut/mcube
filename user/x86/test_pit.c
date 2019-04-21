@@ -16,7 +16,7 @@
 static void pit_5secs_delay(void)
 {
   for (int i = 0; i < 500; i++) {
-    pit_mdelay(10);
+    pit_udelay(10 * 1000);
   }
 }
 
@@ -24,7 +24,7 @@ static void pit_5secs_delay(void)
  * Test milli-second delays against wall-clock
  * Remember to have a stopwatch close by
  */
-static void pit_test_mdelay(void)
+static void pit_test_udelay(void)
 {
   printk("PIT: Testing timer delays\n\n");
 
@@ -34,7 +34,7 @@ static void pit_test_mdelay(void)
   printk("Note: Delay interval started \n");
 
   for (int i = 0; i < 1000; i++) {
-    pit_mdelay(10);
+    pit_udelay(10 * 1000);
   }
 
   printk("Note: Delay end \n\n");
@@ -45,7 +45,7 @@ static void pit_test_mdelay(void)
   printk("Note: Delay interval started \n");
 
   for (int i = 0; i < 5000; i++) {
-    pit_mdelay(1);
+    pit_udelay(1 * 1000);
   }
 
   printk("Note: Delay end \n\n");
@@ -56,7 +56,7 @@ static void pit_test_mdelay(void)
   printk("Note: Delay interval started \n");
 
   for (int i = 0; i < 100; i++) {
-    pit_mdelay(50);
+    pit_udelay(50 * 1000);
   }
 
   printk("Note: Delay end \n\n");
@@ -78,7 +78,7 @@ static uint64_t ticks[DELAY_TESTS];
 extern void pit_periodic_handler(void);
 static void pit_test_periodic_irq(void)
 {
-  int i, ms, vector;
+  int i, us, vector;
 
   printk("PIT: Testing periodic interrupts\n\n");
 
@@ -89,10 +89,10 @@ static void pit_test_periodic_irq(void)
 
   /* Testing showed that big delay values catches
    * more periodic timer accuracy errors .. */
-  ms = 50;
+  us = 50 * 1000;
 
-  //  pit_monotonic(ms);
-  init_timer(ms);
+  //  pit_monotonic(us);
+  init_timer(us);
   start_timer(0);
   
 
@@ -100,7 +100,7 @@ static void pit_test_periodic_irq(void)
   local_irq_enable();
 
   for (i = 0; i < DELAY_TESTS; i++) {
-    pit_mdelay(ms);
+    pit_udelay(us);
     ticks[i] = pit_ticks_count;
   }
 
@@ -117,7 +117,7 @@ static void pit_test_periodic_irq(void)
 bool test_pit(void)
 {
   pit_test_periodic_irq();
-  pit_test_mdelay();
+  pit_test_udelay();
   return true;
 }
 

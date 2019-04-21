@@ -71,10 +71,10 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  start_timer(0);
   //  user_thread_main();
   //  test_pit();
+  test_apic();
   for (;;)
     ;
   //  user_level_main();
-  //  test_apic();
   //  test_page_alloc();
   //  test_percpu();
 

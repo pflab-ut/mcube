@@ -1,5 +1,5 @@
 /**
- * @file drivers/acpi/apic.c
+ * @file arch/x86/apic.c
  *
  * @author Hiroyuki Chishiro
  */
@@ -61,15 +61,15 @@ void __apic_timer_handler(void)
  */
 static uint64_t pit_calibrate_cpu(int repeat)
 {
-  int ms_delay;
+  int us_delay;
   uint64_t tsc1, tsc2, diff, diff_min, cpu_clock;
 
-  ms_delay = 5;
+  us_delay = 5 * 1000;
   diff_min = UINT64_MAX;
 
   for (int i = 0; i < repeat; i ++) {
     tsc1 = rdtsc();
-    pit_mdelay(ms_delay);
+    pit_udelay(us_delay);
     tsc2 = rdtsc();
 
     diff = tsc2 - tsc1;
@@ -83,7 +83,7 @@ static uint64_t pit_calibrate_cpu(int repeat)
    *                  = ticks / (delay / 1000)
    *                  = ticks * (1000 / delay)
    * We use last form to avoid float arithmetic */
-  cpu_clock = diff_min * (1000 / ms_delay);
+  cpu_clock = diff_min * ((1000 * 1000) / us_delay);
 
   return cpu_clock;
 }
@@ -94,7 +94,7 @@ static uint64_t pit_calibrate_cpu(int repeat)
  */
 static uint64_t pit_calibrate_apic_timer(void)
 {
-  int ms_delay;
+  int us_delay;
   uint32_t counter1, counter2, ticks, ticks_min;
   uint64_t apic_clock;
   union apic_lvt_timer lvt_timer;
@@ -108,11 +108,11 @@ static uint64_t pit_calibrate_apic_timer(void)
 
   /* Guarantee timer won't overflow */
   counter1 = ticks_min = UINT32_MAX;
-  ms_delay = 5;
+  us_delay = 5 * 1000;
 
   for (int i = 0; i < 5; i++) {
     apic_write(APIC_TIMER_INIT_CNT, counter1);
-    pit_mdelay(ms_delay);
+    pit_udelay(us_delay);
     counter2 = apic_read(APIC_TIMER_CUR_CNT);
 
     assert(counter1 > counter2);
@@ -127,7 +127,7 @@ static uint64_t pit_calibrate_apic_timer(void)
    *                  = ticks / (delay / 1000)
    *                  = ticks * (1000 / delay)
    * We use last form to avoid float arithmetic */
-  apic_clock = ticks_min * (1000 / ms_delay);
+  apic_clock = ticks_min * ((1000 * 1000) / us_delay);
 
   return apic_clock;
 }
@@ -306,20 +306,13 @@ void apic_udelay(uint64_t us)
   }
 }
 
-/*
- * Milli-second delay
- */
-void apic_mdelay(int ms)
-{
-  apic_udelay(ms * 1000);
-}
 
 /*
  * Trigger local APIC timer IRQs at periodic rate
  * @ms: milli-second delay between each IRQ
  * @vector: IRQ vector where ticks handler is setup
  */
-void apic_monotonic(int ms, uint8_t vector)
+void apic_monotonic(uint64_t us, uint8_t vector)
 {
   union apic_lvt_timer lvt_timer;
 
@@ -330,7 +323,7 @@ void apic_monotonic(int ms, uint8_t vector)
   lvt_timer.timer_mode = APIC_TIMER_PERIODIC;
   apic_write(APIC_LVTT, lvt_timer.value);
 
-  apic_set_counter_us(ms * 1000);
+  apic_set_counter_us(us);
 }
 
 /*
@@ -401,7 +394,7 @@ bool apic_ipi_acked(void)
       return true;
     }
 
-    pit_mdelay(1);
+    pit_udelay(1 * 1000);
   }
 
   return false;

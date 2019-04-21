@@ -121,8 +121,8 @@ SRCS +=	\
 
 # Devices
 SRCS +=	\
-  $(TOP_DIR)/drivers/acpi/apic.c	\
-  $(TOP_DIR)/drivers/acpi/ioapic.c	\
+  $(TOP_DIR)/arch/x86/apic.c	\
+  $(TOP_DIR)/arch/x86/ioapic.c	\
   $(TOP_DIR)/drivers/misc/keyboard.c \
   $(TOP_DIR)/drivers/uart/serial.c	\
   $(TOP_DIR)/arch/x86/pic.c	\
