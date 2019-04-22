@@ -105,7 +105,7 @@ void init_arch(void)
 
   /* Startup finished, roll-in the scheduler! */
   sched_init();
-  local_irq_enable();
+  enable_local_irq();
 
   /*
    * Second part of kernel initialization (Scheduler is now on!)

@@ -121,33 +121,20 @@ static inline struct idt_descriptor get_idt(void)
   return idt_desc;
 }
 
-static inline void local_irq_disable(void)
-{
-  asm volatile("cli"
-               ::
-               :"cc", "memory");
-}
-
-static inline void local_irq_enable(void)
-{
-  asm volatile("sti"
-               ::
-               :"cc", "memory");
-}
 
 /*
  * Disable interrupts, but restore the original %rflags
  * interrupt enable flag (IF) state afterwards.
  */
 
-static inline union x86_rflags local_irq_disable_save(void)
+static inline union x86_rflags disable_local_irq_save(void)
 {
   union x86_rflags flags;
 
   flags = get_rflags();
 
   if (flags.irqs_enabled) {
-    local_irq_disable();
+    disable_local_irq();
   }
 
   return flags;

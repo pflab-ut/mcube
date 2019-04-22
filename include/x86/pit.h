@@ -16,6 +16,11 @@ void pit_monotonic(uint64_t us);
 
 void __pit_periodic_handler(void);
 
+void init_pit_timer(unsigned long tick_us);
+void start_pit_timer(void);
+void stop_pit_timer(void);
+
+
 
 #endif /* !__ASSEMBLY__ */
 

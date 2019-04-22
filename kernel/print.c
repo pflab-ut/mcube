@@ -79,7 +79,7 @@ void __noreturn panic(const char *fmt, ...)
   int n;
 
   /* NOTE! Do not put anything above this */
-  local_irq_disable();
+  disable_local_irq();
 
   /*
    * NOTE! Manually assure that all the functions called

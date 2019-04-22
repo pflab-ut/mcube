@@ -34,7 +34,7 @@ static inline void spin_lock(spinlock_t *lock)
   union x86_rflags rflags;
 
   /* Reentrancy-safe place: stack or a register */
-  rflags = local_irq_disable_save();
+  rflags = disable_local_irq_save();
 
   while (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
     local_irq_restore(rflags);
@@ -43,7 +43,7 @@ static inline void spin_lock(spinlock_t *lock)
       cpu_pause();
     }
 
-    local_irq_disable();
+    disable_local_irq();
   }
 
   /*
@@ -65,7 +65,7 @@ static inline bool spin_trylock(spinlock_t *lock)
 {
   union x86_rflags rflags;
 
-  rflags = local_irq_disable_save();
+  rflags = disable_local_irq_save();
 
   if (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
     local_irq_restore(rflags);

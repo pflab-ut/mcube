@@ -169,7 +169,7 @@ void sched_enqueue(struct proc *proc)
 {
   union x86_rflags flags;
 
-  flags = local_irq_disable_save();
+  flags = disable_local_irq_save();
 
   proc->enter_runqueue_ts = PS->sys_ticks;
   proc->state = TD_RUNNABLE;

@@ -114,7 +114,7 @@ static void apic_test_periodic_mode(void)
   start_timer();
 
   /* After each delay, store ticks triggered so far */
-  local_irq_enable();
+  enable_local_irq();
 
   for (i = 0; i < DELAY_TESTS; i++) {
     pit_udelay(us);

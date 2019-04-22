@@ -69,10 +69,6 @@ static inline unsigned long get_current_cpu_time(void)
   //	return read_HPET_counter();
 }
 
-void init_pit_timer(unsigned long tick_us);
-void start_pit_timer(unsigned int ch);
-void stop_pit_timer(unsigned int ch);
-
 
 
 #endif	/* !__ASSEMBLY__ */

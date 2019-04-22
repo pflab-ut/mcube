@@ -118,13 +118,17 @@ static inline void finit(void)
 /* clear interrupt */
 static inline void cli(void)
 {
-  asm volatile("cli");
+  asm volatile("cli"
+               ::
+               :"cc", "memory");
 }
 
 /* set interrupt */
 static inline void sti(void)
 {
-  asm volatile("sti");
+  asm volatile("sti"
+               ::
+               :"cc", "memory");
 }
 
 static inline void leave(void)
