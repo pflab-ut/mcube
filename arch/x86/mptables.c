@@ -120,15 +120,15 @@ static struct mpf_struct *get_mpf(void)
 
   ebda = (*(uint16_t *) VIRTUAL(0x40e)) << 4;
 
-  if ((mpf = search_for_mpf(VIRTUAL(ebda), 0x400)) != NULL) {
+  if ((mpf = search_for_mpf(VIRTUAL(ebda), 0x400))) {
     return mpf;
   }
 
-  if ((mpf = search_for_mpf(VIRTUAL(639 * 0x400), 0x400)) != NULL) {
+  if ((mpf = search_for_mpf(VIRTUAL(639 * 0x400), 0x400))) {
     return mpf;
   }
 
-  if ((mpf = search_for_mpf(VIRTUAL(0xF0000), 0x10000)) != NULL) {
+  if ((mpf = search_for_mpf(VIRTUAL(0xF0000), 0x10000))) {
     return mpf;
   }
 

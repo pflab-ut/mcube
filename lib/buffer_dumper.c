@@ -82,6 +82,6 @@ void buf_null_dump(__unused struct buffer_dumper *dumper,
 
 void printbuf(struct buffer_dumper *dumper, void *buf, uint len)
 {
-  assert(dumper != NULL);
+  assert(dumper);
   dumper->formatter(dumper, buf, len);
 }

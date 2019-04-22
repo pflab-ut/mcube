@@ -136,7 +136,7 @@ void dentry_dump(struct dir_entry *dentry)
   assert(dentry->filename_len != 0);
   assert(dentry->filename_len <= EXT2_FILENAME_LEN);
 
-  if ((name = kmalloc(dentry->filename_len + 1)) == NULL) {
+  if (!(name = kmalloc(dentry->filename_len + 1))) {
     panic("Error: cannot allocate memory %lu\n", dentry->filename_len + 1);
   }
 
@@ -251,11 +251,11 @@ __unused static void list_files(uint64_t dir_inum)
 
   dir = inode_get(dir_inum);
 
-  if ((dentry = kmalloc(sizeof(*dentry))) == NULL) {
+  if (!(dentry = kmalloc(sizeof(*dentry)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*dentry));
   }
 
-  if ((name = kmalloc(EXT2_FILENAME_LEN + 1)) == NULL) {
+  if (!(name = kmalloc(EXT2_FILENAME_LEN + 1))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
   }
 
@@ -321,7 +321,7 @@ __unused static void test_path_conversion(void)
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
   /* Different forms of EXT2_ROOT_INODE */
-  for (uint i = 0; ext2_root_list[i] != NULL; i++) {
+  for (uint i = 0; ext2_root_list[i]; i++) {
     const char *path = ext2_root_list[i];
     inum = name_i(path);
 
@@ -334,7 +334,7 @@ __unused static void test_path_conversion(void)
   }
 
   /* Custom files list, should be manually checked */
-  for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
+  for (uint i = 0; ext2_files_list[i].path; i++) {
     file = &ext2_files_list[i];
     file->absolute_inum = name_i(file->path);
     bd->pr("Path: '%s', Inode = %lu\n", file->path, file->absolute_inum);
@@ -343,7 +343,7 @@ __unused static void test_path_conversion(void)
   /* Path file name length tests */
   char *path;
 
-  if ((path = kmalloc(EXT2_FILENAME_LEN + 4)) == NULL) {
+  if (!(path = kmalloc(EXT2_FILENAME_LEN + 4))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 4);
   }
 
@@ -383,10 +383,10 @@ __unused static void test_file_reads(void)
   int len;
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
-  assert(bd != NULL);
+  assert(bd);
   print_uart("c%d t%lu fr start\n", percpu_get(apic_id), current->pid);
 
-  if ((buf = kmalloc(BUF_LEN)) == NULL) {
+  if (!(buf = kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
@@ -423,7 +423,7 @@ __unused static void test_file_reads(void)
 
   print_uart("c%d t%lu fr end!\n", percpu_get(apic_id), current->pid);
 
-  if (percpu_get(halt_thread_at_end) == true) {
+  if (percpu_get(halt_thread_at_end)) {
     halt();
   }
 }
@@ -435,7 +435,7 @@ __unused static void test_block_reads(void)
 
   bd = (void *)percpu_get(dumper);
 
-  if ((buf = kmalloc(BUF_LEN)) == NULL) {
+  if (!(buf = kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
@@ -457,7 +457,7 @@ __unused static void test_block_reads(void)
 
   print_uart("c%d t%lu br end!\n", percpu_get(apic_id), current->pid);
 
-  if (percpu_get(halt_thread_at_end) == true) {
+  if (percpu_get(halt_thread_at_end)) {
     halt();
   }
 }
@@ -481,15 +481,15 @@ __unused static void test_file_existence(void)
 
   print_uart("c%d t%ld ex start\n", percpu_get(apic_id), current->pid);
 
-  if ((parent = kmalloc(4096)) == NULL) {
+  if (!(parent = kmalloc(4096))) {
     panic("Error: cannot allocate memory %lu\n", 4096);
   }
 
-  if ((child = kmalloc(EXT2_FILENAME_LEN + 1)) == NULL) {
+  if (!(child = kmalloc(EXT2_FILENAME_LEN + 1))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
   }
 
-  for (uint j = 0; ext2_files_list[j].path != NULL; j++) {
+  for (uint j = 0; ext2_files_list[j].path; j++) {
     file = &ext2_files_list[j];
     bd->pr("Testing Path '%s':\n", file->path);
     path_get_parent(file->path, parent, child);
@@ -514,7 +514,7 @@ __unused static void test_file_existence(void)
   kfree(child);
   print_uart("c%d t%ld ex end\n", percpu_get(apic_id), current->pid);
 
-  if (percpu_get(halt_thread_at_end) == true) {
+  if (percpu_get(halt_thread_at_end)) {
     halt();
   }
 }
@@ -681,11 +681,11 @@ static void test_ext2_up(void)
   __unused int64_t ilen, inum, count, parent_inum;
   __unused char *buf, *buf2, *parent, *child;
 
-  if ((buf = kmalloc(BUF_LEN)) == NULL) {
+  if (!(buf = kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
-  if ((buf2 = kmalloc(BUF_LEN)) == NULL) {
+  if (!(buf2 = kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
@@ -705,7 +705,7 @@ static void test_ext2_up(void)
 #if TEST_DIR_ENTRIES
 
   /* Most of these fields are invalid, on purpose */
-  if ((dentry = kmalloc(sizeof(*dentry))) == NULL) {
+  if (!(dentry = kmalloc(sizeof(*dentry)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*dentry));
   }
 
@@ -746,7 +746,7 @@ again:
   for (uint i = 0; i < nfree; i++) {
     inode = inode_alloc(EXT2_FT_REG_FILE);
 
-    if (inode == NULL) {
+    if (!inode) {
       panic("Reported free inodes count = %lu, but our "
             "%u-th allocation returned NULL!", nfree, i);
     }
@@ -766,7 +766,7 @@ again:
 
   inode = inode_alloc(EXT2_FT_REG_FILE);
 
-  if (inode != NULL) {
+  if (inode) {
     // Boundary case
     panic("We've allocated all %lu inodes, how can a new "
           "allocation returns inode #%lu?", nfree, inode->inum);
@@ -777,7 +777,7 @@ again:
   /* Deallocate half of the allocated inodes */
   for (uint i = 0; i < nfree / 2; i++) {
     inode = unrolled_lookup(&head, i);
-    assert(inode != NULL);
+    assert(inode);
 
     bd->pr("Deallocating inode #%ld\n", inode->inum);
     unrolled_remove_key(&head, i);
@@ -911,7 +911,7 @@ bagain:
 #if TEST_FILE_WRITES
   int64_t last_file = -1;
 
-  for (uint j = 0; ext2_files_list[j].path != NULL; j++) {
+  for (uint j = 0; ext2_files_list[j].path; j++) {
     file = &ext2_files_list[j];
     inum = name_i(file->path);
     assert(inum > 0);
@@ -965,7 +965,7 @@ bagain:
 out1:
   bd->pr("**** NOW TESTING THE WRITTEN DATA!\n");
 
-  for (uint j = 0; ext2_files_list[j].path != NULL; j++) {
+  for (uint j = 0; ext2_files_list[j].path; j++) {
     file = &ext2_files_list[j];
     inum = name_i(file->path);
     assert(inum > 0);
@@ -1018,7 +1018,7 @@ out1:
 
 #if TEST_FILE_TRUNCATE
 
-  for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
+  for (uint i = 0; ext2_files_list[i].path; i++) {
     file = &ext2_files_list[i];
     inum = name_i(file->path);
     inode = inode_get(inum);
@@ -1048,15 +1048,15 @@ out1:
 
 #if TEST_FILE_DELETION
 
-  if ((parent = kmalloc(4096)) == NULL) {
+  if (!(parent = kmalloc(4096))) {
     panic("Error: cannot allocate memory %lu\n", 4096);
   }
 
-  if ((child = kmalloc(EXT2_FILENAME_LEN + 1)) == NULL) {
+  if (!(child = kmalloc(EXT2_FILENAME_LEN + 1))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
   }
 
-  for (uint i = 0; ext2_files_list[i].path != NULL; i++) {
+  for (uint i = 0; ext2_files_list[i].path; i++) {
     file = &ext2_files_list[i];
     bd->pr("Deleting file '%s'\n", file->path);
     inum = name_i(file->path);
@@ -1130,7 +1130,7 @@ __noreturn static void test_alloc_dealloc(void)
   for (int i = 0; i < 100; i++) {
     inode = inode_alloc(EXT2_FT_REG_FILE);
 
-    if (inode == NULL) {
+    if (!inode) {
       complete = false;
       break;
     }

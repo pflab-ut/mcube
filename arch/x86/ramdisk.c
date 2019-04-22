@@ -44,7 +44,7 @@ static struct ramdisk {
  */
 void *ramdisk_memory_area_end(void)
 {
-  assert(rdheader != NULL);
+  assert(rdheader);
   return (char *) ramdisk.buf + ramdisk.len;
 }
 
@@ -78,12 +78,12 @@ void ramdisk_init(void)
 
 int ramdisk_get_len(void)
 {
-  assert(rdheader != NULL);
+  assert(rdheader);
   return ramdisk.len;
 }
 
 char *ramdisk_get_buf(void)
 {
-  assert(rdheader != NULL);
+  assert(rdheader);
   return ramdisk.buf;
 }

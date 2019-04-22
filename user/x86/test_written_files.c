@@ -70,7 +70,7 @@ void buf_hex_dump(void *given_buf, int len)
   unsigned int bytes_perline = 16, n = 0;
   uint8_t *buf = given_buf;
 
-  assert(buf != NULL);
+  assert(buf);
 
   for (int i = 0; i < len; i++) {
     printf(" ");
@@ -106,12 +106,12 @@ static int dirTree(const char *pathname, const struct stat *sbuf, int type,
 
   len = 4096 * 3;
 
-  if ((buf = malloc(len)) == NULL) {
+  if (!(buf = malloc(len))) {
     perror("malloc");
     return 1;
   }
 
-  if ((readbuf = malloc(len)) == NULL) {
+  if (!(readbuf = malloc(len))) {
     perror("malloc");
     free(buf);
     return 2;

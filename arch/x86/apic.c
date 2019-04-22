@@ -414,7 +414,7 @@ uint8_t apic_bootstrap_id(void)
 
 void *apic_vrbase(void)
 {
-  assert(apic_virt_base != NULL);
+  assert(apic_virt_base);
 
   return apic_virt_base;
 }

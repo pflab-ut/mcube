@@ -120,7 +120,7 @@ __noreturn void panic(const char *fmt, ...);
 /*
  * C99
  */
-#define NULL  ((void *)0)
+#define NULL  ((void *) 0)
 #define bool  _Bool
 #define true    ((_Bool) 1)
 #define false   ((_Bool) 0)

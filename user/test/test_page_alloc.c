@@ -26,7 +26,7 @@ static inline void _validate_zones_data(void)
 
   for (zid = 0; zid < ARRAY_SIZE(zones); zid++) {
     assert((int) zones[zid].id == zid);
-    assert(zones[zid].description != NULL);
+    assert(zones[zid].description);
     assert(zones[zid].start < zones[zid].end);
     assert(zones[zid].boot_freepages >= zones[zid].freepages_count);
   }

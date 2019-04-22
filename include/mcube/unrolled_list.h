@@ -63,20 +63,20 @@ void unrolled_remove_key(struct unrolled_head *head, uint key);
  */
 #define unrolled_for_each(head, val)                                    \
   for (struct __node *__node = (head)->node;                            \
-       __node != NULL;                                                  \
+       __node;                                                          \
        __node = __node->next)                                           \
     for (uint __i = 0,                                                  \
            __unused *_____c =                                           \
            ({                                                           \
              val = NULL;                                                \
-             while (__i < __node->array_len && (val = __node->array[__i]) == NULL) \
+             while (__i < __node->array_len && !(val = __node->array[__i])) \
                __i++; val;                                              \
            });                                                          \
          __i < __node->array_len;                                       \
          __i++,                                                         \
            ({                                                           \
              val = NULL;                                                \
-             while (__i < __node->array_len && (val = __node->array[__i]) == NULL) \
+             while (__i < __node->array_len && !(val = __node->array[__i])) \
                __i++; val;                                              \
            }))
 

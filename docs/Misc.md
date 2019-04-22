@@ -14,7 +14,6 @@
 * Completely Fair Schedulerを実装
 * Message Passingを作成
 * simアーキテクチャでスケジューリングシミュレータを実装
-* vsprintをvsnprintに変更
 
 ## Known Issues
 

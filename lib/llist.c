@@ -11,7 +11,7 @@ void add_node(bin_t *bin, node_t *node)
   node->next = NULL;
   node->prev = NULL;
 
-  if (bin->head == NULL) {
+  if (!bin->head) {
     bin->head = node;
     return;
   }
@@ -22,16 +22,16 @@ void add_node(bin_t *bin, node_t *node)
 
   // iterate until we get the the end of the list or we find a
   // node whose size is
-  while (current_node != NULL && current_node->size <= node->size) {
+  while (current_node && current_node->size <= node->size) {
     previous = current_node;
     current_node = current_node->next;
   }
 
-  if (current_node == NULL) { // we reached the end of the list
+  if (!current_node) { // we reached the end of the list
     previous->next = node;
     node->prev = previous;
   } else {
-    if (previous != NULL) { // middle of list, connect all links!
+    if (previous) { // middle of list, connect all links!
       node->next = current_node;
       previous->next = node;
 
@@ -47,7 +47,7 @@ void add_node(bin_t *bin, node_t *node)
 
 void remove_node(bin_t *bin, node_t *node)
 {
-  if (bin->head == NULL) {
+  if (!bin->head) {
     return;
   }
 
@@ -58,9 +58,9 @@ void remove_node(bin_t *bin, node_t *node)
 
   node_t *tmp = bin->head->next;
 
-  while (tmp != NULL) {
+  while (tmp) {
     if (tmp == node) { // found the node
-      if (tmp->next == NULL) { // last item
+      if (!tmp->next) { // last item
         tmp->prev->next = NULL;
       } else { // middle item
         tmp->prev->next = tmp->next;
@@ -77,13 +77,13 @@ void remove_node(bin_t *bin, node_t *node)
 
 node_t *get_best_fit(bin_t *bin, size_t size)
 {
-  if (bin->head == NULL) {
+  if (!bin->head) {
     return NULL; // empty list!
   }
 
   node_t *tmp = bin->head;
 
-  while (tmp != NULL) {
+  while (tmp) {
     if (tmp->size >= size) {
       return tmp; // found a fit!
     }
@@ -98,7 +98,7 @@ node_t *get_last_node(bin_t *bin)
 {
   node_t *tmp = bin->head;
 
-  while (tmp->next != NULL) {
+  while (tmp->next) {
     tmp = tmp->next;
   }
 

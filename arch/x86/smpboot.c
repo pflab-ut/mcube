@@ -137,11 +137,11 @@ static int start_secondary_cpu(struct percpu *cpu,
    */
 
   /* All cores initialize their own 'current'; dont do it for 'em. */
-  if ((cpu->__current = kmalloc(sizeof(struct proc))) == NULL) {
+  if (!(cpu->__current = kmalloc(sizeof(struct proc)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(struct proc));
   }
 
-  if ((params->stack_ptr = kmalloc(STACK_SIZE)) == NULL) {
+  if (!(params->stack_ptr = kmalloc(STACK_SIZE))) {
     panic("Error: cannot allocate memory %lu\n", STACK_SIZE);
   }
 
@@ -275,7 +275,7 @@ void smpboot_init(void)
 
   smpboot_params_validate_offsets();
 
-  if ((params = kmalloc(sizeof(*params))) == NULL) {
+  if (!(params = kmalloc(sizeof(*params)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*params));
   }
 

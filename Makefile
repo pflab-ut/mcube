@@ -94,7 +94,7 @@ ifeq ($(ARCH_NAME), x86)
 #	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
 else ifeq ($(ARCH_NAME), axis)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
-	$(DUMP) $(BIN) $(DUMPARG) $(ROMFILE)
+	$(DUMP) $(BIN) $(DUMPARG) $(ROM_FILE)
 endif
 
 ifeq ($(ARCH_NAME), x86)
@@ -173,16 +173,16 @@ else ifeq ($(ARCH_NAME), x86)
 ifeq ($(OUTPUT_NAME), console)
 	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 4
 else
-	qemu-system-x86_64 build/mcube-hd.img -nographic -serial mon:stdio -smp 4 | tee uart.log
+	qemu-system-x86_64 build/mcube-hd.img -nographic -serial mon:stdio -smp 4 | $(TEE) $(UART_FILE)
 endif
 
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
-	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET)
+	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET) | $(TEE) $(UART_FILE)
 # with dd file
-#	qemu-system-aarch64 -M raspi3 -drive file=test.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET)
+#	qemu-system-aarch64 -M raspi3 -drive file=test.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET) | $(TEE) $(UART_FILE)
 # for MINI UART
-#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET)
+#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET) | $(TEE) $(UART_FILE)
 else ifeq ($(ARCH_NAME), axis)
 #	$(RUN_AXIS)
 	$(RUN_AXIS) "+define+PRINT_ALL"
@@ -229,7 +229,7 @@ doxygen: doxygenclean
 clean: buildclean doxygenclean
 	@for file in $(CLEANFILES); do $(FIND) . -name $$file -delete || exit 1; done
 	@$(RM) $(TARGET) $(TARGET).elf $(OBJS) $(DEPS) $(DMPFILE) $(MAP)
-	@$(RM) $(ROMFILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
+	@$(RM) $(ROM_FILE) $(BIN) irun* $(TARGET)-flat.vmdk $(TARGET).vmdk
 	@$(RM) -r INCA_libs testconfig
 
 buildclean:

@@ -178,8 +178,8 @@ static inline void list_del(struct list_node *node)
   prevn = node->prev;
   nextn = node->next;
 
-  assert(prevn != NULL);
-  assert(nextn != NULL);
+  assert(prevn);
+  assert(nextn);
   assert(prevn->next == node);
   assert(nextn->prev == node);
 

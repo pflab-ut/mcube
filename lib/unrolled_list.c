@@ -33,7 +33,7 @@ static struct __node *__unode_new(uint node_num, uint array_len)
 {
   struct __node *node;
 
-  if ((node = kmalloc(sizeof(struct __node))) == NULL) {
+  if (!(node = kmalloc(sizeof(struct __node)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(struct __node));
   }
 
@@ -63,7 +63,7 @@ static uint __unode_array_find_free_idx(struct __node *node)
   assert(node->array_nrfree > 0);
 
   for (uint i = 0; i < node->array_len; i++) {
-    if (node->array[i] == NULL) {
+    if (!node->array[i]) {
       return i;
     }
   }
@@ -74,9 +74,9 @@ static uint __unode_array_find_free_idx(struct __node *node)
 static void __unode_store_val_in_array(struct __node *node, uint array_idx,
                                        void *val)
 {
-  assert(val != NULL);
+  assert(val);
   assert(array_idx < node->array_len);
-  assert(node->array[array_idx] == NULL);
+  assert(!node->array[array_idx]);
 
   node->array_nrfree--;
   node->array[array_idx] = val;
@@ -85,9 +85,9 @@ static void __unode_store_val_in_array(struct __node *node, uint array_idx,
 __unused static void __unode_update_val_in_array(struct __node *node,
                                                  uint array_idx, void *val)
 {
-  assert(val != NULL);
+  assert(val);
   assert(array_idx < node->array_len);
-  assert(node->array[array_idx] != NULL);
+  assert(node->array[array_idx]);
 
   node->array[array_idx] = val;
 }
@@ -149,7 +149,7 @@ void unrolled_free(struct unrolled_head *head)
 
   node = head->node;
 
-  while (node != NULL) {
+  while (node) {
     prev = node;
     node = node->next;
     __unode_free(prev);
@@ -172,14 +172,14 @@ uint unrolled_insert(struct unrolled_head *head, void *val)
   struct __node *node, *prev;
   uint idx;
 
-  if (head->node == NULL) {
+  if (!head->node) {
     head->node = __unode_new(0, head->array_len);
   }
 
-  assert(val != NULL);
-  assert(head->node != NULL);
+  assert(val);
+  assert(head->node);
 
-  for (node = head->node; node != NULL; node = node->next) {
+  for (node = head->node; node; node = node->next) {
     if (node->array_nrfree > 0) {
       idx = __unode_array_find_free_idx(node);
       __unode_store_val_in_array(node, idx, val);
@@ -209,7 +209,7 @@ void *unrolled_lookup(struct unrolled_head *head, uint key)
 
   node = __get_node(head, key, &array_idx);
 
-  if (node == NULL) {
+  if (!node) {
     return node;
   }
 
@@ -226,7 +226,7 @@ void unrolled_remove_key(struct unrolled_head *head, uint key)
 
   node = __get_node(head, key, &array_idx);
 
-  if (node == NULL || node->array[array_idx] == NULL) {
+  if (!node || !node->array[array_idx]) {
     panic("UNROLLED: Tried  to remove non-existing mapping structure key %u", key);
   }
 

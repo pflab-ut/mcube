@@ -295,7 +295,7 @@ struct proc *sched_tick(void)
 
     new_proc = dispatch_runnable_proc(&new_prio);
 
-    if (new_proc == NULL) {
+    if (!new_proc) {
       return current;
     }
 

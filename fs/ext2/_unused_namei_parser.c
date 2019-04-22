@@ -52,7 +52,7 @@ uint64_t name_i(const char *path)
   buf_len = 0;
   inum = 0;
 
-  if ((buf = kmalloc(EXT2_FILENAME_LEN + 2)) == NULL) {
+  if (!(buf = kmalloc(EXT2_FILENAME_LEN + 2))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 2);
   }
 

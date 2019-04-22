@@ -22,7 +22,7 @@ struct hash *hash_new(uint len)
 {
   struct hash *hash;
 
-  if ((hash = kmalloc(sizeof(*hash))) == NULL) {
+  if (!(hash = kmalloc(sizeof(*hash)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*hash));
   }
 
@@ -41,7 +41,7 @@ struct hash *hash_new(uint len)
  */
 void hash_free(struct hash *hash)
 {
-  assert(hash != NULL);
+  assert(hash);
   kfree(hash->nodes_array);
   kfree(hash);
 }
@@ -55,7 +55,7 @@ static void *hash_find_elem(struct hash *hash, uint elem_id)
   struct hash_elem *helem = NULL;
   int idx;
 
-  assert(hash != NULL);
+  assert(hash);
   idx = elem_id % hash->len;
   list_for_each(&hash->nodes_array[idx], helem, node) {
     if (helem->id == elem_id) {
@@ -76,7 +76,7 @@ void hash_insert(struct hash *hash, void *elem)
 
   helem = elem;
 
-  if (hash_find_elem(hash, helem->id) != NULL) {
+  if (hash_find_elem(hash, helem->id)) {
     panic("Hash: Inserting element with ID #%lu, which "
           "already exists!", helem->id);
   }
@@ -104,7 +104,7 @@ void hash_remove(struct hash *hash, uint64_t elem_id)
 
   helem = hash_find_elem(hash, elem_id);
 
-  if (helem == NULL) {
+  if (!helem) {
     panic("Hash: Removing non-existent element identified by #%lu\n", elem_id);
   }
 

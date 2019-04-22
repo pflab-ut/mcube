@@ -261,7 +261,7 @@ struct page *get_free_page(enum zone_id zid)
     ascending_prio_for_each(zone) {
       page = __get_free_page(zone->id);
 
-      if (page != NULL) {
+      if (page) {
         break;
       }
     }
@@ -269,7 +269,7 @@ struct page *get_free_page(enum zone_id zid)
     page = __get_free_page(zid);
   }
 
-  if (page == NULL) {
+  if (!page) {
     panic("Memory - No more free pages available at "
           "`%s'", get_zone(zid)->description);
   }

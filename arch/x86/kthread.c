@@ -34,14 +34,14 @@ void kthread_create(void (* /* __noreturn */ func)(void))
   char *stack;
   char *stack_start;
 
-  if ((proc = kmalloc(sizeof(*proc))) == NULL) {
+  if (!(proc = kmalloc(sizeof(*proc)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*proc));
   }
 
   proc_init(proc);
 
   /* New thread stack, moving down */
-  if ((stack_start = (char *) kmalloc(STACK_SIZE)) == NULL) {
+  if (!(stack_start = (char *) kmalloc(STACK_SIZE))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(STACK_SIZE));
   }
 

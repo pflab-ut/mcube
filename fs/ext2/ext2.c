@@ -147,8 +147,8 @@ struct inode *inode_get(uint64_t inum)
   spin_lock(&isb.inodes_hash_lock);
   inode = hash_find(isb.inodes_hash, inum);
 
-  if (inode == NULL) {
-    if ((inode = kmalloc(sizeof(*inode))) == NULL) {
+  if (!inode) {
+    if (!(inode = kmalloc(sizeof(*inode)))) {
       panic("Error: cannot allocate memory %lu\n", sizeof(*inode));
     }
 
@@ -289,7 +289,7 @@ STATIC struct inode *inode_alloc(enum file_type type)
 
   bgd = isb.bgd;
 
-  if ((buf = kmalloc(isb.block_size)) == NULL) {
+  if (!(buf = kmalloc(isb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", isb.block_size);
   }
 
@@ -377,7 +377,7 @@ static void __inode_dealloc(struct inode *inode)
   groupi = (inode->inum - 1) % isb.sb->inodes_per_group;
   bgd = &isb.bgd[group];
 
-  if ((buf = kmalloc(isb.block_size)) == NULL) {
+  if (!(buf = kmalloc(isb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", isb.block_size);
   }
 
@@ -414,7 +414,7 @@ STATIC uint64_t block_alloc(void)
   sb = isb.sb;
   bgd = isb.bgd;
 
-  if ((buf = kmalloc(isb.block_size)) == NULL) {
+  if (!(buf = kmalloc(isb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", isb.block_size);
   }
 
@@ -478,7 +478,7 @@ STATIC void block_dealloc(uint block)
   groupi = (block - sb->first_data_block) % sb->blocks_per_group;
   bgd = &isb.bgd[group];
 
-  if ((buf = kmalloc(isb.block_size)) == NULL) {
+  if (!(buf = kmalloc(isb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", isb.block_size);
   }
 
@@ -734,7 +734,7 @@ STATIC int64_t find_dir_entry(struct inode *dir, const char *name,
   assert(S_ISDIR(dir->mode));
   dentry_len = sizeof(struct dir_entry);
 
-  if ((dentry = *entry = kmalloc(dentry_len)) == NULL) {
+  if (!(dentry = *entry = kmalloc(dentry_len))) {
     panic("Error: cannot allocate memory %lu\n", dentry_len);
   }
 
@@ -742,7 +742,7 @@ STATIC int64_t find_dir_entry(struct inode *dir, const char *name,
     return -ENOENT;
   }
 
-  assert(name != NULL);
+  assert(name);
 
   for (offset = 0;  ; offset += dentry->record_len) {
     len = file_read(dir, (char *)dentry, offset, dentry_len);
@@ -787,7 +787,7 @@ static int64_t remove_dir_entry(struct inode *dir, const char *name)
   int64_t ret, offset, dentry_inum;
 
   assert(S_ISDIR(dir->mode));
-  assert(name != NULL);
+  assert(name);
 
   if ((ret = find_dir_entry(dir, name, strlen(name), &dentry, &offset)) < 0) {
     goto out;
@@ -828,7 +828,7 @@ int file_delete(struct inode *parent, const char *name)
   int64_t entry_inum;
 
   assert(S_ISDIR(parent->mode));
-  assert(name != NULL);
+  assert(name);
 
   entry_inum = remove_dir_entry(parent, name);
 
@@ -867,7 +867,7 @@ int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
 
   assert(S_ISDIR(dir->mode));
   assert(entry_ino->inum != 0);
-  assert(name != NULL);
+  assert(name);
   assert(type == EXT2_FT_REG_FILE || type == EXT2_FT_DIR);
 
   filename_len = strnlen(name, EXT2_FILENAME_LEN - 1);
@@ -896,7 +896,7 @@ int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
    * empty, with no entries at all!
    */
 
-  if ((lastentry = kmalloc(sizeof(*lastentry))) == NULL) {
+  if (!(lastentry = kmalloc(sizeof(*lastentry)))) {
     panic("Error: cannot allocate memory %lu\n", lastentry);
   }
 
@@ -974,13 +974,13 @@ no_lastentry:
    * dir entries traversal from parsing uninitialized data.
    */
 
-  if ((zeroes = kmalloc(isb.block_size)) == NULL) {
+  if (!(zeroes = kmalloc(isb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", isb.block_size);
   }
 
   memset(zeroes, 0, isb.block_size);
 
-  if ((newentry = kmalloc(sizeof(*newentry))) == NULL) {
+  if (!(newentry = kmalloc(sizeof(*newentry)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*newentry));
   }
 
@@ -1038,7 +1038,7 @@ int64_t file_new(struct inode *dir, const char *name, enum file_type type)
 
   assert(S_ISDIR(dir->mode));
 
-  if ((inode = inode_alloc(type)) == NULL) {
+  if (!(inode = inode_alloc(type))) {
     return -ENOSPC;
   }
 
@@ -1109,7 +1109,7 @@ static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
     return;
   }
 
-  if ((buf = kmalloc(isb.block_size)) == NULL) {
+  if (!(buf = kmalloc(isb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", isb.block_size);
   }
 
@@ -1174,7 +1174,7 @@ int64_t name_i(const char *path)
   struct dir_entry *dentry;
   int64_t inum, prev_inum, null;
 
-  assert(path != NULL);
+  assert(path);
 
   switch (*path) {
   case '\0':

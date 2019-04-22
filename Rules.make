@@ -177,7 +177,12 @@ RUN_AXIS_CLUSTER = $(TOP_DIR)/scripts/misc/run_axis_cluster.sh
 MAKEFLAGS += --no-print-directory -rR
 MAKE = make
 
-ROMFILE = rom.txt
+ROM_FILE = rom.txt
+
+TEE = tee
+
+UART_FILE = uart.log
+
 
 DOC_DIR = docs
 

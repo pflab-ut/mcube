@@ -116,7 +116,7 @@ static void test_several_elements(int count, int type)
   }
 
   for (int i = 0; i < count; i++) {
-    if ((t[i] = kmalloc(sizeof(struct test))) == NULL) {
+    if (!(t[i] = kmalloc(sizeof(struct test)))) {
       panic("Error: cannot allocate memory %lu\n", sizeof(struct test));
     }
 

@@ -72,7 +72,7 @@ bool test_string(void)
 
   i = 1;
 
-  if ((str = kmalloc(1024)) == NULL) {
+  if (!(str = kmalloc(1024))) {
     panic("Error: cannot allocate memory %lu\n", 1024);
   }
 

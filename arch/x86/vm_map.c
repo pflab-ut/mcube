@@ -204,7 +204,7 @@ bool vaddr_is_mapped(void *vaddr)
   struct pml3e *pml3e;
   struct pml2e *pml2e;
 
-  assert(kernel_pml4_table != NULL);
+  assert(kernel_pml4_table);
   assert((uintptr_t) vaddr >= KERN_PAGE_OFFSET);
   assert((uintptr_t) vaddr < KERN_PAGE_END_MAX);
 
