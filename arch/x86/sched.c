@@ -269,7 +269,7 @@ struct proc *sched_tick(void)
   //  printk("((1 * 1000 * 1000) / TICK_USEC) = %lu\n", ((1 * 1000 * 1000) / TICK_USEC));
   if (TICK_USEC <= 1 * 1000 * 1000 * 1000
       && PS->sys_ticks % ((1 * 1000 * 1000) / TICK_USEC) == 0) {
-    printk("One second has elapsed...\n");
+    //    printk("One second has elapsed...\n");
     //    stop_timer();
   }
 
@@ -405,8 +405,9 @@ void sched_init(void)
 
 spinlock_t printstats_lock = INIT_SPINLOCK;
 
-void print_proc_stats(struct proc *proc, int prio)
+void print_proc_stats(__unused struct proc *proc, __unused int prio)
 {
+#if 0
   uint dispatch_count;
   clock_t rqwait_overall;
 
@@ -426,6 +427,7 @@ void print_proc_stats(struct proc *proc, int prio)
              rqwait_overall / dispatch_count,
              proc->stats.preempt_high_prio,
              proc->stats.preempt_slice_end);
+#endif
 }
 
 

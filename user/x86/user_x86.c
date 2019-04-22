@@ -72,14 +72,11 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  user_thread_main();
   //  test_pit();
 
-  test_percpu();
+  //  test_percpu();
   //  test_apic();
-
-  for (;;)
-    ;
+  //  test_page_alloc();
 
   //  user_level_main();
-  //  test_page_alloc();
 
   return 0;
 }

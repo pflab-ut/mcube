@@ -751,12 +751,11 @@ int print(const char *fmt, ...)
 /*
  * Kernel print, for VGA and serial outputs
  */
-#if 1
 int printk(const char *fmt, ...)
 {
   va_list args;
   int n;
-
+  
   /* NOTE! This will deadlock if the code enclosed
    * by this lock triggered exceptions: the default
    * exception handlers already call printk() */
@@ -768,7 +767,13 @@ int printk(const char *fmt, ...)
   kbuf[n] = '\0';
 
 #if CONFIG_ARCH_X86
+#if CONFIG_PRINT2CONSOLE
   vga_write(kbuf, n, VGA_DEFAULT_COLOR);
+#elif CONFIG_PRINT2UART
+  serial_write(kbuf, n);
+#else
+#error "Unknown Printk to Output"
+#endif
 #else
   puts(kbuf);
 #endif
@@ -776,7 +781,6 @@ int printk(const char *fmt, ...)
   spin_unlock(&kbuf_lock);
   return n;
 }
-#endif
 
 int print_uart(const char *fmt, ...)
 {
@@ -796,6 +800,8 @@ int print_uart(const char *fmt, ...)
   puts(sbuf);
 #elif CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
   uart_write(NULL, sbuf, n);
+#else
+#error "Unknown Architecture"
 #endif
 
   spin_unlock(&sbuf_lock);

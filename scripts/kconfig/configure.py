@@ -11,7 +11,7 @@ set up configuration.
 import sys
 import tools
 
-def init_sysconfig(algo, arch, compiler, machine):
+def init_sysconfig(algo, arch, compiler, machine, output):
   "initialize sysconfig"
   fout = open("./.sysconfig", "w")
 
@@ -40,6 +40,13 @@ def init_sysconfig(algo, arch, compiler, machine):
     fout.write("CC = clang\n")
   else:
     print("Unknown Compiler")
+
+  if output == "console":
+    fout.write("OUTPUT_NAME = console\n")
+  elif output == "uart":
+    fout.write("OUTPUT_NAME = uart\n")
+  else:
+    print("Unknown Output")
 
   fout.write("ALGO_NAME = " + algo + "\n")
 
@@ -105,6 +112,7 @@ def main():
   arch = tools.scan_arch_name(kconfig_file)
   compiler = tools.scan_compiler_name(kconfig_file)
   machine = tools.scan_machine_name(kconfig_file)
+  output = tools.scan_output_name(kconfig_file)
 
   tools.scan_kconfig(kconfig_file)
 
@@ -116,7 +124,7 @@ def main():
   if not tools.check_conflicts_and_dependencies():
     sys.exit("Error: check_conflicts_and_dependencies()")
 
-  init_sysconfig(algo, arch, compiler, machine)
+  init_sysconfig(algo, arch, compiler, machine, output)
 
   init_kconfig()
   init_config()

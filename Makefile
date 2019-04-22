@@ -170,23 +170,11 @@ run:
 ifeq ($(ARCH_NAME), sim)
 	$(TARGET)
 else ifeq ($(ARCH_NAME), x86)
-#	qemu-system-x86_64 -cpu core2duo -cdrom $(TARGET).iso -nographic -curses -clock hpet
-#	qemu-system-x86_64 -cpu qemu64 -cdrom $(TARGET).iso -nographic -curses
-#	qemu-system-x86_64 -m 1024 -smp cores=4,threads=1,sockets=2 \
-	-numa node,nodeid=0,cpus=0-3 \
-	-numa node,nodeid=1,cpus=4-7 \
-	-drive id=disk,format=raw,file=./build/mcube.img,if=none \
-	-device ahci,id=ahci \
-	-device ide-drive,drive=disk,bus=ahci.0 \
-	-boot a -display curses
-#	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 4
-	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 1
-#	qemu-system-x86_64 build/mcube-hd.img -curses -smp 4 -nographic
-#	qemu-system-x86_64 -m 1024 -smp cores=2,threads=1,sockets=1 \
-	-drive id=disk,format=raw,file=./build/mcube.img,if=none \
-	-device ahci,id=ahci \
-	-device ide-drive,drive=disk,bus=ahci.0 \
-	-boot a -display curses
+ifeq ($(OUTPUT_NAME), console)
+	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 4
+else
+	qemu-system-x86_64 build/mcube-hd.img -nographic -serial mon:stdio -smp 4 | tee uart.log
+endif
 
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011

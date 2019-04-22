@@ -73,6 +73,9 @@ RE_ALGO_LINE = re.compile(ALGO_LINE)
 MACHINE_LINE = r"\s+mname\s+(.*)"
 RE_MACHINE_LINE = re.compile(MACHINE_LINE)
 
+OUTPUT_LINE = r"\s+oname\s+(.*)"
+RE_OUTPUT_LINE = re.compile(OUTPUT_LINE)
+
 KCONFIG_LINE = r"\s+config\s+(.*)"
 RE_KCONFIG_LINE = re.compile(KCONFIG_LINE)
 
@@ -258,6 +261,32 @@ def scan_machine_name(filename):
         break
   fin.close()
   return machine_name
+
+
+def scan_output_name(filename):
+  "scan output name"
+  fin = open(filename, "r")
+  this_output = False
+  output_name = "none"
+  for line in fin:
+    if line.strip() == "":
+      continue
+    if RE_COMMENT_LINE.match(line):
+      continue
+    index = line.find("menu")
+    if index == 0:
+      this_output = False
+    kconfig_list = RE_KCONFIG_LINE.findall(line)
+    if kconfig_list:
+      if CONFIGURES[kconfig_list[0]] == "y":
+        this_output = True
+    elif this_output:
+      output_list = RE_OUTPUT_LINE.findall(line)
+      if output_list:
+        output_name = output_list[0]
+        break
+  fin.close()
+  return output_name
 
 
 

@@ -25,7 +25,7 @@ static void hash_print_info(struct hash *hash)
     list_for_each(&hash->nodes_array[i], helem, node) {
       count++;
     }
-    print_uart("%lu\n", count);
+    //    print_uart("%lu\n", count);
   }
 }
 

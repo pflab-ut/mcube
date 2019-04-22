@@ -1,3 +1,4 @@
 ARCH_NAME = x86
 CC = gcc
+OUTPUT_NAME = uart
 ALGO_NAME = fp

@@ -48,6 +48,7 @@ void init_arch(void)
    * with zero. Kernel assembly code also assumes a zeroed BSS
    * space */
   clear_bss();
+  serial_init();
 
   /*
    * Very-early setup: Do not call any code that will use
@@ -90,7 +91,6 @@ void init_arch(void)
   mptables_init();
 
   /* Remap and mask the PIC; it's just a disturbance */
-  serial_init();
   pic_init();
 
   /* Initialize the APICs (and map their MMIO regs) before enabling

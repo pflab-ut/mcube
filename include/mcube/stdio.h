@@ -16,6 +16,7 @@ void printk_bust_all_locks(void);
 //int printk(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 int printk(const char *fmt, ...);
 
+
 /* print for both kernel and user modes. */
 int print(const char *fmt, ...);
 
@@ -23,6 +24,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args);
 
 void serial_putc(char c);
 int print_uart(const char *fmt, ...);
+
 
 void __noreturn loop_print(char ch, int color);
 

@@ -63,11 +63,13 @@ menu Print
   config CONFIG_PRINT2CONSOLE
     title Print to Console
     default y
+    oname console
     defs -DCONFIG_PRINT2CONSOLE
     conflicts CONFIG_ARCH_ARM
   config CONFIG_PRINT2UART
     title Print to UART
     default n
+    oname uart
     defs -DCONFIG_PRINT2UART
     conflicts CONFIG_ARCH_SIM
     conflicts CONFIG_ARCH_AXIS
