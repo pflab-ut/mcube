@@ -58,6 +58,6 @@ systems.
 * `Makefile`: Makefile
 * `README.md`: Readme file
 * `Rules.mak`: Makefile-related rule file
+* `astylerc`: `astyle` configuration file
 * `configure`: configuration file
 * `pylintrc`: `pylint` configuration file
-
