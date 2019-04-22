@@ -393,8 +393,8 @@ void sched_init(void)
    * lost, the entire kernel will halt.
    */
   //  pit_monotonic((1000 * 1000) / HZ);
-  init_timer(TICK_USEC);
-  start_timer();
+  init_pit_timer(TICK_USEC);
+  start_pit_timer();
 }
 
 

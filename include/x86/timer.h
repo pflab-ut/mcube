@@ -6,10 +6,6 @@
 #ifndef __MCUBE_X86_TIMER_H__
 #define __MCUBE_X86_TIMER_H__
 
-#define PIT_HZ 1193180 /* 1.19318MHz */
-
-#define PIT_CNT0 0x0040
-#define PIT_CTRL 0x0043
 
 /* enable each timer */
 #define APIC_TIMER 1
@@ -17,19 +13,6 @@
 #define HPET_TIMER 0
 
 #ifndef __ASSEMBLY__
-
-
-/**
- * @fn    timer_enable
- * @brief Enable timer interrupts.
- */
-void timer_enable(void);
-
-/**
- * @fn    timer_disable
- * @brief Disable timer interrupts.
- */
-void timer_disable(void);
 
 
 static inline unsigned long tsc2usec(unsigned long tsc)
@@ -68,7 +51,6 @@ static inline unsigned long get_current_cpu_time(void)
   return rdtsc();
   //	return read_HPET_counter();
 }
-
 
 
 #endif	/* !__ASSEMBLY__ */

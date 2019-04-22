@@ -120,7 +120,7 @@ void init_arch(void)
   //  smpboot_trigger_secondary_cores_testcases();
 
   //  run_test_cases();
-  user_main(0, NULL);
+  //  user_main(0, NULL);
 
 }
 
