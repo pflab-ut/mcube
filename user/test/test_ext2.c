@@ -208,27 +208,18 @@ __unused static void path_get_parent(const char *path, char *parent,
  */
 
 
-#define TEST_INODES      0
-#define TEST_BLOCK_READS    0
-#define TEST_FILE_READS      0
-#define TEST_DIR_ENTRIES    0
-#define TEST_PATH_CONVERSION    0
-#define TEST_INODE_ALLOC_DEALLOC  0
-#define TEST_BLOCK_ALLOC_DEALLOC  0
-#define TEST_FILE_WRITES    0
-#define TEST_FILE_EXISTENCE    0
-#define TEST_FILE_CREATION    0
-#define TEST_FILE_TRUNCATE    0
-#define TEST_FILE_DELETION    0
-
-#if  (TEST_INODE_ALLOC_DEALLOC == 1) && (EXT2_SMP_TESTS == 1)
-#error  Cannot run serial 'inode allocation' tests with the SMP ones
-#endif
-
-#if  (TEST_BLOCK_ALLOC_DEALLOC == 1) && (EXT2_SMP_TESTS == 1)
-#error  Cannot run serial 'block allocation' tests with the SMP ones
-#endif
-
+#define TEST_INODES      1
+#define TEST_BLOCK_READS    1
+#define TEST_FILE_READS      1
+#define TEST_DIR_ENTRIES    1
+#define TEST_PATH_CONVERSION    1
+#define TEST_INODE_ALLOC_DEALLOC  1
+#define TEST_BLOCK_ALLOC_DEALLOC  1
+#define TEST_FILE_WRITES    1
+#define TEST_FILE_EXISTENCE    1
+#define TEST_FILE_CREATION    1
+#define TEST_FILE_TRUNCATE    1
+#define TEST_FILE_DELETION    1
 
 
 enum {
@@ -1108,8 +1099,8 @@ out1:
     printk("%s: Sucess!", __func__);
   }
 
-  kfree(buf);
   kfree(buf2);
+  kfree(buf);
 }
 
 /*
