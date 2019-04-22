@@ -22,11 +22,11 @@ pip3 install pyflakes pylint
 $prefix git samba make doxygen sendmail git
 
 # LaTeX
-$prefix tetex-* texlive-latex* texlive-science ptex-jtex
-$prefix texlive-lang-japanese texlive-fonts-recommended
-$prefix dvi2ps-fontdesc-morisawa5   
+#$prefix tetex-* texlive-latex* texlive-science ptex-jtex
+#$prefix texlive-lang-japanese texlive-fonts-recommended
+#$prefix dvi2ps-fontdesc-morisawa5
 
-# qemu
+# QEMU
 $prefix qemu qemu-system
 
 

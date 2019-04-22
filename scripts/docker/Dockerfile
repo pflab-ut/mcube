@@ -16,11 +16,6 @@ RUN set -x \
     && pip3 install pyflakes pylint \
     && mkdir -p $HOME
 
-# for LaTeX
-#               tetex-* texlive-latex* texlive-science ptex-jtex \
-#               texlive-lang-japanese texlive-fonts-recommended \
-#               dvi2ps-fontdesc-morisawa5 \
-
 VOLUME $HOME
 
 CMD ["/bin/bash"]
