@@ -192,7 +192,7 @@ int run(unsigned long nr_threads)
   //syscall0(SYS_sched);
 
   do_release();
-  start_timer(0);
+  start_timer();
 
 
   //  generate_software_interrupt(0);
@@ -213,7 +213,7 @@ int run(unsigned long nr_threads)
     //    wait_until_next_interrupt();
   }
 
-  stop_timer(0);
+  stop_timer();
 
   print("run() end\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));

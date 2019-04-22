@@ -109,7 +109,9 @@ static void apic_test_periodic_mode(void)
   /* Testing showed that big delay values catches
    * more periodic timer accuracy errors .. */
   us = 50 * 1000;
-  apic_monotonic(us, vector);
+  //  apic_monotonic(us, vector);
+  init_apic_timer(us, vector);
+  start_timer();
 
   /* After each delay, store ticks triggered so far */
   local_irq_enable();

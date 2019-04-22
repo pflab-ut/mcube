@@ -9,9 +9,8 @@
 #ifndef __ASSEMBLY__
 
 
-
-void start_timer(unsigned int ch);
-void stop_timer(unsigned int ch);
+void start_timer(void);
+void stop_timer(void);
 void init_timer(unsigned long tick_us);
 
 int handle_timer_tick(int irq, void *dummy);

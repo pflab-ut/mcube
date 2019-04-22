@@ -219,12 +219,12 @@ void pit_oneshot(uint64_t us)
   pit_set_counter(us, PIT_COUNTER0);
 }
 
-void init_timer(unsigned long tick_us)
+void init_pit_timer(unsigned long tick_us)
 {
   pit_set_counter(tick_us, PIT_COUNTER0);
 }
 
-void start_timer(__unused unsigned int ch)
+void start_pit_timer(__unused unsigned int ch)
 {
   union pit_cmd cmd = { .raw = 0 };
   /* No control over GATE-0: it's always positive */
@@ -239,7 +239,7 @@ void start_timer(__unused unsigned int ch)
   //  outb(inb(PIC0_IMR) & unmask_irq(PIT_IRQ), PIC0_IMR);
 }
 
-void stop_timer(__unused unsigned int ch)
+void stop_pit_timer(__unused unsigned int ch)
 {
   union pit_cmd cmd = { .raw = 0 };
 

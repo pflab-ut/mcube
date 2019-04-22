@@ -270,7 +270,7 @@ struct proc *sched_tick(void)
   if (TICK_USEC <= 1 * 1000 * 1000 * 1000
       && PS->sys_ticks % ((1 * 1000 * 1000) / TICK_USEC) == 0) {
     printk("One second has elapsed...\n");
-    //    stop_timer(0);
+    //    stop_timer();
   }
 
   PS->sys_ticks++;
@@ -394,7 +394,7 @@ void sched_init(void)
    */
   //  pit_monotonic((1000 * 1000) / HZ);
   init_timer(TICK_USEC);
-  start_timer(0);
+  start_timer();
 }
 
 

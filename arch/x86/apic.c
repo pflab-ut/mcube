@@ -255,6 +255,7 @@ void apic_init(void)
 
   printk("APIC: bootstrap core lapic enabled, apic_id=0x%x\n",
          bootstrap_apic_id.id);
+
 }
 
 /*
@@ -416,4 +417,33 @@ void *apic_vrbase(void)
   assert(apic_virt_base != NULL);
 
   return apic_virt_base;
+}
+
+
+void init_apic_timer(unsigned long tick_us, uint8_t vector)
+{
+  union apic_lvt_timer lvt_timer;
+
+  /* Before setting up the counter */
+  lvt_timer.value = 0;
+  lvt_timer.vector = vector;
+  lvt_timer.mask = APIC_MASK;
+  lvt_timer.timer_mode = APIC_TIMER_PERIODIC;
+  apic_write(APIC_LVTT, lvt_timer.value);
+
+  apic_set_counter_us(tick_us);
+}
+
+void start_apic_timer(void)
+{
+  union apic_lvt_timer lvt_timer = { .value = apic_read(APIC_LVTT)};
+  lvt_timer.mask = APIC_UNMASK;
+  apic_write(APIC_LVTT, lvt_timer.value);
+}
+
+void stop_apic_timer(void)
+{
+  union apic_lvt_timer lvt_timer = { .value = apic_read(APIC_LVTT)};
+  lvt_timer.mask = APIC_MASK;
+  apic_write(APIC_LVTT, lvt_timer.value);
 }

@@ -93,7 +93,7 @@ static void pit_test_periodic_irq(void)
 
   //  pit_monotonic(us);
   init_timer(us);
-  start_timer(0);
+  start_timer();
 
 
   /* After each delay, store ticks triggered so far */

@@ -10,10 +10,10 @@ void init_timer(__unused unsigned long tick_us)
 }
 
 
-void start_timer(__unused unsigned int ch)
+void start_timer(void)
 {
 }
 
-void stop_timer(__unused unsigned int ch)
+void stop_timer(void)
 {
 }

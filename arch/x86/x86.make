@@ -140,6 +140,7 @@ SRCS +=		\
  $(TOP_DIR)/arch/x86/ramdisk.c	\
 	$(TOP_DIR)/arch/x86/thread.c \
 	$(TOP_DIR)/arch/x86/syscall.c \
+	$(TOP_DIR)/arch/x86/timer.c \
 	$(TOP_DIR)/arch/x86/init.c
 
 

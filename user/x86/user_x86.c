@@ -68,7 +68,7 @@ int ap_main(void)
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
   printk("user_arch_main()\n");
-  //  start_timer(0);
+  //  start_timer();
   //  user_thread_main();
   //  test_pit();
 
