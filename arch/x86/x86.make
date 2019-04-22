@@ -124,7 +124,7 @@ SRCS +=	\
   $(TOP_DIR)/arch/x86/apic.c	\
   $(TOP_DIR)/arch/x86/ioapic.c	\
   $(TOP_DIR)/drivers/misc/keyboard.c \
-  $(TOP_DIR)/drivers/uart/serial.c	\
+  $(TOP_DIR)/drivers/uart/uart_x86.c	\
   $(TOP_DIR)/arch/x86/pic.c	\
   $(TOP_DIR)/arch/x86/pit.c
 
@@ -144,10 +144,6 @@ SRCS +=		\
 	$(TOP_DIR)/arch/x86/init.c
 
 
-
-#SRCS += \
-	$(TOP_DIR)/drivers/uart/uart.c \
-	$(TOP_DIR)/drivers/uart/uart_x86.c \
 
 
 SRCS += \
