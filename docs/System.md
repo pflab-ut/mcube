@@ -30,10 +30,10 @@ systems.
 
 # Task Queues
 
-* O(1): Each priority task queue has priority-based double circular
+* *O(1)*: Each priority task queue has priority-based double circular
   linked list like O(1) scheduler in Linux.  
-* O(logN) Binominal Heap: One priority task queue manages binominal heap.
-* O(N) Double Circular Linked List: One priority task queue has
+* *O(logN)* Binominal Heap: One priority task queue manages binominal heap.
+* *O(N)* Double Circular Linked List: One priority task queue has
   priority-based double circular linked list.
 
 # Directories
