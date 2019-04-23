@@ -138,7 +138,11 @@ static inline void proc_init(struct proc *proc)
   proc->state = TD_INVALID;
   list_init(&proc->pnode);
 
+#if CONFIG_OPTION_FS_EXT2
   proc->working_dir = EXT2_ROOT_INODE;
+#else
+  proc->working_dir = 0;
+#endif
   unrolled_init(&proc->fdtable, 32);
 }
 

@@ -300,7 +300,6 @@ void smpboot_init(void)
   assert(nr_alive_cpus == nr_cpus);
 }
 
-#if 1
 /* testcases */
 
 static void __noreturn test0(void)
@@ -346,4 +345,3 @@ static void run_secondary_core_testcases(void)
   //  test_ext2();
 }
 
-#endif

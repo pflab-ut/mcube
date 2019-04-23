@@ -55,26 +55,26 @@ static inline int is_irq_enabled(unsigned long flags)
 }
 
 
-static inline void save_local_irq(unsigned long *flags)
+static inline void save_local_irq(union rflags *flags)
 {
   asm volatile("mrs    %0, daif\n"
-               : "=r"(*flags)
+               : "=r"(flags->raw)
                :
                : "memory");
 
-  if (is_irq_enabled(*flags)) {
+  if (is_irq_enabled(flags->raw)) {
     disable_local_irq();
   }
 }
 
-static inline void restore_local_irq(unsigned long *flags)
+static inline void restore_local_irq(union rflags *flags)
 {
   asm volatile("msr    daif, %0"
                :
-               : "r"(*flags)
+               : "r"(flags->raw)
                : "memory");
 
-  if (is_irq_enabled(*flags)) {
+  if (is_irq_enabled(flags->raw)) {
     enable_local_irq();
   }
 }

@@ -755,7 +755,7 @@ int printk(const char *fmt, ...)
 {
   va_list args;
   int n;
-  
+
   /* NOTE! This will deadlock if the code enclosed
    * by this lock triggered exceptions: the default
    * exception handlers already call printk() */

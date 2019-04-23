@@ -22,17 +22,17 @@ extern unsigned long current_cpu;
  * @brief CPU ID information
  */
 struct cpuid_info {
-  /** EAX register. */
-  unsigned int eax;
-  /** EBX register. */
-  unsigned int ebx;
-  /** ECX register. */
-  unsigned int ecx;
-  /** EDX register. */
-  unsigned int edx;
+  /** RAX register. */
+  unsigned int rax;
+  /** RBX register. */
+  unsigned int rbx;
+  /** RCX register. */
+  unsigned int rcx;
+  /** RDX register. */
+  unsigned int rdx;
 };
 
-typedef struct cpuid_info cpuid_info;
+typedef struct cpuid_info cpuid_info_t;
 
 int get_nr_cpu_cores(void);
 

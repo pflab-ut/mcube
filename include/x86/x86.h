@@ -18,9 +18,9 @@
 #ifndef __ASSEMBLY__
 
 
-static inline union x86_rflags get_rflags(void)
+static inline union rflags get_rflags(void)
 {
-  union x86_rflags flags;
+  union rflags flags;
 
   asm volatile("pushfq;"
                "popq %0;"
@@ -36,7 +36,7 @@ static inline union x86_rflags get_rflags(void)
  * should be compiled to mark the lock as available (lock->val
  * = 1) before enabling interrupts, but never after.
  */
-static inline void set_rflags(union x86_rflags flags)
+static inline void set_rflags(union rflags flags)
 {
   asm volatile("pushq %0;"
                "popfq;"
@@ -50,9 +50,9 @@ static inline void set_rflags(union x86_rflags flags)
  * This is same as the CPU rflags value following #RESET or
  * INIT SIPI, with the difference of having IRQs enabled.
  */
-static inline union x86_rflags default_rflags(void)
+static inline union rflags default_rflags(void)
 {
-  union x86_rflags flags;
+  union rflags flags;
 
   flags.raw = 0;
   flags.__reserved1_0 = 1;

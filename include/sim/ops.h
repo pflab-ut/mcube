@@ -8,6 +8,19 @@
 
 #ifndef __ASSEMBLY__
 
+static inline void cpuid(uint64_t op,
+                         cpuid_info_t *cinfo)
+{
+  cinfo->rax = op;
+  cinfo->rcx = 0;
+  asm volatile("cpuid"
+               : "=a"(cinfo->rax),
+               "=b"(cinfo->rbx),
+               "=c"(cinfo->rcx),
+               "=d"(cinfo->rdx)
+               : "0"(cinfo->rax), "2"(cinfo->rcx));
+}
+
 static inline uint64_t rdtsc(void)
 {
   uint64_t x;
@@ -29,19 +42,6 @@ static inline uint64_t rdtscp(void)
 }
 
 
-static inline void cpuid(unsigned int op,
-                         unsigned int *eax, unsigned int *ebx,
-                         unsigned int *ecx, unsigned int *edx)
-{
-  *eax = op;
-  *ecx = 0;
-  asm volatile("cpuid"
-               : "=a"(*eax),
-               "=b"(*ebx),
-               "=c"(*ecx),
-               "=d"(*edx)
-               : "0"(*eax), "2"(*ecx));
-}
 
 
 static inline void trap(__unused uint32_t trap_code)

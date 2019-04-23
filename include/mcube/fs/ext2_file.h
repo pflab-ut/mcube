@@ -1,10 +1,10 @@
 /**
- * @file include/x86/file.h
+ * @file include/mcube/fs/ext2_file.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_X86_FILE_H__
-#define __MCUBE_X86_FILE_H__
+#ifndef __MCUBE_FS_EXT2_FILE_H__
+#define __MCUBE_FS_EXT2_FILE_H__
 
 #ifndef __ASSEMBLY__
 
@@ -47,4 +47,4 @@ void file_run_tests(void);
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MCUBE_X86_FILE_H__ */
+#endif /* __MCUBE_FS_EXT2_FILE_H__ */

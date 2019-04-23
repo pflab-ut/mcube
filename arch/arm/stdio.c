@@ -9,7 +9,7 @@ static spinlock_t putchar_lock = INIT_SPINLOCK;
 
 int putchar(int c)
 {
-  unsigned long flags;
+  union rflags flags;
   save_local_irq(&flags);
   spin_lock(&putchar_lock);
   uart_putc(c, 0);

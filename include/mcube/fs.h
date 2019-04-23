@@ -8,6 +8,7 @@
 
 #if CONFIG_OPTION_FS_EXT2
 #include <mcube/fs/ext2.h>
+#include <mcube/fs/ext2_file.h>
 #elif CONFIG_OPTION_FS_FAT
 #include <mcube/fs/fat.h>
 #endif /* CONFIG_OPTION_FS_EXT2 */

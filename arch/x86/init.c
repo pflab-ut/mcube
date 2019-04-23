@@ -22,7 +22,8 @@ void clear_bss(void)
   memset(__bss_start, 0, __bss_end - __bss_start);
 }
 
-static void print_info(void)
+
+static void print_memory_info(void)
 {
   printk("Mcube Kernel\n\n");
 
@@ -37,6 +38,55 @@ static void print_info(void)
   printk("BSS start  = 0x%lx\n", __bss_start);
   printk("BSS end    = 0x%lx\n", __bss_end);
   printk("BSS size   = %d bytes\n\n", __bss_end - __bss_start);
+}
+
+static void print_vendor_id(void)
+{
+  char vendor_id[VENDOR_ID_LENGTH+1];
+  cpuid_info_t cinfo;
+  cpuid(0x0, &cinfo);
+  printk("Largest Standard Function Number Supported: %d\n", cinfo.rax);
+  memcpy(&vendor_id[0], &cinfo.rbx, 4);
+  memcpy(&vendor_id[4], &cinfo.rdx, 4);
+  memcpy(&vendor_id[8], &cinfo.rcx, 4);
+  vendor_id[VENDOR_ID_LENGTH] = '\0';
+  printk("Vendor ID: %s\n", vendor_id);
+}
+
+static void print_simd_info(void)
+{
+  cpuid_info_t cinfo;
+  cpuid(0x1, &cinfo);
+  printk("MMX: %s, ", cinfo.rdx & 1 << 23 ? "OK" : "NG");
+  printk("SSE: %s, ", cinfo.rdx & 1 << 25 ? "OK" : "NG");
+  printk("AVX: %s, ", cinfo.rcx & 1 << 28 ? "OK" : "NG");
+  printk("FMA: %s, ", cinfo.rcx & 1 << 12 ? "OK" : "NG");
+  cpuid(0x7, &cinfo);
+  printk("AVX2: %s\n", cinfo.rbx & 1 <<  5 ? "OK" : "NG");
+}
+
+
+static void print_cpu_brand_info(void)
+{
+  cpuid_info_t cinfo;
+  char cpu_brand[CPU_BRAND_LENGTH+1];
+  cpuid(0x80000002, &cinfo);
+  memcpy(&cpu_brand[0], &cinfo, sizeof(cinfo));
+  cpuid(0x80000003, &cinfo);
+  memcpy(&cpu_brand[16], &cinfo, sizeof(cinfo));
+  cpuid(0x80000004, &cinfo);
+  memcpy(&cpu_brand[32], &cinfo, sizeof(cinfo));
+  cpu_brand[CPU_BRAND_LENGTH] = '\0';
+  printk("CPU Brand: %s\n", cpu_brand);
+}
+
+
+static void print_info(void)
+{
+  print_memory_info();
+  print_vendor_id();
+  print_simd_info();
+  print_cpu_brand_info();
 }
 
 
@@ -59,12 +109,12 @@ void init_arch(void)
 
   schedulify_this_code_path(BOOTSTRAP);
 
+  /* print information */
+  print_info();
+
   /*
    * Memory Management init
    */
-
-  print_info();
-
   /* First, don't override the ramdisk area (if any) */
   ramdisk_init();
 
@@ -103,6 +153,13 @@ void init_arch(void)
 
   keyboard_init();
 
+  /* CPU information */
+#if 0
+  print_cpu_brand();
+  print_simd_info();
+  print_vendor_id();
+#endif
+  
   /* Startup finished, roll-in the scheduler! */
   sched_init();
   enable_local_irq();
@@ -146,66 +203,3 @@ void init_arch_ap(void)
 void exit_arch_ap(void)
 {
 }
-
-
-#if 0
-
-void init_arch(void)
-{
-  disable_local_irq();
-  init_cpu();
-  /* initialize console */
-#if CONFIG_PRINT2CONSOLE
-  init_tty();
-#elif CONFIG_PRINT2UART
-  init_uart();
-#else
-#error "Unknown Print to Output"
-#endif /* CONFIG_PRINT2UART */
-
-  //  tty_set_textcolor(TTY_ID, TEXTCOLOR_LTGRAY, TEXTCOLOR_BLACK);
-  //  tty_clear(TTY_ID);
-
-
-  /* initialize memory */
-  init_acpi();
-  init_pmap();
-  init_page();
-
-  init_irq();
-  init_exception();
-  init_syscall();
-
-
-  init_keyboard();
-  init_apic();
-  init_kmalloc();
-#if 0
-  print_cpu_brand();
-  print_simd_info();
-  print_vendor_id();
-#endif
-
-  sched_time = 100;
-
-  init_timer(TICK_USEC);
-
-
-  enable_local_irq();
-
-
-  //asm volatile("int 0x0");
-  //  asm volatile("int 0x12");
-  //  asm volatile("int 0x32");
-  //  kshell();
-  //  init_cache();
-  printk("init_end()\n");
-
-  for (;;) {
-    //    printk("a");
-    //printk("read_hpet_counter() = %lu\n", read_hpet_counter());
-    //    printk("TIMER_COMPARATOR_64(0) = %lu\n", mmio_in64(TIMER_COMPARATOR_64(0)));
-  }
-}
-
-#endif

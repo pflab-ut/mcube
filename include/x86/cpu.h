@@ -11,6 +11,13 @@
 
 #define REGISTER_LENGTH 64
 
+#define VENDOR_ID_LENGTH 12
+#define CPU_BRAND_LENGTH 48
+
+
+#define REG_LENGTH 64
+
+
 #ifdef __ASSEMBLY__
 
 .macro get_cpu_id
@@ -57,64 +64,59 @@ shrl $0x18, % eax
 
 #define INIT_CPU_EFLAGS (CPU_EFLAGS_IF | CPU_EFLAGS_BIT)
 
+/**
+ * @struct cpuid_info
+ * @brief CPU ID information
+ */
+struct cpuid_info {
+  /** EAX register. */
+  uint64_t rax;
+  /** EBX register. */
+  uint64_t rbx;
+  /** ECX register. */
+  uint64_t rcx;
+  /** EDX register. */
+  uint64_t rdx;
+};
 
-#if 0
-static inline unsigned long get_lapic_id(void)
+typedef struct cpuid_info cpuid_info_t;
+
+static inline void cpuid(uint64_t op,
+                         cpuid_info_t *cinfo)
 {
-  registers4_t regs4;
-  cpuid(0x1, &regs4);
-
-  /* real machine */
-  /* NOTE: omit logical processor id */
-  return (regs4.ebx & 0x0f000000) >> 25;
-  /* virtual machine */
-  //  return (regs4.ebx & 0x0f000000) >> 24;
+  cinfo->rax = op;
+  cinfo->rcx = 0;
+  asm volatile("cpuid"
+               : "=a"(cinfo->rax),
+               "=b"(cinfo->rbx),
+               "=c"(cinfo->rcx),
+               "=d"(cinfo->rdx)
+               : "0"(cinfo->rax), "2"(cinfo->rcx));
 }
-#endif
 
-#if 0
-static inline uint32_t get_lapic_id(void)
+extern int nr_cpus;
+
+
+static inline unsigned long get_cpu_id(void)
 {
-  return mmio_in32(LAPIC_LOCAL_APIC_ID);
-}
+#if 1
+  return 0;
+#else
+  union apic_id id;
+  id.raw = apic_read(APIC_ID);
+  return id.id;
 #endif
+}
 
-//#define get_cpu_id() get_lapic_id()
-#define get_cpu_id() 0
-
-#if 0
 static inline int get_nr_cpu_cores(void)
 {
-  registers4_t regs4;
-  cpuid(0x4, &regs4);
-
-  if (regs4.eax & 0x1f) {
-    /* omit logical cpu id */
-    return ((regs4.eax >> 27) + 1);
-    /* virtual machine */
-    //    return ((regs4.eax >> 26) + 1);
-  }
-
-  return 1;
+  return nr_cpus;
 }
-#endif
 
 void init_syscall(void);
 
 
-void print_vendor_id(void);
-void print_simd_info(void);
-void print_cpu_brand(void);
-
-
-
 #endif /* __ASSEMBLY__ */
-
-#define VENDOR_ID_LENGTH 12
-#define CPU_BRAND_LENGTH 48
-
-
-#define REG_LENGTH 64
 
 
 #endif	/* __MCUBE_X86_CPU_H__ */

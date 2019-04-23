@@ -122,30 +122,6 @@ static inline struct idt_descriptor get_idt(void)
 }
 
 
-/*
- * Disable interrupts, but restore the original %rflags
- * interrupt enable flag (IF) state afterwards.
- */
-
-static inline union x86_rflags disable_local_irq_save(void)
-{
-  union x86_rflags flags;
-
-  flags = get_rflags();
-
-  if (flags.irqs_enabled) {
-    disable_local_irq();
-  }
-
-  return flags;
-}
-
-static inline void local_irq_restore(union x86_rflags flags)
-{
-  if (flags.irqs_enabled) {
-    set_rflags(flags);
-  }
-}
 
 #endif /* !__ASSEMBLY__ */
 

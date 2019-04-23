@@ -13,13 +13,6 @@ void start_timer(void);
 void stop_timer(void);
 void init_timer(unsigned long tick_us);
 
-int handle_timer_tick(int irq, void *dummy);
-
-
-extern unsigned long sys_tsc;
-
-#define TIMER_ONESHOT 0x0
-#define TIMER_PERIODIC 0x1
 
 // 1us
 //#define TICK_USEC 1

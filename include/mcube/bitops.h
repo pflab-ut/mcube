@@ -242,7 +242,7 @@ static inline uint32_t find_last_bit32(uint32_t *b, int nr)
 static inline void set_bit32(volatile uint32_t *addr, int nr)
 {
   int mask;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
@@ -256,7 +256,7 @@ static inline void set_bit32(volatile uint32_t *addr, int nr)
 static inline void clear_bit32(volatile uint32_t *addr, int nr)
 {
   int mask;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
@@ -269,7 +269,7 @@ static inline void clear_bit32(volatile uint32_t *addr, int nr)
 static inline void change_bit32(volatile uint32_t *addr, int nr)
 {
   int mask;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
@@ -281,7 +281,7 @@ static inline void change_bit32(volatile uint32_t *addr, int nr)
 static inline int test_and_set_bit32(volatile uint32_t *addr, int nr)
 {
   int mask, retval;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
@@ -296,7 +296,7 @@ static inline int test_and_set_bit32(volatile uint32_t *addr, int nr)
 static inline int test_and_clear_bit32(volatile uint32_t *addr, int nr)
 {
   int mask, retval;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
@@ -311,7 +311,7 @@ static inline int test_and_clear_bit32(volatile uint32_t *addr, int nr)
 static inline int test_and_change_bit32(volatile uint32_t *addr, int nr)
 {
   int mask, retval;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
@@ -461,7 +461,7 @@ static inline uint64_t find_last_zero_bit64(uint64_t *b, int nr)
 static inline void set_bit64(volatile uint64_t *addr, int nr)
 {
   int mask;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 6;
   mask = 1 << (nr & 0x3f);
@@ -475,7 +475,7 @@ static inline void set_bit64(volatile uint64_t *addr, int nr)
 static inline void clear_bit64(volatile uint64_t *addr, int nr)
 {
   int mask;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 6;
   mask = 1 << (nr & 0x3f);
@@ -488,7 +488,7 @@ static inline void clear_bit64(volatile uint64_t *addr, int nr)
 static inline void change_bit64(volatile uint64_t *addr, int nr)
 {
   int mask;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 6;
   mask = 1 << (nr & 0x3f);
@@ -500,7 +500,7 @@ static inline void change_bit64(volatile uint64_t *addr, int nr)
 static inline int test_and_set_bit64(volatile uint64_t *addr, int nr)
 {
   int mask, retval;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 6;
   mask = 1 << (nr & 0x3f);
@@ -515,7 +515,7 @@ static inline int test_and_set_bit64(volatile uint64_t *addr, int nr)
 static inline int test_and_clear_bit64(volatile uint64_t *addr, int nr)
 {
   int mask, retval;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 6;
   mask = 1 << (nr & 0x3f);
@@ -530,7 +530,7 @@ static inline int test_and_clear_bit64(volatile uint64_t *addr, int nr)
 static inline int test_and_change_bit64(volatile uint64_t *addr, int nr)
 {
   int mask, retval;
-  unsigned long flags;
+  union rflags flags;
 
   addr += nr >> 6;
   mask = 1 << (nr & 0x3f);

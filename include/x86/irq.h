@@ -300,30 +300,24 @@ static inline int is_irq_enabled(unsigned long flags)
   return flags & CPU_EFLAGS_INTERRUPT;
 }
 
+/*
+ * Disable interrupts, but restore the original %rflags
+ * interrupt enable flag (IF) state afterwards.
+ */
 
-static inline void save_local_irq(unsigned long *flags)
+static inline void save_local_irq(union rflags *flags)
 {
-  asm volatile("# raw_save_flags\n\t"
-               "pushf ; pop %0"
-               : "=rm"(*flags)
-               :
-               : "memory");
+  *flags = get_rflags();
 
-  if (is_irq_enabled(*flags)) {
+  if (flags->irqs_enabled) {
     disable_local_irq();
   }
 }
 
-
-static inline void restore_local_irq(unsigned long *flags)
+static inline void restore_local_irq(union rflags *flags)
 {
-  asm volatile("push %0 ; popf"
-               :
-               :"g"(*flags)
-               :"memory", "cc");
-
-  if (is_irq_enabled(*flags)) {
-    enable_local_irq();
+  if (flags->irqs_enabled) {
+    set_rflags(*flags);
   }
 }
 

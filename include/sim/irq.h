@@ -22,12 +22,12 @@ static inline int is_irq_enabled(__unused unsigned long flags)
   return 1;
 }
 
-static inline void save_local_irq(__unused unsigned long *flags)
+static inline void save_local_irq(__unused union rflags *flags)
 {
 }
 
 
-static inline void restore_local_irq(__unused unsigned long *flags)
+static inline void restore_local_irq(__unused union rflags *flags)
 {
 }
 

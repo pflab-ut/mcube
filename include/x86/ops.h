@@ -30,19 +30,6 @@ typedef struct registers {
   uint64_t r15;
 } registers_t;
 
-/**
- * @struct registers4
- * @brief  A record describing the first 4 general-purpose registers.
- */
-struct registers4 {
-  uint32_t eax;
-  uint32_t ebx;
-  uint32_t ecx;
-  uint32_t edx;
-} __packed;
-
-typedef struct registers4 registers4_t;
-
 
 static inline uint8_t inb(uint16_t port)
 {
@@ -176,17 +163,6 @@ static inline void mfence(void)
 {
   asm volatile("mfence");
 }
-
-
-/*
-  static inline void cpuid(uint32_t code, registers4_t *regs)
-  {
-  asm volatile("cpuid"
-  : "=a" (regs->eax), "=b" (regs->ebx), "=c" (regs->ecx),
-  "=d" (regs->edx)
-  : "0" (code));
-  }
-*/
 
 
 /* read time stamp counter */

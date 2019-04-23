@@ -167,9 +167,9 @@ static void rq_return_proc(struct runqueue *rq, struct proc *proc, int prio)
 
 void sched_enqueue(struct proc *proc)
 {
-  union x86_rflags flags;
+  union rflags flags;
 
-  flags = disable_local_irq_save();
+  save_local_irq(&flags);
 
   proc->enter_runqueue_ts = PS->sys_ticks;
   proc->state = TD_RUNNABLE;
@@ -177,7 +177,7 @@ void sched_enqueue(struct proc *proc)
 
   list_add_tail(&PS->just_queued, &proc->pnode);
 
-  local_irq_restore(flags);
+  restore_local_irq(&flags);
   sched_dbg("@@ T%d added\n", proc->pid);
 }
 

@@ -65,13 +65,13 @@
 #define E820_PHYS_MAX  (E820_PHYS_BASE + 0x1000)
 
 /* Struct start signature */
-#define E820_INIT_SIG  ('C'<<(3*8) | 'U'<<(2*8) | 'T'<<(1*8) | 'E')
+#define E820_INIT_SIG  ('C' << (3 * 8) | 'U' << (2 * 8) | 'T' << (1 * 8) | 'E')
 
 /* E820H-struct-is-validated signature */
-#define E820_VALID_SIG  ('V'<<(3*8) | 'A'<<(2*8) | 'L'<<(1*8) | 'D')
+#define E820_VALID_SIG  ('V' << (3 * 8) | 'A' << (2 * 8) | 'L' << (1 * 8) | 'D')
 
 /* ACPI-defined 'E820h supported' BIOS signature */
-#define E820_BIOS_SIG  ('S'<<(3*8) | 'M'<<(2*8) | 'A'<<(1*8) | 'P')
+#define E820_BIOS_SIG  ('S' << (3 * 8) | 'M' << (2 * 8) | 'A' << (1 * 8) | 'P')
 
 #define E820_END  0xffffffff  /* E820 list end mark */
 
@@ -123,15 +123,15 @@ enum {
  * Prerequisite: E820h-struct previously validated
  */
 #define e820_for_each(range)                            \
-  for (uint32_t *entry = (uint32_t *)E820_BASE + 1,     \
+  for (uint32_t *entry = (uint32_t *) E820_BASE + 1,    \
          entry_len = *entry++,                          \
          __unused *_____b = (uint32_t *)                \
-         ({range  = (struct e820_range *)entry;});      \
+         ({range  = (struct e820_range *) entry;});     \
                                                         \
-       *(entry - 1) != E820_END;                        \
-                                                        \
-       entry = (uint32_t *)((char *)entry + entry_len), \
-         entry_len = *entry++,                          \
+       *(entry - 1) != E820_END;                          \
+                                                          \
+       entry = (uint32_t *)((char *) entry + entry_len),  \
+         entry_len = *entry++,                            \
          range = (struct e820_range *)entry)
 
 

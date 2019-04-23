@@ -11,6 +11,7 @@
 * Completely Fair Schedulerを実装する．
 * Message Passingを作成する．
 * simアーキテクチャでスケジューリングシミュレータを実装する．
+* NR_CPUSを動的に設定する．
 
 ## Known Issues
 

@@ -22,7 +22,7 @@
  * The BIOS knows if a core is usable by checking its
  * Builtin-self-test (BIST) result in %rax after RESET#
  */
-static int nr_cpus = 1;
+int nr_cpus = 1;
 
 /*
  * CPU Descriptors Table

@@ -10,11 +10,11 @@ unsigned long current_cpu = 0;
 
 int get_nr_cpu_cores(void)
 {
-  cpuid_info cinfo;
-  cpuid(0x4, &cinfo.eax, &cinfo.ebx, &cinfo.ecx, &cinfo.edx);
+  cpuid_info_t cinfo;
+  cpuid(0x4, &cinfo);
 
-  if (cinfo.eax & 0x1f) {
-    return ((cinfo.eax >> 26) + 1);
+  if (cinfo.rax & 0x1f) {
+    return ((cinfo.rax >> 26) + 1);
   }
 
   return 1;

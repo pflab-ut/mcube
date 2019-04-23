@@ -31,13 +31,13 @@
  */
 static inline void spin_lock(spinlock_t *lock)
 {
-  union x86_rflags rflags;
+  union rflags flags;
 
   /* Reentrancy-safe place: stack or a register */
-  rflags = disable_local_irq_save();
+  save_local_irq(&flags);
 
   while (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
-    local_irq_restore(rflags);
+    restore_local_irq(&flags);
 
     while (lock->val == SPIN_LOCKED) {
       cpu_pause();
@@ -51,7 +51,7 @@ static inline void spin_lock(spinlock_t *lock)
    * must be themselves protected against concurrent SMP access.
    * Access a lock's elements if and only if it's already held.
    */
-  lock->rflags = rflags;
+  lock->flags = flags;
 }
 
 /*
@@ -63,16 +63,16 @@ static inline void spin_lock(spinlock_t *lock)
  */
 static inline bool spin_trylock(spinlock_t *lock)
 {
-  union x86_rflags rflags;
+  union rflags flags;
 
-  rflags = disable_local_irq_save();
+  save_local_irq(&flags);
 
   if (atomic_bit_test_and_set(&lock->val) == SPIN_LOCKED) {
-    local_irq_restore(rflags);
+    restore_local_irq(&flags);
     return false;
   }
 
-  lock->rflags = rflags;
+  lock->flags = flags;
   return true;
 }
 
@@ -81,14 +81,14 @@ static inline bool spin_trylock(spinlock_t *lock)
  */
 static inline void spin_unlock(spinlock_t *lock)
 {
-  union x86_rflags rflags;
+  union rflags flags;
 
   /* Access a lock's elements iff it's already held. */
-  rflags = lock->rflags;
+  flags = lock->flags;
   barrier();
   lock->val = SPIN_UNLOCKED;
 
-  local_irq_restore(rflags);
+  restore_local_irq(&flags);
 }
 
 /*
