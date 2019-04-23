@@ -26,19 +26,19 @@ void uart_putc(char c, uint8_t ch)
   uart_pol_putc(c, ch);
 }
 
-size_t uart_write(void *dev, const void *data, size_t length)
+size_t uart_write(const char *data, size_t length, uint8_t ch)
 {
   size_t num;
 
   for (num = 0; num < length; num++) {
-    uart_putc(((unsigned char *) data)[num], ((uart_devdata *) dev)->ch);
+    uart_putc(data[num], ch);
   }
 
   return num;
 }
 
-size_t uart_read(void *dev, __unused void *data, __unused size_t length)
+size_t uart_read(__unused size_t length, uint8_t ch)
 {
-  return uart_getc(((uart_devdata *) dev)->ch);
+  return uart_getc(ch);
 }
 

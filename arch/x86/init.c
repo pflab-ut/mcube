@@ -98,7 +98,7 @@ void init_arch(void)
    * with zero. Kernel assembly code also assumes a zeroed BSS
    * space */
   clear_bss();
-  serial_init();
+  init_uart();
 
   /*
    * Very-early setup: Do not call any code that will use

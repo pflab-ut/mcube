@@ -400,21 +400,6 @@ void enable_irq(uint8_t irq);
 void disable_irq(uint8_t irq);
 
 
-static inline uint8_t unmask_irq(uint8_t irq)
-{
-  return ~(0x1 << irq) & 0xff;
-}
-
-static inline uint8_t mask_irq(uint8_t irq)
-{
-  return 0x1 << irq;
-}
-
-static inline uint8_t clear_irq(uint8_t irq)
-{
-  return OCW2_SPEC_EOI | irq;
-}
-
 
 #endif /* !__ASSEMBLY__ */
 

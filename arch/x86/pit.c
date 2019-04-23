@@ -179,7 +179,6 @@ void start_pit_timer(void)
   cmd.rw = RW_16bit;
   cmd.timer = 0;
   outb(cmd.raw, PIT_CONTROL);
-  //  outb(inb(PIC0_IMR) & unmask_irq(PIT_IRQ), PIC0_IMR);
 }
 
 void stop_pit_timer(void)

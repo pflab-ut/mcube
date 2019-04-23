@@ -25,10 +25,10 @@ typedef struct uart_devdata uart_devdata;
 
 extern volatile spinlock_t uart_getc_lock, uart_putc_lock;
 
-uint8_t uart_getc(uint8_t port);
-void uart_putc(char c, uint8_t port);
-size_t uart_write(void *dev, const void *data, size_t length);
-size_t uart_read(void *dev, void *data, size_t length);
+uint8_t uart_getc(uint8_t ch);
+void uart_putc(char c, uint8_t ch);
+size_t uart_write(const char *data, size_t length, uint8_t ch);
+size_t uart_read(size_t length, uint8_t ch);
 
 uint8_t uart_pol_getc(uint32_t ch);
 void uart_pol_putc(uint8_t c, uint32_t ch);

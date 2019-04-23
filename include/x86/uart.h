@@ -123,4 +123,6 @@ extern struct uart_devdata uart_data[NR_UART_PORTS];
 
 #endif /* !__ASSEMBLY__ */
 
+
+
 #endif /* __MCUBE_X86_UART_H__ */

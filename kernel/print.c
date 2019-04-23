@@ -770,7 +770,7 @@ int printk(const char *fmt, ...)
 #if CONFIG_PRINT2CONSOLE
   vga_write(kbuf, n, VGA_DEFAULT_COLOR);
 #elif CONFIG_PRINT2UART
-  serial_write(kbuf, n);
+  uart_write(kbuf, n, 0);
 #else
 #error "Unknown Printk to Output"
 #endif
@@ -794,12 +794,10 @@ int print_uart(const char *fmt, ...)
   va_end(args);
   sbuf[n] = '\0';
 
-#if CONFIG_ARCH_X86
-  serial_write(sbuf, n);
+#if CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
+  uart_write(sbuf, n, 0);
 #elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
   puts(sbuf);
-#elif CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
-  uart_write(NULL, sbuf, n);
 #else
 #error "Unknown Architecture"
 #endif

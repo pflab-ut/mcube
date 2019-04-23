@@ -18,8 +18,8 @@
 
 #if PRINT_UART_TESTS
 #define printk(fmt, ...)  print_uart(fmt, ##__VA_ARGS__)
-#define putchar_colored(c, col)  serial_putc(c)
-#define putchar(c)    serial_putc(c)
+#define putchar_colored(c, col)  uart_putc(c)
+#define putchar(c)    uart_putc(c)
 #endif /* PRINTS_TESTS */
 
 static void printk_test_int(void)
@@ -121,22 +121,22 @@ static void printk_test_colors(void)
 
   printk("Colored text: ");
 #if PRINT_UART_TESTS
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
-  serial_putc('A');
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
+  uart_putc('A', 0);
 #else
   uint8_t color = VGA_COLOR(VGA_BLACK, 0);
   putchar_colored('A', color | VGA_BLACK);

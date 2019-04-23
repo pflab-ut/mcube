@@ -194,7 +194,7 @@ static void disable_DLAB(void)
   outb(reg.raw, port_base + UART_LINE_CTRL);
 }
 
-void serial_init(void)
+void init_uart(void)
 {
   union modem_control_reg reg;
   uint16_t divisor = MAX_BAUD / DESIRED_BAUD;
@@ -202,7 +202,7 @@ void serial_init(void)
 
   if ((port_base = *(uint16_t *) VIRTUAL(BDA_COM1_ENTRY)) == 0) {
     printk("COM1: BIOS-reported I/O address = 0; "
-           "no serial port attached\n");
+           "no uart port attached\n");
     return;
   }
 
@@ -269,12 +269,12 @@ static int __putc(uint8_t byte)
   return 0;
 }
 
-void serial_write(const char *buf, int len)
+size_t uart_write(const char *data, size_t length, __unused uint8_t ch)
 {
-  int ret;
+  int ret = 0;
 
   if (port_base == 0) {
-    return;
+    return 0;
   }
 
   spin_lock(&port_lock);
@@ -283,17 +283,16 @@ void serial_write(const char *buf, int len)
     goto out;
   }
 
-  ret = 0;
-
-  while (*buf && len-- && ret == 0) {
-    ret = __putc(*buf++);
+  while (*data && length-- && ret == 0) {
+    ret = __putc(*data++);
   }
 
 out:
   spin_unlock(&port_lock);
+  return ret;
 }
 
-void serial_putc(char c)
+void uart_putc(char c, __unused uint8_t ch)
 {
-  serial_write(&c, 1);
+  uart_write(ch, &c, 1);
 }
