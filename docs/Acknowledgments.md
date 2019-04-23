@@ -2,8 +2,8 @@
 
 ## Sponsors
 
-* NEDO AI April 2019 - March 2021: Research and Development of System on
-  Chip and Software Platforms for Fully Autonomous Driving
+* NEDO AI April 2019 - March 2021: Research and Development of System
+  on a Chip and Software Platforms for Autonomous Driving
 * NEDO IoT June 2017- March 2019: Research and Development of
   Domain-Specific IoT Platforms,  
 
