@@ -39,7 +39,6 @@
 #include <x86/thread.h>
 #include <x86/timer.h>
 #include <x86/uart.h>
-#include <x86/unistd.h>
 #include <x86/vectors.h>
 #include <x86/vga.h>
 
