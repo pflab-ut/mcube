@@ -29,22 +29,19 @@ Please edit `configure` file or execute the following command.
 ```
 $ cp docs/config/ARCH_configure configure
 ```
-where ARCH_configure is `arm_raspi3_configure`, `arm_synquacer_configure`,
+where `ARCH_configure` is `arm_raspi3_configure`, `arm_synquacer_configure`,
 `axis_configure`, `sim_configure`, or `x86_configure`.
 
-
-to `configure` file. ARCH of ARCH_configure is changed to architecture
-name of small characters.
+`ARCH` of `ARCH_configure` is changed to an architecture name of small
+characters.
 Details of `configure` file are explained in `Kconfig`.
-
 
 ## How to Build
 
 First of all you check and modify `configure` file.
-If `CONFIG_XXX=y`, the configuration is enabled.
-If `CONFIG_XXX=n`, the configuration is disabled.
+If `CONFIG_XXX=y`, enable the configuration.
+If `CONFIG_XXX=n`, disable the configuration.
 Then please execute the following command.
-
 ```
 $ make configure
 ```
@@ -73,12 +70,9 @@ $ make run
 ```
 
 Please execute the following command in GUI.
-
 ```
 $ make grun
 ```
-
-After configuration test, send the results to your e-mail.
 
 ## Documentations
 * [System](docs/System.md)
