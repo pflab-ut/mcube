@@ -11,12 +11,6 @@
  * In contrast, all threads in each task shares the address space.
  */
 
-/*
- * OFFSETS -- these are softwired. --
- */
-#define TK_MMU_CNTXT_OFFSET  0x0
-#define TK_SBRK_LIMIT_OFFSET 0x20
-
 #define OFFSET_OF_CPU_CONTEXT 0
 
 
@@ -25,10 +19,6 @@
 
 #ifndef __ASSEMBLY__
 
-
-
-
-typedef struct tlb_info tlb_info;
 
 /**
  * @struct task_struct
@@ -78,22 +68,6 @@ static inline void preempt_enable(void)
     .preempt_count = 0                          \
   }
 
-
-/**
- * @struct emc_req_info
- * @brief Request information to external memory controller
- */
-struct emc_req_info {
-  /** Semaphore to external memory controller. */
-  struct sem_struct sem;
-  /** Pointer to thread sending a reqeust to external memory controller. */
-  struct thread_struct *th;
-};
-
-typedef struct emc_req_info emc_req_info;
-
-extern struct emc_req_info emc_req;
-#define  EMC_REQ_INIT  {.sem  = INIT_COUNT_SEM(0), .th = NULL}
 
 
 void add_thread_to_task(struct thread_struct *);

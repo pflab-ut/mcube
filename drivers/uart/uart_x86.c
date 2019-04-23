@@ -294,5 +294,5 @@ out:
 
 void uart_putc(char c, __unused uint8_t ch)
 {
-  uart_write(ch, &c, 1);
+  uart_write(&c, 1, ch);
 }

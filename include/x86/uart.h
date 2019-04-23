@@ -118,8 +118,6 @@
 #define BAUDRATE_MSB(speed) (((UART_CLK / 16 / (speed)) & 0xff00) >> 8)
 
 
-extern struct dev_ops uart_ops;
-extern struct uart_devdata uart_data[NR_UART_PORTS];
 
 #endif /* !__ASSEMBLY__ */
 

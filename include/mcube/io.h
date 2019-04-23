@@ -9,7 +9,6 @@
 #ifndef __ASSEMBLY__
 
 
-
 #define mmio_in8(addr) (*(volatile uint8_t *) (unsigned long) (addr))
 #define mmio_in16(addr) (*(volatile uint16_t *) (unsigned long) (addr))
 #define mmio_in32(addr) (*(volatile uint32_t *) (unsigned long) (addr))

@@ -43,33 +43,6 @@ void qsort(void *base, size_t num, size_t size, sortcmp cmp);
 #endif /* CONFIG_ARCH_SIM */
 
 
-
-
-/**
- * @brief mem_block_header
- *
- * The mem_block structure has memory block information for dynamic allocation.
- */
-struct mem_block_header {
-  size_t size;
-  unsigned int is_free;
-  struct mem_block_header *next;
-};
-
-typedef struct mem_block_header mem_block_header;
-
-
-/* 4k */
-#define BLOCK_NUM 0x8
-#define MALLOC_SIZE (0x1000 + (BLOCK_NUM - 1) * sizeof(struct mem_block_header))
-
-extern unsigned char user_malloc[MALLOC_SIZE];
-
-extern spinlock_t global_malloc_lock;
-
-struct mem_block_header *get_free_block(size_t size);
-
-
 #endif /* !__ASSEMBLY__ */
 
 #endif /* __MCUBE_MCUBE_STDLIB_H__ */
