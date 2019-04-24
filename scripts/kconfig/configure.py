@@ -15,7 +15,7 @@ def init_sysconfig_algo(fout, algo):
   "initialize algorithm"
   fout.write("ALGO_NAME = " + algo + "\n")
 
-def init_sysconfig_arch(fout, arch):
+def init_sysconfig_arch(fout, arch, machine):
   "initialize architecture"
   if arch == "sim":
     fout.write("ARCH_NAME = sim\n")
@@ -55,12 +55,12 @@ def init_sysconfig_output(fout, output):
     print("Unknown Output")
 
 
-def init_sysconfig(algo, arch, compiler, output):
+def init_sysconfig(algo, arch, machine, compiler, output):
   "initialize sysconfig"
   fout = open("./.sysconfig", "w")
 
   init_sysconfig_algo(fout, algo)
-  init_sysconfig_arch(fout, arch)
+  init_sysconfig_arch(fout, arch, machine)
   init_sysconfig_compiler(fout, compiler)
   init_sysconfig_output(fout, output)
 
@@ -125,6 +125,7 @@ def main():
 
   algo = tools.scan_algo_name(kconfig_file)
   arch = tools.scan_arch_name(kconfig_file)
+  machine = tools.scan_machine_name(kconfig_file)
   compiler = tools.scan_compiler_name(kconfig_file)
   output = tools.scan_output_name(kconfig_file)
 
@@ -138,7 +139,7 @@ def main():
   if not tools.check_conflicts_and_dependencies():
     sys.exit("Error: check_conflicts_and_dependencies()")
 
-  init_sysconfig(algo, arch, compiler, output)
+  init_sysconfig(algo, arch, machine, compiler, output)
 
   init_kconfig()
   init_config()
