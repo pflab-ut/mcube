@@ -50,9 +50,9 @@
 /** Memory. */
 #define CONFIG_MEMORY_VARIABLE 0
 /** Memory. */
-#define CONFIG_MEMORY_256KB 0
+#define CONFIG_MEMORY_256KB 1
 /** Memory. */
-#define CONFIG_MEMORY_1MB 1
+#define CONFIG_MEMORY_1MB 0
 /** Memory. */
 #define CONFIG_MEMORY_8MB 0
 #endif /* __MCUBE_MCUBE_CONFIG_H__ */

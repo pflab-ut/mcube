@@ -15,6 +15,8 @@
 
 #ifndef __ASSEMBLY__
 
+#if !CONFIG_ARCH_SIM
+
 typedef uint64_t dev_t;    /* "Shall be _unsigned_ integer type" */
 typedef uint64_t ino_t;    /* ... */
 typedef uint64_t nlink_t;  /* "Shall be an integer type" */
@@ -56,9 +58,9 @@ typedef enum {
   S_IRWXO    = S_IROTH | S_IWOTH | S_IXOTH,
 
   // 3- File Type
-  S_IFMT    = 0xF000,  /* Mask for the 'file type' mode bits */
-  S_IFSOCK  = 0xC000,  /* Socket */
-  S_IFLNK    = 0xA000,  /* Symbolic link */
+  S_IFMT    = 0xf000,  /* Mask for the 'file type' mode bits */
+  S_IFSOCK  = 0xc000,  /* Socket */
+  S_IFLNK    = 0xa000,  /* Symbolic link */
   S_IFREG    = 0x8000,  /* Regular file */
   S_IFBLK    = 0x6000,  /* Block device */
   S_IFDIR    = 0x4000,  /* Directory */
@@ -93,6 +95,8 @@ struct stat {
   time_t  st_mtime;  /* Time of last data modification */
   time_t  st_ctime;  /* Time of last file status change */
 };
+
+#endif /* !CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */
 
