@@ -14,13 +14,6 @@
  * Minimal printk test cases
  */
 
-#define PRINT_UART_TESTS 1
-
-#if PRINT_UART_TESTS
-#define printk(fmt, ...)  print_uart(fmt, ##__VA_ARGS__)
-#define putchar_colored(c, col)  uart_putc(c)
-#define putchar(c)    uart_putc(c)
-#endif /* PRINTS_TESTS */
 
 static void printk_test_int(void)
 {
@@ -118,26 +111,7 @@ __unused static void printk_test_format(void)
 
 static void printk_test_colors(void)
 {
-
-  printk("Colored text: ");
-#if PRINT_UART_TESTS
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-  uart_putc('A', 0);
-#else
+#if CONFIG_ARCH_X86 && CONFIG_PRINT2CONSOLE
   uint8_t color = VGA_COLOR(VGA_BLACK, 0);
   putchar_colored('A', color | VGA_BLACK);
   putchar_colored('A', color | VGA_BLUE);
@@ -155,7 +129,26 @@ static void printk_test_colors(void)
   putchar_colored('A', color | VGA_LIGHT_MAGNETA);
   putchar_colored('A', color | VGA_YELLOW);
   putchar_colored('A', color | VGA_WHITE);
-#endif
+#else
+  printk("Colored text: ");
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+  putchar('A');
+#endif /* CONFIG_ARCH_X86 && CONFIG_PRINT2CONSOLE */
+
   printk("\n");
 }
 

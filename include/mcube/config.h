@@ -26,9 +26,9 @@
 /** Print. */
 #define CONFIG_PRINT2UART 1
 /** Algorithm. */
-#define CONFIG_ALGO_FP 1
+#define CONFIG_ALGO_FP 0
 /** Algorithm. */
-#define CONFIG_ALGO_RM 0
+#define CONFIG_ALGO_RM 1
 /** Algorithm. */
 #define CONFIG_ALGO_EDF 0
 /** Task Queue. */
@@ -42,7 +42,7 @@
 /** Tie-Break. */
 #define CONFIG_TIE_BREAK_ID 0
 /** Option. */
-#define CONFIG_OPTION_DEBUG 1
+#define CONFIG_OPTION_DEBUG 0
 /** Option. */
 #define CONFIG_OPTION_FS_EXT2 0
 /** Option. */
@@ -50,9 +50,9 @@
 /** Memory. */
 #define CONFIG_MEMORY_VARIABLE 0
 /** Memory. */
-#define CONFIG_MEMORY_256KB 1
+#define CONFIG_MEMORY_256KB 0
 /** Memory. */
-#define CONFIG_MEMORY_1MB 0
+#define CONFIG_MEMORY_1MB 1
 /** Memory. */
 #define CONFIG_MEMORY_8MB 0
 #endif /* __MCUBE_MCUBE_CONFIG_H__ */

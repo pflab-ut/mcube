@@ -14,7 +14,6 @@
 #include <x86/idt.h>
 #include <x86/atomic.h>
 #include <x86/spinlock.h>
-#include <x86/stat.h>
 #include <x86/vm.h>
 
 #include <x86/apic.h>

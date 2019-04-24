@@ -75,20 +75,20 @@ static inline int is_irq_enabled(__unused unsigned long flags)
   return data & 0x1;
 }
 
-static inline void save_local_irq(unsigned long *flags)
+static inline void save_local_irq(union rflags *flags)
 {
   asm volatile("mfs %0, $0" : "=r"(*flags));
 
-  if (is_irq_enabled(*flags)) {
+  if (is_irq_enabled(flags->raw)) {
     disable_local_irq();
   }
 }
 
-static inline void restore_local_irq(unsigned long *flags)
+static inline void restore_local_irq(union rflags *flags)
 {
   asm volatile("mts $0, %0" :: "r"(*flags));
 
-  if (is_irq_enabled(*flags)) {
+  if (is_irq_enabled(flags->raw)) {
     enable_local_irq();
   }
 }

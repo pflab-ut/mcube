@@ -62,6 +62,7 @@ static inline int rq_get_highest_prio(struct runqueue *rq)
       return i;
     }
   }
+
   return UNDEF_PRIO;
 }
 

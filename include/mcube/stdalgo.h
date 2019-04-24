@@ -9,8 +9,8 @@
 #ifndef __ASSEMBLY__
 
 
-uint64_t gcd(uint64_t m, uint64_t n);
-uint64_t lcm(uint64_t m, uint64_t n);
+unsigned long gcd(unsigned long m, unsigned long n);
+unsigned long lcm(unsigned long m, unsigned long n);
 
 
 #endif /* !__ASSEMBLY__ */

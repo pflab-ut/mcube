@@ -30,7 +30,6 @@ void exit_irq(void)
 void init_spinlock(void)
 {
   kbuf_lock = INIT_SPINLOCK;
-  sbuf_lock = INIT_SPINLOCK;
 }
 
 void clear_bss(void)

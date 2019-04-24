@@ -1,10 +1,10 @@
 /**
- * @file include/x86/stat.h
+ * @file include/mcube/stat.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_X86_STAT_H__
-#define __MCUBE_X86_STAT_H__
+#ifndef __MCUBE_MCUBE_STAT_H__
+#define __MCUBE_MCUBE_STAT_H__
 
 
 /*
@@ -96,4 +96,4 @@ struct stat {
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MCUBE_X86_STAT_H__ */
+#endif /* __MCUBE_MCUBE_STAT_H__ */

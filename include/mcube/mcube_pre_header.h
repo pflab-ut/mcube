@@ -26,6 +26,7 @@
 #include <mcube/spinlock.h>
 #include <mcube/rwlock.h>
 #include <mcube/seqlock.h>
+#include <mcube/stat.h>
 
 /* alphabetical order */
 #include <mcube/bitops.h>

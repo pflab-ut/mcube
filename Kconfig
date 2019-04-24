@@ -10,21 +10,18 @@ menu Architecture
     title Simulator
     default y
     aname sim
-    mname none
     defs -DCONFIG_ARCH_SIM
     defs -DENABLE_FPU
   config CONFIG_ARCH_X86
     title X86
     default n
     aname x86
-    mname none
     defs -DCONFIG_ARCH_X86
     depends CONFIG_COMPILER_GCC
   config CONFIG_ARCH_ARM_RASPI3
     title ARM for Raspberry Pi3
     default n
     aname arm
-    mname raspi3
     defs -DCONFIG_ARCH_ARM
     defs -DCONFIG_ARCH_ARM_RASPI3
     defs -DENABLE_FPU
@@ -32,7 +29,6 @@ menu Architecture
     title ARM for SynQuacer
     default n
     aname arm
-    mname synquacer
     defs -DCONFIG_ARCH_ARM
     defs -DCONFIG_ARCH_ARM_SYNQUACER
     defs -DENABLE_FPU
@@ -40,7 +36,6 @@ menu Architecture
     title AXIS
     default n
     aname axis
-    mname none
     defs -DCONFIG_ARCH_AXIS
 endmenu
 
