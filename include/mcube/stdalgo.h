@@ -12,7 +12,6 @@
 uint64_t gcd(uint64_t m, uint64_t n);
 uint64_t lcm(uint64_t m, uint64_t n);
 
-int binsearch(char *word, args arg[], int n);
 
 #endif /* !__ASSEMBLY__ */
 

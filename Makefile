@@ -33,7 +33,9 @@ LIB_SRCS = \
  $(TOP_DIR)/lib/llist.c \
  $(TOP_DIR)/lib/math.c \
  $(TOP_DIR)/lib/mm.c \
+ $(TOP_DIR)/lib/mt.c \
  $(TOP_DIR)/lib/spinlock.c \
+ $(TOP_DIR)/lib/stdalgo.c \
  $(TOP_DIR)/lib/stdlib.c \
  $(TOP_DIR)/lib/string.c \
  $(TOP_DIR)/lib/unrolled_list.c \

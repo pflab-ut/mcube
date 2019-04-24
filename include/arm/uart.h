@@ -567,11 +567,5 @@
 #define UART_TDR_MASK 0x3ff
 
 
-#ifndef __ASSEMBLY__
-
-
-extern struct uart_devdata uart_data[NR_UART_PORTS];
-
-#endif /* !__ASSEMBLY__ */
 
 #endif /* __MCUBE_ARM_UART_H__ */

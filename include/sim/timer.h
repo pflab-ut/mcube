@@ -7,17 +7,6 @@
 #define __MCUBE_SIM_TIMER_H__
 
 
-#define NR_TIMERS 4
-#define TIMER_MAXID 3
-
-#define SYSTEM_TIMER 0
-#define IRQ_SYSTEM_TIMER 0
-
-#define PERIODIC_INT_START  0
-
-#define ONESHOT_INT_START  1
-
-
 #ifndef __ASSEMBLY__
 
 #include <time.h>
@@ -41,10 +30,6 @@ static inline void delay(unsigned long us)
     pause();
   }
 }
-
-void init_tsc(void);
-
-extern double clk_per_nsec, nsec_per_clk;
 
 static inline unsigned long get_current_cpu_time(void)
 {

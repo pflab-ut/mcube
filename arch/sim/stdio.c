@@ -6,7 +6,7 @@
 #include <mcube/mcube.h>
 
 
-void serial_putc(char c)
+void uart_putc(char c, __unused uint8_t ch)
 {
   putchar(c);
 }

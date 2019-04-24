@@ -15,31 +15,6 @@
 
 #ifndef __ASSEMBLY__
 
-/*
- * GCC extensions shorthands
- */
-
-//#define __aligned(val)  __attribute__((aligned(val)))
-#define __pure    __attribute__((pure))
-#define __pure_const  __attribute__((const))
-#define __packed  __attribute__((packed))
-#define __unused  __attribute__((__unused__))
-#define __used    __attribute__((__used__))
-#define __error(msg)  __attribute__((error(msg)))
-#define __likely(exp)  __builtin_expect((exp), 1)
-#define __unlikely(exp)  __builtin_expect((exp), 0)
-#define __noinline  __attribute__((noinline))
-#define __noreturn  __attribute__((noreturn))
-
-/* Mark the 'always_inline' attributed function as C99
- * 'inline' cause the attribute by itself is worthless.
- * It's "for functions declared inline" -- GCC manual */
-#ifndef __always_inline
-#define __always_inline  inline __attribute__((always_inline))
-#endif
-
-/* Suppress GCC's "var used uninitialized" */
-#define __uninitialized(x)  (x) = (x)
 
 /*
  * Semi type-safe min and max using GNU extensions
@@ -126,14 +101,10 @@ __noreturn void panic(const char *fmt, ...);
 #define false   ((_Bool) 0)
 
 
+#ifdef EOF
 #undef EOF
 #define EOF -1
-
-
-
-#define SUCCESS 1
-#define FAILURE 0
-
+#endif /* EOF */
 
 
 /*

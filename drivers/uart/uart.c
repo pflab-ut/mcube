@@ -6,9 +6,6 @@
 #include <mcube/mcube.h>
 
 
-struct uart_devdata uart_data[NR_UART_PORTS];
-
-
 uint8_t uart_getc(uint8_t ch)
 {
   uint8_t c;

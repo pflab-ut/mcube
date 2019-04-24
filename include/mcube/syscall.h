@@ -45,8 +45,6 @@ asmlinkage int sys_bad_syscall(int number);
 
 #if CONFIG_ARCH_SIM
 
-#define _GNU_SOURCE
-#include <unistd.h>
 #include <sys/syscall.h>
 
 

@@ -42,7 +42,7 @@ static void print_memory_info(void)
 
 static void print_vendor_id(void)
 {
-  char vendor_id[VENDOR_ID_LENGTH+1];
+  char vendor_id[VENDOR_ID_LENGTH + 1];
   cpuid_info_t cinfo;
   cpuid(0x0, &cinfo);
   printk("Largest Standard Function Number Supported: %d\n", cinfo.rax);
@@ -69,7 +69,7 @@ static void print_simd_info(void)
 static void print_cpu_brand_info(void)
 {
   cpuid_info_t cinfo;
-  char cpu_brand[CPU_BRAND_LENGTH+1];
+  char cpu_brand[CPU_BRAND_LENGTH + 1];
   cpuid(0x80000002, &cinfo);
   memcpy(&cpu_brand[0], &cinfo, sizeof(cinfo));
   cpuid(0x80000003, &cinfo);
@@ -153,13 +153,6 @@ void init_arch(void)
 
   keyboard_init();
 
-  /* CPU information */
-#if 0
-  print_cpu_brand();
-  print_simd_info();
-  print_vendor_id();
-#endif
-  
   /* Startup finished, roll-in the scheduler! */
   sched_init();
   enable_local_irq();

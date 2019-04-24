@@ -8,7 +8,7 @@
 
 #ifndef __ASSEMBLY__
 
-#define FOUT_SIZE 0x200
+#define KBUF_SIZE 1024
 #define MAX_DIGIT 64
 
 void printk_bust_all_locks(void);

@@ -11,6 +11,7 @@
 #include <mcube/config.h>
 #include <mcube/types.h>
 #include <mcube/stdarg.h>
+#include <mcube/compiler.h>
 #include <mcube/kernel.h>
 #include <mcube/stdio.h>
 #include <mcube/stddef.h>
@@ -27,13 +28,10 @@
 #include <mcube/seqlock.h>
 
 /* alphabetical order */
-#include <mcube/barrier.h>
 #include <mcube/bitops.h>
 #include <mcube/buffer.h>
 #include <mcube/buffer_dumper.h>
 #include <mcube/byteops.h>
-#include <mcube/cache.h>
-#include <mcube/compiler.h>
 #include <mcube/core_state.h>
 #include <mcube/ctype.h>
 #include <mcube/dmac.h>
@@ -47,7 +45,6 @@
 #include <mcube/kmalloc.h>
 #include <mcube/mm.h>
 #include <mcube/mt.h>
-#include <mcube/rand.h>
 #include <mcube/semaphore.h>
 #include <mcube/stdalgo.h>
 #include <mcube/stdlib.h>

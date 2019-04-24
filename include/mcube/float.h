@@ -6,8 +6,8 @@
 #ifndef __MCUBE_MCUBE_FLOAT_H__
 #define __MCUBE_MCUBE_FLOAT_H__
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_ARM
+#if ENABLE_FPU
 #include <float.h>
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_ARM */
+#endif /* ENABLE_FPU */
 
 #endif /* __MCUBE_MCUBE_FLOAT_H__ */
