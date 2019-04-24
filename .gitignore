@@ -1,13 +1,12 @@
 # Add any directories, files, or patterns you don't want to be tracked by version control
 
-# dirs
+# directories
 build/
-INCA_libs/
-testconfig/
-__pycache__/
-html/
-latex/
 .ccache/
+html/
+INCA_libs/
+__pycache__/
+testconfig/
 
 # files
 irun*

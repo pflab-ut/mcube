@@ -23,29 +23,6 @@ struct cpu_context {
 #define INIT_CPU_CONTEXT (struct cpu_context) {0}
 
 
-static inline int get_pthread_id(void)
-{
-  return syscall(SYS_gettid);
-}
-
-/**
- * @struct pthread_arg
- * @brief POSIX thread argument
- */
-struct pthread_arg {
-  /** Thread ID. */
-  unsigned long thid;
-  /** Function pointer to execution. */
-  int (*func)(void *arg);
-};
-
-typedef struct pthread_arg pthread_arg;
-
-void *pthread_func(void *arg);
-
-
-void exec_thread(void);
-
 
 #endif /* !__ASSEMBLY__ */
 

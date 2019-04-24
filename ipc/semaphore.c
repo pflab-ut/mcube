@@ -5,16 +5,10 @@
  */
 #include <mcube/mcube.h>
 
-unsigned int nr_resources;
-
-/* for real-time synchronization protocol */
-struct sem_struct sync_sem[NR_RESOURCES];
-
 
 void init_sem(struct sem_struct *sem, unsigned int nr_rsrcs, unsigned int ceil)
 {
   int cpu = get_cpu_id();
-  assert(nr_resources <= 1);
   sem->counter = nr_rsrcs;
   sem->ceil = ceil;
   sem->ewq = &kernel_th[cpu];

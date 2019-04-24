@@ -8,9 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-#define SEPARATE_SIZE  0
-
-#define STACK_ALIGN(x)  (((x) + 7) & -8)
 
 /**
  * @struct context_regs

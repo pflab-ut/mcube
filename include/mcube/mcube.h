@@ -6,6 +6,7 @@
 #ifndef __MCUBE_MCUBE_MCUBE_H__
 #define __MCUBE_MCUBE_MCUBE_H__
 
+#define _GNU_SOURCE
 
 #include <mcube/mcube_pre_header.h>
 

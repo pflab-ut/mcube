@@ -13,6 +13,7 @@
 #define KERNEL_STACK_SIZE 0x1000
 #define USER_STACK_SIZE 0x1000
 
+#define STACK_ALIGN(x)  (((x) + 7) & -8)
 
 #define NR_PRIORITIES NR_THREADS
 
@@ -42,6 +43,7 @@ void exit_arch_ap(void);
 
 void clear_bss(void);
 
+void shell(void);
 
 #endif /* !__ASSEMBLY__ */
 

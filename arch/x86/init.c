@@ -153,13 +153,6 @@ void init_arch(void)
 
   keyboard_init();
 
-  /* CPU information */
-#if 0
-  print_cpu_brand();
-  print_simd_info();
-  print_vendor_id();
-#endif
-
   /* Startup finished, roll-in the scheduler! */
   sched_init();
   enable_local_irq();

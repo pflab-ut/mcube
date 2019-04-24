@@ -18,8 +18,3 @@ int putchar(int c)
   return c;
 }
 
-
-void serial_putc(char c)
-{
-  putchar(c);
-}

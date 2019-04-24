@@ -13,7 +13,6 @@
 #include <sim/regs.h>
 #include <sim/spinlock.h>
 #include <sim/system.h>
-#include <sim/task.h>
 #include <sim/thread.h>
 #include <sim/timer.h>
 

@@ -101,14 +101,10 @@ __noreturn void panic(const char *fmt, ...);
 #define false   ((_Bool) 0)
 
 
+#ifdef EOF
 #undef EOF
 #define EOF -1
-
-
-
-#define SUCCESS 1
-#define FAILURE 0
-
+#endif /* EOF */
 
 
 /*

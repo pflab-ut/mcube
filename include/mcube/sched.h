@@ -19,24 +19,24 @@
 /*
  * System clock ticks per second
  */
-#define HZ      250
+#define HZ 250
 
 /*
  * A thread round-robin slice in number of ticks
  */
-#define RR_INTERVAL    2
+#define RR_INTERVAL 2
 
 /*
  * Threads priority boundaries
  */
-#define    MIN_PRIO  0
-#define    MAX_PRIO  19
+#define MIN_PRIO 0
+#define MAX_PRIO 19
 
 /*
  * Priorities only affect latency, not CPU usage.
  */
-#define DEFAULT_PRIO    10
-#define UNDEF_PRIO    -1
+#define DEFAULT_PRIO 10
+#define UNDEF_PRIO -1
 #define VALID_PRIO(prio)      \
   (MIN_PRIO <= (prio) && (prio) <= MAX_PRIO)
 
@@ -57,11 +57,11 @@ static inline void rq_init(struct runqueue *rq)
 
 static inline int rq_get_highest_prio(struct runqueue *rq)
 {
-  for (int i = MAX_PRIO; i >= MIN_PRIO; i--)
+  for (int i = MAX_PRIO; i >= MIN_PRIO; i--) {
     if (!list_empty(&rq->head[i])) {
       return i;
     }
-
+  }
   return UNDEF_PRIO;
 }
 
@@ -111,7 +111,6 @@ void kthread_create(void (* func)(void));
 uint64_t kthread_alloc_pid(void);
 
 
-
 /* sys_jiffies: the world clock. */
 extern unsigned long sys_jiffies;
 
@@ -150,9 +149,6 @@ static inline unsigned long tsc2nsec(unsigned long tsc);
 
 extern int bindex[NR_CPUS];
 
-extern int try;
-
-
 extern unsigned long nr_tasks;
 
 
@@ -161,8 +157,6 @@ extern struct thread_struct *prev_th[NR_CPUS];
 
 
 extern unsigned long sched_time;
-extern int is_in_int;
-
 extern volatile uint32_t sched_end;
 
 extern struct thread_struct *sleep_tq[NR_CPUS];
@@ -196,7 +190,6 @@ int sleep_for(unsigned int length, unsigned long state);
 int sleep_until(unsigned long release, unsigned long state);
 
 int activate(struct thread_struct *th);
-int sys_activate(struct thread_struct *th);
 int do_activate(struct thread_struct *th);
 
 int sched_test(int nr_tasks, int nr_cpus);
@@ -218,9 +211,7 @@ enum budget_policy {
 
 typedef enum budget_policy budget_policy;
 
-
 #define NR_RESOURCES 16
-
 
 /**
  * @struct sched_info
@@ -267,8 +258,6 @@ struct sched_info {
 };
 
 typedef struct sched_info sched_info;
-
-void do_sync(void);
 
 
 #endif /* !__ASSEMBLY__ */

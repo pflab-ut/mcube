@@ -11,16 +11,12 @@
 
 #include <mcube/mcube.h>
 
-
-static char kbuf[1024];
-static char sbuf[1024];
+static char kbuf[KBUF_SIZE];
 
 #if CONFIG_ARCH_AXIS
 spinlock_t kbuf_lock;
-spinlock_t sbuf_lock;
 #else
 spinlock_t kbuf_lock = INIT_SPINLOCK;
-spinlock_t sbuf_lock = INIT_SPINLOCK;
 #endif
 
 
@@ -59,7 +55,6 @@ struct printf_argdesc {
 
 #if CONFIG_ARCH_X86
 
-static char buf[256];
 static spinlock_t panic_lock = INIT_SPINLOCK;
 
 /*
@@ -115,11 +110,11 @@ void __noreturn panic(const char *fmt, ...)
   }
 
   va_start(args, fmt);
-  n = vsnprint(buf, sizeof(buf) - 1, fmt, args);
+  n = vsnprint(kbuf, sizeof(kbuf) - 1, fmt, args);
   va_end(args);
 
-  buf[n] = 0;
-  printk("\nCPU#%d-PANIC: %s", percpu_get(apic_id), buf);
+  kbuf[n] = 0;
+  printk("\nCPU#%d-PANIC: %s", percpu_get(apic_id), kbuf);
 
   /* Since the  other cores are stopped only after they re-
    * accept interrupts, they may print on-screen and scroll
@@ -134,7 +129,7 @@ halt:
 
 void __noreturn panic(const char *fmt, ...)
 {
-  char buf[FOUT_SIZE];
+  char buf[KBUF_SIZE];
   va_list ap;
   va_start(ap, fmt);
   vsnprint(buf, sizeof(buf), fmt, ap);
@@ -303,7 +298,7 @@ static inline int lfout(double lf, char *dst, int n,
 
     if ((u64 /= base) == 0) {
 
-      if (FOUT_SIZE < n + i) {
+      if (KBUF_SIZE < n + i) {
         return -1;
       }
 
@@ -787,22 +782,22 @@ int print_uart(const char *fmt, ...)
   va_list args;
   int n;
 
-  spin_lock(&sbuf_lock);
+  spin_lock(&kbuf_lock);
 
   va_start(args, fmt);
-  n = vsnprint(sbuf, sizeof(sbuf), fmt, args);
+  n = vsnprint(kbuf, sizeof(kbuf), fmt, args);
   va_end(args);
-  sbuf[n] = '\0';
+  kbuf[n] = '\0';
 
 #if CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
-  uart_write(sbuf, n, 0);
+  uart_write(kbuf, n, 0);
 #elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
-  puts(sbuf);
+  puts(kbuf);
 #else
 #error "Unknown Architecture"
 #endif
 
-  spin_unlock(&sbuf_lock);
+  spin_unlock(&kbuf_lock);
   return n;
 }
 
