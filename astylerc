@@ -40,14 +40,14 @@ pad-header
 # Remove extra space padding around parens on the inside and
 # outside. Any end of line comments will remain in the original column,
 # if possible. This option can be used in combination with the paren
-# padding options pad?paren, pad?paren?out, pad?paren?in, and pad?header
+# padding options pad-paren, pad-paren-out, pad-paren-in, and pad-header
 # above. Only padding that has not been requested by other options will
 # be removed.
 
 # For example, if a source has parens padded on both the inside and
 # outside, and you want inside only. You need to use unpad-paren to
-# remove the outside padding, and pad?paren?in to retain the inside
-# padding. Using only pad?paren?in> would not remove the outside
+# remove the outside padding, and pad-paren-in to retain the inside
+# padding. Using only pad-paren-in> would not remove the outside
 # padding.
 unpad-paren
 
@@ -88,7 +88,7 @@ break-one-line-headers
 add-braces
 
 # Indent C++ comments beginning in column one. By default C++ comments
-# beginning in column one are assumed to be commented?out code and not
+# beginning in column one are assumed to be commented-out code and not
 # indented. This option will allow the comments to be indented with the
 # code.
 indent-col1-comments
@@ -106,8 +106,8 @@ attach-return-type-decl
 # conditionals will break on a logical conditional (||, &&, ...),
 # comma, paren, semicolon, or space.
 # Some code will not be broken, such as comments, quotes, and arrays. If
-# used with keep?one?line?blocks or add-one-line-braces the blocks will
-# NOT be broken. If used with keep?one?line?statements the statements
+# used with keep-one-line-blocks or add-one-line-braces the blocks will
+# NOT be broken. If used with keep-one-line-statements the statements
 # will be broken at a semicolon if the line goes over the maximum
 # length. If there is no available break point within the max code
 # length, the line will be broken at the first available break point
