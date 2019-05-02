@@ -98,7 +98,7 @@ static void test_sw(void)
 void test_transfer_instructions(void)
 {
   test_buf[OFFSET_ADDR / sizeof(unsigned int)] = 0x12345678;
-  
+
   test_mts();
   test_mfs();
   test_lb();

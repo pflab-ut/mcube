@@ -8,7 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-
 /**
  * @struct full_regs
  * @brief Full register
@@ -21,8 +20,6 @@ struct full_regs {
   /** Saved program status register */
   uint64_t spsr;
 } __packed;
-
-typedef struct full_regs full_regs;
 
 
 #endif /* !__ASSEMBLY__ */

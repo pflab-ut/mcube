@@ -28,13 +28,18 @@
 #define pdebug_registers(regs) do {                               \
     for (int i = 0; i < 32; i += 2) {                             \
       printk("x%02d: 0x%016lx  x%02d: 0x%016lx\n",                \
-             i, regs.gpr[i], i + 1, regs.gpr[i + 1]);             \
+             i, (regs).gpr[i], i + 1, (regs).gpr[i + 1]);         \
     }                                                             \
   } while (0)
 
 #elif CONFIG_ARCH_AXIS
 
-#define pdebug_registers(regs) do {             \
+#define pdebug_registers(regs) do {                                \
+    for (int i = 0; i < 32; i += 2) {                              \
+      printk("r%02d: 0x%016lx  r%02d: 0x%016lx\n",                 \
+             i, (regs).gpr_regs.regs[i],                           \
+             i + 1, (regs).gpr_regs.regs[i + 1]);                  \
+    }                                                              \
   } while (0)
 
 #else
