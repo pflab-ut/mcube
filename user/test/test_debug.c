@@ -17,7 +17,7 @@ bool test_debug(void)
   pdebug_deadline_tq();
   pdebug_sleep_tq();
 #if CONFIG_TQ_BHEAP
-  pdebug_bheap(&run_tq, run_tq[cpu].head);
+  pdebug_bheap(&run_tq, run_tq[0].head);
 #endif /* CONFIG_TQ_BHEAP */
   pdebug_thread_in_line();
   pdebug_task(tasks[0]);
