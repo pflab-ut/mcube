@@ -9,6 +9,7 @@
 #define _GNU_SOURCE
 
 #include <mcube/mcube_pre_header.h>
+#include <net/net_header.h>
 
 #if CONFIG_ARCH_SIM
 #include <sim/sim_header.h>
@@ -21,6 +22,7 @@
 #else
 #error "Unknown Architecture"
 #endif
+
 
 #include <mcube/mcube_post_header.h>
 

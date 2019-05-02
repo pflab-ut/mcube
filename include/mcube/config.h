@@ -8,9 +8,9 @@
 /* Don't edit this file.
  * Please edit configure then do make configure. */
 /** Architecture. */
-#define CONFIG_ARCH_SIM 0
+#define CONFIG_ARCH_SIM 1
 /** Architecture. */
-#define CONFIG_ARCH_X86 1
+#define CONFIG_ARCH_X86 0
 /** Architecture. */
 #define CONFIG_ARCH_ARM_RASPI3 0
 /** Architecture. */
@@ -22,13 +22,13 @@
 /** Compiler. */
 #define CONFIG_COMPILER_GCC 1
 /** Print. */
-#define CONFIG_PRINT2CONSOLE 0
+#define CONFIG_PRINT2CONSOLE 1
 /** Print. */
-#define CONFIG_PRINT2UART 1
+#define CONFIG_PRINT2UART 0
 /** Algorithm. */
-#define CONFIG_ALGO_FP 0
+#define CONFIG_ALGO_FP 1
 /** Algorithm. */
-#define CONFIG_ALGO_RM 1
+#define CONFIG_ALGO_RM 0
 /** Algorithm. */
 #define CONFIG_ALGO_EDF 0
 /** Task Queue. */
@@ -42,7 +42,7 @@
 /** Tie-Break. */
 #define CONFIG_TIE_BREAK_ID 0
 /** Option. */
-#define CONFIG_OPTION_DEBUG 1
+#define CONFIG_OPTION_DEBUG 0
 /** Option. */
 #define CONFIG_OPTION_FS_EXT2 0
 /** Option. */

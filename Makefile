@@ -11,6 +11,9 @@ TOP_DIR = .
 
 include $(TOP_DIR)/Rules.make
 
+FS_SRCS = \
+ $(TOP_DIR)/fs/init.c \
+
 KERNEL_SRCS = \
  $(TOP_DIR)/kernel/main.c \
  $(TOP_DIR)/kernel/print.c \
@@ -23,6 +26,9 @@ KERNEL_SRCS = \
  $(TOP_DIR)/kernel/syscall.c \
  $(TOP_DIR)/kernel/queue.c \
  $(TOP_DIR)/kernel/irq.c \
+
+IPC_SRCS = \
+ $(TOP_DIR)/ipc/semaphore.c \
 
 LIB_SRCS = \
  $(TOP_DIR)/lib/buffer.c \
@@ -40,11 +46,8 @@ LIB_SRCS = \
  $(TOP_DIR)/lib/string.c \
  $(TOP_DIR)/lib/unrolled_list.c \
 
-IPC_SRCS = \
- $(TOP_DIR)/ipc/semaphore.c \
-
-FS_SRCS = \
- $(TOP_DIR)/fs/init.c \
+NET_SRCS = \
+ $(TOP_DIR)/net/socket.c \
 
 USER_SRCS = \
  $(TOP_DIR)/user/user.c \
@@ -65,10 +68,11 @@ USER_SRCS = \
  $(TOP_DIR)/user/test/test_vm.c \
 
 SRCS += \
+	$(FS_SRCS) \
+	$(IPC_SRCS) \
 	$(KERNEL_SRCS) \
 	$(LIB_SRCS) \
-	$(IPC_SRCS) \
-	$(FS_SRCS) \
+	$(NET_SRCS) \
 	$(USER_SRCS) \
 
 
