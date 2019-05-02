@@ -152,27 +152,3 @@ menu Option
     depends CONFIG_ARCH_ARM_RASPI3
     conflicts CONFIG_OPTION_FS_EXT2
 endmenu
-
-menu Memory
-  type exclusive
-  config CONFIG_MEMORY_VARIABLE
-    title Memory Variable
-    default n
-    defs -DCONFIG_MEMORY_VARIABLE
-    conflicts CONFIG_ARCH_AXIS
-  config CONFIG_MEMORY_256KB
-    title Memory 256KB
-    default y
-    defs -DCONFIG_MEMORY_256KB
-    defs -DMEMORY_SIZE=0x00040000
-  config CONFIG_MEMORY_1MB
-    title Memory 1MB
-    default n
-    defs -DCONFIG_MEMORY_1MB
-    defs -DMEMORY_SIZE=0x00100000
-  config CONFIG_MEMORY_8MB
-    title Memory 8MB
-    default n
-    defs -DCONFIG_MEMORY_8MB
-    defs -DMEMORY_SIZE=0x00800000
-endmenu

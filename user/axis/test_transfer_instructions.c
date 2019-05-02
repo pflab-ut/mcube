@@ -6,7 +6,8 @@
 #include <mcube/mcube.h>
 #include "user_axis.h"
 
-#define BASE_ADDR (MEMORY_SIZE / 2)
+#define TEST_BUFSIZE 256
+static unsigned int test_buf[TEST_BUFSIZE];
 #define OFFSET_ADDR 0x12
 
 static void test_mts(void)
@@ -31,7 +32,7 @@ static void test_mfs(void)
 
 static void test_lb(void)
 {
-  unsigned int rx = BASE_ADDR;
+  unsigned int rx = (unsigned int) test_buf;
   int rc;
   asm volatile("lb %0, %1(%2)" : "=r"(rc) : "i"(OFFSET_ADDR), "r"(rx));
   print("test_lb(): 0x%x(0x%x) = 0x%x\n", OFFSET_ADDR, rx, rc);
@@ -39,7 +40,7 @@ static void test_lb(void)
 
 static void test_lbu(void)
 {
-  unsigned int rx = BASE_ADDR;
+  unsigned int rx = (unsigned int) test_buf;
   unsigned int rc;
   asm volatile("lbu %0, %1(%2)" : "=r"(rc) : "i"(OFFSET_ADDR), "r"(rx));
   print("test_lbu(): 0x%x(0x%x) = 0x%x\n", OFFSET_ADDR, rx, rc);
@@ -47,7 +48,7 @@ static void test_lbu(void)
 
 static void test_lh(void)
 {
-  unsigned int rx = BASE_ADDR;
+  unsigned int rx = (unsigned int) test_buf;
   int rc;
   asm volatile("lh %0, %1(%2)" : "=r"(rc) : "i"(OFFSET_ADDR), "r"(rx));
   print("test_lh(): 0x%x(0x%x) = 0x%x\n", OFFSET_ADDR, rx, rc);
@@ -55,7 +56,7 @@ static void test_lh(void)
 
 static void test_lhu(void)
 {
-  unsigned int rx = BASE_ADDR;
+  unsigned int rx = (unsigned int) test_buf;
   unsigned int rc;
   asm volatile("lhu %0, %1(%2)" : "=r"(rc) : "i"(OFFSET_ADDR), "r"(rx));
   print("test_lhu(): 0x%x(0x%x) = 0x%x\n", OFFSET_ADDR, rx, rc);
@@ -63,7 +64,7 @@ static void test_lhu(void)
 
 static void test_lw(void)
 {
-  unsigned int rx = BASE_ADDR;
+  unsigned int rx = (unsigned int) test_buf;
   int rc;
   asm volatile("lw %0, %1(%2)" : "=r"(rc) : "i"(OFFSET_ADDR), "r"(rx));
   print("test_lw(): 0x%x(0x%x) = 0x%x\n", OFFSET_ADDR, rx, rc);
@@ -71,7 +72,7 @@ static void test_lw(void)
 
 static void test_sb(void)
 {
-  unsigned int rx = BASE_ADDR;
+  unsigned int rx = (unsigned int) test_buf;
   int rc = 56;
   asm volatile("sb %0, %1(%2)" :: "r"(rc), "i"(OFFSET_ADDR), "r"(rx));
   print("test_sb(): 0x%x(0x%x) = 0x%x\n", OFFSET_ADDR, rx, rc);
@@ -79,7 +80,7 @@ static void test_sb(void)
 
 static void test_sh(void)
 {
-  unsigned int rx = BASE_ADDR;
+  unsigned int rx = (unsigned int) test_buf;
   int rc = 56;
   asm volatile("sh %0, %1(%2)" :: "r"(rc), "i"(OFFSET_ADDR), "r"(rx));
   print("test_sh(): 0x%x(0x%x) = 0x%x\n", OFFSET_ADDR, rx, rc);
@@ -87,8 +88,8 @@ static void test_sh(void)
 
 static void test_sw(void)
 {
-  volatile unsigned int rx = BASE_ADDR;
-  volatile int rc = 56;
+  unsigned int rx = (unsigned int) test_buf;
+  int rc = 56;
   asm volatile("sw %0, %1(%2)" :: "r"(rc), "i"(OFFSET_ADDR), "r"(rx));
   print("test_sw(): 0x%x(0x%x) = 0x%x\n", OFFSET_ADDR, rx, rc);
 }
@@ -96,7 +97,8 @@ static void test_sw(void)
 
 void test_transfer_instructions(void)
 {
-  *((uint32_t *)(BASE_ADDR + OFFSET_ADDR)) = 0x12345678;
+  test_buf[OFFSET_ADDR / sizeof(unsigned int)] = 0x12345678;
+  
   test_mts();
   test_mfs();
   test_lb();

@@ -1,4 +1,4 @@
 ALGO_NAME = rm
 ARCH_NAME = x86
 CC = gcc
-OUTPUT_NAME = console
+OUTPUT_NAME = uart

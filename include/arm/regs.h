@@ -10,24 +10,12 @@
 
 
 /**
- * @struct context_regs
- * @brief Context register
- */
-struct context_regs {
-  /** General purpose registers in ARM. */
-  uint64_t gpr[32];
-} __packed;
-
-typedef struct context_regs context_regs;
-
-
-/**
  * @struct full_regs
  * @brief Full register
  */
 struct full_regs {
   /** General purpose registers in ARM. */
-  struct context_regs cregs;
+  uint64_t gpr[32];
   /** Exception link register */
   uint64_t elr;
   /** Saved program status register */
@@ -35,8 +23,6 @@ struct full_regs {
 } __packed;
 
 typedef struct full_regs full_regs;
-
-void dump_registers(struct full_regs *regs);
 
 
 #endif /* !__ASSEMBLY__ */

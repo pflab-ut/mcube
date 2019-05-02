@@ -57,9 +57,11 @@ void timer_main(void)
   }
 }
 
+#define DST_BUFSIZE 256
+
 int dmac_main(void)
 {
-  uint32_t dst = MEMORY_SIZE / 2;
+  uint32_t dst[DST_BUFSIZE];
   //  uint32_t dst = 0x10;
   uint32_t src = 0;
   uint32_t n = 16;

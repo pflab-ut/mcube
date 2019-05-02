@@ -25,6 +25,7 @@ static inline void print_thread_in_line(void)
 
 #define pdebug_thread_in_line() do {            \
     PDEBUG_WHERE();                             \
+    print_thread_in_line();                     \
   } while (0)
 
 static inline void print_task(struct task_struct *tk)
@@ -55,7 +56,7 @@ static inline void print_task_bythid(int thid)
 }
 
 
-#define pdebug_task_bythid(thid) do {           \
+#define pdebug_task_by_thid(thid) do {          \
     PDEBUG_WHERE();                             \
     print_task_bythid(thid);                    \
   } while (0)
@@ -63,7 +64,7 @@ static inline void print_task_bythid(int thid)
 #else
 #define pdebug_thread_in_line()
 #define pdebug_task(tk)
-#define pdebug_task_bythid(id)
+#define pdebug_task_by_thid(id)
 #endif /* CONFIG_OPTION_DEBUG */
 
 #endif /* !__ASSEMBLY__ */

@@ -36,7 +36,6 @@ extern double CPU_CLOCK_MHZ_PER_NSEC;
 extern double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* ENABLE_FPU */
 
-extern unsigned long ap_start;
 
 void set_cpu_clock(void);
 
@@ -45,6 +44,8 @@ void init_cpu(void);
 void init_ap(void);
 void init_smp(void);
 
+struct full_regs;
+void dump_registers(struct full_regs *regs);
 
 
 #endif /* __ASSEMBLY__ */

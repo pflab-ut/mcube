@@ -27,9 +27,11 @@ double cos(double x)
   while (true) {
     /* maclaurin expansion of cos(x) */
     t = - (t * x * x) / ((2 * n) * (2 * n - 1));
+
     if (FABS(t) <= EPSILON) {
       break;
     }
+
     y += t;
     n++;
   }
@@ -58,9 +60,11 @@ double sin(double x)
   while (true) {
     /* maclaurin expansion of sin(x) */
     t = - (t * x * x) / ((2 * n + 1) * (2 * n));
+
     if (FABS(t) <= EPSILON) {
       break;
     }
+
     y += t;
     n++;
   }
@@ -140,9 +144,11 @@ double atan(double x)
 
   while (true) {
     t = (n * n * x * x) / (2 * n + 1 + t);
+
     if (FABS(t) <= EPSILON) {
       break;
     }
+
     n++;
   }
 

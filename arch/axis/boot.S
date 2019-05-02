@@ -16,7 +16,6 @@ ENTRY(_start)
   mfs $t0, $1 // get cluster and cpu ids
   and $t0, $t0, 0x7 // get cpu id
 //  la    $sp, THREAD_STACK_ADDR(0, 0)
-  //  la    $sp, (MEMORY_BASE + MEMORY_SIZE)
   // $sp = kernel_stack + cpu_id($t0) * STACK_SIZE
   la $sp, kernel_stack
   addi $t0, $t0, 1
