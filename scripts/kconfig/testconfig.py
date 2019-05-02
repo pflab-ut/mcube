@@ -17,7 +17,7 @@ import datetime
 import errno
 import tools
 
-VALS = [0, 0, 0, 0, 0, 0, 0, 0]
+VALS = [0, 0, 0, 0, 0, 0, 0]
 INDEX = 0
 MESSAGE = ""
 PATH = ""
@@ -113,7 +113,7 @@ def main():
 
   print(len(CINFO))
 
-  do_recursive_for_loop(0, 7)
+  do_recursive_for_loop(0, len(CINFO) - 1)
 
   if MESSAGE == "":
     MESSAGE = "Build Test is successful."
