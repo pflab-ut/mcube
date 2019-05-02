@@ -536,7 +536,7 @@ uint64_t file_read(struct inode *inode, char *buf, uint64_t offset,
     block = offset / isb.block_size;
     blk_offset = offset % isb.block_size;
     read_len = isb.block_size - blk_offset;
-    read_len = min(read_len, len);
+    read_len = MIN(read_len, len);
 
     assert(block < EXT2_INO_NR_DIRECT_BLKS);
     block_read(inode->blocks[block], buf, blk_offset, read_len);
@@ -594,7 +594,7 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
     block = offset / isb.block_size;
     blk_offset = offset % isb.block_size;
     write_len = isb.block_size - blk_offset;
-    write_len = min(write_len, len);
+    write_len = MIN(write_len, len);
 
     assert(block < EXT2_INO_NR_DIRECT_BLKS);
 
@@ -621,7 +621,7 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
 
     if (offset > inode->size_low) {
       inode->size_low = offset;
-      block = ceil_div(offset, isb.block_size);
+      block = CEIL(offset, isb.block_size);
       inode->i512_blocks = (block * isb.block_size) / 512;
       inode->dirty = true;
     }
@@ -637,7 +637,7 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
  */
 static inline int dir_entry_min_len(int filename_len)
 {
-  return round_up(EXT2_DIR_ENTRY_MIN_LEN + filename_len,
+  return ROUND_UP(EXT2_DIR_ENTRY_MIN_LEN + filename_len,
                   EXT2_DIR_ENTRY_ALIGN);
 }
 
@@ -663,13 +663,13 @@ STATIC bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
     return false;
   }
 
-  if (!is_aligned(offset, EXT2_DIR_ENTRY_ALIGN)) {
+  if (!IS_ALIGNED(offset, EXT2_DIR_ENTRY_ALIGN)) {
     printk("EXT2: Dir entry (ino %lu) offset %lu is not "
            "aligned on four-byte boundary\n", inum, offset);
     return false;
   }
 
-  if (!is_aligned(dentry->record_len, EXT2_DIR_ENTRY_ALIGN)) {
+  if (!IS_ALIGNED(dentry->record_len, EXT2_DIR_ENTRY_ALIGN)) {
     printk("EXT2: Dir entry (ino %lu, offset %lu) length %lu is "
            "not aligned on four-byte boundary\n", inum, offset,
            dentry->record_len);
@@ -1260,7 +1260,7 @@ void init_ext2(void)
   isb.sb  = (void *)&isb.buf[EXT2_SUPERBLOCK_OFFSET];
   isb.block_size = 1024U << isb.sb->log_block_size;
   isb.frag_size  = 1024U << isb.sb->log_fragment_size;
-  bgd_start = ceil_div(EXT2_SUPERBLOCK_OFFSET + sizeof(*sb), isb.block_size);
+  bgd_start = CEIL(EXT2_SUPERBLOCK_OFFSET + sizeof(*sb), isb.block_size);
   isb.bgd = (void *)&isb.buf[bgd_start * isb.block_size];
 
   sb = isb.sb;
@@ -1284,7 +1284,7 @@ void init_ext2(void)
     panic("Ext2: Erroneous file system state; run fsck!");
   }
 
-  if (!is_aligned(sb->inode_size, 2)) {
+  if (!IS_ALIGNED(sb->inode_size, 2)) {
     panic("Ext2: Invalid inode size = %d bytes!", sb->inode_size);
   }
 
@@ -1320,11 +1320,11 @@ void init_ext2(void)
 
   /* Use ceil division: the last Block Group my have a
    * smaller number of blocks than the rest!  */
-  isb.blockgroups_count = ceil_div(sb->blocks_count -
-                                   sb->first_data_block, sb->blocks_per_group);
+  isb.blockgroups_count = CEIL(sb->blocks_count -
+                               sb->first_data_block, sb->blocks_per_group);
   isb.last_blockgroup = isb.blockgroups_count - 1;
   inodetbl_size = sb->inodes_per_group * sb->inode_size;
-  inodetbl_blocks = ceil_div(inodetbl_size, isb.block_size);
+  inodetbl_blocks = CEIL(inodetbl_size, isb.block_size);
 
   /* Block Group Descriptor Table sanity checks */
   if (isb.blockgroups_count > 1 &&  // Last group special case

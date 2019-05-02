@@ -851,8 +851,8 @@ bagain:
         continue;
       }
 
-      nblocks = ceil_div(inode->size_low, isb.block_size);
-      nblocks = min(nblocks, (uint64_t) EXT2_INO_NR_BLOCKS);
+      nblocks = CEIL(inode->size_low, isb.block_size);
+      nblocks = MIN(nblocks, (uint64_t) EXT2_INO_NR_BLOCKS);
 
       for (uint ino_blk = 0; ino_blk < nblocks; ino_blk++) {
         if (inode->blocks[ino_blk] == 0) {
