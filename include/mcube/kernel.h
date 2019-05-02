@@ -86,19 +86,19 @@ static inline uint64_t ceil_div(uint64_t a, uint64_t b)
 
 __noreturn void panic(const char *fmt, ...);
 
+
+#include <stdbool.h>
+
 #if CONFIG_ARCH_SIM
 
 #include <assert.h>
 
 #else
 
-/*
- * C99
- */
 #define NULL  ((void *) 0)
-#define bool  _Bool
-#define true    ((_Bool) 1)
-#define false   ((_Bool) 0)
+//#define bool  _Bool
+//#define true    ((_Bool) 1)
+//#define false   ((_Bool) 0)
 
 
 #ifdef EOF

@@ -13,7 +13,6 @@
 #include <sys/types.h>
 #include <inttypes.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 
 #elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER || CONFIG_ARCH_AXIS

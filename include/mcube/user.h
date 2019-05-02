@@ -16,6 +16,7 @@ int ap_main(void);
 
 bool test_atomic(void);
 bool test_bitmap(void);
+bool test_debug(void);
 bool test_ext2(void);
 bool test_file(void);
 bool test_hash(void);

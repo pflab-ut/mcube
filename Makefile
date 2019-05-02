@@ -51,6 +51,7 @@ USER_SRCS = \
  $(TOP_DIR)/user/test/test.c \
  $(TOP_DIR)/user/test/test_atomic.c \
  $(TOP_DIR)/user/test/test_bitmap.c \
+ $(TOP_DIR)/user/test/test_debug.c \
  $(TOP_DIR)/user/test/test_ext2.c \
  $(TOP_DIR)/user/test/test_hash.c \
  $(TOP_DIR)/user/test/test_kmalloc.c \

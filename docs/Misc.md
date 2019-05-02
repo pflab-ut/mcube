@@ -2,6 +2,7 @@
 
 ## ToDo
 
+* Unix Domain Socketを実装する．
 * run_tq等を構造体のメンバ変数にすることで，モノリシックカーネルで
    キャッシュライン毎にアクセスできるようにする．
 * Mcube KernelをLinuxに適用することを検討する．

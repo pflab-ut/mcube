@@ -10,6 +10,7 @@ int user_test_main(__unused int argc, __unused char *argv[])
 {
   test_atomic();
   test_bitmap();
+  test_debug();
   test_ext2();
   test_hash();
   test_kmalloc();

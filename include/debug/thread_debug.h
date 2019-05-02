@@ -6,7 +6,7 @@
 #ifndef __MCUBE_DEBUG_THREAD_DEBUG_H__
 #define __MCUBE_DEBUG_THREAD_DEBUG_H__
 
-/* Never include this file directly. Include <debug/debug.h> instead. */
+/* Never include this file directly. Include <debug/debug_header.h> instead. */
 #ifndef __ASSEMBLY__
 
 #if CONFIG_OPTION_DEBUG
