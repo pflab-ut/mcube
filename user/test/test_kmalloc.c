@@ -70,7 +70,7 @@ static void _test_allocs(int count, int rounded)
       panic("Error: cannot allocate memory %lu\n", size);
     }
 
-    assert(is_aligned((uintptr_t)p[i].p, 16));
+    assert(IS_ALIGNED((uintptr_t)p[i].p, 16));
     p[i].size = size;
 
     if (rounded) {
@@ -103,7 +103,7 @@ static void _test_allocs(int count, int rounded)
       panic("Error: cannot allocate memory %lu\n", size);
     }
 
-    assert(is_aligned((uintptr_t)p[i].p, 16));
+    assert(IS_ALIGNED((uintptr_t)p[i].p, 16));
     p[i].size = size;
     (rounded) ? memset32(p[i].p, i, size) : memset(p[i].p, i, size);
 

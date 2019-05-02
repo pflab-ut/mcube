@@ -204,7 +204,7 @@ static struct proc *dispatch_runnable_proc(int *ret_prio)
 
   if (rq_empty(PS->rq_active)) {
     rq_dump(PS->rq_expired);
-    swap(PS->rq_active, PS->rq_expired);
+    SWAP(PS->rq_active, PS->rq_expired);
 
     /* FIXME: this can be done in O(1) */
     list_for_each_safe(&PS->just_queued, proc, spare, pnode) {
@@ -299,7 +299,7 @@ struct proc *sched_tick(void)
       return current;
     }
 
-    PS->current_prio = max(MIN_PRIO, PS->current_prio - 1);
+    PS->current_prio = MAX(MIN_PRIO, PS->current_prio - 1);
     rq_add_proc(PS->rq_expired, current, PS->current_prio);
     return preempt(new_proc, new_prio);
   }

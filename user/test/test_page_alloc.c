@@ -147,7 +147,7 @@ __unused static int _torture_pfdtable_add_range(void)
   /* The pfdrmap became much larger: extend our memory area */
   old_count = _get_all_freepages_count(_BOOT);
   old_end = kmem_end;
-  kmem_end = round_up((uintptr_t)pfdrmap_end, PAGE_SIZE);
+  kmem_end = ROUND_UP((uintptr_t)pfdrmap_end, PAGE_SIZE);
 
   /* Clear pfdtable structures */
   pfdtable_top = pfdtable;

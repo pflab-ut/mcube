@@ -229,7 +229,7 @@ void kfree(void *addr)
 
   buf_size = 1 << page->bucket_idx;
 
-  if (!is_aligned((uintptr_t) buf, buf_size)) {
+  if (!IS_ALIGNED((uintptr_t) buf, buf_size)) {
     panic("Bucket: Freeing invalidly-aligned 0x%lx address; "
           "bucket buffer size = 0x%lx\n", buf, buf_size);
   }

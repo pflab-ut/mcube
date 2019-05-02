@@ -24,7 +24,7 @@ static int call_mbox(unsigned char ch)
   mmio_out32(VIDEOCORE_MAILBOX_WRITE, r);
 
   /* now wait for the response */
-  while (1) {
+  while (true) {
     /* is there a response? */
     do {
       nop();

@@ -37,9 +37,9 @@ static void map_pml2_range(struct pml2e *pml2_base, uintptr_t vstart,
   struct pml2e *pml2e;
 
   assert(page_aligned(pml2_base));
-  assert(is_aligned(vstart, PAGE_SIZE_2MB));
-  assert(is_aligned(vend, PAGE_SIZE_2MB));
-  assert(is_aligned(pstart, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(vstart, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(vend, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(pstart, PAGE_SIZE_2MB));
 
   if ((vend - vstart) > (0x1ULL << 30)) {
     panic("A PML2 table cant map ranges > 1-GByte. "
@@ -83,9 +83,9 @@ static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
   uintptr_t end;
 
   assert(page_aligned(pml3_base));
-  assert(is_aligned(vstart, PAGE_SIZE_2MB));
-  assert(is_aligned(vend, PAGE_SIZE_2MB));
-  assert(is_aligned(pstart, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(vstart, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(vend, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(pstart, PAGE_SIZE_2MB));
 
   if ((vend - vstart) > PML3_MAPPING_SIZE) {
     panic("A PML3 table can't map ranges > 512-GBytes. "
@@ -137,9 +137,9 @@ static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
   uintptr_t end;
 
   assert(page_aligned(pml4_base));
-  assert(is_aligned(vstart, PAGE_SIZE_2MB));
-  assert(is_aligned(vend, PAGE_SIZE_2MB));
-  assert(is_aligned(pstart, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(vstart, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(vend, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(pstart, PAGE_SIZE_2MB));
 
   if ((vend - vstart) > PML4_MAPPING_SIZE) {
     panic("Mapping a virtual range that exceeds the 48-bit "
@@ -186,9 +186,9 @@ static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
  */
 static void map_kernel_range(uintptr_t vstart, uint64_t vlen, uintptr_t pstart)
 {
-  assert(is_aligned(vstart, PAGE_SIZE_2MB));
-  assert(is_aligned(vlen, PAGE_SIZE_2MB));
-  assert(is_aligned(pstart, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(vstart, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(vlen, PAGE_SIZE_2MB));
+  assert(IS_ALIGNED(pstart, PAGE_SIZE_2MB));
 
   map_pml4_range(kernel_pml4_table, vstart, vstart + vlen, pstart);
 }
@@ -228,7 +228,7 @@ bool vaddr_is_mapped(void *vaddr)
     return false;
   }
 
-  assert((uintptr_t) page_base(pml2e) == round_down((uintptr_t) vaddr,
+  assert((uintptr_t) page_base(pml2e) == ROUND_DOWN((uintptr_t) vaddr,
                                                     PAGE_SIZE_2MB));
   return true;
 }
@@ -253,8 +253,8 @@ void *vm_kmap(uintptr_t pstart, uint64_t len)
   }
 
   ret = VIRTUAL(pstart);
-  pstart = round_down(pstart, PAGE_SIZE_2MB);
-  pend = round_up(pend, PAGE_SIZE_2MB);
+  pstart = ROUND_DOWN(pstart, PAGE_SIZE_2MB);
+  pend = ROUND_UP(pend, PAGE_SIZE_2MB);
 
   while (pstart < pend) {
     vstart = VIRTUAL(pstart);
@@ -287,7 +287,7 @@ void vm_init(void)
 
   /* Map the entire available physical space */
   phys_end = e820_get_phys_addr_end();
-  phys_end = round_up(phys_end, PAGE_SIZE_2MB);
+  phys_end = ROUND_UP(phys_end, PAGE_SIZE_2MB);
   map_kernel_range(KERN_PAGE_OFFSET, phys_end, KERN_PHYS_OFFSET);
   printk("Memory: Mapping range 0x%lx -> 0x%lx to physical 0x0\n",
          KERN_PAGE_OFFSET, KERN_PAGE_OFFSET + phys_end);

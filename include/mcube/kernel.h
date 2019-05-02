@@ -6,6 +6,49 @@
 #ifndef __MCUBE_MCUBE_KERNEL_H__
 #define __MCUBE_MCUBE_KERNEL_H__
 
+
+#define NR_THREADS 16
+
+/* 4K */
+#define KERNEL_STACK_SIZE 0x1000
+#define USER_STACK_SIZE 0x1000
+
+#define STACK_ALIGN(x)  (((x) + 7) & -8)
+
+#define NR_PRIORITIES NR_THREADS
+
+/* each bitmap length is 32 bit */
+#define NR_PRIORITY_BITMAPS CEIL(NR_PRIORITIES, 32)
+
+#ifndef  __ASSEMBLY__
+
+#define inf_loop() do {                                                 \
+    print("%s:%s():%d %s\n", __FILE__, __func__, __LINE__, "inf_loop()"); \
+    if (call_sys_get_mode_level() != USER_LEVEL) {                      \
+      disable_local_irq();                                              \
+    }                                                                   \
+    for (;;)                                                            \
+      ;                                                                 \
+  } while (0)
+
+
+extern unsigned int Debug;
+
+int main(int argc, char *argv[]);
+
+void init_arch(void);
+void init_arch_ap(void);
+void exit_arch(void);
+void exit_arch_ap(void);
+
+void clear_bss(void);
+
+void shell(void);
+
+#endif /* !__ASSEMBLY__ */
+
+
+
 /*
  * Common methods and definitions
  *
@@ -15,74 +58,6 @@
 
 #ifndef __ASSEMBLY__
 
-
-/*
- * Semi type-safe min and max using GNU extensions
- * The type-checking trick is taken from Linux-2.6.
- */
-#define min(x, y) ({                            \
-      typeof(x) _m1 = (x);                      \
-      typeof(y) _m2 = (y);                      \
-      (void) (&_m1 == &_m2);                    \
-      _m1 < _m2 ? _m1 : _m2;                    \
-    })
-#define max(x, y) ({                            \
-      typeof(x) _m1 = (x);                      \
-      typeof(y) _m2 = (y);                      \
-      (void) (&_m1 == &_m2);                    \
-      _m1 > _m2 ? _m1 : _m2;                    \
-    })
-#define swap(x, y) ({                           \
-      typeof(x) _m1 = (x);                      \
-      typeof(y) _m2 = (y);                      \
-      typeof(x) _m3;                            \
-      (void) (&_m1 == &_m2);                    \
-      _m3 = (x);                                \
-      (x) = (y);                                \
-      (y) = _m3;                                \
-    })
-
-
-/*
- * In a binary system, a value 'x' is said to be n-byte
- * aligned when 'n' is a power of the radix 2, and x is
- * a multiple of 'n' bytes.
- *
- * A n-byte-aligned value has at least a log2n number of
- * least-significant zeroes.
- *
- * Return given x value 'n'-aligned.
- *
- * Using two's complement, rounding = (x & (typeof(x))-n)
- */
-#define round_down(x, n)  (x & ~(typeof(x))(n - 1))
-#define round_up(x, n)    (((x - 1) | (typeof(x))(n - 1)) + 1)
-
-/*
- * Check if given 'x' value is 'n'-aligned
- * 'n' must be power of the radix 2; see round_up()
- */
-#define __mask(x, n)    ((typeof(x))((n) - 1))
-#define is_aligned(x, n)  (((x) & __mask(x, n)) == 0)
-
-/*
- * 'a' Ceil Division 'b'  --  ceil((1.0 * 'a') / 'b')
- *
- * This is a very common operator for idioms like: "Amount
- * of pages needed to render 'x' lines where @a = desired
- * number of lines, and @b = lines in a single page."
- *
- * Or "Number of sectors to hold a a ramdisk image, where
- * @a = ramdisk number of bytes, @b = bytes in a sector.".
- */
-static inline uint64_t ceil_div(uint64_t a, uint64_t b)
-{
-  if (a == 0) {
-    return a;
-  }
-
-  return ((a - 1) / b) + 1;
-}
 
 __noreturn void panic(const char *fmt, ...);
 

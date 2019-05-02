@@ -332,7 +332,7 @@ struct page *addr_to_page(void *addr)
   uint64_t paddr, start, end, offset;
 
   paddr = PHYS(addr);
-  paddr = round_down(paddr, PAGE_SIZE);
+  paddr = ROUND_DOWN(paddr, PAGE_SIZE);
 
   for (rmap = pfdrmap; rmap != pfdrmap_top; rmap++) {
     range = &(rmap->range);
@@ -401,7 +401,7 @@ void pagealloc_init(void)
   pfdrmap_top = pfdrmap;
   pfdrmap_end = pfdrmap + avail_ranges;
 
-  kmem_end = round_up((uintptr_t)pfdrmap_end, PAGE_SIZE);
+  kmem_end = ROUND_UP((uintptr_t)pfdrmap_end, PAGE_SIZE);
   printk("Memory: Kernel memory area end = 0x%lx\n", kmem_end);
 
   /*

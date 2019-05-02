@@ -24,24 +24,12 @@ double cos(double x)
   t = 1.0;
   n = 1;
 
-  while (1) {
+  while (true) {
     /* maclaurin expansion of cos(x) */
     t = - (t * x * x) / ((2 * n) * (2 * n - 1));
-#if defined(TERM_NUMBER)
-
-    if (n > TERM_NUMBER) {
+    if (FABS(t) <= EPSILON) {
       break;
     }
-
-#elif defined(TERM_AMPLITUDE)
-
-    if (FABS(t) <= TERM_AMPLITUDE) {
-      break;
-    }
-
-#else
-#error "Unknown Termination Policy"
-#endif /* TERM_NUMBER */
     y += t;
     n++;
   }
@@ -67,24 +55,12 @@ double sin(double x)
   t = x;
   n = 1;
 
-  while (1) {
+  while (true) {
     /* maclaurin expansion of sin(x) */
     t = - (t * x * x) / ((2 * n + 1) * (2 * n));
-#if defined(TERM_NUMBER)
-
-    if (n > TERM_NUMBER) {
+    if (FABS(t) <= EPSILON) {
       break;
     }
-
-#elif defined(TERM_AMPLITUDE)
-
-    if (FABS(t) <= TERM_AMPLITUDE) {
-      break;
-    }
-
-#else
-#error "Unknown Termination Policy"
-#endif /* TERM_NUMBER */
     y += t;
     n++;
   }
@@ -162,23 +138,11 @@ double atan(double x)
   t = 0;
   n = 0;
 
-  while (1) {
+  while (true) {
     t = (n * n * x * x) / (2 * n + 1 + t);
-#if defined(TERM_NUMBER)
-
-    if (n > TERM_NUMBER) {
+    if (FABS(t) <= EPSILON) {
       break;
     }
-
-#elif defined(TERM_AMPLITUDE)
-
-    if (FABS(t) <= TERM_AMPLITUDE) {
-      break;
-    }
-
-#else
-#error "Unknown Termination Policy"
-#endif /* TERM_NUMBER */
     n++;
   }
 

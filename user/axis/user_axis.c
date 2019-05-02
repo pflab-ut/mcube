@@ -11,7 +11,7 @@ void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
 
-  while (1) {
+  while (true) {
     print("%lu", id);
     //  do_end_job(&ths[id]);
   }
@@ -50,7 +50,7 @@ void timer_main(void)
   enable_timer_interrupt();
   enable_timer();
 
-  while (1) {
+  while (true) {
     print("get_timer_count() = %lu\n", get_timer_count());
     //    wi();
     //    wait_until_next_interrupt();
@@ -74,7 +74,7 @@ int dmac_main(void)
     print("dst 0x%x\n", mmio_in32(dst + i));
   }
 
-  while (1) {
+  while (true) {
     sync();
     //print("hoge\n");
   }
@@ -121,7 +121,7 @@ void multi_cpus_main(void)
 
   volatile int i = 0;
 
-  while (1) {
+  while (true) {
     i++;
     print("i = %d\n", i);
   }
@@ -131,7 +131,7 @@ void tsc_main(void)
 {
   int i = 0;
 
-  while (1) {
+  while (true) {
     print("get_time_stamp_counter() = %lu\n", get_time_stamp_counter());
     i++;
 

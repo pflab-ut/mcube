@@ -196,8 +196,8 @@ int e820_sanitize_range(struct e820_range *range, uint64_t kmem_end)
   start = range->base;
   end = start + range->len;
 
-  start = round_up(start, PAGE_SIZE);
-  end = round_down(end, PAGE_SIZE);
+  start = ROUND_UP(start, PAGE_SIZE);
+  end = ROUND_DOWN(end, PAGE_SIZE);
 
   if (end <= start) {
     range->type = E820_ERRORMEM;

@@ -511,7 +511,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
       }
 
       len = strlen(s);
-      len = min(size, len);
+      len = MIN(size, len);
       strncpy(str, s, len);
       break;
 

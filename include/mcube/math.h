@@ -8,27 +8,76 @@
 
 #ifndef __ASSEMBLY__
 
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+/*
+ * Semi type-safe min and max using GNU extensions
+ * The type-checking trick is taken from Linux-2.6.
+ */
+#define MIN(x, y) ({                            \
+      typeof(x) _m1 = (x);                      \
+      typeof(y) _m2 = (y);                      \
+      (void) (&_m1 == &_m2);                    \
+      _m1 < _m2 ? _m1 : _m2;                    \
+    })
+#define MAX(x, y) ({                            \
+      typeof(x) _m1 = (x);                      \
+      typeof(y) _m2 = (y);                      \
+      (void) (&_m1 == &_m2);                    \
+      _m1 > _m2 ? _m1 : _m2;                    \
+    })
+#define SWAP(x, y) ({                           \
+      typeof(x) _m1 = (x);                      \
+      typeof(y) _m2 = (y);                      \
+      typeof(x) _m3;                            \
+      (void) (&_m1 == &_m2);                    \
+      _m3 = (x);                                \
+      (x) = (y);                                \
+      (y) = _m3;                                \
+    })
+
+
+/*
+ * In a binary system, a value 'x' is said to be n-byte
+ * aligned when 'n' is a power of the radix 2, and x is
+ * a multiple of 'n' bytes.
+ *
+ * A n-byte-aligned value has at least a log2n number of
+ * least-significant zeroes.
+ *
+ * Return given x value 'n'-aligned.
+ *
+ * Using two's complement, rounding = (x & (typeof(x))-n)
+ */
+#define ROUND_DOWN(x, n)  (x & ~(typeof(x))(n - 1))
+#define ROUND_UP(x, n)    (((x - 1) | (typeof(x))(n - 1)) + 1)
+
+/*
+ * Check if given 'x' value is 'n'-aligned
+ * 'n' must be power of the radix 2; see round_up()
+ */
+#define __MASK(x, n)    ((typeof(x))((n) - 1))
+#define IS_ALIGNED(x, n)  (((x) & __MASK(x, n)) == 0)
+
 
 long lpow(long x, long y);
 
-
-#if defined(ENABLE_FPU)
 
 /**
  * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
  * @return Ceiling of @c size/unit.
  */
-#define CEIL(size, unit) (((int64_t) (size) * (int64_t) (unit) < 0) \
-                          || ((int64_t) (size) % (int64_t) (unit)) == 0 ? \
+#define CEIL(size, unit) (((long) (size) * (long) (unit) < 0) \
+                          || ((long) (size) % (long) (unit)) == 0 ? \
                           (size) / (unit) : (size) / (unit) + 1)
+
+#if defined(ENABLE_FPU)
+
 /**
  * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
  * @return Floor of @c size/unit.
  */
 #define FLOOR(size, unit)  ((size) / (unit) > 0 ? (size) / (unit) :    \
-                           (int64_t) (size) / (unit) > (double) (size) / (unit) ?  \
+                           (long) (size) / (unit) > (double) (size) / (unit) ?  \
                            (size) / (unit) - 1 : (size) / (unit))
 
 
@@ -36,7 +85,7 @@ long lpow(long x, long y);
  * The ABS() macro computes the absolute value of the integer @c x.
  * @return Absolute value of @c x.
  */
-#define ABS(x) ((int64_t) (x) > 0 ? (int64_t) (x) : - (int64_t) (x))
+#define ABS(x) ((long) (x) > 0 ? (long) (x) : - (long) (x))
 /**
  * The FABS() macro computes the absolute value of the floating-point @c x.
  * @return Absolute value of @c x.
@@ -45,15 +94,10 @@ long lpow(long x, long y);
 
 
 #define PI 3.1415926535897932384626433832795
-
-/* termination by aplitude */
-#define TERM_AMPLITUDE 0.000000001
-
-/* termination by # of terms */
 #define MAX_BERNOULLI_ODD_NUMBER 19
-#define TERM_NUMBER 24
-
 #define D 4.4544551033807686783083602485579e-6
+#define EPSILON 0.001
+
 
 #if CONFIG_ARCH_SIM
 #include <math.h>
@@ -75,18 +119,13 @@ double strtod(const char *nptr, char **endptr);
 #endif /* CONFIG_ARCH_SIM */
 
 #else
-/**
- * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
- * @return Ceiling of @c size/unit.
- */
-#define CEIL(size, unit) (((int32_t) (size) * (int32_t) (unit) < 0) \
-                          || ((int32_t) (size) % (int32_t) (unit)) == 0 ? \
-                          (size) / (unit) : (size) / (unit) + 1)
+
 /**
  * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
  * @return Floor of @c size/unit.
  */
-#define FLOOR(size, unit)  ((size) / (unit))
+#define FLOOR(size, unit) ((size) / (unit))
+
 
 #endif /* ENABLE_FPU */
 

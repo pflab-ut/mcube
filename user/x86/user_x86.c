@@ -10,7 +10,7 @@ void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
 
-  while (1) {
+  while (true) {
     print("%lu", id);
     wait_until_next_interrupt();
   }

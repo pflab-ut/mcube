@@ -52,7 +52,7 @@ void *user_func(void *arg)
 {
   unsigned long id = *(int *) arg;
 
-  while (1) {
+  while (true) {
     print("%lu\n", id);
     //    delay(1000);
   }
@@ -88,7 +88,7 @@ int user_thread_main(void)
 
 void process(const char *array)
 {
-  while (1) {
+  while (true) {
     print("%s", array);
     //    delay(100);
   }
@@ -132,7 +132,7 @@ int user_dmac_main(void)
                 0, DMAC_POLLING);
 #endif
 
-  while (1) {
+  while (true) {
     print("dst = %s\n", dst);
     wfi();
   }

@@ -10,7 +10,7 @@ __noreturn void shell(void)
 {
   int c;
 
-  while (1) {
+  while (true) {
     c = uart_getc(0);
 
     if (c == '\r') {
