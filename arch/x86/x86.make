@@ -4,49 +4,24 @@
 #  Hiroyuki Chishiro
 #
 
-#LDFLAGS	=  $(shell $(CC) $(CFLAGS) -print-file-name=libgcc_eh.a)
-TEXT_ADDR = 0x00007c00
-
-
-#PRIVATE_LDFLAGS = -Ttext=$(TEXT_ADDR) -N -Bstatic
-
-#CFLAGS += -fPIC
-#CFLAGS += -fPIE
-#LDFLAGS += -Ttext=$(TEXT_ADDR)
 
 ifeq ($(CC), clang)
   CROSS_PREFIX = llvm-
   CC	= $(CCACHE) clang
   LD = ld.bfd
-#  LD = ld.lld
-#  AS = $(CROSS_PREFIX)as
-  AS = nasm
-#  ASFLAGS = -f elf64
-#  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
   OBJDUMP = objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
-#  CFLAGS += -masm=intel
   LDFLAGS += -T scripts/linker/x86-elf.ld --Map $(MAP)
 else
   CROSS_PREFIX = 
   CC = $(CCACHE) $(CROSS_PREFIX)gcc
   LD = ld
-#  AS = $(CROSS_PREFIX)as
-  AS = nasm
   ASFLAGS = -f elf64
   OBJDUMP = $(CROSS_PREFIX)objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
-#  LDFLAGS += -nostdlib -Ttext=$(TEXT_ADDR) scripts/linker/x86-elf.ld
-#  LDFLAGS += -nostdlib
-#  LDFLAGS += -N -T scripts/linker/x86-elf.ldp
   LDFLAGS += -nostdinc -nostdlib -T scripts/linker/x86-elf.ldp
 endif
 
-#CFLAGS += -D__LITTLE_ENDIAN__
-#CFLAGS += -mcmodel=large -nostdlib -nodefaultlibs -fno-builtin -fno-stack-protector
-#CFLAGS += -fno-pic
-#CFLAGS += -fno-pie
-#CFLAGS += -fno-pie -Wno-pointer-sign -fno-stack-protector -mfentry
 
 #
 # Machine-dependent C Flags:

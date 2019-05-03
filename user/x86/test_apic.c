@@ -78,10 +78,6 @@ static void apic_test_delay(void)
  * Test APIC timer periodic ticks against PIT delays
  */
 
-/*
- * Increase the counter for each periodic timer tick.
- */
-static volatile int ticks_count;
 
 
 /*

@@ -26,9 +26,6 @@ else
   LDFLAGS += -T scripts/linker/dom-elf.ld
 endif
 
-#LDFLAGS += -Ttext=$(TEXT_ADDR) -Tdata=$(DATA_ADDR) -Tbss=$(BSS_ADDR)
-#LDFLAGS += -Ttext=$(TEXT_ADDR)
-
 
 CFLAGS += -D__BIG_ENDIAN__
 

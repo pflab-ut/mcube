@@ -19,7 +19,6 @@ ifeq ($(CC), clang)
   OBJCOPY = $(CROSS_PREFIX)objcopy
   LDFLAGS += -T scripts/linker/arm-elf.ld --Map $(MAP)
 else
-#  CFLAGS += -nostartfiles
   CROSS_PREFIX = aarch64-linux-gnu-
   CC = $(CCACHE) $(CROSS_PREFIX)gcc
   LD = $(CROSS_PREFIX)ld
