@@ -146,6 +146,87 @@ typedef enum socket_type socket_type;
 #define PF_IEEE802154   36      /* IEEE 802.15.4 sockets.  */
 #define PF_MAX          37      /* For now..  */
 
+/* Address families.  */
+#define AF_UNSPEC       PF_UNSPEC
+#define AF_LOCAL        PF_LOCAL
+#define AF_UNIX         PF_UNIX
+#define AF_FILE         PF_FILE
+#define AF_INET         PF_INET
+#define AF_AX25         PF_AX25
+#define AF_IPX          PF_IPX
+#define AF_APPLETALK    PF_APPLETALK
+#define AF_NETROM       PF_NETROM
+#define AF_BRIDGE       PF_BRIDGE
+#define AF_ATMPVC       PF_ATMPVC
+#define AF_X25          PF_X25
+#define AF_INET6        PF_INET6
+#define AF_ROSE         PF_ROSE
+#define AF_DECnet       PF_DECnet
+#define AF_NETBEUI      PF_NETBEUI
+#define AF_SECURITY     PF_SECURITY
+#define AF_KEY          PF_KEY
+#define AF_NETLINK      PF_NETLINK
+#define AF_ROUTE        PF_ROUTE
+#define AF_PACKET       PF_PACKET
+#define AF_ASH          PF_ASH
+#define AF_ECONET       PF_ECONET
+#define AF_ATMSVC       PF_ATMSVC
+#define AF_RDS          PF_RDS
+#define AF_SNA          PF_SNA
+#define AF_IRDA         PF_IRDA
+#define AF_PPPOX        PF_PPPOX
+#define AF_WANPIPE      PF_WANPIPE
+#define AF_LLC          PF_LLC
+#define AF_IB           PF_IB
+#define AF_MPLS         PF_MPLS
+#define AF_CAN          PF_CAN
+#define AF_TIPC         PF_TIPC
+#define AF_BLUETOOTH    PF_BLUETOOTH
+#define AF_IUCV         PF_IUCV
+#define AF_RXRPC        PF_RXRPC
+#define AF_ISDN         PF_ISDN
+#define AF_PHONET       PF_PHONET
+#define AF_IEEE802154   PF_IEEE802154
+#define AF_CAIF         PF_CAIF
+#define AF_ALG          PF_ALG
+#define AF_NFC          PF_NFC
+#define AF_VSOCK        PF_VSOCK
+#define AF_KCM          PF_KCM
+#define AF_QIPCRTR      PF_QIPCRTR
+#define AF_SMC          PF_SMC
+#define AF_MAX          PF_MAX
+
+/* Socket level values.  Others are defined in the appropriate headers.
+
+   XXX These definitions also should go into the appropriate headers as
+   far as they are available.  */
+#define SOL_RAW         255
+#define SOL_DECNET      261
+#define SOL_X25         262
+#define SOL_PACKET      263
+#define SOL_ATM         264     /* ATM layer (cell level).  */
+#define SOL_AAL         265     /* ATM Adaption Layer (packet level).  */
+#define SOL_IRDA        266
+#define SOL_NETBEUI     267
+#define SOL_LLC         268
+#define SOL_DCCP        269
+#define SOL_NETLINK     270
+#define SOL_TIPC        271
+#define SOL_RXRPC       272
+#define SOL_PPPOL2TP    273
+#define SOL_BLUETOOTH   274
+#define SOL_PNPIPE      275
+#define SOL_RDS         276
+#define SOL_IUCV        277
+#define SOL_CAIF        278
+#define SOL_ALG         279
+#define SOL_NFC         280
+#define SOL_KCM         281
+#define SOL_TLS         282
+
+/* Maximum queue length specifiable by listen.  */
+#define SOMAXCONN       128
+
 
 extern int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 extern int bind(int sockfd, const struct sockaddr *my_addr, socklen_t addrlen);
