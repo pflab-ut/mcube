@@ -17,22 +17,6 @@
 
 extern unsigned long current_cpu;
 
-/**
- * @struct cpuid_info
- * @brief CPU ID information
- */
-struct cpuid_info {
-  /** RAX register. */
-  unsigned int rax;
-  /** RBX register. */
-  unsigned int rbx;
-  /** RCX register. */
-  unsigned int rcx;
-  /** RDX register. */
-  unsigned int rdx;
-};
-
-typedef struct cpuid_info cpuid_info_t;
 
 int get_nr_cpu_cores(void);
 

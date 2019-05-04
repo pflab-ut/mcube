@@ -6,7 +6,6 @@
 #ifndef __MCUBE_JIFFIES_DEBUG_H__
 #define __MCUBE_JIFFIES_DEBUG_H__
 
-/* Never include this file directly. Include <debug/debug_header.h> instead. */
 #ifndef __ASSEMBLY__
 
 #if CONFIG_OPTION_DEBUG

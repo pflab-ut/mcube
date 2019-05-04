@@ -69,9 +69,16 @@ Please execute the following command in CUI.
 $ make run
 ```
 
-Please execute the following command in GUI.
+If using command line arguments in SIM architecture,
+please execute the following command in CUI.
 ```
-$ make grun
+$ make run ARGS="arg1 arg2 arg3"
+```
+
+If using command line arguments in SIM architecture,
+please execute the following command in GUI.
+```
+$ make grun ARGS="arg1 arg2 arg3"
 ```
 
 ## Documentations

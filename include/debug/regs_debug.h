@@ -6,11 +6,9 @@
 #ifndef __MCUBE_DEBUG_REGS_DEBUG_H__
 #define __MCUBE_DEBUG_REGS_DEBUG_H__
 
-/* Never include this file directly. Include <debug/debug_header.h> instead. */
-
 #ifndef __ASSEMBLY__
-#if CONFIG_OPTION_DEBUG
 
+#if CONFIG_OPTION_DEBUG
 
 #if CONFIG_ARCH_SIM
 
@@ -49,7 +47,8 @@
 #else
 #define pdebug_registers(regs)
 
-#endif
+#endif /* CONFIG_OPTION_DEBUG */
+
 #endif /* !__ASSEMBLY__ */
 
 #endif /* __MCUBE_DEBUG_REGS_DEBUG_H__ */

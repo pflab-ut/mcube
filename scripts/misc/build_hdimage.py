@@ -22,10 +22,10 @@
 #  o end signature, "McubeEnd", 8-bytes
 #
 # As seen above, ramdisk length is expressed in two terms:
-# o in 512-byte sectors (including header len), for the real-mode
-#   assembly code loading the header and its ramdisk image to RAM.
-# o in plain bytes (without  header len), for the C code accssing
-#   the ramdisk image directly.
+#  o in 512-byte sectors (including header len), for the real-mode
+#    assembly code loading the header and its ramdisk image to RAM.
+#  o in plain bytes (without  header len), for the C code accssing
+#    the ramdisk image directly.
 #
 # Python-2.7 _AND_ Python-3.0+ compatible
 # NOTE! Always read & write the files in binary mode.

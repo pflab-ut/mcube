@@ -64,7 +64,7 @@ void delete_thread_from_task(struct thread_struct *th)
 
 static inline int alloc_task_id(void)
 {
-  static unsigned int task_id = TASK_ID;
+  static unsigned int task_id = INIT_TASK_ID;
   return task_id++;
 }
 

@@ -120,7 +120,6 @@ SRCS +=		\
 
 
 
-
 SRCS += \
  $(TOP_DIR)/user/x86/test_apic.c \
  $(TOP_DIR)/user/x86/test_percpu.c \

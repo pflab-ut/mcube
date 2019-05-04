@@ -12,7 +12,7 @@
 #include <stddef.h>
 
 #elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER || CONFIG_ARCH_AXIS
-//#define offsetof(T, F) ((unsigned int)((char *)&((T *)0L)->F - (char *)0L))
+//#define offsetof(T, F) ((unsigned int)((char *)&((T *) 0L)->F - (char *) 0L))
 #define offsetof(type, elem)  ((unsigned long) &((type *) 0)->elem)
 #else
 #error "Uknown Architecture"

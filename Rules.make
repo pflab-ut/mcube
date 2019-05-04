@@ -183,6 +183,7 @@ TEE = tee
 
 UART_FILE = uart.log
 
+ARGS =
 
 DOC_DIR = docs
 

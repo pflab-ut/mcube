@@ -26,7 +26,7 @@ int call_sys_sched(void);
 int call_sys_end_job(void);
 unsigned long call_sys_get_exec_time(void);
 int call_sys_write(char *buf);
-int call_sys_get_cpu_id(void);
+unsigned long call_sys_get_cpu_id(void);
 int call_sys_get_mode_level(void);
 int call_sys_move_to_kernel_level(void);
 

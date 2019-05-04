@@ -8,7 +8,7 @@
 
 void init_sem(struct sem_struct *sem, unsigned int nr_rsrcs, unsigned int ceil)
 {
-  int cpu = get_cpu_id();
+  unsigned long cpu = get_cpu_id();
   sem->counter = nr_rsrcs;
   sem->ceil = ceil;
   sem->ewq = &kernel_th[cpu];
@@ -19,7 +19,7 @@ void init_sem(struct sem_struct *sem, unsigned int nr_rsrcs, unsigned int ceil)
 
 void sem_down(struct sem_struct *sem)
 {
-  int cpu = get_cpu_id();
+  unsigned long cpu = get_cpu_id();
   lock_scheduler();
 
   if (--sem->counter < 0) {
@@ -45,7 +45,7 @@ void sem_down(struct sem_struct *sem)
 void sem_up(struct sem_struct *sem)
 {
   struct thread_struct *th;
-  int cpu = get_cpu_id();
+  unsigned long cpu = get_cpu_id();
   lock_scheduler();
 
   sem->counter++;

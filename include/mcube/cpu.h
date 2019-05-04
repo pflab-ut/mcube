@@ -37,6 +37,40 @@ extern double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* ENABLE_FPU */
 
 
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
+/**
+ * @struct cpuid_info
+ * @brief CPU ID information
+ */
+struct cpuid_info {
+  /** EAX register. */
+  uint64_t rax;
+  /** EBX register. */
+  uint64_t rbx;
+  /** ECX register. */
+  uint64_t rcx;
+  /** EDX register. */
+  uint64_t rdx;
+};
+
+typedef struct cpuid_info cpuid_info_t;
+
+static inline void cpuid(uint64_t op,
+                         cpuid_info_t *cinfo)
+{
+  cinfo->rax = op;
+  cinfo->rcx = 0;
+  asm volatile("cpuid"
+               : "=a"(cinfo->rax),
+               "=b"(cinfo->rbx),
+               "=c"(cinfo->rcx),
+               "=d"(cinfo->rdx)
+               : "0"(cinfo->rax), "2"(cinfo->rcx));
+}
+
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+
+
 void set_cpu_clock(void);
 
 void init_fpu(void);
