@@ -73,7 +73,7 @@ $ make run
 
 Please execute the following command in GUI.
 ```
-$ make grun ARGS="arg1 arg2 arg3"
+$ make grun
 ```
 
 ### With Arguments in SIM Architecture
