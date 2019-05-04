@@ -64,19 +64,26 @@ $ make clean
 
 ## How to Execute
 
+### Without Arguments
+
 Please execute the following command in CUI.
 ```
 $ make run
 ```
 
-If using command line arguments in SIM architecture,
-please execute the following command in CUI.
+Please execute the following command in GUI.
+```
+$ make grun ARGS="arg1 arg2 arg3"
+```
+
+### With Arguments (SIM Architecture)
+
+Please execute the following command in CUI.
 ```
 $ make run ARGS="arg1 arg2 arg3"
 ```
 
-If using command line arguments in SIM architecture,
-please execute the following command in GUI.
+Please execute the following command in GUI.
 ```
 $ make grun ARGS="arg1 arg2 arg3"
 ```
