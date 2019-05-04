@@ -76,7 +76,7 @@ Please execute the following command in GUI.
 $ make grun ARGS="arg1 arg2 arg3"
 ```
 
-### With Arguments (SIM Architecture)
+### With Arguments in SIM Architecture
 
 Please execute the following command in CUI.
 ```
