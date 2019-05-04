@@ -16,7 +16,6 @@ int ap_main(void)
   return 0;
 }
 
-int socket_client(int argc, char *argv[]);
 
 #define PORT 49152
 #define SOCKET_BUFSIZE 256
@@ -66,9 +65,11 @@ int socket_client(int argc, char *argv[])
   return 0;
 }
 
-int socket_server(int argc, char *argv[])
+int socket_server(__unused int argc, __unused char *argv[])
 {
-  int s1, s2, len;
+  int s1, s2;
+  int ret;
+  socklen_t len;
   struct sockaddr_in saddr, caddr;
   char buf[SOCKET_BUFSIZE];
 
@@ -84,25 +85,29 @@ int socket_server(int argc, char *argv[])
 
   if (bind(s1, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
     perror("bind");
-    exit(1);
+    exit(2);
   }
 
   if (listen(s1, 1) < 0) {
     perror("listen");
-    exit(1);
+    exit(3);
   }
 
   len = sizeof(caddr);
 
   if ((s2 = accept(s1, (struct sockaddr *) &caddr, &len)) < 0) {
     perror("accept");
-    exit(1);
+    exit(4);
   }
 
   close(s1);
 
   strcpy(buf, "I'm a server.\n");
-  write(s2, buf, sizeof(buf));
+
+  if ((ret = write(s2, buf, sizeof(buf))) == -1) {
+    perror("write");
+    exit(5);
+  }
 
   close(s2);
 

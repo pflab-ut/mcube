@@ -99,9 +99,8 @@ long lpow(long x, long y);
 #define EPSILON 0.001
 
 
-#if CONFIG_ARCH_SIM
-#include <math.h>
-#else
+#if !CONFIG_ARCH_SIM
+
 double __ieee754_sqrt(double x);
 double copysign(double x, double y);
 double pow(double x, double y);

@@ -8,11 +8,7 @@
 
 #ifndef __ASSEMBLY__
 
-#if CONFIG_ARCH_SIM
-
-#include <string.h>
-
-#elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER || CONFIG_ARCH_AXIS
+#if !CONFIG_ARCH_SIM
 
 void *memset(void *s, int c, size_t n);
 void *memset32(void *dst, uint32_t val, uint64_t len);
@@ -37,9 +33,7 @@ char *strncat(char *s, const char *t, size_t n);
 char *strchr(const char *s, int c);
 char *strtok(char *str, const char *delim);
 
-#else
-#error "Unknown Architecture"
-#endif /* CONFIG_ARCH_SIM */
+#endif /* !CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */
 

@@ -28,17 +28,10 @@ int print_uart(const char *fmt, ...);
 
 void __noreturn loop_print(char ch, int color);
 
-/* print for user mode. */
+
+#if !CONFIG_ARCH_SIM
+
 int printf(const char *fmt, ...);
-
-
-#if CONFIG_ARCH_SIM
-
-#include <stdio.h>
-#include <unistd.h>
-
-#else
-
 int getc(void);
 int putchar(int c);
 int puts(const char *s);
@@ -48,8 +41,7 @@ void putchar_colored(char c, int color);
 #endif /* CONFIG_ARCH_X86 */
 
 
-
-#endif /* CONFIG_ARCH_SIM */
+#endif /* !CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */
 

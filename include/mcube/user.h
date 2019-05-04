@@ -34,8 +34,12 @@ bool test_vm(void);
 bool test_apic(void);
 bool test_percpu(void);
 bool test_pit(void);
-
 #endif /* CONFIG_ARCH_X86 */
+
+int socket_client(int argc, char *argv[]);
+int socket_server(int argc, char *argv[]);
+void print_socket_usage(char *exec);
+
 
 #endif /* __ASSEMBLY__ */
 

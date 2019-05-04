@@ -62,13 +62,9 @@ void shell(void);
 __noreturn void panic(const char *fmt, ...);
 
 
-#include <stdbool.h>
 
-#if CONFIG_ARCH_SIM
+#if !CONFIG_ARCH_SIM
 
-#include <assert.h>
-
-#else
 
 #define NULL  ((void *) 0)
 //#define bool  _Bool

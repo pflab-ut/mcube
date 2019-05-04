@@ -7,6 +7,8 @@
 #define __MCUBE_MCUBE_SYSCALLS_H__
 
 
+#if !CONFIG_ARCH_SIM
+
 #define SYS_sched 0
 #define SYS_end_job 1
 #define SYS_get_exec_time 2
@@ -16,7 +18,7 @@
 #define SYS_move_to_kernel_level 6
 #define NR_syscalls 7
 
-
+#endif /* !CONFIG_ARCH_SIM */
 
 #ifndef __ASSEMBLY__
 
@@ -43,23 +45,12 @@ asmlinkage int sys_bad_syscall(int number);
 
 
 
-#if CONFIG_ARCH_SIM
-
-#include <sys/syscall.h>
-
-
-#elif CONFIG_ARCH_X86
-
 asmlinkage int syscall0(int number);
 asmlinkage int syscall1(int number, unsigned long arg1);
 asmlinkage int syscall2(int number, unsigned long arg1, unsigned long arg2);
 
-#elif CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER || CONFIG_ARCH_AXIS
-
-#else
-#error "Unknown Architecture"
-#endif /* CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */
+
 
 #endif /* __MCUBE_MCUBE_SYSCALLS_H__ */

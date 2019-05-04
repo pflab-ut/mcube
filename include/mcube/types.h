@@ -9,14 +9,7 @@
 #ifndef __ASSEMBLY__
 
 
-#if CONFIG_ARCH_SIM
-#include <sys/types.h>
-#include <inttypes.h>
-#include <stdint.h>
-
-
-#elif CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER || CONFIG_ARCH_AXIS
-
+#if !CONFIG_ARCH_SIM
 
 /** 8-bit integer data type. */
 typedef signed char int8_t;
@@ -52,9 +45,7 @@ typedef unsigned long int uintptr_t;
 
 typedef uint64_t clock_t;
 
-#else
-#error "Unknown Architecture"
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+#endif /* !CONFIG_ARCH_SIM */
 
 
 

@@ -6,9 +6,7 @@
 #ifndef __MCUBE_MCUBE_LIMITS_H__
 #define __MCUBE_MCUBE_LIMITS_H__
 
-#if CONFIG_ARCH_SIM
-#include <limits.h>
-#else
+#if !CONFIG_ARCH_SIM
 
 #define CHAR_BIT 8
 
@@ -52,7 +50,9 @@
 
 #define ULLONG_MAX 18446744073709551615ULL
 
+#ifndef DBL_MAX
 #define DBL_MAX 0x1.fffffffffffffp1023
+#endif /* !DBL_MAX */
 
 #ifndef HUGE_VAL
 #define HUGE_VAL DBL_MAX
@@ -76,7 +76,7 @@
 #define UTYPE_MAXVAL(x) ((typeof(x))UINT64_MAX)
 
 
-#endif /* CONFIG_ARCH_SIM */
+#endif /* !CONFIG_ARCH_SIM */
 
 
 #endif /* __MCUBE_MCUBE_LIMITS_H__ */

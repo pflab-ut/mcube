@@ -8,14 +8,11 @@
 
 
 /* early include due to dependency */
-#include <mcube/config.h>
 #include <mcube/types.h>
-#include <mcube/stdarg.h>
 #include <mcube/compiler.h>
 #include <mcube/math.h>
 #include <mcube/kernel.h>
 #include <mcube/stdio.h>
-#include <mcube/stddef.h>
 #include <mcube/linkage.h>
 #include <mcube/irq.h>
 #include <mcube/cpu.h>

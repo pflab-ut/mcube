@@ -6,8 +6,8 @@
 #ifndef __MCUBE_MCUBE_MCUBE_H__
 #define __MCUBE_MCUBE_MCUBE_H__
 
-#define _GNU_SOURCE
-
+#include <mcube/config.h>
+#include <mcube/c_header.h>
 #include <mcube/mcube_pre_header.h>
 #include <net/net_header.h>
 
