@@ -44,6 +44,7 @@ LIB_SRCS = \
  $(TOP_DIR)/lib/stdalgo.c \
  $(TOP_DIR)/lib/stdlib.c \
  $(TOP_DIR)/lib/string.c \
+ $(TOP_DIR)/lib/unistd.c \
  $(TOP_DIR)/lib/unrolled_list.c \
 
 NET_SRCS = \
@@ -200,14 +201,16 @@ endif
 
 grun:
 ifeq ($(ARCH_NAME), x86)
-#	qemu-system-x86_64 -cdrom $(TARGET).iso
-#	qemu-system-x86_64 build/mcube-hd.img -curses -smp 4
-	qemu-system-x86_64 build/mcube-hd.img -smp 4
+ifeq ($(OUTPUT_NAME), console)
+	qemu-system-x86_64 build/mcube-hd.img -curses -smp 4
+else
+	qemu-system-x86_64 build/mcube-hd.img -serial mon:stdio -smp 4 | $(TEE) $(UART_FILE)
+endif
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
-	qemu-system-aarch64 -M raspi3 -serial mon:stdio -kernel $(TARGET)
+	qemu-system-aarch64 -M raspi3 -serial mon:stdio -kernel $(TARGET) | $(TEE) $(UART_FILE)
 # for MINI UART
-#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -kernel $(TARGET)
+#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -kernel $(TARGET) | $(TEE) $(UART_FILE)
 endif
 
 mrun:

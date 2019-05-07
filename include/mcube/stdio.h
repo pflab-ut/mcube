@@ -36,6 +36,10 @@ int getc(void);
 int putchar(int c);
 int puts(const char *s);
 
+ssize_t read(int fd, void *buf, size_t count);
+ssize_t write(int fd, const void *buf, size_t count);
+
+
 #if CONFIG_ARCH_X86
 void putchar_colored(char c, int color);
 #endif /* CONFIG_ARCH_X86 */

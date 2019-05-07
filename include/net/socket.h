@@ -82,8 +82,8 @@ enum socket_type {
 																	 datagrams of fixed maximum length.  */
   SOCK_DCCP = 6,                /* Datagram Congestion Control Protocol.  */
   SOCK_PACKET = 10,             /* Linux specific way of getting packets
-																		 at the dev level.  For writing rarp and
-																		 other similar things on the user level. */
+                                   at the dev level.  For writing rarp and
+                                   other similar things on the user level. */
 
   /* Flags to be ORed into the type parameter of socket and socketpair and
   	 used for the flags parameter of paccept.  */
@@ -219,11 +219,11 @@ typedef enum socket_type socket_type;
 #define SOMAXCONN       128
 
 
-extern int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
-extern int bind(int sockfd, const struct sockaddr *my_addr, socklen_t addrlen);
-extern int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
-extern int listen(int sockfd, int backlog);
-extern int socket(int domain, int type, int protocol);
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+int bind(int sockfd, const struct sockaddr *my_addr, socklen_t addrlen);
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+int listen(int sockfd, int backlog);
+int socket(int domain, int type, int protocol);
 
 
 #endif /* CONFIG_ARCH_SIM */

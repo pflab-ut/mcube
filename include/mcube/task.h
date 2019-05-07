@@ -14,8 +14,6 @@
 #define OFFSET_OF_CPU_CONTEXT 0
 
 
-#define NR_TASKS 0x10
-
 
 #ifndef __ASSEMBLY__
 

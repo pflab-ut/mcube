@@ -257,7 +257,7 @@ static int __putc(uint8_t byte)
   timeout = 0xfffff;
 
   while (!tx_buffer_empty() && timeout--) {
-    cpu_pause();
+    pause();
   }
 
   if (__unlikely(timeout == -1)) {

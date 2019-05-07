@@ -184,6 +184,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   // user_dmac_main();
   //  kernel_level_main();
   user_atomic_main();
+  barrier();
   //  test_ring_buf();
 #if CONFIG_ARCH_ARM_RASPI3
   //  user_raspi3_main();

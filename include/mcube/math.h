@@ -51,13 +51,6 @@
 #define ROUND_DOWN(x, n)  (x & ~(typeof(x))(n - 1))
 #define ROUND_UP(x, n)    (((x - 1) | (typeof(x))(n - 1)) + 1)
 
-/*
- * Check if given 'x' value is 'n'-aligned
- * 'n' must be power of the radix 2; see round_up()
- */
-#define __MASK(x, n)    ((typeof(x))((n) - 1))
-#define IS_ALIGNED(x, n)  (((x) & __MASK(x, n)) == 0)
-
 
 long lpow(long x, long y);
 

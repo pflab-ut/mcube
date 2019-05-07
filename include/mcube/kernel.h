@@ -6,7 +6,7 @@
 #ifndef __MCUBE_MCUBE_KERNEL_H__
 #define __MCUBE_MCUBE_KERNEL_H__
 
-
+#define NR_TASKS   16
 #define NR_THREADS 16
 
 /* 4K */
@@ -20,7 +20,16 @@
 /* each bitmap length is 32 bit */
 #define NR_PRIORITY_BITMAPS CEIL(NR_PRIORITIES, 32)
 
+
 #ifndef  __ASSEMBLY__
+
+/*
+ * Check if given 'x' value is 'n'-aligned
+ * 'n' must be power of the radix 2.
+ */
+#define __MASK(x, n)    ((typeof(x))((n) - 1))
+#define IS_ALIGNED(x, n)  (((x) & __MASK(x, n)) == 0)
+
 
 #define inf_loop() do {                                                 \
     print("%s:%s():%d %s\n", __FILE__, __func__, __LINE__, "inf_loop()"); \
@@ -42,10 +51,7 @@ void exit_arch(void);
 void exit_arch_ap(void);
 
 void clear_bss(void);
-
 void shell(void);
-
-#endif /* !__ASSEMBLY__ */
 
 
 
@@ -56,8 +62,6 @@ void shell(void);
  *
  */
 
-#ifndef __ASSEMBLY__
-
 
 __noreturn void panic(const char *fmt, ...);
 
@@ -66,16 +70,14 @@ __noreturn void panic(const char *fmt, ...);
 #if !CONFIG_ARCH_SIM
 
 
+#ifndef NULL
 #define NULL  ((void *) 0)
-//#define bool  _Bool
-//#define true    ((_Bool) 1)
-//#define false   ((_Bool) 0)
+#endif /* !NULL */
 
 
-#ifdef EOF
-#undef EOF
+#ifndef EOF
 #define EOF -1
-#endif /* EOF */
+#endif /* !EOF */
 
 
 /*
@@ -85,9 +87,10 @@ extern void halt_cpu_ipi_handler(void);
 
 #define assert(condition)                       \
   do {                                          \
-    if (__unlikely(!(condition)))               \
+    if (__unlikely(!(condition))) {             \
       panic("%s:%d - !(" #condition ")\n",      \
             __FILE__, __LINE__);                \
+    }                                           \
   } while (0);
 
 
@@ -98,17 +101,8 @@ extern void halt_cpu_ipi_handler(void);
  * values cached in registers across the assembler instruction
  * and not optimize stores or loads to that memory." --GCC
  */
-//#define barrier() asm volatile ("":::"memory");
+#define barrier() asm volatile("":::"memory")
 
-/*
- * For spin-loops, use x86 'pause' and a memory barrier to:
- * - force gcc to reload any values from memory over the busy
- *   loop, avoiding the often-buggy C volatile keyword
- * - hint the CPU to avoid useless memory ordering violations
- * - for Pentium 4, reduce power usage in the busy loop state
- */
-#define cpu_pause()                             \
-  asm volatile ("pause":::"memory");
 
 /*
  * Compile-time assert for constant-folded expressions
@@ -139,7 +133,7 @@ __unused void __undefined_method(void);
  */
 #define ARRAY_SIZE(arr)                                       \
   ({                                                          \
-    compiler_assert(__arr_size(arr) <= (uint64_t)INT32_MAX);  \
+    compiler_assert(__arr_size(arr) <= (uint64_t) INT32_MAX); \
     (int32_t)__arr_size(arr);                                 \
   })
 

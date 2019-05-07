@@ -135,7 +135,7 @@ void pit_udelay(uint64_t us)
   timer2_start();
 
   while ((inb(0x61) & PIT_OUT2) == 0) {
-    cpu_pause();
+    pause();
   }
 }
 

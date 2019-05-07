@@ -9,6 +9,7 @@
 * マルチカーネルの（メモリ共有）プロセス生成，破棄するcfork/cexit関数を実装する．
 * x86でsyscall/sysretを利用したシステムコールを実装する．
 * x86でuser levelで動作する．
+* x86のスケジューラを統合する．
 * Completely Fair Schedulerを実装する．
 * Message Passingを作成する．
 * simアーキテクチャでスケジューリングシミュレータを実装する．

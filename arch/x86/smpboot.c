@@ -250,7 +250,7 @@ __noreturn void secondary_start(void)
   enable_local_irq();
 
   while (start_running_testcases == false) {
-    cpu_pause();
+    pause();
   }
 
   run_secondary_core_testcases();

@@ -40,7 +40,7 @@ static inline void spin_lock(spinlock_t *lock)
     restore_local_irq(&flags);
 
     while (lock->val == SPIN_LOCKED) {
-      cpu_pause();
+      pause();
     }
 
     disable_local_irq();
@@ -90,15 +90,6 @@ static inline void spin_unlock(spinlock_t *lock)
 
   restore_local_irq(&flags);
 }
-
-/*
- * NOTE! As discussed above, lock() in terms of trylock():
- *
- *  while (!spin_trylock(lock))
- *    while (lock->val == SPIN_LOCKED)
- *      cpu_pause();
- *
- */
 
 
 #endif /* !__ASSEMBLY__ */

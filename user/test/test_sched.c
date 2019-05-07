@@ -16,7 +16,7 @@ __noreturn void loop_print(char ch, int color)
     putchar_colored(ch, color);
 
     for (int i = 0; i < 0xffff; i++) {
-      cpu_pause();
+      pause();
     }
   }
 }

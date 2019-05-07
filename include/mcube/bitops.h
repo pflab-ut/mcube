@@ -330,7 +330,7 @@ static inline uint64_t ffb64(uint64_t bitmap)
   //  asm volatile("bsf %1, %0" :"=r" (bitmap) :"rm" (bitmap));
   int num = 0;
 
-  if ((bitmap & 0xffffffffffffffff) == 0) {
+  if ((bitmap & 0xffffffffffffffffUL) == 0) {
     num += 64;
     bitmap = 0;
   }
@@ -400,32 +400,32 @@ static inline uint64_t flb64(uint64_t bitmap)
 {
   int num = 63;
 
-  if (!(bitmap & 0xffffffff00000000)) {
+  if (!(bitmap & 0xffffffff00000000UL)) {
     num -= 32;
     bitmap <<= 32;
   }
 
-  if (!(bitmap & 0xffffffffffff0000)) {
+  if (!(bitmap & 0xffffffffffff0000UL)) {
     num -= 16;
     bitmap <<= 16;
   }
 
-  if (!(bitmap & 0xffffffffffffff00)) {
+  if (!(bitmap & 0xffffffffffffff00UL)) {
     num -= 8;
     bitmap <<= 8;
   }
 
-  if (!(bitmap & 0xfffffffffffffff0)) {
+  if (!(bitmap & 0xfffffffffffffff0UL)) {
     num -= 4;
     bitmap <<= 4;
   }
 
-  if (!(bitmap & 0xfffffffffffffffc)) {
+  if (!(bitmap & 0xfffffffffffffffcUL)) {
     num -= 2;
     bitmap <<= 2;
   }
 
-  if (!(bitmap & 0xfffffffffffffffe)) {
+  if (!(bitmap & 0xfffffffffffffffeUL)) {
     num -= 1;
   }
 

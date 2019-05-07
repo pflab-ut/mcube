@@ -8,8 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-/* Optimization barrier */
-#define barrier() asm volatile("":::"memory")
 
 /*
  * Versions of the ppc64 compiler before 4.1 had a bug where use of

@@ -303,7 +303,7 @@ void apic_udelay(uint64_t us)
   apic_set_counter_us(us);
 
   while (apic_read(APIC_TIMER_CUR_CNT) != 0) {
-    cpu_pause();
+    pause();
   }
 }
 
