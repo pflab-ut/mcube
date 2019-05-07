@@ -48,6 +48,7 @@ LIB_SRCS = \
  $(TOP_DIR)/lib/unrolled_list.c \
 
 NET_SRCS = \
+ $(TOP_DIR)/net/poll.c \
  $(TOP_DIR)/net/socket.c \
 
 USER_SRCS = \
@@ -64,6 +65,7 @@ USER_SRCS = \
  $(TOP_DIR)/user/test/test_printk.c \
  $(TOP_DIR)/user/test/test_ring_buf.c \
  $(TOP_DIR)/user/test/test_sched.c \
+ $(TOP_DIR)/user/test/test_socket.c \
  $(TOP_DIR)/user/test/test_string.c \
  $(TOP_DIR)/user/test/test_unrolled_list.c \
  $(TOP_DIR)/user/test/test_vm.c \

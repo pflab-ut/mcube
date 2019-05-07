@@ -26,6 +26,7 @@ bool test_page_alloc(void);
 bool test_printk(void);
 bool test_ring_buf(void);
 bool test_sched(void);
+bool test_socket(int argc, char *argv[]);
 bool test_string(void);
 bool test_unrolled_list(void);
 bool test_vm(void);
@@ -36,9 +37,6 @@ bool test_percpu(void);
 bool test_pit(void);
 #endif /* CONFIG_ARCH_X86 */
 
-int socket_client(int argc, char *argv[]);
-int socket_server(int argc, char *argv[]);
-void print_socket_usage(char *exec);
 
 
 #endif /* __ASSEMBLY__ */

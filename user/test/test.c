@@ -5,9 +5,10 @@
  */
 #include <mcube/mcube.h>
 
-
 int user_test_main(__unused int argc, __unused char *argv[])
 {
+  test_socket(argc, argv);
+#if 0
   test_atomic();
   test_bitmap();
   test_debug();
@@ -21,5 +22,6 @@ int user_test_main(__unused int argc, __unused char *argv[])
   test_string();
   test_unrolled_list();
   test_vm();
+#endif
   return 0;
 }

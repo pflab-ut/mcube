@@ -162,19 +162,6 @@ int ap_main(void)
   return 0;
 }
 
-void user_atomic_main(void)
-{
-  uint64_t v;
-  v = 1;
-  print("v = %d\n", v);
-  atomic_inc(&v);
-  print("v = %d\n", v);
-  atomic_dec(&v);
-  print("v = %d\n", v);
-
-}
-
-
 
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
@@ -183,7 +170,6 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   // user_ap_main();
   // user_dmac_main();
   //  kernel_level_main();
-  user_atomic_main();
   barrier();
   //  test_ring_buf();
 #if CONFIG_ARCH_ARM_RASPI3

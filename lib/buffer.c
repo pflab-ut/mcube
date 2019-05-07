@@ -6,7 +6,6 @@
 #include <mcube/mcube.h>
 
 
-
 static void advance_pointer(cbuf_handle_t cbuf)
 {
   if (cbuf->full) {

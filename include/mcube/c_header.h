@@ -22,7 +22,11 @@
 #include <string.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <unistd.h>
+#include <errno.h>
+#include <poll.h>
 #else
 //#define offsetof(T, F) ((unsigned int)((char *)&((T *) 0L)->F - (char *) 0L))
 #define offsetof(type, elem)  ((unsigned long) &((type *) 0)->elem)

@@ -7,6 +7,7 @@
 #define __MCUBE_NET_NET_HEADER_H__
 
 
+#include <net/poll.h>
 #include <net/socket.h>
 
 

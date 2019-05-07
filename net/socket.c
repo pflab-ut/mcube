@@ -32,8 +32,25 @@ int listen(__unused int sockfd, __unused int backlog)
 
 int socket(__unused int domain, __unused int type, __unused int protocol)
 {
+  /* TODO: implement for AF_UNIX */
   return 0;
 }
+
+int shutdown(__unused int sockfd, __unused int how)
+{
+  return 0;
+}
+
+ssize_t send(__unused int sockfd, __unused const void *buf, __unused size_t len, __unused int flags)
+{
+  return 0;
+}
+
+ssize_t recv(__unused int sockfd, __unused void *buf, __unused size_t len, __unused int flags)
+{
+  return 0;
+}
+
 
 #endif /* !CONFIG_ARCH_SIM */
 

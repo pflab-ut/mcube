@@ -49,6 +49,7 @@
 #include <mcube/syscall.h>
 #include <mcube/timer.h>
 #include <mcube/uart.h>
+#include <mcube/unistd.h>
 #include <mcube/unrolled_list.h>
 #include <mcube/user.h>
 

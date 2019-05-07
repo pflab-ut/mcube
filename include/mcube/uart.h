@@ -21,7 +21,8 @@ void uart_pol_putc(uint8_t c, uint32_t ch);
 
 void init_uart(void);
 
-#endif
+#endif /* !__ASSEMBLY__ */
+
 
 #endif /* __MCUBE_MCUBE_UART_H__ */
 
