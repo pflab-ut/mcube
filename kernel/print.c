@@ -294,7 +294,7 @@ static int lfout(double num, char *buf, int size,
     }
 
     ulpart = (uint64_t) num;
-    ret = luout(ulpart, buf, size, desc);
+    ret += luout(ulpart, &buf[ret], size, desc);
     buf[ret++] = '.';
 
     /* round off to seven decimal places */
