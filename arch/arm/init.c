@@ -40,6 +40,7 @@ void init_arch(void)
   init_rand_raspi3();
 #endif /* CONFIG_ARCH_ARM_RASPI3 */
   init_irq();
+  init_socket();
 }
 
 void init_arch_ap(void)
@@ -55,3 +56,4 @@ void exit_arch(void)
 void exit_arch_ap(void)
 {
 }
+\

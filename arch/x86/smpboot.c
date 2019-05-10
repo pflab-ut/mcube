@@ -212,19 +212,6 @@ fail:
 #define for_all_cpus_except_bootstrap(cpu)  \
   for (cpu = &cpus[1]; cpu != &cpus[mptables_get_nr_cpus()]; cpu++)
 
-/*
- * Before running any test-cases on secondary cores, wait till
- * the bootstrap CPU informs us (poor secondary cores) that it
- * has properly initialized all of our kernel's subsystems.
- *
- * Otherwise, we will execute uninitialized kernel code!!
- */
-static bool start_running_testcases = false;
-static void run_secondary_core_testcases(void);
-void smpboot_trigger_secondary_cores_testcases(void)
-{
-  start_running_testcases = true;
-}
 
 /*
  * AP cores C code entry. We come here from the trampoline,
@@ -249,11 +236,8 @@ __noreturn void secondary_start(void)
 
   enable_local_irq();
 
-  while (start_running_testcases == false) {
-    pause();
-  }
+  ap_main();
 
-  run_secondary_core_testcases();
   halt();
 }
 
@@ -298,50 +282,5 @@ void smpboot_init(void)
 
   barrier();
   assert(nr_alive_cpus == nr_cpus);
-}
-
-/* testcases */
-
-static void __noreturn test0(void)
-{
-  loop_print('G', VGA_LIGHT_GREEN);
-}
-static void __noreturn test1(void)
-{
-  loop_print('H', VGA_LIGHT_GREEN);
-}
-static void __noreturn test2(void)
-{
-  loop_print('I', VGA_LIGHT_GREEN);
-}
-static void __noreturn test3(void)
-{
-  loop_print('J', VGA_LIGHT_MAGNETA);
-}
-static void __noreturn test4(void)
-{
-  loop_print('K', VGA_LIGHT_MAGNETA);
-}
-static void __noreturn test5(void)
-{
-  loop_print('L', VGA_LIGHT_MAGNETA);
-}
-
-/*
- * This code runs on each secondary core after finishing its
- * own internal initialization.
- */
-static void run_secondary_core_testcases(void)
-{
-  for (int i = 0; i < 20; i++) {
-    kthread_create(test0);
-    kthread_create(test1);
-    kthread_create(test2);
-    kthread_create(test3);
-    kthread_create(test4);
-    kthread_create(test5);
-  }
-
-  //  test_ext2();
 }
 

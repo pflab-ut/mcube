@@ -61,6 +61,7 @@ int user_level_main(void)
 
 int ap_main(void)
 {
+  printk("ap_main()\n");
   return 0;
 }
 

@@ -21,6 +21,7 @@ bool test_ext2(void);
 bool test_file(void);
 bool test_hash(void);
 bool test_kmalloc(void);
+bool test_thread(void);
 bool test_list(void);
 bool test_page_alloc(void);
 bool test_printk(void);

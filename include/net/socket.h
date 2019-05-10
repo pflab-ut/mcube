@@ -224,6 +224,13 @@ typedef enum socket_type socket_type;
 /* Maximum queue length specifiable by listen.  */
 #define SOMAXCONN       128
 
+struct socket_struct {
+  bool used;
+  struct sockaddr_un addr;
+};
+
+#define NR_STDS 3
+
 enum shutdown {
   SHUT_RD = 0,
   SHUT_WR,
@@ -238,6 +245,9 @@ int socket(int domain, int type, int protocol);
 int shutdown(int sockfd, int how);
 ssize_t send(int sockfd, const void *buf, size_t len, int flags);
 ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+
+void init_socket(void);
+
 
 
 #endif /* CONFIG_ARCH_SIM */

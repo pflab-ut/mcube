@@ -49,6 +49,7 @@ void init_arch(void)
   init_irq();
   init_cpu();
   init_kmalloc();
+  init_socket();
 }
 
 void init_arch_ap(void)

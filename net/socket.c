@@ -7,8 +7,9 @@
 
 #if !CONFIG_ARCH_SIM
 
-/* 0: stdin, 1: stdout, 2: stderr */
-static int socket_id = 3;
+
+static struct socket_struct sockets[SOMAXCONN] = {{false, {0}}};
+
 
 int accept(__unused int sockfd, __unused struct sockaddr *addr,
            __unused socklen_t *addrlen)
@@ -25,6 +26,7 @@ int bind(__unused int sockfd, __unused const struct sockaddr *my_addr,
 int connect(__unused int sockfd, __unused const struct sockaddr *addr,
             __unused socklen_t addrlen)
 {
+
   return 0;
 }
 
@@ -33,14 +35,32 @@ int listen(__unused int sockfd, __unused int backlog)
   return 0;
 }
 
-int socket(__unused int domain, __unused int type, __unused int protocol)
+int socket(int domain, int type, int protocol)
 {
+  int ret = -1;
+
   switch (domain) {
   case AF_UNIX:
     switch (type) {
     case SOCK_STREAM:
-      return socket_id++;
+      switch (protocol) {
+      case 0:
+        for (int i = 0; i < SOMAXCONN; i++) {
+          if (!sockets[i].used) {
+            sockets[i].used = true;
+
+          }
+        }
+
+        break;
+
+      default:
+        printk("Error: protocol %d is not implemented\n", protocol);
+        break;
+      }
+
       break;
+
     default:
       printk("Error: type %d is not implemented\n", type);
       break;
@@ -53,7 +73,7 @@ int socket(__unused int domain, __unused int type, __unused int protocol)
     break;
   }
 
-  return -1;
+  return ret;
 }
 
 int shutdown(__unused int sockfd, __unused int how)
@@ -71,6 +91,14 @@ ssize_t recv(__unused int sockfd, __unused void *buf, __unused size_t len,
              __unused int flags)
 {
   return 0;
+}
+
+void init_socket(void)
+{
+  /* stdin, stdout, and stderr are used. */
+  for (int i = 0; i < NR_STDS; i++) {
+    sockets[i].used = true;
+  }
 }
 
 

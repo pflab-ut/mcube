@@ -276,12 +276,13 @@ static int lfout(double num, char *buf, int size,
   int ret = 0;
   static char inf[] = "inf";
   static char nan[] = "NAN";
-  
+
   if (isinf(num)) {
     if (sign) {
       *buf++ = '-';
       ret++;
     }
+
     strcpy(buf, inf);
     ret += strlen(inf);
   } else if (isnan(num)) {

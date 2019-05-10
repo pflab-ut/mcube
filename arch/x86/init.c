@@ -163,6 +163,7 @@ void init_arch(void)
 
   init_ext2();
 
+  init_socket();
 
   // Signal the secondary cores to run their own test-cases code.
   // They've been waiting for us (thread 0) till all of kernel

@@ -281,12 +281,14 @@ int isinf(double x)
 {
   union ieee754 d2ul;
   d2ul.d = x;
+
   if ((d2ul.ul & EXPONENT_MASK) == EXPONENT_MASK
       && (d2ul.ul & FRACTION_MASK) == 0) {
     return true;
   } else {
     return false;
   }
+
   return 0;
 }
 
@@ -294,6 +296,7 @@ int isnan(double x)
 {
   union ieee754 d2ul;
   d2ul.d = x;
+
   if ((d2ul.ul & EXPONENT_MASK) == EXPONENT_MASK
       && (d2ul.ul & FRACTION_MASK) != 0) {
     return true;
