@@ -47,9 +47,7 @@ static inline void delay(unsigned long us)
 
 static inline unsigned long get_current_cpu_time(void)
 {
-  //  return rdtscp();
   return rdtsc();
-  //	return read_HPET_counter();
 }
 
 

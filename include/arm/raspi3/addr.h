@@ -10,7 +10,7 @@
 #define RAM_BASE                  0x00000000
 #define GPU_BASE                  0x37000000
 #define PERIPHERAL_BASE           0x3f000000
-/* NOTE: qemu does not support system timer */
+/* NOTE: QEMU does not support system timer */
 #define SYSTEM_TIMER_BASE         0x3f003000
 #define DMAC_BASE                 0x3f007000
 #define INTERRUPT_CONTROLLER_BASE 0x3f00b000

@@ -20,5 +20,8 @@ int ap_main(void)
 
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
+  printk("user_arch_main(): %lf\n", 1.0);
+  printk("user_arch_main(): %lf\n", 314.1234567890);
+  //  test_socket(argc, argv);
   return 0;
 }

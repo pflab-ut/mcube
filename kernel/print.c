@@ -17,7 +17,7 @@ static char kbuf[KBUF_SIZE];
 spinlock_t kbuf_lock;
 #else
 spinlock_t kbuf_lock = INIT_SPINLOCK;
-#endif
+#endif /* CONFIG_ARCH_AXIS */
 
 
 /*
@@ -140,7 +140,7 @@ void __noreturn panic(const char *fmt, ...)
     ;
 }
 
-#endif
+#endif /* CONFIG_ARCH_X86 */
 
 
 /*
@@ -268,57 +268,43 @@ static int lout(signed long num, char *buf, int size,
 
 #if defined(ENABLE_FPU)
 
-/* TODO: update implementation */
-static inline int lfout(double lf, char *dst, int n,
-                        __unused struct printf_argdesc *desc)
+static int lfout(double num, char *buf, int size,
+                 struct printf_argdesc *desc)
 {
-  int base = 10;
-  int i;
-  char tmp[MAX_DIGIT];
-  double ulf;
-  uint64_t u64;
-
-  if (base == 10 && lf < 0) {
-    dst[n++] = '-';
-    ulf = lf * -1;
+  bool sign = num < 0.0;
+  uint64_t ulpart, dpart;
+  int ret = 0;
+  static char inf[] = "inf";
+  static char nan[] = "NAN";
+  
+  if (isinf(num)) {
+    if (sign) {
+      *buf++ = '-';
+      ret++;
+    }
+    strcpy(buf, inf);
+    ret += strlen(inf);
+  } else if (isnan(num)) {
+    strcpy(buf, nan);
+    ret = strlen(nan);
   } else {
-    ulf = lf;
-  }
-
-  u64 = ulf;
-
-  for (i = 1; i < MAX_DIGIT; i++) {
-    tmp[i] = u64 % base;
-
-    if (tmp[i] < 10) {
-      tmp[i] += '0';
-    } else {
-      tmp[i] += 'a' - 10;
+    if (sign) {
+      num = -num;
+      buf[ret++] = '-';
     }
 
-    if ((u64 /= base) == 0) {
+    ulpart = (uint64_t) num;
+    ret = luout(ulpart, buf, size, desc);
+    buf[ret++] = '.';
 
-      if (KBUF_SIZE < n + i) {
-        return -1;
-      }
-
-      while (i) {
-        dst[n++] = tmp[i--];
-      }
-
-      break;
-    }
+    /* round off to seven decimal places */
+    dpart = (num - ulpart) * 1000000 + 0.5;
+    ret += luout(dpart, &buf[ret], size, desc);
   }
 
-  dst[n++] = '.';
-
-  for (i = 0, ulf = (ulf - (uint64_t) ulf) * 10; i < 6; i++) {
-    dst[n++] = (uint64_t) ulf % 10 + '0';
-    ulf = ulf * 10 - (uint64_t) ulf * 10;
-  }
-
-  return n;
+  return ret;
 }
+
 
 #endif /* ENABLE_FPU */
 
@@ -366,11 +352,13 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
       desc->radix = 16;
       complete = true;
       goto out;
+#if defined(ENABLE_FPU)
 
     case 'f':
       desc->type = FLOAT;
       complete = true;
       goto out;
+#endif /* ENABLE_FPU */
 
     case 's':
       desc->type = STRING;

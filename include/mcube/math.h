@@ -108,7 +108,22 @@ double cbrt(double x);
 double remainder(double x, double y);
 double strtod(const char *nptr, char **endptr);
 
-#endif /* CONFIG_ARCH_SIM */
+int isnan(double x);
+int isinf(double x);
+
+
+#endif /* !CONFIG_ARCH_SIM */
+
+union ieee754 {
+  double d;
+  unsigned char s[8];
+  uint64_t ul;
+};
+
+#define EXPONENT_MASK 0x3ff0000000000000ul
+#define FRACTION_MASK 0x000ffffffffffffful
+
+
 
 #else
 

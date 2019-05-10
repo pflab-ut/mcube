@@ -5,6 +5,18 @@
  */
 #include <mcube/mcube.h>
 
+long lpow(long x, long y)
+{
+  long ret = 1;
+  int i;
+
+  for (i = 0; i < y; i++) {
+    ret *= x;
+  }
+
+  return ret;
+}
+
 #if defined(ENABLE_FPU)
 
 /**
@@ -262,16 +274,36 @@ double cbrt(double x)
   }
 }
 
+#if !CONFIG_ARCH_SIM
+
+
+int isinf(double x)
+{
+  union ieee754 d2ul;
+  d2ul.d = x;
+  if ((d2ul.ul & EXPONENT_MASK) == EXPONENT_MASK
+      && (d2ul.ul & FRACTION_MASK) == 0) {
+    return true;
+  } else {
+    return false;
+  }
+  return 0;
+}
+
+int isnan(double x)
+{
+  union ieee754 d2ul;
+  d2ul.d = x;
+  if ((d2ul.ul & EXPONENT_MASK) == EXPONENT_MASK
+      && (d2ul.ul & FRACTION_MASK) != 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+#endif /* !CONFIG_ARCH_SIM */
+
+
 #endif /* ENABLE_FPU */
 
-long lpow(long x, long y)
-{
-  long ret = 1;
-  int i;
-
-  for (i = 0; i < y; i++) {
-    ret *= x;
-  }
-
-  return ret;
-}

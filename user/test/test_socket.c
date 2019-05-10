@@ -34,7 +34,9 @@ static int socket_client(__unused int argc, __unused char *argv[])
     return 3;
   }
 
-  shutdown(srvfd, SHUT_RDWR);
+  if (shutdown(srvfd, SHUT_RDWR) == -1) {
+    printk("Error: shutdown()\n");
+  }
 
   return 0;
 }
@@ -43,11 +45,11 @@ static int socket_server(__unused int argc, __unused char *argv[])
 {
   int clifd, lsnfd;
   struct sockaddr_un cliaddr, srvaddr;
-  struct pollfd fds[] = {0};
+  struct pollfd fds[] = {{0}};
   char recvbuf[SOCKET_BUFSIZE] = "";
   socklen_t addrlen;
   int len;
-  
+
   if ((lsnfd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0) {
     printk("Error: socket\n");
     return 1;
@@ -82,7 +84,10 @@ static int socket_server(__unused int argc, __unused char *argv[])
       return 4;
     }
 
-    len = read(clifd, recvbuf, sizeof(recvbuf));
+    if ((len = read(clifd, recvbuf, sizeof(recvbuf))) == -1) {
+      printk("Error: read()\n");
+    }
+
     recvbuf[len] = 0;
     printk("%s\n", recvbuf);
   } else {
@@ -90,8 +95,14 @@ static int socket_server(__unused int argc, __unused char *argv[])
     return 5;
   }
 
-  shutdown(clifd, SHUT_RDWR);
-  shutdown(lsnfd, SHUT_RDWR);
+  if (shutdown(clifd, SHUT_RDWR) == -1) {
+    printk("Error: shutdown()\n");
+  }
+
+  if (shutdown(lsnfd, SHUT_RDWR) == -1) {
+    printk("Error: shutdown()\n");
+  }
+
   return 0;
 }
 
@@ -119,6 +130,7 @@ bool test_socket(int argc, char *argv[])
       print_socket_usage(argv[0]);
       return false;
     }
-  }  
+  }
+
   return true;
 }

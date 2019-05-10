@@ -32,8 +32,8 @@ bool test_bitmap(void)
   bit = find_first_bit8(buf, buflen_bytes);
 
   if (bit != -1) {
-    panic("Zeroed buf at 0x%lx, but first_set_bit returned bit #%u as set!", buf,
-          bit);
+    panic("Zeroed buf at 0x%lx, but first_set_bit returned bit #%u as set!",
+          buf, bit);
   }
 
   bit = find_first_zero_bit8(buf, buflen_bytes);
@@ -45,8 +45,8 @@ bool test_bitmap(void)
 
   for (uint i = 0; i < buflen_bits; i++) {
     if (bitmap_bit_is_set(buf, i, buflen_bytes)) {
-      panic("Zeroed buf at 0x%lx, but bit_is_set?() returned bit #%u as set!", buf,
-            i);
+      panic("Zeroed buf at 0x%lx, but bit_is_set?() returned bit #%u as set!",
+            buf, i);
     }
 
     assert(bitmap_bit_is_clear(buf, i, buflen_bytes));
