@@ -369,7 +369,6 @@ void schedulify_this_code_path(enum cpu_type t)
 
 void sched_init(void)
 {
-  extern void ticks_handler(void);
   uint8_t vector;
 
   pcb_validate_offsets();

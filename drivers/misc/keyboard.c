@@ -230,7 +230,6 @@ void __kb_handler(void)
 
 void keyboard_init(void)
 {
-  extern void kb_handler(void);
   uint8_t vector;
 
   vector = KEYBOARD_IRQ_VECTOR;

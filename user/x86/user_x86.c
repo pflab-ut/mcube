@@ -44,7 +44,6 @@ int user_thread_main(void)
   return 0;
 }
 
-extern int call_user_sys_write(char *buf);
 
 int user_level_main(void)
 {

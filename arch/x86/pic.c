@@ -17,20 +17,6 @@
 
 #include <mcube/mcube.h>
 
-/*
- * AT+ standard PIC ports
- */
-#define PIC_MASTER_CMD  0x20
-#define PIC_SLAVE_CMD   0xa0
-#define PIC_MASTER_DATA 0x21
-#define PIC_SLAVE_DATA  0xa1
-
-/*
- * Where the slave PIC is connected
- */
-#define PIC_CASCADE_IRQ 2
-
-extern void PIC_handler(void);
 
 /*
  * As said in a linux kernel comment, delay for access to PIC on

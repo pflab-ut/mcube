@@ -17,7 +17,7 @@ int accept(__unused int sockfd, __unused struct sockaddr *addr,
   return 0;
 }
 
-int bind(__unused int sockfd, __unused const struct sockaddr *my_addr,
+int bind(__unused int sockfd, __unused const struct sockaddr *addr,
          __unused socklen_t addrlen)
 {
   return 0;
@@ -45,10 +45,12 @@ int socket(int domain, int type, int protocol)
     case SOCK_STREAM:
       switch (protocol) {
       case 0:
+        /* check if remaining socket exists */
         for (int i = 0; i < SOMAXCONN; i++) {
           if (!sockets[i].used) {
             sockets[i].used = true;
-
+            ret = i;
+            break;
           }
         }
 
@@ -103,5 +105,3 @@ void init_socket(void)
 
 
 #endif /* !CONFIG_ARCH_SIM */
-
-

@@ -28,7 +28,7 @@ typedef unsigned long int nfds_t;
 
 int poll(struct pollfd *fds, nfds_t nfds, int timeout);
 
-#endif /* CONFIG_ARCH_SIM */
+#endif /* !CONFIG_ARCH_SIM */
 
 #endif /* __ASSEMBLY__ */
 

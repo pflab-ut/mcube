@@ -91,7 +91,6 @@ static uint64_t ticks[DELAY_TESTS];
  * Test the APIC periodic timer against equivalent-time
  * PIT-programmed delays.
  */
-extern void apic_timer_handler(void);
 static void apic_test_periodic_mode(void)
 {
   int i, us, vector;

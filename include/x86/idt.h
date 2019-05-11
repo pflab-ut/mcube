@@ -58,7 +58,7 @@ extern const struct idt_descriptor idtdesc;
 extern struct idt_gate idt[IDT_GATES];
 #define IDT_STUB_SIZE 12
 extern const char idt_exception_stubs[EXCEPTION_GATES][IDT_STUB_SIZE];
-extern void default_irq_handler(void);
+void default_irq_handler(void);
 
 static inline void pack_idt_gate(struct idt_gate *gate, uint8_t type,
                                  void *addr)

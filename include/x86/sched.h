@@ -26,6 +26,7 @@ void rq_dump(struct runqueue *rq);
 
 void print_proc_stats(struct proc *proc, int prio);
 void print_sched_stats(void);
+void ticks_handler(void);
 
 #endif /* !__ASSEMBLY__ */
 

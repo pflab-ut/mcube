@@ -8,8 +8,9 @@
 
 #ifndef __ASSEMBLY__
 
-void __kb_handler(void);
 void keyboard_init(void);
+
+void kb_handler(void);
 
 #endif /* !__ASSEMBLY__ */
 

@@ -6,6 +6,31 @@
 #ifndef __MCUBE_MCUBE_KERNEL_H__
 #define __MCUBE_MCUBE_KERNEL_H__
 
+
+#define SYMBOL_NAME(name) name
+
+#define SYMBOL_NAME_LABEL(name) name##:
+
+#define ENTRY(name)                             \
+  .globl name;                                  \
+  SYMBOL_NAME_LABEL(name)
+
+
+#define END(name)                               \
+  .size name, .-name
+
+
+#define ASM_SIZE_DIRECTIVE(name) .size name,.-name;
+
+
+
+#if CONFIG_ARCH_X86
+#define asmlinkage __attribute__((regparm(0)))
+#else
+#define asmlinkage
+#endif /* CONFIG_ARCH_X86 */
+
+
 #define NR_TASKS   16
 #define NR_THREADS 16
 
@@ -140,6 +165,7 @@ __unused void __undefined_method(void);
 void __noreturn kernel_start(void);
 
 #endif /* !CONFIG_ARCH_SIM */
+
 
 
 #endif /* !__ASSEMBLY__ */

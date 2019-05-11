@@ -330,10 +330,12 @@ bool apic_ipi_acked(void);
 
 
 void __apic_timer_handler(void);
+void apic_timer_handler(void);
 
 void init_apic_timer(unsigned long tick_us, uint8_t vector);
 void start_apic_timer(void);
 void stop_apic_timer(void);
+
 
 
 extern volatile int apic_ticks_count;

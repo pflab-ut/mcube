@@ -47,14 +47,14 @@ endif
 # Check attached docs for extra info on -mcmodel and the zone.
 #
 CMACH_FLAGS =				\
-  -m64					\
-  -mcmodel=kernel			\
-  -mno-sse				\
-  -mno-sse2				\
-  -mno-sse3				\
-	 -mno-mmx				\
-  -mno-3dnow				\
-  -mno-red-zone
+ -m64					\
+ -mcmodel=kernel			\
+ -mno-sse				\
+ -mno-sse2				\
+ -mno-sse3				\
+ -mno-mmx				\
+ -mno-3dnow				\
+ -mno-red-zone
 
 
 # Share headers between assembly, C, and LD files
@@ -82,26 +82,26 @@ BOOTSECT_BIN = $(BOOTSECT_TARGET).bin
 
 # Core and Secondary CPUs bootstrap
 ASMS = \
-  $(TOP_DIR)/arch/x86/head.S	\
-  $(TOP_DIR)/arch/x86/trampoline.S	\
-  $(TOP_DIR)/arch/x86/rmcall.S	\
-  $(TOP_DIR)/arch/x86/e820.S	\
-  $(TOP_DIR)/arch/x86/load_ramdisk.S
+ $(TOP_DIR)/arch/x86/head.S	\
+ $(TOP_DIR)/arch/x86/trampoline.S	\
+ $(TOP_DIR)/arch/x86/rmcall.S	\
+ $(TOP_DIR)/arch/x86/e820.S	\
+ $(TOP_DIR)/arch/x86/load_ramdisk.S
 
 # Memory management
 SRCS +=	\
-  $(TOP_DIR)/arch/x86/e820_map.c	\
-  $(TOP_DIR)/arch/x86/page_alloc.c	\
-  $(TOP_DIR)/arch/x86/vm_map.c	\
+ $(TOP_DIR)/arch/x86/e820_map.c	\
+ $(TOP_DIR)/arch/x86/page_alloc.c	\
+ $(TOP_DIR)/arch/x86/vm_map.c	\
 
 # Devices
 SRCS +=	\
-  $(TOP_DIR)/arch/x86/apic.c	\
-  $(TOP_DIR)/arch/x86/ioapic.c	\
-  $(TOP_DIR)/drivers/misc/keyboard.c \
-  $(TOP_DIR)/drivers/uart/uart_x86.c	\
-  $(TOP_DIR)/arch/x86/pic.c	\
-  $(TOP_DIR)/arch/x86/pit.c
+ $(TOP_DIR)/arch/x86/apic.c	\
+ $(TOP_DIR)/arch/x86/ioapic.c	\
+ $(TOP_DIR)/drivers/misc/keyboard.c \
+ $(TOP_DIR)/drivers/uart/uart_x86.c	\
+ $(TOP_DIR)/arch/x86/pic.c	\
+ $(TOP_DIR)/arch/x86/pit.c
 
 
 # All other kernel objects
@@ -113,10 +113,10 @@ SRCS +=		\
  $(TOP_DIR)/arch/x86/kthread.c	\
  $(TOP_DIR)/arch/x86/percpu.c	\
  $(TOP_DIR)/arch/x86/ramdisk.c	\
-	$(TOP_DIR)/arch/x86/thread.c \
-	$(TOP_DIR)/arch/x86/syscall.c \
-	$(TOP_DIR)/arch/x86/timer.c \
-	$(TOP_DIR)/arch/x86/init.c
+ $(TOP_DIR)/arch/x86/thread.c \
+ $(TOP_DIR)/arch/x86/syscall.c \
+ $(TOP_DIR)/arch/x86/timer.c \
+ $(TOP_DIR)/arch/x86/init.c
 
 
 

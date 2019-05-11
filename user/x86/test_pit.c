@@ -75,7 +75,6 @@ static uint64_t ticks[DELAY_TESTS];
  *
  * Delay intervals code is assumed to be correct.
  */
-extern void pit_periodic_handler(void);
 static void pit_test_periodic_irq(void)
 {
   int i, us, vector;
