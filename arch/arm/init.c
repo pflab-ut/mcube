@@ -56,4 +56,3 @@ void exit_arch(void)
 void exit_arch_ap(void)
 {
 }
-\

@@ -10,6 +10,7 @@
 
 void keyboard_init(void);
 
+void __kb_handler(void);
 void kb_handler(void);
 
 #endif /* !__ASSEMBLY__ */
