@@ -317,16 +317,12 @@ static int lfout(double num, char *buf, int size,
     /* round off to @float_digit decimal places */
     dpart = (num - ulpart) * lpow(10, desc->float_digit) + 0.5;
 
-    fprintf(stdout, "num = %lf (num - ulpart) = %lf\n", num, (num - ulpart));
-    fprintf(stdout, "dpart = %lu desc->float_digit = %d\n", dpart,
-            desc->float_digit);
     desc->digit = -1;
     ret += luout(dpart, &buf[ret], size, desc);
 
     desc->digit = digit - desc->float_digit - 1;
     len = luout(ulpart, str, size, desc);
     str[len++] = '.';
-    fprintf(stderr, "str = %s\n", str);
     /* move float part to right place */
     memmove(&buf[int_begin + len], &buf[int_begin], desc->float_digit);
     /* move integer part from str to right place */
@@ -335,7 +331,6 @@ static int lfout(double num, char *buf, int size,
     ret += len;
   }
 
-  fprintf(stdout, "ret = %d\n", ret);
   return ret;
 }
 
@@ -445,8 +440,6 @@ static const char *parse_arg(const char *fmt, struct print_argdesc *desc)
       }
 
 #endif /* ENABLE_FPU */
-      fprintf(stdout, "desc->digit = %d desc->float_digit = %d\n", desc->digit,
-              desc->float_digit);
       fmt--;
       break;
 

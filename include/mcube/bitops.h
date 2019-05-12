@@ -13,15 +13,6 @@
  * Operations on a Bitmap
  *
  * Copyright (C) 2012 Ahmed S. Darwish <darwish.07@gmail.com>
- *
- * We assume little-endian ordering of bytes in the bitmap, that is:
- * item #0  is represented by first  byte bit #0
- * item #7  is represented by first  byte bit #7
- * item #8  is represented by second byte bit #0
- * item #15 is represented by second byte bit #7
- * .. and so on.
- *
- * FIXME: Optimize this using x86-64 ops.
  */
 
 #include <mcube/mcube.h>
