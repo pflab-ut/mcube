@@ -11,7 +11,7 @@
 
 unsigned long gcd(unsigned long m, unsigned long n);
 unsigned long lcm(unsigned long m, unsigned long n);
-
+unsigned long get_digit(unsigned long num);
 
 #endif /* !__ASSEMBLY__ */
 

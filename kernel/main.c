@@ -12,8 +12,11 @@
 char PADDING[PADDING_SIZE] = {PADDING_DATA};
 #endif
 
+#if CONFIG_OPTION_DEBUG
+unsigned int Debug = true;
+#else
 unsigned int Debug = false;
-//unsigned int Debug = true;
+#endif /* CONFIG_OPTION_DEBUG */
 
 unsigned long CPU_CLOCK;
 unsigned long CPU_CLOCK_MHZ_PER_USEC;

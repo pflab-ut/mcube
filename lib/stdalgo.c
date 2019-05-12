@@ -39,3 +39,15 @@ unsigned long lcm(unsigned long m, unsigned long n)
 
   return ((m / gcd(m, n)) * n);
 }
+
+unsigned long get_digit(unsigned long num)
+{
+  unsigned long digit = 0;
+
+  while (num != 0) {
+    num /= 10;
+    digit++;
+  }
+
+  return digit;
+}

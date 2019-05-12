@@ -11,24 +11,15 @@
 
 #include <mcube/mcube.h>
 
-static char kbuf[KBUF_SIZE];
-
-#if CONFIG_ARCH_AXIS
-spinlock_t kbuf_lock;
-#else
-spinlock_t kbuf_lock = INIT_SPINLOCK;
-#endif /* CONFIG_ARCH_AXIS */
-
-
 /*
- * Definitions for parsing printk arguments. Each argument
+ * Definitions for parsing print arguments. Each argument
  * is described by its descriptor (argdesc) structure.
  */
-enum printf_arglen {
+enum print_arglen {
   INT = 0,
   LONG,
 };
-enum printf_argtype {
+enum print_argtype {
   NONE = 0,
   SIGNED,
   UNSIGNED,
@@ -38,19 +29,37 @@ enum printf_argtype {
   PERCENT,
 };
 
-enum printf_pad {
+enum print_pad {
   PAD_NO = 0,
   PAD_BLANK,
   PAD_ZERO,
 };
 
-struct printf_argdesc {
+struct print_argdesc {
   int radix;
-  enum printf_arglen len;
-  enum printf_argtype type;
-  enum printf_pad pad;
+  enum print_arglen len;
+  enum print_argtype type;
+  enum print_pad pad;
   int digit;
+  int float_digit;
 };
+
+#define INIT_FLOAT_DIGIT 6
+#define PRINTK_MAX_RADIX 16
+
+static char panic_prefix[] = "PANIC: printk: ";
+static char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
+
+
+static char kbuf[KBUF_SIZE];
+
+#if CONFIG_ARCH_AXIS
+spinlock_t kbuf_lock;
+#else
+spinlock_t kbuf_lock = INIT_SPINLOCK;
+#endif /* CONFIG_ARCH_AXIS */
+
+#define INT_BUFSIZE 32
 
 
 #if CONFIG_ARCH_X86
@@ -143,6 +152,7 @@ void __noreturn panic(const char *fmt, ...)
 #endif /* CONFIG_ARCH_X86 */
 
 
+
 /*
  * We cannot use assert() for below printk() code as
  * the assert code istelf internally calls printk().
@@ -159,7 +169,6 @@ void __noreturn panic(const char *fmt, ...)
  * We use putchar() as it directly invokes the VGA code.
  * NOTE! Don't use any assert()s in this function!
  */
-static char panic_prefix[] = "PANIC: printk: ";
 static __noreturn void printk_panic(const char *str)
 {
   const char *prefix;
@@ -177,7 +186,12 @@ static __noreturn void printk_panic(const char *str)
   halt();
 }
 
-#define PRINTK_MAX_RADIX  16
+/*
+ * A panic() that can be safely used by printk().
+ * We use putchar() as it directly invokes the VGA code.
+ * NOTE! Don't use any assert()s in this function!
+ */
+
 
 /*
  * Convert given unsigned long integer (@num) to ascii using
@@ -185,9 +199,8 @@ static __noreturn void printk_panic(const char *str)
  * @size: output buffer size
  */
 static int luout(unsigned long num, char *buf, int size,
-                 struct printf_argdesc *desc)
+                 struct print_argdesc *desc)
 {
-  static char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
   int ret, digits;
   int i;
 
@@ -227,6 +240,7 @@ static int luout(unsigned long num, char *buf, int size,
       case PAD_ZERO:
         buf[i] = '0';
 
+      case PAD_NO:
       default:
         break;
       }
@@ -248,7 +262,7 @@ static int luout(unsigned long num, char *buf, int size,
  * @size: output buffer size
  */
 static int lout(signed long num, char *buf, int size,
-                struct printf_argdesc *desc)
+                struct print_argdesc *desc)
 {
   printk_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
 
@@ -269,13 +283,17 @@ static int lout(signed long num, char *buf, int size,
 #if defined(ENABLE_FPU)
 
 static int lfout(double num, char *buf, int size,
-                 struct printf_argdesc *desc)
+                 struct print_argdesc *desc)
 {
   bool sign = num < 0.0;
-  uint64_t ulpart, dpart;
   int ret = 0;
   static char inf[] = "inf";
-  static char nan[] = "NAN";
+  static char nan[] = "NaN";
+  int digit = desc->digit;
+  uint64_t ulpart, dpart;
+  char str[INT_BUFSIZE];
+  int int_begin;
+  int len;
 
   if (isinf(num)) {
     if (sign) {
@@ -294,15 +312,30 @@ static int lfout(double num, char *buf, int size,
       buf[ret++] = '-';
     }
 
+    int_begin = ret;
     ulpart = (uint64_t) num;
-    ret += luout(ulpart, &buf[ret], size, desc);
-    buf[ret++] = '.';
+    /* round off to @float_digit decimal places */
+    dpart = (num - ulpart) * lpow(10, desc->float_digit) + 0.5;
 
-    /* round off to seven decimal places */
-    dpart = (num - ulpart) * 1000000 + 0.5;
+    fprintf(stdout, "num = %lf (num - ulpart) = %lf\n", num, (num - ulpart));
+    fprintf(stdout, "dpart = %lu desc->float_digit = %d\n", dpart,
+            desc->float_digit);
+    desc->digit = -1;
     ret += luout(dpart, &buf[ret], size, desc);
+
+    desc->digit = digit - desc->float_digit - 1;
+    len = luout(ulpart, str, size, desc);
+    str[len++] = '.';
+    fprintf(stderr, "str = %s\n", str);
+    /* move float part to right place */
+    memmove(&buf[int_begin + len], &buf[int_begin], desc->float_digit);
+    /* move integer part from str to right place */
+    memmove(&buf[int_begin], str, len);
+
+    ret += len;
   }
 
+  fprintf(stdout, "ret = %d\n", ret);
   return ret;
 }
 
@@ -310,15 +343,15 @@ static int lfout(double num, char *buf, int size,
 #endif /* ENABLE_FPU */
 
 /*
- * Parse given printf argument expression (@fmt) and save
+ * Parse given print argument expression (@fmt) and save
  * the results to argument descriptor @desc.
  *
  * Input is in in the form: %ld, %d, %x, %lx, etc.
  *
  * Return @fmt after bypassing the '%' expression.
- * FIXME: Better only return printf-expression # of chars.
+ * FIXME: Better only return print-expression # of chars.
  */
-static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
+static const char *parse_arg(const char *fmt, struct print_argdesc *desc)
 {
   bool complete;
   unsigned int digit_size;
@@ -331,6 +364,7 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
   desc->radix = 10;
   desc->pad = PAD_NO;
   desc->digit = -1;
+  desc->float_digit = INIT_FLOAT_DIGIT;
 
   while (*++fmt) {
     switch (*fmt) {
@@ -384,6 +418,8 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
         desc->pad = PAD_BLANK;
       }
 
+
+      /* integer part */
       digit_size = 0;
 
       while ((*fmt >= '0') && (*fmt <= '9')) {
@@ -391,13 +427,32 @@ static const char *parse_arg(const char *fmt, struct printf_argdesc *desc)
         fmt++;
       }
 
-      fmt--;
       desc->digit = digit_size;
+
+#if defined(ENABLE_FPU)
+      /* float part */
+      digit_size = 0;
+
+      if (*fmt++ == '.') {
+        while ((*fmt >= '0') && (*fmt <= '9')) {
+          digit_size = digit_size * 10 + (*fmt - '0');
+          fmt++;
+        }
+
+        if (digit_size > 0) {
+          desc->float_digit = digit_size;
+        }
+      }
+
+#endif /* ENABLE_FPU */
+      fprintf(stdout, "desc->digit = %d desc->float_digit = %d\n", desc->digit,
+              desc->float_digit);
+      fmt--;
       break;
 
     default:
       /* Unknown mark: complete by definition */
-      //printf("Unknown mark: %d\n", *fmt);
+      //print("Unknown mark: %d\n", *fmt);
       desc->type = NONE;
       complete = true;
       goto out;
@@ -420,13 +475,13 @@ out:
 
 
 /*
- * Formt given printf-like string (@fmt) and store the result
+ * Formt given print-like string (@fmt) and store the result
  * within at most @size bytes. This version does *NOT* append
  * a NULL to output buffer @buf; it's for internal use only.
  */
 int vsnprint(char *buf, int size, const char *fmt, va_list args)
 {
-  struct printf_argdesc desc = {0};
+  struct print_argdesc desc = {0};
   const char *s;
   char *str;
   long num;

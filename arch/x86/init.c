@@ -185,7 +185,10 @@ void exit_arch(void)
  */
 __noreturn void kernel_start(void)
 {
-  main(0, NULL);
+  int argc = 1;
+  char exec_file[] = {"build/mcube"};
+  char *argv[] = {exec_file};
+  main(argc, argv);
   halt();
 }
 

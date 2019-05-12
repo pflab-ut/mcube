@@ -45,6 +45,7 @@ int socket(int domain, int type, int protocol)
     case SOCK_STREAM:
       switch (protocol) {
       case 0:
+
         /* check if remaining socket exists */
         for (int i = 0; i < SOMAXCONN; i++) {
           if (!sockets[i].used) {
