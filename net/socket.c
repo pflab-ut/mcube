@@ -20,6 +20,7 @@ int accept(__unused int sockfd, __unused struct sockaddr *addr,
 int bind(__unused int sockfd, __unused const struct sockaddr *addr,
          __unused socklen_t addrlen)
 {
+
   return 0;
 }
 

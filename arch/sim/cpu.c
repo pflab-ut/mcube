@@ -8,18 +8,6 @@
 /* NOTE: current_cpu == get_cpu_id() */
 unsigned long current_cpu = 0;
 
-int get_nr_cpu_cores(void)
-{
-  cpuid_info_t cinfo;
-  cpuid(0x4, &cinfo);
-
-  if (cinfo.rax & 0x1f) {
-    return ((cinfo.rax >> 26) + 1);
-  }
-
-  return 1;
-}
-
 
 void copy_arch_process(__unused struct task_struct *p,
                        __unused unsigned long func,

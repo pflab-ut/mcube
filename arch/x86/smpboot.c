@@ -221,6 +221,9 @@ fail:
 __noreturn void secondary_start(void)
 {
   union apic_id id;
+  int argc = 1;
+  char exec_file[] = {"build/mcube"};
+  char *argv[NR_ARGS] = {exec_file};
 
   /* Quickly tell the parent we're alive */
   ++nr_alive_cpus;
@@ -236,7 +239,7 @@ __noreturn void secondary_start(void)
 
   enable_local_irq();
 
-  ap_main();
+  user_ap_main(argc, argv);
 
   halt();
 }

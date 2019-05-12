@@ -9,12 +9,10 @@ void kernel_level_main(void);
 void *user_func(void *arg);
 int user_thread_main(void);
 void process(const char *array);
-int user_ap_main(void);
 int user_dmac_main(void);
 void user_process(void);
 void user_atomic_main(void);
 void user_raspi3_main(void);
-
 
 
 void kernel_level_main(void)
@@ -94,26 +92,6 @@ void process(const char *array)
   }
 }
 
-int user_ap_main(void)
-{
-  int ret;
-  print("user_ap_main()\n");
-  ret = copy_process((unsigned long) &process, (unsigned long) "12345");
-
-  if (ret != 0) {
-    print("Error while starting process1\n");
-    return 1;
-  }
-
-  ret = copy_process((unsigned long) &process, (unsigned long) "abcde");
-
-  if (ret != 0) {
-    print("Error while starting process 2");
-    return 2;
-  }
-
-  return 0;
-}
 
 #define BUFSIZE 32
 
@@ -148,18 +126,36 @@ void user_process(void)
 }
 
 
-int ap_main(void)
+int user_ap_main(__unused int argc, __unused char *argv[])
 {
+#if 1
+  int ret;
+  print("user_ap_main()\n");
+  ret = copy_process((unsigned long) &process, (unsigned long) "12345");
+
+  if (ret != 0) {
+    print("Error while starting process1\n");
+    return 1;
+  }
+
+  ret = copy_process((unsigned long) &process, (unsigned long) "abcde");
+
+  if (ret != 0) {
+    print("Error while starting process 2");
+    return 2;
+  }
+
+  return 0;
+#else  
   unsigned long cpu = get_cpu_id();
   delay(100000 * cpu);
   printk("ap_main()\n");
-#if 1
 
   for (;;)
     ;
 
-#endif
   return 0;
+#endif
 }
 
 

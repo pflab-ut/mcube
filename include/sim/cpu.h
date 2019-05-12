@@ -18,9 +18,6 @@
 extern unsigned long current_cpu;
 
 
-int get_nr_cpu_cores(void);
-
-
 #define get_cpu_id() current_cpu
 
 #endif /* !__ASSEMBLY__ */

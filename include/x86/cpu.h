@@ -67,23 +67,11 @@ shrl $0x18, % eax
 typedef struct cpuid_info cpuid_info_t;
 
 
-extern int nr_cpus;
-
-
 static inline unsigned long get_cpu_id(void)
 {
-#if 1
-  return 0;
-#else
-  union apic_id id;
-  id.raw = apic_read(APIC_ID);
-  return id.id;
-#endif
-}
-
-static inline int get_nr_cpu_cores(void)
-{
-  return nr_cpus;
+  cpuid_info_t cinfo;
+  cpuid(0x1, &cinfo);
+  return (cinfo.rbx & 0x0f000000) >> 24;
 }
 
 void init_syscall(void);

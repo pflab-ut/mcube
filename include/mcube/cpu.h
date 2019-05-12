@@ -68,6 +68,18 @@ static inline void cpuid(uint64_t op,
                : "0"(cinfo->rax), "2"(cinfo->rcx));
 }
 
+static inline int get_nr_cpu_cores(void)
+{
+  cpuid_info_t cinfo;
+  cpuid(0x4, &cinfo);
+
+  if (cinfo.rax & 0x1f) {
+    return ((cinfo.rax >> 26) + 1);
+  }
+
+  return 1;
+}
+
 #endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
 
 

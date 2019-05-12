@@ -58,20 +58,33 @@ int user_level_main(void)
 
 #endif
 
-int ap_main(void)
+int user_ap_main(__unused int argc, __unused char *argv[])
 {
-  printk("ap_main()\n");
+  unsigned long cpu = get_cpu_id();
+  char str[] = "client";
+  apic_udelay(100 * 1000);
+  printk("ap_main(): cpu = %d\n", cpu);
+
+  if (cpu == 1) {
+    argc = 2;
+    argv[1] = str;
+    test_socket(argc, argv);
+  }
+
   return 0;
 }
 
 
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
+  char str[] = "server";
   printk("user_arch_main()\n");
   //  start_timer();
   //  user_thread_main();
   //  test_pit();
-  //  test_socket(argc, argv);
+  argc = 2;
+  argv[1] = str;
+  test_socket(argc, argv);
   //  test_percpu();
   //  test_apic();
   //  test_page_alloc();

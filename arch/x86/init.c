@@ -187,7 +187,7 @@ __noreturn void kernel_start(void)
 {
   int argc = 1;
   char exec_file[] = {"build/mcube"};
-  char *argv[] = {exec_file};
+  char *argv[NR_ARGS] = {exec_file};
   main(argc, argv);
   halt();
 }

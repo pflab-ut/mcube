@@ -11,8 +11,7 @@
 int user_main(int argc, char *argv[]);
 int user_arch_main(int argc, char *argv[]);
 int user_test_main(int argc, char *argv[]);
-
-int ap_main(void);
+int user_ap_main(int argc, char *argv[]);
 
 bool test_atomic(void);
 bool test_bitmap(void);

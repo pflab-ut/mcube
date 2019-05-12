@@ -33,6 +33,8 @@
 
 #define NR_TASKS   16
 #define NR_THREADS 16
+#define NR_ARGS 16
+
 
 /* 4K */
 #define KERNEL_STACK_SIZE 0x1000

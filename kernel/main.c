@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     }
 
     /* execute the specific code of application processors (except bootstrap processor). */
-    ap_main();
+    user_ap_main(argc, argv);
     exit_arch_ap();
   }
 

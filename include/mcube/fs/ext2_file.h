@@ -34,14 +34,6 @@ enum parsing_state {
 #define FSTATIC    extern
 uint path_get_leaf(const char *path, mode_t *leaf_type);
 
-struct test_file {
-  uint64_t inum;    /* Inode# of the open()-ed file */
-  int flags;    /* Flags passed  to open() call */
-  spinlock_t lock;  /* ONLY FOR offset and refcount */
-  uint64_t offset;  /* MAIN FIELD: File byte offset */
-  int refcount;    /* Reference count; fork,dup,.. */
-};
-
 void file_run_tests(void);
 
 

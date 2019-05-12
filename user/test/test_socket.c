@@ -55,6 +55,8 @@ static int socket_server(__unused int argc, __unused char *argv[])
     return 1;
   }
 
+  printk("lsnfd = %d\n", lsnfd);
+
   unlink(UNIXDOMAIN_PATH);
   memset(&srvaddr, 0, sizeof(struct sockaddr_un));
   srvaddr.sun_family = AF_UNIX;

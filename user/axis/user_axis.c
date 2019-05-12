@@ -143,7 +143,7 @@ void tsc_main(void)
   }
 }
 
-int ap_main(void)
+int user_ap_main(__unused int argc, __unused char *argv[])
 {
   unsigned long cpu = get_cpu_id();
   putchar(cpu + '0');
