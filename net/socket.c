@@ -8,7 +8,7 @@
 #if !CONFIG_ARCH_SIM
 
 
-static struct socket_struct sockets[SOMAXCONN] = {{false, false, {0, ""}}};
+static struct socket_struct sockets[SOMAXCONN] = {{false, false, -1, {-1, ""}}};
 
 #if CONFIG_ARCH_AXIS
 spinlock_t socket_lock;
@@ -80,7 +80,7 @@ int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
     }
   }
 
-  spin_lock(&socket_lock);
+  spin_unlock(&socket_lock);
   return ret;
 }
 
@@ -111,7 +111,7 @@ int listen(int sockfd, __unused int backlog)
     ret = -1;
   }
 
-  spin_lock(&socket_lock);
+  spin_unlock(&socket_lock);
   return ret;
 }
 

@@ -227,7 +227,10 @@ typedef enum socket_type socket_type;
 struct socket_struct {
   bool used;
   bool passive_socket;
+  int connect_id;
   struct sockaddr_un addr;
+  char *sendmsg;
+  char *recvmsg;
 };
 
 #define NR_STDS 3

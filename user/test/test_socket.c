@@ -28,17 +28,19 @@ static int socket_client(__unused int argc, __unused char *argv[])
 
   if (connect(srvfd, (struct sockaddr *) &addr, sizeof(struct sockaddr_un)) < 0) {
     printk("Error: connect()\n");
-    return 2;
+    goto end_socket;
   }
 
   if (write(srvfd, MESSAGE, strlen(MESSAGE)) < 0) {
     printk("Error: write()\n");
-    return 3;
+    goto end_socket;
   }
 
+end_socket:
+
   if (shutdown(srvfd, SHUT_RDWR) == -1) {
-    printk("Error: shutdown()\n");
-    return 4;
+    printk("Error: shutdown() for socket()\n");
+    return 2;
   }
 
   return 0;
