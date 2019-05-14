@@ -110,11 +110,9 @@ static void handle_syscall(interrupt_context_t *context)
 
 void init_syscall(void)
 {
-#if 1
-  //  set_isr(SYSCALL_IRQ, handle_syscall);
-#else
+#if 0
   // Request the CPU's extended features.
-  registers4_t regs4;
+  cpuid_info_t regs4;
   cpuid(0x80000001, &regs4);
 
   // Bit 11 of rdx tells us if the SYSCALL/SYSRET instructions are

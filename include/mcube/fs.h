@@ -8,7 +8,7 @@
 
 
 #define NR_FILES 128
-#define FILE_LENGTH 64
+#define FILE_LENGTH 128
 
 #ifndef __ASSEMBLY__
 

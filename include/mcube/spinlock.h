@@ -12,10 +12,6 @@
 
 #ifndef __ASSEMBLY__
 
-#define spin_lock_irqsave(lock, flags)
-#define spin_unlock_irqrestore(lock, flags)
-
-
 /*
  * Careful! Spinlocks, ironically enough, are globals and thus
  * must be themselves protected against concurrent SMP access!
@@ -42,19 +38,9 @@ static inline void spin_unlock(spinlock_t *lock);
 
 extern spinlock_t sched_lock;
 extern spinlock_t kbuf_lock;
-extern spinlock_t sbuf_lock;
-
 
 
 void init_spinlock(void);
-
-static inline void lock_scheduler(void)
-{
-}
-
-static inline void unlock_scheduler(void)
-{
-}
 
 
 #endif /* __ASSEMBLY__ */

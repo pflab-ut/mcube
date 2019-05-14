@@ -7,7 +7,7 @@
 
 #define UNIXDOMAIN_PATH "/tmp/server.sock"
 #define MESSAGE "hello world"
-#define SOCKET_BUFSIZE 256
+#define SOCK_BUFSIZE 256
 
 
 static int socket_client(__unused int argc, __unused char *argv[])
@@ -19,6 +19,8 @@ static int socket_client(__unused int argc, __unused char *argv[])
     printk("Error: socket()\n");
     return 1;
   }
+
+  printk("srvfd = %d\n", srvfd);
 
   memset(&addr, 0, sizeof(struct sockaddr_un));
   addr.sun_family = AF_UNIX;
@@ -36,6 +38,7 @@ static int socket_client(__unused int argc, __unused char *argv[])
 
   if (shutdown(srvfd, SHUT_RDWR) == -1) {
     printk("Error: shutdown()\n");
+    return 4;
   }
 
   return 0;
@@ -45,8 +48,7 @@ static int socket_server(__unused int argc, __unused char *argv[])
 {
   int clifd, lsnfd;
   struct sockaddr_un cliaddr, srvaddr;
-  struct pollfd fds[] = {{0}};
-  char recvbuf[SOCKET_BUFSIZE] = "";
+  char recvbuf[SOCK_BUFSIZE] = "";
   socklen_t addrlen;
   int len;
 
@@ -55,54 +57,55 @@ static int socket_server(__unused int argc, __unused char *argv[])
     return 1;
   }
 
-  printk("lsnfd = %d\n", lsnfd);
 
+  /* remove UNIXDOMAIN_PATH if it exists. */
   unlink(UNIXDOMAIN_PATH);
+
   memset(&srvaddr, 0, sizeof(struct sockaddr_un));
   srvaddr.sun_family = AF_UNIX;
   strcpy(srvaddr.sun_path, UNIXDOMAIN_PATH);
 
   if (bind(lsnfd, (struct sockaddr *) &srvaddr, sizeof(struct sockaddr_un)) < 0) {
     printk("Error: bind()\n");
-    return 2;
+    goto end_socket;
   }
 
-  if (listen(lsnfd, 5) < 0) {
+  printk("listen()\n");
+
+  if (listen(lsnfd, 1024) < 0) {
     printk("Error: listen()\n");
-    return 3;
+    goto end_socket;
   }
 
-  fds[0].fd = lsnfd;
-  fds[0].events = POLLIN;
+  printk("accept()\n");
 
-  poll(fds, 1, -1);
-
-  if (fds[0].revents & POLLIN) {
-    memset(&cliaddr, 0, sizeof(struct sockaddr_un));
-    addrlen = sizeof(struct sockaddr_un);
-
-    if ((clifd = accept(lsnfd, (struct sockaddr *) &cliaddr, &addrlen)) < 0) {
-      printk("Error: accept()\n");
-      return 4;
-    }
-
-    if ((len = read(clifd, recvbuf, sizeof(recvbuf))) == -1) {
-      printk("Error: read()\n");
-    }
-
-    recvbuf[len] = 0;
-    printk("%s\n", recvbuf);
-  } else {
-    printk("Error: POLLIN\n");
-    return 5;
+  if ((clifd = accept(lsnfd, (struct sockaddr *) &cliaddr, &addrlen)) < 0) {
+    printk("Error: accept()\n");
+    goto end_socket;
   }
+
+  printk("clifd = %d\n", clifd);
+  printk("read()\n");
+
+  if ((len = read(clifd, recvbuf, sizeof(recvbuf))) == -1) {
+    printk("Error: read()\n");
+    goto end_accept;
+  }
+
+  recvbuf[len] = 0;
+  printk("%s\n", recvbuf);
+
+end_accept:
 
   if (shutdown(clifd, SHUT_RDWR) == -1) {
-    printk("Error: shutdown()\n");
+    printk("Error: shutdown() for accept()\n");
   }
 
+end_socket:
+
   if (shutdown(lsnfd, SHUT_RDWR) == -1) {
-    printk("Error: shutdown()\n");
+    printk("Error: shutdown() for socket()\n");
+    return 2;
   }
 
   return 0;

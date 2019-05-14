@@ -20,7 +20,6 @@ void init_sem(struct sem_struct *sem, unsigned int nr_rsrcs, unsigned int ceil)
 void sem_down(struct sem_struct *sem)
 {
   unsigned long cpu = get_cpu_id();
-  lock_scheduler();
 
   if (--sem->counter < 0) {
 
@@ -33,20 +32,16 @@ void sem_down(struct sem_struct *sem)
     sem->ewq = enqueue_thread(sem->ewq,
                               current_th[cpu],
                               offsetof(struct thread_struct, sched.deadline));
-    unlock_scheduler();
-    lock_scheduler();
   }
 
   current_th[cpu]->nr_resources++;
   sem->owner = current_th[cpu];
-  unlock_scheduler();
 }
 
 void sem_up(struct sem_struct *sem)
 {
   struct thread_struct *th;
   unsigned long cpu = get_cpu_id();
-  lock_scheduler();
 
   sem->counter++;
   th = sem->ewq;
@@ -71,5 +66,4 @@ void sem_up(struct sem_struct *sem)
 
   current_th[cpu]->nr_resources--;
   sem->owner = NULL;
-  unlock_scheduler();
 }

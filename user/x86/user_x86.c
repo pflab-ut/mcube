@@ -63,7 +63,7 @@ int user_ap_main(__unused int argc, __unused char *argv[])
   unsigned long cpu = get_cpu_id();
   char str[] = "client";
   apic_udelay(100 * 1000);
-  printk("ap_main(): cpu = %d\n", cpu);
+  printk("user_ap_main(): cpu = %d\n", cpu);
 
   if (cpu == 1) {
     argc = 2;

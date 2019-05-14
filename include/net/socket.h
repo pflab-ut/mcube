@@ -226,6 +226,7 @@ typedef enum socket_type socket_type;
 
 struct socket_struct {
   bool used;
+  bool passive_socket;
   struct sockaddr_un addr;
 };
 

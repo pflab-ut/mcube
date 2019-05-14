@@ -148,4 +148,14 @@
 #define EOWNERDEAD  130 /* Owner died */
 #define ENOTRECOVERABLE 131 /* State not recoverable */
 
+#ifndef __ASSEMBLY__
+
+#if !CONFIG_ARCH_SIM
+
+extern int errno;
+
+#endif /* !CONFIG_ARCH_SIM */
+
+#endif /* !__ASSEMBLY__ */
+
 #endif  /* __MCUBE_MCUBE_ERRNO_H__ */

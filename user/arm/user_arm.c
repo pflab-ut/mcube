@@ -146,10 +146,10 @@ int user_ap_main(__unused int argc, __unused char *argv[])
   }
 
   return 0;
-#else  
+#else
   unsigned long cpu = get_cpu_id();
   delay(100000 * cpu);
-  printk("ap_main()\n");
+  printk("user_ap_main()\n");
 
   for (;;)
     ;

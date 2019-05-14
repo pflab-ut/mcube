@@ -28,6 +28,11 @@ double CPU_NSEC_PER_CLOCK_MHZ;
 
 static volatile bool IsInitialized = false;
 
+#if !CONFIG_ARCH_SIM
+int errno;
+#endif /* !CONFIG_ARCH_SIM */
+
+
 int main(int argc, char *argv[])
 {
   unsigned long cpu = get_cpu_id();
