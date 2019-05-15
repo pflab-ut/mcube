@@ -235,11 +235,15 @@ struct socket_struct {
 
 #define NR_STDS 3
 
+#define MSG_BUFSIZE 1024
+
+
 enum shutdown {
   SHUT_RD = 0,
   SHUT_WR,
   SHUT_RDWR
 };
+
 
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 int bind(int sockfd, const struct sockaddr *my_addr, socklen_t addrlen);
@@ -252,6 +256,9 @@ ssize_t recv(int sockfd, void *buf, size_t len, int flags);
 
 void init_socket(void);
 
+extern spinlock_t socket_lock;
+
+extern struct socket_struct sockets[SOMAXCONN];
 
 
 #endif /* CONFIG_ARCH_SIM */

@@ -59,7 +59,6 @@ static int socket_server(__unused int argc, __unused char *argv[])
     return 1;
   }
 
-
   /* remove UNIXDOMAIN_PATH if it exists. */
   unlink(UNIXDOMAIN_PATH);
 

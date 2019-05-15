@@ -259,17 +259,34 @@ void init_kmalloc(void)
 
 #else
 
+#if CONFIG_ARCH_AXIS
+spinlock_t kmalloc_lock;
+#else
+spinlock_t kmalloc_lock = INIT_SPINLOCK;
+#endif /* CONFIG_ARCH_AXIS */
+
+
 heap_t heap = {0};
 uint8_t region[HEAP_INIT_SIZE] = {0};
 
 void *kmalloc(size_t size)
 {
-  return heap_alloc(&heap, size);
+  void *ret;
+  spin_lock(&kmalloc_lock);
+  ret = heap_alloc(&heap, size);
+  spin_unlock(&kmalloc_lock);
+  return ret;
 }
 
 void kfree(void *addr)
 {
+  if (!addr) {
+    return;
+  }
+
+  spin_lock(&kmalloc_lock);
   heap_free(&heap, addr);
+  spin_unlock(&kmalloc_lock);
 }
 
 void init_kmalloc(void)
