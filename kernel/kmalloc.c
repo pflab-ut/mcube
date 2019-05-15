@@ -6,7 +6,7 @@
 
 #include <mcube/mcube.h>
 
-#if CONFIG_ARCH_X86
+#if 0//CONFIG_ARCH_X86
 /*
  * Kernel Memory Allocator
  *

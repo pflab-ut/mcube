@@ -21,6 +21,6 @@ int user_arch_main(__unused int argc, __unused char *argv[])
 {
   //  printk("user_arch_main(): %lf\n", 1.0);
   //  printk("user_arch_main(): %020.5lf\n", 12.34567890);
-  test_socket(argc, argv);
+  //  test_socket(argc, argv);
   return 0;
 }

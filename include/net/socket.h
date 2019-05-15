@@ -229,8 +229,8 @@ struct socket_struct {
   bool passive_socket;
   int connect_id;
   struct sockaddr_un addr;
-  char *sendmsg;
-  char *recvmsg;
+  ring_buf_t sendmsg;
+  ring_buf_t recvmsg;
 };
 
 #define NR_STDS 3

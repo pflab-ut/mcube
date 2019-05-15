@@ -7,7 +7,7 @@
 
 #define UNIXDOMAIN_PATH "/tmp/server.sock"
 #define MESSAGE "hello world"
-#define SOCK_BUFSIZE 256
+#define MSG_BUFSIZE 1024
 
 
 static int socket_client(__unused int argc, __unused char *argv[])
@@ -31,10 +31,14 @@ static int socket_client(__unused int argc, __unused char *argv[])
     goto end_socket;
   }
 
+  printk("write()\n");
+
   if (write(srvfd, MESSAGE, strlen(MESSAGE)) < 0) {
     printk("Error: write()\n");
     goto end_socket;
   }
+
+  printk("write() end\n");
 
 end_socket:
 
@@ -50,7 +54,7 @@ static int socket_server(__unused int argc, __unused char *argv[])
 {
   int clifd, lsnfd;
   struct sockaddr_un cliaddr, srvaddr;
-  char recvbuf[SOCK_BUFSIZE] = "";
+  char recvbuf[MSG_BUFSIZE] = "";
   socklen_t addrlen;
   int len;
 
@@ -92,6 +96,8 @@ static int socket_server(__unused int argc, __unused char *argv[])
     printk("Error: read()\n");
     goto end_accept;
   }
+
+  printk("read() end\n");
 
   recvbuf[len] = 0;
   printk("%s\n", recvbuf);

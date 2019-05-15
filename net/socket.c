@@ -8,16 +8,7 @@
 #if !CONFIG_ARCH_SIM
 
 
-struct socket_struct sockets[SOMAXCONN] = {
-  {
-    .used = false,
-    .passive_socket = false,
-    .connect_id = -1,
-    .addr = {.sun_family = -1, .sun_path = ""},
-    .sendmsg = NULL,
-    .recvmsg = NULL
-  }
-};
+struct socket_struct sockets[SOMAXCONN];
 
 #if CONFIG_ARCH_AXIS
 spinlock_t socket_lock;
@@ -46,22 +37,22 @@ int accept(int sockfd, __unused struct sockaddr *addr,
         delay(1000);
       }
 
-#if 1
       printk("accept sockets[%d].connect_id = %d\n", sockfd,
              sockets[sockfd].connect_id);
       ret = sockets[sockfd].connect_id;
 
-      if ((sockets[sockfd].sendmsg = (char *) kmalloc(MSG_BUFSIZE)) == NULL) {
+      if ((sockets[sockfd].sendmsg.buffer = (uint8_t *) kmalloc(
+                                              MSG_BUFSIZE)) == NULL) {
         ret = -1;
         goto out;
       }
 
-      if ((sockets[sockfd].recvmsg = (char *) kmalloc(MSG_BUFSIZE)) == NULL) {
+      if ((sockets[sockfd].recvmsg.buffer = (uint8_t *) kmalloc(
+                                              MSG_BUFSIZE)) == NULL) {
         ret = -1;
         goto out;
       }
 
-#endif
     } else {
       /* sockfd is not an open file descriptor. */
       errno = EBADF;
@@ -220,8 +211,17 @@ int socket(int domain, int type, int protocol)
 
 int shutdown(__unused int sockfd, __unused int how)
 {
-  kfree(sockets[sockfd].recvmsg);
-  kfree(sockets[sockfd].sendmsg);
+  kfree(sockets[sockfd].recvmsg.buffer);
+  kfree(sockets[sockfd].sendmsg.buffer);
+  sockets[sockfd].used = false;
+  sockets[sockfd].passive_socket = false;
+  sockets[sockfd].connect_id = -1;
+  sockets[sockfd].addr = (struct sockaddr_un) {
+    .sun_family = AF_UNSPEC, .sun_path = ""
+  };
+  sockets[sockfd].sendmsg = INIT_RING_BUF;
+  sockets[sockfd].recvmsg = INIT_RING_BUF;
+
   return 0;
 }
 
@@ -252,8 +252,8 @@ void init_socket(void)
     sockets[i].addr = (struct sockaddr_un) {
       .sun_family = AF_UNSPEC, .sun_path = ""
     };
-    sockets[i].sendmsg = NULL;
-    sockets[i].recvmsg = NULL;
+    sockets[i].sendmsg = INIT_RING_BUF;
+    sockets[i].recvmsg = INIT_RING_BUF;
   }
 
   //  pdebug_sockets();
