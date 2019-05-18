@@ -334,21 +334,21 @@ void apic_monotonic(uint64_t us, uint8_t vector)
 /* NOTE! This function is implicitly called by panic
  * code: it should not include any asserts or panics. */
 static void __apic_send_ipi(int dst_apic_id, int delivery_mode,
-                            int vector, enum irq_dest dest)
+                            int vector, enum irq_dst dst)
 {
   union apic_icr icr = { .value = 0 };
 
   icr.vector = vector;
   icr.delivery_mode = delivery_mode;
 
-  switch (dest) {
+  switch (dst) {
   case IRQ_BROADCAST:
-    icr.dest_shorthand = APIC_DEST_SHORTHAND_ALL_BUT_SELF;
+    icr.dst_shorthand = APIC_DST_SHORTHAND_ALL_BUT_SELF;
     break;
 
   case IRQ_SINGLE:
-    icr.dest_mode = APIC_DESTMOD_PHYSICAL;
-    icr.dest = dst_apic_id;
+    icr.dst_mode = APIC_DSTMOD_PHYSICAL;
+    icr.dst = dst_apic_id;
     break;
 
   default:

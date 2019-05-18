@@ -92,7 +92,7 @@ next_sec:
   rep    movsl
 
   /* Loop increment part */
-  movl   %edi, destination_mem  # Next sector's final dest
+  movl   %edi, destination_mem  # Next sector's final dst
   incl   RCODE_SECTOR_LBA    # Next ramdisk LBA
   movl   sectors_count, %ecx  # Restore the loop counter!
   loop   next_sec

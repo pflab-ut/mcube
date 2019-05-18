@@ -16,12 +16,12 @@ void *memset64(void *dst, uint64_t val, uint64_t len);
 
 int memcmp(const void *s1, const void *s2, size_t n);
 
-void *memcpy(void *dest, const void *src, size_t n);
+void *memcpy(void *dst, const void *src, size_t n);
 void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t len);
 void *memcpy_forward(void *dst, const void *src, size_t len);
 void *memcpy_forward_nocheck(void *dst, const void *src, size_t len);
 
-void *memmove(void *dest, const void *src, size_t n);
+void *memmove(void *dst, const void *src, size_t n);
 size_t strlen(const char *s);
 size_t strnlen(const char *str, int n);
 int strcmp(const char *s, const char *t);

@@ -14,7 +14,6 @@
 * Message Passingを作成する．
 * simアーキテクチャでスケジューリングシミュレータを実装する．
 * NR_CPUSを動的に設定する．
-* AXISでメモリサイズを動的に設定する
 
 ## Known Issues
 

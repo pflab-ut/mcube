@@ -108,11 +108,11 @@ static inline void ioapic_write(int apic, uint8_t reg, uint32_t value)
  * 32 bit registers -- Intel 82093AA datasheet */
 union ioapic_irqentry {
   struct {
-    uint32_t vector: 8, delivery_mode: 3, dest_mode: 1,
+    uint32_t vector: 8, delivery_mode: 3, dst_mode: 1,
              delivery_status: 1, polarity: 1, remote_irr: 1,
              trigger: 1, mask: 1, reserved0: 15;
 
-    uint32_t reserved1: 24, dest: 8;
+    uint32_t reserved1: 24, dst: 8;
   } __packed;
   struct {
     uint32_t value_low;
@@ -131,9 +131,9 @@ enum ioapic_delmod {
   IOAPIC_DELMOD_EXTINT = 0x7,
 };
 /* Destination mode (R/W) */
-enum ioapic_destmod {
-  IOAPIC_DESTMOD_PHYSICAL = 0x0,
-  IOAPIC_DESTMOD_LOGICAL  = 0x1,
+enum ioapic_dstmod {
+  IOAPIC_DSTMOD_PHYSICAL = 0x0,
+  IOAPIC_DSTMOD_LOGICAL  = 0x1,
 };
 /* Interrupt Input Pin Polarity (R/W) */
 enum ioapic_polarity {
@@ -155,7 +155,7 @@ enum {
   /* Each local APIC performs a logical AND of chosen
    * address and its logical APIC ID. If a 'true'
    * condition was detected, the IRQ is accepted. */
-  IOAPIC_DEST_BROADCAST = 0xff,
+  IOAPIC_DST_BROADCAST = 0xff,
 };
 
 static inline union ioapic_irqentry ioapic_read_irqentry(int apic, uint8_t irq)
@@ -195,7 +195,7 @@ struct ioapic_pin {
   int pin;      /* which pin in this ioapic */
 };
 
-void ioapic_setup_isairq(uint8_t irq, uint8_t vector, enum irq_dest);
+void ioapic_setup_isairq(uint8_t irq, uint8_t vector, enum irq_dst dst);
 void ioapic_init(void);
 
 #endif /* !__ASSEMBLY__ */

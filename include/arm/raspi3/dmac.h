@@ -209,7 +209,7 @@
 #define DMAC_CH_TI_DST_WIDTH (0x1 << 5)
 /* 4: Destination Address Increment.
  * 1 = Destination address increments after each write.
- * The address will increment by 4, if DEST_WIDTH=0 else by 32.
+ * The address will increment by 4, if DST_WIDTH=0 else by 32.
  * 0 = Destination address does not change.
  */
 #define DMAC_CH_TI_DST_INC (0x1 << 4)
@@ -297,7 +297,7 @@
 #define DMAC_CH_TI2_DST_WIDTH (0x1 << 5)
 /* 4: Destination Address Increment.
  * 1 = Destination address increments after each write
- * The address will increment by 4, if DEST_WIDTH=0 else by 32.
+ * The address will increment by 4, if DST_WIDTH=0 else by 32.
  * 0 = Destination address does not change.
  */
 #define DMAC_CH_TI2_DST_INC (0x1 << 4)

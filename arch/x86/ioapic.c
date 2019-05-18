@@ -98,12 +98,12 @@ static struct ioapic_pin ioapic_isa_pin(int isa_irq, enum mp_irqtype type)
 
 /*
  * Setup the I/O APIC routing entry representing given
- * ISA @irq, pointing it to @dest CPUs IDT @vector.
+ * ISA @irq, pointing it to @dst CPUs IDT @vector.
  *
  * NOTE! You need to install a @vector handler before
  * setting up its respective I/O APIC entry.
  */
-void ioapic_setup_isairq(uint8_t irq, uint8_t vector, enum irq_dest dest)
+void ioapic_setup_isairq(uint8_t irq, uint8_t vector, enum irq_dst dst)
 {
   struct ioapic_pin pin;
   union ioapic_irqentry entry = { .value = 0 };
@@ -118,15 +118,15 @@ void ioapic_setup_isairq(uint8_t irq, uint8_t vector, enum irq_dest dest)
   entry.trigger = IOAPIC_TRIGGER_EDGE;
   entry.mask = IOAPIC_UNMASK;
 
-  switch (dest) {
+  switch (dst) {
   case IRQ_BOOTSTRAP:
-    entry.dest_mode = IOAPIC_DESTMOD_PHYSICAL;
-    entry.dest = apic_bootstrap_id();
+    entry.dst_mode = IOAPIC_DSTMOD_PHYSICAL;
+    entry.dst = apic_bootstrap_id();
     break;
 
   case IRQ_BROADCAST:
-    entry.dest_mode = IOAPIC_DESTMOD_LOGICAL;
-    entry.dest = IOAPIC_DEST_BROADCAST;
+    entry.dst_mode = IOAPIC_DSTMOD_LOGICAL;
+    entry.dst = IOAPIC_DST_BROADCAST;
     break;
 
   default:

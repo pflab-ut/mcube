@@ -35,29 +35,29 @@ int memcmp(const void *s1, const void *s2, size_t n)
 
 
 /**
- * The memmove() function copies @c n bytes from memory area @c src to memory area @c dest.
+ * The memmove() function copies @c n bytes from memory area @c src to memory area @c dst.
  * The memory areas may overlap: copying takes place as though the bytes in @c src are first
- * copied into a temporary array that does not overlap @c src or @c dest,
- * and the bytes are then copied from the temporary array to @c dest.
- * @param dest is a pointer of @c void.
+ * copied into a temporary array that does not overlap @c src or @c dst,
+ * and the bytes are then copied from the temporary array to @c dst.
+ * @param dst is a pointer of @c void.
  * @param src is a pointer of @c void.
- * @param n is the number fo bytes copying @c src to @c dest.
- * @return Pointer to @c dest.
+ * @param n is the number fo bytes copying @c src to @c dst.
+ * @return Pointer to @c dst.
  */
-void *memmove(void *dest, const void *src, size_t n)
+void *memmove(void *dst, const void *src, size_t n)
 {
   char *tmp;
   const char *s;
 
-  if (dest <= src) {
-    tmp = dest;
+  if (dst <= src) {
+    tmp = dst;
     s = src;
 
     while (n--) {
       *tmp++ = *s++;
     }
   } else {
-    tmp = dest;
+    tmp = dst;
     tmp += n;
     s = src;
     s += n;
@@ -67,7 +67,7 @@ void *memmove(void *dest, const void *src, size_t n)
     }
   }
 
-  return dest;
+  return dst;
 }
 
 /**
@@ -159,18 +159,18 @@ int strncmp(const char *s1, const char *s2, size_t n)
 
 /**
  * The strcpy() function copies the string pointed to by @c src, including the terminating null byte
- * ('\0'), to the buffer pointed to by @c dest.
- * The strings may not overlap, and the destination string @c dest must be large enough
+ * ('\0'), to the buffer pointed to by @c dst.
+ * The strings may not overlap, and the destination string @c dst must be large enough
  * to receive the copy.
- * @param dest is a pointer of @c char.
+ * @param dst is a pointer of @c char.
  * @param src is a pointer of @c char.
- * @return Pointer to the destination string @c dest.
+ * @return Pointer to the destination string @c dst.
  */
-char *strcpy(char *dest, const char *src)
+char *strcpy(char *dst, const char *src)
 {
-  char *tmp = dest;
+  char *tmp = dst;
 
-  while ((*dest++ = *src++)) {
+  while ((*dst++ = *src++)) {
   }
 
   return tmp;
@@ -180,16 +180,16 @@ char *strcpy(char *dest, const char *src)
  * The strncpy() function is similar to the strcpy() function, except that
  * at most @c n bytes of @c src are copied.
  * @warning If there is no null byte among the first @c n bytes of @c src,
- * the string placed in @c dest will  not  be  null-terminated.
- * @param dest is a pointer of @c char.
+ * the string placed in @c dst will  not  be  null-terminated.
+ * @param dst is a pointer of @c char.
  * @param src is a pointer of @c char.
- * @param n is the number of bytes copying @c src to @c dest.
- * @return Pointer to the destination string @c dest.
+ * @param n is the number of bytes copying @c src to @c dst.
+ * @return Pointer to the destination string @c dst.
  */
 
-char *strncpy(char *dest, const char *src, size_t n)
+char *strncpy(char *dst, const char *src, size_t n)
 {
-  char *tmp = dest;
+  char *tmp = dst;
 
   while (n) {
     if ((*tmp = *src) != 0) {
@@ -200,28 +200,28 @@ char *strncpy(char *dest, const char *src, size_t n)
     n--;
   }
 
-  return dest;
+  return dst;
 }
 
 
 /**
- * The strcat() function appends the @c src string to the @c dest string, overwriting the terminating null
- * byte ('\0') at the end of @c dest, and then adds a terminating null byte.
- * The strings may not overlap, and the @c dest string must have enough space for the result.
- * If @c dest is not large enough, program behavior is unpredictable.
- * @param dest is a pointer of @c char.
+ * The strcat() function appends the @c src string to the @c dst string, overwriting the terminating null
+ * byte ('\0') at the end of @c dst, and then adds a terminating null byte.
+ * The strings may not overlap, and the @c dst string must have enough space for the result.
+ * If @c dst is not large enough, program behavior is unpredictable.
+ * @param dst is a pointer of @c char.
  * @param src is a pointer of @c char.
- * @return Pointer to the destination string @c dest.
+ * @return Pointer to the destination string @c dst.
  */
-char *strcat(char *dest, const char *src)
+char *strcat(char *dst, const char *src)
 {
-  char *tmp = dest;
+  char *tmp = dst;
 
-  while (*dest) {
-    dest++;
+  while (*dst) {
+    dst++;
   }
 
-  while ((*dest++ = *src++)) {
+  while ((*dst++ = *src++)) {
   }
 
   return tmp;
@@ -231,23 +231,23 @@ char *strcat(char *dest, const char *src)
  * The strncat() function is similar to the strcat() function, except that
  * it will use at most n bytes from src; and
  * src does not need to be null-terminated if it contains @c n or more bytes.
- * @param dest is a pointer of @c char.
+ * @param dst is a pointer of @c char.
  * @param src is a pointer of @c char.
- * @param n is the number of bytes appending @c src to @c dest.
- * @return Pointer to the destination string @c dest.
+ * @param n is the number of bytes appending @c src to @c dst.
+ * @return Pointer to the destination string @c dst.
  */
-char *strncat(char *dest, const char *src, size_t n)
+char *strncat(char *dst, const char *src, size_t n)
 {
-  char *tmp = dest;
+  char *tmp = dst;
 
   if (n) {
-    while (*dest) {
-      dest++;
+    while (*dst) {
+      dst++;
     }
 
-    while ((*dest++ = *src++) != 0) {
+    while ((*dst++ = *src++) != 0) {
       if (--n == 0) {
-        *dest = '\0';
+        *dst = '\0';
         break;
       }
     }
@@ -536,23 +536,23 @@ void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t len)
 
 
 /**
- * The memcpy() function copies @c n bytes from memory area @c src to memory area @c dest.
+ * The memcpy() function copies @c n bytes from memory area @c src to memory area @c dst.
  * The memory areas must not overlap.
- * @param dest is a pointer of @c void.
+ * @param dst is a pointer of @c void.
  * @param src is a pointer of @c void.
- * @param n is the number fo bytes copying @c src to @c dest.
- * @return Pointer to @c dest.
+ * @param n is the number fo bytes copying @c src to @c dst.
+ * @return Pointer to @c dst.
  */
-void *memcpy(void *dest, const void *src, size_t n)
+void *memcpy(void *dst, const void *src, size_t n)
 {
-  char *d = (char *) dest;
+  char *d = (char *) dst;
   char *s = (char *) src;
 
   while (n--) {
     *d++ = *s++;
   }
 
-  return dest;
+  return dst;
 }
 
 
@@ -567,7 +567,7 @@ void *memcpy(void *dest, const void *src, size_t n)
  * @param str is a pointer of @c char.
  * @param delim specifies a set of bytes that delimit the tokens in the parsed string.
  * The caller may specify different strings in delim in successive calls that parse the same string.
- * @return Pointer to @c dest.
+ * @return Pointer to @c dst.
  */
 char *strtok(char *str, const char *delim)
 {

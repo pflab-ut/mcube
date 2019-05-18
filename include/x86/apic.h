@@ -105,11 +105,11 @@ union apic_spiv {
 #define APIC_ICRH  0x310   /* Interrupt Command Register High [63:32] */
 union apic_icr {
   struct {
-    uint32_t vector: 8, delivery_mode: 3, dest_mode: 1,
+    uint32_t vector: 8, delivery_mode: 3, dst_mode: 1,
              delivery_status: 1, reserved0: 1, level: 1,
-             trigger: 1, reserved1: 2, dest_shorthand: 2,
+             trigger: 1, reserved1: 2, dst_shorthand: 2,
              reserved2: 12;
-    uint32_t reserved3: 24, dest: 8;
+    uint32_t reserved3: 24, dst: 8;
   } __packed;
 
   /* Writing the low word of the ICR causes the
@@ -220,7 +220,7 @@ enum {
 /* Delivery mode for IPI and LVT entries */
 enum {
   APIC_DELMOD_FIXED = 0x0,  /* deliver to core in vector field */
-  APIC_DELMOD_LOWPR = 0x1,  /* to lowest cpu among dest cores */
+  APIC_DELMOD_LOWPR = 0x1,  /* to lowest cpu among dst cores */
   APIC_DELMOD_SMI   = 0x2,  /* deliver SMI; vector should be zero */
   APIC_DELMOD_NMI   = 0x4,  /* deliver NMI; vector ignored */
   APIC_DELMOD_INIT  = 0x5,  /* IPI INIT; vector should be zero */
@@ -230,8 +230,8 @@ enum {
 
 /* IPI destination mode */
 enum {
-  APIC_DESTMOD_PHYSICAL = 0x0,
-  APIC_DESTMOD_LOGICAL  = 0x1,
+  APIC_DSTMOD_PHYSICAL = 0x0,
+  APIC_DSTMOD_LOGICAL  = 0x1,
 };
 
 /* Trigger mode for IPI, LINT0, and LINT1
@@ -245,10 +245,10 @@ enum {
 /* Destination shorthands for IPIs
  * When in use, writing the ICR low-word is enough */
 enum {
-  APIC_DEST_SHORTHAND_NONE = 0x0,
-  APIC_DEST_SHORTHAND_SELF = 0x1,
-  APIC_DEST_SHORTHAND_ALL_AND_SELF = 0x2,
-  APIC_DEST_SHORTHAND_ALL_BUT_SELF = 0x3,
+  APIC_DST_SHORTHAND_NONE = 0x0,
+  APIC_DST_SHORTHAND_SELF = 0x1,
+  APIC_DST_SHORTHAND_ALL_AND_SELF = 0x2,
+  APIC_DST_SHORTHAND_ALL_BUT_SELF = 0x3,
 };
 
 /* Intereupt level for IPIs */
@@ -310,7 +310,7 @@ static inline uint32_t apic_read(uint32_t reg)
   return readl(vaddr);
 }
 
-enum irq_dest {
+enum irq_dst {
   IRQ_BROADCAST,      /* Interrupt all cores */
   IRQ_BOOTSTRAP,      /* Interrupt BSC only */
   IRQ_SINGLE,      /* Interrupt a specific core */
