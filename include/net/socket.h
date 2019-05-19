@@ -229,8 +229,7 @@ struct socket_struct {
   bool passive_socket;
   int connect_id;
   struct sockaddr_un addr;
-  ring_buf_t sendmsg;
-  ring_buf_t recvmsg;
+  ring_buf_t msg;
 };
 
 #define NR_STDS 3
@@ -256,7 +255,6 @@ ssize_t recv(int sockfd, void *buf, size_t len, int flags);
 
 void init_socket(void);
 
-extern spinlock_t socket_lock;
 
 extern struct socket_struct sockets[SOMAXCONN];
 

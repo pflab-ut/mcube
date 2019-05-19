@@ -98,7 +98,7 @@ static int socket_server(__unused int argc, __unused char *argv[])
   }
 
   printk("read() end\n");
-
+  printk("len = %d\n", len);
   recvbuf[len] = 0;
   printk("%s\n", recvbuf);
 

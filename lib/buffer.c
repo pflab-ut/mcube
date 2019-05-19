@@ -120,7 +120,7 @@ int ring_buf_get(cbuf_handle_t cbuf, uint8_t *data)
 
 bool ring_buf_empty(cbuf_handle_t cbuf)
 {
-  return (!cbuf->full && (cbuf->head == cbuf->tail));
+  return !cbuf->full && (cbuf->head == cbuf->tail);
 }
 
 bool ring_buf_full(cbuf_handle_t cbuf)

@@ -174,20 +174,20 @@ bool test_kmalloc(void)
     panic("Error: cannot allocate memory %lu\n", 8);
   }
 
-  printk("a = %lu size: 8\n", (unsigned long) a);
+  printk("a = 0x%lx size: 8\n", (unsigned long) a);
   kfree(a);
 
   if (!(b = kmalloc(128))) {
     panic("Error: cannot allocate memory %lu\n", 1028);
   }
 
-  printk("b = %lu size: 128\n", (unsigned long) b);
+  printk("b = 0x%lx size: 128\n", (unsigned long) b);
 
   if (!(c = kmalloc(8))) {
     panic("Error: cannot allocate memory %lu\n", 8);
   }
 
-  printk("c = %lu size: 8\n", (unsigned long) c);
+  printk("c = 0x%lx size: 8\n", (unsigned long) c);
 
   printk("\nfreeing b \n");
   kfree(b);
@@ -196,25 +196,25 @@ bool test_kmalloc(void)
     panic("Error: cannot allocate memory %lu\n", 8);
   }
 
-  printk("d = %lu size: 8\n", (unsigned long) d);
+  printk("d = 0x%lx size: 8\n", (unsigned long) d);
 
   if (!(e = kmalloc(16))) {
     panic("Error: cannot allocate memory %lu\n", 16);
   }
 
-  printk("e = %lu size: 16\n", (unsigned long) e);
+  printk("e = 0x%lx size: 16\n", (unsigned long) e);
 
   if (!(f = kmalloc(8))) {
     panic("Error: cannot allocate memory %lu\n", 8);
   }
 
-  printk("f = %lu size: 8\n", (unsigned long) f);
+  printk("f = 0x%lx size: 8\n", (unsigned long) f);
 
   if (!(g = kmalloc(8))) {
     panic("Error: cannot allocate memory %lu\n", 8);
   }
 
-  printk("g = %lu size: 8\n", (unsigned long) g);
+  printk("g = 0x%lx size: 8\n", (unsigned long) g);
 
   printk("\nfreeing d and f\n");
   kfree(d);
@@ -227,7 +227,7 @@ bool test_kmalloc(void)
     panic("Error: cannot allocate memory %lu\n", 128);
   }
 
-  printk("h = %lu size: 128\n", (unsigned long) h);
+  printk("h = 0x%lx size: 128\n", (unsigned long) h);
   printk("\n");
 
   for (int i = 1; i <= 2048; i += i) {

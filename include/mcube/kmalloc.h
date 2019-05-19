@@ -92,7 +92,6 @@ static inline int is_free_buf(void *buf)
   return 0;
 }
 
-extern spinlock_t kmalloc_lock;
 
 void *__kmalloc(int bucket_idx);
 

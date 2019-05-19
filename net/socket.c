@@ -23,43 +23,25 @@ int accept(int sockfd, __unused struct sockaddr *addr,
   int ret;
 
   if (sockfd >= 0 && sockfd < SOMAXCONN) {
-    if (sockets[sockfd].passive_socket) {
-      /* TODO: use poll() to wait for new socket. */
-      while (true) {
-        spin_lock(&socket_lock);
-
-        if (sockets[sockfd].connect_id != -1) {
-          spin_unlock(&socket_lock);
-          break;
-        }
-
-        spin_unlock(&socket_lock);
-        delay(1000);
-      }
-
-      printk("accept sockets[%d].connect_id = %d\n", sockfd,
-             sockets[sockfd].connect_id);
-      ret = sockets[sockfd].connect_id;
-
-      if ((sockets[sockfd].sendmsg.buffer = (uint8_t *) kmalloc(
-                                              MSG_BUFSIZE)) == NULL) {
-        ret = -1;
-        goto out;
-      }
-
-      if ((sockets[sockfd].recvmsg.buffer = (uint8_t *) kmalloc(
-                                              MSG_BUFSIZE)) == NULL) {
-        ret = -1;
-        goto out;
-      }
-
-    } else {
-      /* sockfd is not an open file descriptor. */
-      errno = EBADF;
-      ret = -1;
+    /* TODO: use poll() to wait for new socket. */
+    while (sockets[sockfd].connect_id == -1) {
+      delay(1000);
     }
+
+    printk("accept(): sockets[%d].connect_id = %d\n", sockfd,
+           sockets[sockfd].connect_id);
+    ret = sockets[sockfd].connect_id;
+
+    if ((sockets[sockfd].msg.buffer = (uint8_t *) kmalloc(MSG_BUFSIZE)) == NULL) {
+      ret = -1;
+      goto out;
+    }
+
+    sockets[ret].connect_id = sockfd;
+
   } else {
-    /* Socket is not listening for connections, or addrlen is invalid (e.g., is negative). */
+    /* Socket is not listening for connections,
+     * or addrlen is invalid (e.g., is negative). */
     errno = EINVAL;
     ret = -1;
   }
@@ -99,27 +81,31 @@ int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 
 int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-  int ret;
+  int ret = -1;
   spin_lock(&socket_lock);
 
   if (sockfd >= 0 && sockfd < SOMAXCONN) {
     for (int i = 0; i < SOMAXCONN; i++) {
       if (strcmp(sockets[i].addr.sun_path, addr->sa_data) == 0) {
         /* find file */
-        /* connect both directions. */
-        sockets[i].connect_id = sockfd;
-        sockets[sockfd].connect_id = i;
         memmove(&sockets[sockfd].addr, addr, addrlen);
+        ret = i;
+        break;
       }
     }
 
-    if (sockets[sockfd].passive_socket) {
-      /* Another socket is already listening on the same port. */
+    printk("connect(): ret = %d\n", ret);
+
+    if (ret == -1) {
       errno = EADDRINUSE;
-      ret = -1;
     } else {
-      sockets[sockfd].passive_socket = true;
-      ret = 0;
+      /* register connect id in server fd. */
+      sockets[ret].connect_id = sockfd;
+
+      /* wait until connect id is set in client fd. */
+      while (sockets[sockfd].connect_id == -1) {
+        delay(1000);
+      }
     }
   } else {
     /* The argument sockfd is not a valid file descriptor. */
@@ -211,16 +197,14 @@ int socket(int domain, int type, int protocol)
 
 int shutdown(__unused int sockfd, __unused int how)
 {
-  kfree(sockets[sockfd].recvmsg.buffer);
-  kfree(sockets[sockfd].sendmsg.buffer);
+  kfree(sockets[sockfd].msg.buffer);
   sockets[sockfd].used = false;
   sockets[sockfd].passive_socket = false;
   sockets[sockfd].connect_id = -1;
   sockets[sockfd].addr = (struct sockaddr_un) {
     .sun_family = AF_UNSPEC, .sun_path = ""
   };
-  sockets[sockfd].sendmsg = INIT_RING_BUF;
-  sockets[sockfd].recvmsg = INIT_RING_BUF;
+  sockets[sockfd].msg = INIT_RING_BUF;
 
   return 0;
 }
@@ -252,8 +236,7 @@ void init_socket(void)
     sockets[i].addr = (struct sockaddr_un) {
       .sun_family = AF_UNSPEC, .sun_path = ""
     };
-    sockets[i].sendmsg = INIT_RING_BUF;
-    sockets[i].recvmsg = INIT_RING_BUF;
+    sockets[i].msg = INIT_RING_BUF;
   }
 
   //  pdebug_sockets();

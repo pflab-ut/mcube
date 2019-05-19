@@ -27,7 +27,7 @@ typedef struct ring_buf ring_buf_t;
 typedef ring_buf_t *cbuf_handle_t;
 
 #define INIT_RING_BUF (ring_buf_t) {                                    \
-    .buffer = NULL, .head = -1, .tail = -1, .max = -1, .full = -1, .lock = INIT_SPINLOCK \
+    .buffer = NULL, .head = 0, .tail = 0, .max = -1, .full = false, .lock = INIT_SPINLOCK \
       }
 
 /**
