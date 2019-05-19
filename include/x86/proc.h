@@ -123,28 +123,8 @@ struct proc {
   } stats;
 };
 
-enum proc_state {
-  TD_RUNNABLE,      /* In the runqueues, to be dispatched */
-  TD_ONCPU,      /* Currently runnning on the CPU */
-  TD_INVALID,      /* NULL mark */
-};
 
-static inline void proc_init(struct proc *proc)
-{
-  memset(proc, 0, sizeof(struct proc));
-
-  proc->pid = kthread_alloc_pid();
-  pcb_init(&proc->pcb);
-  proc->state = TD_INVALID;
-  list_init(&proc->pnode);
-
-#if CONFIG_OPTION_FS_EXT2
-  proc->working_dir = EXT2_ROOT_INODE;
-#else
-  proc->working_dir = 0;
-#endif
-  unrolled_init(&proc->fdtable, 32);
-}
+void proc_init(struct proc *proc);
 
 #endif  /* !_ASSEMBLY */
 

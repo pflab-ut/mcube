@@ -32,7 +32,7 @@ int accept(int sockfd, __unused struct sockaddr *addr,
            sockets[sockfd].connect_id);
     ret = sockets[sockfd].connect_id;
 
-    if ((sockets[sockfd].msg.buffer = (uint8_t *) kmalloc(MSG_BUFSIZE)) == NULL) {
+    if (!(sockets[sockfd].msg.buffer = (uint8_t *) kmalloc(MSG_BUFSIZE))) {
       ret = -1;
       goto out;
     }
@@ -197,13 +197,13 @@ int socket(int domain, int type, int protocol)
 
 int shutdown(__unused int sockfd, __unused int how)
 {
-  kfree(sockets[sockfd].msg.buffer);
   sockets[sockfd].used = false;
   sockets[sockfd].passive_socket = false;
   sockets[sockfd].connect_id = -1;
   sockets[sockfd].addr = (struct sockaddr_un) {
     .sun_family = AF_UNSPEC, .sun_path = ""
   };
+  kfree(sockets[sockfd].msg.buffer);
   sockets[sockfd].msg = INIT_RING_BUF;
 
   return 0;

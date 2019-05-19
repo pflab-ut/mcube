@@ -62,15 +62,15 @@ void kthread_create(void (* /* __noreturn */ func)(void))
    * the ctontext switching code does.
    */
   irq_ctx->cs = KERNEL_CS;
-  irq_ctx->rip = (uintptr_t)func;
+  irq_ctx->rip = (uintptr_t) func;
   irq_ctx->ss = 0;
-  irq_ctx->rsp = (uintptr_t)stack;
+  irq_ctx->rsp = (uintptr_t) stack;
   irq_ctx->rflags = default_rflags().raw;
 
   /* For context switching code, which runs at the
    * ticks handler context, give a stack that respects
    * our IRQ stack protocol */
-  proc->pcb.rsp = (uintptr_t)irq_ctx;
+  proc->pcb.rsp = (uintptr_t) irq_ctx;
 
   /* Push the now completed proc to the runqueu */
   sched_enqueue(proc);

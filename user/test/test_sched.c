@@ -10,10 +10,16 @@
 #include <mcube/mcube.h>
 #if CONFIG_ARCH_X86
 
-__noreturn void loop_print(char ch, int color)
+__noreturn void loop_print(char ch, __unused int color)
 {
+  printk("loop_print()\n");
+
   while (true) {
+#if 1
+    putchar(ch);
+#else
     putchar_colored(ch, color);
+#endif
 
     for (int i = 0; i < 0xffff; i++) {
       pause();
@@ -53,7 +59,9 @@ __noreturn static void test5(void)
 
 bool test_sched(void)
 {
-  for (int i = 0; i < 20; i++) {
+  printk("test_sched()\n");
+
+  for (int i = 0; i < 1; i++) {
     kthread_create(test0);
     kthread_create(test1);
     kthread_create(test2);

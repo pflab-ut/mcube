@@ -27,11 +27,8 @@ static inline void print_sockets(void)
            "             addr.sun_famliy 0x%x addr.sun_path %s\n",
            i, sockets[i].used, sockets[i].passive_socket, sockets[i].connect_id,
            sockets[i].addr.sun_family, sockets[i].addr.sun_path);
-    PDEBUG("             sendmsg: ");
-    print_msg(sockets[i].sendmsg.buffer);
-    PDEBUG("\n");
-    PDEBUG("             recvmsg: ");
-    print_msg(sockets[i].recvmsg.buffer);
+    PDEBUG("             msg: ");
+    print_msg(sockets[i].msg.buffer);
     PDEBUG("\n");
   }
 }

@@ -133,7 +133,7 @@ static void __rq_add_proc(struct runqueue *rq, struct proc *proc, int prio,
   assert(VALID_PRIO(prio));
 
   proc->enter_runqueue_ts = PS->sys_ticks;
-  proc->state = TD_RUNNABLE;
+  proc->state = READY;
 
   switch (type) {
   case ENQ_NORMAL:
@@ -172,7 +172,7 @@ void sched_enqueue(struct proc *proc)
   save_local_irq(&flags);
 
   proc->enter_runqueue_ts = PS->sys_ticks;
-  proc->state = TD_RUNNABLE;
+  proc->state = READY;
   proc->runtime = 0;
 
   list_add_tail(&PS->just_queued, &proc->pnode);
@@ -243,12 +243,12 @@ static struct proc *preempt(struct proc *new_proc, int new_prio)
 {
   assert(new_proc != current);
   assert(list_empty(&new_proc->pnode));
-  assert(new_proc->state == TD_RUNNABLE);
+  assert(new_proc->state == READY);
 
   assert(VALID_PRIO(new_prio));
   PS->current_prio = new_prio;
 
-  new_proc->state = TD_ONCPU;
+  new_proc->state = RUNNING;
   new_proc->stats.dispatch_count++;
   new_proc->stats.rqwait_overall += PS->sys_ticks - new_proc->enter_runqueue_ts;
 
@@ -276,7 +276,7 @@ struct proc *sched_tick(void)
   PS->sys_ticks++;
   current->runtime++;
 
-  assert(current->state == TD_ONCPU);
+  assert(current->state == RUNNING);
   assert(VALID_PRIO(PS->current_prio));
 
   current->stats.runtime_overall++;
@@ -363,7 +363,7 @@ void schedulify_this_code_path(enum cpu_type t)
   barrier();
 
   proc_init(current);
-  current->state = TD_ONCPU;
+  current->state = RUNNING;
   PS->current_prio = DEFAULT_PRIO;
 }
 
@@ -486,3 +486,20 @@ void rq_dump(__unused struct runqueue *rq)
 #endif
 }
 
+
+void proc_init(struct proc *proc)
+{
+  memset(proc, 0, sizeof(struct proc));
+
+  proc->pid = kthread_alloc_pid();
+  pcb_init(&proc->pcb);
+  proc->state = UNADMITTED;
+  list_init(&proc->pnode);
+
+#if CONFIG_OPTION_FS_EXT2
+  proc->working_dir = EXT2_ROOT_INODE;
+#else
+  proc->working_dir = 0;
+#endif
+  unrolled_init(&proc->fdtable, 32);
+}
