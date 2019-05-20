@@ -22,9 +22,11 @@ int accept(int sockfd, __unused struct sockaddr *addr,
 {
   int ret = -1;
 
+  spin_lock(&socket_lock);
+
   if (sockets[sockfd].type != SOCK_STREAM
       && sockets[sockfd].type != SOCK_SEQPACKET) {
-    ret = EOPNOTSUPP;
+    errno = EOPNOTSUPP;
     goto out;
   }
 
@@ -37,7 +39,9 @@ int accept(int sockfd, __unused struct sockaddr *addr,
 
   /* TODO: use poll() to wait for new socket. */
   while (sockets[sockfd].connect_id == -1) {
+    spin_unlock(&socket_lock);
     delay(1000);
+    spin_lock(&socket_lock);
   }
 
   printk("accept(): sockets[%d].connect_id = %d\n", sockfd,
@@ -45,13 +49,14 @@ int accept(int sockfd, __unused struct sockaddr *addr,
   ret = sockets[sockfd].connect_id;
 
   if (!(sockets[sockfd].msg.buffer = (uint8_t *) kmalloc(MSG_BUFSIZE))) {
-    ret = -1;
+    errno = ENOMEM;
     goto out;
   }
 
   sockets[ret].connect_id = sockfd;
 
 out:
+  spin_unlock(&socket_lock);
   return ret;
 }
 
@@ -97,7 +102,7 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 
   if (sockets[sockfd].type != SOCK_STREAM
       && sockets[sockfd].type != SOCK_SEQPACKET) {
-    ret = EOPNOTSUPP;
+    errno = EOPNOTSUPP;
     goto out;
   }
 
@@ -122,7 +127,9 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 
   /* wait until connect id is set in client fd. */
   while (sockets[sockfd].connect_id == -1) {
+    spin_unlock(&socket_lock);
     delay(1000);
+    spin_lock(&socket_lock);
   }
 
 out:
