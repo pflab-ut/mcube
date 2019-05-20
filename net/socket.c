@@ -22,10 +22,17 @@ int accept(int sockfd, __unused struct sockaddr *addr,
 {
   int ret = -1;
 
+  if (sockets[sockfd].type != SOCK_STREAM
+      && sockets[sockfd].type != SOCK_SEQPACKET) {
+    ret = EOPNOTSUPP;
+    goto out;
+  }
+
   if (sockfd < 0 || sockfd >= SOMAXCONN) {
     /* Socket is not listening for connections,
      * or addrlen is invalid (e.g., is negative). */
     errno = EINVAL;
+    goto out;
   }
 
   /* TODO: use poll() to wait for new socket. */
@@ -88,8 +95,8 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
     goto out;
   }
 
-  if (sockets[sockfd].type != SOCK_STREAM &&
-      sockets[sockfd].type != SOCK_SEQPACKET) {
+  if (sockets[sockfd].type != SOCK_STREAM
+      && sockets[sockfd].type != SOCK_SEQPACKET) {
     ret = EOPNOTSUPP;
     goto out;
   }
@@ -200,7 +207,7 @@ int socket(int domain, int type, int protocol)
   return ret;
 }
 
-int shutdown(__unused int sockfd, __unused int how)
+int shutdown(int sockfd, __unused int how)
 {
   sockets[sockfd].used = false;
   sockets[sockfd].passive_socket = false;
@@ -214,16 +221,26 @@ int shutdown(__unused int sockfd, __unused int how)
   return 0;
 }
 
-ssize_t send(__unused int sockfd, __unused const void *buf, __unused size_t len,
-             __unused int flags)
+ssize_t send(int sockfd, const void *buf, size_t len, int flags)
 {
-  return 0;
+  if (flags != 0) {
+    printk("Error: cannot set flags 0x%x\n", flags);
+    errno = EINVAL;
+    return -1;
+  }
+
+  return write(sockfd, buf, len);
 }
 
-ssize_t recv(__unused int sockfd, __unused void *buf, __unused size_t len,
-             __unused int flags)
+ssize_t recv(int sockfd, void *buf, size_t len, int flags)
 {
-  return 0;
+  if (flags != 0) {
+    printk("Error: cannot set flags 0x%x\n", flags);
+    errno = EINVAL;
+    return -1;
+  }
+
+  return read(sockfd, buf, len);
 }
 
 void init_socket(void)

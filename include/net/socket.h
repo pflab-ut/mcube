@@ -224,6 +224,36 @@ typedef enum socket_type socket_type;
 /* Maximum queue length specifiable by listen.  */
 #define SOMAXCONN       128
 
+/* Bits in the FLAGS argument to `send', `recv', et al.  */
+enum {
+  MSG_OOB		= 0x01,	/* Process out-of-band data.  */
+  MSG_PEEK		= 0x02,	/* Peek at incoming messages.  */
+  MSG_DONTROUTE	= 0x04,	/* Don't use local routing.  */
+  /* DECnet uses a different name.  */
+  MSG_TRYHARD		= MSG_DONTROUTE,
+  MSG_CTRUNC		= 0x08,	/* Control data lost before delivery.  */
+  MSG_PROXY		= 0x10,	/* Supply or ask second address.  */
+  MSG_TRUNC		= 0x20,
+  MSG_DONTWAIT	= 0x40, /* Nonblocking IO.  */
+  MSG_EOR		= 0x80, /* End of record.  */
+  MSG_WAITALL		= 0x100, /* Wait for a full request.  */
+  MSG_FIN		= 0x200,
+  MSG_SYN		= 0x400,
+  MSG_CONFIRM		= 0x800, /* Confirm path validity.  */
+  MSG_RST		= 0x1000,
+  MSG_ERRQUEUE	= 0x2000, /* Fetch message from error queue.  */
+  MSG_NOSIGNAL	= 0x4000, /* Do not generate SIGPIPE.  */
+  MSG_MORE		= 0x8000,  /* Sender will send more.  */
+  MSG_WAITFORONE	= 0x10000, /* Wait for at least one packet to return.*/
+  MSG_BATCH		= 0x40000, /* sendmmsg: more messages coming.  */
+  MSG_ZEROCOPY	= 0x4000000, /* Use user data in kernel path.  */
+  MSG_FASTOPEN	= 0x20000000, /* Send data in TCP SYN.  */
+  MSG_CMSG_CLOEXEC	= 0x40000000	/* Set close_on_exit for file
+					   descriptor received through
+					   SCM_RIGHTS.  */
+};
+
+
 struct socket_struct {
   bool used;
   bool passive_socket;
