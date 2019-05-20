@@ -228,6 +228,9 @@ struct socket_struct {
   bool used;
   bool passive_socket;
   int connect_id;
+  int domain;
+  int type;
+  int protocol;
   struct sockaddr_un addr;
   ring_buf_t msg;
 };

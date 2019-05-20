@@ -103,7 +103,7 @@ struct isb isb;
 
 
 __unused struct buffer_dumper serial_char_dumper = {
-  .pr = print_uart,
+  .pr = printk,
   .formatter = buf_char_dump,
 };
 

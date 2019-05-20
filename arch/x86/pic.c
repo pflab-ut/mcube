@@ -45,7 +45,7 @@ static inline void i8259_mask(void)
  *
  * Unfortunately spuruious PIC interrupts do occur even if the
  * PIC is entirely masked. Thus, we remap the chips away from
- * IBM programmed reserved Intel exception numbers 0x8-0xF to
+ * IBM programmed reserved Intel exception numbers 0x8-0xf to
  * saner values at PIC_IRQ0_VECTOR and mask it afterwards.
  *
  * Those spurious interrupts do occur for an important reason:

@@ -16,10 +16,6 @@
 
 #ifndef __ASSEMBLY__
 
-/*
- * Dump the MP tables in case of a critical error
- */
-#define MP_DEBUG  1
 
 /*
  * Intel MP Floating Pointer structure

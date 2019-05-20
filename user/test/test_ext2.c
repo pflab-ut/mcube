@@ -26,17 +26,17 @@ __unused static struct buffer_dumper vga_char_dumper = {
 };
 
 __unused static struct buffer_dumper vga_null_dumper = {
-  .pr = print_uart,
+  .pr = printk,
   .formatter = buf_null_dump,
 };
 
 __unused static struct buffer_dumper serial_hex_dumper = {
-  .pr = print_uart,
+  .pr = printk,
   .formatter = buf_hex_dump,
 };
 
 __unused static struct buffer_dumper serial_null_dumper = {
-  .pr = print_uart,
+  .pr = printk,
   .formatter = buf_null_dump,
 };
 
@@ -384,7 +384,7 @@ __unused static void test_file_reads(void)
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
   assert(bd);
-  print_uart("c%d t%lu fr start\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu fr start\n", percpu_get(apic_id), current->pid);
 
   if (!(buf = kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
@@ -421,7 +421,7 @@ __unused static void test_file_reads(void)
 
   kfree(buf);
 
-  print_uart("c%d t%lu fr end!\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu fr end!\n", percpu_get(apic_id), current->pid);
 
   if (percpu_get(halt_thread_at_end)) {
     halt();
@@ -439,7 +439,7 @@ __unused static void test_block_reads(void)
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
-  print_uart("c%d t%lu br start\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu br start\n", percpu_get(apic_id), current->pid);
 
   /* All possible permumations: Burn, baby, Burn! */
   for (uint i = 0; i < isb.sb->blocks_count; i++) {
@@ -455,7 +455,7 @@ __unused static void test_block_reads(void)
 
   kfree(buf);
 
-  print_uart("c%d t%lu br end!\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu br end!\n", percpu_get(apic_id), current->pid);
 
   if (percpu_get(halt_thread_at_end)) {
     halt();
@@ -479,7 +479,7 @@ __unused static void test_file_existence(void)
 
   bd = (void *)percpu_get(dumper);
 
-  print_uart("c%d t%ld ex start\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%ld ex start\n", percpu_get(apic_id), current->pid);
 
   if (!(parent = kmalloc(4096))) {
     panic("Error: cannot allocate memory %lu\n", 4096);
@@ -512,7 +512,7 @@ __unused static void test_file_existence(void)
 
   kfree(parent);
   kfree(child);
-  print_uart("c%d t%ld ex end\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%ld ex end\n", percpu_get(apic_id), current->pid);
 
   if (percpu_get(halt_thread_at_end)) {
     halt();
@@ -695,8 +695,8 @@ static void test_ext2_up(void)
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
   /* Extract the modified ext2 volume out of the virtual machine: */
-  print_uart("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
-             ramdisk_get_len());
+  printk("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
+         ramdisk_get_len());
 
   test_inodes();
   test_block_reads();
@@ -772,7 +772,7 @@ again:
           "allocation returns inode #%lu?", nfree, inode->inum);
   }
 
-  print_uart("Success! All inodes now allocated; inode_alloc() got NULL!\n");
+  printk("Success! All inodes now allocated; inode_alloc() got NULL!\n");
 
   /* Deallocate half of the allocated inodes */
   for (uint i = 0; i < nfree / 2; i++) {
@@ -804,18 +804,18 @@ again:
     goto again;
   }
 
-  print_uart("\n");
-  print_uart("NOTE! All disk inodes are now allocated. Meanwhile, the ones "
-             "we've manually allocated are not linked by any dir entries "
-             "and have a dtime = 0. To make fsck happy, we'll deallocate "
-             "all of those 'malformed' inodes now :-)\n\n");
+  printk("\n");
+  printk("NOTE! All disk inodes are now allocated. Meanwhile, the ones "
+         "we've manually allocated are not linked by any dir entries "
+         "and have a dtime = 0. To make fsck happy, we'll deallocate "
+         "all of those 'malformed' inodes now :-)\n\n");
   unrolled_for_each(&all_allocated, void_inum) {
     inode = inode_get((uint64_t) void_inum);
-    print_uart("Deallocating inode #%lu\n", inode->inum);
+    printk("Deallocating inode #%lu\n", inode->inum);
     inode_mark_delete(inode);
     inode_put(inode);
   }
-  print_uart("Done!\n");
+  printk("Done!\n");
 #endif
 
 #if TEST_BLOCK_ALLOC_DEALLOC
@@ -1067,8 +1067,8 @@ out1:
     }
 
     path_get_parent(file->path, parent, child);
-    print_uart("Parent: '%s'\n", parent);
-    print_uart("Child: '%s'\n", child);
+    printk("Parent: '%s'\n", parent);
+    printk("Child: '%s'\n", child);
     parent_inum = (*parent == '\0') ?
                   (int64_t) current->working_dir : name_i(parent);
 
@@ -1124,7 +1124,7 @@ __noreturn static void test_alloc_dealloc(void)
   void *inode_ptr;
   bool complete = true;
 
-  print_uart("c%d t%lu a start\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu a start\n", percpu_get(apic_id), current->pid);
   unrolled_init(&head, 64);
 
   for (int i = 0; i < 100; i++) {
@@ -1142,8 +1142,8 @@ __noreturn static void test_alloc_dealloc(void)
     inode_mark_delete(inode_ptr);
     inode_put(inode_ptr);
   }
-  print_uart("c%d t%lu a %s\n", percpu_get(apic_id), current->pid,
-             (complete) ? "end!" : "no ino!");
+  printk("c%d t%lu a %s\n", percpu_get(apic_id), current->pid,
+         (complete) ? "end!" : "no ino!");
   halt();
 }
 
@@ -1174,8 +1174,8 @@ static bool test_ext2_smp(void)
 
   /* Extract the modified ext2 volume out of the virtual machine: */
   if (percpu_get(apic_id) == 0) {
-    print_uart("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
-               ramdisk_get_len());
+    printk("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
+           ramdisk_get_len());
   }
 
   for (int i = 0; i < 200; i++) {

@@ -128,7 +128,7 @@ static struct mpf_struct *get_mpf(void)
     return mpf;
   }
 
-  if ((mpf = search_for_mpf(VIRTUAL(0xF0000), 0x10000))) {
+  if ((mpf = search_for_mpf(VIRTUAL(0xf0000), 0x10000))) {
     return mpf;
   }
 
@@ -167,7 +167,6 @@ static int mpc_check(struct mpc_table *mpc)
   return 1;
 }
 
-#ifdef MP_DEBUG
 
 /*
  * Dump MP conf table header
@@ -196,7 +195,6 @@ void mpc_dump(struct mpc_table *mpc)
          mpf_checksum(mpc + 1, mpc->ext_length));
 }
 
-#endif /* MP_DEBUG */
 
 /*
  * MP base conf table entries parsers. Copy all the needed data

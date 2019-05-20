@@ -12,8 +12,8 @@
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
  */
 
-#define IDT_GATES  (0xFF + 1)
-#define EXCEPTION_GATES (0x1F + 1)
+#define IDT_GATES  (0xff + 1)
+#define EXCEPTION_GATES (0x1f + 1)
 
 #define GATE_INTERRUPT  0xe
 #define GATE_TRAP  0xf

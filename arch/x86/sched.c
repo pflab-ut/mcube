@@ -419,13 +419,13 @@ void print_proc_stats(__unused struct proc *proc, __unused int prio)
     rqwait_overall += PS->sys_ticks - proc->enter_runqueue_ts;
   }
 
-  print_uart("%lu:%d:%lu:%lu:%lu:%lu:%u:%u ", proc->pid, prio,
-             proc->stats.runtime_overall,
-             proc->stats.runtime_overall / dispatch_count,
-             rqwait_overall,
-             rqwait_overall / dispatch_count,
-             proc->stats.preempt_high_prio,
-             proc->stats.preempt_slice_end);
+  printk("%lu:%d:%lu:%lu:%lu:%lu:%u:%u ", proc->pid, prio,
+         proc->stats.runtime_overall,
+         proc->stats.runtime_overall / dispatch_count,
+         rqwait_overall,
+         rqwait_overall / dispatch_count,
+         proc->stats.preempt_high_prio,
+         proc->stats.preempt_slice_end);
 #endif
 }
 
@@ -438,7 +438,7 @@ void print_sched_stats(void)
 
   spin_lock(&printstats_lock);
 
-  print_uart("%lu ", PS->sys_ticks);
+  printk("%lu ", PS->sys_ticks);
   print_proc_stats(current, PS->current_prio);
 
   for (int i = MIN_PRIO; i <= MAX_PRIO; i++) {
@@ -453,7 +453,7 @@ void print_sched_stats(void)
   list_for_each(&PS->just_queued, proc, pnode) {
     print_proc_stats(proc, DEFAULT_PRIO);
   }
-  print_uart("\n");
+  printk("\n");
 
   spin_unlock(&printstats_lock);
 #endif
@@ -473,16 +473,16 @@ void rq_dump(__unused struct runqueue *rq)
 
   //  name = (rq == rq_active) ? "active" : "expired";
   name = (rq == PS->rq_active) ? "active" : "expired";
-  print_uart("Dumping %s table:\n", name);
+  printk("Dumping %s table:\n", name);
 
   for (int i = MAX_PRIO; i >= MIN_PRIO; i--) {
     if (!list_empty(&rq->head[i])) {
       list_for_each(&rq->head[i], proc, pnode)
-      print_uart("%lu ", proc->pid);
+      printk("%lu ", proc->pid);
     }
   }
 
-  print_uart("\n");
+  printk("\n");
 #endif
 }
 

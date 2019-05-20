@@ -15,17 +15,17 @@ static void hash_print_info(struct hash *hash)
   struct hash_elem *helem = NULL;
   uint64_t count;
 
-  print_uart("Printing Hash info:\n");
-  print_uart("Hash Address: 0x%lx\n", hash);
-  print_uart("Hash Array Length: %d\n", hash->len);
+  printk("Printing Hash info:\n");
+  printk("Hash Address: 0x%lx\n", hash);
+  printk("Hash Array Length: %d\n", hash->len);
 
   for (int i = 0; i < hash->len; i++) {
-    print_uart("Number of Elemenets in Hash List #%d = ", i);
+    printk("Number of Elemenets in Hash List #%d = ", i);
     count = 0;
     list_for_each(&hash->nodes_array[i], helem, node) {
       count++;
     }
-    //    print_uart("%lu\n", count);
+    // printk("%lu\n", count);
   }
 }
 
