@@ -7,7 +7,6 @@
 
 #if !CONFIG_ARCH_SIM
 
-
 struct socket_struct sockets[SOMAXCONN];
 
 #if CONFIG_ARCH_AXIS
@@ -216,16 +215,7 @@ int socket(int domain, int type, int protocol)
 
 int shutdown(int sockfd, __unused int how)
 {
-  sockets[sockfd].used = false;
-  sockets[sockfd].passive_socket = false;
-  sockets[sockfd].connect_id = -1;
-  sockets[sockfd].addr = (struct sockaddr_un) {
-    .sun_family = AF_UNSPEC, .sun_path = ""
-  };
-  kfree(sockets[sockfd].msg.buffer);
-  sockets[sockfd].msg = INIT_RING_BUF;
-
-  return 0;
+  return close(sockfd);
 }
 
 ssize_t send(int sockfd, const void *buf, size_t len, int flags)

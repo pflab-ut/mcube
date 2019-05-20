@@ -115,5 +115,19 @@ ssize_t write(int fd, const void *buf, size_t count)
   return count;
 }
 
+int close(int fd)
+{
+  sockets[fd].used = false;
+  sockets[fd].passive_socket = false;
+  sockets[fd].connect_id = -1;
+  sockets[fd].addr = (struct sockaddr_un) {
+    .sun_family = AF_UNSPEC, .sun_path = ""
+  };
+  kfree(sockets[fd].msg.buffer);
+  sockets[fd].msg = INIT_RING_BUF;
+
+  return 0;
+}
+
 
 #endif /* !CONFIG_ARCH_SIM */
