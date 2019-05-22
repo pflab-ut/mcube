@@ -133,6 +133,8 @@ void init_arch(void)
    * early on .. */
   init_kmalloc();
 
+  init_syscall();
+
   /*
    * Secondary-CPUs startup
    */

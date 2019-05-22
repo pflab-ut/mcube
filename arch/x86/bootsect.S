@@ -60,7 +60,7 @@ real_start:
   movw   $STACK_OFFSET, %sp
 
   /* Permanently save the BIOS-passed EDD Drive Number */
-  .equ   driveno, RCODE_DRIVE_NUMBER - MBR_SEG<<4
+  .equ   driveno, RCODE_DRIVE_NUMBER - MBR_SEG << 4
   movb   %dl, (driveno)
 
   MSG    (welcome)
@@ -337,30 +337,68 @@ sector:
  * known not to boot with the GDT being 8-byte unaligned. Intel also
  * recommends 16 byte alignment, so let it be.
  *
- * “The limit value is expressed in bytes and is added to the base
+ * "The limit value is expressed in bytes and is added to the base
  * address to get the address of the last valid byte.  A limit value
  * of 0 results in exactly 1 valid byte. Because IDT/GDT entries are
  * always eight bytes long, the limit should always be one less than
- * an integral multiple of eight (that is, 8N - 1).”  --Intel */
+ * an integral multiple of eight (that is, 8N - 1)."  --Intel */
 .align 16
+/*
+ * Global Descriptor 64-bits length
+ * [63-48]: base[31-24], G, D, L, AVL, limit[19-16]
+ * [47-32]: P, DPL[1-0], 1, 1, C, R, A, base[23-16]
+ * [31-16]: base[15-0]
+ * [15-0]:  limit[15-0]
+ *
+ * base:
+ *   32 bit starting memory address of the segment
+ * limit:
+ *   20 bit length of the segment. (More specifically, the address of the last
+ *   accessible data, so the length is one more that the value stored here.)
+ *   How exactly this should be interpreted depends on other bits of
+ *   the segment descriptor.
+ * G = Granularity:
+ *   If clear, the limit is in units of bytes,
+ *   with a maximum of 220 bytes. If set, the limit is in units of 4096-byte pages,
+ *   for a maximum of 232 bytes.
+ * D = Default operand size:
+ *   If clear, this is a 16-bit code segment; if set, this is a 32-bit segment
+ * L = Long-mode segment:
+ *   If set, this is a 64-bit segment (and D must be zero),
+ *   and code in this segment uses the 64-bit instruction encoding
+ * AVL = Available:
+ *   For software use, not used by hardware
+ * P = Present:
+ *   If clear, a "segment not present" exception is generated on any reference to this segment
+ * DPL = Descriptor privilege level:
+ *   Privilege level required to access this descriptor
+ * C = Conforming:
+ *   Code in this segment may be called from less-privileged levels
+ * R = Readable:
+ *   If clear, the segment may be executed but not read from
+ * A = Accessed:
+ *   This bit is set to 1 by hardware when the segment is accessed, and cleared by software
+ */
 gdt:
   /* since the null descriptor values are not used, we
    * save the gdt table descriptor here at its place */
   .word  gdt_end - gdt -1 # limit
-  .long  MBR_SEG<<4 + gdt  # NOTE! protected mode flat address
+  .long  MBR_SEG << 4 + gdt  # NOTE! protected mode flat address
   .word  0x0000    # padding
 gdt_cs:
   /* code segment descriptor */
-  .word  0xffff    # limit = 0xfffff
-  .word  0x0000    # base address = 0x00000
-  .byte  0x00, 0x9a  # P=1, DPL=00, S=1, TYPE=0xA (execute/read)
-  .byte  0xcf, 0x00  # granularity=4K, D=1
+  /* 0x00cf9a000000ffff */ 
+  .word  0xffff      # limit
+  .word  0x0000      # base
+  .word  0x9a00      # P=1, DPL=00, type=0xa (execute/read)
+  .word  0x00cf      # G=1 (4K), D=1, limit[16:19]=0xf
 gdt_ds:
-  /* data segment descriptor */
-  .word  0xffff    # limit = 0xfffff
-  .word  0x0000    # base address = 0x00000
-  .byte  0x00, 0x92  # P=1, DPL=00, S=1, TYPE=0x2 (read/write)
-  .byte  0xcf, 0x00  # granularity=4K, B=1
+ /* data segment descriptor */
+ /* 0x00cf92000000ffff */
+  .word  0xffff      # limit
+  .word  0x0000      # base
+  .word  0x9200      # P=1, DPL=00, type=0x2 (read/write)
+  .word  0x00cf      # G=1 (4K), B=1, limit[16:19]=0xf
 gdt_end:
 
 idtdesc:

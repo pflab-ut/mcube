@@ -347,6 +347,42 @@ zap_identity:
  * are loaded." --Intel
  */
 .align 16
+/*
+ * Global Descriptor 64-bits length
+ * [63-48]: base[31-24], G, D, L, AVL, limit[19-16]
+ * [47-32]: P, DPL[1-0], 1, 1, C, R, A, base[23-16]
+ * [31-16]: base[15-0]
+ * [15-0]:  limit[15-0]
+ *
+ * base:
+ *   32 bit starting memory address of the segment
+ * limit:
+ *   20 bit length of the segment. (More specifically, the address of the last
+ *   accessible data, so the length is one more that the value stored here.)
+ *   How exactly this should be interpreted depends on other bits of
+ *   the segment descriptor.
+ * G = Granularity:
+ *   If clear, the limit is in units of bytes,
+ *   with a maximum of 220 bytes. If set, the limit is in units of 4096-byte pages,
+ *   for a maximum of 232 bytes.
+ * D = Default operand size:
+ *   If clear, this is a 16-bit code segment; if set, this is a 32-bit segment
+ * L = Long-mode segment:
+ *   If set, this is a 64-bit segment (and D must be zero),
+ *   and code in this segment uses the 64-bit instruction encoding
+ * AVL = Available:
+ *   For software use, not used by hardware
+ * P = Present:
+ *   If clear, a "segment not present" exception is generated on any reference to this segment
+ * DPL = Descriptor privilege level:
+ *   Privilege level required to access this descriptor
+ * C = Conforming:
+ *   Code in this segment may be called from less-privileged levels
+ * R = Readable:
+ *   If clear, the segment may be executed but not read from
+ * A = Accessed:
+ *   This bit is set to 1 by hardware when the segment is accessed, and cleared by software
+ */
 .globl global_gdt
 .globl global_gdt_size
   .equ   global_gdt_size, global_gdt_end - global_gdt
@@ -357,17 +393,17 @@ global_gdt:
 gdt_cs:
   .word  0xffff    # limit = 0xfffff
   .word  0x0000    # base address = 0x00000
-  .byte  0x00, 0x9a  # P=1, DPL=00, S=1, TYPE=0xA (execute/read)
-  .byte  0xcf, 0x00  # granularity=4K, D=1
+  .word  0x9a00    # P=1, DPL=00, S=1, TYPE=0xa (execute/read)
+  .word  0x00cf    # granularity=4K, D=1
 gdt_ds:
   .word  0xffff    # limit = 0xfffff
   .word  0x0000    # base address = 0x00000
-  .byte  0x00, 0x92  # P=1, DPL=00, S=1, TYPE=0x2 (read/write)
-  .byte  0xcf, 0x00  # granularity=4K, B=1
+  .word  0x9200    # P=1, DPL=00, S=1, TYPE=0x2 (read/write)
+  .word  0x00cf    # granularity=4K, B=1
 gdt_cs16:
   .word  0xffff    # limit
   .word  PMODE16_START  # base
-  .word  0x9a00    # P=1, DPL=00, TYPE=0xA (execute/read)
+  .word  0x9a00    # P=1, DPL=00, TYPE=0xa (execute/read)
   .word  0x0000    # granularity=byte, D=0 (16-bit)
 gdt_ds16:
   .word  0xffff    # limit
@@ -386,8 +422,8 @@ gdt:
 
   /* long mode Code segment */
   .long  0x00000000    # base/limit; ignored in LM
-  .byte  0x00, 0x98    # P=1, DPL=0, C/conforming=0
-  .byte  0xa0, 0x00    # L=1, D=0, base[24-31] ignored
+  .word  0x9800    # P=1, DPL=0, C/conforming=0
+  .word  0x00a0    # L=1, D=0, base[24-31] ignored
 
 gdt_end:
 

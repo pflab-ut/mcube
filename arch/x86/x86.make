@@ -86,7 +86,8 @@ ASMS = \
  $(TOP_DIR)/arch/x86/trampoline.S	\
  $(TOP_DIR)/arch/x86/rmcall.S	\
  $(TOP_DIR)/arch/x86/e820.S	\
- $(TOP_DIR)/arch/x86/load_ramdisk.S
+ $(TOP_DIR)/arch/x86/load_ramdisk.S \
+ $(TOP_DIR)/arch/x86/entry.S
 
 # Memory management
 SRCS +=	\

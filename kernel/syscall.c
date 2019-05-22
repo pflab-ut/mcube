@@ -95,7 +95,7 @@ asmlinkage int sys_bad_syscall(int number)
   return -1;
 }
 
-void *const sys_call_table[] = {
+void *const syscall_table[] = {
   sys_sched,
   sys_end_job,
   sys_get_exec_time,

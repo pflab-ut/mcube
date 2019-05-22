@@ -110,30 +110,35 @@ static void handle_syscall(interrupt_context_t *context)
 
 void init_syscall(void)
 {
-#if 0
-  // Request the CPU's extended features.
-  cpuid_info_t regs4;
-  cpuid(0x80000001, &regs4);
+  uint64_t val;
+  cpuid_info_t cinfo;
 
-  // Bit 11 of rdx tells us if the SYSCALL/SYSRET instructions are
-  // available. If they're not, raise an invalid opcode exception.
-  if (!(regs4.edx & (1 << 11))) {
-    invalid_opcode();
+  /* Check CPUID.0x80000001 for syscall support */
+  cpuid(0x80000001, &cinfo);
+
+  if (!((cinfo.rdx >> 11) & 1) || !((cinfo.rdx >> 29) & 1)) {
+    panic("syscall is not supported.");
   }
 
-  // Update the MSR_STAR with the segment selectors that will be used
-  // by SYSCALL and SYSRET.
-  uint64_t star = rdmsr(MSR_STAR);
-  star &= 0x00000000ffffffff;
-  star |= (uint64_t) GDT64_SEGMENT_SELECTOR_KERNEL_CODE << 32;
-  star |= (uint64_t)((GDT64_SEGMENT_SELECTOR_USER_CODE - 16) | 3) << 48;
-  wrmsr(MSR_STAR, star);
-  //  printk("star = %x %x\n", star >> 32, star & 0xffffffff);
-  // Write the address of the system call handler used by SYSCALL.
-  wrmsr(MSR_LSTAR, (uint64_t) handle_syscall);
+  printk("syscall is OK!\n");
 
-  // Write the CPU flag mask used during SYSCALL.
-  wrmsr(MSR_SYSCALL_MASK, 0);
+  /* EFLAG mask */
+  wrmsr(MSR_IA32_FMASK, 0x0002);
 
+  /* Entry point to the system call */
+  wrmsr(MSR_IA32_LSTAR, (uint64_t) syscall_entry);
+#if 0
+
+  /* Syscall/sysret segments */
+  val = GDT_RING0_CODE_SEL | ((GDT_RING3_CODE32_SEL + 3) << 16);
+  wrmsr(MSR_IA32_STAR, val << 32);
+
+  /* Enable syscall */
+  val = rdmsr(MSR_IA32_EFER);
+  val |= 1;
+  wrmsr(MSR_IA32_EFER, val);
+
+  /* Call assembly syscall_setup() */
+  syscall_setup((uint64_t) table, (uint64_t) nr);
 #endif
 }

@@ -3,8 +3,8 @@
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_MCUBE_SYSCALLS_H__
-#define __MCUBE_MCUBE_SYSCALLS_H__
+#ifndef __MCUBE_MCUBE_SYSCALL_H__
+#define __MCUBE_MCUBE_SYSCALL_H__
 
 
 #if !CONFIG_ARCH_SIM
@@ -16,7 +16,7 @@
 #define SYS_get_cpu_id 4
 #define SYS_get_mode_level 5
 #define SYS_move_to_kernel_level 6
-#define NR_syscalls 7
+#define NR_SYSCALLS 7
 
 #endif /* !CONFIG_ARCH_SIM */
 
@@ -50,7 +50,9 @@ asmlinkage int syscall1(int number, unsigned long arg1);
 asmlinkage int syscall2(int number, unsigned long arg1, unsigned long arg2);
 
 
+void syscall_entry(void);
+
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /* __MCUBE_MCUBE_SYSCALLS_H__ */
+#endif /* __MCUBE_MCUBE_SYSCALL_H__ */

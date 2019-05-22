@@ -175,8 +175,43 @@ startup_64:
  * We can't substract symbols from different ELF sections,
  * so we don't use the data section for below structuers.
  */
-
 .align 16
+/*
+ * Global Descriptor 64-bits length
+ * [63-48]: base[31-24], G, D, L, AVL, limit[19-16]
+ * [47-32]: P, DPL[1-0], 1, 1, C, R, A, base[23-16]
+ * [31-16]: base[15-0]
+ * [15-0]:  limit[15-0]
+ *
+ * base:
+ *   32 bit starting memory address of the segment
+ * limit:
+ *   20 bit length of the segment. (More specifically, the address of the last
+ *   accessible data, so the length is one more that the value stored here.)
+ *   How exactly this should be interpreted depends on other bits of
+ *   the segment descriptor.
+ * G = Granularity:
+ *   If clear, the limit is in units of bytes,
+ *   with a maximum of 220 bytes. If set, the limit is in units of 4096-byte pages,
+ *   for a maximum of 232 bytes.
+ * D = Default operand size:
+ *   If clear, this is a 16-bit code segment; if set, this is a 32-bit segment
+ * L = Long-mode segment:
+ *   If set, this is a 64-bit segment (and D must be zero),
+ *   and code in this segment uses the 64-bit instruction encoding
+ * AVL = Available:
+ *   For software use, not used by hardware
+ * P = Present:
+ *   If clear, a "segment not present" exception is generated on any reference to this segment
+ * DPL = Descriptor privilege level:
+ *   Privilege level required to access this descriptor
+ * C = Conforming:
+ *   Code in this segment may be called from less-privileged levels
+ * R = Readable:
+ *   If clear, the segment may be executed but not read from
+ * A = Accessed:
+ *   This bit is set to 1 by hardware when the segment is accessed, and cleared by software
+ */
 gdt:
   .word  gdt_end - gdt - 1  # limit
   .long  SMPBOOT_START + (gdt - trampoline)
@@ -186,7 +221,7 @@ gdt_cs:
   /* 0x00cf9a000000ffff */
   .word  0xffff      # limit
   .word  0x0000      # base
-  .word  0x9a00      # P=1, DPL=00, type=0xa (exec/read)
+  .word  0x9a00      # P=1, DPL=00, type=0xa (execute/read)
   .word  0x00cf      # G=1 (4K), D=1, limit[16:19]=0xf
 gdt_ds:
   /* 0x00cf92000000ffff */

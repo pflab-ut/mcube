@@ -12,8 +12,16 @@
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
  */
 
-#define MSR_FS_BASE  0xC0000100
-#define MSR_GS_BASE  0xC0000101
+#define MSR_FS_BASE  0xc0000100
+#define MSR_GS_BASE  0xc0000101
+
+/* Machine-specific registers (MSRs) */
+#define MSR_APIC_BASE           0x1b
+#define MSR_PLATFORM_INFO       0xce
+#define MSR_IA32_EFER           0xc0000080
+#define MSR_IA32_STAR           0xc0000081
+#define MSR_IA32_LSTAR          0xc0000082
+#define MSR_IA32_FMASK          0xc0000084
 
 #ifndef __ASSEMBLY__
 
