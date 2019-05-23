@@ -43,14 +43,19 @@ asmlinkage int sys_get_mode_level(void);
 asmlinkage int sys_move_to_kernel_level(void);
 asmlinkage int sys_bad_syscall(int number);
 
+#if !CONFIG_ARCH_SIM
 
-
-asmlinkage int syscall0(int number);
-asmlinkage int syscall1(int number, unsigned long arg1);
-asmlinkage int syscall2(int number, unsigned long arg1, unsigned long arg2);
+/* int syscall(arg0, ..., arg5) */
+asmlinkage int syscall(int number, ...);
 
 
 void syscall_entry(void);
+void syscall_setup(void *table, uint64_t nr_syscalls);
+
+extern void *syscall_table[NR_SYSCALLS + 1];
+
+#endif /* !CONFIG_ARCH_SIM */
+
 
 #endif /* !__ASSEMBLY__ */
 

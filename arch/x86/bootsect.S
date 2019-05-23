@@ -87,7 +87,7 @@ real_start:
    * at 0x10000. For simplicity, we'll copy the disk's first
    * 640 sectors post the mbr to ram regardless of the real
    * kernel size; we may optimize later. The kernel will be in
-   * the range (0x10000-0x50000]; sector size = 512 bytes.
+   * the range [0x10000-0x50000); sector size = 512 bytes.
    *
    * INT 0x13, function 0x42 - extended read sectors
    * input  %dl     - drive number (provided by bios in %dl)
@@ -230,7 +230,7 @@ reloc:
  * Port 0x64 output:
  * (send commands to motherboard's keyboard controller)
  *
- * 0xD0: Read the controller's state/output-port. The byte can
+ * 0xd0: Read the controller's state/output-port. The byte can
  * be read by reading from 0x60 afterwards.
  * bit1: if set, A20 line is on. The opposite if clear.
  *
@@ -241,8 +241,8 @@ reloc:
 
   .equ   KCOMM, 0x64    # controller command io port
   .equ   KDATA, 0x60    # controller data io port
-  .equ   KCOMM_GETSTATE, 0xD0
-  .equ   KCOMM_SETSTATE, 0xD1
+  .equ   KCOMM_GETSTATE, 0xd0
+  .equ   KCOMM_SETSTATE, 0xd1
 
 enable_a20:
   /* First we read the controller state and save it. To avoid
@@ -344,40 +344,34 @@ sector:
  * an integral multiple of eight (that is, 8N - 1)."  --Intel */
 .align 16
 /*
- * Global Descriptor 64-bits length
- * [63-48]: base[31-24], G, D, L, AVL, limit[19-16]
- * [47-32]: P, DPL[1-0], 1, 1, C, R, A, base[23-16]
- * [31-16]: base[15-0]
- * [15-0]:  limit[15-0]
+ * 31                                                             0
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * | Base address  |G|D|X|A| Limit |P|DPL|S| Type  | Base address  | +8
+ * | 31-24         | |B| | | 19-16 | |   | |       | 23-16         |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * | Base address                  | Segment limit                 | +0
+ * | 15-0                          | 15-0                          |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * 63                                                            32
  *
- * base:
- *   32 bit starting memory address of the segment
- * limit:
- *   20 bit length of the segment. (More specifically, the address of the last
- *   accessible data, so the length is one more that the value stored here.)
- *   How exactly this should be interpreted depends on other bits of
- *   the segment descriptor.
- * G = Granularity:
- *   If clear, the limit is in units of bytes,
- *   with a maximum of 220 bytes. If set, the limit is in units of 4096-byte pages,
- *   for a maximum of 232 bytes.
- * D = Default operand size:
- *   If clear, this is a 16-bit code segment; if set, this is a 32-bit segment
- * L = Long-mode segment:
- *   If set, this is a 64-bit segment (and D must be zero),
- *   and code in this segment uses the 64-bit instruction encoding
- * AVL = Available:
- *   For software use, not used by hardware
- * P = Present:
- *   If clear, a "segment not present" exception is generated on any reference to this segment
- * DPL = Descriptor privilege level:
- *   Privilege level required to access this descriptor
- * C = Conforming:
- *   Code in this segment may be called from less-privileged levels
- * R = Readable:
- *   If clear, the segment may be executed but not read from
- * A = Accessed:
- *   This bit is set to 1 by hardware when the segment is accessed, and cleared by software
+ * G: Granularity bit. If 0 the limit is in 1 B blocks (byte granularity),
+ *    if 1 the limit is in 4 KiB blocks (page granularity).
+ * DB: Size bit. If 0 the selector defines 16 bit protected mode. If 1 it
+ *     defines 32 bit protected mode. You can have both 16 bit and 32 bit
+ *     selectors at once.
+ * X: L bit in x86-64
+ * P: Present bit. This must be 1 for all valid selectors.
+ * DPL: Privilege, 2 bits. Contains the ring level, 0 = highest (kernel),
+ *      3 = lowest (user applications).
+ * A: 0
+ * S: 1
+ * Type: Ex DC RW Ac
+ * Ex: Executable bit. If 1 code in this segment can be executed, ie. a
+ *     code selector. If 0 it is a data selector.
+ * DC: Direction bit/Conforming bit.
+ * RW: Readable bit/Writable bit.
+ * Ac: Accessed bit. Just set to 0. The CPU sets this to 1 when the segment
+ *     is accessed.
  */
 gdt:
   /* since the null descriptor values are not used, we

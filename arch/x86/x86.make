@@ -65,9 +65,6 @@ AFLAGS = -D__ASSEMBLY__
 # merging global common variables
 LDFLAGS += --warn-common
 
-# Our global kernel linker script, after being
-# 'cpp' pre-processed from the *.ld source
-PROCESSED_LD_SCRIPT = kern/kernel.ldp
 
 BOOTSECT_ASMS =		\
  $(TOP_DIR)/arch/x86/bootsect.S
@@ -83,11 +80,12 @@ BOOTSECT_BIN = $(BOOTSECT_TARGET).bin
 # Core and Secondary CPUs bootstrap
 ASMS = \
  $(TOP_DIR)/arch/x86/head.S	\
- $(TOP_DIR)/arch/x86/trampoline.S	\
  $(TOP_DIR)/arch/x86/rmcall.S	\
  $(TOP_DIR)/arch/x86/e820.S	\
  $(TOP_DIR)/arch/x86/load_ramdisk.S \
- $(TOP_DIR)/arch/x86/entry.S
+ $(TOP_DIR)/arch/x86/asm_syscall.S \
+ $(TOP_DIR)/arch/x86/trampoline.S	\
+
 
 # Memory management
 SRCS +=	\

@@ -8,16 +8,16 @@
 
 asmlinkage int sys_sched(void)
 {
-  print("sys_sched()\n");
-  do_sched();
+  printk("sys_sched()\n");
+  //  do_sched();
   return 0;
 }
 
 asmlinkage int sys_end_job(unsigned long *id_ptr)
 {
   struct thread_struct *th = &ths[*id_ptr - 1];
-  print("sys_end_job()\n");
-  print("id_ptr = %lu\n", *id_ptr);
+  printk("sys_end_job()\n");
+  printk("id_ptr = %lu\n", *id_ptr);
   th->sched.remaining = 0;
   do_end_job(th);
   return 0;
@@ -28,10 +28,10 @@ asmlinkage int sys_get_exec_time(unsigned long *id_ptr,
                                  unsigned long *cputime_ptr)
 {
   struct thread_struct *th = &ths[*id_ptr - 1];
-  print("sys_get_cputime()\n");
+  printk("sys_get_cputime()\n");
 #if 0
-  print("id_ptr = 0x%lx id = %lu\n", id_ptr, *id_ptr);
-  print("cputime_ptr = 0x%lx cputime = %lu\n", cputime_ptr, *cputime_ptr);
+  printk("id_ptr = 0x%lx id = %lu\n", id_ptr, *id_ptr);
+  printk("cputime_ptr = 0x%lx cputime = %lu\n", cputime_ptr, *cputime_ptr);
 #endif
   *cputime_ptr = th->sched.sum_exec_time + tsc2nsec(get_current_cpu_time()
                                                     - th->sched.begin_cpu_time);
@@ -83,19 +83,19 @@ asmlinkage int sys_move_to_kernel_level(void)
   printk("spsr = 0x%lx\n", spsr);
   asm volatile("mrs %0, elr_el1" : "=r"(elr));
   printk("elr = 0x%x\n", elr);
-  //  print("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
+  //  printk("sys_get_mode_level() = %d\n", call_sys_get_mode_level());
 #endif /* CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER */
   return 0;
 }
 
 asmlinkage int sys_bad_syscall(int number)
 {
-  print("sys_bad_syscall()\n");
-  print("number = %d\n", number);
+  printk("sys_bad_syscall()\n");
+  printk("number = %d\n", number);
   return -1;
 }
 
-void *const syscall_table[] = {
+void *syscall_table[] = {
   sys_sched,
   sys_end_job,
   sys_get_exec_time,

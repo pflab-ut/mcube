@@ -74,6 +74,17 @@ static inline unsigned long get_cpu_id(void)
   return (cinfo.rbx & 0x0f000000) >> 24;
 }
 
+static inline bool is_syscall_available(cpuid_info_t *cinfo)
+{
+  return (cinfo->rdx >> 11) & 1;
+}
+
+static inline bool is_long_mode_available(cpuid_info_t *cinfo)
+{
+  return (cinfo->rdx >> 29) & 1;
+}
+
+
 void init_syscall(void);
 
 

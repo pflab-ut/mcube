@@ -37,6 +37,17 @@ extern double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* ENABLE_FPU */
 
 
+void set_cpu_clock(void);
+
+void init_fpu(void);
+void init_cpu(void);
+void init_ap(void);
+void init_smp(void);
+
+struct full_regs;
+void dump_registers(struct full_regs *regs);
+
+
 #if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
 /**
  * @struct cpuid_info
@@ -80,18 +91,8 @@ static inline int get_nr_cpu_cores(void)
   return 1;
 }
 
+
 #endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
-
-
-void set_cpu_clock(void);
-
-void init_fpu(void);
-void init_cpu(void);
-void init_ap(void);
-void init_smp(void);
-
-struct full_regs;
-void dump_registers(struct full_regs *regs);
 
 
 #endif /* __ASSEMBLY__ */
