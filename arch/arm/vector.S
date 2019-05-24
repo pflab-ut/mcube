@@ -168,9 +168,9 @@ vector_sync_el1h:
   stbl    .req    x27                                     // syscall table pointer
 
 el1h_svc:
-  adr     stbl, sys_call_table                    // load syscall table pointer
+  adr     stbl, syscall_table                    // load syscall table pointer
   uxtw    scno, w8                                // syscall number in w8
-  mov     sc_nr, #NR_syscalls
+  mov     sc_nr, #NR_SYSCALLS
 //  enable_local_irq
   cmp     scno, sc_nr                             // check upper syscall limit
   b.hs    el1h_ni_sys
@@ -210,9 +210,9 @@ vector_sync_el0_64:
   stbl    .req    x27                                     // syscall table pointer
 
 el0_svc:  
-  adr     stbl, sys_call_table                    // load syscall table pointer
+  adr     stbl, syscall_table                    // load syscall table pointer
   uxtw    scno, w8                                // syscall number in w8
-  mov     sc_nr, #NR_syscalls
+  mov     sc_nr, #NR_SYSCALLS
 //  enable_local_irq
   cmp     scno, sc_nr                             // check upper syscall limit
   b.hs    el0_ni_sys
