@@ -17,7 +17,7 @@ else
   CC = $(CCACHE) $(CROSS_PREFIX)gcc
   LD = ld
   ASFLAGS = -f elf64
-  OBJDUMP = $(CROSS_PREFIX)objdump -D -M intel
+  OBJDUMP = $(CROSS_PREFIX)objdump -D
   OBJCOPY = $(CROSS_PREFIX)objcopy
   LDFLAGS += -nostdinc -nostdlib -T scripts/linker/x86-elf.ldp
 endif
@@ -77,13 +77,15 @@ BOOTSECT_BIN = $(BOOTSECT_TARGET).bin
 # Object files listings
 #
 
-# Core and Secondary CPUs bootstrap
+# Core (unmapped)
 ASMS = \
  $(TOP_DIR)/arch/x86/head.S	\
  $(TOP_DIR)/arch/x86/rmcall.S	\
  $(TOP_DIR)/arch/x86/e820.S	\
- $(TOP_DIR)/arch/x86/load_ramdisk.S \
- $(TOP_DIR)/arch/x86/asm_syscall.S \
+ $(TOP_DIR)/arch/x86/load_ramdisk.S
+
+# Core and Secondary CPUs bootstrap (mapped as C codes)
+ASMS += $(TOP_DIR)/arch/x86/utils.S \
  $(TOP_DIR)/arch/x86/trampoline.S	\
 
 

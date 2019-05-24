@@ -212,6 +212,7 @@ fail:
 #define for_all_cpus_except_bootstrap(cpu)  \
   for (cpu = &cpus[1]; cpu != &cpus[mptables_get_nr_cpus()]; cpu++)
 
+spinlock_t gdt_lock = INIT_SPINLOCK;
 
 /*
  * AP cores C code entry. We come here from the trampoline,
@@ -227,6 +228,12 @@ __noreturn void secondary_start(void)
 
   /* Quickly tell the parent we're alive */
   ++nr_alive_cpus;
+#if 0
+  spin_lock(&gdt_lock);
+  gdt_init();
+  gdt_load();
+  spin_unlock(&gdt_lock);
+#endif
 
   schedulify_this_code_path(SECONDARY);
   apic_local_regs_init();
@@ -265,6 +272,7 @@ void smpboot_init(void)
   if (!(params = kmalloc(sizeof(*params)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*params));
   }
+
 
   params->cr3 = get_cr3();
   params->idtr = get_idt();

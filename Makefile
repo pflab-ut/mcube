@@ -181,18 +181,18 @@ ifeq ($(ARCH_NAME), sim)
 	$(TARGET) $(ARGS)
 else ifeq ($(ARCH_NAME), x86)
 ifeq ($(OUTPUT_NAME), console)
-	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -smp 4
+	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -m 1G -smp 4
 else
-	qemu-system-x86_64 build/mcube-hd.img -nographic -serial mon:stdio -smp 4 | $(TEE) $(UART_FILE)
+	qemu-system-x86_64 build/mcube-hd.img -nographic -serial mon:stdio -m 1G -smp 4 | $(TEE) $(UART_FILE)
 endif
 
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
-	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET) | $(TEE) $(UART_FILE)
+	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 # with dd file
-#	qemu-system-aarch64 -M raspi3 -drive file=test.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET) | $(TEE) $(UART_FILE)
+#	qemu-system-aarch64 -M raspi3 -drive file=test.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 # for MINI UART
-#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET) | $(TEE) $(UART_FILE)
+#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 else ifeq ($(ARCH_NAME), axis)
 #	$(RUN_AXIS)
 	$(RUN_AXIS) "+define+PRINT_ALL"
@@ -204,15 +204,15 @@ endif
 grun:
 ifeq ($(ARCH_NAME), x86)
 ifeq ($(OUTPUT_NAME), console)
-	qemu-system-x86_64 build/mcube-hd.img -curses -smp 4
+	qemu-system-x86_64 build/mcube-hd.img -curses -m 1G -smp 4
 else
-	qemu-system-x86_64 build/mcube-hd.img -serial mon:stdio -smp 4 | $(TEE) $(UART_FILE)
+	qemu-system-x86_64 build/mcube-hd.img -serial mon:stdio -m 1G -smp 4 | $(TEE) $(UART_FILE)
 endif
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
-	qemu-system-aarch64 -M raspi3 -serial mon:stdio -kernel $(TARGET) | $(TEE) $(UART_FILE)
+	qemu-system-aarch64 -M raspi3 -serial mon:stdio -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 # for MINI UART
-#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -kernel $(TARGET) | $(TEE) $(UART_FILE)
+#	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 endif
 
 mrun:

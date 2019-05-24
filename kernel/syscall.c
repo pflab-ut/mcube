@@ -15,8 +15,8 @@ asmlinkage int sys_sched(void)
 
 asmlinkage int sys_end_job(unsigned long *id_ptr)
 {
-  struct thread_struct *th = &ths[*id_ptr - 1];
   printk("sys_end_job()\n");
+  struct thread_struct *th = &ths[*id_ptr - 1];
   printk("id_ptr = %lu\n", *id_ptr);
   th->sched.remaining = 0;
   do_end_job(th);
@@ -45,6 +45,7 @@ asmlinkage int sys_mcube_write(char *buf)
 
 asmlinkage int sys_get_cpu_id(void)
 {
+  printk("sys_get_cpu_id()\n");
   return get_cpu_id();
 }
 

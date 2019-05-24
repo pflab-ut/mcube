@@ -27,7 +27,8 @@
  */
 
 #include <mcube/mcube.h>
-
+#include "rmcommon.h"
+ 
 .code16
 
 .text

@@ -86,6 +86,7 @@ static inline bool is_long_mode_available(cpuid_info_t *cinfo)
 
 
 void init_syscall(void);
+void change_ring0_to_ring3(uint64_t selector);
 
 
 #endif /* __ASSEMBLY__ */

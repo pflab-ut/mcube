@@ -58,7 +58,8 @@ static void map_pml2_range(struct pml2e *pml2_base, uintptr_t vstart,
 
     pml2e->present = 1;
     pml2e->read_write = 1;
-    pml2e->user_supervisor = 0;
+    //    pml2e->user_supervisor = 0;
+    pml2e->user_supervisor = 1;
     pml2e->__reserved1 = 1;
     pml2e->page_base = (uintptr_t)pstart >> PAGE_SHIFT_2MB;
 

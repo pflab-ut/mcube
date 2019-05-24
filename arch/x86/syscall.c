@@ -36,6 +36,13 @@ int call_sys_write(char *buf)
   return 0;
 }
 
+unsigned long call_sys_get_cpu_id(void)
+{
+  unsigned long ret = 0;
+  syscall(SYS_get_cpu_id, (unsigned long) &ret);
+  return ret;
+}
+
 int call_sys_get_mode_level(void)
 {
   int ret = 0;
@@ -62,19 +69,17 @@ void init_syscall(void)
     panic("syscall is not supported.");
   }
 
-  printk("syscall is OK!\n");
+  printk("enable syscall\n");
 
   /* EFLAG mask */
   wrmsr(MSR_IA32_FMASK, 0x0002);
 
   /* Entry point to the system call */
   wrmsr(MSR_IA32_LSTAR, (uint64_t) syscall_entry);
-#if 0
 
   /* Syscall/sysret segments */
   val = GDT_RING0_CODE_SEL | ((GDT_RING3_CODE32_SEL + 3) << 16);
   wrmsr(MSR_IA32_STAR, val << 32);
-#endif
 
   /* Enable syscall */
   val = rdmsr(MSR_IA32_EFER);
@@ -83,6 +88,13 @@ void init_syscall(void)
 
   /* Call assembly syscall_setup() */
   //  syscall_setup(syscall_table, (uint64_t) NR_SYSCALLS);
+  printk("call change_ring0_to_ring3()\n");
+  change_ring0_to_ring3(GDT_RING3_CODE64_SEL + 3);
 
-  call_sys_sched();
+  //  __asm__ __volatile__ ("movq %cr0,%rax");
+  //  call_sys_sched();
+  //  call_sys_end_job();
+  //  call_sys_get_cpu_id();
+  for (;;)
+    ;
 }

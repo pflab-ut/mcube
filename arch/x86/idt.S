@@ -112,7 +112,7 @@ default_exception_handler:
   jmp    1b
 
 idt_msg:
-  .ascii "Exception: vector=%d, errcode=0x%lx, %%cs=0x%lx, "
+  .ascii "Exception: vector=0x%lx, errcode=0x%lx, %%cs=0x%lx, "
   .ascii "%%rip=0x%lx, %%ss=0x%lx, %%rsp=0x%lx, %%rflags=0x%lx, "
   .ascii "%%cr2=0x%lx, %%cr3=0x%lx, %%cr4=0x%lx \n"
   .byte  0
