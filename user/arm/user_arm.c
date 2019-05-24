@@ -161,11 +161,14 @@ int user_ap_main(__unused int argc, __unused char *argv[])
 
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
+  //  char str[128];
   //  print("user_arch_main()\n");
   //  user_thread_main();
   // user_ap_main();
   // user_dmac_main();
   //  kernel_level_main();
+  //  sprintf(str, "abc");
+  //  printk("str = %s\n", str);
   barrier();
   //  test_ring_buf();
 #if CONFIG_ARCH_ARM_RASPI3

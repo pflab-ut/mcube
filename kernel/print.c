@@ -712,7 +712,6 @@ void printk_bust_all_locks(void)
 }
 
 
-
 #endif
 
 int puts(const char *s)
@@ -726,6 +725,8 @@ int puts(const char *s)
 
   return n;
 }
+
+#if !CONFIG_ARCH_SIM
 
 int printf(const char *fmt, ...)
 {
@@ -752,6 +753,30 @@ int printf(const char *fmt, ...)
   spin_unlock(&kbuf_lock);
   return n;
 }
+
+int sprintf(char *str, const char *fmt, ...)
+{
+  va_list args;
+  int n;
+
+  /* NOTE! This will deadlock if the code enclosed
+   * by this lock triggered exceptions: the default
+   * exception handlers already call printk() */
+  spin_lock(&kbuf_lock);
+
+  va_start(args, fmt);
+  n = vsnprint(str, sizeof(str), fmt, args);
+  va_end(args);
+  str[n] = '\0';
+
+  spin_unlock(&kbuf_lock);
+  return n;
+}
+
+
+#endif /* CONFIG_ARCH_SIM */
+
+
 
 int print(const char *fmt, ...)
 {

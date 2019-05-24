@@ -32,6 +32,7 @@ void __noreturn loop_print(char ch, int color);
 #if !CONFIG_ARCH_SIM
 
 int printf(const char *fmt, ...);
+int sprintf(char *str, const char *format, ...);
 int getc(void);
 int putchar(int c);
 int puts(const char *s);
