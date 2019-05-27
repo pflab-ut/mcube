@@ -43,12 +43,10 @@ ENTRY(arch_switch_to)
 #define STACK_OFFSET 48
   
 ENTRY(move_to_user_level)
-#if 1
   sub sp, sp, #STACK_OFFSET
   stp x25, x26, [sp, #16 * 0]
   stp x27, x28, [sp, #16 * 1]
   stp x29, x30, [sp, #16 * 2]
-#endif
   mov x26, x30 // save ret addr
   mov x25, sp // save sp
 

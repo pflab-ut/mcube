@@ -40,13 +40,11 @@
   stp x28, x29, [sp, #16 * 14]
 //  str x30, [sp, #16 * 15]
 
-#if 1
   .if     \el == 0
   mrs     x21, sp_el0
   .else
   add     x21, sp, #S_FRAME_SIZE
   .endif /* \el == 0 */
-#endif
   
   mrs     x22, elr_el1 // save exception link register
   mrs     x23, spsr_el1 // save saved program status register
@@ -60,11 +58,9 @@
   ldp     x22, x23, [sp, #16 * 16]
   ldp     x30, x21, [sp, #16 * 15]
 
-#if 1
   .if \el == 0
   msr     sp_el0, x21
   .endif /* \el == 0 */
-#endif
 //  mov x21, sp
 //  msr sp_el0, x21
   

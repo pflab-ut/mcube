@@ -13,6 +13,7 @@
 * [advos](https://github.com/drpnd/advos)
 * [Bare metal Raspberry Pi 3 tutorials](https://github.com/bztsrc/raspi3-tutorial)
 * [cuteOS](https://github.com/a-darwish/cuteOS)
+* [Linux](https://github.com/torvalds/linux)
 * [Raph_Kernel](https://github.com/PFLab-OS/Raph_Kernel)
 * [raspberry-pi-os](https://github.com/s-matyukevich/raspberry-pi-os)
 * [Raspberry Pi bare metal code for qemu raspi2 and raspi3](https://github.com/eggman/raspberrypi)
