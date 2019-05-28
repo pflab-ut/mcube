@@ -169,6 +169,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  kernel_level_main();
   //  sprintf(str, "abc");
   //  printk("str = %s\n", str);
+  //  perror("perror()");
   barrier();
   //  test_ring_buf();
 #if CONFIG_ARCH_ARM_RASPI3

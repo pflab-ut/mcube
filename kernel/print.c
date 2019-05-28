@@ -774,6 +774,27 @@ int sprintf(char *str, const char *fmt, ...)
   return n;
 }
 
+void perror(const char *string)
+{
+  int len = strlen(string);
+  delay(1000);
+  strcpy(kbuf, string);
+  kbuf[len++] = ':';
+  kbuf[len++] = ' ';
+  sprintf(&kbuf[len], "%d\n", errno);
+#if CONFIG_ARCH_X86
+#if CONFIG_PRINT2CONSOLE
+  vga_write(kbuf, n, VGA_DEFAULT_COLOR);
+#elif CONFIG_PRINT2UART
+  uart_write(kbuf, n, 0);
+#else
+#error "Unknown Printk to Output"
+#endif
+#else
+  puts(kbuf);
+#endif
+}
+
 
 #endif /* CONFIG_ARCH_SIM */
 
@@ -839,6 +860,7 @@ int printk(const char *fmt, ...)
   spin_unlock(&kbuf_lock);
   return n;
 }
+
 
 int print_uart(const char *fmt, ...)
 {
