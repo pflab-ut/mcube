@@ -237,11 +237,11 @@ ticks_handler:
 
   /* Pick the new process to run */
   call   sched_tick
-  cmpq   current, %rax
+  cmpq   get_current_process(), %rax
   je     2f
 
   movq   %rax, %rdi
-  movq   current, %rax
+  movq   get_current_process(), %rax
 
   /* Save scratch regs to current->pcb */
   addq   $PD_PCB, %rax
@@ -254,7 +254,7 @@ ticks_handler:
 1:  movq   %rsp, PCB_RSP(%rax)
 
   /* current = next */
-  movq   %rdi, current
+  movq   %rdi, get_current_process()
 
   /* Restore scratch from the new PCB */
   addq   $PD_PCB, %rdi

@@ -25,16 +25,16 @@ uint64_t percpu_inspect_order(void);
 static char *str1, *str2;
 void percpu_inspect_current(void)
 {
-  current->pid = 0x00;
-  current->state = 0x11;
-  current->runtime = 0x22;
-  current->enter_runqueue_ts = 0x33;
+  get_current_process()->pid = 0x00;
+  get_current_process()->state = 0x11;
+  get_current_process()->runtime = 0x22;
+  get_current_process()->enter_runqueue_ts = 0x33;
 
   memcpy(str1, str2, 100);
   memcpy(str1 + 100, str2 + 100, 100);
 
-  if (current->pid == 0) {
-    current->pid = 0x55;
+  if (get_current_process()->pid == 0) {
+    get_current_process()->pid = 0x55;
   }
 }
 

@@ -55,24 +55,20 @@ def init_sysconfig_output(fout, output):
     print("Unknown Output")
 
 
-def init_sysconfig(algo, arch, machine, compiler, output):
-  "initialize sysconfig"
-  fout = open("./.sysconfig", "w")
+
+def init_kconfig(algo, arch, machine, compiler, output):
+  "initialize kconfig"
+  fout = open("./.kconfig", "w")
 
   init_sysconfig_algo(fout, algo)
   init_sysconfig_arch(fout, arch, machine)
   init_sysconfig_compiler(fout, compiler)
   init_sysconfig_output(fout, output)
 
-
-  fout.close()
-
-def init_kconfig():
-  "initialize kconfig"
-  fout = open("./.kconfig", "w")
   fout.write(tools.DEFS + "\n\n")
   fout.write(tools.CFILES + "\n\n")
   fout.write(tools.AFILES + "\n")
+
   fout.close()
 
 def init_config():
@@ -139,9 +135,7 @@ def main():
   if not tools.check_conflicts_and_dependencies():
     sys.exit("Error: check_conflicts_and_dependencies()")
 
-  init_sysconfig(algo, arch, machine, compiler, output)
-
-  init_kconfig()
+  init_kconfig(algo, arch, machine, compiler, output)
   init_config()
 
 

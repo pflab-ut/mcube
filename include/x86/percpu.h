@@ -281,7 +281,7 @@ extern struct percpu cpus[CPUS_MAX];
  * thread, even if it moved to another CPU. Thus, inform GCC to _cache_
  * below result in registers as much as possible!
  */
-static __always_inline __pure_const struct process *percpu_current_process(void)
+static __always_inline __pure_const struct process *get_current_process(void)
 {
   struct process *current_process;
 
@@ -290,17 +290,13 @@ static __always_inline __pure_const struct process *percpu_current_process(void)
   return current_process;
 }
 
-/*
- * Descriptor of thread representing 'self', applicable anywhere.
- */
-#define current    (percpu_current_process())
 
 void percpu_area_init(enum cpu_type);
 
 
 #else
 
-#define current    %gs:0x0
+#define get_current_process()    %gs:0x0
 
 #endif /* !__ASSEMBLY__ */
 

@@ -1,4 +1,0 @@
-ALGO_NAME = fp
-ARCH_NAME = sim
-CC = gcc
-OUTPUT_NAME = console

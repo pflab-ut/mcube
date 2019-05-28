@@ -244,7 +244,7 @@ static struct process *dispatch_runnable_process(int *ret_prio)
  */
 static struct process *preempt(struct process *new_process, int new_prio)
 {
-  assert(new_process != current);
+  assert(new_process != get_current_process());
   assert(list_empty(&new_process->pnode));
   assert(new_process->state == READY);
 
@@ -278,13 +278,13 @@ struct process *sched_tick(void)
   }
 
   PS->sys_ticks++;
-  current->runtime++;
+  get_current_process()->runtime++;
 
-  assert(current->state == RUNNING);
+  assert(get_current_process()->state == RUNNING);
   assert(VALID_PRIO(PS->current_prio));
 
-  current->stats.runtime_overall++;
-  current->stats.prio_map[PS->current_prio]++;
+  get_current_process()->stats.runtime_overall++;
+  get_current_process()->stats.prio_map[PS->current_prio]++;
 
   if (PS->sys_ticks % SCHED_STATS_RATE == 0) {
     print_sched_stats();
@@ -294,17 +294,17 @@ struct process *sched_tick(void)
    * Only switch queues after finishing the slice, not to introduce
    * fairness regression for last task standing in the active queue.
    */
-  if (current->runtime >= RR_INTERVAL) {
-    current->stats.preempt_slice_end++;
+  if (get_current_process()->runtime >= RR_INTERVAL) {
+    get_current_process()->stats.preempt_slice_end++;
 
     new_process = dispatch_runnable_process(&new_prio);
 
     if (!new_process) {
-      return current;
+      return get_current_process();
     }
 
     PS->current_prio = MAX(MIN_PRIO, PS->current_prio - 1);
-    rq_add_process(PS->rq_expired, current, PS->current_prio);
+    rq_add_process(PS->rq_expired, get_current_process(), PS->current_prio);
     return preempt(new_process, new_prio);
   }
 
@@ -316,7 +316,7 @@ struct process *sched_tick(void)
   new_prio = rq_get_highest_prio(PS->rq_active);
 
   if (new_prio > PS->current_prio) {
-    current->stats.preempt_high_prio++;
+    get_current_process()->stats.preempt_high_prio++;
     panic("Sleep support in not yet in the kernel; how "
           "did we reach here?");
 
@@ -324,7 +324,7 @@ struct process *sched_tick(void)
                              struct process, pnode);
     list_del(&new_process->pnode);
 
-    rq_return_process(PS->rq_active, current, PS->current_prio);
+    rq_return_process(PS->rq_active, get_current_process(), PS->current_prio);
     return preempt(new_process, new_prio);
   }
 
@@ -332,7 +332,7 @@ struct process *sched_tick(void)
    * No higher priority tasks in the horizon, and our slice usage
    * is not yet complete. Peace of cake, continue running.
    */
-  return current;
+  return get_current_process();
 }
 
 /*
@@ -366,8 +366,8 @@ void schedulify_this_code_path(enum cpu_type t)
    */
   barrier();
 
-  process_init(current);
-  current->state = RUNNING;
+  process_init(get_current_process());
+  get_current_process()->state = RUNNING;
   PS->current_prio = DEFAULT_PRIO;
 }
 
@@ -419,7 +419,7 @@ void print_process_stats(__unused struct process *process, __unused int prio)
 
   rqwait_overall = process->stats.rqwait_overall;
 
-  if (process != current) {
+  if (process != get_current_process()) {
     rqwait_overall += PS->sys_ticks - process->enter_runqueue_ts;
   }
 
@@ -443,7 +443,7 @@ void print_sched_stats(void)
   spin_lock(&printstats_lock);
 
   printk("%lu ", PS->sys_ticks);
-  print_process_stats(current, PS->current_prio);
+  print_process_stats(get_current_process(), PS->current_prio);
 
   for (int i = MIN_PRIO; i <= MAX_PRIO; i++) {
     list_for_each(&PS->rq_active->head[i], process, pnode) {

@@ -5,7 +5,6 @@
 #
 
 
-include $(TOP_DIR)/.sysconfig
 include $(TOP_DIR)/.kconfig
 include $(TOP_DIR)/arch/$(ARCH_NAME)/$(ARCH_NAME).make
 
