@@ -428,7 +428,8 @@ static const char *parse_arg(const char *fmt, struct print_argdesc *desc)
       /* float part */
       digit_size = 0;
 
-      if (*fmt++ == '.') {
+      if (*fmt == '.') {
+        fmt++;
         while ((*fmt >= '0') && (*fmt <= '9')) {
           digit_size = digit_size * 10 + (*fmt - '0');
           fmt++;

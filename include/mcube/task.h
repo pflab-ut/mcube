@@ -59,7 +59,7 @@ static inline void preempt_enable(void)
 
 #define INIT_TASK {                             \
     .id    = INIT_TASK_ID,                      \
-    .top_thread  = &kernel_th[0],               \
+    .top_thread  = NULL,                        \
     .state    = 0,                              \
     .counter  = 0,                              \
     .priority  = 1,                             \
