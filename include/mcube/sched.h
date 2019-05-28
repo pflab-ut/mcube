@@ -95,7 +95,7 @@ struct percpu_sched {
   int just_queued_turn;
 };
 
-struct proc;
+struct process;
 enum cpu_type {
   BOOTSTRAP,
   SECONDARY,
@@ -105,10 +105,12 @@ void sched_percpu_area_init(void);
 void schedulify_this_code_path(enum cpu_type);
 void sched_init(void);
 
-void sched_enqueue(struct proc *);
-struct proc *sched_tick(void);  /* Avoid GCC warning */
+void sched_enqueue(struct process *);
+struct process *sched_tick(void);  /* Avoid GCC warning */
 
-void kthread_create(void (* func)(void *), void *arg);
+struct th_attr;
+
+void kthread_create(void (* func)(void *), void *arg, struct th_attr *attr);
 uint64_t kthread_alloc_pid(void);
 
 

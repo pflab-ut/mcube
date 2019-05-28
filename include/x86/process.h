@@ -1,10 +1,10 @@
 /**
- * @file include/x86/proc.h
+ * @file include/x86/process.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_X86_PROC_H__
-#define __MCUBE_X86_PROC_H__
+#ifndef __MCUBE_X86_PROCESS_H__
+#define __MCUBE_X86_PROCESS_H__
 
 /*
  * Processes and their related definitions
@@ -102,7 +102,7 @@ static inline void pcb_init(struct pcb *pcb)
 /*
  * Process descriptor; one for each process
  */
-struct proc {
+struct process {
   uint64_t pid;
   struct pcb pcb;      /* Hardware state (for ctxt switch) */
   int state;      /* Current process state */
@@ -124,7 +124,7 @@ struct proc {
 };
 
 
-void proc_init(struct proc *proc);
+void process_init(struct process *process);
 
 #endif  /* !_ASSEMBLY */
 
@@ -198,8 +198,8 @@ static inline void pcb_validate_offsets(void)
   compiler_assert(PCB_RSP  == offsetof(struct pcb, rsp));
   compiler_assert(PCB_SIZE == sizeof(struct pcb));
 
-  compiler_assert(PD_PID == offsetof(struct proc, pid));
-  compiler_assert(PD_PCB == offsetof(struct proc, pcb));
+  compiler_assert(PD_PID == offsetof(struct process, pid));
+  compiler_assert(PD_PCB == offsetof(struct process, pcb));
 
   compiler_assert(IRQCTX_R11 == offsetof(struct irq_ctx, r11));
   compiler_assert(IRQCTX_R10 == offsetof(struct irq_ctx, r10));
@@ -220,4 +220,4 @@ static inline void pcb_validate_offsets(void)
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MCUBE_X86_PROC_H__ */
+#endif /* __MCUBE_X86_PROCESS_H__ */

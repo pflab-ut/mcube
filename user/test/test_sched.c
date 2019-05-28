@@ -69,12 +69,12 @@ bool test_sched(void)
 {
   printk("test_sched()\n");
 
-  kthread_create(test0, &id[0]);
-  kthread_create(test1, &id[1]);
-  kthread_create(test2, &id[2]);
-  kthread_create(test3, &id[3]);
-  kthread_create(test4, &id[4]);
-  kthread_create(test5, &id[5]);
+  kthread_create(test0, &id[0], NULL);
+  kthread_create(test1, &id[1], NULL);
+  kthread_create(test2, &id[2], NULL);
+  kthread_create(test3, &id[3], NULL);
+  kthread_create(test4, &id[4], NULL);
+  kthread_create(test5, &id[5], NULL);
 
   return true;
 }

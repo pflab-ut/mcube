@@ -137,8 +137,8 @@ static int start_secondary_cpu(struct percpu *cpu,
    */
 
   /* All cores initialize their own 'current'; dont do it for 'em. */
-  if (!(cpu->__current = kmalloc(sizeof(struct proc)))) {
-    panic("Error: cannot allocate memory %lu\n", sizeof(struct proc));
+  if (!(cpu->__current = kmalloc(sizeof(struct process)))) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(struct process));
   }
 
   if (!(params->stack_ptr = kmalloc(STACK_SIZE))) {

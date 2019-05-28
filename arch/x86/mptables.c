@@ -32,7 +32,7 @@ int nr_cpus = 1;
  * To make '__current' available to early boot code, it's statically
  * allocated in the first slot. Thus, slot 0 is reserved for the BSC.
  */
-extern struct proc swapper;
+extern struct process swapper;
 struct percpu cpus[CPUS_MAX] = {
   [0] = {
     .__current = &swapper,

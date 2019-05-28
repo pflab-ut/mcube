@@ -30,7 +30,7 @@
 #include <x86/percpu.h>
 #include <x86/pic.h>
 #include <x86/pit.h>
-#include <x86/proc.h>
+#include <x86/process.h>
 #include <x86/ramdisk.h>
 #include <x86/regs.h>
 #include <x86/sched.h>

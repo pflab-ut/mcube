@@ -71,15 +71,29 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
     ths[index].id = id;
     ths[index].state = UNADMITTED;
     ths[index].tk = current_task;
-    ths[index].type = attr->type;
+
+    if (attr) {
+      ths[index].type = attr->type;
+    } else {
+      ths[index].type = APERIODIC_TH;
+    }
+
     ths[index].thflags = 0;
     ths[index].arg = arg;
 
     ths[index].sched.release = 0;
-    ths[index].sched.period = attr->period;
-    ths[index].sched.relative_deadline = attr->relative_deadline;
-    ths[index].sched.deadline = attr->relative_deadline;
-    ths[index].sched.wcet = attr->wcet;
+
+    if (attr) {
+      ths[index].sched.period = attr->period;
+      ths[index].sched.relative_deadline = attr->relative_deadline;
+      ths[index].sched.deadline = attr->relative_deadline;
+      ths[index].sched.wcet = attr->wcet;
+    } else {
+      ths[index].sched.period = ULONG_MAX;
+      ths[index].sched.relative_deadline = ULONG_MAX;
+      ths[index].sched.deadline = ULONG_MAX;
+      ths[index].sched.wcet = ULONG_MAX;
+    }
 
     ths[index].stack_top = USER_THREAD_STACK_ADDR(ths[index].id);
     ths[index].run_func = run_user_thread;

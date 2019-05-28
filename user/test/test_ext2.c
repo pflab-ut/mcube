@@ -1179,11 +1179,11 @@ static bool test_ext2_smp(void)
   }
 
   for (int i = 0; i < 200; i++) {
-    kthread_create(test_alloc_dealloc, NULL);
+    kthread_create(test_alloc_dealloc, NULL, NULL);
   }
 
   for (int i = 0; i < 200; i++) {
-    kthread_create(test_file_reads, NULL);
+    kthread_create(test_file_reads, NULL, NULL);
   }
 
   /*
@@ -1192,9 +1192,9 @@ static bool test_ext2_smp(void)
    * run them as SMP fuzzers instead ...
    */
   //for (int i = 0; i < 20; i++)
-  //  kthread_create(test_block_reads);
+  //  kthread_create(test_block_reads, NULL, NULL);
   //for (int i = 0; i < 5; i++)
-  //  kthread_create(test_file_existence);
+  //  kthread_create(test_file_existence, NULL, NULL);
 
   /*
    * Don't run concurrent writers yet, inodes locks
@@ -1202,13 +1202,13 @@ static bool test_ext2_smp(void)
    * get corrupted.
    */
   //for (int i = 0; i < 5; i++)
-  //  kthread_create(test_file_creation);
+  //  kthread_create(test_file_creation, NULL, NULL);
 
   /*
    * Some SMP fuzzers
    */
   for (int i = 0; i < 10; i++) {
-    kthread_create(smp_fuzz, NULL);
+    kthread_create(smp_fuzz, NULL, NULL);
   }
 
   return true;

@@ -13,6 +13,8 @@ irun*
 rom.txt
 *\#*
 ramdisk
+include/mcube/config.h
+.kconfig
 
 # suffixes
 *.bak

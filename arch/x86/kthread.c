@@ -28,18 +28,19 @@ uint64_t kthread_alloc_pid(void)
  *
  * NOTE! given function must never exit!
  */
-void kthread_create(void (* /* __noreturn */ func)(void *), void *arg)
+void kthread_create(void (* /* __noreturn */ func)(void *), void *arg,
+                    __unused struct th_attr *attr)
 {
-  struct proc *proc;
+  struct process *process;
   struct irq_ctx *irq_ctx;
   char *stack;
   char *stack_start;
 
-  if (!(proc = kmalloc(sizeof(*proc)))) {
-    panic("Error: cannot allocate memory %lu\n", sizeof(*proc));
+  if (!(process = kmalloc(sizeof(struct process)))) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(struct process));
   }
 
-  proc_init(proc);
+  process_init(process);
 
   /* New thread stack, moving down */
   if (!(stack_start = (char *) kmalloc(STACK_SIZE))) {
@@ -55,7 +56,7 @@ void kthread_create(void (* /* __noreturn */ func)(void *), void *arg)
   /*
    * Values for the code to-be-executed once scheduled.
    * They will get popped and used automatically by the
-   * processor at ticks handler `iretq'.
+   * processessor at ticks handler `iretq'.
    *
    * Set to-be-executed code's %rsp to the top of the
    * newly allocated stack since this new code doesn't
@@ -73,8 +74,8 @@ void kthread_create(void (* /* __noreturn */ func)(void *), void *arg)
   /* For context switching code, which runs at the
    * ticks handler context, give a stack that respects
    * our IRQ stack protocol */
-  proc->pcb.rsp = (uintptr_t) irq_ctx;
+  process->pcb.rsp = (uintptr_t) irq_ctx;
 
-  /* Push the now completed proc to the runqueu */
-  sched_enqueue(proc);
+  /* Push the now completed process to the runqueu */
+  sched_enqueue(process);
 }

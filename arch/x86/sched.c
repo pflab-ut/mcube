@@ -109,10 +109,10 @@ void sched_percpu_area_init(void)
 }
 
 /*
- * Statically allocate the booting-thread descriptor: ‘current’
+ * Statically allocate the booting-thread descriptor: "current"
  * must be available in all contexts, including early boot.
  */
-struct proc swapper;
+struct process swapper;
 
 /*
  * @ENQ_NORMAL: Enqueue given thread as if it's a newly created
@@ -127,22 +127,23 @@ enum enqueue_type {
   ENQ_RETURN,
 };
 
-static void __rq_add_proc(struct runqueue *rq, struct proc *proc, int prio,
-                          enum enqueue_type type)
+static void __rq_add_process(struct runqueue *rq, struct process *process,
+                             int prio,
+                             enum enqueue_type type)
 {
   assert(VALID_PRIO(prio));
 
-  proc->enter_runqueue_ts = PS->sys_ticks;
-  proc->state = READY;
+  process->enter_runqueue_ts = PS->sys_ticks;
+  process->state = READY;
 
   switch (type) {
   case ENQ_NORMAL:
-    proc->runtime = 0;
-    list_add_tail(&rq->head[prio], &proc->pnode);
+    process->runtime = 0;
+    list_add_tail(&rq->head[prio], &process->pnode);
     break;
 
   case ENQ_RETURN:
-    list_add(&rq->head[prio], &proc->pnode);
+    list_add(&rq->head[prio], &process->pnode);
     break;
 
   default:
@@ -150,14 +151,16 @@ static void __rq_add_proc(struct runqueue *rq, struct proc *proc, int prio,
   }
 }
 
-static void rq_add_proc(struct runqueue *rq, struct proc *proc, int prio)
+static void rq_add_process(struct runqueue *rq, struct process *process,
+                           int prio)
 {
-  __rq_add_proc(rq, proc, prio, ENQ_NORMAL);
+  __rq_add_process(rq, process, prio, ENQ_NORMAL);
 }
 
-static void rq_return_proc(struct runqueue *rq, struct proc *proc, int prio)
+static void rq_return_process(struct runqueue *rq, struct process *process,
+                              int prio)
 {
-  __rq_add_proc(rq, proc, prio, ENQ_RETURN);
+  __rq_add_process(rq, process, prio, ENQ_RETURN);
 }
 
 
@@ -165,20 +168,20 @@ static void rq_return_proc(struct runqueue *rq, struct proc *proc, int prio)
  * @@@ Scheduling proper: @@@
  */
 
-void sched_enqueue(struct proc *proc)
+void sched_enqueue(struct process *process)
 {
   union rflags flags;
 
   save_local_irq(&flags);
 
-  proc->enter_runqueue_ts = PS->sys_ticks;
-  proc->state = READY;
-  proc->runtime = 0;
+  process->enter_runqueue_ts = PS->sys_ticks;
+  process->state = READY;
+  process->runtime = 0;
 
-  list_add_tail(&PS->just_queued, &proc->pnode);
+  list_add_tail(&PS->just_queued, &process->pnode);
 
   restore_local_irq(&flags);
-  sched_dbg("@@ T%d added\n", proc->pid);
+  sched_dbg("@@ T%d added\n", process->pid);
 }
 
 /*
@@ -188,18 +191,18 @@ void sched_enqueue(struct proc *proc)
  *
  * Return NULL if all relevant queues are empty.
  */
-static struct proc *dispatch_runnable_proc(int *ret_prio)
+static struct process *dispatch_runnable_process(int *ret_prio)
 {
-  struct proc *proc, *spare = NULL;
+  struct process *process, *spare = NULL;
   int h_prio;
 
   if (PS->just_queued_turn && !list_empty(&PS->just_queued)) {
     PS->just_queued_turn = 0;
 
-    proc = list_entry(PS->just_queued.next, struct proc, pnode);
-    list_del(&proc->pnode);
+    process = list_entry(PS->just_queued.next, struct process, pnode);
+    list_del(&process->pnode);
     *ret_prio = DEFAULT_PRIO;
-    return proc;
+    return process;
   }
 
   if (rq_empty(PS->rq_active)) {
@@ -207,9 +210,9 @@ static struct proc *dispatch_runnable_proc(int *ret_prio)
     SWAP(PS->rq_active, PS->rq_expired);
 
     /* FIXME: this can be done in O(1) */
-    list_for_each_safe(&PS->just_queued, proc, spare, pnode) {
-      list_del(&proc->pnode);
-      rq_add_proc(PS->rq_active, proc, DEFAULT_PRIO);
+    list_for_each_safe(&PS->just_queued, process, spare, pnode) {
+      list_del(&process->pnode);
+      rq_add_process(PS->rq_active, process, DEFAULT_PRIO);
     }
     rq_dump(PS->rq_active);
   }
@@ -229,39 +232,40 @@ static struct proc *dispatch_runnable_proc(int *ret_prio)
   assert(VALID_PRIO(h_prio));
   assert(!list_empty(&PS->rq_active->head[h_prio]));
 
-  proc = list_entry(PS->rq_active->head[h_prio].next, struct proc,  pnode);
-  list_del(&proc->pnode);
+  process = list_entry(PS->rq_active->head[h_prio].next, struct process,  pnode);
+  list_del(&process->pnode);
   *ret_prio = h_prio;
-  return proc;
+  return process;
 }
 
 /*
  * Preempt current thread using given new one.
  * New thread should NOT be in ANY runqueue.
  */
-static struct proc *preempt(struct proc *new_proc, int new_prio)
+static struct process *preempt(struct process *new_process, int new_prio)
 {
-  assert(new_proc != current);
-  assert(list_empty(&new_proc->pnode));
-  assert(new_proc->state == READY);
+  assert(new_process != current);
+  assert(list_empty(&new_process->pnode));
+  assert(new_process->state == READY);
 
   assert(VALID_PRIO(new_prio));
   PS->current_prio = new_prio;
 
-  new_proc->state = RUNNING;
-  new_proc->stats.dispatch_count++;
-  new_proc->stats.rqwait_overall += PS->sys_ticks - new_proc->enter_runqueue_ts;
+  new_process->state = RUNNING;
+  new_process->stats.dispatch_count++;
+  new_process->stats.rqwait_overall += PS->sys_ticks -
+                                       new_process->enter_runqueue_ts;
 
-  sched_dbg("dispatching T%d\n", new_proc->pid);
-  return new_proc;
+  sched_dbg("dispatching T%d\n", new_process->pid);
+  return new_process;
 }
 
 /*
  * Our scheduler, it gets invoked HZ times per second.
  */
-struct proc *sched_tick(void)
+struct process *sched_tick(void)
 {
-  struct proc *new_proc;
+  struct process *new_process;
   int new_prio;
 
   //  printk("pit_ticks_count = %lu\n", pit_ticks_count);
@@ -293,15 +297,15 @@ struct proc *sched_tick(void)
   if (current->runtime >= RR_INTERVAL) {
     current->stats.preempt_slice_end++;
 
-    new_proc = dispatch_runnable_proc(&new_prio);
+    new_process = dispatch_runnable_process(&new_prio);
 
-    if (!new_proc) {
+    if (!new_process) {
       return current;
     }
 
     PS->current_prio = MAX(MIN_PRIO, PS->current_prio - 1);
-    rq_add_proc(PS->rq_expired, current, PS->current_prio);
-    return preempt(new_proc, new_prio);
+    rq_add_process(PS->rq_expired, current, PS->current_prio);
+    return preempt(new_process, new_prio);
   }
 
   /*
@@ -316,12 +320,12 @@ struct proc *sched_tick(void)
     panic("Sleep support in not yet in the kernel; how "
           "did we reach here?");
 
-    new_proc = list_entry(PS->rq_active->head[new_prio].next,
-                          struct proc, pnode);
-    list_del(&new_proc->pnode);
+    new_process = list_entry(PS->rq_active->head[new_prio].next,
+                             struct process, pnode);
+    list_del(&new_process->pnode);
 
-    rq_return_proc(PS->rq_active, current, PS->current_prio);
-    return preempt(new_proc, new_prio);
+    rq_return_process(PS->rq_active, current, PS->current_prio);
+    return preempt(new_process, new_prio);
   }
 
   /*
@@ -362,7 +366,7 @@ void schedulify_this_code_path(enum cpu_type t)
    */
   barrier();
 
-  proc_init(current);
+  process_init(current);
   current->state = RUNNING;
   PS->current_prio = DEFAULT_PRIO;
 }
@@ -404,28 +408,28 @@ void sched_init(void)
 
 spinlock_t printstats_lock = INIT_SPINLOCK;
 
-void print_proc_stats(__unused struct proc *proc, __unused int prio)
+void print_process_stats(__unused struct process *process, __unused int prio)
 {
 #if 0
   uint dispatch_count;
   clock_t rqwait_overall;
 
-  dispatch_count = proc->stats.dispatch_count;
+  dispatch_count = process->stats.dispatch_count;
   dispatch_count = max(1u, dispatch_count);
 
-  rqwait_overall = proc->stats.rqwait_overall;
+  rqwait_overall = process->stats.rqwait_overall;
 
-  if (proc != current) {
-    rqwait_overall += PS->sys_ticks - proc->enter_runqueue_ts;
+  if (process != current) {
+    rqwait_overall += PS->sys_ticks - process->enter_runqueue_ts;
   }
 
-  printk("%lu:%d:%lu:%lu:%lu:%lu:%u:%u ", proc->pid, prio,
-         proc->stats.runtime_overall,
-         proc->stats.runtime_overall / dispatch_count,
+  printk("%lu:%d:%lu:%lu:%lu:%lu:%u:%u ", process->pid, prio,
+         process->stats.runtime_overall,
+         process->stats.runtime_overall / dispatch_count,
          rqwait_overall,
          rqwait_overall / dispatch_count,
-         proc->stats.preempt_high_prio,
-         proc->stats.preempt_slice_end);
+         process->stats.preempt_high_prio,
+         process->stats.preempt_slice_end);
 #endif
 }
 
@@ -434,24 +438,24 @@ void print_sched_stats(void)
 {
 #if 0
   /* NOTE: print sched stats information. */
-  struct proc *proc;
+  struct process *process;
 
   spin_lock(&printstats_lock);
 
   printk("%lu ", PS->sys_ticks);
-  print_proc_stats(current, PS->current_prio);
+  print_process_stats(current, PS->current_prio);
 
   for (int i = MIN_PRIO; i <= MAX_PRIO; i++) {
-    list_for_each(&PS->rq_active->head[i], proc, pnode) {
-      print_proc_stats(proc, i);
+    list_for_each(&PS->rq_active->head[i], process, pnode) {
+      print_process_stats(process, i);
     }
-    list_for_each(&PS->rq_expired->head[i], proc, pnode) {
-      print_proc_stats(proc, i);
+    list_for_each(&PS->rq_expired->head[i], process, pnode) {
+      print_process_stats(process, i);
     }
   }
 
-  list_for_each(&PS->just_queued, proc, pnode) {
-    print_proc_stats(proc, DEFAULT_PRIO);
+  list_for_each(&PS->just_queued, process, pnode) {
+    print_process_stats(process, DEFAULT_PRIO);
   }
   printk("\n");
 
@@ -468,7 +472,7 @@ void rq_dump(__unused struct runqueue *rq)
 {
 #if 0
   /* FIXME: not work well */
-  struct proc *proc;
+  struct process *process;
   const char *name;
 
   //  name = (rq == rq_active) ? "active" : "expired";
@@ -477,8 +481,8 @@ void rq_dump(__unused struct runqueue *rq)
 
   for (int i = MAX_PRIO; i >= MIN_PRIO; i--) {
     if (!list_empty(&rq->head[i])) {
-      list_for_each(&rq->head[i], proc, pnode)
-      printk("%lu ", proc->pid);
+      list_for_each(&rq->head[i], process, pnode)
+      printk("%lu ", process->pid);
     }
   }
 
@@ -487,19 +491,19 @@ void rq_dump(__unused struct runqueue *rq)
 }
 
 
-void proc_init(struct proc *proc)
+void process_init(struct process *process)
 {
-  memset(proc, 0, sizeof(struct proc));
+  memset(process, 0, sizeof(struct process));
 
-  proc->pid = kthread_alloc_pid();
-  pcb_init(&proc->pcb);
-  proc->state = UNADMITTED;
-  list_init(&proc->pnode);
+  process->pid = kthread_alloc_pid();
+  pcb_init(&process->pcb);
+  process->state = UNADMITTED;
+  list_init(&process->pnode);
 
 #if CONFIG_OPTION_FS_EXT2
-  proc->working_dir = EXT2_ROOT_INODE;
+  process->working_dir = EXT2_ROOT_INODE;
 #else
-  proc->working_dir = 0;
+  process->working_dir = 0;
 #endif
-  unrolled_init(&proc->fdtable, 32);
+  unrolled_init(&process->fdtable, 32);
 }

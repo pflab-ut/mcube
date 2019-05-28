@@ -112,7 +112,7 @@
  * NOTE-2! '__current' is hardcoded to ALWAYS be the first element.
  */
 struct percpu {
-  struct proc *__current;    /* Descriptor of the ON_CPU thread */
+  struct process *__current;    /* Descriptor of the ON_CPU thread */
   int apic_id;      /* Local APIC ID */
   uintptr_t self;      /* Address of this per-CPU area */
   struct percpu_sched sched;
@@ -281,19 +281,19 @@ extern struct percpu cpus[CPUS_MAX];
  * thread, even if it moved to another CPU. Thus, inform GCC to _cache_
  * below result in registers as much as possible!
  */
-static __always_inline __pure_const struct proc *percpu_current_proc(void)
+static __always_inline __pure_const struct process *percpu_current_process(void)
 {
-  struct proc *curproc;
+  struct process *current_process;
 
-  asm("mov %%gs:0, %0" : "=r"(curproc));
+  asm("mov %%gs:0, %0" : "=r"(current_process));
 
-  return curproc;
+  return current_process;
 }
 
 /*
  * Descriptor of thread representing 'self', applicable anywhere.
  */
-#define current    (percpu_current_proc())
+#define current    (percpu_current_process())
 
 void percpu_area_init(enum cpu_type);
 

@@ -24,7 +24,7 @@ struct runqueue;
 #define  sched_dbg(fmt, ...) PDEBUG(fmt, ##__VA_ARGS__)
 void rq_dump(struct runqueue *rq);
 
-void print_proc_stats(struct proc *proc, int prio);
+void print_process_stats(struct process *process, int prio);
 void print_sched_stats(void);
 void ticks_handler(void);
 
