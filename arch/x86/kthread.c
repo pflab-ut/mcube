@@ -21,13 +21,14 @@ uint64_t kthread_alloc_pid(void)
   return atomic_inc(&pids);
 }
 
+
 /*
  * Create a new kernel thread running given function
  * code, and attach it to the runqueue.
  *
  * NOTE! given function must never exit!
  */
-void kthread_create(void (* /* __noreturn */ func)(void))
+void kthread_create(void (* /* __noreturn */ func)(void *), void *arg)
 {
   struct proc *proc;
   struct irq_ctx *irq_ctx;
@@ -63,6 +64,8 @@ void kthread_create(void (* /* __noreturn */ func)(void))
    */
   irq_ctx->cs = KERNEL_CS;
   irq_ctx->rip = (uintptr_t) func;
+  irq_ctx->rdi = (unsigned long) arg;
+
   irq_ctx->ss = 0;
   irq_ctx->rsp = (uintptr_t) stack;
   irq_ctx->rflags = default_rflags().raw;

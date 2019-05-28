@@ -376,7 +376,7 @@ __unused static void test_path_conversion(void)
   }
 }
 
-__unused static void test_file_reads(void)
+__unused static void test_file_reads(__unused void *arg)
 {
   struct inode *inode;
   char *buf;
@@ -700,7 +700,7 @@ static void test_ext2_up(void)
 
   test_inodes();
   test_block_reads();
-  test_file_reads();
+  test_file_reads(NULL);
 
 #if TEST_DIR_ENTRIES
 
@@ -1117,7 +1117,7 @@ out1:
  * TODO: Once semaphores are ready, don't quit, but sleep when no
  * more disk inodes are available.
  */
-__noreturn static void test_alloc_dealloc(void)
+__noreturn static void test_alloc_dealloc(__unused void *arg)
 {
   struct inode *inode;
   struct unrolled_head head;
@@ -1151,7 +1151,7 @@ __noreturn static void test_alloc_dealloc(void)
  * Fuzz: Constantly Fetch and put inodes from disk, offering enough
  * SMP fuzz-testing against code accessing the file system.
  */
-__noreturn static void smp_fuzz(void)
+__noreturn static void smp_fuzz(__unused void *arg)
 {
   struct inode *inode;
 
@@ -1179,11 +1179,11 @@ static bool test_ext2_smp(void)
   }
 
   for (int i = 0; i < 200; i++) {
-    kthread_create(test_alloc_dealloc);
+    kthread_create(test_alloc_dealloc, NULL);
   }
 
   for (int i = 0; i < 200; i++) {
-    kthread_create(test_file_reads);
+    kthread_create(test_file_reads, NULL);
   }
 
   /*
@@ -1208,7 +1208,7 @@ static bool test_ext2_smp(void)
    * Some SMP fuzzers
    */
   for (int i = 0; i < 10; i++) {
-    kthread_create(smp_fuzz);
+    kthread_create(smp_fuzz, NULL);
   }
 
   return true;

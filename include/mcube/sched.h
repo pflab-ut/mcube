@@ -108,7 +108,7 @@ void sched_init(void);
 void sched_enqueue(struct proc *);
 struct proc *sched_tick(void);  /* Avoid GCC warning */
 
-void kthread_create(void (* func)(void));
+void kthread_create(void (* func)(void *), void *arg);
 uint64_t kthread_alloc_pid(void);
 
 

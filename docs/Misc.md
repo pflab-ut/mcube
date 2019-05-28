@@ -2,14 +2,12 @@
 
 ## ToDo
 
-* Unix Domain Socketを実装する．
 * run_tq等を構造体のメンバ変数にすることで，モノリシックカーネルで
    キャッシュライン毎にアクセスできるようにする．
-* Mcube KernelをLinuxに適用することを検討する．
 * マルチカーネルの（メモリ共有）プロセス生成，破棄するcfork/cexit関数を実装する．
 * x86でsyscall/sysretを利用したシステムコールを実装する．
 * x86でuser levelで動作する．
-* x86のスケジューラを統合する．
+* x86のスケジューラを他のアーキテクチャで利用可能にする．
 * Completely Fair Schedulerを実装する．
 * Message Passingを作成する．
 * simアーキテクチャでスケジューリングシミュレータを実装する．

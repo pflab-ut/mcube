@@ -77,7 +77,7 @@ int user_ap_main(__unused int argc, __unused char *argv[])
 
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
-#if 1
+#if 0
   char str[] = "server";
   printk("user_arch_main()\n");
   //  start_timer();
@@ -90,7 +90,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  test_percpu();
   //  test_apic();
   //  test_page_alloc();
-  //  test_sched();
+  test_sched();
   //  user_level_main();
 
   return 0;

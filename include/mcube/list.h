@@ -65,7 +65,7 @@ struct list_node {
   {                                             \
     .next = &(n),                               \
       .prev = &(n),                             \
-      }
+  }
 
 /*
  * Global declaration with a static init
