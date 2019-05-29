@@ -25,6 +25,7 @@ bool test_list(void);
 bool test_page_alloc(void);
 bool test_printk(void);
 bool test_ring_buf(void);
+bool test_scan(void);
 bool test_sched(void);
 bool test_socket(int argc, char *argv[]);
 bool test_string(void);

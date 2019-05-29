@@ -7,56 +7,22 @@
  * printf()-like methods: vsnprintf(), etc
  *
  * Copyright (C) 2009-2010 Ahmed S. Darwish <darwish.07@gmail.com>
-*/
+ */
 
 #include <mcube/mcube.h>
 
-/*
- * Definitions for parsing print arguments. Each argument
- * is described by its descriptor (argdesc) structure.
- */
-enum print_arglen {
-  INT = 0,
-  LONG,
-};
-enum print_argtype {
-  NONE = 0,
-  SIGNED,
-  UNSIGNED,
-  FLOAT,
-  STRING,
-  CHAR,
-  PERCENT,
-};
 
-enum print_pad {
-  PAD_NO = 0,
-  PAD_BLANK,
-  PAD_ZERO,
-};
-
-struct print_argdesc {
-  int radix;
-  enum print_arglen len;
-  enum print_argtype type;
-  enum print_pad pad;
-  int digit;
-  int float_digit;
-};
-
-#define INIT_FLOAT_DIGIT 6
 #define PRINTK_MAX_RADIX 16
 
-static char panic_prefix[] = "PANIC: printk: ";
 static char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
 
 
-static char kbuf[KBUF_SIZE];
+static char pbuf[KBUF_SIZE];
 
 #if CONFIG_ARCH_AXIS
-spinlock_t kbuf_lock;
+spinlock_t pbuf_lock;
 #else
-spinlock_t kbuf_lock = INIT_SPINLOCK;
+spinlock_t pbuf_lock = INIT_SPINLOCK;
 #endif /* CONFIG_ARCH_AXIS */
 
 #define INT_BUFSIZE 32
@@ -119,11 +85,11 @@ void __noreturn panic(const char *fmt, ...)
   }
 
   va_start(args, fmt);
-  n = vsnprint(kbuf, sizeof(kbuf) - 1, fmt, args);
+  n = vsnprint(pbuf, sizeof(pbuf) - 1, fmt, args);
   va_end(args);
 
-  kbuf[n] = 0;
-  printk("\nCPU#%d-PANIC: %s", percpu_get(apic_id), kbuf);
+  pbuf[n] = 0;
+  printk("\nCPU#%d-PANIC: %s", percpu_get(apic_id), pbuf);
 
   /* Since the  other cores are stopped only after they re-
    * accept interrupts, they may print on-screen and scroll
@@ -154,57 +120,17 @@ void __noreturn panic(const char *fmt, ...)
 
 
 /*
- * We cannot use assert() for below printk() code as
- * the assert code istelf internally calls printk().
- */
-#define printk_assert(condition)                \
-  do {                                          \
-    if (__unlikely(!(condition))) {             \
-      printk_panic("!(" #condition ")");        \
-    }                                           \
-  } while (0);
-
-/*
- * A panic() that can be safely used by printk().
- * We use putchar() as it directly invokes the VGA code.
- * NOTE! Don't use any assert()s in this function!
- */
-static __noreturn void printk_panic(const char *str)
-{
-  const char *prefix;
-
-  prefix = panic_prefix;
-
-  while (*prefix != 0) {
-    putchar(*prefix++);
-  }
-
-  while (*str != 0) {
-    putchar(*str++);
-  }
-
-  halt();
-}
-
-/*
- * A panic() that can be safely used by printk().
- * We use putchar() as it directly invokes the VGA code.
- * NOTE! Don't use any assert()s in this function!
- */
-
-
-/*
  * Convert given unsigned long integer (@num) to ascii using
  * desired radix. Return the number of ascii chars printed.
  * @size: output buffer size
  */
 static int luout(unsigned long num, char *buf, int size,
-                 struct print_argdesc *desc)
+                 struct format_argdesc *desc)
 {
   int ret, digits;
   int i;
 
-  printk_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
+  format_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
 
   digits = 0;
 
@@ -216,9 +142,9 @@ static int luout(unsigned long num, char *buf, int size,
     digits++;
   }
 
-  printk_assert(digits > 0);
-  printk_assert(digits <= size);
-  printk_assert(desc->digit <= size);
+  format_assert(digits > 0);
+  format_assert(digits <= size);
+  format_assert(desc->digit <= size);
 
   if (desc->digit == -1) {
     ret = digits;
@@ -228,7 +154,7 @@ static int luout(unsigned long num, char *buf, int size,
       num = num / desc->radix;
     }
   } else {
-    printk_assert(digits <= desc->digit);
+    format_assert(digits <= desc->digit);
     ret = desc->digit;
 
     for (i = 0; i < desc->digit - digits; i++) {
@@ -262,13 +188,13 @@ static int luout(unsigned long num, char *buf, int size,
  * @size: output buffer size
  */
 static int lout(signed long num, char *buf, int size,
-                struct print_argdesc *desc)
+                struct format_argdesc *desc)
 {
-  printk_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
+  format_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
 
   if (num < 0) {
     /* Make room for the '-' */
-    printk_assert(size >= 2);
+    format_assert(size >= 2);
 
     num *= -1;
     buf[0] = '-';
@@ -283,7 +209,7 @@ static int lout(signed long num, char *buf, int size,
 #if defined(ENABLE_FPU)
 
 static int lfout(double num, char *buf, int size,
-                 struct print_argdesc *desc)
+                 struct format_argdesc *desc)
 {
   bool sign = num < 0.0;
   int ret = 0;
@@ -337,135 +263,6 @@ static int lfout(double num, char *buf, int size,
 
 #endif /* ENABLE_FPU */
 
-/*
- * Parse given print argument expression (@fmt) and save
- * the results to argument descriptor @desc.
- *
- * Input is in in the form: %ld, %d, %x, %lx, etc.
- *
- * Return @fmt after bypassing the '%' expression.
- * FIXME: Better only return print-expression # of chars.
- */
-static const char *parse_arg(const char *fmt, struct print_argdesc *desc)
-{
-  bool complete;
-  unsigned int digit_size;
-
-  printk_assert(*fmt == '%');
-
-  complete = false;
-  desc->len = INT;
-  desc->type = NONE;
-  desc->radix = 10;
-  desc->pad = PAD_NO;
-  desc->digit = -1;
-  desc->float_digit = INIT_FLOAT_DIGIT;
-
-  while (*++fmt) {
-    switch (*fmt) {
-    case 'l':
-      desc->len = LONG;
-      break;
-
-    case 'd':
-      desc->type = SIGNED;
-      complete = true;
-      goto out;
-
-    case 'u':
-      desc->type = UNSIGNED;
-      complete = true;
-      goto out;
-
-    case 'x':
-      desc->type = UNSIGNED;
-      desc->radix = 16;
-      complete = true;
-      goto out;
-#if defined(ENABLE_FPU)
-
-    case 'f':
-      desc->type = FLOAT;
-      complete = true;
-      goto out;
-#endif /* ENABLE_FPU */
-
-    case 's':
-      desc->type = STRING;
-      complete = true;
-      goto out;
-
-    case 'c':
-      desc->type = CHAR;
-      complete = true;
-      goto out;
-
-    case '%':
-      desc->type = PERCENT;
-      complete = true;
-      goto out;
-
-    case '0' ... '9':
-      if (*fmt == '0') {
-        desc->pad = PAD_ZERO;
-        fmt++;
-      } else {
-        desc->pad = PAD_BLANK;
-      }
-
-
-      /* integer part */
-      digit_size = 0;
-
-      while ((*fmt >= '0') && (*fmt <= '9')) {
-        digit_size = digit_size * 10 + (*fmt - '0');
-        fmt++;
-      }
-
-      desc->digit = digit_size;
-
-#if defined(ENABLE_FPU)
-      /* float part */
-      digit_size = 0;
-
-      if (*fmt == '.') {
-        fmt++;
-        while ((*fmt >= '0') && (*fmt <= '9')) {
-          digit_size = digit_size * 10 + (*fmt - '0');
-          fmt++;
-        }
-
-        if (digit_size > 0) {
-          desc->float_digit = digit_size;
-        }
-      }
-
-#endif /* ENABLE_FPU */
-      fmt--;
-      break;
-
-    default:
-      /* Unknown mark: complete by definition */
-      //print("Unknown mark: %d\n", *fmt);
-      desc->type = NONE;
-      complete = true;
-      goto out;
-    }
-  }
-
-out:
-
-  if (!complete) {
-    printk_panic("Unknown/incomplete expression");
-  }
-
-  /* Bypass last expression char */
-  if (*fmt != '\0') {
-    fmt++;
-  }
-
-  return fmt;
-}
 
 
 /*
@@ -475,12 +272,11 @@ out:
  */
 int vsnprint(char *buf, int size, const char *fmt, va_list args)
 {
-  struct print_argdesc desc = {0};
+  struct format_argdesc desc = {0};
   const char *s;
   char *str;
   long num;
   unsigned long unum;
-  unsigned char ch;
   int len;
 #if defined(ENABLE_FPU)
   double dnum;
@@ -503,7 +299,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
       break;
     }
 
-    printk_assert(*fmt == '%');
+    format_assert(*fmt == '%');
     fmt = parse_arg(fmt, &desc);
 
     len = 0;
@@ -554,8 +350,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
       break;
 
     case CHAR:
-      ch = (unsigned char) va_arg(args, int);
-      *str = ch;
+      *str = (unsigned char) va_arg(args, int);
       len = 1;
       break;
 
@@ -574,7 +369,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
     size -= len;
   }
 
-  printk_assert(str >= buf);
+  format_assert(str >= buf);
   return str - buf;
 }
 
@@ -709,7 +504,7 @@ int putchar(int c)
 void printk_bust_all_locks(void)
 {
   spin_lock(&vga_lock);
-  spin_lock(&kbuf_lock);
+  spin_lock(&pbuf_lock);
 }
 
 
@@ -737,21 +532,21 @@ int printf(const char *fmt, ...)
   /* NOTE! This will deadlock if the code enclosed
    * by this lock triggered exceptions: the default
    * exception handlers already call printk() */
-  spin_lock(&kbuf_lock);
+  spin_lock(&pbuf_lock);
 
   va_start(args, fmt);
-  n = vsnprint(kbuf, sizeof(kbuf), fmt, args);
+  n = vsnprint(pbuf, sizeof(pbuf), fmt, args);
   va_end(args);
-  kbuf[n] = '\0';
+  pbuf[n] = '\0';
 
   /* TODO: call_sys_write() */
 #if CONFIG_ARCH_X86
-  vga_write(kbuf, n, VGA_DEFAULT_COLOR);
+  vga_write(pbuf, n, VGA_DEFAULT_COLOR);
 #else
-  puts(kbuf);
+  puts(pbuf);
 #endif
 
-  spin_unlock(&kbuf_lock);
+  spin_unlock(&pbuf_lock);
   return n;
 }
 
@@ -763,14 +558,14 @@ int sprintf(char *str, const char *fmt, ...)
   /* NOTE! This will deadlock if the code enclosed
    * by this lock triggered exceptions: the default
    * exception handlers already call printk() */
-  spin_lock(&kbuf_lock);
+  spin_lock(&pbuf_lock);
 
   va_start(args, fmt);
   n = vsnprint(str, sizeof(str), fmt, args);
   va_end(args);
   str[n] = '\0';
 
-  spin_unlock(&kbuf_lock);
+  spin_unlock(&pbuf_lock);
   return n;
 }
 
@@ -778,20 +573,20 @@ void perror(const char *string)
 {
   int len = strlen(string);
   delay(1000);
-  strcpy(kbuf, string);
-  kbuf[len++] = ':';
-  kbuf[len++] = ' ';
-  sprintf(&kbuf[len], "%d\n", errno);
+  strcpy(pbuf, string);
+  pbuf[len++] = ':';
+  pbuf[len++] = ' ';
+  sprintf(&pbuf[len], "%d\n", errno);
 #if CONFIG_ARCH_X86
 #if CONFIG_PRINT2CONSOLE
-  vga_write(kbuf, n, VGA_DEFAULT_COLOR);
+  vga_write(pbuf, n, VGA_DEFAULT_COLOR);
 #elif CONFIG_PRINT2UART
-  uart_write(kbuf, n, 0);
+  uart_write(pbuf, n, 0);
 #else
 #error "Unknown Printk to Output"
 #endif
 #else
-  puts(kbuf);
+  puts(pbuf);
 #endif
 }
 
@@ -808,21 +603,21 @@ int print(const char *fmt, ...)
   /* NOTE! This will deadlock if the code enclosed
    * by this lock triggered exceptions: the default
    * exception handlers already call printk() */
-  spin_lock(&kbuf_lock);
+  spin_lock(&pbuf_lock);
 
   va_start(args, fmt);
-  n = vsnprint(kbuf, sizeof(kbuf), fmt, args);
+  n = vsnprint(pbuf, sizeof(pbuf), fmt, args);
   va_end(args);
-  kbuf[n] = '\0';
+  pbuf[n] = '\0';
 
   /* TODO: support both kernel and user levels */
 #if CONFIG_ARCH_X86
-  vga_write(kbuf, n, VGA_DEFAULT_COLOR);
+  vga_write(pbuf, n, VGA_DEFAULT_COLOR);
 #else
-  puts(kbuf);
+  puts(pbuf);
 #endif
 
-  spin_unlock(&kbuf_lock);
+  spin_unlock(&pbuf_lock);
   return n;
 }
 
@@ -838,26 +633,26 @@ int printk(const char *fmt, ...)
   /* NOTE! This will deadlock if the code enclosed
    * by this lock triggered exceptions: the default
    * exception handlers already call printk() */
-  spin_lock(&kbuf_lock);
+  spin_lock(&pbuf_lock);
 
   va_start(args, fmt);
-  n = vsnprint(kbuf, sizeof(kbuf), fmt, args);
+  n = vsnprint(pbuf, sizeof(pbuf), fmt, args);
   va_end(args);
-  kbuf[n] = '\0';
+  pbuf[n] = '\0';
 
 #if CONFIG_ARCH_X86
 #if CONFIG_PRINT2CONSOLE
-  vga_write(kbuf, n, VGA_DEFAULT_COLOR);
+  vga_write(pbuf, n, VGA_DEFAULT_COLOR);
 #elif CONFIG_PRINT2UART
-  uart_write(kbuf, n, 0);
+  uart_write(pbuf, n, 0);
 #else
 #error "Unknown Printk to Output"
 #endif
 #else
-  puts(kbuf);
+  puts(pbuf);
 #endif
 
-  spin_unlock(&kbuf_lock);
+  spin_unlock(&pbuf_lock);
   return n;
 }
 
@@ -867,22 +662,22 @@ int print_uart(const char *fmt, ...)
   va_list args;
   int n;
 
-  spin_lock(&kbuf_lock);
+  spin_lock(&pbuf_lock);
 
   va_start(args, fmt);
-  n = vsnprint(kbuf, sizeof(kbuf), fmt, args);
+  n = vsnprint(pbuf, sizeof(pbuf), fmt, args);
   va_end(args);
-  kbuf[n] = '\0';
+  pbuf[n] = '\0';
 
 #if CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
-  uart_write(kbuf, n, 0);
+  uart_write(pbuf, n, 0);
 #elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
-  puts(kbuf);
+  puts(pbuf);
 #else
 #error "Unknown Architecture"
 #endif
 
-  spin_unlock(&kbuf_lock);
+  spin_unlock(&pbuf_lock);
   return n;
 }
 

@@ -17,6 +17,8 @@ FS_SRCS = \
 KERNEL_SRCS = \
  $(TOP_DIR)/kernel/main.c \
  $(TOP_DIR)/kernel/print.c \
+ $(TOP_DIR)/kernel/scan.c \
+ $(TOP_DIR)/kernel/format.c \
  $(TOP_DIR)/kernel/thread.c \
  $(TOP_DIR)/kernel/task.c \
  $(TOP_DIR)/kernel/kmalloc.c \
@@ -64,6 +66,7 @@ USER_SRCS = \
  $(TOP_DIR)/user/test/test_page_alloc.c \
  $(TOP_DIR)/user/test/test_printk.c \
  $(TOP_DIR)/user/test/test_ring_buf.c \
+ $(TOP_DIR)/user/test/test_scan.c \
  $(TOP_DIR)/user/test/test_sched.c \
  $(TOP_DIR)/user/test/test_socket.c \
  $(TOP_DIR)/user/test/test_string.c \
