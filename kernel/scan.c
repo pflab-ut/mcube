@@ -1,4 +1,4 @@
-/*
+/**
  * @file kernel/scan.c
  *
  * @author Hiroyuki Chishiro
@@ -61,7 +61,7 @@ int vsnscan(const char *buf, int size, const char *fmt, va_list args)
       break;
     }
 
-    //    scank_assert(*fmt == '%');
+    format_assert(*fmt == '%');
     fmt = parse_arg(fmt, &desc);
 
     len = 0;
@@ -104,19 +104,16 @@ int vsnscan(const char *buf, int size, const char *fmt, va_list args)
 
     case STRING:
       len = get_val(va_arg(args, char *), str);
-
       break;
 
     case CHAR:
-      //      ch = (unsigned char) va_arg(args, int);
-      //      *str = ch;
       get_val(sbuf, str);
       *va_arg(args, char *) = *sbuf;
       len = 1;
       break;
 
     default:
-      // fscanf(stderr, "Error: Unknown scan type %d\n", desc.type);
+      // fprintf(stderr, "Error: Unknown scan type %d\n", desc.type);
       break;
       /* No-op */
     }
@@ -125,7 +122,7 @@ int vsnscan(const char *buf, int size, const char *fmt, va_list args)
     size -= len;
   }
 
-  //  scank_assert(str >= buf);
+  format_assert(str >= buf);
   return str - buf;
 }
 
