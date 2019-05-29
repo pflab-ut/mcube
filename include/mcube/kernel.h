@@ -24,11 +24,11 @@
 
 
 
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 #define asmlinkage __attribute__((regparm(0)))
 #else
 #define asmlinkage
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 
 
 #define NR_TASKS   16

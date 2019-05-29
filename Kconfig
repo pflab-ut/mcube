@@ -13,12 +13,12 @@ menu Architecture
     mname none
     defs -DCONFIG_ARCH_SIM
     defs -DENABLE_FPU
-  config CONFIG_ARCH_X86
-    title X86
+  config CONFIG_ARCH_X86_64
+    title X86_64
     default n
-    aname x86
+    aname x86_64
     mname none
-    defs -DCONFIG_ARCH_X86
+    defs -DCONFIG_ARCH_X86_64
     depends CONFIG_COMPILER_GCC
   config CONFIG_ARCH_ARM_RASPI3
     title ARM for Raspberry Pi3
@@ -142,7 +142,7 @@ menu Option
     cfiles $(TOP_DIR)/fs/ext2/ext2.c
     cfiles $(TOP_DIR)/fs/ext2/files_list.c
     defs -DCONFIG_OPTION_FS_EXT2
-    depends CONFIG_ARCH_X86
+    depends CONFIG_ARCH_X86_64
     conflicts CONFIG_OPTION_FS_FAT
   config CONFIG_OPTION_FS_FAT
     title Fat File System

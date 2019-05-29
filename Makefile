@@ -99,7 +99,7 @@ $(TARGET): $(ASM_OBJS) $(OBJS) $(MBR_TARGET) $(BOOTSECT_TARGET) $(FONT_OBJ)
 	$(LD) $(LDFLAGS) $(ASM_OBJS) $(FONT_OBJ) $(OBJS) -o $@
 	$(SIZE) $@
 	$(OBJDUMP) $@ > $(DMPFILE)
-ifeq ($(ARCH_NAME), x86)
+ifeq ($(ARCH_NAME), x86_64)
 	$(OBJCOPY) -O binary $(BOOTSECT_TARGET) $(BOOTSECT_BIN)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
 	$(CAT) $(BOOTSECT_BIN) $(BIN) > $(TARGET).img
@@ -110,7 +110,7 @@ else ifeq ($(ARCH_NAME), axis)
 	$(DUMP) $(BIN) $(DUMPARG) $(ROM_FILE)
 endif
 
-ifeq ($(ARCH_NAME), x86)
+ifeq ($(ARCH_NAME), x86_64)
 $(BOOTSECT_TARGET): $(BOOTSECT_OBJS)
 	$(LD) -N -Ttext 0x0 -o $@ $^
 else
@@ -182,7 +182,7 @@ pyflakes:
 run:
 ifeq ($(ARCH_NAME), sim)
 	$(TARGET) $(ARGS)
-else ifeq ($(ARCH_NAME), x86)
+else ifeq ($(ARCH_NAME), x86_64)
 ifeq ($(OUTPUT_NAME), console)
 	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -m 1G -smp 4
 else
@@ -205,7 +205,7 @@ else
 endif
 
 grun:
-ifeq ($(ARCH_NAME), x86)
+ifeq ($(ARCH_NAME), x86_64)
 ifeq ($(OUTPUT_NAME), console)
 	qemu-system-x86_64 build/mcube-hd.img -curses -m 1G -smp 4
 else

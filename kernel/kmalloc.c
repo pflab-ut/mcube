@@ -6,7 +6,7 @@
 
 #include <mcube/mcube.h>
 
-#if 0//CONFIG_ARCH_X86
+#if 0//CONFIG_ARCH_X86_64
 /*
  * Kernel Memory Allocator
  *
@@ -296,5 +296,5 @@ void init_kmalloc(void)
   init_heap(&heap, (long) region);
 }
 
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 

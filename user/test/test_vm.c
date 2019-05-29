@@ -8,7 +8,7 @@
  */
 
 #include <mcube/mcube.h>
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 
 
 /*
@@ -129,5 +129,5 @@ bool test_vm(void)
   return true;
 }
 
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 

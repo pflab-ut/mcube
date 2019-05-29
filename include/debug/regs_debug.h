@@ -15,7 +15,7 @@
 #define pdebug_registers(regs) do {             \
   } while (0)
 
-#elif CONFIG_ARCH_X86
+#elif CONFIG_ARCH_X86_64
 
 #define pdebug_registers(regs) do {             \
   } while (0)

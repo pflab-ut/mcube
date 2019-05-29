@@ -32,11 +32,11 @@ bool test_string(void);
 bool test_unrolled_list(void);
 bool test_vm(void);
 
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 bool test_apic(void);
 bool test_percpu(void);
 bool test_pit(void);
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 
 
 

@@ -25,7 +25,7 @@ vpath %.c $(TOP_DIR)/arch/$(ARCH_NAME) \
 vpath %.S $(TOP_DIR)/arch/$(ARCH_NAME)
 vpath %.asm $(TOP_DIR)/arch/$(ARCH_NAME)
 
-ifeq ($(ARCH_NAME), x86)
+ifeq ($(ARCH_NAME), x86_64)
  IMG_TARGET = $(TOP_DIR)/build/mcube.img
 endif
 

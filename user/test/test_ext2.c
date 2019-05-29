@@ -9,7 +9,7 @@
 
 #include <mcube/mcube.h>
 
-#if CONFIG_ARCH_X86 && CONFIG_OPTION_FS_EXT2
+#if CONFIG_ARCH_X86_64 && CONFIG_OPTION_FS_EXT2
 
 /**
  * Public interface:
@@ -1228,5 +1228,5 @@ bool test_ext2(void)
   return true;
 }
 
-#endif /* CONFIG_ARCH_X86 && CONFIG_OPTION_FS_EXT2 */
+#endif /* CONFIG_ARCH_X86_64 && CONFIG_OPTION_FS_EXT2 */
 

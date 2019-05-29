@@ -9,7 +9,7 @@ reboot.
 ![Mcube Kernel](docs/fig/mcube.jpg "Mcube Kernel")
 
 ## Supporting Compilers and ISAs
-- LLVM-6.0.0/GCC-7.3.0 (or later) for X86, ARM, and SIM (user-level) ISAs
+- LLVM-6.0.0/GCC-7.3.0 (or later) for X86_64, ARM64 (aarch64), and SIM (user-level) ISAs
 - LLVM-6.0.0/GCC-4.8.4 Extension for AXIS ISA
   - LLVM's ISA name is MAXIS (can be downloaded from https://github.com/pflab-ut/llvm)
   - GCC's ISA name is DOM (not open for public)
@@ -29,8 +29,8 @@ Please edit `configure` file or execute the following command.
 ```
 $ cp docs/config/ARCH_configure configure
 ```
-where `ARCH_configure` is `arm_raspi3_configure`, `arm_synquacer_configure`,
-`axis_configure`, `sim_configure`, or `x86_configure`.
+where `ARCH_configure` is `aarch64_raspi3_configure`, `aarch64_synquacer_configure`,
+`axis_configure`, `sim_configure`, or `x86_64_configure`.
 
 `ARCH` of `ARCH_configure` is changed to an architecture name of small
 characters.

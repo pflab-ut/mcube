@@ -8,7 +8,7 @@
  */
 #include <mcube/mcube.h>
 
-#if 0//CONFIG_ARCH_X86
+#if 0//CONFIG_ARCH_X86_64
 
 /*
  * Kernel memory allocator test cases.
@@ -243,4 +243,4 @@ bool test_kmalloc(void)
   return true;
 }
 
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */

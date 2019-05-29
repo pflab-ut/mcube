@@ -8,7 +8,7 @@
  */
 #include <mcube/mcube.h>
 
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 
 static void test_strnlen(const char *str, int len, int expected_len, bool print)
 {
@@ -116,4 +116,5 @@ bool test_string(void)
 }
 
 
-#endif
+#endif /* CONFIG_ARCH_X86_64 */
+

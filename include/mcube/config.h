@@ -10,7 +10,7 @@
 /** Architecture. */
 #define CONFIG_ARCH_SIM 1
 /** Architecture. */
-#define CONFIG_ARCH_X86 0
+#define CONFIG_ARCH_X86_64 0
 /** Architecture. */
 #define CONFIG_ARCH_ARM_RASPI3 0
 /** Architecture. */

@@ -295,7 +295,7 @@ char *strchr(const char *s, int c)
  * To copy the @ch byte repetitively over an 8-byte block,
  * we multiply its value with (0xffffffffffffffff / 0xff).
  */
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 void *memset(void *dst, int ch, size_t len)
 {
   uint64_t uch;
@@ -420,10 +420,10 @@ void *memset64(void *s, uint64_t c, uint64_t n)
   return s;
 }
 
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86_64
 
 
 /*

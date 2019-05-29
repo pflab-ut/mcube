@@ -8,7 +8,7 @@
  */
 #include <mcube/mcube.h>
 
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 /*
  * Keep track of pages we allocate and free
  */
@@ -412,5 +412,5 @@ bool test_page_alloc(void)
   return true;
 }
 
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 

@@ -8,7 +8,7 @@
  */
 
 #include <mcube/mcube.h>
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 
 __noreturn void loop_print(char ch, __unused int color)
 {
@@ -79,5 +79,5 @@ bool test_sched(void)
   return true;
 }
 
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 

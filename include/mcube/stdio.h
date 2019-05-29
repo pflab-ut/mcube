@@ -92,9 +92,9 @@ int putchar(int c);
 int puts(const char *s);
 
 
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 void putchar_colored(char c, int color);
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 
 
 #endif /* !CONFIG_ARCH_SIM */

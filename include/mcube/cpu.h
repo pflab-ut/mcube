@@ -48,7 +48,7 @@ struct full_regs;
 void dump_registers(struct full_regs *regs);
 
 
-#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86
+#if CONFIG_ARCH_SIM || CONFIG_ARCH_X86_64
 /**
  * @struct cpuid_info
  * @brief CPU ID information
@@ -92,7 +92,7 @@ static inline int get_nr_cpu_cores(void)
 }
 
 
-#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_SIM || CONFIG_ARCH_X86_64 */
 
 
 #endif /* __ASSEMBLY__ */

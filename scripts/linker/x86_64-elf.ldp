@@ -1,0 +1,70 @@
+OUTPUT_FORMAT("elf64-x86-64")
+OUTPUT_ARCH(i386:x86-64)
+ENTRY(startup_32)
+SECTIONS
+{
+ . = 0x100000;
+ ASSERT(global_gdt >> 24 == 0,
+        "Error: The 'global_gdt' must reside in a 3-byte address")
+ .text.head : {
+       ./build/./arch/x86_64/head.o(.text)
+       ./build/./arch/x86_64/rmcall.o(.text)
+       ./build/./arch/x86_64/e820.o(.text)
+       ./build/./arch/x86_64/load_ramdisk.o(.text)
+ }
+ .data.head : {
+       ./build/./arch/x86_64/head.o(.data)
+       ./build/./arch/x86_64/rmcall.o(.data)
+       ./build/./arch/x86_64/e820.o(.data)
+       ./build/./arch/x86_64/load_ramdisk.o(.data)
+ }
+ .bss.head (NOLOAD) : {
+       ./build/./arch/x86_64/head.o(.bss)
+       ./build/./arch/x86_64/rmcall.o(.bss)
+       ./build/./arch/x86_64/e820.o(.bss)
+       ./build/./arch/x86_64/load_ramdisk.o(.bss)
+ }
+ . += 0xffffffff80000000;
+ .text : AT(ADDR(.text) - 0xffffffff80000000) {
+        __text_start = .;
+        *(EXCLUDE_FILE (*./build/./arch/x86_64/head.o
+        *./build/./arch/x86_64/rmcall.o
+        *./build/./arch/x86_64/e820.o
+        *./build/./arch/x86_64/load_ramdisk.o)
+          .text)
+        __text_end = .;
+ }
+ .data : {
+        __data_start = .;
+        *(EXCLUDE_FILE (*./build/./arch/x86_64/head.o
+        *./build/./arch/x86_64/rmcall.o
+        *./build/./arch/x86_64/e820.o
+        *./build/./arch/x86_64/load_ramdisk.o)
+
+          .data)
+        *(.rodata)
+        __data_end = .;
+        }
+ .bss : {
+  __bss_start = .;
+        *(EXCLUDE_FILE (*./build/./arch/x86_64/head.o
+        *./build/./arch/x86_64/rmcall.o
+        *./build/./arch/x86_64/e820.o
+        *./build/./arch/x86_64/load_ramdisk.o)
+
+          .bss)
+        *(EXCLUDE_FILE (*./build/./arch/x86_64/head.o
+        *./build/./arch/x86_64/rmcall.o
+        *./build/./arch/x86_64/e820.o
+        *./build/./arch/x86_64/load_ramdisk.o)
+
+          COMMON)
+  __bss_end = .;
+ }
+ __kernel_end = .;
+ /DISCARD/ : {
+  *(.eh_frame)
+  *(.comment)
+  *(.note)
+ }
+}

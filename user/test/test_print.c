@@ -111,7 +111,7 @@ __unused static void printk_test_format(void)
 
 static void printk_test_colors(void)
 {
-#if CONFIG_ARCH_X86 && CONFIG_PRINT2CONSOLE
+#if CONFIG_ARCH_X86_64 && CONFIG_PRINT2CONSOLE
   uint8_t color = VGA_COLOR(VGA_BLACK, 0);
   putchar_colored('A', color | VGA_BLACK);
   putchar_colored('A', color | VGA_BLUE);
@@ -147,7 +147,7 @@ static void printk_test_colors(void)
   putchar('A');
   putchar('A');
   putchar('A');
-#endif /* CONFIG_ARCH_X86 && CONFIG_PRINT2CONSOLE */
+#endif /* CONFIG_ARCH_X86_64 && CONFIG_PRINT2CONSOLE */
 
   printk("\n");
 }

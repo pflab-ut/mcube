@@ -28,7 +28,7 @@ spinlock_t pbuf_lock = INIT_SPINLOCK;
 #define INT_BUFSIZE 32
 
 
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 
 static spinlock_t panic_lock = INIT_SPINLOCK;
 
@@ -115,7 +115,7 @@ void __noreturn panic(const char *fmt, ...)
     ;
 }
 
-#endif /* CONFIG_ARCH_X86 */
+#endif /* CONFIG_ARCH_X86_64 */
 
 
 
@@ -391,7 +391,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
  * Do not use any assert()s in VGA code! (stack overflow)
  */
 
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 
 #define VGA_BASE    ((char *) VIRTUAL(0xb8000))
 #define VGA_MAXROWS    25
@@ -540,7 +540,7 @@ int printf(const char *fmt, ...)
   pbuf[n] = '\0';
 
   /* TODO: call_sys_write() */
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
   vga_write(pbuf, n, VGA_DEFAULT_COLOR);
 #else
   puts(pbuf);
@@ -577,7 +577,7 @@ void perror(const char *string)
   pbuf[len++] = ':';
   pbuf[len++] = ' ';
   sprintf(&pbuf[len], "%d\n", errno);
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 #if CONFIG_PRINT2CONSOLE
   vga_write(pbuf, len, VGA_DEFAULT_COLOR);
 #elif CONFIG_PRINT2UART
@@ -611,7 +611,7 @@ int print(const char *fmt, ...)
   pbuf[n] = '\0';
 
   /* TODO: support both kernel and user levels */
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
   vga_write(pbuf, n, VGA_DEFAULT_COLOR);
 #else
   puts(pbuf);
@@ -640,7 +640,7 @@ int printk(const char *fmt, ...)
   va_end(args);
   pbuf[n] = '\0';
 
-#if CONFIG_ARCH_X86
+#if CONFIG_ARCH_X86_64
 #if CONFIG_PRINT2CONSOLE
   vga_write(pbuf, n, VGA_DEFAULT_COLOR);
 #elif CONFIG_PRINT2UART
@@ -669,7 +669,7 @@ int print_uart(const char *fmt, ...)
   va_end(args);
   pbuf[n] = '\0';
 
-#if CONFIG_ARCH_X86 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
+#if CONFIG_ARCH_X86_64 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
   uart_write(pbuf, n, 0);
 #elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
   puts(pbuf);

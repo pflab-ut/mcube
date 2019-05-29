@@ -13,8 +13,8 @@
 
 #if CONFIG_ARCH_SIM
 #include <sim/sim_header.h>
-#elif CONFIG_ARCH_X86
-#include <x86/x86_header.h>
+#elif CONFIG_ARCH_X86_64
+#include <x86_64/x86_64_header.h>
 #elif CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
 #include <arm/arm_header.h>
 #elif CONFIG_ARCH_AXIS

@@ -78,4 +78,4 @@ typedef struct full_regs full_regs;
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MCUBE_X86_REGS_H__ */
+#endif /* __MCUBE_AXIS_REGS_H__ */
