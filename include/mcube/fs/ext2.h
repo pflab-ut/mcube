@@ -455,12 +455,11 @@ struct path_translation {
  * driver was enabled.
  */
 
-#define STATIC  extern
 void block_read(uint64_t block, char *buf, uint blk_offset, uint len);
 void block_write(uint64_t block, char *buf, uint blk_offset, uint len);
 void block_dealloc(uint block);
 struct inode *inode_alloc(enum file_type type);
-STATIC void inode_mark_delete(struct inode *inode);
+void inode_mark_delete(struct inode *inode);
 uint64_t block_alloc(void);
 bool dir_entry_valid(struct inode *, struct dir_entry *, uint64_t off,
                      uint64_t len);

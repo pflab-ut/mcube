@@ -579,9 +579,9 @@ void perror(const char *string)
   sprintf(&pbuf[len], "%d\n", errno);
 #if CONFIG_ARCH_X86
 #if CONFIG_PRINT2CONSOLE
-  vga_write(pbuf, n, VGA_DEFAULT_COLOR);
+  vga_write(pbuf, len, VGA_DEFAULT_COLOR);
 #elif CONFIG_PRINT2UART
-  uart_write(pbuf, n, 0);
+  uart_write(pbuf, len, 0);
 #else
 #error "Unknown Printk to Output"
 #endif

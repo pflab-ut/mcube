@@ -64,7 +64,7 @@ USER_SRCS = \
  $(TOP_DIR)/user/test/test_kmalloc.c \
  $(TOP_DIR)/user/test/test_list.c \
  $(TOP_DIR)/user/test/test_page_alloc.c \
- $(TOP_DIR)/user/test/test_printk.c \
+ $(TOP_DIR)/user/test/test_print.c \
  $(TOP_DIR)/user/test/test_ring_buf.c \
  $(TOP_DIR)/user/test/test_scan.c \
  $(TOP_DIR)/user/test/test_sched.c \

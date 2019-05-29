@@ -16,7 +16,7 @@
  *
  * SMP-Locking README (1):
  * -----------------------
- * Every used ‘on-disk’ inode is buffered on RAM as an ‘in-core’ inode.
+ * Every used "on-disk" inode is buffered on RAM as an "in-core" inode.
  * Such buffered images are tracked by a hash table inode repository.
  * Each in-core inode has a reference count, guarding it from deletion
  * while being in-use.  This design is taken from the classical SVR2
@@ -250,7 +250,7 @@ static void __block_read_write(uint64_t block, char *buf, uint blk_offset,
  * @blk_offset  : Offset within the block  to start reading from
  * @len         : Nr of bytes to read, starting from @blk_offset
  */
-STATIC void block_read(uint64_t block, char *buf, uint blk_offset, uint len)
+void block_read(uint64_t block, char *buf, uint blk_offset, uint len)
 {
   __block_read_write(block, buf, blk_offset, len, BLOCK_READ);
 }
@@ -262,7 +262,7 @@ STATIC void block_read(uint64_t block, char *buf, uint blk_offset, uint len)
  * @blk_offset  : Offset within the block to start writing to
  * @len         : Nr of bytes to write, starting from @blk_offset
  */
-STATIC void block_write(uint64_t block, char *buf, uint blk_offset, uint len)
+void block_write(uint64_t block, char *buf, uint blk_offset, uint len)
 {
   __block_read_write(block, buf, blk_offset, len, BLOCK_WRTE);
 }
@@ -274,12 +274,12 @@ STATIC void block_write(uint64_t block, char *buf, uint blk_offset, uint len)
  *
  * NOTE! There are obviously more SMP-friendly ways for doing this
  * than just grabbing a global lock reserved for inodes allocation.
- * An ‘optimistic locking’ scheme would access the inode bitmap
- * locklessly, but set the inode's ‘used/free’ bit using an atomic
+ * An "optimistic locking" scheme would access the inode bitmap
+ * locklessly, but set the inode's "used/free" bit using an atomic
  * test_bit_and_set method.  If another thread got that inode bef-
  * ore us, we continue searching the bitmap for yet another inode!
  */
-STATIC struct inode *inode_alloc(enum file_type type)
+struct inode *inode_alloc(enum file_type type)
 {
   struct inode *inode;
   struct group_descriptor *bgd;
@@ -351,7 +351,7 @@ out:
 /*
  * Inode delete - Mark given inode for deletion
  */
-STATIC void inode_mark_delete(struct inode *inode)
+void inode_mark_delete(struct inode *inode)
 {
   inode->delete_on_last_use = true;
 }
@@ -403,7 +403,7 @@ static void __inode_dealloc(struct inode *inode)
  * Block Alloc - Allocate a free data block from disk
  * Return val   : Block number, or 0 if no free blocks exist
  */
-STATIC uint64_t block_alloc(void)
+uint64_t block_alloc(void)
 {
   union super_block *sb;
   struct group_descriptor *bgd;
@@ -463,7 +463,7 @@ out:
  *
  * All the necessary counters are updated in the process
  */
-STATIC void block_dealloc(uint block)
+void block_dealloc(uint block)
 {
   union super_block *sb;
   struct group_descriptor *bgd;
@@ -649,8 +649,8 @@ static inline int dir_entry_min_len(int filename_len)
  *
  * FIXME: Assure entry's type == its destination inode mode.
  */
-STATIC bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
-                            uint64_t offset, uint64_t read_len)
+bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
+                     uint64_t offset, uint64_t read_len)
 {
   uint64_t inum;
 
@@ -724,9 +724,9 @@ STATIC bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
  * @offset  : Return val, offset of found dentry wrt to dir file
  * Return val  : Inode number of file, or an errorno
  */
-STATIC int64_t find_dir_entry(struct inode *dir, const char *name,
-                              uint name_len,
-                              struct dir_entry **entry, int64_t *roffset)
+int64_t find_dir_entry(struct inode *dir, const char *name,
+                       uint name_len,
+                       struct dir_entry **entry, int64_t *roffset)
 {
   struct dir_entry *dentry;
   uint64_t dentry_len, offset, len;
@@ -1185,7 +1185,7 @@ int64_t name_i(const char *path)
     break;
 
   default:
-    inum = current->working_dir;
+    inum = get_current_process()->working_dir;
     assert(inum != 0);
   }
 

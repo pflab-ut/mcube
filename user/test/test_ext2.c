@@ -384,7 +384,7 @@ __unused static void test_file_reads(__unused void *arg)
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
   assert(bd);
-  printk("c%d t%lu fr start\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu fr start\n", percpu_get(apic_id), get_current_process()->pid);
 
   if (!(buf = kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
@@ -421,7 +421,7 @@ __unused static void test_file_reads(__unused void *arg)
 
   kfree(buf);
 
-  printk("c%d t%lu fr end!\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu fr end!\n", percpu_get(apic_id), get_current_process()->pid);
 
   if (percpu_get(halt_thread_at_end)) {
     halt();
@@ -439,7 +439,7 @@ __unused static void test_block_reads(void)
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
-  printk("c%d t%lu br start\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu br start\n", percpu_get(apic_id), get_current_process()->pid);
 
   /* All possible permumations: Burn, baby, Burn! */
   for (uint i = 0; i < isb.sb->blocks_count; i++) {
@@ -455,7 +455,7 @@ __unused static void test_block_reads(void)
 
   kfree(buf);
 
-  printk("c%d t%lu br end!\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu br end!\n", percpu_get(apic_id), get_current_process()->pid);
 
   if (percpu_get(halt_thread_at_end)) {
     halt();
@@ -479,7 +479,7 @@ __unused static void test_file_existence(void)
 
   bd = (void *)percpu_get(dumper);
 
-  printk("c%d t%ld ex start\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%ld ex start\n", percpu_get(apic_id), get_current_process()->pid);
 
   if (!(parent = kmalloc(4096))) {
     panic("Error: cannot allocate memory %lu\n", 4096);
@@ -496,7 +496,7 @@ __unused static void test_file_existence(void)
     bd->pr("Parent: '%s'\n", parent);
     bd->pr("Child: '%s'\n", child);
     parent_inum = (*parent == '\0') ?
-                  (int64_t) current->working_dir : name_i(parent);
+                  (int64_t) get_current_process()->working_dir : name_i(parent);
     parent_ino = inode_get(parent_inum);
     inum = file_new(parent_ino, child, EXT2_FT_REG_FILE);
 
@@ -512,7 +512,7 @@ __unused static void test_file_existence(void)
 
   kfree(parent);
   kfree(child);
-  printk("c%d t%ld ex end\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%ld ex end\n", percpu_get(apic_id), get_current_process()->pid);
 
   if (percpu_get(halt_thread_at_end)) {
     halt();
@@ -542,7 +542,7 @@ __unused static void test_file_creation(void)
 
   char prefix[64];
   __vsnprint(prefix, sizeof(prefix) - 1, "c%d_t%lu_",
-             percpu_get(apic_id), current->pid);
+             percpu_get(apic_id), get_current_process()->pid);
 
   bd = &serial_char_dumper;
 
@@ -1070,7 +1070,7 @@ out1:
     printk("Parent: '%s'\n", parent);
     printk("Child: '%s'\n", child);
     parent_inum = (*parent == '\0') ?
-                  (int64_t) current->working_dir : name_i(parent);
+                  (int64_t) get_current_process()->working_dir : name_i(parent);
 
     if (parent_inum < 0) {
       bd->pr("FAILURE: Parent pathname resolution returned "
@@ -1124,7 +1124,7 @@ __noreturn static void test_alloc_dealloc(__unused void *arg)
   void *inode_ptr;
   bool complete = true;
 
-  printk("c%d t%lu a start\n", percpu_get(apic_id), current->pid);
+  printk("c%d t%lu a start\n", percpu_get(apic_id), get_current_process()->pid);
   unrolled_init(&head, 64);
 
   for (int i = 0; i < 100; i++) {
@@ -1142,7 +1142,7 @@ __noreturn static void test_alloc_dealloc(__unused void *arg)
     inode_mark_delete(inode_ptr);
     inode_put(inode_ptr);
   }
-  printk("c%d t%lu a %s\n", percpu_get(apic_id), current->pid,
+  printk("c%d t%lu a %s\n", percpu_get(apic_id), get_current_process()->pid,
          (complete) ? "end!" : "no ino!");
   halt();
 }
