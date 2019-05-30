@@ -29,7 +29,8 @@ void exit_irq(void)
 
 void init_spinlock(void)
 {
-  kbuf_lock = INIT_SPINLOCK;
+  pbuf_lock = INIT_SPINLOCK;
+  sbuf_lock = INIT_SPINLOCK;
   kmalloc_lock = INIT_SPINLOCK;
   socket_lock = INIT_SPINLOCK;
 }

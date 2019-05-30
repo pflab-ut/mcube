@@ -12,8 +12,6 @@ bool test_scan(void)
   unsigned int ua, ub;
   char c, d;
   char str[256];
-  float f;
-  double lf;
   sscan("123 -4567", "%d%d", &a, &b);
   printf("a = %d, b = %d\n", a, b);
   sscan("1234 567", "%u%u", &ua, &ub);
@@ -22,7 +20,11 @@ bool test_scan(void)
   printf("c = '%c' d = '%c'\n", c, d);
   sscan("abc", "%s", str);
   printf("str = %s\n", str);
+#if defined(ENABLE_FPU)
+  float f;
+  double lf;
   sscan("12.34 -56.789", "%f%lf", &f, &lf);
   printf("f = %f lf = %lf\n", f, lf);
+#endif /* ENABLE_FPU */
   return true;
 }

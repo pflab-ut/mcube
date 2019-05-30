@@ -36,7 +36,8 @@ static inline void spin_lock(spinlock_t *lock);
 static inline bool spin_trylock(spinlock_t *lock);
 static inline void spin_unlock(spinlock_t *lock);
 
-extern spinlock_t kbuf_lock;
+extern spinlock_t pbuf_lock;
+extern spinlock_t sbuf_lock;
 extern spinlock_t kmalloc_lock;
 extern spinlock_t socket_lock;
 
