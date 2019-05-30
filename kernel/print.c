@@ -119,6 +119,7 @@ void __noreturn panic(const char *fmt, ...)
 
 
 
+
 /*
  * Convert given unsigned long integer (@num) to ascii using
  * desired radix. Return the number of ascii chars printed.
@@ -136,17 +137,15 @@ static int luout(unsigned long num, char *buf, int size,
 
   if (num == 0) {
     digits++;
-  }
-
-  for (typeof(num) c = num; c != 0; c /= desc->radix) {
-    digits++;
+  } else {
+    digits = get_digit(num, desc->radix);
   }
 
   format_assert(digits > 0);
   format_assert(digits <= size);
   format_assert(desc->digit <= size);
 
-  if (desc->digit == -1) {
+  if (desc->digit == INIT_DIGIT) {
     ret = digits;
 
     for (; digits != 0; digits--) {
@@ -215,11 +214,13 @@ static int lfout(double num, char *buf, int size,
   int ret = 0;
   static char inf[] = "inf";
   static char nan[] = "NaN";
-  int digit = desc->digit;
   uint64_t ulpart, dpart;
   char str[INT_BUFSIZE];
   int int_begin;
   int len;
+  int dlen;
+  int digit = desc->digit;
+  int float_digit = desc->float_digit;
 
   if (isinf(num)) {
     if (sign) {
@@ -243,18 +244,30 @@ static int lfout(double num, char *buf, int size,
     /* round off to @float_digit decimal places */
     dpart = (num - ulpart) * lpow(10, desc->float_digit) + 0.5;
 
-    desc->digit = -1;
-    ret += luout(dpart, &buf[ret], size, desc);
+    if (float_digit == INIT_FLOAT_DIGIT) {
+      desc->digit = INIT_FLOAT_DIGIT;
+    } else {
+      desc->digit = desc->float_digit;
+    }
 
-    desc->digit = digit - desc->float_digit - 1;
+    dlen = luout(dpart, &buf[ret], size, desc);
+
+
+    if (digit == INIT_DIGIT || digit < float_digit ||
+        digit - float_digit - 1 < (int) get_digit(ulpart, 10)) {
+      desc->digit = INIT_DIGIT;
+    } else {
+      desc->digit = digit - float_digit - 1;
+    }
+
     len = luout(ulpart, str, size, desc);
     str[len++] = '.';
     /* move float part to right place */
-    memmove(&buf[int_begin + len], &buf[int_begin], desc->float_digit);
+    memmove(&buf[int_begin + len], &buf[int_begin], dlen);
     /* move integer part from str to right place */
     memmove(&buf[int_begin], str, len);
 
-    ret += len;
+    ret += dlen + len;
   }
 
   return ret;

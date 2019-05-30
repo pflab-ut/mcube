@@ -125,8 +125,6 @@ int vsnscan(const char *buf, const char *fmt, va_list args)
 }
 
 
-//#if !CONFIG_ARCH_SIM
-
 int sscan(const char *str, const char *fmt, ...)
 {
   va_list args;
@@ -141,8 +139,20 @@ int sscan(const char *str, const char *fmt, ...)
   return n;
 }
 
+#if !CONFIG_ARCH_SIM
 
+int sscanf(const char *str, const char *fmt, ...)
+{
+  va_list args;
+  int n;
 
-//#endif /* CONFIG_ARCH_SIM */
+  spin_lock(&sbuf_lock);
+  va_start(args, fmt);
+  n = vsnscan(str, fmt, args);
+  va_end(args);
+  spin_unlock(&sbuf_lock);
 
+  return n;
+}
 
+#endif /* !CONFIG_ARCH_SIM */

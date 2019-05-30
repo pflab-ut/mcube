@@ -164,6 +164,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  char str[128];
   //  print("user_arch_main()\n");
   //  user_thread_main();
+  test_scan();
   // user_ap_main();
   // user_dmac_main();
   //  kernel_level_main();

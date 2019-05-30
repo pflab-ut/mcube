@@ -53,6 +53,7 @@ int sscan(const char *str, const char *fmt, ...);
 int vsnscan(const char *buf, const char *fmt, va_list args);
 
 
+
 /* print for both kernel and user modes. */
 int print(const char *fmt, ...);
 
@@ -85,6 +86,7 @@ __noreturn void loop_print(char ch, int color);
 
 #if !CONFIG_ARCH_SIM
 
+int sscanf(const char *str, const char *fmt, ...);
 int printf(const char *fmt, ...);
 int sprintf(char *str, const char *format, ...);
 void perror(const char *string);

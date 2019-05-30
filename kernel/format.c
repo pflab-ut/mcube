@@ -106,13 +106,13 @@ const char *parse_arg(const char *fmt, struct format_argdesc *desc)
       goto out;
 
     case '0' ... '9':
+    case '.':
       if (*fmt == '0') {
         desc->pad = PAD_ZERO;
         fmt++;
       } else {
         desc->pad = PAD_BLANK;
       }
-
 
       /* integer part */
       digit_size = 0;
@@ -123,7 +123,6 @@ const char *parse_arg(const char *fmt, struct format_argdesc *desc)
       }
 
       desc->digit = digit_size;
-
 #if defined(ENABLE_FPU)
       /* float part */
       digit_size = 0;

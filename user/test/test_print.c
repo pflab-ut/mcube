@@ -11,11 +11,11 @@
 
 
 /*
- * Minimal printk test cases
+ * Minimal print test cases
  */
 
 
-static void printk_test_int(void)
+static void print_test_int(void)
 {
   printk("(-10, 10): ");
 
@@ -35,7 +35,7 @@ static void printk_test_int(void)
   printk("\n");
 }
 
-static void printk_test_hex(void)
+static void print_test_hex(void)
 {
   printk("(0x0, 0x100): ");
 
@@ -54,7 +54,7 @@ static void printk_test_hex(void)
   printk("\n");
 }
 
-static void printk_test_string(void)
+static void print_test_string(void)
 {
   const char *test1, *test2, *test3;
 
@@ -84,7 +84,7 @@ static void printk_test_string(void)
  * C printf expressions
  */
 static char tmpbuf[100];
-__unused static void printk_test_format(void)
+__unused static void print_test_format(void)
 {
   const char *fmt;
   int len;
@@ -109,7 +109,7 @@ __unused static void printk_test_format(void)
   }
 }
 
-static void printk_test_colors(void)
+static void print_test_colors(void)
 {
 #if CONFIG_ARCH_X86_64 && CONFIG_PRINT2CONSOLE
   uint8_t color = VGA_COLOR(VGA_BLACK, 0);
@@ -152,12 +152,30 @@ static void printk_test_colors(void)
   printk("\n");
 }
 
-bool test_printk(void)
+static void print_test_float(void)
 {
-  printk_test_int();
-  printk_test_hex();
-  printk_test_string();
-  //  printk_test_format();
-  printk_test_colors();
+#if 1
+  printf("printf: %lf\n", 23.4567890);
+  printf("printf: %2.5lf\n", 23.4567890);
+  printf("printf:%.5lf\n", 234.4567890);
+  printf("printf: %18lf\n", 23.456);
+#endif
+  printk("printk: %lf\n", 23.4567890);
+  printk("printk: %2.5lf\n", 23.4567890);
+  printk("printk:%.5lf\n", 234.4567890);
+  printk("printk: %18lf\n", 23.456);
+}
+
+
+bool test_print(void)
+{
+#if 1
+  print_test_int();
+  print_test_hex();
+  print_test_string();
+  //  print_test_format();
+  print_test_colors();
+#endif
+  print_test_float();
   return true;
 }
