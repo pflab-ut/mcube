@@ -6,60 +6,60 @@
 /* This code is from https://github.com/CCareaga/heap_allocator */
 #include <mcube/mcube.h>
 
-void add_node(bin_t *bin, node_t *node)
+void add_heap_node(bin_t *bin, heap_node_t *heap_node)
 {
-  node->next = NULL;
-  node->prev = NULL;
+  heap_node->next = NULL;
+  heap_node->prev = NULL;
 
   if (!bin->head) {
-    bin->head = node;
+    bin->head = heap_node;
     return;
   }
 
   // we need to save next and prev while we iterate
-  node_t *current_node = bin->head;
-  node_t *previous = NULL;
+  heap_node_t *current_heap_node = bin->head;
+  heap_node_t *previous = NULL;
 
   // iterate until we get the the end of the list or we find a
-  // node whose size is
-  while (current_node && current_node->size <= node->size) {
-    previous = current_node;
-    current_node = current_node->next;
+  // heap_node whose size is
+  while (current_heap_node && current_heap_node->size <= heap_node->size) {
+    previous = current_heap_node;
+    current_heap_node = current_heap_node->next;
   }
 
-  if (!current_node) { // we reached the end of the list
-    previous->next = node;
-    node->prev = previous;
+  if (!current_heap_node) { // we reached the end of the list
+    previous->next = heap_node;
+    heap_node->prev = previous;
   } else {
     if (previous) { // middle of list, connect all links!
-      node->next = current_node;
-      previous->next = node;
+      heap_node->next = current_heap_node;
+      previous->next = heap_node;
 
-      node->prev = previous;
-      current_node->prev = node;
+      heap_node->prev = previous;
+      current_heap_node->prev = heap_node;
     } else { // head is the only element
-      node->next = bin->head;
-      bin->head->prev = node;
-      bin->head = node;
+      heap_node->next = bin->head;
+      bin->head->prev = heap_node;
+      bin->head = heap_node;
     }
   }
 }
 
-void remove_node(bin_t *bin, node_t *node)
+void remove_heap_node(bin_t *bin, heap_node_t *heap_node)
 {
   if (!bin->head) {
     return;
   }
 
-  if (bin->head == node) {
+  if (bin->head == heap_node) {
     bin->head = bin->head->next;
     return;
   }
 
-  node_t *tmp = bin->head->next;
+  heap_node_t *tmp = bin->head->next;
 
   while (tmp) {
-    if (tmp == node) { // found the node
+    if (tmp == heap_node) { // found the heap_node
       if (!tmp->next) { // last item
         tmp->prev->next = NULL;
       } else { // middle item
@@ -75,13 +75,13 @@ void remove_node(bin_t *bin, node_t *node)
   }
 }
 
-node_t *get_best_fit(bin_t *bin, size_t size)
+heap_node_t *get_best_fit(bin_t *bin, size_t size)
 {
   if (!bin->head) {
     return NULL; // empty list!
   }
 
-  node_t *tmp = bin->head;
+  heap_node_t *tmp = bin->head;
 
   while (tmp) {
     if (tmp->size >= size) {
@@ -94,9 +94,9 @@ node_t *get_best_fit(bin_t *bin, size_t size)
   return NULL; // no fit!
 }
 
-node_t *get_last_node(bin_t *bin)
+heap_node_t *get_last_heap_node(bin_t *bin)
 {
-  node_t *tmp = bin->head;
+  heap_node_t *tmp = bin->head;
 
   while (tmp->next) {
     tmp = tmp->next;

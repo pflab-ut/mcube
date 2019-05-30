@@ -20,12 +20,12 @@
  * NOTE! the  data array could've been embedded in the node using
  * declaration 'void *array[]', and putting that at structure end?
  */
-struct __node {
+struct unrolled_node {
   void **array;    /* Array of void pointers to data! */
   uint array_len;    /* Number of cells in the @array (Redundant!)*/
   uint array_nrfree;  /* Number of free cells in the @array */
   uint num;    /* Node number in the linked list, from 0 */
-  struct __node *next;  /* Next node in this list, or NULL */
+  struct unrolled_node *next;  /* Next node in this list, or NULL */
 };
 
 /*
@@ -33,7 +33,7 @@ struct __node {
  * desired kernel structure.
  */
 struct unrolled_head {
-  struct __node *node;  /* Singly-linked list of unrolled nodes */
+  struct unrolled_node *node;  /* Singly-linked list of unrolled nodes */
   uint array_len;    /* Number of cells in each node array */
 };
 
@@ -62,21 +62,21 @@ void unrolled_remove_key(struct unrolled_head *head, uint key);
  * and GNU extensions syntax to achieve it.
  */
 #define unrolled_for_each(head, val)                                    \
-  for (struct __node *__node = (head)->node;                            \
-       __node;                                                          \
-       __node = __node->next)                                           \
+  for (struct unrolled_node *unrolled_node = (head)->node;                            \
+       unrolled_node;                                                          \
+       unrolled_node = unrolled_node->next)                                           \
     for (uint __i = 0,                                                  \
            __unused *_____c =                                           \
            ({                                                           \
              val = NULL;                                                \
-             while (__i < __node->array_len && !(val = __node->array[__i])) \
+             while (__i < unrolled_node->array_len && !(val = unrolled_node->array[__i])) \
                __i++; val;                                              \
            });                                                          \
-         __i < __node->array_len;                                       \
+         __i < unrolled_node->array_len;                                       \
          __i++,                                                         \
            ({                                                           \
              val = NULL;                                                \
-             while (__i < __node->array_len && !(val = __node->array[__i])) \
+             while (__i < unrolled_node->array_len && !(val = unrolled_node->array[__i])) \
                __i++; val;                                              \
            }))
 

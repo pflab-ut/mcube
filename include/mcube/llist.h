@@ -9,15 +9,15 @@
 
 #ifndef __ASSEMBLY__
 
-void add_node(bin_t *bin, node_t *node);
+void add_heap_node(bin_t *bin, heap_node_t *heap_node);
 
-void remove_node(bin_t *bin, node_t *node);
+void remove_heap_node(bin_t *bin, heap_node_t *heap_node);
 
-node_t *get_best_fit(bin_t *list, size_t size);
-node_t *get_last_node(bin_t *list);
+heap_node_t *get_best_fit(bin_t *list, size_t size);
+heap_node_t *get_last_heap_node(bin_t *list);
 
-node_t *next(node_t *current);
-node_t *prev(node_t *current);
+heap_node_t *next(heap_node_t *current);
+heap_node_t *prev(heap_node_t *current);
 
 #endif /* !__ASSEMBLY__ */
 

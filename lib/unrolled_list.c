@@ -29,12 +29,12 @@
 /*
  * Allocate and initialize a new list node
  */
-static struct __node *__unode_new(uint node_num, uint array_len)
+static struct unrolled_node *__unode_new(uint node_num, uint array_len)
 {
-  struct __node *node;
+  struct unrolled_node *node;
 
-  if (!(node = kmalloc(sizeof(struct __node)))) {
-    panic("Error: cannot allocate memory %lu\n", sizeof(struct __node));
+  if (!(node = kmalloc(sizeof(struct unrolled_node)))) {
+    panic("Error: cannot allocate memory %lu\n", sizeof(struct unrolled_node));
   }
 
   node->array = kmalloc(array_len * sizeof(void *));
@@ -49,7 +49,7 @@ static struct __node *__unode_new(uint node_num, uint array_len)
 /*
  * Free all of a node's memory storage
  */
-static void __unode_free(struct __node *node)
+static void __unode_free(struct unrolled_node *node)
 {
   kfree(node->array);
   kfree(node);
@@ -58,7 +58,7 @@ static void __unode_free(struct __node *node)
 /*
  * Retun index of first free cell in given node's array
  */
-static uint __unode_array_find_free_idx(struct __node *node)
+static uint __unode_array_find_free_idx(struct unrolled_node *node)
 {
   assert(node->array_nrfree > 0);
 
@@ -71,7 +71,8 @@ static uint __unode_array_find_free_idx(struct __node *node)
   assert(false);
 }
 
-static void __unode_store_val_in_array(struct __node *node, uint array_idx,
+static void __unode_store_val_in_array(struct unrolled_node *node,
+                                       uint array_idx,
                                        void *val)
 {
   assert(val);
@@ -82,7 +83,7 @@ static void __unode_store_val_in_array(struct __node *node, uint array_idx,
   node->array[array_idx] = val;
 }
 
-__unused static void __unode_update_val_in_array(struct __node *node,
+__unused static void __unode_update_val_in_array(struct unrolled_node *node,
                                                  uint array_idx, void *val)
 {
   assert(val);
@@ -97,10 +98,10 @@ __unused static void __unode_update_val_in_array(struct __node *node,
  * within such node's array of data. Return NULL if the @key
  * was out of range.
  */
-static struct __node *__get_node(struct unrolled_head *head, uint key,
-                                 uint *array_idx)
+static struct unrolled_node *__get_node(struct unrolled_head *head, uint key,
+                                        uint *array_idx)
 {
-  struct __node *node;
+  struct unrolled_node *node;
   uint node_num;
 
   node = head->node;
@@ -145,7 +146,7 @@ void unrolled_init(struct unrolled_head *head, uint array_len)
  */
 void unrolled_free(struct unrolled_head *head)
 {
-  struct __node *node, *prev;
+  struct unrolled_node *node, *prev;
 
   node = head->node;
 
@@ -169,7 +170,7 @@ void unrolled_free(struct unrolled_head *head)
  */
 uint unrolled_insert(struct unrolled_head *head, void *val)
 {
-  struct __node *node, *prev;
+  struct unrolled_node *node, *prev;
   uint idx;
 
   if (!head->node) {
@@ -204,7 +205,7 @@ uint unrolled_insert(struct unrolled_head *head, void *val)
  */
 void *unrolled_lookup(struct unrolled_head *head, uint key)
 {
-  struct __node *node;
+  struct unrolled_node *node;
   uint array_idx;
 
   node = __get_node(head, key, &array_idx);
@@ -221,7 +222,7 @@ void *unrolled_lookup(struct unrolled_head *head, uint key)
  */
 void unrolled_remove_key(struct unrolled_head *head, uint key)
 {
-  struct __node *node;
+  struct unrolled_node *node;
   uint array_idx;
 
   node = __get_node(head, key, &array_idx);

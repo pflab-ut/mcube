@@ -21,19 +21,19 @@
 
 #ifndef __ASSEMBLY__
 
-typedef struct node {
+typedef struct heap_node {
   unsigned int hole;
   unsigned int size;
-  struct node *next;
-  struct node *prev;
-} node_t;
+  struct heap_node *next;
+  struct heap_node *prev;
+} heap_node_t;
 
 typedef struct {
-  node_t *header;
+  heap_node_t *header;
 } footer_t;
 
 typedef struct {
-  node_t *head;
+  heap_node_t *head;
 } bin_t;
 
 typedef struct {
@@ -51,10 +51,10 @@ uint expand(heap_t *heap, size_t sz);
 void contract(heap_t *heap, size_t sz);
 
 uint get_bin_index(size_t sz);
-void create_foot(node_t *head);
-footer_t *get_foot(node_t *head);
+void create_foot(heap_node_t *head);
+footer_t *get_foot(heap_node_t *head);
 
-node_t *get_wilderness(heap_t *heap);
+heap_node_t *get_wilderness(heap_t *heap);
 
 #endif /* !__ASSEMBLY__ */
 

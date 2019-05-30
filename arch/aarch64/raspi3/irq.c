@@ -1,5 +1,5 @@
 /**
- * @file arch/arm/raspi3/irq.c
+ * @file arch/aarch64/raspi3/irq.c
  *
  * @author Hiroyuki Chishiro
  */

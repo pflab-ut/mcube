@@ -62,10 +62,9 @@ struct mpc_table {
   uint8_t reserved;
 } __packed;
 
-/*
+/**
  * MP Configuration table entries
  */
-
 struct mpc_cpu {
   uint8_t entry;      /* Entry type (processor) */
   uint8_t lapic_id;    /* This processor's lapic ID */

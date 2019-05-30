@@ -96,7 +96,7 @@ enum zone_id {
   NR_ZONES = 3,
 };
 
-/*
+/**
  * Page Frame Descriptor
  *
  * It's essential to save space in this struct since there's

@@ -7,7 +7,7 @@
 #include <mcube/mcube.h>
 
 
-static uint overhead = sizeof(footer_t) + sizeof(node_t);
+static uint overhead = sizeof(footer_t) + sizeof(heap_node_t);
 uint offset = 8;
 
 // ========================================================
@@ -22,14 +22,14 @@ void init_heap(heap_t *heap, long start)
 {
   // first we create the initial region, this is the "wilderness" chunk
   // the heap starts as just one big chunk of allocatable memory
-  node_t *init_region = (node_t *) start;
+  heap_node_t *init_region = (heap_node_t *) start;
   init_region->hole = 1;
-  init_region->size = (HEAP_INIT_SIZE) - sizeof(node_t) - sizeof(footer_t);
+  init_region->size = (HEAP_INIT_SIZE) - sizeof(heap_node_t) - sizeof(footer_t);
 
   create_foot(init_region); // create a foot (size must be defined)
 
   // now we add the region to the correct bin and setup the heap struct
-  add_node(heap->bins[get_bin_index(init_region->size)], init_region);
+  add_heap_node(heap->bins[get_bin_index(init_region->size)], init_region);
 
   heap->start = start;
   heap->end   = start + HEAP_INIT_SIZE;
@@ -48,7 +48,7 @@ void *heap_alloc(heap_t *heap, size_t size)
   uint index = get_bin_index(size);
   // now use this bin to try and find a good fitting chunk!
   bin_t *temp = (bin_t *) heap->bins[index];
-  node_t *found = get_best_fit(temp, size);
+  heap_node_t *found = get_best_fit(temp, size);
 
   // while no chunk if found advance through the bins until we
   // find a chunk or get to the wilderness
@@ -63,9 +63,10 @@ void *heap_alloc(heap_t *heap, size_t size)
   // then we should split this chunk, otherwise just return the chunk
   if ((found->size - size) > (overhead + MIN_ALLOC_SZ)) {
     // do the math to get where to split at, then set its metadata
-    node_t *split = (node_t *)(((char *) found + sizeof(node_t) + sizeof(
-                                  footer_t)) + size);
-    split->size = found->size - size - sizeof(node_t) - sizeof(footer_t);
+    heap_node_t *split = (heap_node_t *)(((char *) found + sizeof(
+                                            heap_node_t) + sizeof(
+                                            footer_t)) + size);
+    split->size = found->size - size - sizeof(heap_node_t) - sizeof(footer_t);
     split->hole = 1;
 
     create_foot(split); // create a footer for the split
@@ -74,19 +75,19 @@ void *heap_alloc(heap_t *heap, size_t size)
     // place it in the correct bin
     uint new_idx = get_bin_index(split->size);
 
-    add_node(heap->bins[new_idx], split);
+    add_heap_node(heap->bins[new_idx], split);
 
     found->size = size; // set the found chunks size
     create_foot(found); // since size changed, remake foot
   }
 
   found->hole = 0; // not a hole anymore
-  remove_node(heap->bins[index], found); // remove it from its bin
+  remove_heap_node(heap->bins[index], found); // remove it from its bin
 
   // these following lines are checks to determine if the heap should
   // be expanded or contracted
   // ==========================================
-  node_t *wild = get_wilderness(heap);
+  heap_node_t *wild = get_wilderness(heap);
 
   if (wild->size < MIN_WILDERNESS) {
     uint success = expand(heap, 0x1000);
@@ -119,48 +120,48 @@ void heap_free(heap_t *heap, void *p)
   bin_t *list;
   footer_t *new_foot, *old_foot;
 
-  // the actual head of the node is not p, it is p minus the size
-  // of the fields that precede "next" in the node structure
-  // if the node being free is the start of the heap then there is
+  // the actual head of the heap_node is not p, it is p minus the size
+  // of the fields that precede "next" in the heap_node structure
+  // if the heap_node being free is the start of the heap then there is
   // no need to coalesce so just put it in the right list
-  node_t *head = (node_t *)((char *) p - offset);
+  heap_node_t *head = (heap_node_t *)((char *) p - offset);
 
-  if (head == (node_t *)(uintptr_t) heap->start) {
+  if (head == (heap_node_t *)(uintptr_t) heap->start) {
     head->hole = 1;
-    add_node(heap->bins[get_bin_index(head->size)], head);
+    add_heap_node(heap->bins[get_bin_index(head->size)], head);
     return;
   }
 
-  // these are the next and previous nodes in the heap, not the prev and next
-  // in a bin. to find prev we just get subtract from the start of the head node
-  // to get the footer of the previous node (which gives us the header pointer).
-  // to get the next node we simply get the footer and add the sizeof(footer_t).
-  node_t *next = (node_t *)((char *) get_foot(head) + sizeof(footer_t));
+  // these are the next and previous heap_nodes in the heap, not the prev and next
+  // in a bin. to find prev we just get subtract from the start of the head heap_node
+  // to get the footer of the previous heap_node (which gives us the header pointer).
+  // to get the next heap_node we simply get the footer and add the sizeof(footer_t).
+  heap_node_t *next = (heap_node_t *)((char *) get_foot(head) + sizeof(footer_t));
   footer_t *f = (footer_t *)((char *) head - sizeof(footer_t));
-  node_t *prev = f->header;
+  heap_node_t *prev = f->header;
 
-  // if the previous node is a hole we can coalese!
+  // if the previous heap_node is a hole we can coalese!
   if (prev->hole) {
-    // remove the previous node from its bin
+    // remove the previous heap_node from its bin
     list = heap->bins[get_bin_index(prev->size)];
-    remove_node(list, prev);
+    remove_heap_node(list, prev);
 
-    // re-calculate the size of thie node and recreate a footer
+    // re-calculate the size of thie heap_node and recreate a footer
     prev->size += overhead + head->size;
     new_foot = get_foot(head);
     new_foot->header = prev;
 
-    // previous is now the node we are working with, we head to prev
-    // because the next if statement will coalesce with the next node
+    // previous is now the heap_node we are working with, we head to prev
+    // because the next if statement will coalesce with the next heap_node
     // and we want that statement to work even when we coalesce with prev
     head = prev;
   }
 
-  // if the next node is free coalesce!
+  // if the next heap_node is free coalesce!
   if (next->hole) {
     // remove it from its bin
     list = heap->bins[get_bin_index(next->size)];
-    remove_node(list, next);
+    remove_heap_node(list, next);
 
     // re-calculate the new size of head
     head->size += overhead + next->size;
@@ -178,7 +179,7 @@ void heap_free(heap_t *heap, void *p)
 
   // this chunk is now a hole, so put it in the right bin!
   head->hole = 1;
-  add_node(heap->bins[get_bin_index(head->size)], head);
+  add_heap_node(heap->bins[get_bin_index(head->size)], head);
 }
 
 // these are left here to implement contraction / expansion
@@ -219,32 +220,32 @@ uint get_bin_index(size_t sz)
 }
 
 // ========================================================
-// this function will create a footer given a node
-// the node's size must be set to the correct value!
+// this function will create a footer given a heap_node
+// the heap_node's size must be set to the correct value!
 // ========================================================
-void create_foot(node_t *head)
+void create_foot(heap_node_t *head)
 {
   footer_t *foot = get_foot(head);
   foot->header = head;
 }
 
 // ========================================================
-// this function will get the footer pointer given a node
+// this function will get the footer pointer given a heap_node
 // ========================================================
-footer_t *get_foot(node_t *node)
+footer_t *get_foot(heap_node_t *heap_node)
 {
-  return (footer_t *)((char *) node + sizeof(node_t) + node->size);
+  return (footer_t *)((char *) heap_node + sizeof(heap_node_t) + heap_node->size);
 }
 
 // ========================================================
-// this function will get the wilderness node given a
+// this function will get the wilderness heap_node given a
 // heap struct pointer
 //
 // NOTE: this function banks on the heap's end field being
 // correct, it simply uses the footer at the end of the
 // heap because that is always the wilderness
 // ========================================================
-node_t *get_wilderness(heap_t *heap)
+heap_node_t *get_wilderness(heap_t *heap)
 {
   footer_t *wild_foot = (footer_t *)((char *) heap->end - sizeof(footer_t));
   return wild_foot->header;
