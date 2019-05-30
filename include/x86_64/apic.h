@@ -53,6 +53,11 @@ static inline void msr_apicbase_enable(void)
  */
 
 #define APIC_ID    0x20  /* APIC ID Register */
+
+/**
+ * @union apic_id
+ * @brief APIC ID information
+ */
 union apic_id {
   struct {
     uint32_t reserved: 24, id: 8;
@@ -63,6 +68,11 @@ union apic_id {
 #define APIC_LVR  0x30  /* APIC Version Register */
 
 #define APIC_TPR  0x80    /* Task Priority Register */
+
+/**
+ * @union apic_tpr
+ * @brief APIC task priority register information
+ */
 union apic_tpr {
   struct {
     uint32_t subclass: 4, priority: 4, reserved: 24;
@@ -76,6 +86,11 @@ union apic_tpr {
 #define APIC_RRR  0xc0  /* Remote Read Register */
 
 #define APIC_LDR  0xd0  /* Logical Desitination Register */
+
+/**
+ * @union apic_ldr
+ * @brief APIC logical destination register information
+ */
 union apic_ldr {
   struct {
     uint32_t reserved: 24, logical_id: 8;
@@ -84,6 +99,11 @@ union apic_ldr {
 };
 
 #define APIC_DFR  0xe0  /* Destination Format Register */
+
+/**
+ * @union apic_ldr
+ * @brief APIC destination format register information
+ */
 union apic_dfr {
   struct {
     uint32_t reserved: 28, apic_model: 4;
@@ -92,6 +112,11 @@ union apic_dfr {
 };
 
 #define APIC_SPIV  0xf0  /* Spurious Interrupt Vector Register */
+
+/**
+ * @union apic_spiv
+ * @brief APIC spurious interrupt vector information
+ */
 union apic_spiv {
   struct {
     uint32_t vector: 8, apic_enable: 1, focus: 1, reserved: 22;
@@ -103,6 +128,11 @@ union apic_spiv {
 
 #define APIC_ICRL  0x300   /* Interrupt Command Register Low [31:0] */
 #define APIC_ICRH  0x310   /* Interrupt Command Register High [63:32] */
+
+/**
+ * @union apic_icr
+ * @brief APIC interrupt command register information
+ */
 union apic_icr {
   struct {
     uint32_t vector: 8, delivery_mode: 3, dst_mode: 1,
@@ -127,6 +157,11 @@ union apic_icr {
  */
 
 #define APIC_LVTT  0x320   /* Timer LVT Entry */
+
+/**
+ * @union apic_lvt_timer
+ * @brief APIC local vector table timer information
+ */
 union apic_lvt_timer {
   struct {
     uint32_t vector: 8,
@@ -141,6 +176,11 @@ union apic_lvt_timer {
 };
 
 #define APIC_LVTTHER  0x330   /* Thermal LVT Entry */
+
+/**
+ * @union apic_lvt_thermal
+ * @brief APIC local vector table thermal information
+ */
 union apic_lvt_thermal {
   struct {
     unsigned vector: 8, delivery_mode: 3, reserved0: 1,
@@ -150,6 +190,11 @@ union apic_lvt_thermal {
 };
 
 #define APIC_LVTPC  0x340   /* Performance Counter LVT Entry */
+
+/**
+ * @union apic_lvt_perfc
+ * @brief APIC LVT performance counter information
+ */
 union apic_lvt_perfc {
   struct {
     unsigned vector: 8, delivery_mode: 3, reserved0: 1,
@@ -160,6 +205,10 @@ union apic_lvt_perfc {
 
 #define APIC_LVT0  0x350  /* Local Interrupt 0 LVT Entry */
 #define APIC_LVT1  0x360  /* Local Interrupt 1 LVT Entry */
+/**
+ * @union apic_lvt_lint
+ * @brief APIC LVT local interrupt information
+ */
 union apic_lvt_lint {
   struct {
     unsigned vector: 8, delivery_mode: 3, reserved0: 1,
@@ -170,6 +219,11 @@ union apic_lvt_lint {
 };
 
 #define APIC_LVTERR  0x370   /* Error LVT Entry */
+
+/**
+ * @union apic_lvt_error
+ * @brief APIC LVT error information
+ */
 union apic_lvt_error {
   struct {
     unsigned vector: 8, delivery_mode: 3, reserved0: 1,
@@ -182,6 +236,11 @@ union apic_lvt_error {
 #define APIC_TIMER_CUR_CNT  0x390  /* Timer Current Count register */
 
 #define APIC_DCR    0x3e0  /* Timer Divide Configuration register */
+
+/**
+ * @union apic_dcr
+ * @brief APIC divide configuration register information
+ */
 union apic_dcr {
   struct {
     uint32_t divisor: 4, /* NOTE! bit-2 MUST be zero */
@@ -298,7 +357,7 @@ static inline void apic_write(uint32_t reg, uint32_t val)
 
   vaddr = apic_vrbase();
   vaddr = (char *) vaddr + reg;
-  writel(val, vaddr);
+  mmio_out32(vaddr, val);
 }
 
 static inline uint32_t apic_read(uint32_t reg)
@@ -307,9 +366,13 @@ static inline uint32_t apic_read(uint32_t reg)
 
   vaddr = apic_vrbase();
   vaddr = (char *) vaddr + reg;
-  return readl(vaddr);
+  return mmio_in32(vaddr);
 }
 
+/**
+ * @enum irq_dst
+ * @brief IRQ destination information
+ */
 enum irq_dst {
   IRQ_BROADCAST,      /* Interrupt all cores */
   IRQ_BOOTSTRAP,      /* Interrupt BSC only */

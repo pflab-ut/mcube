@@ -18,7 +18,7 @@ enum {
   KBD_DATA_REG  = 0x60,    /* Data register (R/W) */
 };
 
-/*
+/**
  * Motherboard controller's status; (R) from port 0x64
  */
 union i8042_status {
@@ -35,7 +35,7 @@ union i8042_status {
   } __packed;
 };
 
-/*
+/**
  * Motherboard controller's commands; (W) to port 0x64
  */
 enum i8042_cmd {
@@ -48,7 +48,7 @@ enum i8042_cmd {
   WRITE_OUTPUT  = 0xd1,    /* Write controller's P2 output port */
 };
 
-/*
+/**
  * Motherboard controller's output port (P2) pins description.
  * Such pins are connected to system lines like the on-keyboard
  * controller, IRQ1, system reboot, and the A20 multiplexer.
@@ -67,7 +67,7 @@ union i8042_p2 {
   } __packed;
 };
 
-/*
+/**
  * On-keyboard controller commands; written to port 0x60.
  *
  * If the i8042 is expecting data from a previous command, we
@@ -83,7 +83,7 @@ enum keyboard_cmd {
   FULL_RESET  = 0xff,    /* Full reset + self test */
 };
 
-/*
+/**
  * Special-keys scan codes
  */
 enum {

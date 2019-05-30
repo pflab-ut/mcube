@@ -40,7 +40,10 @@
 #define VALID_PRIO(prio)      \
   (MIN_PRIO <= (prio) && (prio) <= MAX_PRIO)
 
-/*
+/**
+ * @struct runqueue
+ * @brief Runqueue information
+ *
  * The runqueue: a bucket array holding heads of
  * the lists connecting threads of equal priority.
  */

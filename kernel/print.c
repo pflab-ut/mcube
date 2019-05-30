@@ -457,8 +457,8 @@ static void vga_write(char *buf, int n, int color)
     }
 
     if (*buf != '\n') {
-      writew((color << 8) + *buf,
-             vga_buffer + 2 * (vga_xpos + vga_ypos * max_xpos));
+      mmio_out32(vga_buffer + 2 * (vga_xpos + vga_ypos * max_xpos),
+                 (color << 8) + *buf);
       vga_xpos++;
     }
 

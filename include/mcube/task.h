@@ -36,7 +36,6 @@ struct task_struct {
   long priority;
   /** Preempt count. */
   long preempt_count;
-
 };
 
 typedef struct task_struct task_struct;

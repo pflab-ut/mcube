@@ -21,6 +21,10 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @struct heap_node
+ * @brief Heap node information
+ */
 typedef struct heap_node {
   unsigned int hole;
   unsigned int size;
@@ -28,15 +32,27 @@ typedef struct heap_node {
   struct heap_node *prev;
 } heap_node_t;
 
-typedef struct {
+/**
+ * @struct footer
+ * @brief Footer information
+ */
+typedef struct footer {
   heap_node_t *header;
 } footer_t;
 
-typedef struct {
+/**
+ * @struct bin
+ * @brief Bin information
+ */
+typedef struct bin {
   heap_node_t *head;
 } bin_t;
 
-typedef struct {
+/**
+ * @struct heap
+ * @brief Heap information
+ */
+typedef struct heap {
   long start;
   long end;
   bin_t bins[BIN_COUNT][sizeof(bin_t)];

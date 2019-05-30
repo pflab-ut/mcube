@@ -20,6 +20,10 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @struct idt_gate
+ * @brief IDT gate information
+ */
 struct idt_gate {
   uint16_t offset_low;
   uint16_t selector;
@@ -34,6 +38,10 @@ struct idt_gate {
   uint32_t reserved0_2;
 } __packed;
 
+/**
+ * @struct idt_descriptor
+ * @brief IDT descriptor information
+ */
 struct idt_descriptor {
   uint16_t limit;
   uint64_t base;

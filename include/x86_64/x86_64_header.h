@@ -6,7 +6,6 @@
 #ifndef __MCUBE_X86_64_X86_64_HEADER_H__
 #define __MCUBE_X86_64_X86_64_HEADER_H__
 
-#include <x86_64/mmio.h>
 #include <x86_64/ops.h>
 #include <x86_64/paging.h>
 #include <x86_64/x86_64.h>

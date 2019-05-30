@@ -15,11 +15,13 @@
 
 #ifndef __ASSEMBLY__
 
-/*
+/**
+ * @struct ioapic_desc
+ * @brief I/O APIC descriptors
+ *
  * System-wide I/O APIC descriptors for each I/O APIC reported
  * by the BIOS as usable. At lease one ioapic should be enabled.
  */
-
 struct ioapic_desc {
   uint8_t  id;      /* Chip APIC ID */
   uint8_t version;    /* Chip version: 0x11, 0x20, .. */
@@ -39,6 +41,11 @@ extern struct ioapic_desc ioapic_descs[IOAPICS_MAX];
  */
 
 #define IOAPIC_ID  0x00
+
+/**
+ * @union ioapic_id
+ * @brief I/O APIC ID
+ */
 union ioapic_id {
   uint32_t value;
   struct {
@@ -47,6 +54,11 @@ union ioapic_id {
 };
 
 #define IOAPIC_VER  0x01
+
+/**
+ * @union ioapic_ver
+ * @brief I/O APIC Version
+ */
 union ioapic_ver {
   uint32_t value;
   struct {
@@ -56,6 +68,11 @@ union ioapic_ver {
 };
 
 #define IOAPIC_ARB  0x02
+
+/**
+ * @union ioapic_arb
+ * @brief I/O APIC arbitration
+ */
 union ioapic_arb {
   uint32_t value;
   struct {
@@ -88,8 +105,8 @@ static inline uint32_t ioapic_read(int apic, uint8_t reg)
   uint32_t *ioregsel = (uint32_t *)ioapic_base(apic);
   uint32_t *iowin = (uint32_t *)(ioapic_base(apic) + 0x10);
 
-  writel(reg, ioregsel);
-  return readl(iowin);
+  mmio_out32(ioregsel, reg);
+  return mmio_in32(iowin);
 }
 
 static inline void ioapic_write(int apic, uint8_t reg, uint32_t value)
@@ -97,12 +114,15 @@ static inline void ioapic_write(int apic, uint8_t reg, uint32_t value)
   uint32_t *ioregsel = (uint32_t *)ioapic_base(apic);
   uint32_t *iowin = (uint32_t *)(ioapic_base(apic) + 0x10);
 
-  writel(reg, ioregsel);
-  writel(value, iowin);
+  mmio_out32(ioregsel, reg);
+  mmio_out32(iowin, value);
 }
 
 #define IOAPIC_REDTBL0  0x10
-/* Don't use a single uint64_t element here. All APIC registers are
+/**
+ * @struct ioapic_irqentry
+ * @brief I/O APIC irq entry
+ * Don't use a single uint64_t element here. All APIC registers are
  * accessed using 32 bit loads and stores. Registers that are
  * described as 64 bits wide are accessed as multiple independent
  * 32 bit registers -- Intel 82093AA datasheet */

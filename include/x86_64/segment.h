@@ -36,6 +36,10 @@
 struct gdtr *gdt_init(void);
 void gdt_load(void);
 
+/**
+ * @struct gdt_descriptor
+ * @brief GDT descriptor information
+ */
 struct gdt_descriptor {
   uint16_t limit;
   uint64_t base;

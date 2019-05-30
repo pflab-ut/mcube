@@ -18,24 +18,9 @@
 
 #include <mcube/mcube.h>
 
-/*
- * Ramdisk header format.
- */
-#define RDSIG_LEN   8
-#define RDSIG_START "McubeSta"
-#define RDSIG_END   "McubeEnd"
+struct ramdisk_header *rdheader;
+struct ramdisk ramdisk;
 
-static struct ramdisk_header {
-  char start_signature[RDSIG_LEN];
-  uint32_t sectors;    /* Rdisk len in 512-byte sectors (+hdr)*/
-  uint32_t length;    /* Rdisk len in bytes (without hdr) */
-  char end_signature[RDSIG_LEN];
-} __packed *rdheader;
-
-static struct ramdisk {
-  char *buf;
-  int len;
-} ramdisk;
 
 /*
  * The page allocator puts its 'page frame descriptor table'

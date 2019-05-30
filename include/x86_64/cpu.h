@@ -64,8 +64,6 @@ shrl $0x18, % eax
 
 #define INIT_CPU_EFLAGS (CPU_EFLAGS_IF | CPU_EFLAGS_BIT)
 
-typedef struct cpuid_info cpuid_info_t;
-
 
 static inline unsigned long get_cpu_id(void)
 {

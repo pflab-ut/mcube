@@ -97,7 +97,8 @@ enum zone_id {
 };
 
 /**
- * Page Frame Descriptor
+ * @struct page
+ * @brief Page Frame Descriptor
  *
  * It's essential to save space in this struct since there's
  * one for each available page frame in the system.

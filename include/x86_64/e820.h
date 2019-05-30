@@ -92,8 +92,9 @@
 #define E820_BASE  VIRTUAL(E820_PHYS_BASE)
 #define E820_MAX  VIRTUAL(E820_PHYS_MAX)
 
-/*
- * ACPI Address Range Descriptor
+/**
+ * @struct e820_range
+ * @brief ACPI address range descriptor
  */
 struct e820_range {
   uint64_t base;      /* Range base address */
@@ -135,10 +136,10 @@ enum {
          range = (struct e820_range *)entry)
 
 
-/*
- * e820 module public interfaces
+/**
+ * @struct e820_setup
+ * @brief e820 module public interfaces
  */
-
 struct e820_setup {
   int valid;      /* true if struct is initialized */
   uint64_t avail_pages;    /* # of e820-available pages */
