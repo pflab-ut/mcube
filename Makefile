@@ -82,7 +82,7 @@ SRCS += \
 	$(USER_SRCS) \
 
 
-ifeq ($(ARCH_NAME), arm)
+ifeq ($(ARCH_NAME), aarch64)
 FONT_PSF = $(TOP_DIR)/lib/font.psf
 FONT_OBJ = $(TOP_DIR)/build/$(FONT_PSF:.psf=.o)
 else
@@ -118,7 +118,7 @@ $(BOOTSECT_TARGET): # do nothing
 endif
 
 
-ifeq ($(ARCH_NAME), arm)
+ifeq ($(ARCH_NAME), aarch64)
 $(FONT_OBJ): $(FONT_PSF)
 ifeq ($(CC), gcc)
 	$(LD) -r -b binary -o $@ $(FONT_PSF)

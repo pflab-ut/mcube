@@ -14,7 +14,7 @@
  * @brief Full register
  */
 struct full_regs {
-  /** General purpose registers in ARM. */
+  /** General purpose registers in X86_64. */
   uint64_t rax;
   uint64_t rbx;
   uint64_t rcx;

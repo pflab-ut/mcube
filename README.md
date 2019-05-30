@@ -9,7 +9,7 @@ reboot.
 ![Mcube Kernel](docs/fig/mcube.jpg "Mcube Kernel")
 
 ## Supporting Compilers and ISAs
-- LLVM-6.0.0/GCC-7.3.0 (or later) for X86_64, ARM64 (aarch64), and SIM (user-level) ISAs
+- LLVM-6.0.0/GCC-7.3.0 (or later) for X86_64, ARM64 (AARCH64), and SIM (user-level) ISAs
 - LLVM-6.0.0/GCC-4.8.4 Extension for AXIS ISA
   - LLVM's ISA name is MAXIS (can be downloaded from https://github.com/pflab-ut/llvm)
   - GCC's ISA name is DOM (not open for public)

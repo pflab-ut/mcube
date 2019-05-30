@@ -20,21 +20,21 @@ menu Architecture
     mname none
     defs -DCONFIG_ARCH_X86_64
     depends CONFIG_COMPILER_GCC
-  config CONFIG_ARCH_ARM_RASPI3
-    title ARM for Raspberry Pi3
+  config CONFIG_ARCH_AARCH64_RASPI3
+    title AARCH64 for Raspberry Pi3
     default n
-    aname arm
+    aname aarch64
     mname raspi3
-    defs -DCONFIG_ARCH_ARM
-    defs -DCONFIG_ARCH_ARM_RASPI3
+    defs -DCONFIG_ARCH_AARCH64
+    defs -DCONFIG_ARCH_AARCH64_RASPI3
     defs -DENABLE_FPU
-  config CONFIG_ARCH_ARM_SYNQUACER
-    title ARM for SynQuacer
+  config CONFIG_ARCH_AARCH64_SYNQUACER
+    title AARCH64 for SynQuacer
     default n
-    aname arm
+    aname aarch64
     mname synquacer
-    defs -DCONFIG_ARCH_ARM
-    defs -DCONFIG_ARCH_ARM_SYNQUACER
+    defs -DCONFIG_ARCH_AARCH64
+    defs -DCONFIG_ARCH_AARCH64_SYNQUACER
     defs -DENABLE_FPU
   config CONFIG_ARCH_AXIS
     title AXIS
@@ -65,7 +65,7 @@ menu Print
     default y
     oname console
     defs -DCONFIG_PRINT2CONSOLE
-    conflicts CONFIG_ARCH_ARM
+    conflicts CONFIG_ARCH_AARCH64
   config CONFIG_PRINT2UART
     title Print to UART
     default n
@@ -149,6 +149,6 @@ menu Option
     default n
     cfiles $(TOP_DIR)/fs/fat/fat.c
     defs -DCONFIG_OPTION_FS_FAT
-    depends CONFIG_ARCH_ARM_RASPI3
+    depends CONFIG_ARCH_AARCH64_RASPI3
     conflicts CONFIG_OPTION_FS_EXT2
 endmenu

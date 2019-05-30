@@ -669,7 +669,7 @@ int print_uart(const char *fmt, ...)
   va_end(args);
   pbuf[n] = '\0';
 
-#if CONFIG_ARCH_X86_64 || CONFIG_ARCH_ARM_RASPI3 || CONFIG_ARCH_ARM_SYNQUACER
+#if CONFIG_ARCH_X86_64 || CONFIG_ARCH_AARCH64_RASPI3 || CONFIG_ARCH_AARCH64_SYNQUACER
   uart_write(pbuf, n, 0);
 #elif CONFIG_ARCH_SIM || CONFIG_ARCH_AXIS
   puts(pbuf);

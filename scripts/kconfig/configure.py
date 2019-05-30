@@ -21,8 +21,8 @@ def init_sysconfig_arch(fout, arch, machine):
     fout.write("ARCH_NAME = sim\n")
   elif arch == "x86":
     fout.write("ARCH_NAME = x86\n")
-  elif arch == "arm":
-    fout.write("ARCH_NAME = arm\n")
+  elif arch == "aarch64":
+    fout.write("ARCH_NAME = aarch64\n")
     if machine == "raspi3":
       fout.write("MACHINE_NAME = raspi3\n")
     elif machine == "synquacer":

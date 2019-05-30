@@ -13,8 +13,8 @@ systems.
 
 * SIM
 * x86_64
-* ARM Raspberry Pi3 (aarch64)
-* ARM Synquacer (aarch64)
+* ARM Raspberry Pi3 (AARCH64)
+* ARM Synquacer (AARCH64)
 * AXIS
 
 # Compilers

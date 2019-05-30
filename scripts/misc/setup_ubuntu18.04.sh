@@ -31,5 +31,5 @@ $prefix qemu qemu-system
 
 
 echo "\n"
-echo "If you use QEMU 2.12.0 (or later) for Raspberry Pi3 (ARM64), please use https://www.qemu.org/download/."
+echo "If you use QEMU 2.12.0 (or later) for Raspberry Pi3 (AARCH64), please use https://www.qemu.org/download/."
 echo "If you use AXIS ISA for DOM, please use https://github.com/pflab-ut/llvm."
