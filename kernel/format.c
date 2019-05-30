@@ -58,7 +58,7 @@ const char *parse_arg(const char *fmt, struct format_argdesc *desc)
   desc->type = NONE;
   desc->radix = 10;
   desc->pad = PAD_NO;
-  desc->digit = -1;
+  desc->digit = INIT_DIGIT;
   desc->float_digit = INIT_FLOAT_DIGIT;
 
   while (*++fmt) {

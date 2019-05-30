@@ -50,7 +50,7 @@ void printk_bust_all_locks(void);
 int printk(const char *fmt, ...);
 
 int sscan(const char *str, const char *fmt, ...);
-int vsnscan(const char *buf, int size, const char *fmt, va_list args);
+int vsnscan(const char *buf, const char *fmt, va_list args);
 
 
 /* print for both kernel and user modes. */
@@ -80,6 +80,7 @@ __noreturn void format_panic(const char *str);
 __noreturn void loop_print(char ch, int color);
 
 
+#define INIT_DIGIT -1
 #define INIT_FLOAT_DIGIT 6
 
 #if !CONFIG_ARCH_SIM

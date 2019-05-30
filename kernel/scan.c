@@ -16,59 +16,55 @@ spinlock_t sbuf_lock = INIT_SPINLOCK;
 #endif /* CONFIG_ARCH_AXIS */
 
 
-static int get_val(char *dst, const char *src)
+static int get_val(char *dst, const char *src, int n)
 {
-  const char *p = src;
+  int i = 0;
 
   while (*src == '\0' || *src == ' ' || *src == '\t' || *src == '\n') {
     src++;
   }
 
   while (*src != '\0' && *src != ' ' && *src != '\t' && *src != '\n') {
-    *dst++ = *src++;
+    if (n == INIT_DIGIT || (n > 0 && i < n)) {
+      dst[i++] = *src++;
+    } else {
+      break;
+    }
   }
 
-  *dst++ = '\0';
-  return src - p;
+  dst[i] = '\0';
+  return i;
 }
 
 
-/*
- * Formt given scan-like string (@fmt) and store the result
- * within at most @size bytes. This version does *NOT* append
- * a NULL to output buffer @buf; it's for internal use only.
- */
-int vsnscan(const char *buf, int size, const char *fmt, va_list args)
+int vsnscan(const char *buf, const char *fmt, va_list args)
 {
   struct format_argdesc desc = {0};
   char *str;
+  int num = 0;
   int len;
-
-  if (size < 1) {
-    return 0;
-  }
 
   str = (char *) buf;
 
   while (*fmt) {
-    while (*fmt != '\0' && *fmt != '%' && size != 0) {
-      *str++ = *fmt++;
-      size--;
+    while (*fmt != '\0' && *fmt != '%') {
+      str++;
+      fmt++;
     }
 
     /* Mission complete */
-    if (*fmt == '\0' || size == 0) {
+    if (*fmt == '\0') {
       break;
     }
 
+    len = 0;
     format_assert(*fmt == '%');
     fmt = parse_arg(fmt, &desc);
 
-    len = 0;
-
     switch (desc.type) {
     case SIGNED:
-      len = get_val(sbuf, str);
+      len += get_val(sbuf, str, desc.digit);
+      num++;
 
       if (desc.len == LONG) {
         *va_arg(args, long *) = strtol(sbuf, NULL, 10);
@@ -79,7 +75,8 @@ int vsnscan(const char *buf, int size, const char *fmt, va_list args)
       break;
 
     case UNSIGNED:
-      len = get_val(sbuf, str);
+      len += get_val(sbuf, str, desc.digit);
+      num++;
 
       if (desc.len == LONG) {
         *va_arg(args, unsigned long *) = strtoul(sbuf, NULL, 10);
@@ -91,7 +88,8 @@ int vsnscan(const char *buf, int size, const char *fmt, va_list args)
 #if defined(ENABLE_FPU)
 
     case FLOAT:
-      len = get_val(sbuf, str);
+      len += get_val(sbuf, str, desc.digit);
+      num++;
 
       if (desc.len == LONG) {
         *va_arg(args, double *) = strtod(sbuf, NULL);
@@ -103,13 +101,14 @@ int vsnscan(const char *buf, int size, const char *fmt, va_list args)
 #endif /* ENABLE_FPU */
 
     case STRING:
-      len = get_val(va_arg(args, char *), str);
+      len += get_val(va_arg(args, char *), str, desc.digit);
+      num++;
       break;
 
     case CHAR:
-      get_val(sbuf, str);
+      len += get_val(sbuf, str, 1);
+      num++;
       *va_arg(args, char *) = *sbuf;
-      len = 1;
       break;
 
     default:
@@ -119,11 +118,10 @@ int vsnscan(const char *buf, int size, const char *fmt, va_list args)
     }
 
     str += len;
-    size -= len;
   }
 
   format_assert(str >= buf);
-  return str - buf;
+  return num;
 }
 
 
@@ -136,7 +134,7 @@ int sscan(const char *str, const char *fmt, ...)
 
   spin_lock(&sbuf_lock);
   va_start(args, fmt);
-  n = vsnscan(str, sizeof(str), fmt, args);
+  n = vsnscan(str, fmt, args);
   va_end(args);
   spin_unlock(&sbuf_lock);
 

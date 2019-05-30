@@ -5,6 +5,19 @@
  */
 #include <mcube/mcube.h>
 
+static bool test_time(void)
+{
+  struct tm t;
+  int ret;
+  ret = sscan("20190530T12:34:56", "%4d%2d%2dT%2d:%2d:%2d",
+              &t.tm_year, &t.tm_mon, &t.tm_mday, &t.tm_hour, &t.tm_min, &t.tm_sec);
+
+  printf("year = %d mon = %d mday = %d, hour = %d min = %d sec = %d\n",
+         t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  printf("ret = %d\n", ret);
+  return true;
+}
+
 
 bool test_scan(void)
 {
@@ -20,6 +33,8 @@ bool test_scan(void)
   printf("c = '%c' d = '%c'\n", c, d);
   sscan("abc", "%s", str);
   printf("str = %s\n", str);
+
+  test_time();
 #if defined(ENABLE_FPU)
   float f;
   double lf;
