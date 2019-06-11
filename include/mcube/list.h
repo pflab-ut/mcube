@@ -50,16 +50,19 @@
 
 #ifndef __ASSEMBLY__
 
-/*
- * Doubly-linked list node
+/**
+ * @struct list_node
+ * @brief Doubly-linked list node.
  */
 struct list_node {
   struct list_node *next;
   struct list_node *prev;
 };
 
-/*
+/**
  * Static init, for inside-structure nodes
+ *
+ * @param n Address.
  */
 #define LIST_INIT(n)                            \
   {                                             \
@@ -67,8 +70,10 @@ struct list_node {
       .prev = &(n),                             \
   }
 
-/*
- * Global declaration with a static init
+/**
+ * Global declaration with a static init.
+ *
+ * @param n Address.
  */
 #define LIST_NODE(n)                            \
   struct list_node n = LIST_INIT(n)
@@ -120,13 +125,16 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
   new->next = node;
 }
 
-/*
+/**
  * Return the address of the data structure of type @type
- * that includes given @node. @node_name is the node's
- * name inside that structure declaration.
+ * that includes given @node.
  *
  * The "useless" pointer assignment is for type-checking.
  * `Make it hard to misuse' -- a golden APIs advice.
+ *
+ * @param node Node.
+ * @param type Type.
+ * @param node_name node's name inside that structure declaration.
  */
 #define list_entry(node, type, node_name)       \
   ({                                            \
@@ -139,26 +147,33 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
     (type *)((uint8_t *)(node) - offset);       \
   })
 
-/*
+/**
  * Scan the list, beginning from @node, using the iterator
- * @struc. @struc is of type pointer to the structure
- * containing @node. @name is the node's name inside that
- * structure (the one containing @node) declaration.
+ * @struc.
  *
  * NOTE! Don't delete the the iterator's list node inside
  * loop: we use it in the initialization of next iteration.
+ *
+ * @param node Node.
+ * @param struc Ftye pointer to the structure.
+ * @param name Node's name.
  */
 #define list_for_each(node, struc, name)                            \
   for (struc = list_entry((node)->next, typeof(*struc), name);      \
        &(struc->name) != (node);                                    \
        struc = list_entry(struc->name.next, typeof(*struc), name))
 
-/*
+/**
  * Same as list_for_each(), but with making it safe to
  * delete the iterator's list node inside the loop. This
  * is useful for popping-up list elements as you go.
  *
  * You'll need to give us a spare iterator for this.
+ *
+ * @param node Node.
+ * @param struc Structure.
+ * @param spare_struc Spare structure.
+ * @param Name Name.
  */
 #define list_for_each_safe(node, struc, spare_struc, name)              \
   for (struc = list_entry((node)->next, typeof(*struc), name),          \

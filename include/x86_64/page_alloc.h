@@ -9,8 +9,9 @@
 
 #ifndef __ASSEMBLY__
 
-/*
- * Page allocator Zone Descriptor
+/**
+ * @struct zone
+ * @brief Page allocator Zone Descriptor.
  */
 struct zone {
   /* Statically initialized */
@@ -63,8 +64,9 @@ static inline void zones_init(void)
   }
 }
 
-/*
- * Reverse Mapping Descriptor
+/**
+ * @struct rmap
+ * @brief Reverse mapping descriptor.
  *
  * This structure aids in reverse-mapping a virtual address
  * to its respective page descriptor.

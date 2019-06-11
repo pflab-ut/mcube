@@ -13,7 +13,6 @@
 #include <mcube/math.h>
 #include <mcube/kernel.h>
 #include <mcube/stdio.h>
-#include <mcube/linkage.h>
 #include <mcube/irq.h>
 #include <mcube/cpu.h>
 #include <mcube/limits.h>

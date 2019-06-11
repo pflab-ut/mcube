@@ -44,7 +44,10 @@
 
 #ifndef __ASSEMBLY__
 
-/*
+/**
+ * @enum zone_id
+ * @brief Zone ID.
+ *
  * Page allocator Zones
  *
  * We divide the physical memory space to 'zones' according to
@@ -98,7 +101,7 @@ enum zone_id {
 
 /**
  * @struct page
- * @brief Page Frame Descriptor
+ * @brief Page Frame Descriptor.
  *
  * It's essential to save space in this struct since there's
  * one for each available page frame in the system.

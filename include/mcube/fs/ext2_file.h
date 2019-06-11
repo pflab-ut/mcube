@@ -20,8 +20,9 @@ int sys_close(int fd);
 int sys_unlink(const char *path);
 int sys_link(const char *oldpath, const char *newpath);
 
-/*
- * States for parsing a hierarchial Unix path
+/**
+ * @enum parsing_state
+ * @brief States for parsing a hierarchial Unix path.
  */
 enum parsing_state {
   START,      /* Start of line */

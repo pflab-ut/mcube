@@ -17,7 +17,7 @@ void init_gen_rand(uint32_t seed);
   ------------------------------------------------------*/
 /**
  * @struct W128_T
- * @brief 128-bit data structure
+ * @brief 128-bit data structure.
  */
 struct W128_T {
   /** 32-bit data structure x 4. */

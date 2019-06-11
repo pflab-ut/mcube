@@ -22,7 +22,7 @@
 
 /**
  * @struct idt_gate
- * @brief IDT gate information
+ * @brief IDT gate information.
  */
 struct idt_gate {
   uint16_t offset_low;
@@ -40,7 +40,7 @@ struct idt_gate {
 
 /**
  * @struct idt_descriptor
- * @brief IDT descriptor information
+ * @brief IDT descriptor information.
  */
 struct idt_descriptor {
   uint16_t limit;

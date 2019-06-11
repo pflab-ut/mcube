@@ -11,7 +11,7 @@
 
 /**
  * @struct context_regs
- * @brief Context register
+ * @brief Context registers.
  */
 struct context_regs {
   /** Dummy register in SIM. */
@@ -22,7 +22,7 @@ typedef struct context_regs context_regs;
 
 /**
  * @struct full_regs
- * @brief Full register
+ * @brief Full registers.
  */
 struct full_regs {
   /** Dummy register in SIM. */

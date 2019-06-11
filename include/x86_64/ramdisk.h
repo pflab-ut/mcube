@@ -17,7 +17,7 @@
 
 /**
  * @struct ramdisk_header
- * @brief Ramdisk header information
+ * @brief Ramdisk header information.
  */
 struct ramdisk_header {
   char start_signature[RDSIG_LEN];
@@ -30,7 +30,7 @@ extern struct ramdisk_header *rdheader;
 
 /**
  * @struct ramdisk
- * @brief Ramdisk information
+ * @brief Ramdisk information.
  */
 struct ramdisk {
   char *buf;

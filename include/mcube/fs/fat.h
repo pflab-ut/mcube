@@ -11,7 +11,7 @@
 
 /**
  * @struct bios_parameter_block
- * @brief The BIOS Parameter Block (in Volume Boot Record)
+ * @brief The BIOS Parameter Block (in Volume Boot Record).
  */
 struct bios_parameter_block {
   char            jmp[3];

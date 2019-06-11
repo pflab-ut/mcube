@@ -38,7 +38,7 @@ void gdt_load(void);
 
 /**
  * @struct gdt_descriptor
- * @brief GDT descriptor information
+ * @brief GDT descriptor information.
  */
 struct gdt_descriptor {
   uint16_t limit;

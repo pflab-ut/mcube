@@ -155,9 +155,11 @@
  * x86_64 Page Table entries
  */
 
-/*
- * Page-map level 4 entry
- * Format is common for 2-MB and 4-KB pages
+/**
+ * @struct pml4e
+ * @brief Page-map level 4 entry.
+ *
+ * Format is common for 2-MB and 4-KB pages.
  */
 struct pml4e {
   uint64_t present: 1,   /* Present PML4 entry */
@@ -191,8 +193,10 @@ static inline void *pml3_base(struct pml4e *pml4e)
   return VIRTUAL((uintptr_t)pml4e->pml3_base << PAGE_SHIFT);
 }
 
-/*
- * Page Directory Pointer entry
+/**
+ * @struct pml3e
+ * @brief Page Directory Pointer entry.
+ *
  * Format is common for 2-MB and 4-KB pages
  */
 struct pml3e {
@@ -215,9 +219,11 @@ static inline void *pml2_base(struct pml3e *pml3e)
   return VIRTUAL((uintptr_t)pml3e->pml2_base << PAGE_SHIFT);
 }
 
-/*
- * Page Directory entry, 2-MB pages
- * NOTE!! set the page size bit to 1
+/**
+ * @struct pml2e
+ * @brief Page Directory entry, 2-MB pages.
+ *
+ * NOTE!! set the page size bit to 1.
  */
 struct pml2e {
   unsigned present: 1,   /* Present referenced 2-MB page */

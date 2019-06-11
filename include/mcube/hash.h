@@ -8,11 +8,19 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @struct hash_elem
+ * @param Hash element.
+ */
 struct hash_elem {
   unsigned long id; /* Unique ID for each hash element */
   struct list_node node; /* List node for hash fn collision */
 };
 
+/**
+ * @struct hash
+ * @param Hash information.
+ */
 struct hash {
   int len; /* Number of buckets in table */
   struct list_node *nodes_array; /* Array (table) of list nodes */

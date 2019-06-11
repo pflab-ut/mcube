@@ -94,7 +94,7 @@
 
 /**
  * @struct e820_range
- * @brief ACPI address range descriptor
+ * @brief ACPI address range descriptor.
  */
 struct e820_range {
   uint64_t base;      /* Range base address */
@@ -138,7 +138,7 @@ enum {
 
 /**
  * @struct e820_setup
- * @brief e820 module public interfaces
+ * @brief e820 module public interfaces.
  */
 struct e820_setup {
   int valid;      /* true if struct is initialized */

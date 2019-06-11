@@ -20,7 +20,7 @@
 
 /**
  * @struct task_struct
- * @brief Task information
+ * @brief Task information.
  */
 struct task_struct {
   /** Task ID. */

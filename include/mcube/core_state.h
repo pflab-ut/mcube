@@ -10,7 +10,7 @@
 
 /**
  * @struct core_state
- * @brief Core state management for multikernel
+ * @brief Core state management for multikernel.
  */
 struct core_state {
   /**
@@ -20,12 +20,12 @@ struct core_state {
   spinlock_t lock;
 
   /**
-   * Transmit message;
+   * Transmit message.
    */
   struct ring_buf message_tx[NR_CPUS];
 
   /**
-   * Receive message;
+   * Receive message.
    */
   struct ring_buf message_rx[NR_CPUS];
 

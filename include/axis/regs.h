@@ -16,7 +16,7 @@
 
 /**
  * @struct gpr_regs
- * @brief General purpose register
+ * @brief General purpose registers.
  */
 struct gpr_regs {
   /** General purpose registers in AXIS. */
@@ -30,7 +30,7 @@ typedef struct context_regs context_regs;
 
 /**
  * @struct special_regs
- * @brief Special register
+ * @brief Special registers.
  */
 struct special_regs {
   /** Special registers in AXIS. */
@@ -47,7 +47,7 @@ typedef struct special_regs special_regs;
 
 /**
  * @struct system_regs
- * @brief System register
+ * @brief System registers.
  */
 struct system_regs {
   /** Special registers of each core in AXIS. */
@@ -61,7 +61,7 @@ typedef struct special_regs special_regs;
 
 /**
  * @struct full_regs
- * @brief Full register
+ * @brief Full registers.
  */
 struct full_regs {
   /** General purpose registers in AXIS. */

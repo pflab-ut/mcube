@@ -26,6 +26,10 @@
 
 #define MPF_SIGNATURE ('_'<<(3 * 8) | 'P'<<(2 * 8) | 'M'<<(1 * 8) | '_')
 
+/**
+ * @struct mpf_struct
+ * @brief MP floating information.
+ */
 struct mpf_struct {
   uint32_t signature;    /* "_MP_" */
   uint32_t conf_physaddr;    /* MP configuration table pointer */
@@ -46,6 +50,10 @@ struct mpf_struct {
 
 #define MPC_SIGNATURE ('P'<<(3 * 8) | 'M'<<(2 * 8) | 'C'<<(1 * 8) | 'P')
 
+/**
+ * @struct mpc_table
+ * @brief MP configuration table.
+ */
 struct mpc_table {
   uint32_t signature;    /* "PCMP" */
   uint16_t length;    /* Base Table length + header */
@@ -63,7 +71,8 @@ struct mpc_table {
 } __packed;
 
 /**
- * MP Configuration table entries
+ * @struct mpc_cpu
+ * @brief MP configuration table entries.
  */
 struct mpc_cpu {
   uint8_t entry;      /* Entry type (processor) */
@@ -77,12 +86,20 @@ struct mpc_cpu {
   uint64_t reserved;    /* Reserved */
 } __packed;
 
+/**
+ * @struct mpc_bus
+ * @brief MP configuration bus.
+ */
 struct mpc_bus {
   uint8_t entry;      /* Entry type (bus) */
   uint8_t id;      /* Bus ID */
   char type[6];      /* Bus Type string */
 } __packed;
 
+/**
+ * @struct mpc_ioapic
+ * @brief MP configuration I/O APIC.
+ */
 struct mpc_ioapic {
   uint8_t entry;      /* Entry type (ioapic) */
   uint8_t id;      /* The ID of this I/O APIC */
@@ -92,6 +109,10 @@ struct mpc_ioapic {
   uint32_t base;      /* This I/O APIC base address */
 } __packed;
 
+/**
+ * @struct mpc_irq
+ * @brief MP configuration IRQ.
+ */
 struct mpc_irq {
   uint8_t entry;      /* Entry type (I/O interrupt entry) */
   uint8_t type;      /* Interrupt type */
@@ -104,6 +125,10 @@ struct mpc_irq {
   uint8_t dst_ioapicpin;    /* Destination I/O APIC INTINn pin */
 } __packed;
 
+/**
+ * @struct mpc_linterrupt
+ * @brief MP configuration local interrupt.
+ */
 struct mpc_linterrupt {
   uint8_t entry;      /* Entry type (local interrupt entry) */
   uint8_t type;      /* Interrupt type */

@@ -12,7 +12,7 @@
 
 /**
  * @struct tm
- * @brief Time information
+ * @brief Time information.
  */
 struct tm {
   int tm_sec;    /* Seconds (0-60) */

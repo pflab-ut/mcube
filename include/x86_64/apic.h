@@ -56,7 +56,7 @@ static inline void msr_apicbase_enable(void)
 
 /**
  * @union apic_id
- * @brief APIC ID information
+ * @brief APIC ID information.
  */
 union apic_id {
   struct {
@@ -71,7 +71,7 @@ union apic_id {
 
 /**
  * @union apic_tpr
- * @brief APIC task priority register information
+ * @brief APIC task priority register information.
  */
 union apic_tpr {
   struct {
@@ -89,7 +89,7 @@ union apic_tpr {
 
 /**
  * @union apic_ldr
- * @brief APIC logical destination register information
+ * @brief APIC logical destination register information.
  */
 union apic_ldr {
   struct {
@@ -101,8 +101,8 @@ union apic_ldr {
 #define APIC_DFR  0xe0  /* Destination Format Register */
 
 /**
- * @union apic_ldr
- * @brief APIC destination format register information
+ * @union apic_dfr
+ * @brief APIC destination format register information.
  */
 union apic_dfr {
   struct {
@@ -115,7 +115,7 @@ union apic_dfr {
 
 /**
  * @union apic_spiv
- * @brief APIC spurious interrupt vector information
+ * @brief APIC spurious interrupt vector information.
  */
 union apic_spiv {
   struct {
@@ -131,7 +131,7 @@ union apic_spiv {
 
 /**
  * @union apic_icr
- * @brief APIC interrupt command register information
+ * @brief APIC interrupt command register information.
  */
 union apic_icr {
   struct {
@@ -160,7 +160,7 @@ union apic_icr {
 
 /**
  * @union apic_lvt_timer
- * @brief APIC local vector table timer information
+ * @brief APIC local vector table timer information.
  */
 union apic_lvt_timer {
   struct {
@@ -179,7 +179,7 @@ union apic_lvt_timer {
 
 /**
  * @union apic_lvt_thermal
- * @brief APIC local vector table thermal information
+ * @brief APIC local vector table thermal information.
  */
 union apic_lvt_thermal {
   struct {
@@ -193,7 +193,7 @@ union apic_lvt_thermal {
 
 /**
  * @union apic_lvt_perfc
- * @brief APIC LVT performance counter information
+ * @brief APIC LVT performance counter information.
  */
 union apic_lvt_perfc {
   struct {
@@ -207,7 +207,7 @@ union apic_lvt_perfc {
 #define APIC_LVT1  0x360  /* Local Interrupt 1 LVT Entry */
 /**
  * @union apic_lvt_lint
- * @brief APIC LVT local interrupt information
+ * @brief APIC LVT local interrupt information.
  */
 union apic_lvt_lint {
   struct {
@@ -222,7 +222,7 @@ union apic_lvt_lint {
 
 /**
  * @union apic_lvt_error
- * @brief APIC LVT error information
+ * @brief APIC LVT error information.
  */
 union apic_lvt_error {
   struct {
@@ -239,7 +239,7 @@ union apic_lvt_error {
 
 /**
  * @union apic_dcr
- * @brief APIC divide configuration register information
+ * @brief APIC divide configuration register information.
  */
 union apic_dcr {
   struct {
@@ -371,7 +371,7 @@ static inline uint32_t apic_read(uint32_t reg)
 
 /**
  * @enum irq_dst
- * @brief IRQ destination information
+ * @brief IRQ destination information.
  */
 enum irq_dst {
   IRQ_BROADCAST,      /* Interrupt all cores */

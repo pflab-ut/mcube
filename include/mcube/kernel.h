@@ -7,19 +7,44 @@
 #define __MCUBE_MCUBE_KERNEL_H__
 
 
+/**
+ * Symbol name.
+ *
+ * @param name Symbol name.
+ */
 #define SYMBOL_NAME(name) name
 
+/**
+ * Symbol name's label.
+ *
+ * @param name Symbol name's label.
+ */
 #define SYMBOL_NAME_LABEL(name) name##:
 
+/**
+ * Entry.
+ *
+ * @param name Entry name.
+ */
 #define ENTRY(name)                             \
   .globl name;                                  \
   SYMBOL_NAME_LABEL(name)
 
 
+/**
+ * End.
+ *
+ * @param name End name.
+ */
 #define END(name)                               \
   .size name, .-name
 
 
+/**
+ * Assembler size directive.
+ *
+ * @param name Directive name.
+ */
 #define ASM_SIZE_DIRECTIVE(name) .size name,.-name;
 
 

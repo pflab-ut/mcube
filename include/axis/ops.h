@@ -28,7 +28,7 @@ static inline void ert(void)
   asm volatile("ert");
 }
 
-static inline void __attribute__((__noreturn__)) halt(void)
+__noreturn static inline void halt(void)
 {
   printk("halt\n");
   inf_loop();

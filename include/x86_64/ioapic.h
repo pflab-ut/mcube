@@ -17,7 +17,7 @@
 
 /**
  * @struct ioapic_desc
- * @brief I/O APIC descriptors
+ * @brief I/O APIC descriptors.
  *
  * System-wide I/O APIC descriptors for each I/O APIC reported
  * by the BIOS as usable. At lease one ioapic should be enabled.
@@ -44,7 +44,7 @@ extern struct ioapic_desc ioapic_descs[IOAPICS_MAX];
 
 /**
  * @union ioapic_id
- * @brief I/O APIC ID
+ * @brief I/O APIC ID.
  */
 union ioapic_id {
   uint32_t value;
@@ -57,7 +57,7 @@ union ioapic_id {
 
 /**
  * @union ioapic_ver
- * @brief I/O APIC Version
+ * @brief I/O APIC Version.
  */
 union ioapic_ver {
   uint32_t value;
@@ -71,7 +71,7 @@ union ioapic_ver {
 
 /**
  * @union ioapic_arb
- * @brief I/O APIC arbitration
+ * @brief I/O APIC arbitration.
  */
 union ioapic_arb {
   uint32_t value;
@@ -121,7 +121,8 @@ static inline void ioapic_write(int apic, uint8_t reg, uint32_t value)
 #define IOAPIC_REDTBL0  0x10
 /**
  * @struct ioapic_irqentry
- * @brief I/O APIC irq entry
+ * @brief I/O APIC irq entry.
+ *
  * Don't use a single uint64_t element here. All APIC registers are
  * accessed using 32 bit loads and stores. Registers that are
  * described as 64 bits wide are accessed as multiple independent
@@ -206,7 +207,10 @@ static inline void ioapic_mask_irq(int apic, uint8_t irq)
   ioapic_write(apic, IOAPIC_REDTBL0 + 2 * irq, entry.value_low);
 }
 
-/*
+/**
+ * @struct ioapic_pin
+ * @brief I/O APIC pin.
+ *
  * Represents where an interrupt source is connected to the
  * I/O APICs system
  */

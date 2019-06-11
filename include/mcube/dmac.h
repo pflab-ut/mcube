@@ -19,6 +19,15 @@ enum dmac {
   DMAC_END
 };
 
+/**
+ * do DMAC operation.
+ *
+ * @param dst Destination.
+ * @param src Source.
+ * @param n Size.
+ * @param ch Channel.
+ * @param policy Policy.
+ */
 void do_local_dmac(uint32_t dst,
                    uint32_t src,
                    size_t n,

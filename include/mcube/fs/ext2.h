@@ -25,8 +25,11 @@
  *    their study notes at: http://www.webcitation.org/68IbFbOGr
  */
 
-
-enum {
+/**
+ * @enum ext2
+ * @brief EXT2 information.
+ */
+enum ext2 {
   EXT2_SUPERBLOCK_SIZE  = 1024,
   EXT2_SUPERBLOCK_MAGIC  = 0xef53,  /* EF'S' */
   EXT2_MIN_FS_SIZE  = (60 * 1024),  /* 60-KB */
@@ -50,24 +53,27 @@ enum {
   EXT2_INO_TRIPLEIN  = 14,    /* Inode's triple indirect */
 };
 
-/*
- * Superblock `revision level'
+/**
+ * @enum ext2_revision
+ * @brief Superblock "revision level".
  */
-enum {
+enum ext2_revision {
   EXT2_GOOD_OLD_REVISION  = 0,    /* Unsupported */
   EXT2_DYNAMIC_REVISION  = 1,
 };
 
-/*
- * Superblock `state' field
+/**
+ * @enum ext2_fs
+ * @brief Superblock "state" field.
  */
-enum {
+enum ext2_fs {
   EXT2_VALID_FS    = 1,    /* Unmounted cleanly */
   EXT2_ERROR_FS    = 2,    /* Errors detected */
 };
 
-/*
- * Reserved Inode Numbers
+/**
+ * @enum ext2_inode
+ * @brief Reserved inode numbers.
  */
 enum {
   EXT2_BAD_INODE    = 1,    /* Bad blocks inode */
@@ -87,8 +93,9 @@ enum {
   EXT2_INO_EXTENT_FL  = 0x00080000,  /* File data in extents */
 };
 
-/*
- * Directory entries 1-byte File-Type field
+/**
+ * @enum file_type.
+ * @brief Directory entries 1-byte File-Type field.
  */
 enum file_type {
   EXT2_FT_UNKNOWN    = 0,
@@ -164,8 +171,9 @@ static inline enum file_type inode_mode_to_dir_entry_type(mode_t mode)
   }
 }
 
-/*
- * On-disk Superblock Format
+/**
+ * @union super_block
+ * @brief On-disk Superblock Format.
  *
  * @inodes_count      : Total number of inodes, used and free, in the FS.
  * @blocks_count      : Total number of blocks, used, free, and reserved.
@@ -253,8 +261,9 @@ union super_block {
   uint8_t   raw[EXT2_SUPERBLOCK_SIZE];
 };
 
-/*
- * A Block Group descriptor
+/**
+ * @struct group_descriptor
+ * @brief A Block Group descriptor.
  *
  * @block_bitmap      : 32-bit Block ID of the group 'blocks bitmap'
  * @inode_bitmap      : 32-bit Block ID of the group 'inodes bitmap'
@@ -273,8 +282,9 @@ struct group_descriptor {
   uint16_t  reserved[7];
 } __packed;
 
-/*
- * In-core Inode Image:
+/**
+ * @struct inode
+ * @brief In-core Inode Image.
  *
  * Every used 'on-disk' inode is buffered on RAM as an 'in-core' inode.
  * Such buffered images are tracked by a hash table inode repository.
@@ -390,8 +400,9 @@ static inline bool is_symlink(uint64_t inum)
   return ___test_inum(inum, S_ISLNK);
 }
 
-/*
- * Inode data blocks level of indirection
+/**
+ * @enum indirection_level
+ * @brief Inode data blocks level of indirection.
  */
 enum indirection_level {
   ZERO_INDIR  = 0,    /* A plain block */
@@ -401,8 +412,9 @@ enum indirection_level {
   INDIRECTION_LEVEL_MAX,
 };
 
-/*
- * Directory Entry Format.
+/**
+ * @struct dir_entry
+ * @brief Directory entry format.
  *
  * A directory is a file holding variable-sized records;
  * each record represents a file contained in that folder.
@@ -430,13 +442,18 @@ int file_delete(struct inode *parent, const char *name);
 void file_truncate(struct inode *inode);
 int64_t name_i(const char *path);
 
+/**
+ * @enum block_op
+ * @brief Block operations.
+ */
 enum block_op {
   BLOCK_READ,
   BLOCK_WRTE,
 };
 
-/*
- * Pahtname translation - Used for testing ext2 code.
+/**
+ * @struct path_translation
+ * @brief Pahtname translation - Used for testing ext2 code.
  *
  * @path              : Absolute, hierarchial, UNIX format, file path
  * @relative_inum     : Inode# found using name_i() on _each_ subcomponent
@@ -477,8 +494,9 @@ void inode_dump(struct inode *, const char *path);
 void dentry_dump(struct dir_entry *dentry);
 
 
-/*
- * In-memory Super Block - Global State for our FS code
+/**
+ * @struct isb
+ * @brief In-memory Super Block - Global State for our FS code.
  *
  * NOTE! The inodes repository hash lock could be fine-grained
  * by having a lock on each hash collision linked-list instead.

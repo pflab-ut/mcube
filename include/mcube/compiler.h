@@ -9,11 +9,14 @@
 #ifndef __ASSEMBLY__
 
 
-/*
+/**
  * Versions of the ppc64 compiler before 4.1 had a bug where use of
  * RELOC_HIDE could trash r30. The bug can be worked around by changing
  * the inline assembly constraint from =g to =r, in this particular
  * case either is valid.
+ *
+ * @param ptr Pointer.
+ * @param off Offset.
  */
 #define RELOC_HIDE(ptr, off)                        \
   ({ unsigned long __ptr;                           \

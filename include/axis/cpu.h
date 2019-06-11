@@ -14,7 +14,7 @@
 
 /**
  * @struct cluster
- * @brief  AXIS cluster information.
+ * @brief AXIS cluster information.
  */
 struct cluster {
   unsigned long cluster_id;

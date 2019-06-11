@@ -16,7 +16,7 @@
 
 /**
  * @struct cpu_context
- * @brief  CPU context information.
+ * @brief CPU context information.
  */
 struct cpu_context {
   unsigned long s0;

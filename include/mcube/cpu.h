@@ -51,7 +51,7 @@ void dump_registers(struct full_regs *regs);
 #if CONFIG_ARCH_SIM || CONFIG_ARCH_X86_64
 /**
  * @struct cpuid_info
- * @brief CPU ID information
+ * @brief CPU ID information.
  */
 struct cpuid_info {
   /** EAX register. */

@@ -56,7 +56,8 @@ struct bheap_node;
 #endif /* CONFIG_TQ_BHEAP */
 
 /**
- * @brief Thread information
+ * @struct thread_struct
+ * @brief Thread information.
  *
  * The thread_struct structure has the sched_info structure to manage scheduling information.
  */
@@ -138,7 +139,8 @@ struct thread_struct {
 typedef struct thread_struct thread_struct;
 
 /**
- * @brief Thread attribute for task set
+ * @struct th_attr
+ * @brief Thread attributes.
  *
  * The th_attr structure sets up task set for scheduling.
  */

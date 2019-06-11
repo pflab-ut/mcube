@@ -12,6 +12,10 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @struct file_struct
+ * @brief File information.
+ */
 struct file_struct {
   uint64_t inum;    /* Inode# of the open()-ed file */
   int flags;    /* Flags passed  to open() call */

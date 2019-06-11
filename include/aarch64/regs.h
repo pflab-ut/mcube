@@ -10,7 +10,7 @@
 
 /**
  * @struct full_regs
- * @brief Full register
+ * @brief Full registers.
  */
 struct full_regs {
   /** General purpose registers in AARCH64. */

@@ -17,8 +17,9 @@
 #ifndef __ASSEMBLY__
 
 
-/*
- * IRQ 'stack protocol'.
+/**
+ * @struct irq_ctx
+ * @brief IRQ 'stack protocol'.
  *
  * Stack view for any code executed at IRQ context
  * (.e.g. context-switching code, all handlers, ..)
@@ -55,8 +56,11 @@ static inline void irq_ctx_init(struct irq_ctx *ctx)
   memset64(ctx, 0xdeadfeeddeadfeed, sizeof(*ctx));
 }
 
-/*
- * Process Control Block, holding machine-dependent state that
+/**
+ * @struct pcb
+ * @brief Process control block.
+ *
+ * Process Control Block (PCB) holds machine-dependent state that
  * get swapped during a context switch.
  *
  * We already save ABI-mandated scratch registers upon ticks
@@ -99,8 +103,9 @@ static inline void pcb_init(struct pcb *pcb)
  */
 #define  STACK_SIZE  PAGE_SIZE
 
-/*
- * Process descriptor; one for each process
+/**
+ * @struct process
+ * @brief Process descriptor; one for each process.
  */
 struct process {
   uint64_t pid;

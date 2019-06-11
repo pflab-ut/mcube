@@ -10,7 +10,7 @@
 
 /**
  * @struct bheap_node
- * @brief Binominal heap node
+ * @brief Binominal heap node.
  */
 struct bheap_node {
   /** Node ID. */
@@ -33,7 +33,7 @@ typedef struct bheap_node bheap_node;
 
 /**
  * @struct rt_runqueue
- * @brief Real-time runqueue information
+ * @brief Real-time runqueue information.
  */
 struct rt_runqueue {
   /** Lock to runqueue. */

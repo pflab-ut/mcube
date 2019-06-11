@@ -42,7 +42,7 @@
 
 /**
  * @struct runqueue
- * @brief Runqueue information
+ * @brief Runqueue information.
  *
  * The runqueue: a bucket array holding heads of
  * the lists connecting threads of equal priority.
@@ -78,8 +78,9 @@ static inline bool rq_empty(struct runqueue *rq)
   return false;
 }
 
-/*
- * Per-CPU area scheduling elements
+/**
+ * @param percpu_sched
+ * @brief Per-CPU area scheduling elements.
  *
  * NOTE! Always disable interrupts before accessing any
  * of these elements outside of the timer IRQ context.
@@ -98,7 +99,13 @@ struct percpu_sched {
   int just_queued_turn;
 };
 
+
 struct process;
+
+/**
+ * @enum cpu_type
+ * @brief CPU type.
+ */
 enum cpu_type {
   BOOTSTRAP,
   SECONDARY,
@@ -221,7 +228,7 @@ typedef enum budget_policy budget_policy;
 
 /**
  * @struct sched_info
- * @brief Scheduling information
+ * @brief Scheduling information.
  */
 struct sched_info {
 

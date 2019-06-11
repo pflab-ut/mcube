@@ -56,8 +56,9 @@
 
 #ifndef __ASSEMBLY__
 
-/*
- * A kernel memory bucket for each power-of-2 list
+/**
+ * @struct bucket
+ * @brief A kernel memory bucket for each power-of-2 list
  *
  * A Bucket with index 'x' holds all the information for the
  * free bufs list of size (1 << x) bytes, including its head.

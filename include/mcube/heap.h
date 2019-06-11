@@ -8,7 +8,7 @@
 #define __MCUBE_MCUBE_HEAP_H__
 
 #define HEAP_INIT_SIZE 0x10000
-#define HEAP_MAX_SIZE 0xF0000
+#define HEAP_MAX_SIZE 0xf0000
 #define HEAP_MIN_SIZE 0x10000
 
 #define MIN_ALLOC_SZ 4
@@ -23,7 +23,7 @@
 
 /**
  * @struct heap_node
- * @brief Heap node information
+ * @brief Heap node information.
  */
 typedef struct heap_node {
   unsigned int hole;
@@ -34,7 +34,7 @@ typedef struct heap_node {
 
 /**
  * @struct footer
- * @brief Footer information
+ * @brief Footer information.
  */
 typedef struct footer {
   heap_node_t *header;
@@ -42,7 +42,7 @@ typedef struct footer {
 
 /**
  * @struct bin
- * @brief Bin information
+ * @brief Bin information.
  */
 typedef struct bin {
   heap_node_t *head;
@@ -50,7 +50,7 @@ typedef struct bin {
 
 /**
  * @struct heap
- * @brief Heap information
+ * @brief Heap information.
  */
 typedef struct heap {
   long start;

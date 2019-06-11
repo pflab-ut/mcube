@@ -10,7 +10,7 @@
 
 /**
  * @struct rwlock
- * @brief Read/Write lock
+ * @brief Read/Write lock.
  */
 struct rwlock {
   /** Number of readers. */

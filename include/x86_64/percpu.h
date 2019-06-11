@@ -90,8 +90,9 @@
  */
 #define CACHE_LINE_SIZE    128
 
-/*
- * The Per-CPU Data Area
+/**
+ * @struct percpu
+ * @brief Per-CPU data area.
  *
  * To prevent "false-sharing" of CPU cache lines, we put this area within
  * unique 64-byte cache-line size boundary, and 128-byte sector boundary.

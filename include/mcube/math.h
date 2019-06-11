@@ -13,18 +13,39 @@
  * Semi type-safe min and max using GNU extensions
  * The type-checking trick is taken from Linux-2.6.
  */
+
+/**
+ * Return minimum of @x and @y.
+ *
+ * @param x Value.
+ * @param y Value.
+ */
 #define MIN(x, y) ({                            \
       typeof(x) _m1 = (x);                      \
       typeof(y) _m2 = (y);                      \
       (void) (&_m1 == &_m2);                    \
       _m1 < _m2 ? _m1 : _m2;                    \
     })
+
+/**
+ * Return maximum of @x and @y.
+ *
+ * @param x Value.
+ * @param y Value.
+ */
 #define MAX(x, y) ({                            \
       typeof(x) _m1 = (x);                      \
       typeof(y) _m2 = (y);                      \
       (void) (&_m1 == &_m2);                    \
       _m1 > _m2 ? _m1 : _m2;                    \
     })
+
+/**
+ * Return swap @x and @y.
+ *
+ * @param x Value.
+ * @param y Value.
+ */
 #define SWAP(x, y) ({                           \
       typeof(x) _m1 = (x);                      \
       typeof(y) _m2 = (y);                      \
@@ -58,6 +79,9 @@ long lpow(long x, long y);
 /**
  * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
  * @return Ceiling of @c size/unit.
+ *
+ * @param size Size.
+ * @param unit Unit.
  */
 #define CEIL(size, unit) (((long) (size) * (long) (unit) < 0) \
                           || ((long) (size) % (long) (unit)) == 0 ? \
@@ -68,6 +92,9 @@ long lpow(long x, long y);
 /**
  * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
  * @return Floor of @c size/unit.
+ *
+ * @param size Size.
+ * @param unit Unit.
  */
 #define FLOOR(size, unit)  ((size) / (unit) > 0 ? (size) / (unit) :    \
                            (long) (size) / (unit) > (double) (size) / (unit) ?  \

@@ -14,8 +14,9 @@
 
 #ifndef __ASSEMBLY__
 
-/*
- * Singly-linked unrolled list node
+/**
+ * @struct unrolled_node
+ * @brief Singly-linked unrolled list node.
  *
  * NOTE! the  data array could've been embedded in the node using
  * declaration 'void *array[]', and putting that at structure end?
@@ -28,7 +29,10 @@ struct unrolled_node {
   struct unrolled_node *next;  /* Next node in this list, or NULL */
 };
 
-/*
+/**
+ * @struct unrolled_head
+ * @brief Unrolled header.
+ *
  * To use unrolled lists, embed this descriptor inside the
  * desired kernel structure.
  */

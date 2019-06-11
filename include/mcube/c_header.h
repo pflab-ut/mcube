@@ -28,7 +28,13 @@
 #include <errno.h>
 #include <poll.h>
 #else
-//#define offsetof(T, F) ((unsigned int)((char *)&((T *) 0L)->F - (char *) 0L))
+
+/**
+ * calculate offset of element of type.
+ *
+ * @param type Type.
+ * @param elem Element.
+ */
 #define offsetof(type, elem)  ((unsigned long) &((type *) 0)->elem)
 #endif /* CONFIG_ARCH_SIM */
 
