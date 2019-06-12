@@ -12,11 +12,14 @@
 
 #ifndef __ASSEMBLY__
 
-/*
+/**
+ * @struct spinlock
+ * @brief Spinlock information.
+ *
  * Careful! Spinlocks, ironically enough, are globals and thus
  * must be themselves protected against concurrent SMP access!
  */
-typedef struct spinlock {
+struct spinlock {
   uint32_t val;
 
   /*
@@ -25,8 +28,9 @@ typedef struct spinlock {
    * is saved here ... to get restored upon lock release.
    */
   union rflags flags;
-} spinlock_t;
+};
 
+typedef struct spinlock spinlock_t;
 
 #define INIT_SPINLOCK (spinlock_t) {.val = SPIN_UNLOCKED, .flags.raw = 0}
 

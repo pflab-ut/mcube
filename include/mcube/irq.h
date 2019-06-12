@@ -20,6 +20,10 @@
 static inline void enable_local_irq(void);
 static inline void disable_local_irq(void);
 
+/**
+ * @union rflags
+ * @brief Flags.
+ */
 union rflags {
   uint64_t raw;
   struct {

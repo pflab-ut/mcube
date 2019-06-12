@@ -126,8 +126,8 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
 }
 
 /**
- * Return the address of the data structure of type @type
- * that includes given @node.
+ * Return the address of the data structure of @a type
+ * that includes given @a node.
  *
  * The "useless" pointer assignment is for type-checking.
  * `Make it hard to misuse' -- a golden APIs advice.
@@ -148,8 +148,8 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
   })
 
 /**
- * Scan the list, beginning from @node, using the iterator
- * @struc.
+ * Scan the list, beginning from @a node, using the iterator
+ * @a struc.
  *
  * NOTE! Don't delete the the iterator's list node inside
  * loop: we use it in the initialization of next iteration.

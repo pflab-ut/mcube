@@ -18,6 +18,10 @@
 #define POLLHUP  0x0010
 #define POLLNVAL 0x0020
 
+/**
+ * @struct pollfd
+ * @brief Set of file descriptors to be polled.
+ */
 struct pollfd {
   int   fd;         /* file descriptor */
   short events;     /* requested events */

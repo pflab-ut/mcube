@@ -32,8 +32,9 @@ enum {
   PIT_CONTROL  =  0x43,    /* read/write Chip's Control Word */
 };
 
-/*
- * Control Word format
+/**
+ * @union pit_cmd
+ * Control word format.
  */
 union pit_cmd {
   uint8_t raw;

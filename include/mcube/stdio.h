@@ -11,7 +11,10 @@
 #define KBUF_SIZE 1024
 #define MAX_DIGIT 64
 
-/*
+/**
+ * @enum format_arglen
+ * @brief Format argument's length
+ *
  * Definitions for parsing format arguments. Each argument
  * is described by its descriptor (argdesc) structure.
  */
@@ -19,6 +22,11 @@ enum format_arglen {
   INT = 0,
   LONG,
 };
+
+/**
+ * @enum format_argtype
+ * @brief Format argument's type.
+ */
 enum format_argtype {
   NONE = 0,
   SIGNED,
@@ -29,12 +37,20 @@ enum format_argtype {
   PERCENT,
 };
 
+/**
+ * @enum format_pad
+ * @brief Format padding.
+ */
 enum format_pad {
   PAD_NO = 0,
   PAD_BLANK,
   PAD_ZERO,
 };
 
+/**
+ * @struct format_argdesc
+ * @brief Format argument's descriptor.
+ */
 struct format_argdesc {
   int radix;
   enum format_arglen len;
@@ -51,7 +67,6 @@ int printk(const char *fmt, ...);
 
 int sscan(const char *str, const char *fmt, ...);
 int vsnscan(const char *buf, const char *fmt, va_list args);
-
 
 
 /* print for both kernel and user modes. */
@@ -76,8 +91,6 @@ const char *parse_arg(const char *fmt, struct format_argdesc *desc);
   } while (0);
 
 __noreturn void format_panic(const char *str);
-
-
 __noreturn void loop_print(char ch, int color);
 
 

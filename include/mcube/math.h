@@ -15,7 +15,7 @@
  */
 
 /**
- * Return minimum of @x and @y.
+ * Return minimum of @a x and @a y.
  *
  * @param x Value.
  * @param y Value.
@@ -28,7 +28,7 @@
     })
 
 /**
- * Return maximum of @x and @y.
+ * Return maximum of @a x and @a y.
  *
  * @param x Value.
  * @param y Value.
@@ -41,7 +41,7 @@
     })
 
 /**
- * Return swap @x and @y.
+ * Return swap @a x and @a y.
  *
  * @param x Value.
  * @param y Value.
@@ -77,8 +77,8 @@ long lpow(long x, long y);
 
 
 /**
- * The CEIL() macro computes the smallest integral value that is not less than @c size/unit.
- * @return Ceiling of @c size/unit.
+ * The CEIL() macro computes the smallest integral value that is not less than @a size/unit.
+ * @return Ceiling of @a size/unit.
  *
  * @param size Size.
  * @param unit Unit.
@@ -90,8 +90,8 @@ long lpow(long x, long y);
 #if defined(ENABLE_FPU)
 
 /**
- * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
- * @return Floor of @c size/unit.
+ * The FLOOR() macro returns the largest integral value that is not greater than @a size/unit.
+ * @return Floor of @a size/unit.
  *
  * @param size Size.
  * @param unit Unit.
@@ -102,13 +102,13 @@ long lpow(long x, long y);
 
 
 /**
- * The ABS() macro computes the absolute value of the integer @c x.
- * @return Absolute value of @c x.
+ * The ABS() macro computes the absolute value of the integer @a x.
+ * @return Absolute value of @a x.
  */
 #define ABS(x) ((long) (x) > 0 ? (long) (x) : - (long) (x))
 /**
- * The FABS() macro computes the absolute value of the floating-point @c x.
- * @return Absolute value of @c x.
+ * The FABS() macro computes the absolute value of the floating-point @a x.
+ * @return Absolute value of @a x.
  */
 #define FABS(x) ((double) (x) > 0 ? (double) (x) : - (double) (x))
 
@@ -155,8 +155,8 @@ union ieee754 {
 #else
 
 /**
- * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
- * @return Floor of @c size/unit.
+ * The FLOOR() macro returns the largest integral value that is not greater than @a size/unit.
+ * @return Floor of @a size/unit.
  */
 #define FLOOR(size, unit) ((size) / (unit))
 

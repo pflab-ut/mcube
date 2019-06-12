@@ -27,7 +27,8 @@ typedef int socklen_t;
  */
 
 /**
- * @brief Socket address
+ * @struct sockaddr
+ * @brief Socket address.
  *
  * The sockaddr structure has socket address information.
  */
@@ -38,7 +39,10 @@ struct sockaddr {
   char sa_data[14];
 };
 
-/* Structure describing the address of an AF_LOCAL (aka AF_UNIX) socket.  */
+/**
+ * @struct sockaddr_un
+ * @brief Structure describing the address of an AF_LOCAL (aka AF_UNIX) socket.
+ */
 struct sockaddr_un {
   sa_family_t sun_family;
   char sun_path[108];         /* Path name.  */
@@ -47,7 +51,8 @@ struct sockaddr_un {
 typedef struct sockaddr sockaddr;
 
 /**
- * @brief Internet address
+ * @struct in_addr
+ * @brief Internet address.
  *
  * The in_addr structure has definition of internet address.
  */
@@ -59,6 +64,7 @@ struct in_addr {
 typedef struct in_addr in_addr;
 
 /**
+ * @struct sockaddr_in
  * @brief Socket address
  *
  * The sockaddr_in structure has internet socket address.
@@ -76,7 +82,10 @@ struct sockaddr_in {
 
 typedef struct sockaddr_in sockaddr_in;
 
-/* Types of sockets.  */
+/**
+ * @enum socket_type
+ * @brief Types of sockets.
+ */
 enum socket_type {
   SOCK_STREAM = 1,              /* Sequenced, reliable, connection-based
 																	 byte streams.  */
@@ -253,7 +262,10 @@ enum {
 					   SCM_RIGHTS.  */
 };
 
-
+/**
+ * @struct socket_struct
+ * @brief Socket structure.
+ */
 struct socket_struct {
   bool used;
   bool passive_socket;
@@ -269,7 +281,10 @@ struct socket_struct {
 
 #define MSG_BUFSIZE 1024
 
-
+/**
+ * @enum shutdown
+ * @brief Shutdown for socket.
+ */
 enum shutdown {
   SHUT_RD = 0,
   SHUT_WR,

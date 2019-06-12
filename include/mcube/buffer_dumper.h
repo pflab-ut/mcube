@@ -17,8 +17,9 @@
 /**
  * @struct buffer_dumper
  * @brief Buffer Dumper
- * @pr: printf()-like method, determining the output device (to VGA, serial)
- * @formatter: how to dump buffers to output device (using hex, ascii, null)
+ *
+ * @param pr: printf()-like method, determining the output device (to VGA, serial)
+ * @param formatter: how to dump buffers to output device (using hex, ascii, null)
  */
 struct buffer_dumper {
   int (*pr)(const char *fmt, ...);

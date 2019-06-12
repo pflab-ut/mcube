@@ -77,8 +77,9 @@ typedef enum {
 #define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
 #define S_ISSOCK(mode)  (((mode) & S_IFMT) == S_IFSOCK)
 
-/*
- * Inode information returned by the stat() group of functions
+/**
+ * @struct stat
+ * @brief Inode information returned by the stat() group of functions.
  */
 struct stat {
   dev_t  st_dev;    /* Device ID of device containing file */

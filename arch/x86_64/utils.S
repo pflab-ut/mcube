@@ -63,12 +63,12 @@ ENTRY(syscall)
  popq    %rbp
  ret
 
-.extern CPU_DATA_BASE
+//.extern CPU_DATA_BASE
  
 ENTRY(change_ring0_to_ring3)
  /* Setup SP0 in TSS */
  movq $0xffffffff80280000UL, %rax
- movq $CPU_DATA_BASE, %rdx
+// movq $CPU_DATA_BASE, %rdx
  movq %rax, 4(%rdx)
  /* Prepare stack for iretq */
  movq %rsp, %rdx

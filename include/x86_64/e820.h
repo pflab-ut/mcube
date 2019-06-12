@@ -116,7 +116,7 @@ enum {
 
 /**
  * e820_for_each - iterate over E820h-struct ranges
- * @range:       the iterator, 'struct e820_range *'
+ * @param range       the iterator, 'struct e820_range *'
  *
  * Take care while modifying this code, we're really
  * bending C and GNU extensions rules to achieve it.

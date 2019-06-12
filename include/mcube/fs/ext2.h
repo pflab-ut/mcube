@@ -75,7 +75,7 @@ enum ext2_fs {
  * @enum ext2_inode
  * @brief Reserved inode numbers.
  */
-enum {
+enum ext2_inode {
   EXT2_BAD_INODE    = 1,    /* Bad blocks inode */
   EXT2_ROOT_INODE    = 2,    /* Inode for the root '/' */
   EXT2_ACL_IDX_INODE  = 3,    /* ACL Index (deprecated) */
@@ -84,10 +84,11 @@ enum {
   EXT2_UNDELETE_DIR_INODE = 6,    /* Undelete directory inode */
 };
 
-/*
- * Inode flags - only the ones we recognize
+/**
+ * @enum ext2_inode_flags
+ * @brief Inode flags - only the ones we recognize.
  */
-enum {
+enum ext2_inode_flags {
   EXT2_INO_IMMUTABLE_FL  = 0x00000010,  /* Immutable file */
   EXT2_INO_DIR_INDEX_FL  = 0x00001000,  /* Hash-indexed directory */
   EXT2_INO_EXTENT_FL  = 0x00080000,  /* File data in extents */
@@ -175,48 +176,48 @@ static inline enum file_type inode_mode_to_dir_entry_type(mode_t mode)
  * @union super_block
  * @brief On-disk Superblock Format.
  *
- * @inodes_count      : Total number of inodes, used and free, in the FS.
- * @blocks_count      : Total number of blocks, used, free, and reserved.
- * @r_blocks_count    : Total number of blocks reserved for the superuser,
- *                      usable for emergency cases when the disk is full.
- * @free_blocks_count : Total # of free blocks, including reserved.
- * @free_inodes_count : Total # of free inodes; sum of b-groups free inodes.
- * @first_data_block  : First block holding data, i.e. non-bootstrap code.
- *                      NOTE! 1st block for Block Group #0 = first_data_block
- * @log_block_size    : Block size = 1024 << size_in_log (1, 2, 4, 8, .. KB)
- * @log_framgent_size : Fragments are not support, their size = block size
- * @blocks_per_group  : Number of blocks per Block Group
- * @frags_per_group   : Number of fragments per Block Group
- * @inodes_per_group  : Number of inodes per Block Group
- * @mount_time        : Last time the FS was mounted, UNIX format
- * @write_time        : Last write access to the FS
- * @mount_count       : Number of mounts since the last fsck (FS check)
- * @max_mount_count   : Max number of mounts before an fsck is performed
- * @magic_signature   : Magic value identifying the FS as ext2
- * @state             : mounted cleanly (VALID_FS) or errors detected (ERROR)
- * @error_behavior    : What the FS driver should do when detecting errors
- * @minor_revision    : Minor part of the revision level
- * @last_check        : Last time of fsck
- * @check_interval    : Maximum Unix time interval allowed between fscks
- * @creator_os        : OS that created the file system
- * @revision_level    : Revision 0 (EXT2_GOOD_OLD) or 1 (EXT2_DYNAMIC)
- * @reserved_uid      : Default user ID for reserved blocks
- * @reserved_gid      : Default group ID for reserved blocks
- * @first_inode       : Index to first useable (non-reserved) inode
- * @inode_size        : Size of the On-Disk inode structure
- * @block_group       : Block Group number hosting this superblock
- * @features_compat   : Bitmask for the 'compatible' feature set. If FS driver
- *                      doesn't know any of these features, it can still mount
- *                      and use the disk _without_ risk of damaging data.
- * @features_incompat : Bitmask for the 'incompatible' feature set. If driver
- *                      faced any unknown bit set, it should NOT mount it.
- * @features_ro_compat: Any of these features unknown? mount it as readonly!
- * @UUID[16]          : Unique 128-bit UUID for the volume
- * @volume_label[16]  : 16-byte, NULL-terminated, ISO-Latin-1 volume name
- * @last_mounted[64]  : Obsolete, directory path wher the FS was last mounted
- * @compression_bitmap: LZV1, GZIP, BZIP, LZO type of compression used
- * @prealloc_blocks   : Nr of blocks to try to preallocate (COMPAT_PRERALLOC)
- * @prealloc_dir_blcks: Nr of blocks to try to preallocate for directories
+ * @a inodes_count      : Total number of inodes, used and free, in the FS.
+ * @a blocks_count      : Total number of blocks, used, free, and reserved.
+ * @a r_blocks_count    : Total number of blocks reserved for the superuser,
+ *                        usable for emergency cases when the disk is full.
+ * @a free_blocks_count : Total # of free blocks, including reserved.
+ * @a free_inodes_count : Total # of free inodes; sum of b-groups free inodes.
+ * @a first_data_block  : First block holding data, i.e. non-bootstrap code.
+ *                        NOTE! 1st block for Block Group #0 = first_data_block
+ * @a log_block_size    : Block size = 1024 << size_in_log (1, 2, 4, 8, .. KB)
+ * @a log_framgent_size : Fragments are not support, their size = block size
+ * @a blocks_per_group  : Number of blocks per Block Group
+ * @a frags_per_group   : Number of fragments per Block Group
+ * @a inodes_per_group  : Number of inodes per Block Group
+ * @a mount_time        : Last time the FS was mounted, UNIX format
+ * @a write_time        : Last write access to the FS
+ * @a mount_count       : Number of mounts since the last fsck (FS check)
+ * @a max_mount_count   : Max number of mounts before an fsck is performed
+ * @a magic_signature   : Magic value identifying the FS as ext2
+ * @a state             : mounted cleanly (VALID_FS) or errors detected (ERROR)
+ * @a error_behavior    : What the FS driver should do when detecting errors
+ * @a minor_revision    : Minor part of the revision level
+ * @a last_check        : Last time of fsck
+ * @a check_interval    : Maximum Unix time interval allowed between fscks
+ * @a creator_os        : OS that created the file system
+ * @a revision_level    : Revision 0 (EXT2_GOOD_OLD) or 1 (EXT2_DYNAMIC)
+ * @a reserved_uid      : Default user ID for reserved blocks
+ * @a reserved_gid      : Default group ID for reserved blocks
+ * @a first_inode       : Index to first useable (non-reserved) inode
+ * @a inode_size        : Size of the On-Disk inode structure
+ * @a block_group       : Block Group number hosting this superblock
+ * @a features_compat   : Bitmask for the 'compatible' feature set. If FS driver
+ *                        doesn't know any of these features, it can still mount
+ *                        and use the disk _without_ risk of damaging data.
+ * @a features_incompat : Bitmask for the 'incompatible' feature set. If driver
+ *                        faced any unknown bit set, it should NOT mount it.
+ * @a features_ro_compat: Any of these features unknown? mount it as readonly!
+ * @a UUID[16]          : Unique 128-bit UUID for the volume
+ * @a volume_label[16]  : 16-byte, NULL-terminated, ISO-Latin-1 volume name
+ * @a last_mounted[64]  : Obsolete, directory path wher the FS was last mounted
+ * @a compression_bitmap: LZV1, GZIP, BZIP, LZO type of compression used
+ * @a prealloc_blocks   : Nr of blocks to try to preallocate (COMPAT_PRERALLOC)
+ * @a prealloc_dir_blcks: Nr of blocks to try to preallocate for directories
  */
 union super_block {
   struct {
@@ -265,12 +266,12 @@ union super_block {
  * @struct group_descriptor
  * @brief A Block Group descriptor.
  *
- * @block_bitmap      : 32-bit Block ID of the group 'blocks bitmap'
- * @inode_bitmap      : 32-bit Block ID of the group 'inodes bitmap'
- * @inode_table       : 32-bit Block ID for the inode's table first block
- * @free_blocks_count : Nr of free blocks in this group
- * @free_inodes_count : Nr of free inodes in this group
- * @used_dirs_count   : Nr of inodes allocated for directories in this group
+ * @a block_bitmap      : 32-bit Block ID of the group 'blocks bitmap'
+ * @a inode_bitmap      : 32-bit Block ID of the group 'inodes bitmap'
+ * @a inode_table       : 32-bit Block ID for the inode's table first block
+ * @a free_blocks_count : Nr of free blocks in this group
+ * @a free_inodes_count : Nr of free inodes in this group
+ * @a used_dirs_count   : Nr of inodes allocated for directories in this group
  */
 struct group_descriptor {
   uint32_t  block_bitmap;
@@ -297,35 +298,35 @@ struct group_descriptor {
  * NOTE!-2 Remember addinig an initialization line for any new members
  *
  * @@ Below fields are entirely in RAM, no equivalent exist on disk:
- * @inum              : Inode number (MUST be the first element)
- * @node              : List node for the inodes hash table collision list
- * @refcount          : Reference count (CHECK `ext2.c' notes before usage)
- * @lock              : For protecting internal inode fields (`ext2.c')
- * @dirty             : Does the buffered inode image now differ from disk?
+ * @a inum              : Inode number (MUST be the first element)
+ * @a node              : List node for the inodes hash table collision list
+ * @a refcount          : Reference count (CHECK `ext2.c' notes before usage)
+ * @a lock              : For protecting internal inode fields (`ext2.c')
+ * @a dirty             : Does the buffered inode image now differ from disk?
  *
  * @@ Below fields are mirrored from the Ext2 On-Disk inode image:
- * @mode              : File type and access rights
- * @uid               : User ID associated with the file
- * @size_low          : Lower 32-bits of file size, in bytes
- * @atime             : Last time this inode was accessed; UNIX format
- * @ctime             : Time when this inode was created;  UNIX format
- * @mtime             : Last time this inode was modified; UNIX format
- * @dtime             : Time when this inode was deleted (if so); UNIX
- * @gid_low           : POSIX group ID having access to this file (low 16bits)
- * @links_count       : How many times this inode is linked to by dir entries
- * @i512_blocks       : Total number of 512-byte blocks reserved to contain the
- *                      data of this inode, regardless of whether these blocks
- *                      are used or not.
- * @flags             : How should the driver behave when dealing with file's
- *                      data; SECRM_FL, UNRM_FL, APPEND_FL, IMMUTABLE_FL, etc.
- * @reserved          : Originally for other, non-Linux, private data
- * @blocks[15]        : Pointers to data blocks; blocks 0-11 are direct mapping,
- *                      12 is indirect, 13 is double indirect, 14 is triple.
- *                      0 value indicates that such part of file isn't mapped.
- * @generation        : File version, only used by NFS
- * @file_acl          : Block number containing file's extended attributes
- * @size_high         : Higher 32-bits of file size, in bytes
- * @blocks_count_high : Higher 32-bits of total number of 512-byte blocks
+ * @a mode              : File type and access rights
+ * @a uid               : User ID associated with the file
+ * @a size_low          : Lower 32-bits of file size, in bytes
+ * @a atime             : Last time this inode was accessed; UNIX format
+ * @a ctime             : Time when this inode was created;  UNIX format
+ * @a mtime             : Last time this inode was modified; UNIX format
+ * @a dtime             : Time when this inode was deleted (if so); UNIX
+ * @a gid_low           : POSIX group ID having access to this file (low 16bits)
+ * @a links_count       : How many times this inode is linked to by dir entries
+ * @a i512_blocks       : Total number of 512-byte blocks reserved to contain the
+ *                       data of this inode, regardless of whether these blocks
+ *                       are used or not.
+ * @a flags             : How should the driver behave when dealing with file's
+ *                        data; SECRM_FL, UNRM_FL, APPEND_FL, IMMUTABLE_FL, etc.
+ * @a reserved          : Originally for other, non-Linux, private data
+ * @a blocks[15]        : Pointers to data blocks; blocks 0-11 are direct mapping,
+ *                        12 is indirect, 13 is double indirect, 14 is triple.
+ *                        0 value indicates that such part of file isn't mapped.
+ * @a generation        : File version, only used by NFS
+ * @a file_acl          : Block number containing file's extended attributes
+ * @a size_high         : Higher 32-bits of file size, in bytes
+ * @a blocks_count_high : Higher 32-bits of total number of 512-byte blocks
  */
 struct inode {
   uint64_t  inum;
@@ -419,11 +420,11 @@ enum indirection_level {
  * A directory is a file holding variable-sized records;
  * each record represents a file contained in that folder.
  *
- * @inode             : Inode # of the file entry, 0 indicates a non-used entry
- * @record_len        : Unsigned displacement to the next directory entry
- * @filename_len      : File name len must never be larger than record_len - 8
- * @file_type        : Must match the type defined in the inode entry above
- * @filename[255]     : Name of entry, in ISO-LATIN-1 character set.
+ * @a inode             : Inode # of the file entry, 0 indicates a non-used entry
+ * @a record_len        : Unsigned displacement to the next directory entry
+ * @a filename_len      : File name len must never be larger than record_len - 8
+ * @a file_type        : Must match the type defined in the inode entry above
+ * @a filename[255]     : Name of entry, in ISO-LATIN-1 character set.
  */
 struct dir_entry {
   uint32_t  inode_num;
@@ -455,10 +456,10 @@ enum block_op {
  * @struct path_translation
  * @brief Pahtname translation - Used for testing ext2 code.
  *
- * @path              : Absolute, hierarchial, UNIX format, file path
- * @relative_inum     : Inode# found using name_i() on _each_ subcomponent
- * @absolute_inum     : Inode# found using name_i() on the path as a whole.
- * @fd                : File descriptor returned by open(@path, O_RDONLY);
+ * @a path              : Absolute, hierarchial, UNIX format, file path
+ * @a relative_inum     : Inode# found using name_i() on _each_ subcomponent
+ * @a absolute_inum     : Inode# found using name_i() on the path as a whole.
+ * @a fd                : File descriptor returned by open(@a path, O_RDONLY);
  */
 struct path_translation {
   const char *path;

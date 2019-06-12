@@ -37,6 +37,67 @@
 
 #ifndef __ASSEMBLY__
 
+/*
+ * Assembly trampoline code start and end pointers
+ */
+extern const char trampoline[];
+extern const char trampoline_end[];
+
+/**
+ * @struct smpboot_params
+ * @brief Parameters to be sent to other AP cores.
+ */
+struct smpboot_params {
+  uintptr_t cr3;
+  struct idt_descriptor idtr;
+  struct gdt_descriptor gdtr;
+
+  /* Unique values for each core */
+  char *stack_ptr;
+  void *percpu_area_ptr;
+} __packed;
+
+/*
+ * Validate the manually calculated parameters offsets
+ * we're sending to the assembly trampoline code
+ */
+static inline void smpboot_params_validate_offsets(void)
+{
+  compiler_assert(SMPBOOT_CR3
+                  == offsetof(struct smpboot_params, cr3));
+
+  compiler_assert(SMPBOOT_IDTR
+                  == offsetof(struct smpboot_params, idtr));
+
+  compiler_assert(SMPBOOT_IDTR_LIMIT
+                  == offsetof(struct smpboot_params, idtr)
+                  + offsetof(struct idt_descriptor, limit));
+
+  compiler_assert(SMPBOOT_IDTR_BASE
+                  == offsetof(struct smpboot_params, idtr)
+                  + offsetof(struct idt_descriptor, base));
+
+  compiler_assert(SMPBOOT_GDTR
+                  == offsetof(struct smpboot_params, gdtr));
+
+  compiler_assert(SMPBOOT_GDTR_LIMIT
+                  == offsetof(struct smpboot_params, gdtr)
+                  + offsetof(struct gdt_descriptor, limit));
+
+  compiler_assert(SMPBOOT_GDTR_BASE
+                  == offsetof(struct smpboot_params, gdtr)
+                  + offsetof(struct gdt_descriptor, base));
+
+  compiler_assert(SMPBOOT_STACK_PTR
+                  == offsetof(struct smpboot_params, stack_ptr));
+
+  compiler_assert(SMPBOOT_PERCPU_PTR
+                  == offsetof(struct smpboot_params, percpu_area_ptr));
+
+  compiler_assert(SMPBOOT_PARAMS_SIZE
+                  == sizeof(struct smpboot_params));
+}
+
 
 #define TRAMPOLINE_START  VIRTUAL(SMPBOOT_START)
 #define TRAMPOLINE_PARAMS  VIRTUAL(SMPBOOT_PARAMS)

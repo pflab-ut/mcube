@@ -72,6 +72,11 @@
  * Line control register, controls DLAB and send mode
  */
 #define UART_LINE_CTRL    3
+
+/**
+ * @union line_control_reg
+ * @brief Line control register.
+ */
 union line_control_reg {
   uint8_t raw;
   struct {
@@ -104,6 +109,11 @@ enum {
  * want to send data.
  */
 #define UART_MODEM_CTRL    4
+
+/**
+ * @union modem_control_reg
+ * @brief Modem control register.
+ */
 union modem_control_reg {
   uint8_t raw;
   struct {
@@ -119,6 +129,11 @@ union modem_control_reg {
  * Status and error info relating to rx and tx.
  */
 #define UART_LINE_STATUS  5
+
+/**
+ * @union line_status_reg
+ * @brief Line status register.
+ */
 union line_status_reg {
   uint8_t raw;
   struct {
@@ -139,6 +154,11 @@ union line_status_reg {
  * us that the attached device is ready for receiving data.
  */
 #define UART_MODEM_STATUS  6
+
+/**
+ * @union modem_status_reg
+ * @brief Modem status register.
+ */
 union modem_status_reg {
   uint8_t raw;
   struct {
