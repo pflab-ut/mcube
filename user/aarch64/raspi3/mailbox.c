@@ -39,6 +39,8 @@ void raspi3_frame_buffer_main(void)
   fb_print(10, 5, "Hello World!");
 }
 
+#define COUNTER_SECTOR 1
+
 void raspi3_sd_main(void)
 {
 #if CONFIG_OPTION_FS_FAT
@@ -47,12 +49,20 @@ void raspi3_sd_main(void)
   // initialize EMMC and detect SD card type
   if (init_sd() == SD_OK) {
     // read the master boot record after our bss segment
-#if 0
+#if 1
     extern unsigned char __end;
+    unsigned int *counter = (unsigned int *)(&__end + 508);
 
     if (sd_readblock(0, &__end, 1)) {
       // dump it to serial console
       memdump(&__end, 512);
+      // increase boot counter
+      (*counter)++;
+
+      // save the sector
+      if (sd_writeblock(&__end, COUNTER_SECTOR, 1)) {
+        printk("Boot counter 0x%x written to SD card.\n", *counter);
+      }
     }
 
 #endif

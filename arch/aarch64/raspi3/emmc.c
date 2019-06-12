@@ -218,6 +218,85 @@ int sd_readblock(unsigned int lba, unsigned char *buffer, unsigned int num)
 }
 
 /**
+ * write a block to the sd card and return the number of bytes written
+ * returns 0 on error.
+ */
+int sd_writeblock(unsigned char *buffer, unsigned int lba, unsigned int num)
+{
+  int r, d;
+  unsigned int c = 0;
+
+  if (num < 1) {
+    num = 1;
+  }
+
+  printk("sd_writeblock lba 0x%x num 0x%x\n", lba, num);
+
+  if (sd_status(SR_DAT_INHIBIT | SR_WRITE_AVAILABLE)) {
+    sd_err = SD_TIMEOUT;
+    return 0;
+  }
+
+  unsigned int *buf = (unsigned int *) buffer;
+
+  if (sd_scr[0] & SCR_SUPP_CCS) {
+    if (num > 1 && (sd_scr[0] & SCR_SUPP_SET_BLKCNT)) {
+      sd_cmd(CMD_SET_BLOCKCNT, num);
+
+      if (sd_err) {
+        return 0;
+      }
+    }
+
+    mmio_out32(EMMC_BLKSIZECNT, (num << 16) | 512);
+    sd_cmd(num == 1 ? CMD_WRITE_SINGLE : CMD_WRITE_MULTI, lba);
+
+    if (sd_err) {
+      return 0;
+    }
+  } else {
+    mmio_out32(EMMC_BLKSIZECNT, (1 << 16) | 512);
+  }
+
+  while (c < num) {
+    if (!(sd_scr[0] & SCR_SUPP_CCS)) {
+      sd_cmd(CMD_WRITE_SINGLE, (lba + c) * 512);
+
+      if (sd_err) {
+        return 0;
+      }
+    }
+
+    if ((r = sd_int(INT_WRITE_RDY))) {
+      printk("\rERROR: Timeout waiting for ready to write\n");
+      sd_err = r;
+      return 0;
+    }
+
+    for (d = 0; d < 128; d++) {
+      mmio_out32(EMMC_DATA, buf[d]);
+    }
+
+    c++;
+    buf += 128;
+  }
+
+  if ((r = sd_int(INT_DATA_DONE))) {
+    printk("\rERROR: Timeout waiting for data done\n");
+    sd_err = r;
+    return 0;
+  }
+
+  if (num > 1 && !(sd_scr[0] & SCR_SUPP_SET_BLKCNT) &&
+      (sd_scr[0] & SCR_SUPP_CCS)) {
+    sd_cmd(CMD_STOP_TRANS, 0);
+  }
+
+  return sd_err != SD_OK || c != num ? 0 : num * 512;
+}
+
+
+/**
  * set SD clock to frequency in Hz
  */
 int sd_clk(unsigned int f)

@@ -41,6 +41,8 @@
 #define CMD_READ_SINGLE     0x11220010
 #define CMD_READ_MULTI      0x12220032
 #define CMD_SET_BLOCKCNT    0x17020000
+#define CMD_WRITE_SINGLE    0x18220010
+#define CMD_WRITE_MULTI     0x19220032
 #define CMD_APP_CMD         0x37000000
 #define CMD_SET_BUS_WIDTH   (0x06020000 | CMD_NEED_APP)
 #define CMD_SEND_OP_COND    (0x29020000 | CMD_NEED_APP)
@@ -48,6 +50,7 @@
 
 /* STATUS register settings */
 #define SR_READ_AVAILABLE   0x00000800
+#define SR_WRITE_AVAILABLE  0x00000400
 #define SR_DAT_INHIBIT      0x00000002
 #define SR_CMD_INHIBIT      0x00000001
 #define SR_APP_CMD          0x00000020
@@ -56,6 +59,8 @@
 #define INT_DATA_TIMEOUT    0x00100000
 #define INT_CMD_TIMEOUT     0x00010000
 #define INT_READ_RDY        0x00000020
+#define INT_WRITE_RDY       0x00000010
+#define INT_DATA_DONE       0x00000002
 #define INT_CMD_DONE        0x00000001
 
 #define INT_ERROR_MASK      0x017E8000
@@ -105,6 +110,7 @@ int sd_status(unsigned int mask);
 int sd_int(unsigned int mask);
 int sd_cmd(unsigned int code, unsigned int arg);
 int sd_readblock(unsigned int lba, unsigned char *buffer, unsigned int num);
+int sd_writeblock(unsigned char *buffer, unsigned int lba, unsigned int num);
 int sd_clk(unsigned int f);
 int init_sd(void);
 
