@@ -10,14 +10,37 @@
 
 /**
  * @struct ring_buf
- * @brief Ring buffer
+ * @brief Ring buffer.
  */
 struct ring_buf {
+  /**
+   * Pointer to buffer.
+   */
   uint8_t *buffer;
+
+  /**
+   * Head.
+   */
   size_t head;
+
+  /**
+   * Tail.
+   */
   size_t tail;
+
+  /**
+   * Max.
+   */
   size_t max;
-  int full;
+
+  /**
+   * Is buffer full?
+   */
+  bool full;
+
+  /**
+   * Lock for buffer.
+   */
   spinlock_t lock;
 };
 
@@ -31,57 +54,82 @@ typedef ring_buf_t *cbuf_handle_t;
       }
 
 /**
- * Pass in a storage buffer and size
- * Returns a ring buffer handle
+ * @fn cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
+ * @brief initialize buffer.
+ * @param buffer Buffer.
+ * @param size Buffer size.
+ * @return Handled buffer.
  */
 cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size);
 
 /**
- * Free a ring buffer structure.
- * Does not free data buffer; owner is responsible for that
+ * @fn void ring_buf_free(cbuf_handle_t cbuf)
+ * @brief Free buffer structure.
+ * Does not free data buffer; owner is responsible for that.
+ * @param cbuf Buffer.
  */
 void ring_buf_free(cbuf_handle_t cbuf);
 
 /**
- * Reset the ring buffer to empty, head == tail
+ * @fn void ring_buf_reset(cbuf_handle_t cbuf)
+ * @brief Reset buffer to empty, head == tail.
+ * @param cbuf Buffer.
  */
 void ring_buf_reset(cbuf_handle_t cbuf);
 
 /**
- * Put version 1 continues to add data if the buffer is full
- * Old data is overwritten
+ * @fn void ring_buf_put(cbuf_handle_t cbuf, uint8_t data)
+ * @brief Put version 1 continues to add data if the buffer is full.
+ * Old data is overwritten.
+ * @param cbuf Buffer.
+ * @param data Data.
  */
 void ring_buf_put(cbuf_handle_t cbuf, uint8_t data);
 
 /**
- * Put Version 2 rejects new data if the buffer is full
- * Returns 0 on success, -1 if buffer is full
+ * @fn int ring_buf_put2(cbuf_handle_t cbuf, uint8_t data)
+ * @brief Put Version 2 rejects new data if buffer is full
+ * @param cbuf Buffer.
+ * @param data Data.
+ * @return 0 on success, -1 if buffer is full.
  */
 int ring_buf_put2(cbuf_handle_t cbuf, uint8_t data);
 
 /**
- * Retrieve a value from the buffer
- * Returns 0 on success, -1 if the buffer is empty
+ * @fn int ring_buf_get(cbuf_handle_t cbuf, uint8_t *data)
+ * @brief Retrieve a value from buffer.
+ * @param cbuf Buffer.
+ * @param data Data.
+ * @return 0 on success, -1 if buffer is empty.
  */
 int ring_buf_get(cbuf_handle_t cbuf, uint8_t *data);
 
 /**
- * Returns true if the buffer is empty
+ * @fn bool ring_buf_empty(cbuf_handle_t cbuf)
+ * @brief Is buffer empty?
+ * @param cbuf Buffer.
+ * @return True if buffer is empty.
  */
 bool ring_buf_empty(cbuf_handle_t cbuf);
 
 /**
- * Returns true if the buffer is full
+ * @fn bool ring_buf_full(cbuf_handle_t cbuf)
+ * @param cbuf Buffer.
+ * @return True if the buffer is full.
  */
 bool ring_buf_full(cbuf_handle_t cbuf);
 
 /**
- * Returns the maximum capacity of the buffer
+ * @fn size_t ring_buf_capacity(cbuf_handle_t cbuf)
+ * @param cbuf Buffer.
+ * @return Maximum capacity of buffer.
  */
 size_t ring_buf_capacity(cbuf_handle_t cbuf);
 
 /**
- * Returns the current number of elements in the buffer
+ * @fn size_t ring_buf_size(cbuf_handle_t cbuf)
+ * @param cbuf Buffer.
+ * @return Current number of elements in buffer.
  */
 size_t ring_buf_size(cbuf_handle_t cbuf);
 

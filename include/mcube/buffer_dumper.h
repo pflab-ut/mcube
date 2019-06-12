@@ -16,36 +16,65 @@
 
 /**
  * @struct buffer_dumper
- * @brief Buffer Dumper
- *
- * @param pr: printf()-like method, determining the output device (to VGA, serial)
- * @param formatter: how to dump buffers to output device (using hex, ascii, null)
+ * @brief Buffer Dumper.
  */
 struct buffer_dumper {
+  /**
+   * printf()-like method, determining the output device (to VGA, serial)
+   */
   int (*pr)(const char *fmt, ...);
+  
+  /**
+   * formatter: how to dump buffers to output device (using hex, ascii, null)
+   */
   void (*formatter)(struct buffer_dumper *dumper, void *buf, uint len);
 };
 
 extern struct buffer_dumper serial_char_dumper;
 
-/*
- * Possible functions for the printer:
- * - printk(fmt, ...)
- * - prints(fmt, ...)
- * - and below null printer
+/**
+ * @fn int null_printer(const char *fmt, ...)
+ * @brief Possible functions for the printer.
  */
 int null_printer(const char *fmt, ...);
 
-/*
- * Possible functions for the formatter:
+/**
+ * @fn void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
+ * @brief Dump buffer by hex.
+ * @param dumper Dump buffer.
+ * @param given_buf Given buffer.
+ * @param len Length.
  */
 void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len);
+
+/**
+ * @fn void buf_char_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
+ * @brief Dump buffer by char.
+ * @param dumper Dump buffer.
+ * @param given_buf Given buffer.
+ * @param len Length.
+ */
 void buf_char_dump(struct buffer_dumper *dumper, void *given_buf, uint len);
+
+/**
+ * @fn void buf_null_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
+ * @brief Dump buffer by null.
+ * @param dumper Dump buffer.
+ * @param given_buf Given buffer.
+ * @param len Length.
+ */
 void buf_null_dump(__unused struct buffer_dumper *dumper,
                    __unused void *given_buf, __unused uint len);
 
 
-void printbuf(struct buffer_dumper *, void *buf, uint len);
+/**
+ * @fn void printbuf(struct buffer_dumper *dumper, void *buf, uint len)
+ * @brief Print buffer.
+ * @param dumper Dump buffer.
+ * @param buf Buffer.
+ * @param len Length.
+ */
+void printbuf(struct buffer_dumper *dumper, void *buf, uint len);
 
 #endif /* !__ASSEMBLY__ */
 

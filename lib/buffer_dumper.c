@@ -79,7 +79,6 @@ void buf_null_dump(__unused struct buffer_dumper *dumper,
 /**
  * Public interface:
  */
-
 void printbuf(struct buffer_dumper *dumper, void *buf, uint len)
 {
   assert(dumper);

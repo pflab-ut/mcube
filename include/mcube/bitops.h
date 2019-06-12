@@ -17,6 +17,13 @@
 
 #include <mcube/mcube.h>
 
+/**
+ * @fn static inline bool bit_is_set8(uint8_t val, int bit)
+ * @brief Is bit set by 8-bits?
+ * @param val Value.
+ * @param bit Bit index.
+ * @return True if bit is set.
+ */
 static inline bool bit_is_set8(uint8_t val, int bit)
 {
   if ((val & (1U << bit)) == 0) {
@@ -26,9 +33,12 @@ static inline bool bit_is_set8(uint8_t val, int bit)
   return true;
 }
 
-/*
- * Find the first set (or clear) bit in the given @buf of
- * @len bytes. @TEST_FUNC is used for testing bit's state.
+/**
+ * @fn static inline int64_t find_first_bit8(char *buf, uint len)
+ * @brief find first bit by 8-bits.
+ * @param buf Buffer.
+ * @param len Length.
+ * @return Bit index.
  */
 static inline int64_t find_first_bit8(char *buf, uint len)
 {
@@ -45,6 +55,13 @@ static inline int64_t find_first_bit8(char *buf, uint len)
   return -1;
 }
 
+/**
+ * @fn static inline int64_t find_first_zero_bit8(char *buf, uint len)
+ * @brief find first zero bit by 8-bits.
+ * @param buf Buffer.
+ * @param len Length.
+ * @return Bit index.
+ */
 static inline int64_t find_first_zero_bit8(char *buf, uint len)
 {
   uint bits_per_byte = 8;
@@ -61,10 +78,14 @@ static inline int64_t find_first_zero_bit8(char *buf, uint len)
 }
 
 
-/*
- * Given a buffer @bit offset, calculate the bit position
- * in terms of a @byte_offset within the buffer, and a
- * @bit_offset within that byte.  @len is the buf length.
+/**
+ * @fn static inline void set_offsets8(uint bit, uint *byte_offset, uint *bit_offset,
+ *                                     uint len)
+ * @brief set offset by 8-bits.
+ * @param bit Given bit offset of buffer.
+ * @param byte_offset Byte offset.
+ * @param bit_offset Bit offset.
+ * @param len Buffer length.
  */
 static inline void set_offsets8(uint bit, uint *byte_offset, uint *bit_offset,
                                 uint len)
@@ -76,8 +97,12 @@ static inline void set_offsets8(uint bit, uint *byte_offset, uint *bit_offset,
   *bit_offset  = bit % 8;
 }
 
-/*
- * Set given @bit number in buffer.
+/**
+ * @fn static inline void set_bit8(char *buf, uint bit, uint len)
+ * @brief set bit by 8-bits.
+ * @param buf Buffer.
+ * @param bit Bit.
+ * @param len Length.
  */
 static inline void set_bit8(char *buf, uint bit, uint len)
 {
@@ -88,8 +113,12 @@ static inline void set_bit8(char *buf, uint bit, uint len)
   *buf |= (1 << bit_offset);
 }
 
-/*
- * Clear given @bit number in buffer.
+/**
+ * @fn static inline void clear_bit8(char *buf, uint bit, uint len)
+ * @brief clear bit by 8-bits.
+ * @param buf Buffer.
+ * @param bit Bit.
+ * @param len Length.
  */
 static inline void clear_bit8(char *buf, uint bit, uint len)
 {

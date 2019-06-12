@@ -61,15 +61,25 @@ struct format_argdesc {
 };
 
 void printk_bust_all_locks(void);
-/* print for only kernel mode. */
-//int printk(const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+
+/**
+ * @fn int printk(const char *fmt, ...)
+ * @brief print characters for kernel mode.
+ * @param fmt Format.
+ * @return Number of characters printed.
+ */
 int printk(const char *fmt, ...);
 
 int sscan(const char *str, const char *fmt, ...);
 int vsnscan(const char *buf, const char *fmt, va_list args);
 
 
-/* print for both kernel and user modes. */
+/**
+ * @fn int print(const char *fmt, ...)
+ * @brief print characters for both kernel and user modes.
+ * @param fmt Format.
+ * @return Number of characters printed.
+ */
 int print(const char *fmt, ...);
 
 int vsnprint(char *buf, int size, const char *fmt, va_list args);
@@ -100,7 +110,15 @@ __noreturn void loop_print(char ch, int color);
 #if !CONFIG_ARCH_SIM
 
 int sscanf(const char *str, const char *fmt, ...);
+
+/**
+ * @fn int printf(const char *fmt, ...)
+ * @brief print characters for both kernel and user modes.
+ * @param fmt Format.
+ * @return Number of characters printed.
+ */
 int printf(const char *fmt, ...);
+
 int sprintf(char *str, const char *format, ...);
 void perror(const char *string);
 int getc(void);

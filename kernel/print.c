@@ -635,9 +635,7 @@ int print(const char *fmt, ...)
 }
 
 
-/*
- * Kernel print, for VGA and serial outputs
- */
+
 int printk(const char *fmt, ...)
 {
   va_list args;
