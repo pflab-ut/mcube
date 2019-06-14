@@ -6,6 +6,10 @@
 #ifndef __MCUBE_MCUBE_CPU_H__
 #define __MCUBE_MCUBE_CPU_H__
 
+/**
+ * @def NR_CPUS
+ * @brief Number of CPUs.
+ */
 #define NR_CPUS 4
 
 /**
@@ -60,29 +64,34 @@
 
 
 /**
- * CPU clock [usec/clock].
+ * @var CPU_CLOCK
+ * @brief CPU clock [usec/clock].
  */
 extern unsigned long CPU_CLOCK;
 
 /**
- * CPU clock MHz per usec (MHz] = [clock/usec]).
+ * @var CPU_CLOCK_MHZ_PER_USEC
+ * @brief CPU clock MHz per usec (MHz] = [clock/usec]).
  */
 extern unsigned long CPU_CLOCK_MHZ_PER_USEC;
 
 #if defined(ENABLE_FPU)
 
 /**
- * CPU microsecond per clock MHz.
+ * @var CPU_USEC_PER_CLOCK_MHZ
+ * @brief CPU microsecond per clock MHz.
  */
 extern double CPU_USEC_PER_CLOCK_MHZ;
 
 /**
- * CPU clock MHz per nanosecond.
+ * @var CPU_CLOCK_MHZ_PER_NSEC
+ * @brief CPU clock MHz per nanosecond.
  */
 extern double CPU_CLOCK_MHZ_PER_NSEC;
 
 /**
- * CPU nanosecond per clock MHz.
+ * @var CPU_NSEC_PER_CLOCK_MHZ
+ * @brief CPU nanosecond per clock MHz.
  */
 extern double CPU_NSEC_PER_CLOCK_MHZ;
 

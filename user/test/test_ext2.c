@@ -45,10 +45,6 @@ __unused static struct buffer_dumper null_null_dumper = {
   .formatter = buf_null_dump,
 };
 
-void ext2_debug_init(struct buffer_dumper *g_dumper)
-{
-  percpu_set(dumper, (uintptr_t)g_dumper);
-}
 
 void superblock_dump(union super_block *sb)
 {

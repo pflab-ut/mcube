@@ -107,6 +107,11 @@ __unused struct buffer_dumper serial_char_dumper = {
   .formatter = buf_char_dump,
 };
 
+void ext2_debug_init(struct buffer_dumper *g_dumper)
+{
+  percpu_set(dumper, (uintptr_t)g_dumper);
+}
+
 
 /*
  * Return a pointer to the on-disk image of inode #inum.
@@ -243,42 +248,16 @@ static void __block_read_write(uint64_t block, char *buf, uint blk_offset,
   };
 }
 
-/*
- * Block Read - Read given disk block into buffer
- * @block       : Disk block to read from
- * @buf         : Buffer to put the read data into
- * @blk_offset  : Offset within the block  to start reading from
- * @len         : Nr of bytes to read, starting from @blk_offset
- */
 void block_read(uint64_t block, char *buf, uint blk_offset, uint len)
 {
   __block_read_write(block, buf, blk_offset, len, BLOCK_READ);
 }
 
-/*
- * Block Write - Write given buffer into disk block
- * @block       : Disk block to write to
- * @buf         : Buffer of data to be written
- * @blk_offset  : Offset within the block to start writing to
- * @len         : Nr of bytes to write, starting from @blk_offset
- */
 void block_write(uint64_t block, char *buf, uint blk_offset, uint len)
 {
   __block_read_write(block, buf, blk_offset, len, BLOCK_WRTE);
 }
 
-/*
- * Inode Alloc - Assign a free disk inode to newly created files
- * @type        : Type of file this inode is allocated for
- * Return val   : Locked in-core copy of allocated disk inode, or NULL
- *
- * NOTE! There are obviously more SMP-friendly ways for doing this
- * than just grabbing a global lock reserved for inodes allocation.
- * An "optimistic locking" scheme would access the inode bitmap
- * locklessly, but set the inode's "used/free" bit using an atomic
- * test_bit_and_set method.  If another thread got that inode bef-
- * ore us, we continue searching the bitmap for yet another inode!
- */
 struct inode *inode_alloc(enum file_type type)
 {
   struct inode *inode;
@@ -348,9 +327,6 @@ out:
   return inode;
 }
 
-/*
- * Inode delete - Mark given inode for deletion
- */
 void inode_mark_delete(struct inode *inode)
 {
   inode->delete_on_last_use = true;
@@ -399,10 +375,6 @@ static void __inode_dealloc(struct inode *inode)
   kfree(buf);
 }
 
-/*
- * Block Alloc - Allocate a free data block from disk
- * Return val   : Block number, or 0 if no free blocks exist
- */
 uint64_t block_alloc(void)
 {
   union super_block *sb;
@@ -457,12 +429,6 @@ out:
   return block;
 }
 
-/*
- * Block Dealloc - Mark given block as free on-disk
- * @block       : Block number to deallocate
- *
- * All the necessary counters are updated in the process
- */
 void block_dealloc(uint block)
 {
   union super_block *sb;
@@ -495,17 +461,6 @@ void block_dealloc(uint block)
   kfree(buf);
 }
 
-/*
- * File Read - Read given file into buffer
- * @inode  : File's inode, which will map us to the data blocks
- * @buf    : Buffer to put the read data into
- * @offset  : File's offset
- * @len    : Nr of bytes to read, starting from file @offset
- * Return value  : Nr of bytes read, or zero (out of boundary @offset)
- *
- * NOTE! If this code was later modified so that errors are returned,
- * remember to check such errors in all of the callers.
- */
 uint64_t file_read(struct inode *inode, char *buf, uint64_t offset,
                    uint64_t len)
 {
@@ -555,14 +510,6 @@ uint64_t file_read(struct inode *inode, char *buf, uint64_t offset,
   return ret_len;
 }
 
-/*
- * File Write - Write given buffer into file
- * @inode       : File's inode, which will map us to the data blocks
- * @buf         : Buffer of the data to be written
- * @offset      : File's offset
- * @len         : Nr of bytes to write
- * Return value : Nr of bytes actually written, or an errno
- */
 int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
                    uint64_t len)
 {
@@ -641,25 +588,17 @@ static inline int dir_entry_min_len(int filename_len)
                   EXT2_DIR_ENTRY_ALIGN);
 }
 
-/*
- * Check the validity of given directory entry. Entry's @offset
- * is relative to the directory-file start.  @dir is the inode
- * of directory file holding given @dentry.  @len is the number
- * of bytes we were able read before reaching EOF.
- *
- * FIXME: Assure entry's type == its destination inode mode.
- */
 bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
-                     uint64_t offset, uint64_t read_len)
+                     uint64_t offset, uint64_t len)
 {
   uint64_t inum;
 
   inum = dir->inum;
 
-  if (read_len < EXT2_DIR_ENTRY_MIN_LEN) {
+  if (len < EXT2_DIR_ENTRY_MIN_LEN) {
     printk("EXT2: Truncated dir entry (ino %lu, offset %lu); "
            "remaining file len = %lu < 8 bytes\n", inum, offset,
-           read_len);
+           len);
     return false;
   }
 
@@ -713,17 +652,6 @@ bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
   return true;
 }
 
-/*
- * Search given directory for an entry with file @name.  Return such
- * entry if found, or return an errno.
- *
- * @dir         : Inode for the directory to be searched
- * @name        : Wanted file name, which may not be NULL-terminated
- * @name_len    : File name len, to avoid requiring the NULL postfix
- * @dentry  : Return val, the found directory entry (if any)
- * @offset  : Return val, offset of found dentry wrt to dir file
- * Return val  : Inode number of file, or an errorno
- */
 int64_t find_dir_entry(struct inode *dir, const char *name,
                        uint name_len,
                        struct dir_entry **entry, int64_t *roffset)
@@ -812,16 +740,6 @@ out:
   return ret;
 }
 
-/*
- * File Delete - Delete given file.
- * @parent      : Parent directory where the file will be located
- * @name        : File's name
- *
- * NOTE! If given file's inode was linked by several hard links, then
- * instead of the default behaviour of deleting the file's inode and
- * truncating its entire data, only the file's directory entry will
- * get deleted.
- */
 int file_delete(struct inode *parent, const char *name)
 {
   struct inode *inode;
@@ -848,15 +766,6 @@ int file_delete(struct inode *parent, const char *name)
   return 0;
 }
 
-/*
- * Create a new file entry in given parent directory. Check file_new()
- * for parameters documentation.  @entry_inum is the allocated inode
- * number for the new file.
- *
- * NOTE! This increments the entry's destination inode links count
- * NOTE! @dir may be equal to @entry_ino if we are adding a '.' entry
- * to a new folder.
- */
 int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
                            const char *name, enum file_type type)
 {
@@ -1024,13 +933,6 @@ free_dentry1:
   return ret;
 }
 
-/*
- * File New - Create and initialize a new file in given directory
- * @dir    : Parent directory where the file will be located
- * @name        : File's name
- * @type        : File's type, in Ext2 dir entry type format
- * Return value : New file's inode number, or an errno
- */
 int64_t file_new(struct inode *dir, const char *name, enum file_type type)
 {
   int64_t ret, ret2, inum;
@@ -1128,10 +1030,6 @@ static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
   kfree(buf);
 }
 
-/*
- * File Truncate - Truncate given file to zero (0) bytes
- * @inode  : File's inode, which will map us to the data blocks
- */
 void file_truncate(struct inode *inode)
 {
   assert(S_ISREG(inode->mode));
@@ -1162,11 +1060,6 @@ void file_truncate(struct inode *inode)
   inode->blocks[EXT2_INO_TRIPLEIN] = 0;
 }
 
-/*
- * Namei - Find the inode of given file path
- * path         : Absolute, hierarchial, UNIX format, file path
- * return value : Inode num, or -ENOENT, -ENOTDIR, -ENAMETOOLONG
- */
 int64_t name_i(const char *path)
 {
   const char *p1, *p2;

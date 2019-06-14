@@ -6,8 +6,16 @@
 #ifndef __MCUBE_MCUBE_FS_H__
 #define __MCUBE_MCUBE_FS_H__
 
-
+/**
+ * @def NR_FILES
+ * @brief Number of files.
+ */
 #define NR_FILES 128
+
+/**
+ * @def FILE_LENGTH
+ * @brief File length.
+ */
 #define FILE_LENGTH 128
 
 #ifndef __ASSEMBLY__
@@ -25,9 +33,22 @@ struct file_struct {
   char pathname[FILE_LENGTH];
 };
 
+/**
+ * @var files
+ * @brief File structures.
+ */
 extern struct file_struct files[NR_FILES];
 
+/**
+ * @fn void init_ext2(void)
+ * @brief initialize Ext2 file system.
+ */
 void init_ext2(void);
+
+/**
+ * @fn void init_fat(void)
+ * @brief initialize FAT file system.
+ */
 void init_fat(void);
 
 #endif /* !__ASSEMBLY__ */
