@@ -9,7 +9,8 @@
 #ifndef __ASSEMBLY__
 
 /**
- * swap byte order of 32-bits data.
+ * @def swap32(x)
+ * @brief swap byte order of 32-bits data.
  *
  * @param x 32-bits data.
  */
@@ -19,7 +20,8 @@
                               (((uint32_t)(x) & 0xff000000) >> 24) ))
 
 /**
- * swap byte order of 16-bits data.
+ * @def swap16(x)
+ * @brief swap byte order of 16-bits data.
  *
  * @param x 16-bits data.
  */
@@ -27,7 +29,8 @@
                               (((uint16_t)(x) & 0xff00) >>  8))
 
 /**
- * pack four 8-bits data into 32-bits data.
+ * @def pack32(ui32, ui8hh, ui8hl, ui8lh, ui8ll)
+ * @brief pack four 8-bits data into 32-bits data.
  *
  * @param ui32 32-bits destination data.
  * @param ui8hh 8-bits bits[31-24] data.
@@ -43,7 +46,8 @@
   }
 
 /**
- * unpack four 8-bits data from 32-bits data.
+ * @def unpack32(ui32, ui8hh, ui8hl, ui8lh, ui8ll)
+ * @brief unpack four 8-bits data from 32-bits data.
  *
  * @param ui32 32-bits source data.
  * @param ui8hh 8-bits bits[31-24] data.
@@ -62,7 +66,8 @@
   }
 
 /**
- * pack two 8-bits data into 16-bits data.
+ * @def pack16(ui16, ui8h, ui8l)
+ * @brief pack two 8-bits data into 16-bits data.
  *
  * @param ui16 16-bits destination data.
  * @param ui8h 8-bits bits[15-8] data.
@@ -73,7 +78,8 @@
   }
 
 /**
- * unpack two 8-bits data from 16-bits data.
+ * @def unpack16(ui16, ui8h, ui8l)
+ * @brief unpack two 8-bits data from 16-bits data.
  *
  * @param ui32 16-bits source data.
  * @param ui8h 8-bits bits[15-8] data.
@@ -85,25 +91,47 @@
   }
 
 /**
- * Long to char shift length
+ * @def LONG_TO_CHAR_SHIFT_WIDTH
+ * @brief Long to char shift length.
  */
 #define LONG_TO_CHAR_SHIFT_WIDTH 24
 
 /**
- * Char to long shift length
+ * @def CHAR_TO_LONG_SHIFT_WIDTH
+ * @brief Char to long shift length.
  */
 #define CHAR_TO_LONG_SHIFT_WIDTH LONG_TO_CHAR_SHIFT_WIDTH
 
+
+/**
+ * @fn static inline unsigned char long_to_char(unsigned long l)
+ * @brief Long to char shift length.
+ * @param l Long data.
+ * @return Char data.
+ */
 static inline unsigned char long_to_char(unsigned long l)
 {
   return (l >> LONG_TO_CHAR_SHIFT_WIDTH);
 }
 
+/**
+ * @fn static inline unsigned long char_to_long(unsigned char c)
+ * @brief Char to long shift length.
+ * @param c Char data.
+ * @return Long data.
+ */
 static inline unsigned long char_to_long(unsigned char c)
 {
   return (c << CHAR_TO_LONG_SHIFT_WIDTH);
 }
 
+/**
+ * @fn static inline unsigned char get_byte(unsigned long l, unsigned char byte)
+ * @brief get byte index data.
+ * @param l Long data.
+ * @param byte Byte index
+ * @return Byte index data.
+ */
 static inline unsigned char get_byte(unsigned long l, unsigned char byte)
 {
   return (l >> (8 * byte)) & 0xff;

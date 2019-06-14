@@ -20,7 +20,12 @@ enum dmac {
 };
 
 /**
- * do DMAC operation.
+ * @fn void do_local_dmac(uint32_t dst,
+                          uint32_t src,
+                          size_t n,
+                          unsigned int ch,
+                          enum dmac policy)
+ * @brief do DMAC operation.
  *
  * @param dst Destination.
  * @param src Source.

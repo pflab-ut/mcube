@@ -129,8 +129,13 @@ static inline void clear_bit8(char *buf, uint bit, uint len)
   *buf &= ~(1 << bit_offset);
 }
 
-/*
- * Check if given @bit number in buffer is set.
+/**
+ * @fn static inline bool bitmap_bit_is_set(char *buf, uint bit, uint len)
+ * @brief check if given @a bit number in buffer is set.
+ * @param buf Buffer.
+ * @param bit Bit.
+ * @param len Length.
+ * @return True if bit is set.
  */
 static inline bool bitmap_bit_is_set(char *buf, uint bit, uint len)
 {
@@ -141,8 +146,13 @@ static inline bool bitmap_bit_is_set(char *buf, uint bit, uint len)
   return bit_is_set8(*buf, bit_offset);
 }
 
-/*
- * Check if given @bit number in buffer is clear.
+/**
+ * @fn static inline bool bitmap_bit_is_clear(char *buf, uint bit, uint len)
+ * @brief check if given @a bit number in buffer is clear.
+ * @param buf Buffer.
+ * @param bit Bit.
+ * @param len Length.
+ * @return True if bit is clear.
  */
 static inline bool bitmap_bit_is_clear(char *buf, uint bit, uint len)
 {
@@ -150,8 +160,12 @@ static inline bool bitmap_bit_is_clear(char *buf, uint bit, uint len)
 }
 
 
-
-/* find first bit */
+/**
+ * @fn static inline uint32_t ffb32(uint32_t bitmap)
+ * @brief find first bit in 32-bits.
+ * @param bitmap Bitmap.
+ * @return Bit index.
+ */
 static inline uint32_t ffb32(uint32_t bitmap)
 {
   //  PDEBUG("ffs(): bitmap = %x\n", bitmap);
@@ -186,26 +200,40 @@ static inline uint32_t ffb32(uint32_t bitmap)
 }
 
 
-static inline uint32_t find_first_bit32(uint32_t *b, int nr)
+/**
+ * @fn static inline uint32_t find_first_bit32(uint32_t *buf, int nr)
+ * @brief find first bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline uint32_t find_first_bit32(uint32_t *buf, int nr)
 {
   int i;
 
   for (i = 0; i < nr; i++) {
-    if (b[i]) {
-      return 32 * i + ffb32(b[i]);
+    if (buf[i]) {
+      return 32 * i + ffb32(buf[i]);
     }
   }
 
   return 32 * nr;
 }
 
-static inline uint32_t find_first_zero_bit32(uint32_t *b, int nr)
+/**
+ * @fn static inline uint32_t find_first_zero_bit32(uint32_t *buf, int nr)
+ * @brief find first zero bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline uint32_t find_first_zero_bit32(uint32_t *buf, int nr)
 {
   int i;
 
   for (i = 0; i < nr; i++) {
-    if (~b[i]) {
-      return 32 * i + ffb32(~b[i]);
+    if (~buf[i]) {
+      return 32 * i + ffb32(~buf[i]);
     }
   }
 
@@ -213,7 +241,12 @@ static inline uint32_t find_first_zero_bit32(uint32_t *b, int nr)
 }
 
 
-/* find last bit */
+/**
+ * @fn static inline uint32_t flb32(uint32_t bitmap)
+ * @brief find last bit in 32-bits.
+ * @param bitmap Bitmap.
+ * @return Bit index.
+ */
 static inline uint32_t flb32(uint32_t bitmap)
 {
   int num = 31;
@@ -245,105 +278,176 @@ static inline uint32_t flb32(uint32_t bitmap)
   return num;
 }
 
-static inline uint32_t find_last_bit32(uint32_t *b, int nr)
+
+/**
+ * @fn static inline uint32_t find_last_bit32(uint32_t *buf, int nr)
+ * @brief find last bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline uint32_t find_last_bit32(uint32_t *buf, int nr)
 {
   int i;
 
   for (i = nr - 1; i >= 0; i--) {
-    if (b[i]) {
-      return 32 * i + flb32(b[i]);
+    if (buf[i]) {
+      return 32 * i + flb32(buf[i]);
     }
   }
 
   return 32 * nr;
 }
 
+/**
+ * @fn static inline uint32_t find_last_zero_bit32(uint32_t *buf, int nr)
+ * @brief find last zero bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline uint32_t find_last_zero_bit32(uint32_t *buf, int nr)
+{
+  int i;
 
-static inline void set_bit32(volatile uint32_t *addr, int nr)
+  for (i = nr - 1; i >= 0; i--) {
+    if (~buf[i]) {
+      return 32 * i + flb32(buf[i]);
+    }
+  }
+
+  return 32 * nr;
+}
+
+/**
+ * @fn static inline void set_bit32(volatile uint32_t *buf, int nr)
+ * @brief set bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ */
+static inline void set_bit32(volatile uint32_t *buf, int nr)
 {
   int mask;
   union rflags flags;
 
-  addr += nr >> 5;
+  buf += nr >> 5;
   mask = 1 << (nr & 0x1f);
   save_local_irq(&flags);
-  //  PDEBUG("addr = %x mask = %x\n", addr, mask);
-  *addr |= mask;
+  //  PDEBUG("buf = %x mask = %x\n", buf, mask);
+  *buf |= mask;
   restore_local_irq(&flags);
 }
 
 
-static inline void clear_bit32(volatile uint32_t *addr, int nr)
+/**
+ * @fn static inline void clear_bit32(volatile uint32_t *buf, int nr)
+ * @brief clear bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ */
+static inline void clear_bit32(volatile uint32_t *buf, int nr)
 {
   int mask;
   union rflags flags;
 
-  addr += nr >> 5;
+  buf += nr >> 5;
   mask = 1 << (nr & 0x1f);
   save_local_irq(&flags);
-  //  PDEBUG("addr = %x mask = %x\n", addr, mask);
-  *addr &= ~mask;
+  //  PDEBUG("buf = %x mask = %x\n", buf, mask);
+  *buf &= ~mask;
   restore_local_irq(&flags);
 }
 
-static inline void change_bit32(volatile uint32_t *addr, int nr)
+/**
+ * @fn static inline void change_bit32(volatile uint32_t *buf, int nr)
+ * @brief change bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ */
+static inline void change_bit32(volatile uint32_t *buf, int nr)
 {
   int mask;
   union rflags flags;
 
-  addr += nr >> 5;
+  buf += nr >> 5;
   mask = 1 << (nr & 0x1f);
   save_local_irq(&flags);
-  *addr ^= mask;
+  *buf ^= mask;
   restore_local_irq(&flags);
 }
 
-static inline int test_and_set_bit32(volatile uint32_t *addr, int nr)
+/**
+ * @fn static inline int test_and_set_bit32(volatile uint32_t *buf, int nr)
+ * @brief test and set bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return True if test and set is successful.
+ */
+static inline int test_and_set_bit32(volatile uint32_t *buf, int nr)
 {
   int mask, retval;
   union rflags flags;
 
-  addr += nr >> 5;
+  buf += nr >> 5;
   mask = 1 << (nr & 0x1f);
   save_local_irq(&flags);
-  retval = (mask & *addr) != 0;
-  *addr |= mask;
+  retval = (mask & *buf) != 0;
+  *buf |= mask;
   restore_local_irq(&flags);
 
   return retval;
 }
 
-static inline int test_and_clear_bit32(volatile uint32_t *addr, int nr)
+/**
+ * @fn static inline int test_and_clear_bit32(volatile uint32_t *buf, int nr)
+ * @brief test and clear bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return True if test and clear is successful.
+ */
+static inline int test_and_clear_bit32(volatile uint32_t *buf, int nr)
 {
   int mask, retval;
   union rflags flags;
 
-  addr += nr >> 5;
+  buf += nr >> 5;
   mask = 1 << (nr & 0x1f);
   save_local_irq(&flags);
-  retval = (mask & *addr) != 0;
-  *addr &= ~mask;
+  retval = (mask & *buf) != 0;
+  *buf &= ~mask;
   restore_local_irq(&flags);
 
   return retval;
 }
 
-static inline int test_and_change_bit32(volatile uint32_t *addr, int nr)
+/**
+ * @fn static inline int test_and_change_bit32(volatile uint32_t *buf, int nr)
+ * @brief test and change bit by 32-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return True if test and change is successful.
+ */
+static inline int test_and_change_bit32(volatile uint32_t *buf, int nr)
 {
   int mask, retval;
   union rflags flags;
 
-  addr += nr >> 5;
+  buf += nr >> 5;
   mask = 1 << (nr & 0x1f);
   save_local_irq(&flags);
-  retval = (mask & *addr) != 0;
-  *addr ^= mask;
+  retval = (mask & *buf) != 0;
+  *buf ^= mask;
   restore_local_irq(&flags);
 
   return retval;
 }
 
-/* find first bit */
+/**
+ * @fn static inline uint64_t ffb64(uint64_t bitmap)
+ * @brief find first bit in 64-bits.
+ * @param bitmap Bitmap.
+ * @return Bit index.
+ */
 static inline uint64_t ffb64(uint64_t bitmap)
 {
   //  PDEBUG("ffs(): bitmap = %x\n", bitmap);
@@ -387,6 +491,14 @@ static inline uint64_t ffb64(uint64_t bitmap)
   return num;
 }
 
+
+/**
+ * @fn static inline uint64_t find_first_bit64(uint64_t *b, int nr)
+ * @brief find first bit by 64-bits.
+ * @param b Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
 static inline uint64_t find_first_bit64(uint64_t *b, int nr)
 {
   int i;
@@ -400,6 +512,13 @@ static inline uint64_t find_first_bit64(uint64_t *b, int nr)
   return NR_PRIORITIES;
 }
 
+/**
+ * @fn static inline uint64_t find_first_zero_bit64(uint64_t *b, int nr)
+ * @brief find first zero bit by 64-bits.
+ * @param b Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
 static inline uint64_t find_first_zero_bit64(uint64_t *b, int nr)
 {
   int i;
@@ -415,7 +534,12 @@ static inline uint64_t find_first_zero_bit64(uint64_t *b, int nr)
 
 
 
-/* find last bit */
+/**
+ * @fn static inline uint64_t flb64(uint64_t bitmap)
+ * @brief find last bit in 64-bits.
+ * @param bitmap Bitmap.
+ * @return Bit index.
+ */
 static inline uint64_t flb64(uint64_t bitmap)
 {
   int num = 63;
@@ -452,6 +576,13 @@ static inline uint64_t flb64(uint64_t bitmap)
   return num;
 }
 
+/**
+ * @fn static inline uint64_t find_last_bit64(uint64_t *b, int nr)
+ * @brief find last bit by 64-bits.
+ * @param b Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
 static inline uint64_t find_last_bit64(uint64_t *b, int nr)
 {
   int i;
@@ -465,6 +596,13 @@ static inline uint64_t find_last_bit64(uint64_t *b, int nr)
   return NR_PRIORITIES;
 }
 
+/**
+ * @fn static inline uint64_t find_last_zero_bit64(uint64_t *b, int nr)
+ * @brief find last zero bit by 64-bits.
+ * @param b Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
 static inline uint64_t find_last_zero_bit64(uint64_t *b, int nr)
 {
   int i;
@@ -478,85 +616,129 @@ static inline uint64_t find_last_zero_bit64(uint64_t *b, int nr)
   return NR_PRIORITIES;
 }
 
-static inline void set_bit64(volatile uint64_t *addr, int nr)
+
+/**
+ * @fn static inline void set_bit64(volatile uint64_t *buf, int nr)
+ * @brief set bit by 64-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline void set_bit64(volatile uint64_t *buf, int nr)
 {
   int mask;
   union rflags flags;
 
-  addr += nr >> 6;
+  buf += nr >> 6;
   mask = 1 << (nr & 0x3f);
   save_local_irq(&flags);
-  //  PDEBUG("addr = %x mask = %x\n", addr, mask);
-  *addr |= mask;
+  //  PDEBUG("buf = %x mask = %x\n", buf, mask);
+  *buf |= mask;
   restore_local_irq(&flags);
 }
 
 
-static inline void clear_bit64(volatile uint64_t *addr, int nr)
+/**
+ * @fn static inline void clear_bit64(volatile uint64_t *buf, int nr)
+ * @brief clear bit by 64-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline void clear_bit64(volatile uint64_t *buf, int nr)
 {
   int mask;
   union rflags flags;
 
-  addr += nr >> 6;
+  buf += nr >> 6;
   mask = 1 << (nr & 0x3f);
   save_local_irq(&flags);
-  //  PDEBUG("addr = %x mask = %x\n", addr, mask);
-  *addr &= ~mask;
+  //  PDEBUG("buf = %x mask = %x\n", buf, mask);
+  *buf &= ~mask;
   restore_local_irq(&flags);
 }
 
-static inline void change_bit64(volatile uint64_t *addr, int nr)
+
+/**
+ * @fn static inline void change_bit64(volatile uint64_t *buf, int nr)
+ * @brief change bit by 64-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline void change_bit64(volatile uint64_t *buf, int nr)
 {
   int mask;
   union rflags flags;
 
-  addr += nr >> 6;
+  buf += nr >> 6;
   mask = 1 << (nr & 0x3f);
   save_local_irq(&flags);
-  *addr ^= mask;
+  *buf ^= mask;
   restore_local_irq(&flags);
 }
 
-static inline int test_and_set_bit64(volatile uint64_t *addr, int nr)
+/**
+ * @fn static inline void test_and_set_bit64(volatile uint64_t *buf, int nr)
+ * @brief test and set bit by 64-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline int test_and_set_bit64(volatile uint64_t *buf, int nr)
 {
   int mask, retval;
   union rflags flags;
 
-  addr += nr >> 6;
+  buf += nr >> 6;
   mask = 1 << (nr & 0x3f);
   save_local_irq(&flags);
-  retval = (mask & *addr) != 0;
-  *addr |= mask;
+  retval = (mask & *buf) != 0;
+  *buf |= mask;
   restore_local_irq(&flags);
 
   return retval;
 }
 
-static inline int test_and_clear_bit64(volatile uint64_t *addr, int nr)
+/**
+ * @fn static inline void test_and_clear_bit64(volatile uint64_t *buf, int nr)
+ * @brief test and clear bit by 64-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline int test_and_clear_bit64(volatile uint64_t *buf, int nr)
 {
   int mask, retval;
   union rflags flags;
 
-  addr += nr >> 6;
+  buf += nr >> 6;
   mask = 1 << (nr & 0x3f);
   save_local_irq(&flags);
-  retval = (mask & *addr) != 0;
-  *addr &= ~mask;
+  retval = (mask & *buf) != 0;
+  *buf &= ~mask;
   restore_local_irq(&flags);
 
   return retval;
 }
 
-static inline int test_and_change_bit64(volatile uint64_t *addr, int nr)
+/**
+ * @fn static inline void test_and_change_bit64(volatile uint64_t *buf, int nr)
+ * @brief test and change bit by 64-bits.
+ * @param buf Buffer.
+ * @param nr Number of bytes.
+ * @return Bit index.
+ */
+static inline int test_and_change_bit64(volatile uint64_t *buf, int nr)
 {
   int mask, retval;
   union rflags flags;
 
-  addr += nr >> 6;
+  buf += nr >> 6;
   mask = 1 << (nr & 0x3f);
   save_local_irq(&flags);
-  retval = (mask & *addr) != 0;
-  *addr ^= mask;
+  retval = (mask & *buf) != 0;
+  *buf ^= mask;
   restore_local_irq(&flags);
 
   return retval;

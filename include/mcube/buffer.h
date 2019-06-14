@@ -44,11 +44,22 @@ struct ring_buf {
   spinlock_t lock;
 };
 
+/**
+ * @typedef ring_buf_t
+ * @brief Typedef of @struct ring_buf.
+ */
 typedef struct ring_buf ring_buf_t;
 
-
+/**
+ * @typedef cbuf_handle_t
+ * @brief Typedef of @typedef ring_buf_t.
+ */
 typedef ring_buf_t *cbuf_handle_t;
 
+/**
+ * @def INIT_RING_BUF
+ * @param initialize ring buffer.
+ */
 #define INIT_RING_BUF (ring_buf_t) {                                    \
     .buffer = NULL, .head = 0, .tail = 0, .max = -1, .full = false, .lock = INIT_SPINLOCK \
       }

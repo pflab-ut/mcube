@@ -25,6 +25,9 @@ static inline void disable_local_irq(void);
  * @brief Flags.
  */
 union rflags {
+  /**
+   * Raw data.
+   */
   uint64_t raw;
   struct {
     uint32_t carry_flag: 1,   /* Last math op resulted carry */
@@ -52,8 +55,18 @@ union rflags {
   } __packed;
 };
 
-
+/**
+ * @fn static inline void save_local_irq(union rflags *flags)
+ * @brief save local irq flags.
+ * @param flags Flags.
+ */
 static inline void save_local_irq(union rflags *flags);
+
+/**
+ * @fn static inline void restore_local_irq(union rflags *flags)
+ * @brief restore local irq flags.
+ * @param flags Flags.
+ */
 static inline void restore_local_irq(union rflags *flags);
 
 

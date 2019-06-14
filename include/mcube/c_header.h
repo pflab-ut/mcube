@@ -30,6 +30,7 @@
 #else
 
 /**
+ * @def offsetof(type, elem)
  * calculate offset of element of type.
  *
  * @param type Type.
