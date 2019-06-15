@@ -209,6 +209,6 @@ end:
   //  asm volatile("move %0, $sp" : "=r"(tmp));
   //  printk("sp = 0x%lx\n", tmp);
   enable_local_irq();
-  return 0;
+  return IRQ_HANDLED;
 }
 

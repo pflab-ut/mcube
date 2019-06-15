@@ -8,21 +8,24 @@
 
 
 /**
- * Symbol name.
+ * @def SYMBOL_NAME(name)
+ * @brief Symbol name.
  *
  * @param name Symbol name.
  */
 #define SYMBOL_NAME(name) name
 
 /**
- * Symbol name's label.
+ * @def SYMBOL_NAME_LABEL(name)
+ * @brief Symbol name's label.
  *
  * @param name Symbol name's label.
  */
 #define SYMBOL_NAME_LABEL(name) name##:
 
 /**
- * Entry.
+ * @def ENTRY(name)
+ * @brief Entry.
  *
  * @param name Entry name.
  */
@@ -32,7 +35,8 @@
 
 
 /**
- * End.
+ * @def END(name)
+ * @brief End.
  *
  * @param name End name.
  */
@@ -41,12 +45,12 @@
 
 
 /**
- * Assembler size directive.
+ * @def ASM_SIZE_DIRECTIVE(name)
+ * @brief Assembler size directive.
  *
  * @param name Directive name.
  */
 #define ASM_SIZE_DIRECTIVE(name) .size name,.-name;
-
 
 
 #if CONFIG_ARCH_X86_64

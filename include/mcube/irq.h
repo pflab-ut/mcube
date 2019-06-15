@@ -6,18 +6,36 @@
 #ifndef __MCUBE_MCUBE_IRQ_H__
 #define __MCUBE_MCUBE_IRQ_H__
 
-#define LOCAL_IRQ_ENABLED 1
-#define LOCAL_IRQ_DISABLED 0
-
-
+/**
+ * @def IRQ_HANDLED
+ * @brief handle IRQ.
+ */
 #define IRQ_HANDLED 1
+
+/**
+ * @def IRQ_UNHANDLED
+ * @brief unhandle IRQ.
+ */
 #define IRQ_UNHANDLED 0
 
+/**
+ * @def NR_CALLBACKS
+ * @brief Number of callbacks.
+ */
 #define NR_CALLBACKS 8
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @fn static inline void enable_local_irq(void)
+ * @brief enable local IRQ.
+ */
 static inline void enable_local_irq(void);
+
+/**
+ * @fn static inline void disable_local_irq(void)
+ * @brief disable local IRQ.
+ */
 static inline void disable_local_irq(void);
 
 /**
@@ -30,6 +48,9 @@ union rflags {
    */
   uint64_t raw;
   struct {
+    /**
+     * Flags.
+     */
     uint32_t carry_flag: 1,   /* Last math op resulted carry */
              __reserved1_0: 1, /* Always 1 */
              parity_flag: 1,   /* Last op resulted even parity */
@@ -51,13 +72,18 @@ union rflags {
              virtual: 2,   /* Virtualization fields */
              id_flag: 1,   /* CPUID supported if writable */
              __reserved0_3: 10; /* Must be zero */
-    uint32_t __reserved0_4;    /* Must be zero */
+
+    /**
+     * Must be zero.
+     */
+    uint32_t __reserved0_4;
   } __packed;
 };
 
 /**
  * @fn static inline void save_local_irq(union rflags *flags)
  * @brief save local irq flags.
+ *
  * @param flags Flags.
  */
 static inline void save_local_irq(union rflags *flags);
@@ -65,26 +91,60 @@ static inline void save_local_irq(union rflags *flags);
 /**
  * @fn static inline void restore_local_irq(union rflags *flags)
  * @brief restore local irq flags.
+ *
  * @param flags Flags.
  */
 static inline void restore_local_irq(union rflags *flags);
 
-
+/**
+ * @fn void wait_until_next_interrupt(void)
+ * @brief wait until next interrupt.
+ */
 void wait_until_next_interrupt(void);
-void init_irq(void);
-void exit_irq(void);
 
+/**
+ * @fn void init_irq(void)
+ * @brief initialize IRQ.
+ */
+void init_irq(void);
+
+/**
+ * @fn void exit_irq(void)
+ * @brief exit IRQ.
+ */
+void exit_irq(void);
 
 struct full_regs;
 
+/**
+ * @fn asmlinkage int do_irq(struct full_regs *regs)
+ * @brief do IRQ.
+ *
+ * @param regs Full registers.
+ * @return IRQ_HANDLED if success.
+ */
 asmlinkage int do_irq(struct full_regs *regs);
 
+/**
+ * @typedef void (*callback_t)(void)
+ * @brief Typedef of callback function.
+ */
 typedef void (*callback_t)(void);
 
+/**
+ * @fn void register_callback_handler(callback_t func, unsigned long id)
+ * @brief register callback handler.
+ *
+ * @param func Callback function.
+ * @param id Callback ID.
+ */
 void register_callback_handler(callback_t func, unsigned long id);
 
+/**
+ * @var Callback[NR_CALLBACKS]
+ * @brief Pointer to callback functions.
+ */
 extern callback_t Callback[NR_CALLBACKS];
-
 
 #endif /* !__ASSEMBLY__ */
 

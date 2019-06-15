@@ -10,14 +10,6 @@
 static uint overhead = sizeof(footer_t) + sizeof(heap_node_t);
 uint offset = 8;
 
-// ========================================================
-// this function initializes a new heap structure, provided
-// an empty heap struct, and a place to start the heap
-//
-// NOTE: this function uses HEAP_INIT_SIZE to determine
-// how large the heap is so make sure the same constant
-// is used when allocating memory for your heap!
-// ========================================================
 void init_heap(heap_t *heap, long start)
 {
   // first we create the initial region, this is the "wilderness" chunk
@@ -35,13 +27,6 @@ void init_heap(heap_t *heap, long start)
   heap->end   = start + HEAP_INIT_SIZE;
 }
 
-// ========================================================
-// this is the allocation function of the heap, it takes
-// the heap struct pointer and the size of the chunk we
-// want. this function will search through the bins until
-// it finds a suitable chunk. it will then split the chunk
-// if neccesary and return the start of the chunk
-// ========================================================
 void *heap_alloc(heap_t *heap, size_t size)
 {
   // first get the bin index that this chunk size should be in
@@ -109,12 +94,6 @@ void *heap_alloc(heap_t *heap, size_t size)
   return &found->next;
 }
 
-// ========================================================
-// this is the free function of the heap, it takes the
-// heap struct pointer and the pointer provided by the
-// heap_alloc function. the given chunk will be possibly
-// coalesced  and then placed in the correct bin
-// ========================================================
 void heap_free(heap_t *heap, void *p)
 {
   bin_t *list;
@@ -183,30 +162,22 @@ void heap_free(heap_t *heap, void *p)
 }
 
 // these are left here to implement contraction / expansion
-uint expand(__unused heap_t *heap, __unused size_t sz)
+uint expand(__unused heap_t *heap, __unused size_t size)
 {
   return 0;
 }
 
-void contract(__unused heap_t *heap, __unused size_t sz)
+void contract(__unused heap_t *heap, __unused size_t size)
 {
   return;
 }
 
-
-// ========================================================
-// this function is the hashing function that converts
-// size => bin index. changing this function will change
-// the binning policy of the heap. right now it just
-// places any allocation < 8 in bin 0 and then for anything
-// above 8 it bins using the log base 2 of the size
-// ========================================================
-uint get_bin_index(size_t sz)
+uint get_bin_index(size_t size)
 {
   uint index = 0;
-  sz = sz < 4 ? 4 : sz;
+  size = size < 4 ? 4 : size;
 
-  while (sz >>= 1) {
+  while (size >>= 1) {
     index++;
   }
 
@@ -219,32 +190,17 @@ uint get_bin_index(size_t sz)
   return index;
 }
 
-// ========================================================
-// this function will create a footer given a heap_node
-// the heap_node's size must be set to the correct value!
-// ========================================================
 void create_foot(heap_node_t *head)
 {
   footer_t *foot = get_foot(head);
   foot->header = head;
 }
 
-// ========================================================
-// this function will get the footer pointer given a heap_node
-// ========================================================
 footer_t *get_foot(heap_node_t *heap_node)
 {
   return (footer_t *)((char *) heap_node + sizeof(heap_node_t) + heap_node->size);
 }
 
-// ========================================================
-// this function will get the wilderness heap_node given a
-// heap struct pointer
-//
-// NOTE: this function banks on the heap's end field being
-// correct, it simply uses the footer at the end of the
-// heap because that is always the wilderness
-// ========================================================
 heap_node_t *get_wilderness(heap_t *heap)
 {
   footer_t *wild_foot = (footer_t *)((char *) heap->end - sizeof(footer_t));

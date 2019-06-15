@@ -13,11 +13,6 @@
 
 #include <mcube/mcube.h>
 
-
-/*
- * Allocation.  @len is the Hash table's length; assuming balanced
- * distribution, a bigger val means less prabability for collision.
- */
 struct hash *hash_new(uint len)
 {
   struct hash *hash;
@@ -36,9 +31,7 @@ struct hash *hash_new(uint len)
   return hash;
 }
 
-/*
- * Deallocation
- */
+
 void hash_free(struct hash *hash)
 {
   assert(hash);
@@ -65,10 +58,6 @@ static void *hash_find_elem(struct hash *hash, uint elem_id)
   return NULL;
 }
 
-/*
- * Insert given element in the hash repository. @elem is a
- * pointer to the structure to be inserted.
- */
 void hash_insert(struct hash *hash, void *elem)
 {
   struct hash_elem *helem;
@@ -86,18 +75,11 @@ void hash_insert(struct hash *hash, void *elem)
   list_add(&hash->nodes_array[idx], &helem->node);
 }
 
-/*
- * Find the element identified by @elem_id in the given hash
- * repository.  Return NULL in case of non-existence.
- */
 void *hash_find(struct hash *hash, uint64_t elem_id)
 {
   return hash_find_elem(hash, elem_id);
 }
 
-/*
- * Remove element identified by @elem_id from given hash.
- */
 void hash_remove(struct hash *hash, uint64_t elem_id)
 {
   struct hash_elem *helem;
