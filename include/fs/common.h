@@ -1,10 +1,10 @@
 /**
- * @file include/mcube/fs.h
+ * @file include/fs/common.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_MCUBE_FS_H__
-#define __MCUBE_MCUBE_FS_H__
+#ifndef __MCUBE_FS_COMMON_H__
+#define __MCUBE_FS_COMMON_H__
 
 /**
  * @def NR_FILES
@@ -54,11 +54,4 @@ void init_fat(void);
 #endif /* !__ASSEMBLY__ */
 
 
-#if CONFIG_OPTION_FS_EXT2
-#include <mcube/fs/ext2.h>
-#include <mcube/fs/ext2_file.h>
-#elif CONFIG_OPTION_FS_FAT
-#include <mcube/fs/fat.h>
-#endif /* CONFIG_OPTION_FS_EXT2 */
-
-#endif /* __MCUBE_MCUBE_FS_H__ */
+#endif /* __MCUBE_FS_COMMON_H__ */

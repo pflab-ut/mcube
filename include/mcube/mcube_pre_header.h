@@ -21,7 +21,6 @@
 #include <mcube/spinlock.h>
 #include <mcube/rwlock.h>
 #include <mcube/seqlock.h>
-#include <mcube/stat.h>
 
 /* alphabetical order */
 #include <mcube/bitops.h>
@@ -33,7 +32,6 @@
 #include <mcube/dmac.h>
 #include <mcube/errno_base.h>
 #include <mcube/errno.h>
-#include <mcube/fs.h>
 #include <mcube/hash.h>
 #include <mcube/heap.h>
 #include <mcube/io.h>

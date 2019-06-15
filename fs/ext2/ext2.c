@@ -98,14 +98,199 @@
 
 #include <mcube/mcube.h>
 
-
 struct isb isb;
 
+/**
+ * Public interface:
+ */
 
-__unused struct buffer_dumper serial_char_dumper = {
+struct buffer_dumper serial_char_dumper = {
   .pr = printk,
   .formatter = buf_char_dump,
 };
+
+struct buffer_dumper vga_hex_dumper = {
+  .pr = printk,
+  .formatter = buf_hex_dump,
+};
+
+struct buffer_dumper vga_char_dumper = {
+  .pr = printk,
+  .formatter = buf_char_dump,
+};
+
+struct buffer_dumper vga_null_dumper = {
+  .pr = printk,
+  .formatter = buf_null_dump,
+};
+
+struct buffer_dumper serial_hex_dumper = {
+  .pr = printk,
+  .formatter = buf_hex_dump,
+};
+
+struct buffer_dumper serial_null_dumper = {
+  .pr = printk,
+  .formatter = buf_null_dump,
+};
+
+struct buffer_dumper null_null_dumper = {
+  .pr = null_printer,
+  .formatter = buf_null_dump,
+};
+
+
+void superblock_dump(union super_block *sb)
+{
+  struct buffer_dumper *bd = (void *) percpu_get(dumper);
+  sb->volume_label[EXT2_LABEL_LEN - 1] = '\0';
+  sb->last_mounted[EXT2_LAST_MNT_LEN - 1] = '\0';
+  bd->pr("Dumping Superblock contents:\n");
+  bd->pr(".. Inodes count = %u inode\n", sb->inodes_count);
+  bd->pr(".. Blocks count = %u block\n", sb->blocks_count);
+  bd->pr(".. Reserved blocks count = %u block\n", sb->r_blocks_count);
+  bd->pr(".. Free blocks count = %u block\n", sb->free_blocks_count);
+  bd->pr(".. Free inodes count = %u inode\n", sb->free_inodes_count);
+  bd->pr(".. First data block = #%u\n", sb->first_data_block);
+  bd->pr(".. Block size = %u bytes\n", 1024U << sb->log_block_size);
+  bd->pr(".. Fragment size = %u bytes\n", 1024U << sb->log_fragment_size);
+  bd->pr(".. Blocks per group = %u block\n", sb->blocks_per_group);
+  bd->pr(".. Fragments per group = %u frag\n", sb->frags_per_group);
+  bd->pr(".. Inodes per group = %u inode\n", sb->inodes_per_group);
+  bd->pr(".. Latest mount time = 0x%x\n", sb->mount_time);
+  bd->pr(".. Latest write access = 0x%x\n", sb->write_time);
+  bd->pr(".. Number of mounts since last fsck = %d\n", sb->mount_count);
+  bd->pr(".. Max num of mounts before fsck = %d\n", sb->max_mount_count);
+  bd->pr(".. FS Magic value = 0x%x\n", sb->magic_signature);
+  bd->pr(".. FS State = %d\n", sb->state);
+  bd->pr(".. Error behaviour = %d\n", sb->errors_behavior);
+  bd->pr(".. Minor revision = %d\n", sb->minor_revision);
+  bd->pr(".. Last time of fsck = 0x%x\n", sb->last_check);
+  bd->pr(".. Time allowed between fscks = 0x%x\n", sb->check_interval);
+  bd->pr(".. Creator OS = %u\n", sb->creator_os);
+  bd->pr(".. Revision level = %u\n", sb->revision_level);
+  bd->pr(".. UID for reserved blocks = %d\n", sb->reserved_uid);
+  bd->pr(".. GID for reserved blocks = %d\n", sb->reserved_gid);
+  bd->pr(".. First non-reserved inode = %u\n", sb->first_inode);
+  bd->pr(".. Inode size = %d bytes\n", sb->inode_size);
+  bd->pr(".. Block group # hosting this super: %d\n", sb->block_group);
+  bd->pr(".. Compatible features bitmask = 0x%x\n", sb->features_compat);
+  bd->pr(".. Incompatible features mask = 0x%x\n", sb->features_incompat);
+  bd->pr(".. RO-compatible features = 0x%x\n", sb->features_ro_compat);
+  bd->pr(".. Volume label = `%s'\n", sb->volume_label);
+  bd->pr(".. Directory path of last mount = `%s'\n", sb->last_mounted);
+  bd->pr("\n");
+}
+
+void blockgroup_dump(int idx, struct group_descriptor *bgd,
+                     uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks)
+{
+  struct buffer_dumper *bd = (void *)percpu_get(dumper);
+  bd->pr("Group #%d: (Blocks %u-%u)\n", idx, firstb, lastb);
+  bd->pr(".. Block bitmap at %u\n", bgd->block_bitmap);
+  bd->pr(".. Inode bitmap at %u\n", bgd->inode_bitmap);
+  bd->pr(".. Inode table at %u-%u\n", bgd->inode_table,
+         bgd->inode_table + inodetbl_blocks - 1);
+  bd->pr(".. %d free blocks, %d free inodes, %d directories\n",
+         bgd->free_blocks_count, bgd->free_inodes_count,
+         bgd->used_dirs_count);
+  bd->pr("\n");
+}
+
+void inode_dump(struct inode *inode, const char *path)
+{
+  struct buffer_dumper *bd = (void *)percpu_get(dumper);
+  bd->pr("Dumping inode contents, #%d, for '%s':\n", inode->inum, path);
+  bd->pr(".. Mode = 0x%x, Flags = 0x%x\n", inode->mode, inode->flags);
+  bd->pr(".. UID = %d, GID = %d\n", inode->uid, inode->gid_low);
+  bd->pr(".. Last time this inode was accessed = 0x%x\n", inode->atime);
+  bd->pr(".. Last time this inode was modified = 0x%x\n", inode->mtime);
+  bd->pr(".. Time when this inode was deleted = 0x%x\n", inode->dtime);
+  bd->pr(".. Links count = %d links\n", inode->links_count);
+  bd->pr(".. File size = %d bytes\n", inode->size_low);
+  bd->pr(".. 512-byte Blocks count = %u blocks\n", inode->i512_blocks);
+  bd->pr(".. Block number for ACL file = #%u\n", inode->file_acl);
+  bd->pr(".. Data Blocks:\n");
+
+  for (int i = 0; i < EXT2_INO_NR_BLOCKS; i++) {
+    bd->pr("%u ", inode->blocks[i]);
+  }
+
+  bd->pr("\n\n");
+}
+
+void dentry_dump(struct dir_entry *dentry)
+{
+  char *name;
+
+  assert(dentry->filename_len != 0);
+  assert(dentry->filename_len <= EXT2_FILENAME_LEN);
+
+  if (!(name = kmalloc(dentry->filename_len + 1))) {
+    panic("Error: cannot allocate memory %lu\n", dentry->filename_len + 1);
+  }
+
+  memcpy(name, dentry->filename, dentry->filename_len);
+  name[dentry->filename_len] = '\0';
+
+  struct buffer_dumper *bd = (void *) percpu_get(dumper);
+  bd->pr("Dumping Directory Entry contents:\n");
+  bd->pr(".. Inode number = %u\n", dentry->inode_num);
+  bd->pr(".. Record len = %d bytes\n", dentry->record_len);
+  bd->pr(".. Filename len = %d bytes\n", dentry->filename_len);
+  bd->pr(".. File type = %d\n", dentry->file_type);
+  bd->pr(".. Filename = '%s'\n", name);
+  bd->pr("\n");
+  kfree(name);
+}
+
+/*
+ * Given UNIX @path, put its leaf node in @child, and the dir
+ * path leading to that leaf in @parent (Mini-stateful parser)
+ */
+enum ext2_state { EXT2_S_NONE, EXT2_SLASH, EXT2_FILENAME, EXT2_EOL };
+void path_get_parent(const char *path, char *parent, char *child)
+{
+  enum ext2_state state, prev_state;
+  int sub_idx;
+
+  sub_idx = 0;
+  state = EXT2_S_NONE;
+
+  for (size_t i = 0; i <= strlen(path); i++) {
+    prev_state = state;
+
+    if (path[i] == '/') {
+      state = EXT2_SLASH;
+      assert(prev_state != EXT2_SLASH);
+
+      if (prev_state == EXT2_S_NONE) {
+        sub_idx = i + 1;
+        continue;
+      }
+    } else if (path[i] == '\0') {
+      state = EXT2_EOL;
+
+      if (prev_state == EXT2_SLASH) {
+        continue;
+      }
+    } else {
+      state = FILENAME;
+
+      if (i - sub_idx > EXT2_FILENAME_LEN) {
+        panic("File name in path '%s' too long", path);
+      }
+    }
+
+    if (path[i] == '/' || path[i] == '\0') {
+      memcpy(child, &path[sub_idx], i - sub_idx);
+      memcpy(parent, path, sub_idx);
+      child[i - sub_idx] = '\0';
+      parent[sub_idx] = '\0';
+      sub_idx = i + 1;
+    }
+  }
+}
 
 void ext2_debug_init(struct buffer_dumper *g_dumper)
 {

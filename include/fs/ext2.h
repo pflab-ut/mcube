@@ -1,10 +1,10 @@
 /**
- * @file include/mcube/fs/ext2.h
+ * @file include/fs/ext2.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_MCUBE_FS_EXT2_H__
-#define __MCUBE_MCUBE_FS_EXT2_H__
+#ifndef __MCUBE_FS_EXT2_H__
+#define __MCUBE_FS_EXT2_H__
 
 
 #ifndef __ASSEMBLY__
@@ -922,7 +922,7 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
  * Check file_new() for parameters documentation.
  *
  * NOTE! This increments the entry's destination inode links count
- * NOTE! @dir may be equal to @entry_ino if we are adding a '.' entry
+ * NOTE! @a dir may be equal to @a entry_ino if we are adding a '.' entry
  * to a new folder.
  *
  * @param dir Directory.
@@ -1124,6 +1124,7 @@ void blockgroup_dump(int bg_idx, struct group_descriptor *,
 void inode_dump(struct inode *, const char *path);
 void dentry_dump(struct dir_entry *dentry);
 
+void path_get_parent(const char *path, char *parent, char *child);
 
 /**
  * @struct isb
@@ -1149,8 +1150,9 @@ struct isb {
 extern struct isb isb;
 
 
+
 #endif /* !__ASSEMBLY__ */
 
 
-#endif /* __MCUBE_MCUBE_FS_EXT2_H__ */
+#endif /* __MCUBE_FS_EXT2_H__ */
 

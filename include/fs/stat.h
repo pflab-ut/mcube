@@ -1,10 +1,10 @@
 /**
- * @file include/mcube/stat.h
+ * @file include/fs/stat.h
  *
  * @author Hiroyuki Chishiro
  */
-#ifndef __MCUBE_MCUBE_STAT_H__
-#define __MCUBE_MCUBE_STAT_H__
+#ifndef __MCUBE_FS_STAT_H__
+#define __MCUBE_FS_STAT_H__
 
 
 /*
@@ -16,6 +16,7 @@
 #ifndef __ASSEMBLY__
 
 #if !CONFIG_ARCH_SIM
+
 
 typedef uint64_t dev_t;    /* "Shall be _unsigned_ integer type" */
 typedef uint64_t ino_t;    /* ... */
@@ -101,4 +102,4 @@ struct stat {
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* __MCUBE_MCUBE_STAT_H__ */
+#endif /* __MCUBE_FS_STAT_H__ */

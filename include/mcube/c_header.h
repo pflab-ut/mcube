@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <poll.h>
+#include <sys/stat.h>
 #else
 
 /**

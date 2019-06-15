@@ -10,6 +10,7 @@
 #include <mcube/c_header.h>
 #include <mcube/mcube_pre_header.h>
 #include <net/net_header.h>
+#include <fs/fs_header.h>
 
 #if CONFIG_ARCH_SIM
 #include <sim/sim_header.h>

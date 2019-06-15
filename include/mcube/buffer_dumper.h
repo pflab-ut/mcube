@@ -30,7 +30,14 @@ struct buffer_dumper {
   void (*formatter)(struct buffer_dumper *dumper, void *buf, uint len);
 };
 
+
 extern struct buffer_dumper serial_char_dumper;
+extern struct buffer_dumper vga_hex_dumper;
+extern struct buffer_dumper vga_char_dumper;
+extern struct buffer_dumper vga_null_dumper;
+extern struct buffer_dumper serial_hex_dumper;
+extern struct buffer_dumper serial_null_dumper;
+extern struct buffer_dumper null_null_dumper;
 
 /**
  * @fn int null_printer(const char *fmt, ...)

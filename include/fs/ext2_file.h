@@ -1,5 +1,5 @@
 /**
- * @file include/mcube/fs/ext2_file.h
+ * @file include/fs/ext2_file.h
  *
  * @author Hiroyuki Chishiro
  */
