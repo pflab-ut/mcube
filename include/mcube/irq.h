@@ -121,7 +121,7 @@ struct full_regs;
  * @brief do IRQ.
  *
  * @param regs Full registers.
- * @return IRQ_HANDLED if success.
+ * @return IRQ_HANDLED if success, and otherwise if failure.
  */
 asmlinkage int do_irq(struct full_regs *regs);
 

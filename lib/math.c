@@ -285,11 +285,9 @@ int isinf(double x)
   if ((d2ul.ul & EXPONENT_MASK) == EXPONENT_MASK
       && (d2ul.ul & FRACTION_MASK) == 0) {
     return true;
-  } else {
-    return false;
   }
 
-  return 0;
+  return false;
 }
 
 int isnan(double x)
@@ -300,9 +298,9 @@ int isnan(double x)
   if ((d2ul.ul & EXPONENT_MASK) == EXPONENT_MASK
       && (d2ul.ul & FRACTION_MASK) != 0) {
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 #endif /* !CONFIG_ARCH_SIM */

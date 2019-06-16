@@ -55,12 +55,20 @@
  * @brief Doubly-linked list node.
  */
 struct list_node {
+  /**
+   * Next list node.
+   */
   struct list_node *next;
+
+  /**
+   * Previous list node.
+   */
   struct list_node *prev;
 };
 
 /**
- * Static init, for inside-structure nodes
+ * @def LIST_INIT(n)
+ * @brief Static init, for inside-structure nodes
  *
  * @param n Address.
  */
@@ -71,15 +79,19 @@ struct list_node {
   }
 
 /**
- * Global declaration with a static init.
+ * @def LIST_NODE(n)
+ * @brief Global declaration with a static init.
  *
  * @param n Address.
  */
 #define LIST_NODE(n)                            \
   struct list_node n = LIST_INIT(n)
 
-/*
- * Dynamic init, for run-time
+/**
+ * @fn static inline void list_init(struct list_node *node)
+ * @brief Dynamic init, for run-time.
+ *
+ * @param node List node.
  */
 static inline void list_init(struct list_node *node)
 {
@@ -87,8 +99,12 @@ static inline void list_init(struct list_node *node)
   node->prev = node;
 }
 
-/*
- * Is this node connected with any neighbours?
+/**
+ * @fn static inline bool list_empty(const struct list_node *node)
+ * @brief Is this node connected with any neighbours?
+ *
+ * @param node List node.
+ * @return True if list node is empty.
  */
 static inline bool list_empty(const struct list_node *node)
 {

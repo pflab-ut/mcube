@@ -40,10 +40,30 @@
  *
  * Bucket index '4' represents a buf size of (2 << 4) = 16 bytes.
  */
-#define MINBUCKET_IDX  4    /* 16 bytes */
-#define MAXBUCKET_IDX  12    /* 4096 bytes = 1 page */
-#define MINALLOC_SZ  (1 << MINBUCKET_IDX)
-#define MAXALLOC_SZ  (1 << MAXBUCKET_IDX)
+
+/**
+ * @def MINBUCKET_IDX
+ * @brief Minimum bucket index.
+ */
+#define MINBUCKET_IDX 4
+
+/**
+ * @def MAXBUCKET_IDX
+ * @brief Maximum bucket index.
+ */
+#define MAXBUCKET_IDX 12
+
+/**
+ * @def MINALLOC_SZ
+ * @brief Minimum allocation index.
+ */
+#define MINALLOC_SZ (1 << MINBUCKET_IDX)
+
+/**
+ * @def MAXALLOC_SZ
+ * @brief Maximum allocation index.
+ */
+#define MAXALLOC_SZ (1 << MAXBUCKET_IDX)
 
 /*
  * For sanity checks, we sign buffers as either free or
@@ -51,8 +71,17 @@
  * distinguish those signatures in memory dumps.
  */
 
-#define FREEBUF_SIG  0xcafebabe  /* Hot free babe (buffer) */
-#define ALLOCBUF_SIG  0xdeadbeef  /* Allocated beef (buffer) */
+/**
+ * @def FREEBUF_SIG
+ * @brief Hot free babe (buffer).
+ */
+#define FREEBUF_SIG 0xcafebabe
+
+/**
+ * @def ALLOCBUF_SIG
+ * @brief Allocated beef (buffer).
+ */
+#define ALLOCBUF_SIG 0xdeadbeef  /*  */
 
 #ifndef __ASSEMBLY__
 
@@ -64,15 +93,36 @@
  * free bufs list of size (1 << x) bytes, including its head.
  */
 struct bucket {
-  spinlock_t lock;    /* Bucket lock */
-  void *head;      /* Free blocks list head */
-  int totalpages;      /* # of pages requested from page allocator */
-  int totalfree;      /* # of free buffers */
+  /**
+   * Bucket lock.
+   */
+  spinlock_t lock;
+
+  /**
+   * Free blocks list head.
+   */
+  void *head;
+
+  /**
+   * # of pages requested from page allocator.
+   */
+  int totalpages;
+
+  /**
+   * # of free buffers.
+   */
+  int totalfree;
 };
 
+/**
+ * @var kmembuckets[MAXBUCKET_IDX + 1]
+ * @brief Kernel memory buckets.
+ */
 extern struct bucket kmembuckets[MAXBUCKET_IDX + 1];
 
-/*
+/**
+ * @fn static inline void sign_buf(void *buf, uint32_t signature)
+ * @brief sign buffer.
  * Take care not to mess with the first 8-byte pointer
  * area while signing the buffer
  */
@@ -82,20 +132,35 @@ static inline void sign_buf(void *buf, uint32_t signature)
   *(uint32_t *) buf = signature;
 }
 
-static inline int is_free_buf(void *buf)
+/**
+ * @fn static inline bool is_free_buf(void *buf)
+ * @brief Is buffer free?
+ */
+static inline bool is_free_buf(void *buf)
 {
   buf = (char *) buf + sizeof(void *);
 
   if (*(uint32_t *) buf == FREEBUF_SIG) {
-    return 1;
+    return true;
   }
 
-  return 0;
+  return false;
 }
 
 
+/**
+ * @fn void *__kmalloc(int bucket_idx)
+ * @brief Kernel memory allocator.
+ *
+ * @param bucket_idx Bucket index.
+ * @return Address to allocated memory.
+ */
 void *__kmalloc(int bucket_idx);
 
+/**
+ * @fn void init_kmalloc(void)
+ * @brief initialize kernel memory allocator.
+ */
 void init_kmalloc(void);
 
 
