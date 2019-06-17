@@ -58,7 +58,7 @@ static inline void zones_init(void)
 
   descending_prio_for_each(zone) {
     zone->freelist = NULL;
-    spin_init(&zone->freelist_lock);
+    zone->freelist_lock = INIT_SPINLOCK;
     zone->freepages_count = 0;
     zone->boot_freepages = 0;
   }

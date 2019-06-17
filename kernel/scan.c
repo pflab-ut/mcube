@@ -37,18 +37,18 @@ static int get_val(char *dst, const char *src, int n)
 }
 
 
-int vsnscan(const char *buf, const char *fmt, va_list args)
+int vsnscan(const char *str, const char *fmt, va_list args)
 {
   struct format_argdesc desc = {0};
-  char *str;
+  char *p;
   int num = 0;
   int len;
 
-  str = (char *) buf;
+  p = (char *) str;
 
   while (*fmt) {
     while (*fmt != '\0' && *fmt != '%') {
-      str++;
+      p++;
       fmt++;
     }
 
@@ -63,7 +63,7 @@ int vsnscan(const char *buf, const char *fmt, va_list args)
 
     switch (desc.type) {
     case SIGNED:
-      len += get_val(sbuf, str, desc.digit);
+      len += get_val(sbuf, p, desc.digit);
       num++;
 
       if (desc.len == LONG) {
@@ -75,7 +75,7 @@ int vsnscan(const char *buf, const char *fmt, va_list args)
       break;
 
     case UNSIGNED:
-      len += get_val(sbuf, str, desc.digit);
+      len += get_val(sbuf, p, desc.digit);
       num++;
 
       if (desc.len == LONG) {
@@ -88,7 +88,7 @@ int vsnscan(const char *buf, const char *fmt, va_list args)
 #if defined(ENABLE_FPU)
 
     case FLOAT:
-      len += get_val(sbuf, str, desc.digit);
+      len += get_val(sbuf, p, desc.digit);
       num++;
 
       if (desc.len == LONG) {
@@ -101,12 +101,12 @@ int vsnscan(const char *buf, const char *fmt, va_list args)
 #endif /* ENABLE_FPU */
 
     case STRING:
-      len += get_val(va_arg(args, char *), str, desc.digit);
+      len += get_val(va_arg(args, char *), p, desc.digit);
       num++;
       break;
 
     case CHAR:
-      len += get_val(sbuf, str, 1);
+      len += get_val(sbuf, p, 1);
       num++;
       *va_arg(args, char *) = *sbuf;
       break;
@@ -117,10 +117,10 @@ int vsnscan(const char *buf, const char *fmt, va_list args)
       /* No-op */
     }
 
-    str += len;
+    p += len;
   }
 
-  format_assert(str >= buf);
+  format_assert(p >= str);
   return num;
 }
 

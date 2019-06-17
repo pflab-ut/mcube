@@ -8,6 +8,8 @@
 
 #ifndef __ASSEMBLY__
 
+__noreturn void loop_print(char ch, int color);
+
 int user_main(int argc, char *argv[]);
 int user_arch_main(int argc, char *argv[]);
 int user_test_main(int argc, char *argv[]);

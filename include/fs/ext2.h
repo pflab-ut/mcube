@@ -738,7 +738,7 @@ static inline void inode_init(struct inode *inode, uint64_t inum)
   inode->inum = inum;
   list_init(&inode->node);
   inode->refcount = 1;
-  spin_init(&inode->lock);
+  inode->lock = INIT_SPINLOCK;
   inode->dirty = false;
   inode->delete_on_last_use = false;
 }

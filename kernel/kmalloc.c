@@ -206,14 +206,14 @@ void *kmalloc(size_t size)
  * - If yes, does it reside in a not-already-freed buffer?
  * Any NO above means an invalid address, thus a kernel bug
  */
-void kfree(void *addr)
+void kfree(void *ptr)
 {
   struct page *page;
   struct bucket *bucket;
   int buf_size;
   char *buf;
 
-  buf = addr;
+  buf = ptr;
   page = addr_to_page(buf);
   bucket = &kmembuckets[page->bucket_idx];
 
@@ -253,7 +253,7 @@ void kfree(void *addr)
 void init_kmalloc(void)
 {
   for (int i = 0; i <= MAXBUCKET_IDX; i++) {
-    spin_init(&kmembuckets[i].lock);
+    kmembuckets[i].lock = INIT_SPINLOCK;
   }
 }
 
@@ -278,14 +278,14 @@ void *kmalloc(size_t size)
   return ret;
 }
 
-void kfree(void *addr)
+void kfree(void *ptr)
 {
-  if (!addr) {
+  if (!ptr) {
     return;
   }
 
   spin_lock(&kmalloc_lock);
-  heap_free(&heap, addr);
+  heap_free(&heap, ptr);
   spin_unlock(&kmalloc_lock);
 }
 

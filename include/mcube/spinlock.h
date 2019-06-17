@@ -57,18 +57,59 @@ typedef struct spinlock spinlock_t;
 #define INIT_SPINLOCK (spinlock_t) {.val = SPIN_UNLOCKED, .flags.raw = 0}
 
 
-void spin_init(spinlock_t *lock);
-
+/**
+ * @fn static inline void spin_lock(spinlock_t *lock)
+ * @brief lock spinlock.
+ *
+ * @param lock Lock.
+ */
 static inline void spin_lock(spinlock_t *lock);
+
+/**
+ * @fn static inline bool spin_trylock(spinlock_t *lock)
+ * @brief try spinlock.
+ *
+ * @param lock Lock.
+ * @return True if spinlock is acquired.
+ */
 static inline bool spin_trylock(spinlock_t *lock);
+
+/**
+ * @fn static inline void spin_unlock(spinlock_t *lock)
+ * @brief unlock spinlock.
+ *
+ * @param lock Lock.
+ */
 static inline void spin_unlock(spinlock_t *lock);
 
+/**
+ * @var pbuf_lock
+ * @brief lock print.
+ */
 extern spinlock_t pbuf_lock;
+
+/**
+ * @var sbuf_lock
+ * @brief lock scan.
+ */
 extern spinlock_t sbuf_lock;
+
+/**
+ * @var kmalloc_lock
+ * @brief lock kmalloc.
+ */
 extern spinlock_t kmalloc_lock;
+
+/**
+ * @var socket_lock
+ * @brief lock socket.
+ */
 extern spinlock_t socket_lock;
 
-
+/**
+ * @var init_spinlock
+ * @brief initialize spinlock.
+ */
 void init_spinlock(void);
 
 

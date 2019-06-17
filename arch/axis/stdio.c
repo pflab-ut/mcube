@@ -11,7 +11,7 @@ int putchar(int c)
   return c;
 }
 
-void serial_putc(char c)
+void uart_putc(char c, __unused uint8_t ch)
 {
   putchar(c);
 }

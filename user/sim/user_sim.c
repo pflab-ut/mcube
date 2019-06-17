@@ -20,7 +20,7 @@ int user_ap_main(__unused int argc, __unused char *argv[])
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
   test_print();
-  //  test_scan();
+  test_scan();
   //  test_socket(argc, argv);
   return 0;
 }

@@ -37,15 +37,6 @@ __noreturn void format_panic(const char *str)
 }
 
 
-/*
- * Parse given print argument expression (@fmt) and save
- * the results to argument descriptor @desc.
- *
- * Input is in in the form: %ld, %d, %x, %lx, etc.
- *
- * Return @fmt after bypassing the '%' expression.
- * FIXME: Better only return print-expression # of chars.
- */
 const char *parse_arg(const char *fmt, struct format_argdesc *desc)
 {
   bool complete;

@@ -283,11 +283,11 @@ static int lfout(double num, char *buf, int size,
  * within at most @size bytes. This version does *NOT* append
  * a NULL to output buffer @buf; it's for internal use only.
  */
-int vsnprint(char *buf, int size, const char *fmt, va_list args)
+int vsnprint(char *str, int size, const char *fmt, va_list args)
 {
   struct format_argdesc desc = {0};
   const char *s;
-  char *str;
+  char *p;
   long num;
   unsigned long unum;
   int len;
@@ -299,11 +299,11 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
     return 0;
   }
 
-  str = buf;
+  p = str;
 
   while (*fmt) {
     while (*fmt != '\0' && *fmt != '%' && size != 0) {
-      *str++ = *fmt++;
+      *p++ = *fmt++;
       size--;
     }
 
@@ -325,7 +325,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
         num = va_arg(args, int);
       }
 
-      len = lout(num, str, size, &desc);
+      len = lout(num, p, size, &desc);
       break;
 
     case UNSIGNED:
@@ -335,7 +335,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
         unum = va_arg(args, unsigned int);
       }
 
-      len = luout(unum, str, size, &desc);
+      len = luout(unum, p, size, &desc);
       break;
 #if defined(ENABLE_FPU)
 
@@ -346,7 +346,7 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
         dnum = (float) va_arg(args, double);
       }
 
-      len = lfout(dnum, str, size, &desc);
+      len = lfout(dnum, p, size, &desc);
       break;
 #endif /* ENABLE_FPU */
 
@@ -359,16 +359,16 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
 
       len = strlen(s);
       len = MIN(size, len);
-      strncpy(str, s, len);
+      strncpy(p, s, len);
       break;
 
     case CHAR:
-      *str = (unsigned char) va_arg(args, int);
+      *p = (unsigned char) va_arg(args, int);
       len = 1;
       break;
 
     case PERCENT:
-      *str = '%';
+      *p = '%';
       len = 1;
       break;
 
@@ -378,12 +378,12 @@ int vsnprint(char *buf, int size, const char *fmt, va_list args)
       /* No-op */
     }
 
-    str += len;
+    p += len;
     size -= len;
   }
 
-  format_assert(str >= buf);
-  return str - buf;
+  format_assert(p >= str);
+  return p - str;
 }
 
 /*
@@ -582,11 +582,11 @@ int sprintf(char *str, const char *fmt, ...)
   return n;
 }
 
-void perror(const char *string)
+void perror(const char *str)
 {
-  int len = strlen(string);
+  int len = strlen(str);
   delay(1000);
-  strcpy(pbuf, string);
+  strcpy(pbuf, str);
   pbuf[len++] = ':';
   pbuf[len++] = ' ';
   sprintf(&pbuf[len], "%d\n", errno);
