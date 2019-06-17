@@ -6,7 +6,6 @@
 #include <mcube/mcube.h>
 
 
-/* periodic job */
 void end_periodic_job(struct thread_struct *th)
 {
   unsigned long abs_release;
@@ -37,7 +36,6 @@ void end_periodic_job(struct thread_struct *th)
 }
 
 
-/* aperiodic job */
 void end_aperiodic_job(struct thread_struct *th)
 {
   unsigned long cpu = get_cpu_id();

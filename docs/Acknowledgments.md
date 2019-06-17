@@ -8,7 +8,7 @@
   Domain-Specific IoT Platforms,  
 
 
-## Operating Systems
+## Source Codes
 
 * [advos](https://github.com/drpnd/advos)
 * [Bare metal Raspberry Pi 3 tutorials](https://github.com/bztsrc/raspi3-tutorial)
@@ -18,7 +18,7 @@
 * [raspberry-pi-os](https://github.com/s-matyukevich/raspberry-pi-os)
 * [Raspberry Pi bare metal code for qemu raspi2 and raspi3](https://github.com/eggman/raspberrypi)
 * [SHMALL - Simple Heap Memory ALLocator](https://github.com/CCareaga/heap_allocator)
-
+* [Latest Algorithm Encyclopedia by C Language (in Japanese)](https://oku.edu.mie-u.ac.jp/~okumura/algo/archive/algo.tar.gz)
 
 ## Documentations
 

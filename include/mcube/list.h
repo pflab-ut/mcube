@@ -117,8 +117,12 @@ static inline bool list_empty(const struct list_node *node)
   return false;
 }
 
-/*
- * Insert @new right after @node
+/**
+ * @fn static inline void list_add(struct list_node *node, struct list_node *new)
+ * @brief insert @a new right after @a node.
+ *
+ * @param node Node.
+ * @param new New node inserted after @a node.
  */
 static inline void list_add(struct list_node *node, struct list_node *new)
 {
@@ -129,8 +133,12 @@ static inline void list_add(struct list_node *node, struct list_node *new)
   new->prev = node;
 }
 
-/*
- * Insert @new right before @node
+/**
+ * @fn static inline void list_add_tail(struct list_node *node, struct list_node *new)
+ * @brief insert @a new right before @a node.
+ *
+ * @param node Node.
+ * @param new New node inserted before @a node.
  */
 static inline void list_add_tail(struct list_node *node, struct list_node *new)
 {
@@ -142,9 +150,8 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
 }
 
 /**
- * Return the address of the data structure of @a type
- * that includes given @a node.
- *
+ * @def list_entry(node, type, node_name)
+ * @brief return the address of the data structure of @a type that includes given @a node.
  * The "useless" pointer assignment is for type-checking.
  * `Make it hard to misuse' -- a golden APIs advice.
  *
@@ -164,9 +171,8 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
   })
 
 /**
- * Scan the list, beginning from @a node, using the iterator
- * @a struc.
- *
+ * @def list_for_each(node, struc, name)
+ * @brief scan the list, beginning from @a node, using the iterator @a struc.
  * NOTE! Don't delete the the iterator's list node inside
  * loop: we use it in the initialization of next iteration.
  *
@@ -180,10 +186,10 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
        struc = list_entry(struc->name.next, typeof(*struc), name))
 
 /**
- * Same as list_for_each(), but with making it safe to
- * delete the iterator's list node inside the loop. This
- * is useful for popping-up list elements as you go.
- *
+ * @def list_for_each_safe(node, struc, spare_struc, name)
+ * @brief Same as list_for_each(), but with making it safe to
+ * delete the iterator's list node inside the loop.
+ * This is useful for popping-up list elements as you go.
  * You'll need to give us a spare iterator for this.
  *
  * @param node Node.
@@ -198,8 +204,11 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
        struc = spare_struc,                                             \
          spare_struc = list_entry(struc->name.next, typeof(*struc), name))
 
-/*
- * Pop @node out of its connected neighbours.
+/**
+ * @fn static inline void list_del(struct list_node *node)
+ * @brief pop @a node out of its connected neighbours.
+ *
+ * @param node Node.
  */
 static inline void list_del(struct list_node *node)
 {

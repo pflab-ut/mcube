@@ -17,15 +17,8 @@ long lpow(long x, long y)
   return ret;
 }
 
-#if defined(ENABLE_FPU)
+#if !CONFIG_ARCH_SIM
 
-/**
- * The cos() function returns the cosine of @c x, where @c x is given in radians.
- * @param x is a radian.
- * @return On success, these functions return the cosine of @c x.
- * If @c x is a NaN, a NaN is returned.
- * If @c x is positive infinity or negative infinity, a domain error occurs, and a NaN is returned.
- */
 double cos(double x)
 {
   double t;
@@ -52,13 +45,6 @@ double cos(double x)
 }
 
 
-/**
- * The sin() function returns the sine of @c x, where @c x is given in radians.
- * @param x is a radian.
- * @return On success, these functions return the sine of @c x.
- * If @c x is a NaN, a NaN is returned.
- * If @c x is positive infinity or negative infinity, a domain error occurs, and a NaN is returned.
- */
 double sin(double x)
 {
   double t;
@@ -84,15 +70,6 @@ double sin(double x)
   return y;
 }
 
-/**
- * The tan() function returns the tangent of @c x, where @c x is given in radians.
- * @param x is a radian.
- * @return On success, these functions return the tangent of @c x.
- * If @c x is a NaN, a NaN is returned.
- * If @c x is positive infinity or negative infinity, a domain error occurs, and a NaN is returned.
- * If the correct result would overflow, a range error occurs and the tan() function returns @c HUGE_VAL
- * with the mathematically correct sign.
- */
 double tan(double x)
 {
   int k;
@@ -102,11 +79,10 @@ double tan(double x)
 
   /* maclaurin expansion of tan(x) */
   k = (int)(x / (PI / 2) + (x >= 0 ? 0.5 : -0.5));
-  x = (x - (3217.0 / 2048) * k) + D * k;
+  x = (x - (3217.0 / 2048) * k) + DIFF_RELATED_TO_PI * k;
   x2 = x * x;
   t = 0;
 
-  /* cannot use termination by amplitude due to divergent sequence */
   for (i = MAX_BERNOULLI_ODD_NUMBER; i >= 3; i -= 2) {
     t = x2 / (i - t);
   }
@@ -126,16 +102,6 @@ double tan(double x)
 }
 
 
-/**
- * The atan() function calculates the principal value of the arc tangent of @c x;
- * that is the value  whose tangent is @c x.
- * @param x is an arc tangent of @c x.
- * @return On success, these functions return the principal value of the arc tangent of @c x
- * in radians; the return value is in the range [-pi/2, pi/2].
- * If @c x is a NaN, a NaN is returned.
- * If @c x is +0 (-0), +0 (-0) is returned.
- * If @c x is positive infinity (negative infinity), +pi/2 (-pi/2) is returned.
- */
 double atan(double x)
 {
   int n, sign;
@@ -195,22 +161,102 @@ double copysign(double x, double y)
 }
 
 
-
-/* NOTE: work if y is integer */
-/* TODO: work if y is not integer */
-double pow(double x, double y)
+double frexp(double x, int *exp)
 {
-  //  double z = __ieee754_pow(x, y);
-#if 1
-  double ret = 1.0;
-  int i;
+  union {
+    double d;
+    uint64_t i;
+  } y = { x };
+  int ee = y.i >> 52 & 0x7ff;
 
-  for (i = 0; i < y; i++) {
-    ret *= x;
+  if (!ee) {
+    if (x) {
+      x = frexp(x * 0x1p64, e);
+      *e -= 64;
+    } else {
+      *e = 0;
+    }
+
+    return x;
+  } else if (ee == 0x7ff) {
+    return x;
   }
 
-  return ret;
-#endif
+  *e = ee - 0x3fe;
+  y.i &= 0x800fffffffffffffull;
+  y.i |= 0x3fe0000000000000ull;
+  return y.d;
+}
+
+
+double log(double x)
+{
+  int i, k;
+  long double x2, s, last;
+
+  if (x <= 0) {
+    fprintf(stderr, "llog(x): x <= 0\n");
+    return 0;
+  }
+
+  frexp(x / SQRT2, &k);  /* 1 / 2 <= (x / SQRT2) / pow(2, k) < 1 */
+  x /= ldexp(1, k);      /* x = x / pow(2, k) */
+  x = (x - 1) / (x + 1);
+  x2 = x * x;
+  i = 1;
+  s = x;
+
+  do {
+    x *= x2;
+    i += 2;
+    last = s;
+    s += x / i;
+  } while (last != s);
+
+  return LOG2 * k + 2 * s;
+}
+
+
+double ipow(double x, int n)
+{
+  int abs_n;
+  double r;
+
+  abs_n = abs(n);
+  r = 1;
+
+  while (abs_n != 0) {
+    if (abs_n & 1) {
+      r *= x;
+    }
+
+    x *= x;
+    abs_n >>= 1;
+  }
+
+  if (n >= 0) {
+    return r;
+  }
+
+  return 1 / r;
+}
+
+
+double pow(double x, double y)
+{
+  if (y <= INT_MAX && y >= -INT_MAX && y == (int) y) {
+    return ipow(x, y);
+  }
+
+  if (x > 0) {
+    return exp(y * log(x));
+  }
+
+  if (x != 0 || y <= 0) {
+    printk("power: domain error\n");
+  }
+
+  return 0;
 }
 
 
@@ -274,8 +320,6 @@ double cbrt(double x)
   }
 }
 
-#if !CONFIG_ARCH_SIM
-
 
 int isinf(double x)
 {
@@ -303,8 +347,6 @@ int isnan(double x)
   return false;
 }
 
+
 #endif /* !CONFIG_ARCH_SIM */
-
-
-#endif /* ENABLE_FPU */
 

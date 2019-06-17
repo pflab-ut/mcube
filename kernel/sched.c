@@ -29,7 +29,7 @@ int bindex[NR_CPUS];
 int bidleindex;
 
 unsigned long sched_time;
-volatile uint32_t sched_end = false;
+volatile bool sched_end = false;
 
 #if defined(SCHED_FP)
 void set_priority(struct thread_struct *th)
@@ -99,11 +99,9 @@ void do_sched(void)
   pdebug_deadline_tq();
 
   spin_lock(&sched_lock);
-  /* jump to algorithm-specific function */
-  //  do_sched_algo();
 
   /* assign the highest priority task to cpu */
-  th = pick_next_task();
+  th = pick_next_thread();
 
   if (th) {
     current_th[cpu] = th;
@@ -133,7 +131,7 @@ void do_sched(void)
 }
 
 
-int check_deadline_miss(void)
+bool check_deadline_miss(void)
 {
   unsigned long cpu = get_cpu_id();
 
@@ -154,7 +152,7 @@ int run(unsigned long nr_threads)
 {
   unsigned int i;
   int ret;
-  print("run()\n");
+  PDEBUG("run()\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
   //  print("current_fp = 0x%x\n", current_fp);
 
@@ -164,8 +162,8 @@ int run(unsigned long nr_threads)
   for (i = 0; i < nr_threads; i++) {
     //    current_cpu = i;
     /* check feasibility and activate */
-    if ((ret = do_activate(&ths[i])) != 0) {
-      //      print("Error: do_activate(): %d\n", ret);
+    if ((ret = activate(&ths[i])) != 0) {
+      //      print("Error: activate(): %d\n", ret);
       return 1;
     }
 
@@ -177,7 +175,6 @@ int run(unsigned long nr_threads)
   sys_jiffies = 0;
   sched_end = false;
 
-  print("run()2\n");
 
   for (i = 0; i < NR_CPUS; i++) {
     current_th[i] = prev_th[i] = &kernel_th[i];
@@ -215,7 +212,7 @@ int run(unsigned long nr_threads)
 
   stop_timer();
 
-  print("run() end\n");
+  PDEBUG("run() end\n");
   //  asm volatile("move %0, $fp" : "=r"(current_fp));
   //  print("current_fp = 0x%x\n", current_fp);
   //  asm volatile("move %0, $sp" : "=r"(current_sp));

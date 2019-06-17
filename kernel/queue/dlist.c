@@ -39,15 +39,6 @@ static void enqueue_rq_dlist(struct rt_runqueue *rq,
 }
 
 
-/* same */
-void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
-{
-  set_bit32(rq->bitmap, 0);
-  enqueue_rq_dlist(rq,
-                   th,
-                   offsetof(struct thread_struct, priority));
-}
-
 
 void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
@@ -74,7 +65,7 @@ void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
   }
 }
 
-struct thread_struct *pick_next_task(void)
+struct thread_struct *pick_next_thread(void)
 {
   struct thread_struct *th = NULL;
   unsigned long cpu = get_cpu_id();

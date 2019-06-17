@@ -11,9 +11,6 @@
 
 #include <mcube/mcube.h>
 
-/*
- * Allocate a unique thread ID
- */
 uint64_t kthread_alloc_pid(void)
 {
   static uint64_t pids;
@@ -22,12 +19,6 @@ uint64_t kthread_alloc_pid(void)
 }
 
 
-/*
- * Create a new kernel thread running given function
- * code, and attach it to the runqueue.
- *
- * NOTE! given function must never exit!
- */
 void kthread_create(void (* /* __noreturn */ func)(void *), void *arg,
                     __unused struct th_attr *attr)
 {

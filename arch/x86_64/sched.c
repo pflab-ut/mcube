@@ -33,13 +33,6 @@
 
 #include <mcube/mcube.h>
 
-/*
- * Initialize all scheduler globals (runqueues + book-keeping).
- * Every core has its own unique version of such memory.
- *
- * NOTE! Disable interrupts for any code accessing such globals
- * outside of the timer IRQ context.  Check include/percpu.h
- */
 void sched_percpu_area_init(void)
 {
 
@@ -114,18 +107,6 @@ void sched_percpu_area_init(void)
  */
 struct process swapper;
 
-/*
- * @ENQ_NORMAL: Enqueue given thread as if it's a newly created
- * thread in the system (clear its state).
- *
- * @ENQ_RETURN: Return a thread to its original queue priority.
- * Don't mess with ANY of its CPU usage counters state. This is
- * for threads preempted by higher-priroty tasks.
- */
-enum enqueue_type {
-  ENQ_NORMAL,
-  ENQ_RETURN,
-};
 
 static void __rq_add_process(struct runqueue *rq, struct process *process,
                              int prio,
@@ -260,9 +241,6 @@ static struct process *preempt(struct process *new_process, int new_prio)
   return new_process;
 }
 
-/*
- * Our scheduler, it gets invoked HZ times per second.
- */
 struct process *sched_tick(void)
 {
   struct process *new_process;
@@ -335,17 +313,6 @@ struct process *sched_tick(void)
   return get_current_process();
 }
 
-/*
- * Let current CPU-init code path be a schedulable entity.
- *
- * Once the scheduler's timer starts ticking, every code path
- * should be in the context of a Schedulable Entity so it can,
- * once interrupted, get later executed. All cores (bootstrap
- * and secondary) initialization path should call this method.
- *
- * A unique 'current' descriptor, representing the initializa-
- * tion path, should be already allocated.
- */
 void schedulify_this_code_path(enum cpu_type t)
 {
   /* 'Current' is a per-CPU structure */

@@ -22,9 +22,18 @@ int sleep_until(unsigned long release, unsigned long state)
   return 0;
 }
 
+
 int activate(struct thread_struct *th)
 {
+
+  if (!(th->state & UNADMITTED)) {
+    return -1;
+  }
   unsigned long cpu = get_cpu_id();
+
+  print("activate()\n");
+  set_priority(th);
+  add_thread_to_task(th);
   //  print("activate()\n");
   th->sched.release = 0;
   th->sched.deadline = th->sched.release + th->sched.relative_deadline;
@@ -40,23 +49,6 @@ int activate(struct thread_struct *th)
                                              th,
                                              offsetof(struct thread_struct, sched.deadline));
 
-  //  PDEBUG("sys_activate() end\n");
+
   return 0;
-}
-
-int do_activate(struct thread_struct *th)
-{
-  int ret;
-
-  if (!(th->state & UNADMITTED)) {
-    ret = -1;
-  } else {
-    print("do_activate()\n");
-    set_priority(th);
-    add_thread_to_task(th);
-    ret = activate(th);
-    print("ret = %d\n", ret);
-  }
-
-  return ret;
 }

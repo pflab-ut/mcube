@@ -10,12 +10,11 @@ struct bheap_node bh_nodes[NR_THREADS];
 
 thread_prio_t thread_prio = thread_is_high_prio;
 
-int empty_bheap(struct rt_runqueue *rq)
+bool empty_bheap(struct rt_runqueue *rq)
 {
   return !(rq->head) && !(rq->min);
 }
 
-/* make child a subtree of root */
 void link_bheap(struct bheap_node *root, struct bheap_node *child)
 {
   child->parent = root;
@@ -24,7 +23,7 @@ void link_bheap(struct bheap_node *root, struct bheap_node *child)
   root->degree++;
 }
 
-/* merge root lists */
+
 struct bheap_node *merge_bheap(struct bheap_node *p,
                                struct bheap_node *q)
 {
@@ -52,7 +51,6 @@ struct bheap_node *merge_bheap(struct bheap_node *p,
   return head;
 }
 
-/* reverse a linked list of nodes. also clears parent pointer */
 struct bheap_node *reverse_bheap(struct bheap_node *h)
 {
   struct bheap_node *tail = NULL;
@@ -180,7 +178,6 @@ struct bheap_node *min_bheap_extract(struct rt_runqueue *rq)
   return node;
 }
 
-/* insert (and reinitialize) a node into the bheap */
 void insert_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 {
   struct bheap_node *min;
@@ -228,32 +225,6 @@ void union_bheap_uncache(struct rt_runqueue *target,
   addition->head = NULL;
 }
 
-struct bheap_node *peek_bheap(struct rt_runqueue *rq)
-{
-  if (!rq->min) {
-    rq->min = min_bheap_extract(rq);
-  }
-
-  return rq->min;
-}
-
-struct bheap_node *take_bheap(struct rt_runqueue *rq)
-{
-  struct bheap_node *node;
-
-  if (!rq->min) {
-    rq->min = min_bheap_extract(rq);
-  }
-
-  node = rq->min;
-  rq->min = NULL;
-
-  if (node) {
-    node->degree = NOT_IN_BHEAP;
-  }
-
-  return node;
-}
 
 void decrease_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 {
@@ -384,15 +355,6 @@ void print_bheap(struct rt_runqueue *rq, struct bheap_node *h)
 }
 
 
-void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
-{
-#if defined(SCHED_FP)
-  set_bit32(rq->bitmap, th->priority);
-#endif /* SCHED_FP */
-  insert_bheap(rq, th->node);
-}
-
-
 /* first argument 'rq' is dummy */
 void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
@@ -405,11 +367,7 @@ void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 
 void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
-  /* dequeue */
-  //  struct bheap_node *bn;
   delete_bheap(rq, th->node);
-  //  bn = take_bheap(rq);
-  //  PDEBUG("dequeue_rq(): bn->node_id = %u, bn_node->value->id = %u, th->id = %u\n", bn->node_id, bn->value->id, th->id);
 #if defined(SCHED_FP)
 
   if (rq->array[th->priority].next == &rq->array[th->priority]) {
@@ -419,7 +377,7 @@ void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 #endif /* SCHED_FP */
 }
 
-struct thread_struct *pick_next_task(void)
+struct thread_struct *pick_next_thread(void)
 {
   struct thread_struct *th = NULL;
   struct bheap_node *bn;

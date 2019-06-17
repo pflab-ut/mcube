@@ -103,7 +103,7 @@
  * @def STACK_ALIGN(x)
  * @brief Stack alignment.
  *
- * @param x Data.
+ * @param x Value.
  */
 #define STACK_ALIGN(x)  (((x) + 7) & -8)
 
@@ -130,7 +130,7 @@
  * @def __MASK(x, n)
  * @brief Mask @a x with @a n alignment.
  *
- * @param x Data.
+ * @param x Value.
  * @param n Alignment.
  */
 #define __MASK(x, n) ((typeof(x))((n) - 1))
@@ -139,7 +139,7 @@
  * @def IS_ALIGNED(x, n)
  * @brief Is @a x aligned with @a n alignment?
  *
- * @param x Data.
+ * @param x Value.
  * @param n Alignment.
  */
 #define IS_ALIGNED(x, n) (((x) & __MASK(x, n)) == 0)

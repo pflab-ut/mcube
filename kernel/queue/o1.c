@@ -7,19 +7,6 @@
 
 
 
-/* for global scheduling and synchronization */
-void enqueue_rq_queue_head(struct rt_runqueue *rq, struct thread_struct *th)
-{
-  /* enqueue the head of rt_runqueue */
-  //  PDEBUG("th->priority = %llu\n", th->priority);
-  set_bit32(rq->bitmap, th->priority);
-  rq->array[th->priority].next->prev = th;
-  th->next = rq->array[th->priority].next;
-  th->prev = &rq->array[th->priority];
-  rq->array[th->priority].next = th;
-}
-
-
 void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {
   //  PDEBUG("th = 0x%x th->priority = %llu\n", th, th->priority);
@@ -50,7 +37,7 @@ void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
   }
 }
 
-struct thread_struct *pick_next_task(void)
+struct thread_struct *pick_next_thread(void)
 {
   unsigned long cpu = get_cpu_id();
   struct thread_struct *th = NULL;

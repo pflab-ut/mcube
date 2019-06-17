@@ -13,16 +13,35 @@
  * @brief Read/Write lock.
  */
 struct rwlock {
-  /** Number of readers. */
+  /**
+   * Number of readers.
+   */
   unsigned int nread;
-  /** Writer lock. */
+  
+  /**
+   * Writer lock.
+   */
   spinlock_t wlock;
 };
 
+/**
+ * @typedef rwlock
+ * @brief Typedef of @struct rwlock.
+ */
 typedef struct rwlock rwlock;
 
+/**
+ * @def INIT_RWLOCK
+ * @brief initialize rwlock.
+ */
 #define INIT_RWLOCK {.nread = 0, .wlock = SPIN_UNLOCKED}
 
+/**
+ * @fn static inline void readers_lock(rwlock *lock)
+ * @brief lock reader.
+ *
+ * @param lock Lock.
+ */
 static inline void readers_lock(rwlock *lock)
 {
   spin_lock(&lock->wlock);
@@ -30,6 +49,12 @@ static inline void readers_lock(rwlock *lock)
   spin_unlock(&lock->wlock);
 }
 
+/**
+ * @fn static inline void readers_unlock(rwlock *lock)
+ * @brief unlock reader.
+ *
+ * @param lock Lock.
+ */
 static inline void readers_unlock(rwlock *lock)
 {
   spin_lock(&lock->wlock);
@@ -37,6 +62,12 @@ static inline void readers_unlock(rwlock *lock)
   spin_unlock(&lock->wlock);
 }
 
+/**
+ * @fn static inline void writers_lock(rwlock *lock)
+ * @brief lock writer.
+ *
+ * @param lock Lock.
+ */
 static inline void writers_lock(rwlock *lock)
 {
   spin_lock(&lock->wlock);
@@ -47,11 +78,24 @@ static inline void writers_lock(rwlock *lock)
   }
 }
 
+/**
+ * @fn static inline void writers_unlock(rwlock *lock)
+ * @brief unlock writer.
+ *
+ * @param lock Lock.
+ */
 static inline void writers_unlock(rwlock *lock)
 {
   spin_unlock(&lock->wlock);
 }
 
+/**
+ * @fn static inline int try_readers_lock(rwlock *lock)
+ * @brief try reader lock.
+ *
+ * @param lock Lock.
+ * @return True if lock is acquired.
+ */
 static inline int try_readers_lock(rwlock *lock)
 {
   if (spin_trylock(&lock->wlock)) {
@@ -63,6 +107,13 @@ static inline int try_readers_lock(rwlock *lock)
   return false;
 }
 
+/**
+ * @fn static inline int try_writers_lock(rwlock *lock)
+ * @brief try writer lock.
+ *
+ * @param lock Lock.
+ * @return True if lock is acquired.
+ */
 static inline int try_writers_lock(rwlock *lock)
 {
   if (spin_trylock(&lock->wlock)) {

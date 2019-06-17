@@ -104,7 +104,6 @@ static void handle_timer_interrupt(void)
     current_th[cpu] = &kernel_th[cpu];
   } else {
     do_release();
-    //    do_timer_tick();
     do_sched();
   }
 

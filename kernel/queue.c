@@ -11,12 +11,6 @@ struct thread_struct *deadline_tq[NR_CPUS];
 struct rt_runqueue run_tq[NR_CPUS];
 
 
-void enqueue_rq_head(struct rt_runqueue *rq, struct thread_struct *th)
-{
-  enqueue_rq_queue(rq, th);
-  th->state = READY;
-}
-
 
 void enqueue_rq(struct rt_runqueue *rq, struct thread_struct *th)
 {

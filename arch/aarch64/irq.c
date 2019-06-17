@@ -77,7 +77,6 @@ int handle_timer_interrupt(void)
 {
   unsigned long cpu = get_cpu_id();
   // timer tick
-  printk("call do_timer_tick()\n");
   printk("handler CNTV_TVAL: %lu\n", get_cntvct_el0());
   //  printk("handler CNTVCT   : 0x%lx\n", get_cntvct_el0());
   pdebug_array(run_tq[cpu].array);
@@ -107,7 +106,6 @@ int handle_timer_interrupt(void)
     current_th[cpu] = &kernel_th[cpu];
   } else {
     do_release();
-    //    do_timer_tick();
     do_sched();
   }
 

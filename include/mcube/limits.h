@@ -226,7 +226,7 @@
  * @def UTYPE_MAXVAL(x)
  * @brief MAX value of given unsigned variable type.
  *
- * @param x Data.
+ * @param x Value.
  */
 #define UTYPE_MAXVAL(x) ((typeof(x)) UINT64_MAX)
 
