@@ -13,17 +13,32 @@
  * @brief Sequence lock
  */
 struct seqlock {
-  /** Sequence. */
+  /**
+   * Sequence.
+   */
   unsigned sequence;
-  /** Lock. */
+
+  /**
+   * Lock.
+   */
   spinlock_t lock;
 };
 
+/**
+ * @typedef seqlock
+ * @brief Typedef of @struct seqlock.
+ */
 typedef struct seqlock seqlock;
 
 /* Lock out other writers and update the count.
  * Acts like a normal spin_lock/unlock.
  * Don't need preempt_disable() because that is in the spin_lock already.
+ */
+
+/**
+ * @fn static inline void write_seqlock(seqlock *sl)
+ * @brief write sequence lock.
+ * @param sl Sequence lock.
  */
 static inline void write_seqlock(seqlock *sl)
 {
@@ -31,12 +46,23 @@ static inline void write_seqlock(seqlock *sl)
   ++sl->sequence;
 }
 
+/**
+ * @fn static inline void write_sequnlock(seqlock *sl)
+ * @brief write sequence unlock.
+ * @param sl Sequence lock.
+ */
 static inline void write_sequnlock(seqlock *sl)
 {
   sl->sequence++;
   spin_unlock(&sl->lock);
 }
 
+/**
+ * @fn static inline int write_tryseqlock(seqlock *sl)
+ * @brief try sequence lock.
+ *
+ * @param sl Sequence lock.
+ */
 static inline int write_tryseqlock(seqlock *sl)
 {
   int ret = spin_trylock(&sl->lock);

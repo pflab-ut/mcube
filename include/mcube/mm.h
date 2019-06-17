@@ -16,7 +16,7 @@
 /**
  * @def PAGE_SIZE
  * @brief Page size.
- */ 
+ */
 #define PAGE_SIZE (0x1 << PAGE_SHIFT)
 
 /**

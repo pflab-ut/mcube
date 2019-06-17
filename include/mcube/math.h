@@ -113,7 +113,7 @@ long lpow(long x, long y);
                           || ((long) (size) % (long) (unit)) == 0 ? \
                           (size) / (unit) : (size) / (unit) + 1)
 
-#if defined(ENABLE_FPU)
+#if !CONFIG_ARCH_SIM && defined(ENABLE_FPU)
 
 /**
  * @def FLOOR(size, unit)
@@ -180,8 +180,6 @@ long lpow(long x, long y);
  */
 #define EPSILON 0.001
 
-
-#if !CONFIG_ARCH_SIM
 
 double copysign(double x, double y);
 
@@ -271,7 +269,7 @@ double log(double x);
 double ipow(double x, int n);
 
 /**
- * @fn double pow(double x, double y) 
+ * @fn double pow(double x, double y)
  * @brief return the value of @a x raised to the power of @a y.
  *
  * @param x Value.
@@ -298,14 +296,14 @@ double ipow(double x, int n);
  * the result is positive infinity.
  * If @a x is negative infinity, and @a y is an odd integer less than 0, the result is -0.
  * If @a x is negative infinity, and @a y less than 0 and not an odd integer,
- * the result is +0.        
+ * the result is +0.
  * If @a x is negative infinity, and @a y is an odd integer greater than 0,
  * the result is negative infinity.
  * If @a x is negative infinity, and @a y greater than 0 and not an odd integer,
  * the result is positive infinity.
  * If @a x is positive infinity, and @a y less than 0, the result is +0.
  * If @a x is positive infinity, and @a y greater than 0, the result is positive infinity.
- * If @a x is +0 or -0, and @a y is an odd integer less than 0, a pole error occurs and HUGE_VAL,   
+ * If @a x is +0 or -0, and @a y is an odd integer less than 0, a pole error occurs and HUGE_VAL,
  * HUGE_VALF, or HUGE_VALL, is returned, with the same sign as @a x.
  * If @a x is +0 or -0, and @a y is less than 0 and not an odd integer,
  * a pole error occurs and +HUGE_VAL, +HUGE_VALF, or +HUGE_VALL, is returned.
@@ -339,7 +337,7 @@ double cbrt(double x);
 
 /**
  * @fn double remainder(double x, double y)
- * @brief compute the remainder of dividing @a x by @a y. 
+ * @brief compute the remainder of dividing @a x by @a y.
  * The return value is @a x-n*y, where @a n is the value @a x/y,
  * rounded to the nearest integer.
  * If the absolute value of @a x-n*y is 0.5, @a n is chosen to be even.
@@ -392,7 +390,6 @@ int isnan(double x);
 int isinf(double x);
 
 
-#endif /* !CONFIG_ARCH_SIM */
 
 /**
  * @union ieee754
@@ -428,7 +425,6 @@ union ieee754 {
 #define FRACTION_MASK 0x000fffffffffffffUL
 
 
-#else
 
 /**
  * @def FLOOR(size, unit)
@@ -440,7 +436,7 @@ union ieee754 {
 #define FLOOR(size, unit) ((size) / (unit))
 
 
-#endif /* ENABLE_FPU */
+#endif /* !CONFIG_ARCH_SIM && ENABLE_FPU */
 
 
 #endif /* !__ASSEMBLY__ */

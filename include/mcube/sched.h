@@ -523,7 +523,7 @@ struct sched_info {
    * Absolute release time.
    */
   unsigned long release;
-  
+
   /**
    * Absolute deadline.
    */
@@ -563,7 +563,7 @@ struct sched_info {
    * Flag to check if release.
    */
   unsigned long is_crelease;
-  
+
   /**
    * Relative deadline.
    */

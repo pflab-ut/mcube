@@ -29,6 +29,7 @@ int activate(struct thread_struct *th)
   if (!(th->state & UNADMITTED)) {
     return -1;
   }
+
   unsigned long cpu = get_cpu_id();
 
   print("activate()\n");

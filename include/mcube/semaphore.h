@@ -14,21 +14,46 @@
  * @brief Semaphore
  */
 struct sem_struct {
-  /** Semaphore counter. */
+  /**
+   * Semaphore counter.
+   */
   volatile short counter;
-  /** Ceiling for Priority Ceiling Protocol. */
-  unsigned int ceil;
-  /** Wait queue for semaphore. */
+
+  /**
+   * Ceiling for Priority Ceiling Protocol.
+   */
+  unsigned long ceil;
+
+  /**
+   * Wait queue for semaphore.
+   */
   struct thread_struct *ewq;
-  /** Owner of semaphore. */
+
+  /**
+   * Owner of semaphore.
+   */
   struct thread_struct *owner;
-  /** Original priority. */
-  uint64_t org_prio;
+
+  /**
+   * Original priority.
+   */
+  unsigned long org_prio;
 };
 
+/**
+ * @typedef sem_struct
+ * @brief Typedef of @struct sem_struct.
+ */
 typedef struct sem_struct sem_struct;
 
-#define  INIT_COUNT_SEM(nres, cpu) {            \
+/**
+ * @def INIT_COUNT_SEM(nres, cpu)
+ * @brief initialize counting semaphore.
+ *
+ * @param nres Number of resources.
+ * @param cpu CPU ID.
+ */
+#define INIT_COUNT_SEM(nres, cpu) {             \
     .counter  = nres,                           \
       .ceil  = 0,                               \
       .ewq    = &kernel_th[cpu],                \
@@ -36,23 +61,53 @@ typedef struct sem_struct sem_struct;
       .org_prio  = 0,                           \
       }
 
+
 #define  INIT_SEM_MUTEX  INIT_COUNT_SEM(1)
 
-/* true: if down, false: if still up */
-/* reading the counter directly in user land will fail due to the data cache */
-static inline int sem_is_down(struct sem_struct *sem)
+/**
+ * @fn static inline bool sem_is_down(struct sem_struct *sem)
+ * @brief  reading the counter directly in user land will fail due to the data cache.
+ *
+ * @param sem Semaphore.
+ * @return True if semaphore is down, and false if semaphore is still up.
+ */
+static inline bool sem_is_down(struct sem_struct *sem)
 {
-  return (sem->counter <= 0);
+  return sem->counter <= 0;
 }
 
-extern unsigned int nr_resources;
+/**
+ * @var nr_resources
+ * @brief Number of resources.
+ */
+extern unsigned long nr_resources;
 
-void __sem_down(struct sem_struct *);
-void __sem_up(struct sem_struct *);
+/**
+ * @fn void init_sem(struct sem_struct *sem, unsigned long nr_rsrcs, unsigned long ceil)
+ * @brief initialize semaphore.
+ *
+ * @param sem Semaphore,
+ * @param nr_rsrcs Number of resources.
+ * @param ceil Ceil.
+ */
+void init_sem(struct sem_struct *sem, unsigned long nr_rsrcs,
+              unsigned long ceil);
 
-void init_sem(struct sem_struct *, unsigned int, unsigned int);
-void sem_down(struct sem_struct *);
-void sem_up(struct sem_struct *);
+/**
+ * @fn void sem_down(struct sem_struct *sem)
+ * @brief down semaphore.
+ *
+ * @param sem Semaphore.
+ */
+void sem_down(struct sem_struct *sem);
+
+/**
+ * @fn void sem_up(struct sem_struct *sem)
+ * @brief up semaphore.
+ *
+ * @param sem Semaphore.
+ */
+void sem_up(struct sem_struct *sem);
 
 #endif /* !__ASSEMBLY__ */
 

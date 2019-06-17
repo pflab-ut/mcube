@@ -17,7 +17,7 @@ long lpow(long x, long y)
   return ret;
 }
 
-#if !CONFIG_ARCH_SIM
+#if !CONFIG_ARCH_SIM && defined(ENABLE_FPU)
 
 double cos(double x)
 {
@@ -348,5 +348,5 @@ int isnan(double x)
 }
 
 
-#endif /* !CONFIG_ARCH_SIM */
+#endif /* !CONFIG_ARCH_SIM && ENABLE_FPU */
 

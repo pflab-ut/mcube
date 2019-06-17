@@ -5,8 +5,10 @@
  */
 #include <mcube/mcube.h>
 
+unsigned long nr_resources = 0;
 
-void init_sem(struct sem_struct *sem, unsigned int nr_rsrcs, unsigned int ceil)
+void init_sem(struct sem_struct *sem, unsigned long nr_rsrcs,
+              unsigned long ceil)
 {
   unsigned long cpu = get_cpu_id();
   sem->counter = nr_rsrcs;

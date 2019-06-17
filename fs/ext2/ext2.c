@@ -1330,8 +1330,8 @@ void init_ext2(void)
   }
 
   ext2_debug_init(&serial_char_dumper);
-  spin_init(&isb.inode_allocation_lock);
-  spin_init(&isb.block_allocation_lock);
+  isb.inode_allocation_lock = INIT_SPINLOCK;
+  isb.block_allocation_lock = INIT_SPINLOCK;
 
   /* In-Memory Super Block init */
   isb.buf = ramdisk_get_buf();
@@ -1459,7 +1459,7 @@ void init_ext2(void)
 
   /* Prepare the In-core Inodes hash repository */
   isb.inodes_hash = hash_new(256);
-  spin_init(&isb.inodes_hash_lock);
+  isb.inodes_hash_lock = INIT_SPINLOCK;
 
   /* Root Inode sanity checks */
   rooti = inode_get(EXT2_ROOT_INODE);

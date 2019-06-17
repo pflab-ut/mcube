@@ -188,7 +188,7 @@ typedef struct W128_T w128_t;
 #define ALTI_MSK64 {MSK2, MSK1, MSK4, MSK3}
 
 /**
- * @def ALTI_SL2_PERM 
+ * @def ALTI_SL2_PERM
  * @brief Alternative shift left 2 perm.
  */
 #define ALTI_SL2_PERM {1,2,3,23,5,6,7,0,9,10,11,4,13,14,15,8}
@@ -200,7 +200,7 @@ typedef struct W128_T w128_t;
 #define ALTI_SL2_PERM64 {1,2,3,4,5,6,7,31,9,10,11,12,13,14,15,0}
 
 /**
- * @def ALTI_SR2_PERM 
+ * @def ALTI_SR2_PERM
  * @brief Alternative shift right 2 perm.
  */
 #define ALTI_SR2_PERM {7,0,1,2,11,4,5,6,15,8,9,10,17,12,13,14}

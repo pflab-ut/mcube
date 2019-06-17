@@ -17,17 +17,17 @@ struct bheap_node {
    * Node ID.
    */
   unsigned long node_id;
-  
+
   /**
    *  Pointer to parent node.
    */
   struct bheap_node *parent;
-  
+
   /**
    * Pointer to next node.
    */
   struct bheap_node *next;
-  
+
   /**
    * Pointer to child node.
    */
@@ -37,12 +37,12 @@ struct bheap_node {
    * Degree.
    */
   unsigned long degree;
-  
+
   /**
    * Value in node.
    */
   struct thread_struct *value;
-  
+
   //  struct bheap_node **ref;
 };
 
@@ -57,29 +57,29 @@ struct rt_runqueue {
    * Lock to runqueue.
    */
   spinlock_t lock;
-  
+
   /**
    * Array to manage threads.
    */
   struct thread_struct array[NR_PRIORITIES];
-  
+
   /**
    * Bitmap.
    */
   uint32_t bitmap[NR_PRIORITY_BITMAPS];
-  
+
   /**
    * Utilization of runqueue.
    */
   unsigned long util;
-  
+
   /**
    * Number of threads in runqueue.
    */
   int nr_threads;
-  
+
 #if CONFIG_TQ_BHEAP
-  /** 
+  /**
    * Head node.
    */
   struct bheap_node *head;
