@@ -16,7 +16,7 @@
 #include <sim/sim_header.h>
 #elif CONFIG_ARCH_X86_64
 #include <x86_64/x86_64_header.h>
-#elif CONFIG_ARCH_AARCH64_RASPI3 || CONFIG_ARCH_AARCH64_SYNQUACER
+#elif CONFIG_ARCH_AARCH64_RASPI3
 #include <aarch64/aarch64_header.h>
 #elif CONFIG_ARCH_AXIS
 #include <axis/axis_header.h>

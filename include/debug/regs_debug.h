@@ -21,7 +21,7 @@
   } while (0)
 
 
-#elif CONFIG_ARCH_AARCH64_RASPI3 || CONFIG_ARCH_AARCH64_SYNQUACER
+#elif CONFIG_ARCH_AARCH64_RASPI3
 
 #define pdebug_registers(regs) do {                               \
     for (int i = 0; i < 32; i += 2) {                             \

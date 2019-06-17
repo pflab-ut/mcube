@@ -7,7 +7,7 @@
 
 #if PL011_UART
 
-/* PL011 UART in Raspberry Pi3 and SynQuacer */
+/* PL011 UART in Raspberry Pi3 */
 
 uint8_t uart_pol_getc(__unused uint32_t ch)
 {
@@ -84,8 +84,6 @@ void init_uart(void)
 
   /* set UART interrupt routing */
   mmio_out32(ENABLE_IRQS2, IRQ_PENDINGn_SRC(PL011_UART_IRQ));
-#elif CONFIG_ARCH_AARCH64_SYNQUACER
-  /* TODO: implement */
 #else
 #error "Unknown Machine"
 #endif /* CONFIG_ARCH_AARCH64_RASPI3 */

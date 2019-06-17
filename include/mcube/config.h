@@ -14,8 +14,6 @@
 /** Architecture. */
 #define CONFIG_ARCH_AARCH64_RASPI3 0
 /** Architecture. */
-#define CONFIG_ARCH_AARCH64_SYNQUACER 0
-/** Architecture. */
 #define CONFIG_ARCH_AXIS 0
 /** Compiler. */
 #define CONFIG_COMPILER_CLANG 0

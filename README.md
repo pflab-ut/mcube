@@ -29,7 +29,7 @@ Please edit `configure` file or execute the following command.
 ```
 $ cp docs/config/ARCH_configure configure
 ```
-where `ARCH_configure` is `aarch64_raspi3_configure`, `aarch64_synquacer_configure`,
+where `ARCH_configure` is `aarch64_raspi3_configure`,
 `axis_configure`, `sim_configure`, or `x86_64_configure`.
 
 `ARCH` of `ARCH_configure` is changed to an architecture name of small

@@ -7,11 +7,6 @@
 #define __MCUBE_AARCH64_UART_H__
 
 
-
-#if CONFIG_ARCH_AARCH64_SYNQUACER && MINI_UART
-#error "Synquacer does not have Mini UART."
-#endif /* CONFIG_ARCH_AARCH64_SYNQUACER && MINI_UART */
-
 /* PL011 UART and Mini UART */
 #define NR_UART_PORTS 2
 

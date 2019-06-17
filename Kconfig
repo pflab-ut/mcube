@@ -28,14 +28,6 @@ menu Architecture
     defs -DCONFIG_ARCH_AARCH64
     defs -DCONFIG_ARCH_AARCH64_RASPI3
     defs -DENABLE_FPU
-  config CONFIG_ARCH_AARCH64_SYNQUACER
-    title AARCH64 for SynQuacer
-    default n
-    aname aarch64
-    mname synquacer
-    defs -DCONFIG_ARCH_AARCH64
-    defs -DCONFIG_ARCH_AARCH64_SYNQUACER
-    defs -DENABLE_FPU
   config CONFIG_ARCH_AXIS
     title AXIS
     default n

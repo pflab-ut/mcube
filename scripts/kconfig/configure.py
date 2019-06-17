@@ -25,16 +25,14 @@ def init_sysconfig_arch(fout, arch, machine):
     fout.write("ARCH_NAME = aarch64\n")
     if machine == "raspi3":
       fout.write("MACHINE_NAME = raspi3\n")
-    elif machine == "synquacer":
-      fout.write("MACHINE_NAME = synquacer\n")
     elif machine == "none":
       fout.write("MACHINE_NAME = none\n")
     else:
-      print("Unknown Machine")
+      print("Unknown Machine: %d" % machine)
   elif arch == "axis":
     fout.write("ARCH_NAME = axis\n")
   else:
-    print("Unknown Architecture")
+    print("Unknown Architecture: %d " % arch)
 
 def init_sysconfig_compiler(fout, compiler):
   "initialize compiler"
@@ -43,7 +41,7 @@ def init_sysconfig_compiler(fout, compiler):
   elif compiler == "clang":
     fout.write("CC = clang\n")
   else:
-    print("Unknown Compiler")
+    print("Unknown Compiler: %d" % compiler)
 
 def init_sysconfig_output(fout, output):
   "initialize compiler"
@@ -52,7 +50,7 @@ def init_sysconfig_output(fout, output):
   elif output == "uart":
     fout.write("OUTPUT_NAME = uart\n")
   else:
-    print("Unknown Output")
+    print("Unknown Output: %d" % output)
 
 
 
