@@ -98,7 +98,7 @@
 
 #include <mcube/mcube.h>
 
-struct isb isb;
+struct imsb imsb;
 
 /**
  * Public interface:
@@ -307,19 +307,19 @@ static void *inode_diskimage(uint64_t inum)
   struct group_descriptor *bgd;
   uint64_t group, groupi, inodetbl_offset, inode_offset;
 
-  sb = isb.sb;
+  sb = imsb.sb;
   assert(inum != 0);
   group  = (inum - 1) / sb->inodes_per_group;
   groupi = (inum - 1) % sb->inodes_per_group;
 
-  if (group >= isb.blockgroups_count || inum > sb->inodes_count) {
+  if (group >= imsb.blockgroups_count || inum > sb->inodes_count) {
     panic("EXT2: Inode %d out of volume range", inum);
   }
 
-  bgd = &isb.bgd[group];
-  inodetbl_offset = bgd->inode_table * isb.block_size;
+  bgd = &imsb.bgd[group];
+  inodetbl_offset = bgd->inode_table * imsb.block_size;
   inode_offset = inodetbl_offset + groupi * sb->inode_size;
-  return (void *)&isb.buf[inode_offset];
+  return (void *)&imsb.buf[inode_offset];
 }
 
 /*
@@ -334,8 +334,8 @@ struct inode *inode_get(uint64_t inum)
 {
   struct inode *inode;
 
-  spin_lock(&isb.inodes_hash_lock);
-  inode = hash_find(isb.inodes_hash, inum);
+  spin_lock(&imsb.inodes_hash_lock);
+  inode = hash_find(imsb.inodes_hash, inum);
 
   if (!inode) {
     if (!(inode = kmalloc(sizeof(*inode)))) {
@@ -344,13 +344,13 @@ struct inode *inode_get(uint64_t inum)
 
     inode_init(inode, inum);
     memcpy(dino_off(inode), inode_diskimage(inum), dino_len());
-    hash_insert(isb.inodes_hash, inode);
+    hash_insert(imsb.inodes_hash, inode);
   } else {
     assert(inode->refcount >= 1);
     inode->refcount++;
   }
 
-  spin_unlock(&isb.inodes_hash_lock);
+  spin_unlock(&imsb.inodes_hash_lock);
 
   return inode;
 }
@@ -377,12 +377,12 @@ void inode_put(struct inode *inode)
     memcpy(inode_diskimage(inode->inum), dino_off(inode), dino_len());
   }
 
-  spin_lock(&isb.inodes_hash_lock);
+  spin_lock(&imsb.inodes_hash_lock);
   assert(inode->refcount > 0);
   --inode->refcount;
 
   if (inode->refcount == 0) {
-    hash_remove(isb.inodes_hash, inode->inum);
+    hash_remove(imsb.inodes_hash, inode->inum);
 
     /*
      * If the inode has been marked for __on disk__ deletion,
@@ -400,7 +400,7 @@ void inode_put(struct inode *inode)
     inode = NULL;
   }
 
-  spin_unlock(&isb.inodes_hash_lock);
+  spin_unlock(&imsb.inodes_hash_lock);
 }
 
 static void __block_read_write(uint64_t block, char *buf, uint blk_offset,
@@ -408,27 +408,27 @@ static void __block_read_write(uint64_t block, char *buf, uint blk_offset,
 {
   uint64_t final_offset, blocks_count;
 
-  blocks_count = isb.sb->blocks_count;
+  blocks_count = imsb.sb->blocks_count;
 
   if (block >= blocks_count) {
     panic("EXT2: Block %lu is out of volume boundary\n"
           "Volume block count = %lu blocks\n", block, blocks_count);
   }
 
-  if (blk_offset + len > isb.block_size) {
+  if (blk_offset + len > imsb.block_size) {
     panic("EXT2: Block-#%lu, blk_offset=%u, len=%u access exceeds "
           "block boundaries!", block, blk_offset, len);
   }
 
-  final_offset = (block * isb.block_size) + blk_offset;
+  final_offset = (block * imsb.block_size) + blk_offset;
 
   switch (operation) {
   case BLOCK_READ:
-    memcpy(buf, &isb.buf[final_offset], len);
+    memcpy(buf, &imsb.buf[final_offset], len);
     break;
 
   case BLOCK_WRTE:
-    memcpy(&isb.buf[final_offset], buf, len);
+    memcpy(&imsb.buf[final_offset], buf, len);
     break;
   };
 }
@@ -451,44 +451,44 @@ struct inode *inode_alloc(enum file_type type)
   int first_zero_bit;
   uint64_t inum;
 
-  bgd = isb.bgd;
+  bgd = imsb.bgd;
 
-  if (!(buf = kmalloc(isb.block_size))) {
-    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  if (!(buf = kmalloc(imsb.block_size))) {
+    panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
-  for (uint i = 0; i < isb.blockgroups_count; i++, bgd++) {
-    spin_lock(&isb.inode_allocation_lock);
-    block_read(bgd->inode_bitmap, buf, 0, isb.block_size);
-    first_zero_bit = find_first_zero_bit8(buf, isb.block_size);
+  for (uint i = 0; i < imsb.blockgroups_count; i++, bgd++) {
+    spin_lock(&imsb.inode_allocation_lock);
+    block_read(bgd->inode_bitmap, buf, 0, imsb.block_size);
+    first_zero_bit = find_first_zero_bit8(buf, imsb.block_size);
 
     if (first_zero_bit == -1) {
-      spin_unlock(&isb.inode_allocation_lock);
+      spin_unlock(&imsb.inode_allocation_lock);
       continue;
     }
 
-    inum = i * isb.sb->inodes_per_group + first_zero_bit + 1;
+    inum = i * imsb.sb->inodes_per_group + first_zero_bit + 1;
 
-    if (inum < isb.sb->first_inode) {
+    if (inum < imsb.sb->first_inode) {
       panic("EXT2: Reserved ino #%lu marked as free", inum);
     }
 
-    if (inum > isb.sb->inodes_count) {
+    if (inum > imsb.sb->inodes_count) {
       panic("EXT2: Returned ino #%lu exceeds count", inum);
     }
 
-    assert(isb.sb->free_inodes_count > 0);
+    assert(imsb.sb->free_inodes_count > 0);
     assert(bgd->free_inodes_count > 0);
-    isb.sb->free_inodes_count--;
+    imsb.sb->free_inodes_count--;
     bgd->free_inodes_count--;
 
     if (type == EXT2_FT_DIR) {
       bgd->used_dirs_count++;
     }
 
-    set_bit8(buf, first_zero_bit, isb.block_size);
-    block_write(bgd->inode_bitmap, buf, 0, isb.block_size);
-    spin_unlock(&isb.inode_allocation_lock);
+    set_bit8(buf, first_zero_bit, imsb.block_size);
+    block_write(bgd->inode_bitmap, buf, 0, imsb.block_size);
+    spin_unlock(&imsb.inode_allocation_lock);
 
     inode = inode_get(inum);
     memset(dino_off(inode), 0, dino_len());
@@ -529,32 +529,32 @@ static void __inode_dealloc(struct inode *inode)
   char *buf;
 
   assert(inode->inum != 0);
-  assert(inode->inum >= isb.sb->first_inode);
-  assert(inode->inum <= isb.sb->inodes_count);
+  assert(inode->inum >= imsb.sb->first_inode);
+  assert(inode->inum <= imsb.sb->inodes_count);
   assert(inode->links_count == 0);
   assert(inode->refcount == 0);
 
-  group  = (inode->inum - 1) / isb.sb->inodes_per_group;
-  groupi = (inode->inum - 1) % isb.sb->inodes_per_group;
-  bgd = &isb.bgd[group];
+  group  = (inode->inum - 1) / imsb.sb->inodes_per_group;
+  groupi = (inode->inum - 1) % imsb.sb->inodes_per_group;
+  bgd = &imsb.bgd[group];
 
-  if (!(buf = kmalloc(isb.block_size))) {
-    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  if (!(buf = kmalloc(imsb.block_size))) {
+    panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
-  spin_lock(&isb.inode_allocation_lock);
-  isb.sb->free_inodes_count++;
+  spin_lock(&imsb.inode_allocation_lock);
+  imsb.sb->free_inodes_count++;
   bgd->free_inodes_count++;
 
   if (S_ISDIR(inode->mode)) {
     bgd->used_dirs_count--;
   }
 
-  block_read(bgd->inode_bitmap, buf, 0, isb.block_size);
-  assert(bitmap_bit_is_set(buf, groupi, isb.block_size));
-  clear_bit8(buf, groupi, isb.block_size);
-  block_write(bgd->inode_bitmap, buf, 0, isb.block_size);
-  spin_unlock(&isb.inode_allocation_lock);
+  block_read(bgd->inode_bitmap, buf, 0, imsb.block_size);
+  assert(bitmap_bit_is_set(buf, groupi, imsb.block_size));
+  clear_bit8(buf, groupi, imsb.block_size);
+  block_write(bgd->inode_bitmap, buf, 0, imsb.block_size);
+  spin_unlock(&imsb.inode_allocation_lock);
 
   memset(inode_diskimage(inode->inum), 0, dino_len());
   kfree(buf);
@@ -568,25 +568,25 @@ uint64_t block_alloc(void)
   int first_zero_bit;
   char *buf;
 
-  sb = isb.sb;
-  bgd = isb.bgd;
+  sb = imsb.sb;
+  bgd = imsb.bgd;
 
-  if (!(buf = kmalloc(isb.block_size))) {
-    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  if (!(buf = kmalloc(imsb.block_size))) {
+    panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
-  for (uint i = 0; i < isb.blockgroups_count; i++, bgd++) {
-    spin_lock(&isb.block_allocation_lock);
-    block_read(bgd->block_bitmap, buf, 0, isb.block_size);
-    first_zero_bit = find_first_zero_bit8(buf, isb.block_size);
+  for (uint i = 0; i < imsb.blockgroups_count; i++, bgd++) {
+    spin_lock(&imsb.block_allocation_lock);
+    block_read(bgd->block_bitmap, buf, 0, imsb.block_size);
+    first_zero_bit = find_first_zero_bit8(buf, imsb.block_size);
 
     if (first_zero_bit == -1) {
-      spin_unlock(&isb.block_allocation_lock);
+      spin_unlock(&imsb.block_allocation_lock);
       continue;
     }
 
     first_blk = i * sb->blocks_per_group + sb->first_data_block;
-    last_blk = (i != isb.last_blockgroup) ?
+    last_blk = (i != imsb.last_blockgroup) ?
                first_blk + sb->blocks_per_group - 1 :
                sb->blocks_count - 1;
     block = first_blk + first_zero_bit;
@@ -597,14 +597,14 @@ uint64_t block_alloc(void)
             block, first_blk, last_blk);
     }
 
-    assert(isb.sb->free_blocks_count > 0);
+    assert(imsb.sb->free_blocks_count > 0);
     assert(bgd->free_blocks_count > 0);
-    isb.sb->free_blocks_count--;
+    imsb.sb->free_blocks_count--;
     bgd->free_blocks_count--;
 
-    set_bit8(buf, first_zero_bit, isb.block_size);
-    block_write(bgd->block_bitmap, buf, 0, isb.block_size);
-    spin_unlock(&isb.block_allocation_lock);
+    set_bit8(buf, first_zero_bit, imsb.block_size);
+    block_write(bgd->block_bitmap, buf, 0, imsb.block_size);
+    spin_unlock(&imsb.block_allocation_lock);
     goto out;
   }
 
@@ -621,27 +621,27 @@ void block_dealloc(uint block)
   uint64_t group, groupi;
   char *buf;
 
-  sb = isb.sb;
+  sb = imsb.sb;
   assert(block >= sb->first_data_block);
   assert(block < sb->blocks_count);
 
   group  = (block - sb->first_data_block) / sb->blocks_per_group;
   groupi = (block - sb->first_data_block) % sb->blocks_per_group;
-  bgd = &isb.bgd[group];
+  bgd = &imsb.bgd[group];
 
-  if (!(buf = kmalloc(isb.block_size))) {
-    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  if (!(buf = kmalloc(imsb.block_size))) {
+    panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
-  spin_lock(&isb.block_allocation_lock);
+  spin_lock(&imsb.block_allocation_lock);
   sb->free_blocks_count++;
   bgd->free_blocks_count++;
   assert(sb->free_blocks_count <= sb->blocks_count);
-  block_read(bgd->block_bitmap, buf, 0, isb.block_size);
-  assert(bitmap_bit_is_set(buf, groupi, isb.block_size));
-  clear_bit8(buf, groupi, isb.block_size);
-  block_write(bgd->block_bitmap, buf, 0, isb.block_size);
-  spin_unlock(&isb.block_allocation_lock);
+  block_read(bgd->block_bitmap, buf, 0, imsb.block_size);
+  assert(bitmap_bit_is_set(buf, groupi, imsb.block_size));
+  clear_bit8(buf, groupi, imsb.block_size);
+  block_write(bgd->block_bitmap, buf, 0, imsb.block_size);
+  spin_unlock(&imsb.block_allocation_lock);
 
   kfree(buf);
 }
@@ -656,7 +656,7 @@ uint64_t file_read(struct inode *inode, char *buf, uint64_t offset,
     return 0;
   }
 
-  supported_area = isb.block_size * EXT2_INO_NR_DIRECT_BLKS;
+  supported_area = imsb.block_size * EXT2_INO_NR_DIRECT_BLKS;
 
   if (offset >= inode->size_low) {
     return 0;
@@ -673,9 +673,9 @@ uint64_t file_read(struct inode *inode, char *buf, uint64_t offset,
   ret_len = len;
 
   while (len != 0) {
-    block = offset / isb.block_size;
-    blk_offset = offset % isb.block_size;
-    read_len = isb.block_size - blk_offset;
+    block = offset / imsb.block_size;
+    blk_offset = offset % imsb.block_size;
+    read_len = imsb.block_size - blk_offset;
     read_len = MIN(read_len, len);
 
     assert(block < EXT2_INO_NR_DIRECT_BLKS);
@@ -705,7 +705,7 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
     return -EBADF;
   }
 
-  supported_area = isb.block_size * EXT2_INO_NR_DIRECT_BLKS;
+  supported_area = imsb.block_size * EXT2_INO_NR_DIRECT_BLKS;
 
   if (offset >= supported_area || offset >= UINT32_MAX) {
     return -EFBIG;
@@ -723,9 +723,9 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
   last_offset = offset + ret_len;
 
   while (len != 0) {
-    block = offset / isb.block_size;
-    blk_offset = offset % isb.block_size;
-    write_len = isb.block_size - blk_offset;
+    block = offset / imsb.block_size;
+    blk_offset = offset % imsb.block_size;
+    write_len = imsb.block_size - blk_offset;
     write_len = MIN(write_len, len);
 
     assert(block < EXT2_INO_NR_DIRECT_BLKS);
@@ -753,8 +753,8 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
 
     if (offset > inode->size_low) {
       inode->size_low = offset;
-      block = CEIL(offset, isb.block_size);
-      inode->i512_blocks = (block * isb.block_size) / 512;
+      block = CEIL(offset, imsb.block_size);
+      inode->i512_blocks = (block * imsb.block_size) / 512;
       inode->dirty = true;
     }
   }
@@ -813,7 +813,7 @@ bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
     return false;
   }
 
-  if (dentry->record_len + (offset % isb.block_size) > isb.block_size) {
+  if (dentry->record_len + (offset % imsb.block_size) > imsb.block_size) {
     printk("EXT2: Dir entry (ino %lu, offset %lu) span multiple "
            "blocks (entry len = %lu bytes)\n", inum, offset,
            dentry->record_len);
@@ -827,10 +827,10 @@ bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
     return false;
   }
 
-  if (dentry->inode_num > isb.sb->inodes_count) {
+  if (dentry->inode_num > imsb.sb->inodes_count) {
     printk("EXT2: Dir entry (ino %lu, offset %lu) ino field %lu "
            "is out of bounds; max ino = %lu\n", inum, offset,
-           dentry->inode_num, isb.sb->inodes_count);
+           dentry->inode_num, imsb.sb->inodes_count);
     return false;
   }
 
@@ -1042,22 +1042,22 @@ no_lastentry:
    */
 
   newentry_len = dir_entry_min_len(filename_len);
-  blk_offset = offset % isb.block_size;
+  blk_offset = offset % imsb.block_size;
 
-  if (newentry_len + blk_offset > isb.block_size) {
+  if (newentry_len + blk_offset > imsb.block_size) {
     assert(offset > lastentry->record_len);
     offset -= lastentry->record_len;
-    blk_offset = offset % isb.block_size;
-    lastentry->record_len = isb.block_size - blk_offset;
+    blk_offset = offset % imsb.block_size;
+    lastentry->record_len = imsb.block_size - blk_offset;
     assert(lastentry->record_len >=
            dir_entry_min_len(lastentry->filename_len));
     file_write(dir, (char *)lastentry, offset, lastentry->record_len);
     offset += lastentry->record_len;
-    assert(offset % isb.block_size == 0);
+    assert(offset % imsb.block_size == 0);
   }
 
-  blk_offset = offset % isb.block_size;
-  assert(newentry_len + blk_offset <= isb.block_size);
+  blk_offset = offset % imsb.block_size;
+  assert(newentry_len + blk_offset <= imsb.block_size);
 
   /*
    * Now we have a guarantee: the new dir entry is not spanning
@@ -1068,18 +1068,18 @@ no_lastentry:
    * dir entries traversal from parsing uninitialized data.
    */
 
-  if (!(zeroes = kmalloc(isb.block_size))) {
-    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  if (!(zeroes = kmalloc(imsb.block_size))) {
+    panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
-  memset(zeroes, 0, isb.block_size);
+  memset(zeroes, 0, imsb.block_size);
 
   if (!(newentry = kmalloc(sizeof(*newentry)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*newentry));
   }
 
   newentry->inode_num = entry_ino->inum;
-  newentry->record_len = isb.block_size - blk_offset;
+  newentry->record_len = imsb.block_size - blk_offset;
   newentry->filename_len = filename_len;
   newentry->file_type = type;
   assert(filename_len < EXT2_FILENAME_LEN);
@@ -1091,7 +1091,7 @@ no_lastentry:
   }
 
   assert(newentry->record_len >= newentry_len);  /*dst*/
-  assert(newentry->record_len - newentry_len <= isb.block_size);  /*src*/
+  assert(newentry->record_len - newentry_len <= imsb.block_size);  /*src*/
 
   if ((ret = file_write(dir, zeroes, offset  + newentry_len,
                         newentry->record_len - newentry_len)) < 0) {
@@ -1196,12 +1196,12 @@ static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
     return;
   }
 
-  if (!(buf = kmalloc(isb.block_size))) {
-    panic("Error: cannot allocate memory %lu\n", isb.block_size);
+  if (!(buf = kmalloc(imsb.block_size))) {
+    panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
-  entries_count = isb.block_size / sizeof(*entry);
-  block_read(block, buf, 0, isb.block_size);
+  entries_count = imsb.block_size / sizeof(*entry);
+  block_read(block, buf, 0, imsb.block_size);
 
   for (entry = (uint32_t *)buf; entries_count--; entry++) {
     if (*entry != 0) {
@@ -1209,7 +1209,7 @@ static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
     }
   }
 
-  assert((char *)entry == buf + isb.block_size);
+  assert((char *)entry == buf + imsb.block_size);
 
   block_dealloc(block);
   kfree(buf);
@@ -1219,8 +1219,8 @@ void file_truncate(struct inode *inode)
 {
   assert(S_ISREG(inode->mode));
   assert(inode->inum != 0);
-  assert(inode->inum >= isb.sb->first_inode);
-  assert(inode->inum <= isb.sb->inodes_count);
+  assert(inode->inum >= imsb.sb->first_inode);
+  assert(inode->inum <= imsb.sb->inodes_count);
 
   inode->dirty = true;
   inode->size_low = 0;
@@ -1330,22 +1330,22 @@ void init_ext2(void)
   }
 
   ext2_debug_init(&serial_char_dumper);
-  isb.inode_allocation_lock = INIT_SPINLOCK;
-  isb.block_allocation_lock = INIT_SPINLOCK;
+  imsb.inode_allocation_lock = INIT_SPINLOCK;
+  imsb.block_allocation_lock = INIT_SPINLOCK;
 
   /* In-Memory Super Block init */
-  isb.buf = ramdisk_get_buf();
-  isb.sb  = (void *)&isb.buf[EXT2_SUPERBLOCK_OFFSET];
-  isb.block_size = 1024U << isb.sb->log_block_size;
-  isb.frag_size  = 1024U << isb.sb->log_fragment_size;
-  bgd_start = CEIL(EXT2_SUPERBLOCK_OFFSET + sizeof(*sb), isb.block_size);
-  isb.bgd = (void *)&isb.buf[bgd_start * isb.block_size];
+  imsb.buf = ramdisk_get_buf();
+  imsb.sb  = (void *)&imsb.buf[EXT2_SUPERBLOCK_OFFSET];
+  imsb.block_size = 1024U << imsb.sb->log_block_size;
+  imsb.frag_size  = 1024U << imsb.sb->log_fragment_size;
+  bgd_start = CEIL(EXT2_SUPERBLOCK_OFFSET + sizeof(*sb), imsb.block_size);
+  imsb.bgd = (void *)&imsb.buf[bgd_start * imsb.block_size];
 
-  sb = isb.sb;
-  bgd = isb.bgd;
+  sb = imsb.sb;
+  bgd = imsb.bgd;
   bits_per_byte = 8;
 
-  if (sb->blocks_count * isb.block_size > ramdisk_len) {
+  if (sb->blocks_count * imsb.block_size > ramdisk_len) {
     panic("FS: Truncated EXT2 volume image!");
   }
 
@@ -1366,23 +1366,23 @@ void init_ext2(void)
     panic("Ext2: Invalid inode size = %d bytes!", sb->inode_size);
   }
 
-  if (sb->inode_size > isb.block_size) {
+  if (sb->inode_size > imsb.block_size) {
     panic("Ext2: Inode size > file system block size!");
   }
 
-  if (isb.block_size != isb.frag_size) {
+  if (imsb.block_size != imsb.frag_size) {
     panic("Ext2: Fragment size is not equal to block size!");
   }
 
-  if (isb.block_size > EXT2_MAX_BLOCK_LEN) {
-    panic("Ext2: Huge block size of %ld bytes!", isb.block_size);
+  if (imsb.block_size > EXT2_MAX_BLOCK_LEN) {
+    panic("Ext2: Huge block size of %ld bytes!", imsb.block_size);
   }
 
-  if (sb->blocks_per_group > isb.block_size * bits_per_byte) {
+  if (sb->blocks_per_group > imsb.block_size * bits_per_byte) {
     panic("Ext2: Block Groups block bitmap must fit in 1 block!");
   }
 
-  if (sb->inodes_per_group > isb.block_size * bits_per_byte) {
+  if (sb->inodes_per_group > imsb.block_size * bits_per_byte) {
     panic("Ext2: Block Groups inode bitmap must fit in 1 block!");
   }
 
@@ -1398,14 +1398,14 @@ void init_ext2(void)
 
   /* Use ceil division: the last Block Group my have a
    * smaller number of blocks than the rest!  */
-  isb.blockgroups_count = CEIL(sb->blocks_count -
-                               sb->first_data_block, sb->blocks_per_group);
-  isb.last_blockgroup = isb.blockgroups_count - 1;
+  imsb.blockgroups_count = CEIL(sb->blocks_count -
+                                sb->first_data_block, sb->blocks_per_group);
+  imsb.last_blockgroup = imsb.blockgroups_count - 1;
   inodetbl_size = sb->inodes_per_group * sb->inode_size;
-  inodetbl_blocks = CEIL(inodetbl_size, isb.block_size);
+  inodetbl_blocks = CEIL(inodetbl_size, imsb.block_size);
 
   /* Block Group Descriptor Table sanity checks */
-  if (isb.blockgroups_count > 1 &&  // Last group special case
+  if (imsb.blockgroups_count > 1 &&  // Last group special case
       sb->blocks_per_group > sb->blocks_count) {
     panic("Ext2: Block Groups num of blocks > all disk ones!");
   }
@@ -1414,10 +1414,10 @@ void init_ext2(void)
     panic("Ext2: Block Groups num of inodes > all disk ones!");
   }
 
-  for (uint i = 0; i < isb.blockgroups_count; i++) {
+  for (uint i = 0; i < imsb.blockgroups_count; i++) {
     first = i * sb->blocks_per_group + sb->first_data_block;
 
-    if (i == isb.last_blockgroup) {
+    if (i == imsb.last_blockgroup) {
       last = sb->blocks_count - 1;
     } else {
       last  = first + sb->blocks_per_group - 1;
@@ -1458,8 +1458,8 @@ void init_ext2(void)
   }
 
   /* Prepare the In-core Inodes hash repository */
-  isb.inodes_hash = hash_new(256);
-  isb.inodes_hash_lock = INIT_SPINLOCK;
+  imsb.inodes_hash = hash_new(256);
+  imsb.inodes_hash_lock = INIT_SPINLOCK;
 
   /* Root Inode sanity checks */
   rooti = inode_get(EXT2_ROOT_INODE);

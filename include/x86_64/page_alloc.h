@@ -14,11 +14,29 @@
  * @brief Page allocator Zone Descriptor.
  */
 struct zone {
-  /* Statically initialized */
-  enum zone_id id;    /* Self reference (for iterators) */
-  uint64_t start;      /* Physical range start address */
-  uint64_t end;      /* Physical range end address */
-  const char *description;  /* For kernel log messages */
+  /*
+   * Statically initialized.
+   */
+
+  /**
+   * Self reference (for iterators).
+   */
+  enum zone_id id;
+
+  /**
+   * Physical range start address.
+   */
+  uint64_t start;
+
+  /**
+   * Physical range end address.
+   */
+  uint64_t end;
+
+  /**
+   * For kernel log messages.
+   */
+  const char *description;
 
   /* Dynamically initialized */
   struct page *freelist;    /* Connect zone's unallocated pages */

@@ -171,10 +171,10 @@ double frexp(double x, int *exp)
 
   if (!ee) {
     if (x) {
-      x = frexp(x * 0x1p64, e);
-      *e -= 64;
+      x = frexp(x * 0x1p64, exp);
+      *exp -= 64;
     } else {
-      *e = 0;
+      *exp = 0;
     }
 
     return x;
@@ -182,25 +182,80 @@ double frexp(double x, int *exp)
     return x;
   }
 
-  *e = ee - 0x3fe;
+  *exp = ee - 0x3fe;
   y.i &= 0x800fffffffffffffull;
   y.i |= 0x3fe0000000000000ull;
   return y.d;
 }
 
+#if 0
+
+double iexp(double x, int k)  /* $2^{k}x$ */
+{
+  double w;
+
+  if (k >= 0) {
+    w = 2;
+  } else {
+    w = 0.5;
+    k = - k;
+  }
+
+  while (k) {
+    if (k & 1) {
+      x *= w;
+    }
+
+    w *= w;
+    k >>= 1;
+  }
+  return x;
+}
+
+double exp(double x)
+{
+  int i, k, neg;
+  double a, e, prev;
+
+  k = (int)(x / LOG2 + (x >= 0 ? 0.5 : -0.5));
+  x -= k * LOG2;
+
+  if (x >= 0) {
+    neg = 0;
+  } else {
+    neg = 1;
+    x = -x;
+  }
+
+  e = 1 + x;
+  a = x;
+  i = 2;
+
+  do {
+    prev = e;
+    a *= x / i;
+    e += a;
+    i++;
+  } while (e != prev);
+
+  if (neg) {
+    e = 1 / e;
+  }
+  return iexp(e, k);
+}
 
 double log(double x)
 {
   int i, k;
-  long double x2, s, last;
+  double x2, s, last;
 
   if (x <= 0) {
-    fprintf(stderr, "llog(x): x <= 0\n");
+    print("log(x): x <= 0\n");
     return 0;
   }
 
   frexp(x / SQRT2, &k);  /* 1 / 2 <= (x / SQRT2) / pow(2, k) < 1 */
-  x /= ldexp(1, k);      /* x = x / pow(2, k) */
+  x /= iexp(1, k);      /* x = x / pow(2, k) */
   x = (x - 1) / (x + 1);
   x2 = x * x;
   i = 1;
@@ -216,13 +271,14 @@ double log(double x)
   return LOG2 * k + 2 * s;
 }
 
+#endif
 
 double ipow(double x, int n)
 {
   int abs_n;
   double r;
 
-  abs_n = abs(n);
+  abs_n = ABS(n);
   r = 1;
 
   while (abs_n != 0) {
@@ -248,10 +304,13 @@ double pow(double x, double y)
     return ipow(x, y);
   }
 
+#if 0
+  /* FIXME: link error in aarch64. */
   if (x > 0) {
     return exp(y * log(x));
   }
-
+#endif
+  
   if (x != 0 || y <= 0) {
     printk("power: domain error\n");
   }

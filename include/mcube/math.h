@@ -115,6 +115,7 @@ long lpow(long x, long y);
 
 #if !CONFIG_ARCH_SIM && defined(ENABLE_FPU)
 
+
 /**
  * @def FLOOR(size, unit)
  * @brief return the largest integral value that is not greater than @a size/unit.
@@ -166,7 +167,7 @@ long lpow(long x, long y);
  * @def LOG2
  * @brief log(2).
  */
-#define LOG2  0.693147180559945309417232121458L
+#define LOG2 0.6931471805599453094172321214581765680755L
 
 /**
  * @def SQRT2
@@ -249,6 +250,12 @@ double atan(double x);
  * is returned, and the value of @a *exp is unspecified.
  */
 double frexp(double x, int *exp);
+
+
+double iexp(double x, int k);
+
+double exp(double x);
+
 
 /**
  * @fn double log(double x)
@@ -424,17 +431,13 @@ union ieee754 {
  */
 #define FRACTION_MASK 0x000fffffffffffffUL
 
-
+#else
 
 /**
- * @def FLOOR(size, unit)
- * @brief return the largest integral value that is not greater than @a size/unit.
- *
- * @param size Size.
- * @param unit Unit.
+ * The FLOOR() macro returns the largest integral value that is not greater than @c size/unit.
+ * @return Floor of @c size/unit.
  */
 #define FLOOR(size, unit) ((size) / (unit))
-
 
 #endif /* !CONFIG_ARCH_SIM && ENABLE_FPU */
 

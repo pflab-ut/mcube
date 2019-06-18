@@ -99,7 +99,7 @@ __unused static void test_inodes(void)
   struct inode *inode, *inode2, *inode3;
 
   // All volume inodes!
-  for (uint i = 1; i <= isb.sb->inodes_count; i++) {
+  for (uint i = 1; i <= imsb.sb->inodes_count; i++) {
     inode = inode_get(i);
     inode2 = inode_get(i);
     inode3 = inode_get(i);
@@ -199,7 +199,7 @@ __unused static void test_file_reads(__unused void *arg)
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
-  for (uint i = 1; i <= isb.sb->inodes_count; i++) {
+  for (uint i = 1; i <= imsb.sb->inodes_count; i++) {
     bd->pr("Trying inode #%u: ", i);
     inode = inode_get(i);
 
@@ -251,9 +251,9 @@ __unused static void test_block_reads(void)
   printk("c%d t%lu br start\n", percpu_get(apic_id), get_current_process()->pid);
 
   /* All possible permumations: Burn, baby, Burn! */
-  for (uint i = 0; i < isb.sb->blocks_count; i++) {
-    for (uint off = 0; off < isb.block_size; off++) {
-      for (uint len = 0; len <= (isb.block_size - off); len++) {
+  for (uint i = 0; i < imsb.sb->blocks_count; i++) {
+    for (uint off = 0; off < imsb.block_size; off++) {
+      for (uint len = 0; len <= (imsb.block_size - off); len++) {
         bd->pr("Reading Block #%d, offset = %d, "
                "len = %d:\n", i, off, len);
         block_read(i, buf, off, len);
@@ -498,13 +498,13 @@ static void test_ext2_up(void)
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
-  sb = isb.sb;
+  sb = imsb.sb;
 
   ext2_debug_init(&null_null_dumper);
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
   /* Extract the modified ext2 volume out of the virtual machine: */
-  printk("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
+  printk("Ramdisk start at: 0x%lx, with len = %ld\n", imsb.buf,
          ramdisk_get_len());
 
   test_inodes();
@@ -541,7 +541,7 @@ static void test_ext2_up(void)
    * allocating inodes behind our back.
    */
 #if TEST_INODE_ALLOC_DEALLOC
-  nfree = isb.sb->free_inodes_count;
+  nfree = imsb.sb->free_inodes_count;
   struct unrolled_head all_allocated;
   void *void_ino, *void_inum;
   bool first_run = true;
@@ -594,10 +594,10 @@ again:
     inode_put(inode);
   }
 
-  if (isb.sb->free_inodes_count != nfree / 2) {
+  if (imsb.sb->free_inodes_count != nfree / 2) {
     panic("We've allocated all inodes, then deallocated %u "
           "of them. Nonetheless, reported num of free inos "
-          "= %u instead of %u", nfree / 2, isb.sb->free_inodes_count,
+          "= %u instead of %u", nfree / 2, imsb.sb->free_inodes_count,
           nfree / 2);
   }
 
@@ -628,7 +628,7 @@ again:
 #endif
 
 #if TEST_BLOCK_ALLOC_DEALLOC
-  nfree = isb.sb->free_blocks_count;
+  nfree = imsb.sb->free_blocks_count;
   count = 5;
 bagain:
   unrolled_init(&head, 64);
@@ -646,7 +646,7 @@ bagain:
 
     bd->pr("Verifying it's not really allocated: ");
 
-    for (uint ino = 1; ino <= isb.sb->inodes_count; ino++) {
+    for (uint ino = 1; ino <= imsb.sb->inodes_count; ino++) {
       inode = inode_get(ino);
 
       if (ino < sb->first_inode &&
@@ -660,7 +660,7 @@ bagain:
         continue;
       }
 
-      nblocks = CEIL(inode->size_low, isb.block_size);
+      nblocks = CEIL(inode->size_low, imsb.block_size);
       nblocks = MIN(nblocks, (uint64_t) EXT2_INO_NR_BLOCKS);
 
       for (uint ino_blk = 0; ino_blk < nblocks; ino_blk++) {
@@ -701,10 +701,10 @@ bagain:
     block_dealloc(block);
   }
 
-  if (isb.sb->free_blocks_count != nfree) {
+  if (imsb.sb->free_blocks_count != nfree) {
     panic("We've allocated all blocks, then deallocated all of "
           "them. Nonetheless, reported num of free blocks = %u "
-          "instead of %u", isb.sb->free_blocks_count, nfree);
+          "instead of %u", imsb.sb->free_blocks_count, nfree);
   }
 
   unrolled_free(&head);
@@ -965,7 +965,7 @@ __noreturn static void smp_fuzz(__unused void *arg)
   struct inode *inode;
 
   while (true) {
-    for (uint i = 1; i < isb.sb->inodes_count; i++) {
+    for (uint i = 1; i < imsb.sb->inodes_count; i++) {
       inode = inode_get(i);
       inode_put(inode);
     }
@@ -983,7 +983,7 @@ static bool test_ext2_smp(void)
 
   /* Extract the modified ext2 volume out of the virtual machine: */
   if (percpu_get(apic_id) == 0) {
-    printk("Ramdisk start at: 0x%lx, with len = %ld\n", isb.buf,
+    printk("Ramdisk start at: 0x%lx, with len = %ld\n", imsb.buf,
            ramdisk_get_len());
   }
 

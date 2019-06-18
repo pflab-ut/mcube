@@ -1127,13 +1127,13 @@ void dentry_dump(struct dir_entry *dentry);
 void path_get_parent(const char *path, char *parent, char *child);
 
 /**
- * @struct isb
+ * @struct imsb
  * @brief In-memory Super Block - Global State for our FS code.
  *
  * NOTE! The inodes repository hash lock could be fine-grained
  * by having a lock on each hash collision linked-list instead.
  */
-struct isb {
+struct imsb {
   union super_block *sb;    /* On-disk Superblock */
   struct group_descriptor *bgd;    /* On-disk Group Desc Table */
   char *buf;    /* Ramdisk buffer */
@@ -1147,7 +1147,7 @@ struct isb {
   spinlock_t inodes_hash_lock;
 };
 
-extern struct isb isb;
+extern struct imsb imsb;
 
 
 
