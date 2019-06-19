@@ -117,7 +117,6 @@ void do_sched(void)
     end_budget(prev_th[cpu]);
   }
 
-  //  switch_to(tasks[next]);
   current_th[cpu]->state = RUNNING;
 
   if (prev_th[cpu] != current_th[cpu]) {
@@ -125,7 +124,6 @@ void do_sched(void)
   }
 
   spin_unlock(&sched_lock);
-  //  switch_to(current_th[cpu]);
   //  pdebug_jiffies();
   printk("do_sched(): end\n");
 }

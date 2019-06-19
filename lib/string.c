@@ -7,18 +7,6 @@
 
 #if !CONFIG_ARCH_SIM
 
-/**
- * The memcmp() function compares the first @c n bytes (each interpreted as unsigned char)
- * of the memory areas @c s1 and @c s2.
- * @param s1 is a pointer of @c char.
- * @param s2 is a pointer of @c char.
- * @param n is the number of bytes comparing @c s1 to @c s2.
- * @return Integer less than, equal to, or greater than zero if the first @c n bytes of @c s1 is found,
- * respectively, to be less than, to match, or be greater than the first @c n bytes of s2.@n
- * For a nonzero return value, the sign is determined by the sign of the difference between the first
- * pair of bytes (interpreted as @c unsigned @c char) that differ in @c s1 and @c s2.
- */
-
 int memcmp(const void *s1, const void *s2, size_t n)
 {
   const unsigned char *su1, *su2;
@@ -34,16 +22,6 @@ int memcmp(const void *s1, const void *s2, size_t n)
 }
 
 
-/**
- * The memmove() function copies @c n bytes from memory area @c src to memory area @c dst.
- * The memory areas may overlap: copying takes place as though the bytes in @c src are first
- * copied into a temporary array that does not overlap @c src or @c dst,
- * and the bytes are then copied from the temporary array to @c dst.
- * @param dst is a pointer of @c void.
- * @param src is a pointer of @c void.
- * @param n is the number fo bytes copying @c src to @c dst.
- * @return Pointer to @c dst.
- */
 void *memmove(void *dst, const void *src, size_t n)
 {
   char *tmp;
@@ -70,13 +48,6 @@ void *memmove(void *dst, const void *src, size_t n)
   return dst;
 }
 
-/**
- * The strlen() function calculates the length of the string @c s,
- * excluding the terminating null byte('\0').
- * @param s is a pointer of @c char.
- * @return Number of bytes in the string @c s.
- */
-
 size_t strlen(const char *s)
 {
   size_t num = 0;
@@ -88,33 +59,25 @@ size_t strlen(const char *s)
   return num;
 }
 
-size_t strnlen(const char *str, int n)
+size_t strnlen(const char *str, size_t maxlen)
 {
   const char *tmp;
 
   tmp = str;
 
-  while (n) {
+  while (maxlen) {
     if (*tmp == '\0') {
       break;
     }
 
     tmp++;
-    n--;
+    maxlen--;
   }
 
   return tmp - str;
 }
 
 
-/**
- * The strcmp() function compares the two strings @c s1 and @c s2.
- * @param s1 is a pointer of @c char.
- * @param s2 is a pointer of @c char.
- * @return Integer less than, equal to, or greater than zero
- * if @c s1 (or the first @c n bytes thereof) is found, respectively,
- * to be less than, to match, or be greater than @c s2.
- */
 int strcmp(const char *s1, const char *s2)
 {
   int res;
@@ -128,17 +91,6 @@ int strcmp(const char *s1, const char *s2)
   return res;
 }
 
-
-/**
- * The strncmp() function is similar to the strcmp() function, except
- * it compares the only first (at most) @c n bytes of @c s1 and @c s2.
- * @param s1 is a pointer of @c char.
- * @param s2 is a pointer of @c char.
- * @param n is the number of bytes comparing @a s1 to @a s2.
- * @return Integer less than, equal to, or greater than zero
- * if @c s1 (or the first @c n bytes thereof) is found, respectively,
- * to be less than, to match, or be greater than @c s2.
- */
 
 int strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -157,15 +109,6 @@ int strncmp(const char *s1, const char *s2, size_t n)
 
 
 
-/**
- * The strcpy() function copies the string pointed to by @c src, including the terminating null byte
- * ('\0'), to the buffer pointed to by @c dst.
- * The strings may not overlap, and the destination string @c dst must be large enough
- * to receive the copy.
- * @param dst is a pointer of @c char.
- * @param src is a pointer of @c char.
- * @return Pointer to the destination string @c dst.
- */
 char *strcpy(char *dst, const char *src)
 {
   char *tmp = dst;
@@ -175,17 +118,6 @@ char *strcpy(char *dst, const char *src)
 
   return tmp;
 }
-
-/**
- * The strncpy() function is similar to the strcpy() function, except that
- * at most @c n bytes of @c src are copied.
- * @warning If there is no null byte among the first @c n bytes of @c src,
- * the string placed in @c dst will  not  be  null-terminated.
- * @param dst is a pointer of @c char.
- * @param src is a pointer of @c char.
- * @param n is the number of bytes copying @c src to @c dst.
- * @return Pointer to the destination string @c dst.
- */
 
 char *strncpy(char *dst, const char *src, size_t n)
 {
@@ -204,15 +136,6 @@ char *strncpy(char *dst, const char *src, size_t n)
 }
 
 
-/**
- * The strcat() function appends the @c src string to the @c dst string, overwriting the terminating null
- * byte ('\0') at the end of @c dst, and then adds a terminating null byte.
- * The strings may not overlap, and the @c dst string must have enough space for the result.
- * If @c dst is not large enough, program behavior is unpredictable.
- * @param dst is a pointer of @c char.
- * @param src is a pointer of @c char.
- * @return Pointer to the destination string @c dst.
- */
 char *strcat(char *dst, const char *src)
 {
   char *tmp = dst;
@@ -227,15 +150,6 @@ char *strcat(char *dst, const char *src)
   return tmp;
 }
 
-/**
- * The strncat() function is similar to the strcat() function, except that
- * it will use at most n bytes from src; and
- * src does not need to be null-terminated if it contains @c n or more bytes.
- * @param dst is a pointer of @c char.
- * @param src is a pointer of @c char.
- * @param n is the number of bytes appending @c src to @c dst.
- * @return Pointer to the destination string @c dst.
- */
 char *strncat(char *dst, const char *src, size_t n)
 {
   char *tmp = dst;
@@ -257,13 +171,6 @@ char *strncat(char *dst, const char *src, size_t n)
 }
 
 
-/**
- * The strchr() function returns a pointer to the first occurrence of the character @c c
- * in the string @c s.
- * @param s is a pointer of @c char.
- * @param c is a character where it is located.
- * @return Pointer to the matched characture or NULL if the character is not found.
- */
 char *strchr(const char *s, int c)
 {
   for (; *s != (char) c; s++) {
@@ -279,81 +186,73 @@ char *strchr(const char *s, int c)
 
 /* implicit call by compiler */
 
-/**
- * The memset() function fills the first @c n bytes of the memory area pointed to
- * by @c s with the constant byte @c c (8-bit value).
- * @param s is a pointer of @c void.
- * @param c is an integer to fill the memory area.
- * @param n is the number of bytes filled by @c c.
- * @return Pointer to the memory area @c s.
- */
 
 /*
  * "Note that a REP STOS instruction is the fastest way to
  * initialize a large block of memory." --Intel, vol. 2B
  *
- * To copy the @ch byte repetitively over an 8-byte block,
+ * To copy the @a c byte repetitively over an 8-byte block,
  * we multiply its value with (0xffffffffffffffff / 0xff).
  */
 #if CONFIG_ARCH_X86_64
-void *memset(void *dst, int ch, size_t len)
+void *memset(void *s, int c, size_t n)
 {
   uint64_t uch;
   uintptr_t d0;
 
-  uch = ch;
+  uch = c;
   asm volatile(
     "mov  %3, %%rcx;"
     "rep  stosb;"      /* rdi, rcx */
     "mov  %4, %%rcx;"
     "rep  stosq;"      /* ~~~ */
     :"=&D"(d0)
-    :"0"(dst), "a"(uch * 0x0101010101010101),
-    "ir"(len & 7), "ir"(len >> 3)
+    :"0"(s), "a"(uch * 0x0101010101010101),
+    "ir"(n & 7), "ir"(n >> 3)
     :"rcx", "memory");
 
-  return dst;
+  return s;
 }
 
 
 /*
- * Fill memory with given 4-byte value @val. For easy
- * implementation, @len is vetoed to be a multiple of 8
+ * Fill memory with given 4-byte value @a c. For easy
+ * implementation, @a n is vetoed to be a multiple of 8
  */
-void *memset32(void *dst, uint32_t val, uint64_t len)
+void *memset32(void *s, uint32_t c, size_t n)
 {
-  uint64_t uval;
+  uint32_t uc;
   uintptr_t d0;
 
-  assert((len % 8) == 0);
-  len = len / 8;
+  assert((n % 8) == 0);
+  n = n / 8;
 
-  uval = ((uint64_t)val << 32) + val;
+  uc = ((uint64_t) c << 32) + c;
   asm volatile("rep stosq"      /* rdi, rcx */
-               :"=&D"(d0), "+&c"(len)
-               :"0"(dst), "a"(uval)
+               :"=&D"(d0), "+&c"(n)
+               :"0"(s), "a"(uc)
                :"memory");
 
-  return dst;
+  return s;
 }
 
 /*
- * Fill memory with given 8-byte value @val. For easy
- * implementation, @len is vetoed to be a multiple of 8
+ * Fill memory with given 8-byte value @a c. For easy
+ * implementation, @a n is vetoed to be a multiple of 8
  */
-void *memset64(void *dst, uint64_t val, uint64_t len)
+void *memset64(void *s, uint64_t c, size_t n)
 {
   uintptr_t d0;
 
-  assert((len % 8) == 0);
-  len = len / 8;
+  assert((n % 8) == 0);
+  n = n / 8;
 
   asm volatile("rep stosq"      /* rdi, rcx */
-               :"=&D"(d0), "+&c"(len)
-               :"0"(dst), "a"(val)
+               :"=&D"(d0), "+&c"(n)
+               :"0"(s), "a"(c)
                :"memory");
 
-  return dst;
+  return s;
 }
 
 #else
@@ -377,10 +276,10 @@ void *memset(void *s, int c, size_t n)
 }
 
 /*
- * Fill memory with given 4-byte value @val. For easy
- * implementation, @len is vetoed to be a multiple of 8
+ * Fill memory with given 4-byte value @a val. For easy
+ * implementation, @a n is vetoed to be a multiple of 8
  */
-void *memset32(void *s, uint32_t c, uint64_t n)
+void *memset32(void *s, uint32_t c, size_t n)
 {
   /* NOTE: volatile is required for -O3 option of GCC. */
 #if CONFIG_COMPILER_GCC
@@ -399,10 +298,10 @@ void *memset32(void *s, uint32_t c, uint64_t n)
 }
 
 /*
- * Fill memory with given 8-byte value @val. For easy
- * implementation, @len is vetoed to be a multiple of 8
+ * Fill memory with given 8-byte value @a val. For easy
+ * implementation, @a n is vetoed to be a multiple of 8
  */
-void *memset64(void *s, uint64_t c, uint64_t n)
+void *memset64(void *s, uint64_t c, size_t n)
 {
   /* NOTE: volatile is required for -O3 option of GCC. */
 #if CONFIG_COMPILER_GCC
@@ -465,11 +364,6 @@ static void *__memcpy_forward(void *dst, const void *src, size_t len)
   return dst;
 }
 
-/*
- * We do tolerate overlapping regions here if src > dst. In
- * such case, (src - dst) must be bigger than movsq's block
- * copy factor: 8 bytes.
- */
 void *memcpy_forward(void *dst, const void *src, size_t len)
 {
   uintptr_t udst, usrc;
@@ -512,16 +406,6 @@ void *memcpy(void *restrict dst, const void *restrict src, size_t len)
 }
 
 
-/*
- * memcpy(), minus the checks
- *
- * Sanity checks overhead cannot be tolerated for HOT copying
- * paths like screen scrolling.
- *
- * This is also useful for code implicitly called by panic():
- * a sanity check failure there will lead to a stack overflow.
- */
-
 void *memcpy_forward_nocheck(void *dst, const void *src, size_t len)
 {
   return __memcpy_forward(dst, src, len);
@@ -535,14 +419,6 @@ void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t len)
 #else
 
 
-/**
- * The memcpy() function copies @c n bytes from memory area @c src to memory area @c dst.
- * The memory areas must not overlap.
- * @param dst is a pointer of @c void.
- * @param src is a pointer of @c void.
- * @param n is the number fo bytes copying @c src to @c dst.
- * @return Pointer to @c dst.
- */
 void *memcpy(void *dst, const void *src, size_t n)
 {
   char *d = (char *) dst;
@@ -559,16 +435,6 @@ void *memcpy(void *dst, const void *src, size_t n)
 #endif
 
 
-
-/**
- * The strtok() function breaks a string into a sequence of zero or more nonempty tokens.
- * On the first call to strtok() the string to be parsed should be specified in @c str.
- * In each subsequent call that should parse the same string, str must be NULL.
- * @param str is a pointer of @c char.
- * @param delim specifies a set of bytes that delimit the tokens in the parsed string.
- * The caller may specify different strings in delim in successive calls that parse the same string.
- * @return Pointer to @c dst.
- */
 char *strtok(char *str, const char *delim)
 {
   register char *spanp;

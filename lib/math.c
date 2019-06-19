@@ -209,6 +209,7 @@ double iexp(double x, int k)  /* $2^{k}x$ */
     w *= w;
     k >>= 1;
   }
+
   return x;
 }
 
@@ -241,6 +242,7 @@ double exp(double x)
   if (neg) {
     e = 1 / e;
   }
+
   return iexp(e, k);
 }
 
@@ -305,12 +307,14 @@ double pow(double x, double y)
   }
 
 #if 0
+
   /* FIXME: link error in aarch64. */
   if (x > 0) {
     return exp(y * log(x));
   }
+
 #endif
-  
+
   if (x != 0 || y <= 0) {
     printk("power: domain error\n");
   }

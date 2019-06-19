@@ -32,32 +32,12 @@ int alloc_thread_id(void)
   return th_id++;
 }
 
-int thread_tie_break(__unused struct thread_struct *x,
-                     __unused struct thread_struct *y)
-{
-#if CONFIG_TIE_BREAK_FIFO
-  /* always false */
-  return 0;
-#elif CONFIG_TIE_BREAK_ID
-  return x->id < y->id;
-#else
-#error "Unknown Thread Tie-Break Policy"
-#endif
-}
-
 
 void thread_main(__unused struct thread_struct *th)
 {
 }
 
 
-/**
- * The do_create_thread() function creates a thread.
- * @param func Function pointer to user defined function.
- * @param arg Argument of user defined function.
- * @param attr Attributes of thread.
- * @return Pointer to created thread or NULL if not created.
- */
 struct thread_struct *do_create_thread(void *(*func)(void *),
                                        void *arg,
                                        struct th_attr *attr)

@@ -38,6 +38,7 @@ asmlinkage int sys_get_exec_time(unsigned long *id_ptr,
   return 0;
 }
 
+
 asmlinkage int sys_mcube_write(char *buf)
 {
   return puts(buf);

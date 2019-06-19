@@ -89,42 +89,42 @@ double strtod(const char *nptr, char **endptr)
 
 #endif /* ENABLE_FPU */
 
-unsigned long strtoul(const char *cp, char **endp, int base)
+unsigned long strtoul(const char *nptr, char **endp, int base)
 {
   unsigned long result = 0, value;
-  char *ep = (char *) cp + strlen((char *) cp);
+  char *ep = (char *) nptr + strlen((char *) nptr);
 
   if (!base) {
     base = 10;
 
-    if (*cp == '0') {
+    if (*nptr == '0') {
       base = 8;
-      cp++;
+      nptr++;
 
-      if ((toupper(*cp) == 'X') && isxdigit(cp[1])) {
-        cp++;
+      if ((toupper(*nptr) == 'X') && isxdigit(nptr[1])) {
+        nptr++;
         base = 16;
       }
     }
   } else if (base == 16) {
-    if (cp[0] == '0' && toupper(cp[1]) == 'X') {
-      cp += 2;
+    if (nptr[0] == '0' && toupper(nptr[1]) == 'X') {
+      nptr += 2;
     }
   }
 
-  while (isxdigit(*cp)
-         && (value = isdigit(*cp) ? *cp - '0' : toupper(*cp) - 'A' + 10) <
+  while (isxdigit(*nptr)
+         && (value = isdigit(*nptr) ? *nptr - '0' : toupper(*nptr) - 'A' + 10) <
          (unsigned long) base) {
-    //    print("*cp = %c\n", *cp);
+    //    print("*nptr = %c\n", *nptr);
     result = result * base + value;
-    cp++;
+    nptr++;
   }
 
   if (endp) {
-    *endp = (char *) cp;
+    *endp = (char *) nptr;
   }
 
-  if (ep != cp) {
+  if (ep != nptr) {
     //    print("Error!\n");
     return ULONG_MAX;
   }
@@ -133,23 +133,23 @@ unsigned long strtoul(const char *cp, char **endp, int base)
   return result;
 }
 
-long strtol(const char *cp, char **endp, int base)
+long strtol(const char *nptr, char **endp, int base)
 {
-  if (*cp == '-') {
-    return -strtoul(cp + 1, endp, base);
+  if (*nptr == '-') {
+    return -strtoul(nptr + 1, endp, base);
   }
 
-  return strtoul(cp, endp, base);
+  return strtoul(nptr, endp, base);
 }
 
-static void xtoa(unsigned long val, char *buf, unsigned radix, int negative)
+static void xtoa(unsigned long val, char *str, unsigned base, int negative)
 {
   char *p;
   char *firstdig;
   char temp;
   unsigned digval;
 
-  p = buf;
+  p = str;
 
   if (negative) {
     /* Negative, so output '-' and negate */
@@ -161,8 +161,8 @@ static void xtoa(unsigned long val, char *buf, unsigned radix, int negative)
   firstdig = p;
 
   do {
-    digval = (unsigned)(val % radix);
-    val /= radix;
+    digval = (unsigned)(val % base);
+    val /= base;
 
     /* Convert to ascii and store */
     if (digval > 9) {
@@ -186,38 +186,38 @@ static void xtoa(unsigned long val, char *buf, unsigned radix, int negative)
   } while (firstdig < p);
 }
 
-char *itoa(int val, char *buf, int radix)
+char *itoa(int val, char *str, int base)
 {
-  if (radix == 10 && val < 0) {
-    xtoa((unsigned long) val, buf, radix, 1);
+  if (base == 10 && val < 0) {
+    xtoa((unsigned long) val, str, base, 1);
   } else {
-    xtoa((unsigned long)(unsigned int) val, buf, radix, 0);
+    xtoa((unsigned long) val, str, base, 0);
   }
 
-  return buf;
+  return str;
 }
 
-char *ltoa(long val, char *buf, int radix)
+char *ltoa(long val, char *str, int base)
 {
-  xtoa((unsigned long) val, buf, radix, (radix == 10 && val < 0));
-  return buf;
+  xtoa((unsigned long) val, str, base, (base == 10 && val < 0));
+  return str;
 }
 
-char *ultoa(unsigned long val, char *buf, int radix)
+char *ultoa(unsigned long val, char *str, int base)
 {
-  xtoa(val, buf, radix, 0);
-  return buf;
+  xtoa(val, str, base, 0);
+  return str;
 }
 
 
-void qsort(void *base, size_t num, size_t size, sortcmp cmp)
+void qsort(void *base, size_t nmemb, size_t size, sortcmp cmp)
 {
   uint8_t pivot[size], tmp[size]; // use C99 VLAs instead of alloca.
 
   uint8_t *b = (uint8_t *) base;
 
   for (;;) {
-    if (num < 2) {
+    if (nmemb < 2) {
       return;
     }
 
@@ -226,38 +226,36 @@ void qsort(void *base, size_t num, size_t size, sortcmp cmp)
 
     // Partition.
     size_t part;
-    {
-      // Work from outwards in (C.A.R. Hoare version of algorithm).
-      uint8_t *i = b - (size * 1);
-      uint8_t *j = b + (size * num);
+    // Work from outwards in (C.A.R. Hoare version of algorithm).
+    uint8_t *i = b - (size * 1);
+    uint8_t *j = b + (size * nmemb);
 
-      for (;;) {
-        do {
-          i += size;
-        } while (cmp(i, pivot) < 0);
+    for (;;) {
+      do {
+        i += size;
+      } while (cmp(i, pivot) < 0);
 
-        do {
-          j -= size;
-        } while (cmp(j, pivot) > 0);
+      do {
+        j -= size;
+      } while (cmp(j, pivot) > 0);
 
-        if (i >= j) {
-          part = (j - b) / size;
-          break;
-        }
-
-        // Swap elements i and j.
-        memcpy(tmp, i, size);
-        memcpy(i, j, size);
-        memcpy(j, tmp, size);
+      if (i >= j) {
+        part = (j - b) / size;
+        break;
       }
+
+      // Swap elements i and j.
+      memcpy(tmp, i, size);
+      memcpy(i, j, size);
+      memcpy(j, tmp, size);
     }
 
     // Recursively sort the left side of the partition.
     qsort(b, part + 1, size, cmp);
 
     // For the right side of the partition, do tail recursion.
-    b   += (part + 1) * size;
-    num -= part + 1;
+    b += (part + 1) * size;
+    nmemb -= part + 1;
   }
 }
 

@@ -68,15 +68,15 @@ CFLAGS += -fPIC
 # After using -nostdinc, we add compiler's specific includes
 # back (stdarg.h, etc) using the -iwithprefix flag.
 #
-CDIALECT_FLAGS =			\
-  -ffreestanding			\
-  -fno-stack-protector			\
-  -fno-builtin				\
+CDIALECT_FLAGS = \
+  -ffreestanding \
+  -fno-stack-protector \
+  -fno-builtin \
   -iwithprefix include
 
 ifneq ($(ARCH_NAME), sim)
 CDIALECT_FLAGS += \
-	-fno-pie		\
+	-fno-pie \
 	-nostdlib	\
 
 #CDIALECT_FLAGS += \
@@ -114,46 +114,46 @@ COPT_FLAGS =	\
 #
 # Options are printed in GCC HTML documentation order.
 #
-CWARN_FLAGS =				\
-  -Wall					\
+CWARN_FLAGS = \
+  -Wall \
 
-CWARN_FLAGS += -Wextra				\
-		-Wchar-subscripts			\
-  -Wformat=2				\
-  -Wmissing-include-dirs		\
-  -Wparentheses				\
-  -Wtrigraphs				\
-  -Wunused				\
-  -Wstrict-aliasing=2			\
-  -Wpointer-arith			\
-  -Wwrite-strings			\
-  -Waddress				\
-  -Wstrict-prototypes			\
-  -Wmissing-prototypes			\
-  -Wmissing-declarations		\
-  -Wredundant-decls			\
-  -Wdisabled-optimization		\
-  -Wno-type-limits			\
+CWARN_FLAGS += -Wextra	\
+		-Wchar-subscripts	\
+  -Wformat=2	\
+  -Wmissing-include-dirs	\
+  -Wparentheses	\
+  -Wtrigraphs \
+  -Wunused \
+  -Wstrict-aliasing=2 \
+  -Wpointer-arith \
+  -Wwrite-strings \
+  -Waddress \
+  -Wstrict-prototypes \
+  -Wmissing-prototypes \
+  -Wmissing-declarations \
+  -Wredundant-decls \
+  -Wdisabled-optimization \
+  -Wno-type-limits \
   -Wno-missing-field-initializers \
-  -Wundef				\
+  -Wundef \
 		-Wno-int-to-pointer-cast \
 
-#  -Wmissing-noreturn			\
-#  -Wvla					\
-#  -Wcast-qual				\
+#  -Wmissing-noreturn \
+#  -Wvla \
+#  -Wcast-qual \
 
 ifeq ($(CC), gcc)
-CWARN_FLAGS +=
-  -Wlogical-op				\
-  -Wnormalized=nfc			\
+CWARN_FLAGS += \
+  -Wlogical-op \
+  -Wnormalized=nfc \
 
 endif
 
 
-CFLAGS +=				\
-  $(CMACH_FLAGS)			\
-  $(CDIALECT_FLAGS)			\
-  $(COPT_FLAGS)				\
+CFLAGS += \
+  $(CMACH_FLAGS) \
+  $(CDIALECT_FLAGS) \
+  $(COPT_FLAGS) \
   $(CWARN_FLAGS)
 
 
