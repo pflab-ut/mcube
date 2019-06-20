@@ -11,42 +11,91 @@
 
 #if !CONFIG_ARCH_SIM
 
-/** 8-bit integer data type. */
+/**
+ * @typedef int8_t
+ * @brief 8-bit integer data type.
+ */
 typedef signed char int8_t;
-/** 16-bit integer data type. */
+
+/**
+ * @typedef int16_t
+ * @brief 16-bit integer data type.
+ */
 typedef signed short int16_t;
-/** 32-bit integer data type. */
+
+/**
+ * @typedef int32_t
+ * @brief 32-bit integer data type.
+ */
 typedef signed int int32_t;
-/** 64-bit integer data type. */
+
+/**
+ * @typedef int64_t
+ * @brief 64-bit integer data type.
+ */
 typedef signed long long int64_t;
 
-/** 8-bit unsigned integer data type. */
+/**
+ * @typedef uint8_t
+ * @brief 8-bit unsigned integer data type.
+ */
 typedef unsigned char uint8_t;
-/** 16-bit unsigned integer data type. */
+
+/**
+ * @typedef uint16_t
+ * @brief 16-bit unsigned integer data type.
+ */
 typedef unsigned short uint16_t;
-/** 32-bit unsigned integer data type. */
+
+/**
+ * @typedef uint32_t
+ * @brief 32-bit unsigned integer data type.
+ */
 typedef unsigned int uint32_t;
-/** 64-bit unsigned integer data type. */
+
+/**
+ * @typedef uint64_t
+ * @brief 64-bit unsigned integer data type.
+ */
 typedef unsigned long long uint64_t;
 
-/** Unsigned integer data type. */
+/**
+ * @typedef size_t
+ * @brief Unsigned integer data type.
+ */
 typedef unsigned long size_t;
-/** Integer data type. */
+
+/**
+ * @typedef ssize_t
+ * @brief Integer data type.
+ */
 typedef long ssize_t;
 
-/** 32-bit unsigned integer data type. */
+/**
+ * @typedef uint
+ * @brief 32-bit unsigned integer data type.
+ */
 typedef uint32_t uint;
 
-/** Interger pointer type. */
+/**
+ * @typedef intptr_t
+ * @brief Interger pointer type.
+ */
 typedef long int intptr_t;
 
-/** Unsigned interger pointer type. */
+/**
+ * @typedef uintptr_t
+ * @brief Unsigned interger pointer type.
+ */
 typedef unsigned long int uintptr_t;
 
+/**
+ * @typedef clock_t
+ * @param Clock type.
+ */
 typedef uint64_t clock_t;
 
 #endif /* !CONFIG_ARCH_SIM */
-
 
 
 #endif /* !__ASSEMBLY__ */

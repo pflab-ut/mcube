@@ -129,11 +129,6 @@ static struct unrolled_node *__get_node(struct unrolled_head *head, uint key,
  * The Public API starts here:
  */
 
-/*
- * unrolled_init - Initialize the unrolled list
- * @head        : Unrolled linked list head
- * @array_len   : Number of cells in each node's array
- */
 void unrolled_init(struct unrolled_head *head, uint array_len)
 {
   head->node = NULL;
@@ -157,17 +152,6 @@ void unrolled_free(struct unrolled_head *head)
   }
 }
 
-/*
- * unrolled_insert - Insert a given value in the mapping structure
- * @head        : Unrolled linked list head
- * @val         : value to be inserted; cannot be NULL
- * Return value : A "key" for the inserted value, forming a <key,val> pair.
- *
- * NOTE! The returned mapping structure key starts from 0 and move upwards.
- * Any deleted key [usually as a result of close()] is directly re-used
- * when inserting new values, avoiding overflows in the keys space as much
- * as possible.
- */
 uint unrolled_insert(struct unrolled_head *head, void *val)
 {
   struct unrolled_node *node, *prev;
@@ -197,12 +181,6 @@ uint unrolled_insert(struct unrolled_head *head, void *val)
   return node->num * node->array_len;
 }
 
-/*
- * unrolled_lookup - Find the value attached with given key
- * @head        : Unrolled linked list head
- * @key         : Key used to search the mapping structure
- * Return value : Desired value, or NULL if key was invalid
- */
 void *unrolled_lookup(struct unrolled_head *head, uint key)
 {
   struct unrolled_node *node;
@@ -217,9 +195,6 @@ void *unrolled_lookup(struct unrolled_head *head, uint key)
   return node->array[array_idx];
 }
 
-/*
- * unrolled_remove_key - Remove the <key,val> pair identified by @key
- */
 void unrolled_remove_key(struct unrolled_head *head, uint key)
 {
   struct unrolled_node *node;
