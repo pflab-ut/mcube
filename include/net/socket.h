@@ -185,7 +185,11 @@ enum socket_type {
   SOCK_NONBLOCK = 04000
 };
 
-typedef enum socket_type socket_type;
+/**
+ * @typedef socket_type_t
+ * @brief Typedef of @enum socket_type.
+ */
+typedef enum socket_type socket_type_t;
 
 /* Protocol families.  */
 
@@ -997,7 +1001,7 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
  * @param sockfd Socket descriptor.
  * @param addr Address.
  * @param addrlen Address length.
- * @retrun On success, zero is returned.
+ * @return On success, zero is returned.
  * On error, -1 is returned, and errno is set appropriately.
  */
 int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
@@ -1010,7 +1014,7 @@ int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
  * @param sockfd Socket descriptor.
  * @param addr Address.
  * @param addrlen Address length.
- * @retrun If the connection or binding succeeds, zero is returned.
+ * @return If the connection or binding succeeds, zero is returned.
  * On error, -1 is returned, and errno is set appropriately.
  */
 int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);

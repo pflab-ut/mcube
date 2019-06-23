@@ -62,7 +62,11 @@ typedef struct sem_struct sem_struct;
       }
 
 
-#define  INIT_SEM_MUTEX  INIT_COUNT_SEM(1)
+/**
+ * @def INIT_SEM_MUTEX
+ * @brief initialize semaphore mutex.
+ */
+#define INIT_SEM_MUTEX INIT_COUNT_SEM(1)
 
 /**
  * @fn static inline bool sem_is_down(struct sem_struct *sem)

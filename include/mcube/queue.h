@@ -46,6 +46,10 @@ struct bheap_node {
   //  struct bheap_node **ref;
 };
 
+/**
+ * @typedef bheap_node
+ * @brief Typedef of @struct bheap_node.
+ */
 typedef struct bheap_node bheap_node;
 
 /**
@@ -119,7 +123,7 @@ extern rt_runqueue run_tq[NR_CPUS];
 void enqueue_rq(struct rt_runqueue *rq, struct thread_struct *th);
 
 /**
- * @fn void enqueue_rq(struct rt_runqueue *rq, struct thread_struct *th)
+ * @fn void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
  * @brief enqueue queue-dependent runqueue.
  *
  * @param rq Runqueue.

@@ -375,14 +375,7 @@ void apic_broadcast_ipi(int delivery_mode, int vector)
   __apic_send_ipi(0, delivery_mode, vector, IRQ_BROADCAST);
 }
 
-/*
- * Poll the delivery status bit till the latest IPI is acked
- * by the destination core, or timeout. As advised by Intel,
- * this should be checked after sending each IPI.
- *
- * Return 'true' in case of delivery success.
- * FIXME: fine-grained timeouts using micro-seconds.
- */
+
 bool apic_ipi_acked(void)
 {
   union apic_icr icr = { .value = 0 };

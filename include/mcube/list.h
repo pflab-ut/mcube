@@ -195,7 +195,7 @@ static inline void list_add_tail(struct list_node *node, struct list_node *new)
  * @param node Node.
  * @param struc Structure.
  * @param spare_struc Spare structure.
- * @param Name Name.
+ * @param name Name.
  */
 #define list_for_each_safe(node, struc, spare_struc, name)              \
   for (struc = list_entry((node)->next, typeof(*struc), name),          \

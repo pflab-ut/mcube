@@ -13,7 +13,7 @@
 #include <x86_64/idt.h>
 #include <x86_64/atomic.h>
 #include <x86_64/spinlock.h>
-#include <x86_64/vm.h>
+#include <x86_64/vm_map.h>
 
 #include <x86_64/apic.h>
 #include <x86_64/cpu.h>

@@ -6,6 +6,10 @@
 #ifndef __MCUBE_MCUBE_THREAD_H__
 #define __MCUBE_MCUBE_THREAD_H__
 
+/**
+ * @def THREAD_SIZE
+ * @brief Alias to PAGE_SIZE.
+ */
 #define THREAD_SIZE PAGE_SIZE
 
 
@@ -498,12 +502,14 @@ extern unsigned char user_stack[NR_THREADS][USER_STACK_SIZE];
 #define USER_THREAD_STACK_ADDR(id) ((unsigned long) &user_stack[id][USER_STACK_SIZE])
 
 /**
- * @fn int thread_tie_break(struct thread_struct *x, struct thread_struct *y)
+ * @fn static inline bool thread_tie_break(__unused struct thread_struct *x,
+ *                                         __unused struct thread_struct *y)
  * @brief Is thread tie-break?
  *
  * @param x Thread 1.
  * @param y Thread 2.
- * @return
+ * @return True if @c CONFIG_TIE_BREAK_ID is true and
+ * ID of @a x is smaller than that of @a y.
  */
 static inline bool thread_tie_break(__unused struct thread_struct *x,
                                     __unused struct thread_struct *y)
@@ -522,7 +528,7 @@ static inline bool thread_tie_break(__unused struct thread_struct *x,
  *                                           struct thread_struct *y)
  * @param x Thread 1.
  * @param y Thread 2.
- * @return True if @a x's priority is lower than @a y's one.
+ * @return True if priority of @a x is lower than that of @a y.
  */
 static inline bool thread_is_high_prio(struct thread_struct *x,
                                        struct thread_struct *y)

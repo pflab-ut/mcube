@@ -120,7 +120,7 @@ int printk(const char *fmt, ...);
 int sscan(const char *str, const char *fmt, ...);
 
 /**
- * @fn int vsnscan(const char *buf, const char *fmt, va_list args)
+ * @fn int vsnscan(const char *str, const char *fmt, va_list args)
  * @brief scans the input from @a str.
  *
  * @param str Input string.
@@ -140,7 +140,7 @@ int vsnscan(const char *str, const char *fmt, va_list args);
 int print(const char *fmt, ...);
 
 /**
- * @fn int vsnprint(char *buf, int size, const char *fmt, va_list args)
+ * @fn int vsnprint(char *str, int size, const char *fmt, va_list args)
  * @brief print characters.
  *
  * @param str Input string.
@@ -208,7 +208,16 @@ __noreturn void format_panic(const char *str);
 
 #if !CONFIG_ARCH_SIM
 
-
+/**
+ * @fn int sscanf(const char *str, const char *fmt, ...)
+ * @brief scans the input from @a str.
+ *
+ * @param str Input string.
+ * @param fmt Format.
+ * @return On success, these functions return the number of input items successfully
+ * matched and assigned; this can be fewer than provided for, or even zero,
+ * in the event of an early matching failure.
+ */
 int sscanf(const char *str, const char *fmt, ...);
 
 /**
@@ -221,7 +230,7 @@ int sscanf(const char *str, const char *fmt, ...);
 int printf(const char *fmt, ...);
 
 /**
- * @fn int sprintf(char *str, const char *format, ...)
+ * @fn int sprintf(char *str, const char *fmt, ...)
  * @brief write to the character to @a str.
  *
  * @param str String.
@@ -231,7 +240,7 @@ int printf(const char *fmt, ...);
 int sprintf(char *str, const char *fmt, ...);
 
 /**
- * @fn void perror(const char *string)
+ * @fn void perror(const char *str)
  * @brief print error.
  *
  * @param str string.

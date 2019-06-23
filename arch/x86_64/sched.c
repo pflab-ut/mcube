@@ -313,10 +313,10 @@ struct process *sched_tick(void)
   return get_current_process();
 }
 
-void schedulify_this_code_path(enum cpu_type t)
+void schedulify_this_code_path(enum cpu_type type)
 {
   /* 'Current' is a per-CPU structure */
-  percpu_area_init(t);
+  percpu_area_init(type);
 
   /*
    * We tell GCC to cache 'current' as much as possible since

@@ -6,6 +6,10 @@
 #ifndef __MCUBE_MCUBE_C_HEADER_H__
 #define __MCUBE_MCUBE_C_HEADER_H__
 
+/**
+ * @def _GNU_SOURCE
+ * @brief Definition for GNU source.
+ */
 #define _GNU_SOURCE
 
 #ifndef __ASSEMBLY__

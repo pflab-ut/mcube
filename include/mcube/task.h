@@ -95,8 +95,16 @@ static inline void preempt_enable(void)
 }
 
 
+/**
+ * @def INIT_TASK_ID
+ * @brief initialize task ID.
+ */
 #define INIT_TASK_ID 1
 
+/**
+ * @def INIT_TASK
+ * @brief initialize task.
+ */
 #define INIT_TASK {                             \
     .id    = INIT_TASK_ID,                      \
     .top_thread  = NULL,                        \
@@ -107,19 +115,60 @@ static inline void preempt_enable(void)
   }
 
 
+/**
+ * @fn void add_thread_to_task(struct thread_struct *th)
+ * @brief add thread to task.
+ *
+ * @param th Thread.
+ */
+void add_thread_to_task(struct thread_struct *th);
 
-void add_thread_to_task(struct thread_struct *);
-void delete_thread_from_task(struct thread_struct *);
+/**
+ * @fn void delete_thread_from_task(struct thread_struct *th)
+ * @brief delete thread from task.
+ *
+ * @param th Thread.
+ */
+void delete_thread_from_task(struct thread_struct *th);
+
+/**
+ * @fn int exit_task(void)
+ * @brief exit task.
+ *
+ * @return Zero if success.
+ */
 int exit_task(void);
 
+/**
+ * @fn int move_to_user_level(void)
+ * @brief move to user level.
+ *
+ * @return Zero if success.
+ */
 int move_to_user_level(void);
 
+/**
+ * @fn struct task_struct *do_create_task(struct th_attr *attr)
+ * @brief create task.
+ *
+ * @param attr Thread attribute.
+ * @return Pointer to task if success, and NULL if failure.
+ */
 struct task_struct *do_create_task(struct th_attr *attr);
 
+/**
+ * @fn int copy_process(unsigned long func, unsigned long arg)
+ * @brief copy process.
+ *
+ * @param func Address of function.
+ * @param arg Argument.
+ * @return Zero if success.
+ */
 int copy_process(unsigned long func, unsigned long arg);
 
 /**
- * @fn copy_arch_process
+ * @fn void copy_arch_process(struct task_struct *p, unsigned long func,
+ *                            unsigned long arg)
  * @brief Copy architecture dependent values in process
  *
  * @param p Pointer to task.

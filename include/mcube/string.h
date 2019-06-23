@@ -86,7 +86,7 @@ void *memcpy(void *dst, const void *src, size_t n);
  */
 
 /**
- * @fn void *memcpy_forward(void *dst, const void *src, size_t len)
+ * @fn void *memcpy_forward(void *dst, const void *src, size_t n)
  * @brief copy @a n bytes from memory area @a src to memory area @a dst.
  * We do tolerate overlapping regions here if @a src > @a dst. In
  * such case, (@a src - @a dst) must be bigger than movsq's block
@@ -97,10 +97,10 @@ void *memcpy(void *dst, const void *src, size_t n);
  * @param n is the number fo bytes copying @a src to @a dst.
  * @return Pointer to @a dst.
  */
-void *memcpy_forward(void *dst, const void *src, size_t len);
+void *memcpy_forward(void *dst, const void *src, size_t n);
 
 /**
- * @fn void *memcpy_forward_nocheck(void *dst, const void *src, size_t len)
+ * @fn void *memcpy_forward_nocheck(void *dst, const void *src, size_t n)
  * @brief copy @a n bytes from memory area @a src to memory area @a dst without check.
  * We do tolerate overlapping regions here if @a src > @a dst. In
  * such case, (@a src - @a dst) must be bigger than movsq's block
@@ -111,10 +111,10 @@ void *memcpy_forward(void *dst, const void *src, size_t len);
  * @param n is the number fo bytes copying @a src to @a dst.
  * @return Pointer to @a dst.
  */
-void *memcpy_forward_nocheck(void *dst, const void *src, size_t len);
+void *memcpy_forward_nocheck(void *dst, const void *src, size_t n);
 
 /**
- * @fn void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t len)
+ * @fn void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t n)
  * @brief copy @a n bytes from memory area @a src to memory area @a dst without check.
  * We do tolerate overlapping regions here if @a src > @a dst. In
  * such case, (@a src - @a dst) must be bigger than movsq's block
@@ -125,7 +125,7 @@ void *memcpy_forward_nocheck(void *dst, const void *src, size_t len);
  * @param n is the number fo bytes copying @a src to @a dst.
  * @return Pointer to @a dst.
  */
-void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t len);
+void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t n);
 
 
 /**
@@ -152,8 +152,8 @@ void *memmove(void *dst, const void *src, size_t n);
 size_t strlen(const char *s);
 
 /**
- * @fn size_t strnlen(const char *str, int n)
- * @brief returns the number of characters in the string pointed to by @a s,
+ * @fn size_t strnlen(const char *s, size_t n)
+ * @brief return the number of characters in the string pointed to by @a s,
  * excluding the terminating null byte ('\0'), but at most @a n.
  * In doing this, strnlen() looks only at the first n characters in the string
  * pointed to by @a s and never beyond @a s + @a n.
@@ -162,11 +162,11 @@ size_t strlen(const char *s);
  * @param n Maximum length.
  * @return Number of bytes in the string @a s.
  */
-size_t strnlen(const char *str, size_t n);
+size_t strnlen(const char *s, size_t n);
 
 
 /**
- * @fn int strcmp(const char *s, const char *t)
+ * @fn int strcmp(const char *s1, const char *s2)
  * @brief compare the two strings @a s1 and @a s2.
  *
  * @param s1 is a pointer to @c char.
@@ -175,7 +175,7 @@ size_t strnlen(const char *str, size_t n);
  * if @a s1 (or the first @a n bytes thereof) is found, respectively,
  * to be less than, to match, or be greater than @a s2.
  */
-int strcmp(const char *s, const char *t);
+int strcmp(const char *s1, const char *s2);
 
 /**
  * @fn int strncmp(const char *s1, const char *s2, size_t n)
@@ -192,7 +192,7 @@ int strcmp(const char *s, const char *t);
 int strncmp(const char *s1, const char *s2, size_t n);
 
 /**
- * @fn char *strcpy(char *s, const char *t)
+ * @fn char *strcpy(char *dst, const char *src)
  * @brief copy the string pointed to by @a src, including the terminating null byte
  * ('\0'), to the buffer pointed to by @a dst.
  * The strings may not overlap, and the destination string @a dst must be large enough
@@ -205,7 +205,7 @@ int strncmp(const char *s1, const char *s2, size_t n);
 char *strcpy(char *s, const char *t);
 
 /**
- * @fn char *strncpy(char *s, const char *t, size_t n)
+ * @fn char *strncpy(char *dst, const char *src, size_t n)
  * @brief The strncpy() function is similar to the strcpy() function, except that
  * at most @a n bytes of @a src are copied.
  * @warning If there is no null byte among the first @a n bytes of @a src,
@@ -216,10 +216,10 @@ char *strcpy(char *s, const char *t);
  * @param n Number of bytes copying @a src to @a dst.
  * @return Pointer to the destination string @a dst.
  */
-char *strncpy(char *s, const char *t, size_t n);
+char *strncpy(char *dst, const char *src, size_t n);
 
 /**
- * @fn char *strcat(char *s, const char *t)
+ * @fn char *strcat(char *dst, const char *src)
  * @brief The strcat() function appends the @a src string to the @a dst string,
  * overwriting the terminating null byte ('\0') at the end of @a dst,
  * and then adds a terminating null byte.
@@ -233,7 +233,7 @@ char *strncpy(char *s, const char *t, size_t n);
 char *strcat(char *dst, const char *src);
 
 /**
- * @fn char *strncat(char *s, const char *t, size_t n)
+ * @fn char *strncat(char *dst, const char *src, size_t n)
  * @brief The strncat() function is similar to the strcat() function,
  * except that it will use at most n bytes from src; and
  * src does not need to be null-terminated if it contains @a n or more bytes.

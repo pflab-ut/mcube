@@ -31,12 +31,46 @@ struct buffer_dumper {
 };
 
 
+/**
+ * @var serial_char_dumper
+ * @brief Serial character dumper.
+ */
 extern struct buffer_dumper serial_char_dumper;
+
+/**
+ * @var vga_hex_dumper
+ * @brief VGA hex dumper.
+ */
 extern struct buffer_dumper vga_hex_dumper;
+
+/**
+ * @var vga_char_dumper
+ * @brief VGA character dumper.
+ */
 extern struct buffer_dumper vga_char_dumper;
+
+/**
+ * @var vga_null_dumper
+ * @brief VGA NULL dumper.
+ */
 extern struct buffer_dumper vga_null_dumper;
+
+/**
+ * @var serial_hex_dumper
+ * @brief Serial hex dumper.
+ */
 extern struct buffer_dumper serial_hex_dumper;
+
+/**
+ * @var serial_null_dumper
+ * @brief Serial NULL dumper.
+ */
 extern struct buffer_dumper serial_null_dumper;
+
+/**
+ * @var null_null_dumper
+ * @brief NULL NULL dumper.
+ */
 extern struct buffer_dumper null_null_dumper;
 
 /**
@@ -64,7 +98,8 @@ void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len);
 void buf_char_dump(struct buffer_dumper *dumper, void *given_buf, uint len);
 
 /**
- * @fn void buf_null_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
+ * @fn void buf_null_dump(__unused struct buffer_dumper *dumper,
+ *                        __unused void *given_buf, __unused uint len)
  * @brief Dump buffer by null.
  * @param dumper Dump buffer.
  * @param given_buf Given buffer.

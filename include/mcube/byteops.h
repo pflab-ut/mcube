@@ -81,7 +81,7 @@
  * @def unpack16(ui16, ui8h, ui8l)
  * @brief unpack two 8-bits data from 16-bits data.
  *
- * @param ui32 16-bits source data.
+ * @param ui16 16-bits source data.
  * @param ui8h 8-bits bits[15-8] data.
  * @param ui8l 8-bits bits[7-0] data.
  */

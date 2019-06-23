@@ -112,6 +112,9 @@ typedef struct footer footer_t;
  * @brief Bin information.
  */
 struct bin {
+  /**
+   * Head.
+   */
   heap_node_t *head;
 };
 
@@ -126,8 +129,19 @@ typedef struct bin bin_t;
  * @brief Heap information.
  */
 struct heap {
+  /**
+   * Start address.
+   */
   long start;
+
+  /**
+   * End address.
+   */
   long end;
+
+  /**
+   * Array of bins.
+   */
   bin_t bins[BIN_COUNT][sizeof(bin_t)];
 };
 
@@ -159,7 +173,7 @@ void init_heap(heap_t *heap, long start);
  * if neccesary and return the start of the chunk.
  *
  * @param heap Heap table.
- * @parma size Size.
+ * @param size Size.
  */
 void *heap_alloc(heap_t *heap, size_t size);
 
@@ -176,7 +190,7 @@ void *heap_alloc(heap_t *heap, size_t size);
 void heap_free(heap_t *heap, void *p);
 
 /**
- * @fn uint expand(heap_t *heap, size_t sz)
+ * @fn uint expand(heap_t *heap, size_t size)
  * @brief expand heap.
  *
  * @param heap Heap table.
@@ -213,7 +227,7 @@ uint get_bin_index(size_t size);
 void create_foot(heap_node_t *head);
 
 /**
- * @fn footer_t *get_foot(heap_node_t *head)
+ * @fn footer_t *get_foot(heap_node_t *heap_node)
  * @brief get the footer pointer given heap node.
  *
  * @param heap_node Heap node.

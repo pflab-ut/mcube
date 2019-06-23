@@ -28,23 +28,23 @@ void add_heap_node(bin_t *bin, heap_node_t *heap_node);
 void remove_heap_node(bin_t *bin, heap_node_t *heap_node);
 
 /**
- * @fn heap_node_t *get_best_fit(bin_t *list, size_t size)
+ * @fn heap_node_t *get_best_fit(bin_t *bin, size_t size)
  * @brief get best-fit bin.
  *
- * @param list Bin list.
+ * @param bin Bin.
  * @param size Size.
  * @return Node.
  */
-heap_node_t *get_best_fit(bin_t *list, size_t size);
+heap_node_t *get_best_fit(bin_t *bin, size_t size);
 
 /**
- * @fn heap_node_t *get_last_heap_node(bin_t *list)
+ * @fn heap_node_t *get_last_heap_node(bin_t *bin)
  * @brief get last heap node.
  *
- * @param list Bin list.
+ * @param bin Bin.
  * @return Node.
  */
-heap_node_t *get_last_heap_node(bin_t *list);
+heap_node_t *get_last_heap_node(bin_t *bin);
 
 
 #endif /* !__ASSEMBLY__ */

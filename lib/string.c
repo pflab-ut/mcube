@@ -59,22 +59,22 @@ size_t strlen(const char *s)
   return num;
 }
 
-size_t strnlen(const char *str, size_t maxlen)
+size_t strnlen(const char *s, size_t n)
 {
   const char *tmp;
 
-  tmp = str;
+  tmp = s;
 
-  while (maxlen) {
+  while (n) {
     if (*tmp == '\0') {
       break;
     }
 
     tmp++;
-    maxlen--;
+    n--;
   }
 
-  return tmp - str;
+  return tmp - s;
 }
 
 

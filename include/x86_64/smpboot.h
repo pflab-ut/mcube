@@ -48,18 +48,38 @@ extern const char trampoline_end[];
  * @brief Parameters to be sent to other AP cores.
  */
 struct smpboot_params {
+  /**
+   * CR3.
+   */
   uintptr_t cr3;
+
+  /**
+   * Interrupt descriptor table.
+   */
   struct idt_descriptor idtr;
+
+  /**
+   * Global descriptor table.
+   */
   struct gdt_descriptor gdtr;
 
   /* Unique values for each core */
-  char *stack_ptr;
-  void *percpu_area_ptr;
-} __packed;
 
-/*
- * Validate the manually calculated parameters offsets
- * we're sending to the assembly trampoline code
+  /**
+   * Stack pointer.
+   */
+  char *stack_ptr;
+
+  /**
+   * Per CPU area pointer.
+   */
+  void *percpu_area_ptr;
+} __packed /** packed. */ ;
+
+/**
+ * @fn static inline void smpboot_params_validate_offsets(void)
+ * @brief validate the manually calculated parameters offsets
+ * we're sending to the assembly trampoline code.
  */
 static inline void smpboot_params_validate_offsets(void)
 {
@@ -99,13 +119,40 @@ static inline void smpboot_params_validate_offsets(void)
 }
 
 
-#define TRAMPOLINE_START  VIRTUAL(SMPBOOT_START)
-#define TRAMPOLINE_PARAMS  VIRTUAL(SMPBOOT_PARAMS)
+/**
+ * @def TRAMPOLINE_START
+ * @brief Trampoine start.
+ */
+#define TRAMPOLINE_START VIRTUAL(SMPBOOT_START)
 
-void __noreturn secondary_start(void); /* Silence-out GCC */
+/**
+ * @def TRAMPOLINE_PARAMS
+ * @brief Trampoline parameters.
+ */
+#define TRAMPOLINE_PARAMS VIRTUAL(SMPBOOT_PARAMS)
+
+/**
+ * @fn __noreturn void secondary_start(void)
+ * @brief Secondary start.
+ */
+__noreturn void secondary_start(void);
+
+/**
+ * @fn int smpboot_get_nr_alive_cpus(void)
+ * @brief get Number of alive CPUs.
+ *
+ * @return Number of alive CPUs.
+ */
 int smpboot_get_nr_alive_cpus(void);
+
+/**
+ * @fn void smpboot_init(void)
+ * @brief initiazlize SMP boot.
+ * NOTE! This function is called by panic();
+ * it should not include any asserts or panics.
+ */
 void smpboot_init(void);
-void smpboot_trigger_secondary_cores_testcases(void);
+
 
 #endif /* !__ASSEMBLY__ */
 

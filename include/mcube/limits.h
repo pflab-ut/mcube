@@ -147,7 +147,7 @@
 #define LLONG_MIN (-LLONG_MAX - 1LL)
 
 /**
- * @def ULONG_MAX
+ * @def ULLONG_MAX
  * @brief Unsigned long long maximum.
  */
 #define ULLONG_MAX 18446744073709551615ULL

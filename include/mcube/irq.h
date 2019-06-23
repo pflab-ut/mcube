@@ -77,7 +77,7 @@ union rflags {
      * Must be zero.
      */
     uint32_t __reserved0_4;
-  } __packed;
+  } __packed /** packed. */;
 };
 
 /**

@@ -92,7 +92,7 @@ unsigned long call_sys_get_exec_time(void);
  * @fn int call_sys_write(char *buf)
  * @brief call sys_write().
  *
- * @zero Zero if success.
+ * @return Zero if success.
  */
 int call_sys_write(char *buf);
 
@@ -125,7 +125,7 @@ int call_sys_move_to_kernel_level(void);
  * @fn asmlinkage int sys_sched(void)
  * @brief call scheduler.
  *
- * @param Zero if success.
+ * @return Zero if success.
  */
 asmlinkage int sys_sched(void);
 
@@ -152,7 +152,10 @@ asmlinkage int sys_get_exec_time(unsigned long *id_ptr,
 
 /**
  * @fn asmlinkage int sys_mcube_write(char *buf)
- * @brief
+ * @brief write buffer to output.
+ *
+ * @param buf Buffer.
+ * @return Number of characters written.
  */
 asmlinkage int sys_mcube_write(char *buf);
 

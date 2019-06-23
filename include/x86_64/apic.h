@@ -16,19 +16,57 @@
 
 
 /*
- * APIC Base Address MSR
+ * APIC Base Address Model Specific Register (MSR).
  */
-#define MSR_APICBASE    0x0000001b
-#define MSR_APICBASE_ENABLE  (1UL << 11)
-#define MSR_APICBASE_BSC  (1UL << 8)
-#define MSR_APICBASE_ADDRMASK  0x000ffffffffff000ULL
 
+/**
+ * @def MSR_APICBASE
+ * @brief MSR for APIC base.
+ */
+#define MSR_APICBASE 0x0000001b
+
+/* 63-52: reserved. */
+
+/**
+ * @def MSR_APICBASE_ADDRMASK
+ * @brief MSR for address mask.
+ */
+#define MSR_APICBASE_ADDRMASK 0x000ffffffffff000ULL
+
+/**
+ * @def MSR_APICBASE_ENABLE
+ * @brief MSR for enabling APIC base.
+ */
+#define MSR_APICBASE_ENABLE (1UL << 11)
+
+/* 10-9: reserved. */
+
+/**
+ * @def MSR_APICBASE_BSP
+ * @brief MSR for boot strap processor.
+ */
+#define MSR_APICBASE_BSP (1UL << 8)
+
+/* 7-0: reserved. */
+
+/**
+ * @fn static inline uint64_t msr_apicbase_getaddr(void)
+ * @brief get MSR address.
+ *
+ * @return MSR address.
+ */
 static inline uint64_t msr_apicbase_getaddr(void)
 {
   uint64_t msr = rdmsr(MSR_APICBASE);
   return (msr & MSR_APICBASE_ADDRMASK);
 }
 
+/**
+ * @fn static inline void msr_apicbase_setaddr(uint64_t addr)
+ * @brief set MSR address.
+ *
+ * @param addr Address.
+ */
 static inline void msr_apicbase_setaddr(uint64_t addr)
 {
   uint64_t msr = rdmsr(MSR_APICBASE);
@@ -38,6 +76,10 @@ static inline void msr_apicbase_setaddr(uint64_t addr)
   wrmsr(MSR_APICBASE, msr);
 }
 
+/**
+ * @fn static inline void msr_apicbase_enable(void)
+ * @brief enable MSR.
+ */
 static inline void msr_apicbase_enable(void)
 {
   uint64_t tmp;
@@ -52,40 +94,87 @@ static inline void msr_apicbase_enable(void)
  * the Apic Base Address and are aligned on 128-bit boundary.
  */
 
-#define APIC_ID    0x20  /* APIC ID Register */
+/**
+ * @def APIC_ID
+ * @brief APIC ID Register.
+ */
+#define APIC_ID 0x20
 
 /**
  * @union apic_id
- * @brief APIC ID information.
+ * @brief APIC ID.
  */
 union apic_id {
   struct {
+    /**
+     * APIC ID.
+     */
     uint32_t reserved: 24, id: 8;
   } __packed;
+  /**
+   * Raw.
+   */
   uint32_t raw;
 };
 
-#define APIC_LVR  0x30  /* APIC Version Register */
+/**
+ * @def APIC_LVR
+ * @brief APIC Version Register.
+ */
+#define APIC_LVR 0x30
 
-#define APIC_TPR  0x80    /* Task Priority Register */
+/**
+ * @def APIC_TPR
+ * @brief APIC Task Priority Register.
+ */
+#define APIC_TPR 0x80
 
 /**
  * @union apic_tpr
- * @brief APIC task priority register information.
+ * @brief APIC task priority register.
  */
 union apic_tpr {
   struct {
+    /**
+     * APIC task priority register.
+     */
     uint32_t subclass: 4, priority: 4, reserved: 24;
   } __packed;
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
-#define APIC_APR  0x90  /* Arbitration Priority Register */
-#define APIC_PPR  0xa0  /* Processor Priority Register */
-#define APIC_EOI  0xb0  /* End of Interrupt Register */
-#define APIC_RRR  0xc0  /* Remote Read Register */
+/**
+ * @def APIC_APR
+ * @brief APIC Arbitration Priority Register.
+ */
+#define APIC_APR 0x90
 
-#define APIC_LDR  0xd0  /* Logical Desitination Register */
+/**
+ * @def APIC_PPR
+ * @brief APIC Processor Priority Register.
+ */
+#define APIC_PPR 0xa0
+
+/**
+ * @def APIC_EOI
+ * @brief APIC End of Interrupt Register.
+ */
+#define APIC_EOI 0xb0
+
+/**
+ * @def APIC_RRR
+ * @brief APIC Remote Read Register.
+ */
+#define APIC_RRR 0xc0
+
+/**
+ * @def APIC_LDR
+ * @brief APIC Logical Desitination Register.
+ */
+#define APIC_LDR 0xd0
 
 /**
  * @union apic_ldr
@@ -93,12 +182,24 @@ union apic_tpr {
  */
 union apic_ldr {
   struct {
+    /**
+     * Logical ID.
+     */
     uint32_t reserved: 24, logical_id: 8;
-  } __packed;
+  } __packed /** packed. */;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
-#define APIC_DFR  0xe0  /* Destination Format Register */
+
+/**
+ * @def APIC_DFR
+ * @brief APIC Destination Format Register.
+ */
+#define APIC_DFR 0xe0
 
 /**
  * @union apic_dfr
@@ -119,15 +220,36 @@ union apic_dfr {
  */
 union apic_spiv {
   struct {
+    /**
+     * Vector etc.
+     */
     uint32_t vector: 8, apic_enable: 1, focus: 1, reserved: 22;
-  } __packed;
+  } __packed /** packed. */ ;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
-#define APIC_ESR  0x280   /* Error Status Register */
 
-#define APIC_ICRL  0x300   /* Interrupt Command Register Low [31:0] */
-#define APIC_ICRH  0x310   /* Interrupt Command Register High [63:32] */
+/**
+ * @def APIC_ESR
+ * @brief APIC Error Status Register.
+ */
+#define APIC_ESR 0x280
+
+/**
+ * @def APIC_ICRL
+ * @brief APIC Interrupt Command Register Low [31:0].
+ */
+#define APIC_ICRL 0x300
+
+/**
+ * @def APIC_ICRH
+ * @brief APIC Interrupt Command Register High [63:32].
+ */
+#define APIC_ICRH 0x310
 
 /**
  * @union apic_icr
@@ -135,20 +257,33 @@ union apic_spiv {
  */
 union apic_icr {
   struct {
+    /**
+     * Vector etc.
+     */
     uint32_t vector: 8, delivery_mode: 3, dst_mode: 1,
              delivery_status: 1, reserved0: 1, level: 1,
              trigger: 1, reserved1: 2, dst_shorthand: 2,
              reserved2: 12;
     uint32_t reserved3: 24, dst: 8;
-  } __packed;
+  } __packed /** packed. */ ;
 
   /* Writing the low word of the ICR causes the
    * Inter-Process Interrupt (IPI) to be sent */
   struct {
+    /**
+     * Value low.
+     */
     uint32_t value_low;
-    uint32_t value_high;
-  } __packed;
 
+    /**
+     * Value high.
+     */
+    uint32_t value_high;
+  } __packed /** packed. */;
+
+  /**
+   * Value.
+   */
   uint64_t value;
 };
 
@@ -156,7 +291,11 @@ union apic_icr {
  * Local Vector Table entries
  */
 
-#define APIC_LVTT  0x320   /* Timer LVT Entry */
+/**
+ * @def APIC_LVTT
+ * @brief APIC Timer LVT Entry.
+ */
+#define APIC_LVTT 0x320
 
 /**
  * @union apic_lvt_timer
@@ -164,6 +303,9 @@ union apic_icr {
  */
 union apic_lvt_timer {
   struct {
+    /**
+     * Vector etc.
+     */
     uint32_t vector: 8,
              reserved0: 4,
              delivery_status: 1, /* read-only */
@@ -171,7 +313,11 @@ union apic_lvt_timer {
              mask: 1,
              timer_mode: 1,
              reserved2: 14;
-  } __packed;
+  } __packed /** packed. */;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
@@ -183,13 +329,24 @@ union apic_lvt_timer {
  */
 union apic_lvt_thermal {
   struct {
+    /**
+     * Vector etc.
+     */
     unsigned vector: 8, delivery_mode: 3, reserved0: 1,
              delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
-  } __packed;
+  } __packed /** packed. */;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
-#define APIC_LVTPC  0x340   /* Performance Counter LVT Entry */
+/**
+ * @def APIC_LVTPC
+ * @brief APIC Performance Counter LVT Entry.
+ */
+#define APIC_LVTPC 0x340
 
 /**
  * @union apic_lvt_perfc
@@ -197,28 +354,56 @@ union apic_lvt_thermal {
  */
 union apic_lvt_perfc {
   struct {
+    /**
+     * Vector etc.
+     */
     unsigned vector: 8, delivery_mode: 3, reserved0: 1,
              delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
-  } __packed;
+  } __packed /** packed. */;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
-#define APIC_LVT0  0x350  /* Local Interrupt 0 LVT Entry */
-#define APIC_LVT1  0x360  /* Local Interrupt 1 LVT Entry */
+/**
+ * @def APIC_LVT0
+ * @brief APIC Local Interrupt 0 LVT Entry.
+ */
+#define APIC_LVT0 0x350
+
+/**
+ * @def APIC_LVT1
+ * @brief APIC Local Interrupt 1 LVT Entry.
+ */
+#define APIC_LVT1 0x360
+
 /**
  * @union apic_lvt_lint
  * @brief APIC LVT local interrupt information.
  */
 union apic_lvt_lint {
   struct {
+    /**
+     * Value etc.
+     */
     unsigned vector: 8, delivery_mode: 3, reserved0: 1,
              delivery_status: 1, reserved1: 1, remote_irr: 1, trigger: 1,
              mask: 1, reserved3: 15;
-  } __packed;
+  } __packed /** packed. */;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
-#define APIC_LVTERR  0x370   /* Error LVT Entry */
+/**
+ * @def APIC_LVTERR
+ * @brief Error LVT Entry.
+ */
+#define APIC_LVTERR 0x370
 
 /**
  * @union apic_lvt_error
@@ -226,16 +411,36 @@ union apic_lvt_lint {
  */
 union apic_lvt_error {
   struct {
+    /**
+     * Vector etc.
+     */
     unsigned vector: 8, delivery_mode: 3, reserved0: 1,
              delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
-  } __packed;
+  } __packed /** packed. */;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
-#define APIC_TIMER_INIT_CNT  0x380  /* Timer Initial Count register */
-#define APIC_TIMER_CUR_CNT  0x390  /* Timer Current Count register */
+/**
+ * @def APIC_TIMER_INIT_CNT
+ * @brief APIC Timer Initial Count register.
+ */
+#define APIC_TIMER_INIT_CNT 0x380
 
-#define APIC_DCR    0x3e0  /* Timer Divide Configuration register */
+/**
+ * @def APIC_TIMER_CUR_CNT
+ * @brief APIC Timer Current Count register.
+ */
+#define APIC_TIMER_CUR_CNT 0x390
+
+/**
+ * @def APIC_DCR
+ * @brief APIC Timer Divide Configuration register.
+ */
+#define APIC_DCR 0x3e0
 
 /**
  * @union apic_dcr
@@ -243,13 +448,20 @@ union apic_lvt_error {
  */
 union apic_dcr {
   struct {
+    /**
+     * Divisor.
+     */
     uint32_t divisor: 4, /* NOTE! bit-2 MUST be zero */
              reserved0: 28;
-  } __packed;
+  } __packed /* packed. */;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
-/* Timer Divide Register divisor; only APIC_DCR_1 was tested */
+/* Timer Divide Register divisor; only APIC_DCR_1 was tested. */
 enum {
   APIC_DCR_2   = 0x0,    /* Divide by 2   */
   APIC_DCR_4   = 0x1,    /* Divide by 4   */
@@ -347,10 +559,34 @@ enum {
  * APIC register accessors
  */
 
-#define APIC_PHBASE  0xfee00000  /* Physical */
-#define APIC_MMIO_SPACE  PAGE_SIZE  /* 4-KBytes */
+
+/**
+ * @def APIC_PHBASE
+ * @brief APIC Physical.
+ */
+#define APIC_PHBASE 0xfee00000
+
+/**
+ * @def APIC_MMIO_SPACE
+ * @brief APIC memory-mapped I/O base.
+ */
+#define APIC_MMIO_SPACE PAGE_SIZE  /* 4-KBytes */
+
+/**
+ * @fn void *apic_vrbase(void)
+ * @brief APIC virtual base.
+ * @return APIC virtual base.
+ */
 void *apic_vrbase(void);    /* Virtual */
 
+
+/**
+ * @fn static inline void apic_write(uint32_t reg, uint32_t val)
+ * @brief write value to APIC register.
+ *
+ * @param reg Register.
+ * @param val Value.
+ */
 static inline void apic_write(uint32_t reg, uint32_t val)
 {
   void *vaddr;
@@ -360,6 +596,13 @@ static inline void apic_write(uint32_t reg, uint32_t val)
   mmio_out32(vaddr, val);
 }
 
+/**
+ * @fn static inline uint32_t apic_read(uint32_t reg)
+ * @brief read value from APIC register.
+ *
+ * @param reg Register.
+ * @return Value.
+ */
 static inline uint32_t apic_read(uint32_t reg)
 {
   void *vaddr;
@@ -375,38 +618,131 @@ static inline uint32_t apic_read(uint32_t reg)
  */
 enum irq_dst {
   IRQ_BROADCAST,      /* Interrupt all cores */
-  IRQ_BOOTSTRAP,      /* Interrupt BSC only */
+  IRQ_BOOTSTRAP,      /* Interrupt BSP only */
   IRQ_SINGLE,      /* Interrupt a specific core */
 };
 
+/**
+ * @fn void apic_init(void)
+ * @brief initialize APIC.
+ */
 void apic_init(void);
+
+/**
+ * @fn void apic_local_regs_init(void)
+ * @brief initialize APIC local registers.
+ */
 void apic_local_regs_init(void);
 
+/**
+ * @fn uint8_t apic_bootstrap_id(void)
+ * @brief get APIC bootstrap ID.
+ *
+ * @return APIC bootstrap ID.
+ */
 uint8_t apic_bootstrap_id(void);
 
+/**
+ * @fn void apic_udelay(uint64_t us)
+ * @brief Microsecond delay n APIC.
+ *
+ * @param us Microsecond.
+ */
 void apic_udelay(uint64_t us);
+
+/**
+ * @fn void apic_monotonic(uint64_t ms, uint8_t vector)
+ * @brief APIC monotonic.
+ *
+ * @param ms Millisecond.
+ * @param vector Vector.
+ */
 void apic_monotonic(uint64_t ms, uint8_t vector);
 
-void apic_send_ipi(int dst_id, int del_mode, int vector);
-void apic_broadcast_ipi(int del_mode, int vector);
+/**
+ * @fn void apic_send_ipi(int dst_id, int delivery_mode, int vector)
+ * @brief send Inter-Processor Interrupt (IPI) in APIC.
+ *
+ * @param dst_id Destination ID.
+ * @param delivery_mode Delivery mode.
+ * @param vector Vector.
+ */
+void apic_send_ipi(int dst_id, int delivery_mode, int vector);
+
+/**
+ * @fn void apic_broadcast_ipi(int delivery_mode, int vector)
+ * @brief broadcast Inter-Processor Interrupt (IPI) in APIC.
+ *
+ * @param delivery_mode Delivery mode.
+ * @param vector Vector.
+ */
+void apic_broadcast_ipi(int delivery_mode, int vector);
+
+/**
+ * @fn bool apic_ipi_acked(void)
+ * @brief poll the delivery status bit till the latest IPI is acked
+ * by the destination core, or timeout. As advised by Intel,
+ * this should be checked after sending each IPI.
+ *
+ * FIXME: fine-grained timeouts using micro-seconds.
+ *
+ * @return True in case of delivery success.
+ */
 bool apic_ipi_acked(void);
 
 
+/**
+ * @fn void __apic_timer_handler(void)
+ * @brief handle APIC periodic mode in C.
+ */
 void __apic_timer_handler(void);
+
+/**
+ * @fn void apic_timer_handler(void)
+ * @brief handle APIC periodic mode in assembler.
+ */
 void apic_timer_handler(void);
 
+/**
+ * @fn void init_apic_timer(unsigned long tick_us, uint8_t vector)
+ * @brief initialize APIC timer.
+ *
+ * @param tick_us Tick[us].
+ * @param vector Vector.
+ */
 void init_apic_timer(unsigned long tick_us, uint8_t vector);
+
+/**
+ * @fn void start_apic_timer(void)
+ * @brief start APIC timer.
+ */
 void start_apic_timer(void);
+
+/**
+ * @fn void stop_apic_timer(void)
+ * @brief stop APIC timer.
+ */
 void stop_apic_timer(void);
 
-
-
+/**
+ * @var apic_ticks_count
+ * @brief APIC ticks counter.
+ */
 extern volatile int apic_ticks_count;
 
 #else
 
-#define APIC_PHBASE  0xfee00000  /* Physical */
-#define APIC_EOI  0xb0 /* End of Interrupt Register */
+/**
+ * @def APIC_PHBASE
+ * @brief APIC physical base.
+ */
+#define APIC_PHBASE 0xfee00000
+
+/**
+ * @def APIC_EOI
+ * @brief APIC End of Interrupt Register.
+ */
+#define APIC_EOI 0xb0
 
 #endif /* !__ASSEMBLY__ */
 

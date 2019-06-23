@@ -51,6 +51,10 @@ struct W128_T {
  */
 typedef struct W128_T w128_t;
 
+/**
+ * @def MEXP
+ * @brief Definition of MEXP.
+ */
 #define MEXP 19937
 
 #if MEXP == 19937
@@ -58,9 +62,10 @@ typedef struct W128_T w128_t;
 /*-----------------
   BASIC DEFINITIONS
   -----------------*/
-/** Mersenne Exponent. The period of the sequence
- *  is a multiple of 2^MEXP-1.
- * #define MEXP 19937 */
+/*
+ * Mersenne Exponent.
+ * The period of the sequence is a multiple of 2^MEXP-1.
+ */
 
 /**
  * @def SFMT_ARRAY_SIZE

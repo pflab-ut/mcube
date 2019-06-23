@@ -10,27 +10,100 @@
 
 /**
  * @struct registers
- * @brief  A record describing all 64-bit general-purpose registers.
+ * @brief A record describing all 64-bit general-purpose registers.
  */
-typedef struct registers {
+struct registers {
+  /**
+   * RAX.
+   */
   uint64_t rax;
+
+  /**
+   * RBX.
+   */
   uint64_t rbx;
+
+  /**
+   * RCX.
+   */
   uint64_t rcx;
+
+  /**
+   * RDX.
+   */
   uint64_t rdx;
+
+  /**
+   * RSI.
+   */
   uint64_t rsi;
+
+  /**
+   * RDI.
+   */
   uint64_t rdi;
+
+  /**
+   * RBP.
+   */
   uint64_t rbp;
+
+  /**
+   * R8.
+   */
   uint64_t r8;
+
+  /**
+   * R9.
+   */
   uint64_t r9;
+
+  /**
+   * R10.
+   */
   uint64_t r10;
+
+  /**
+   * R11.
+   */
   uint64_t r11;
+
+  /**
+   * R12.
+   */
   uint64_t r12;
+
+  /**
+   * R13.
+   */
   uint64_t r13;
+
+  /**
+   * R14.
+   */
   uint64_t r14;
+
+  /**
+   * R15.
+   */
   uint64_t r15;
-} registers_t;
+
+};
+
+/**
+ * @typedef registers_t
+ * @brief Typedef of @struct registers.
+ */
+typedef struct registers registers_t;
 
 
+/**
+ * @fn static inline uint8_t inb(uint16_t port)
+ * @brief wrapper function for @c inb.
+ *
+ * @param port Port.
+ * @return Value.
+ */
 static inline uint8_t inb(uint16_t port)
 {
   uint8_t val;

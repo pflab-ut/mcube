@@ -215,7 +215,7 @@ struct process;
 void sched_percpu_area_init(void);
 
 /**
- * @fn void schedulify_this_code_path(enum cpu_type)
+ * @fn void schedulify_this_code_path(enum cpu_type type)
  * @brief let current CPU-init code path be a schedulable entity.
  *
  * Once the scheduler's timer starts ticking, every code path
@@ -226,9 +226,9 @@ void sched_percpu_area_init(void);
  * A unique 'current' descriptor, representing the initializa-
  * tion path, should be already allocated.
  *
- * @param cpu_type CPU type.
+ * @param type CPU type.
  */
-void schedulify_this_code_path(enum cpu_type);
+void schedulify_this_code_path(enum cpu_type type);
 
 /**
  * @fn void sched_init(void)
@@ -262,7 +262,7 @@ struct th_attr;
  *
  * @param func Function pointer to run
  * @param arg Arguments.
- * @param th_attr Thread attributes.
+ * @param attr Thread attributes.
  */
 void kthread_create(void (*func)(void *), void *arg, struct th_attr *attr);
 
@@ -348,14 +348,16 @@ static inline unsigned long get_current_cpu_time(void);
  * @fn static inline unsigned long tsc2usec(unsigned long tsc)
  * @brief change time stamp counter to microsecond.
  *
+ * @param tsc Time stamp counter.
  * @return Microsecond.
  */
 static inline unsigned long tsc2usec(unsigned long tsc);
 
 /**
- * @fn static inline unsigned long tsc2usec(unsigned long tsc)
+ * @fn static inline unsigned long tsc2nsec(unsigned long tsc)
  * @brief change time stamp counter to nanosecond.
  *
+ * @param tsc Time stamp counter.
  * @return Nanosecond.
  */
 static inline unsigned long tsc2nsec(unsigned long tsc);
@@ -506,11 +508,6 @@ enum budget_policy {
   PRECISE_ENFORCEMENT
 };
 
-/**
- * @typedef budget_policy
- * @brief Typedef of @enum budget_policy.
- */
-typedef enum budget_policy budget_policy;
 
 
 /**
@@ -572,7 +569,7 @@ struct sched_info {
   /**
    * Budget policy.
    */
-  budget_policy budget_policy;
+  enum budget_policy budget_policy;
 };
 
 /**
