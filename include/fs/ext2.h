@@ -201,7 +201,7 @@ enum ext2_inode_flags {
 };
 
 /**
- * @enum file_type.
+ * @enum file_type
  * @brief Directory entries 1-byte File-Type field.
  */
 enum file_type {
@@ -890,7 +890,7 @@ struct dir_entry {
    * Name of entry, in ISO-LATIN-1 character set.
    */
   char filename[EXT2_FILENAME_LEN];
-} __packed;
+} __packed /** packed. */;
 
 /**
  * @fn uint64_t file_read(struct inode *inode, char *buf, uint64_t offset, uint64_t len)
@@ -922,7 +922,7 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
                    uint64_t len);
 
 /**
- * @fn int64_t ext2_new_dir_entry(struct inode *parent, struct inode *entry_ino,
+ * @fn int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
  *                                const char *name, enum file_type type)
  * @brief create a new file entry in given parent directory.
  * Check file_new() for parameters documentation.
@@ -935,8 +935,9 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
  * @param entry_ino Allocated inode number for the new file.
  * @param name Name.
  * @param type Type.
+ * @return Zero if success, and nonzero if failure.
  */
-int64_t ext2_new_dir_entry(struct inode *parent, struct inode *entry_ino,
+int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
                            const char *name, enum file_type type);
 
 /**
@@ -1089,8 +1090,8 @@ void inode_mark_delete(struct inode *inode);
 uint64_t block_alloc(void);
 
 /**
- * @fn bool dir_entry_valid(struct inode *, struct dir_entry *, uint64_t off,
- *                          uint64_t len)
+ * @fn bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
+ *                          uint64_t offset, uint64_t len)
  * @brief check the validity of given directory entry.
  * FIXME: Assure entry's type == its destination inode mode.
  *
@@ -1124,12 +1125,12 @@ int64_t find_dir_entry(struct inode *dir, const char *name, uint name_len,
  */
 
 /**
- * @fn void ext2_debug_init(struct buffer_dumper *dumper)
+ * @fn void ext2_debug_init(struct buffer_dumper *g_dumper)
  * @brief initialize ext2 debug.
  *
- * @param dumper Dumper.
+ * @param g_dumper Dumper.
  */
-void ext2_debug_init(struct buffer_dumper *dumper);
+void ext2_debug_init(struct buffer_dumper *g_dumper);
 
 /**
  * @fn void superblock_dump(union super_block *sb)
@@ -1154,7 +1155,7 @@ void blockgroup_dump(int bg_idx, struct group_descriptor *bgd,
                      uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks);
 
 /**
- * @fn void inode_dump(struct inode *, const char *path)
+ * @fn void inode_dump(struct inode *inode, const char *path)
  * @brief dump inode.
  *
  * @param inode Inode.

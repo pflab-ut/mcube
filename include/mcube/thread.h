@@ -524,8 +524,8 @@ static inline bool thread_tie_break(__unused struct thread_struct *x,
 }
 
 /**
- * @fn static inline int thread_is_high_prio(struct thread_struct *x,
- *                                           struct thread_struct *y)
+ * @fn static inline bool thread_is_high_prio(struct thread_struct *x,
+ *                                            struct thread_struct *y)
  * @param x Thread 1.
  * @param y Thread 2.
  * @return True if priority of @a x is lower than that of @a y.

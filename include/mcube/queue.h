@@ -236,10 +236,10 @@ struct thread_struct *pick_next_thread(void);
 #define NOT_IN_BHEAP ULONG_MAX
 
 /**
- * @typedef int (*thread_prio_t)(struct thread_struct *a, struct thread_struct *b)
+ * @typedef bool (*thread_prio_t)(struct thread_struct *a, struct thread_struct *b)
  * @brief Typedef of thread priority.
  */
-typedef int (*thread_prio_t)(struct thread_struct *a, struct thread_struct *b);
+typedef bool (*thread_prio_t)(struct thread_struct *a, struct thread_struct *b);
 
 /**
  * @var thread_prio

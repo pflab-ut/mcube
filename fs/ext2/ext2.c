@@ -182,11 +182,11 @@ void superblock_dump(union super_block *sb)
   bd->pr("\n");
 }
 
-void blockgroup_dump(int idx, struct group_descriptor *bgd,
+void blockgroup_dump(int bg_idx, struct group_descriptor *bgd,
                      uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks)
 {
   struct buffer_dumper *bd = (void *) percpu_get(dumper);
-  bd->pr("Group #%d: (Blocks %u-%u)\n", idx, firstb, lastb);
+  bd->pr("Group #%d: (Blocks %u-%u)\n", bg_idx, firstb, lastb);
   bd->pr(".. Block bitmap at %u\n", bgd->block_bitmap);
   bd->pr(".. Inode bitmap at %u\n", bgd->inode_bitmap);
   bd->pr(".. Inode table at %u-%u\n", bgd->inode_table,
@@ -294,7 +294,7 @@ void path_get_parent(const char *path, char *parent, char *child)
 
 void ext2_debug_init(struct buffer_dumper *g_dumper)
 {
-  percpu_set(dumper, (uintptr_t)g_dumper);
+  percpu_set(dumper, (uintptr_t) g_dumper);
 }
 
 

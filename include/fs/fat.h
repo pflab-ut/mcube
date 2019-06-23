@@ -154,7 +154,7 @@ struct bios_parameter_block {
    * File-system type.
    */
   char fst[8];
-} __packed;
+} __packed /** packed. */;
 
 typedef struct bios_parameter_block bpb_t;
 
@@ -198,7 +198,7 @@ struct fatdir {
    * File size.
    */
   unsigned int size;
-} __packed;
+} __packed /** packed. */;
 
 
 /**
