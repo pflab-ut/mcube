@@ -254,6 +254,9 @@ enum file_type {
 /**
  * @fn static inline mode_t dir_entry_type_to_inode_mode(enum file_type type)
  * @brief Directory entry type to inode mode.
+ *
+ * @param type Directory entry type.
+ * @return Inode mode.
  */
 static inline mode_t dir_entry_type_to_inode_mode(enum file_type type)
 {
@@ -287,6 +290,9 @@ static inline mode_t dir_entry_type_to_inode_mode(enum file_type type)
 /**
  * @fn static inline enum file_type inode_mode_to_dir_entry_type(mode_t mode)
  * @brief Inode mode to directory entry type.
+ *
+ * @param mode Mode.
+ * @return Directory entry type.
  */
 static inline enum file_type inode_mode_to_dir_entry_type(mode_t mode)
 {
@@ -512,7 +518,7 @@ union super_block {
      * Number of blocks to try to preallocate for directories
      */
     uint8_t prealloc_dir_blocks;
-  } __packed;
+  } __packed /** packed. */;
 
   /**
    * Raw data.
@@ -1095,8 +1101,7 @@ uint64_t block_alloc(void);
  * @return True if directory entry is valid.
  */
 bool dir_entry_valid(struct inode *dir, struct dir_entry *dentry,
-                     uint64_t offset,
-                     uint64_t len);
+                     uint64_t offset, uint64_t len);
 
 /**
  * @fn int64_t find_dir_entry(struct inode *inode, const char *name, uint name_len,
@@ -1117,13 +1122,62 @@ int64_t find_dir_entry(struct inode *dir, const char *name, uint name_len,
 /*
  * Dump file system On-Disk structures;  useful for testing.
  */
+
+/**
+ * @fn void ext2_debug_init(struct buffer_dumper *dumper)
+ * @brief initialize ext2 debug.
+ *
+ * @param dumper Dumper.
+ */
 void ext2_debug_init(struct buffer_dumper *dumper);
-void superblock_dump(union super_block *);
-void blockgroup_dump(int bg_idx, struct group_descriptor *,
+
+/**
+ * @fn void superblock_dump(union super_block *sb)
+ * @brief dump superblock.
+ *
+ * @param sb Super block.
+ */
+void superblock_dump(union super_block *sb);
+
+/**
+ * @fn void blockgroup_dump(int bg_idx, struct group_descriptor *bgd,
+ *                          uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks)
+ * @brief dump block group.
+ *
+ * @param bg_idx Block group index.
+ * @param bgd Block group descriptor.
+ * @param firstb First block.
+ * @param lastb Last block.
+ * @param inodetbl_blocks Inode table blocks.
+ */
+void blockgroup_dump(int bg_idx, struct group_descriptor *bgd,
                      uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks);
-void inode_dump(struct inode *, const char *path);
+
+/**
+ * @fn void inode_dump(struct inode *, const char *path)
+ * @brief dump inode.
+ *
+ * @param inode Inode.
+ * @param path Path.
+ */
+void inode_dump(struct inode *inode, const char *path);
+
+/**
+ * @fn void dentry_dump(struct dir_entry *dentry)
+ * @brief dump directory entry.
+ *
+ * @param dentry Directory entry.
+ */
 void dentry_dump(struct dir_entry *dentry);
 
+/**
+ * @fn void path_get_parent(const char *path, char *parent, char *child)
+ * @brief get parent path.
+ *
+ * @param path Path.
+ * @param parent Parent.
+ * @param child Child.
+ */
 void path_get_parent(const char *path, char *parent, char *child);
 
 /**
@@ -1134,21 +1188,79 @@ void path_get_parent(const char *path, char *parent, char *child);
  * by having a lock on each hash collision linked-list instead.
  */
 struct imsb {
-  union super_block *sb;    /* On-disk Superblock */
-  struct group_descriptor *bgd;    /* On-disk Group Desc Table */
-  char *buf;    /* Ramdisk buffer */
-  uint64_t block_size;  /* 1, 2, or 4K */
-  uint64_t frag_size;  /* 1, 2, or 4K */
+  /**
+   * On-disk Superblock.
+   */
+  union super_block *sb;
+
+  /**
+   * On-disk Group Desc Table.
+   */
+  struct group_descriptor *bgd;
+
+  /**
+   * Ramdisk buffer.
+   */
+  char *buf;
+
+  /**
+   * 1, 2, or 4K.
+   */
+  uint64_t block_size;
+
+  /**
+   * 1, 2, or 4K.
+   */
+  uint64_t frag_size;
+
+  /**
+   * Block groups count.
+   */
   uint64_t blockgroups_count;
+
+  /**
+   * Last block group.
+   */
   uint64_t last_blockgroup;
+
+  /**
+   * Inode allocation lock.
+   */
   spinlock_t inode_allocation_lock;
+
+  /**
+   * Block allocation lock.
+   */
   spinlock_t block_allocation_lock;
+
+  /**
+   * Inodes hash.
+   */
   struct hash *inodes_hash;
+
+  /**
+   * Inodes hash lock.
+   */
   spinlock_t inodes_hash_lock;
 };
 
+/**
+ * @var imsb
+ * @brief In-memory Super Block.
+ */
 extern struct imsb imsb;
 
+
+/**
+ * @enum parsing_state
+ * @brief States for parsing a hierarchial Unix path.
+ */
+enum parsing_state {
+  START,      /* Start of line */
+  SLASH,      /* Entry names separator */
+  FILENAME,    /* Dir or reg file name */
+  EOL,      /* End of line */
+};
 
 
 #endif /* !__ASSEMBLY__ */

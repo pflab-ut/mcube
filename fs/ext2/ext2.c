@@ -185,7 +185,7 @@ void superblock_dump(union super_block *sb)
 void blockgroup_dump(int idx, struct group_descriptor *bgd,
                      uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks)
 {
-  struct buffer_dumper *bd = (void *)percpu_get(dumper);
+  struct buffer_dumper *bd = (void *) percpu_get(dumper);
   bd->pr("Group #%d: (Blocks %u-%u)\n", idx, firstb, lastb);
   bd->pr(".. Block bitmap at %u\n", bgd->block_bitmap);
   bd->pr(".. Inode bitmap at %u\n", bgd->inode_bitmap);
@@ -199,7 +199,7 @@ void blockgroup_dump(int idx, struct group_descriptor *bgd,
 
 void inode_dump(struct inode *inode, const char *path)
 {
-  struct buffer_dumper *bd = (void *)percpu_get(dumper);
+  struct buffer_dumper *bd = (void *) percpu_get(dumper);
   bd->pr("Dumping inode contents, #%d, for '%s':\n", inode->inum, path);
   bd->pr(".. Mode = 0x%x, Flags = 0x%x\n", inode->mode, inode->flags);
   bd->pr(".. UID = %d, GID = %d\n", inode->uid, inode->gid_low);

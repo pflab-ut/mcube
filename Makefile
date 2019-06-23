@@ -190,9 +190,9 @@ endif
 
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
-	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
+#	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 # with dd file
-#	qemu-system-aarch64 -M raspi3 -drive file=test.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
+	qemu-system-aarch64 -M raspi3 -drive file=fat32.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 # for MINI UART
 #	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 else ifeq ($(ARCH_NAME), axis)

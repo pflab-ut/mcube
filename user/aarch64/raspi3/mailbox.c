@@ -117,7 +117,7 @@ int user_raspi3_main(void)
 {
   //  raspi3_mailbox_main();
   //  raspi3_frame_buffer_main();
-  //  raspi3_sd_main();
-  raspi3_irq_main();
+  raspi3_sd_main();
+  //  raspi3_irq_main();
   return 0;
 }

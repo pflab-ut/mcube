@@ -10,7 +10,12 @@
 
 #if CONFIG_OPTION_DEBUG
 
-
+/**
+ * @fn static inline void print_array(struct thread_struct array[NR_PRIORITIES])
+ * @brief print array.
+ *
+ * @param array Array.
+ */
 static inline void print_array(struct thread_struct array[NR_PRIORITIES])
 {
   int i;
@@ -31,13 +36,29 @@ static inline void print_array(struct thread_struct array[NR_PRIORITIES])
 }
 
 
+/**
+ * @def pdebug_array(array)
+ * @brief print debug for array.
+ *
+ * @param array Array.
+ */
 #define pdebug_array(array) do {                \
     PDEBUG_WHERE();                             \
     print_array(array);                         \
   } while (0)
 
+/**
+ * @def BITMAP_LENGTH
+ * @brief Bitmap length.
+ */
 #define BITMAP_LENGTH (REG_LENGTH + REG_LENGTH / 8)
 
+/**
+ * @fn static inline void print_bitmap(uint32_t bitmap[NR_PRIORITY_BITMAPS])
+ * @brief print bitmap.
+ *
+ * @param bitmap Bitmap.
+ */
 static inline void print_bitmap(uint32_t bitmap[NR_PRIORITY_BITMAPS])
 {
   int i, j;
@@ -65,12 +86,22 @@ static inline void print_bitmap(uint32_t bitmap[NR_PRIORITY_BITMAPS])
   }
 }
 
+/**
+ * @def pdebug_bitmap(bitmap)
+ * @brief print debug for bitmap.
+ *
+ * @param bitmap Bitmap.
+ */
 #define pdebug_bitmap(bitmap) do {              \
     PDEBUG_WHERE();                             \
     print_bitmap(bitmap);                       \
   }  while (0)
 
 
+/**
+ * @fn static inline void print_deadline_tq(void)
+ * @brief print deadline task queue.
+ */
 static inline void print_deadline_tq(void)
 {
   struct thread_struct *p;
@@ -84,11 +115,19 @@ static inline void print_deadline_tq(void)
   PDEBUG("NULL\n");
 }
 
+/**
+ * @def pdebug_deadline_tq()
+ * @brief print debug for deadline task queue.
+ */
 #define pdebug_deadline_tq() do {               \
     PDEBUG_WHERE();                             \
     print_deadline_tq();                        \
   } while (0)
 
+/**
+ * @fn static inline void print_sleep_tq(void)
+ * @brief print sleep task queue.
+ */
 static inline void print_sleep_tq(void)
 {
   struct thread_struct *p;
@@ -102,11 +141,24 @@ static inline void print_sleep_tq(void)
   PDEBUG("NULL\n");
 }
 
+/**
+ * @def pdebug_sleep_tq()
+ * @brief print debug for sleep task queue.
+ */
 #define pdebug_sleep_tq() do {                  \
     PDEBUG_WHERE();                             \
     print_sleep_tq();                           \
   } while (0)
 
+/**
+ * @fn static inline void print_queue(struct thread_struct *head, char *name,
+ *                                    unsigned long cpu)
+ * @param print queue.
+ *
+ * @param head Head.
+ * @param name Name.
+ * @param cpu CPU.
+ */
 static inline void print_queue(struct thread_struct *head, char *name,
                                unsigned long cpu)
 {
@@ -120,6 +172,14 @@ static inline void print_queue(struct thread_struct *head, char *name,
   PDEBUG("NULL\n");
 }
 
+/**
+ * @def pdebug_queue(head, name, cpu)
+ * @brief print debug for queue.
+ *
+ * @param head Head.
+ * @param name Name.
+ * @param cpu CPU.
+ */
 #define pdebug_queue(head, name, cpu) do {      \
     PDEBUG_WHERE();                             \
     print_queue(head, name, cpu);               \
@@ -128,7 +188,13 @@ static inline void print_queue(struct thread_struct *head, char *name,
 
 #if CONFIG_TQ_BHEAP
 
-
+/**
+ * @def pdebug_bheap(rq, th)
+ * @brief print debug for binominal heap.
+ *
+ * @param rq Runqueue.
+ * @param th Thread.
+ */
 #define pdebug_bheap(rq, th) do {               \
     PDEBUG_WHERE();                             \
     PDEBUG("[bheap]: \n\t");                    \
@@ -136,15 +202,53 @@ static inline void print_queue(struct thread_struct *head, char *name,
     PDEBUG("\n");                               \
   } while (0)
 #else
+/**
+ * @def pdebug_bheap(rq, th)
+ * @brief print debug for binominal heap.
+ *
+ * @param rq Runqueue.
+ * @param th Thread.
+ */
 #define pdebug_bheap(rq, th)
 #endif /* CONFIG_TQ_BHEAP */
 
 #else
 
+/**
+ * @def pdebug_array(array)
+ * @brief print debug for array.
+ *
+ * @param array Array.
+ */
 #define pdebug_array(array)
+
+/**
+ * @def pdebug_bitmap(bitmap)
+ * @brief print debug for bitmap.
+ *
+ * @param bitmap Bitmap.
+ */
 #define pdebug_bitmap(bitmap)
+
+/**
+ * @def pdebug_deadline_tq()
+ * @brief print debug for deadline task queue.
+ */
 #define pdebug_deadline_tq()
+
+/**
+ * @def pdebug_sleep_tq()
+ * @brief print debug for sleep task queue.
+ */
 #define pdebug_sleep_tq()
+
+/**
+ * @def pdebug_bheap(rq, th)
+ * @brief print debug for binominal heap.
+ *
+ * @param rq Runqueue.
+ * @param th Thread.
+ */
 #define pdebug_bheap(rq, th)
 
 #endif /* CONFIG_OPTION_DEBUG */

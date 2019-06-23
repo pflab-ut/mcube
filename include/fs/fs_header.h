@@ -8,7 +8,6 @@
 
 #include <fs/common.h>
 #include <fs/stat.h>
-#include <fs/ext2_file.h>
 #include <fs/ext2.h>
 #include <fs/fat.h>
 

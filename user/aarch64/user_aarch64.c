@@ -164,7 +164,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  char str[128];
   //  print("user_arch_main()\n");
   //  user_thread_main();
-  test_scan();
+  //  test_scan();
   // user_ap_main();
   // user_dmac_main();
   //  kernel_level_main();
@@ -174,7 +174,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   barrier();
   //  test_ring_buf();
 #if CONFIG_ARCH_AARCH64_RASPI3
-  //  user_raspi3_main();
+  user_raspi3_main();
 #endif /* CONFIG_ARCH_AARCH64_RASPI3 */
   print("user_arch_main(): end\n");
   return 0;

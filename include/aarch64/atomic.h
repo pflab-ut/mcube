@@ -8,6 +8,15 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @fn static inline uint64_t compare_and_swap(uint64_t *ptr, uint64_t new,
+ *                                             uint64_t old)
+ * @brief compare and swap.
+ *
+ * @param ptr Pointer to data.
+ * @param new New value.
+ * @param old Old value.
+ */
 static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new,
                                     uint64_t old)
 {
@@ -29,12 +38,25 @@ static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new,
 #endif
 }
 
-
+/**
+ * @fn static inline uint64_t atomic_inc(uint64_t *val)
+ * @brief atomic increment.
+ *
+ * @param val Pointer to value.
+ * @return Updated value.
+ */
 static inline void atomic_inc(uint64_t *val)
 {
   compare_and_swap(val, *val + 1, *val);
 }
 
+/**
+ * @fn static inline uint64_t atomic_dec(uint64_t *val)
+ * @brief atomic decrement.
+ *
+ * @param val Pointer to value.
+ * @return Updated value.
+ */
 static inline void atomic_dec(uint64_t *val)
 {
   compare_and_swap(val, *val - 1, *val);

@@ -6,7 +6,6 @@
 #ifndef __MCUBE_FS_STAT_H__
 #define __MCUBE_FS_STAT_H__
 
-
 /*
  * stat.h - Data returned by the stat() function
  *
@@ -17,27 +16,71 @@
 
 #if !CONFIG_ARCH_SIM
 
+/**
+ * @typedef dev_t
+ * @brief Typedef of device.
+ */
+typedef uint64_t dev_t;
 
-typedef uint64_t dev_t;    /* "Shall be _unsigned_ integer type" */
-typedef uint64_t ino_t;    /* ... */
-typedef uint64_t nlink_t;  /* "Shall be an integer type" */
-typedef uint32_t uid_t;    /* "Shall be an integer type" */
-typedef uint32_t gid_t;    /* "Shall be an integer type" */
-typedef int64_t  off_t;    /* "Shall be _signed_ integer type" */
-typedef int64_t  blkcnt_t;  /* "Shall be _signed_ integer type" */
-typedef uint64_t blksize_t;  /* "Shall be an integer type" */
-typedef uint64_t time_t;  /* "Shall be an integer,or real-floating type" */
+/**
+ * @typedef ino_t
+ * @brief Typedef of inode.
+ */
+typedef uint64_t ino_t;
 
-/*
- * File permission bits, (or) creation mode specified at open(,,@mode)
+/**
+ * @typedef nlink_t
+ * @brief Typedef of number of links.
+ */
+typedef uint64_t nlink_t;
+
+/**
+ * @typedef uid_t
+ * @brief Typedef of user ID.
+ */
+typedef uint32_t uid_t;
+
+
+/**
+ * @typedef gid_t
+ * @brief Typedef of group ID.
+ */
+typedef uint32_t gid_t;
+
+/**
+ * @typedef off_t
+ * @brief Typedef of offset.
+ */
+typedef int64_t off_t;
+
+/**
+ * @typedef blkcnt_t
+ * @brief Typedef of block count.
+ */
+typedef int64_t blkcnt_t;
+
+/**
+ * @typedef blksize_t
+ * @brief Typedef of block size.
+ */
+typedef uint64_t blksize_t;
+
+/**
+ * @typedef time_t
+ * @brief Typedef of time.
+ */
+typedef uint64_t time_t;
+
+/**
+ * @enum mode
+ * @brief File permission bits, (or) creation mode specified at open(,,@a mode).
  *
  * I_[R,W,X][USR,GRP,OTH], I_[S,G]UID, & I_SVTX "shall be unique." --SUSv3
  *
  * NOTE! The symbol values are taken from Ext2 specification to ease up
  * stat() system call implementation.
  */
-typedef enum {
-
+enum mode {
   // 1- Process execution user/group override
   S_ISUID    = 0x0800,  /* Set Process UID bit */
   S_IGUID    = 0x0400,  /* Set Group UID bit */
@@ -68,34 +111,127 @@ typedef enum {
   S_IFCHR    = 0x2000,  /* Character device */
   S_IFIFO    = 0x1000,  /* FIFO */
 
-} mode_t;      /* "Shall be an integer type" */
+};
 
-#define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
-#define S_ISCHR(mode)  (((mode) & S_IFMT) == S_IFCHR)
-#define S_ISBLK(mode)  (((mode) & S_IFMT) == S_IFBLK)
-#define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
-#define S_ISFIFO(mode)  (((mode) & S_IFMT) == S_IFIFO)
-#define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
-#define S_ISSOCK(mode)  (((mode) & S_IFMT) == S_IFSOCK)
+/**
+ * @typedef mode_t
+ * @brief Typedef of @enum mode.
+ */
+typedef enum mode mode_t;
+
+/**
+ * @def S_ISDIR(mode)
+ * @brief Is mode directory?
+ *
+ * @param mode Mode.
+ */
+#define S_ISDIR(mode) (((mode) & S_IFMT) == S_IFDIR)
+
+/**
+ * @def S_ISCHR(mode)
+ * @brief Is mode character device?
+ *
+ * @param mode Mode.
+ */
+#define S_ISCHR(mode) (((mode) & S_IFMT) == S_IFCHR)
+
+/**
+ * @def S_ISBLK(mode)
+ * @brief Is mode block device?
+ *
+ * @param mode Mode.
+ */
+#define S_ISBLK(mode) (((mode) & S_IFMT) == S_IFBLK)
+
+/**
+ * @def S_ISREG(mode)
+ * @brief Is mode regular file?
+ *
+ * @param mode Mode.
+ */
+#define S_ISREG(mode) (((mode) & S_IFMT) == S_IFREG)
+
+/**
+ * @def S_ISFIFO(mode)
+ * @brief Is mode FIFO?
+ *
+ * @param mode Mode.
+ */
+#define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
+
+/**
+ * @def S_ISLNK(mode)
+ * @brief Is mode symbolic link?
+ */
+#define S_ISLNK(mode) (((mode) & S_IFMT) == S_IFLNK)
+
+/**
+ * @def S_ISSOCK(mode)
+ * @brief Is mode socket?
+ */
+#define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
 
 /**
  * @struct stat
  * @brief Inode information returned by the stat() group of functions.
  */
 struct stat {
-  dev_t  st_dev;    /* Device ID of device containing file */
-  ino_t  st_ino;    /* File serial (inode) number */
-  mode_t  st_mode;  /* Inode mode bits (see above) */
-  nlink_t  st_nlink;  /* Number of hard links to the file */
-  uid_t  st_uid;    /* User ID of file */
-  gid_t  st_gid;    /* Group ID of file */
-  dev_t  st_rdev;  /* Device ID, if file is char or block special */
-  off_t  st_size;  /* For regular files, the file size in bytes.
-           For symbolic links, the length in bytes of
-           the pathname contained in the symbolic link */
-  time_t  st_atime;  /* Time of last access */
-  time_t  st_mtime;  /* Time of last data modification */
-  time_t  st_ctime;  /* Time of last file status change */
+  /**
+   * Device ID of device containing file.
+   */
+  dev_t st_dev;
+
+  /**
+   * File serial (inode) number.
+   */
+  ino_t st_ino;
+
+  /**
+   * Inode mode bits (see above).
+   */
+  mode_t st_mode;
+
+  /**
+   * Number of hard links to the file.
+   */
+  nlink_t st_nlink;
+
+  /**
+   * User ID of file.
+   */
+  uid_t st_uid;
+
+  /**
+   * Group ID of file.
+   */
+  gid_t st_gid;
+
+  /**
+   * Device ID, if file is char or block special.
+   */
+  dev_t st_rdev;
+
+  /**
+   * For regular files, the file size in bytes.
+   * For symbolic links, the length in bytes of
+   * the pathname contained in the symbolic link.
+   */
+  off_t st_size;
+
+  /**
+   * Time of last access.
+   */
+  time_t st_atime;
+
+  /**
+   * Time of last data modification.
+   */
+  time_t st_mtime;
+
+  /**
+   * Time of last file status change.
+   */
+  time_t st_ctime;
 };
 
 #endif /* !CONFIG_ARCH_SIM */

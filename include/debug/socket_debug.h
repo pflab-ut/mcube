@@ -12,6 +12,12 @@
 
 #if !CONFIG_ARCH_SIM
 
+/**
+ * @fn static inline void print_msg(uint8_t *buf)
+ * @brief print message.
+ *
+ * @param buf Buffer.
+ */
 static inline void print_msg(uint8_t *buf)
 {
   for (int i = 0; i < MSG_BUFSIZE; i++) {
@@ -20,6 +26,10 @@ static inline void print_msg(uint8_t *buf)
 }
 
 
+/**
+ * @fn static inline void print_sockets(void)
+ * @brief print sockets.
+ */
 static inline void print_sockets(void)
 {
   for (int i = 0; i < SOMAXCONN; i++) {
@@ -34,6 +44,10 @@ static inline void print_sockets(void)
 }
 
 
+/**
+ * @def pdebug_sockets(socket)
+ * @brief socket Socket.
+ */
 #define pdebug_sockets(socket) do {             \
     PDEBUG_WHERE();                             \
     print_sockets(socket);                      \
@@ -44,6 +58,10 @@ static inline void print_sockets(void)
 
 #else
 
+/**
+ * @def pdebug_sockets(socket)
+ * @brief socket Socket.
+ */
 #define pdebug_sockets(socket)
 
 #endif /* CONFIG_OPTION_DEBUG */

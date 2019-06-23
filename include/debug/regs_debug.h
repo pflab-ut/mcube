@@ -12,17 +12,35 @@
 
 #if CONFIG_ARCH_SIM
 
+/**
+ * @def pdebug_registers(regs)
+ * @brief print debug for registers.
+ *
+ * @param regs Registers.
+ */
 #define pdebug_registers(regs) do {             \
   } while (0)
 
 #elif CONFIG_ARCH_X86_64
 
+/**
+ * @def pdebug_registers(regs)
+ * @brief print debug for registers.
+ *
+ * @param regs Registers.
+ */
 #define pdebug_registers(regs) do {             \
   } while (0)
 
 
 #elif CONFIG_ARCH_AARCH64_RASPI3
 
+/**
+ * @def pdebug_registers(regs)
+ * @brief print debug for registers.
+ *
+ * @param regs Registers.
+ */
 #define pdebug_registers(regs) do {                               \
     for (int i = 0; i < 32; i += 2) {                             \
       printk("x%02d: 0x%016lx  x%02d: 0x%016lx\n",                \
@@ -32,6 +50,12 @@
 
 #elif CONFIG_ARCH_AXIS
 
+/**
+ * @def pdebug_registers(regs)
+ * @brief print debug for registers.
+ *
+ * @param regs Registers.
+ */
 #define pdebug_registers(regs) do {                                \
     for (int i = 0; i < 32; i += 2) {                              \
       printk("r%02d: 0x%016lx  r%02d: 0x%016lx\n",                 \
@@ -45,8 +69,13 @@
 #endif
 
 #else
+/**
+ * @def pdebug_registers(regs)
+ * @brief print debug for registers.
+ *
+ * @param regs Registers.
+ */
 #define pdebug_registers(regs)
-
 #endif /* CONFIG_OPTION_DEBUG */
 
 #endif /* !__ASSEMBLY__ */

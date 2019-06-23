@@ -18,6 +18,12 @@ static inline uint64_t atomic_inc(uint64_t *val)
   return *val;
 }
 
+static inline uint64_t atomic_dec(uint64_t *val)
+{
+  (*val)--;
+  return *val;
+}
+
 
 #endif /* !__ASSEMBLY__ */
 

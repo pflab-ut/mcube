@@ -10,6 +10,10 @@
 
 #if CONFIG_OPTION_DEBUG
 
+/**
+ * @fn static inline void print_thread_in_line(void)
+ * @brief print thread in line.
+ */
 static inline void print_thread_in_line(void)
 {
   struct thread_struct *tmp;
@@ -22,22 +26,44 @@ static inline void print_thread_in_line(void)
   PDEBUG("\n");
 }
 
+/**
+ * @def pdebug_thread_in_line()
+ * @brief print debug for thread in line.
+ */
 #define pdebug_thread_in_line() do {            \
     PDEBUG_WHERE();                             \
     print_thread_in_line();                     \
   } while (0)
 
+/**
+ * @fn static inline void print_task(struct task_struct *tk)
+ * @brief print task.
+ *
+ * @param tk Task.
+ */
 static inline void print_task(struct task_struct *tk)
 {
   PDEBUG("tk @ %lx\n", (unsigned long) tk);
 }
 
-
+/**
+ * @def pdebug_task(tk)
+ * @brief print debug for task.
+ *
+ * @param tk Task.
+ */
 #define pdebug_task(tk) do {                    \
     PDEBUG_WHERE();                             \
     print_task(tk);                             \
   } while (0)
 
+
+/**
+ * @fn static inline void print_task_bythid(int thid)
+ * @brief print task by thread ID.
+ *
+ * @param th Thread ID.
+ */
 static inline void print_task_bythid(int thid)
 {
   struct thread_struct *th;
@@ -54,15 +80,39 @@ static inline void print_task_bythid(int thid)
   }
 }
 
-
+/**
+ * @def pdebug_task_by_thid(thid)
+ * @brief print debug for task by thread ID.
+ *
+ * @param thid Thread ID.
+ */
 #define pdebug_task_by_thid(thid) do {          \
     PDEBUG_WHERE();                             \
     print_task_bythid(thid);                    \
   } while (0)
 
 #else
+
+/**
+ * @def pdebug_thread_in_line()
+ * @brief print debug for thread in line.
+ */
 #define pdebug_thread_in_line()
+
+/**
+ * @def pdebug_task(tk)
+ * @brief print debug for task.
+ *
+ * @param tk Task.
+ */
 #define pdebug_task(tk)
+
+/**
+ * @def pdebug_task_by_thid(thid)
+ * @brief print debug for task by thread ID.
+ *
+ * @param thid Thread ID.
+ */
 #define pdebug_task_by_thid(id)
 #endif /* CONFIG_OPTION_DEBUG */
 

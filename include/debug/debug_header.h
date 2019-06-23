@@ -9,17 +9,31 @@
 #ifndef __ASSEMBLY__
 #if CONFIG_OPTION_DEBUG
 
-/** The PDEBUG() macro. */
+/**
+ * @def PDEBUG(fmt, args...)
+ * @brief Print debug.
+ *
+ * @param fmt Format.
+ * @param args Arguments.
+ */
 #define PDEBUG(fmt, args...) do {                    \
     if (Debug == true) {                             \
       printk(fmt, ## args);                          \
     }                                                \
   } while (0)
 
-/** The PDEBUG_WHERE() macro. */
+/**
+ * @def PDEBUG_WHERE()
+ * @brief Print debug for where.
+ */
 #define PDEBUG_WHERE() PDEBUG("%s:%s():%d: ", __FILE__, __func__, __LINE__)
 
-/** Assert macro. */
+/**
+ * @def mcube_assert(expr)
+ * @brief assert.
+ *
+ * @param expr Expression.
+ */
 #define mcube_assert(expr) do {                       \
     if (!(expr)) {                              \
       PDEBUG_WHERE();                           \
@@ -30,10 +44,29 @@
 
 #else
 
-/* nullify debugging macros */
+/* nullify debugging macros. */
+
+/**
+ * @def PDEBUG(fmt, args...)
+ * @brief Print debug.
+ *
+ * @param fmt Format.
+ * @param args Arguments.
+ */
 #define PDEBUG(fmt, args...)
+
+/**
+ * @def PDEBUG_WHERE()
+ * @brief Print debug for where.
+ */
 #define PDEBUG_WHERE()
 
+/**
+ * @def mcube_assert(expr)
+ * @brief assert.
+ *
+ * @param expr Expression.
+ */
 #define mcube_assert(expr)
 
 #endif /* CONFIG_OPTION_DEBUG */

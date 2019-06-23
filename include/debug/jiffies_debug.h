@@ -10,6 +10,10 @@
 
 #if CONFIG_OPTION_DEBUG
 
+/**
+ * @fn static inline void print_jiffies(void)
+ * @brief print jiffies.
+ */
 static inline void print_jiffies(void)
 {
   unsigned long cpu = get_cpu_id();
@@ -18,12 +22,20 @@ static inline void print_jiffies(void)
 }
 
 
+/**
+ * @def pdebug_jiffies()
+ * @brief Print debug for jiffies.
+ */
 #define pdebug_jiffies() do {                                           \
     PDEBUG_WHERE();                                                     \
     print_jiffies();                                                    \
   } while (0)
 
 #else
+/**
+ * @def pdebug_jiffies()
+ * @brief Print debug for jiffies.
+ */
 #define pdebug_jiffies()
 #endif /* CONFIG_OPTION_DEBUG */
 

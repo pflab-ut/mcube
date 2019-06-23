@@ -34,11 +34,6 @@ static unsigned int partitionlba = 0;
 extern unsigned char __end;
 
 
-/**
- * Get the starting LBA address of the first partition
- * so that we know where our FAT file system starts, and
- * read that volume's BIOS Parameter Block
- */
 int fat_getpartition(void)
 {
   unsigned char *mbr = &__end;
@@ -78,7 +73,10 @@ int fat_getpartition(void)
 
     /* check file system type. We don't use cluster numbers for that, but magic bytes */
     if (!(bpb->fst[0] == 'F' && bpb->fst[1] == 'A' && bpb->fst[2] == 'T')
-        && !(bpb->fst2[0] == 'F' && bpb->fst2[1] == 'A' && bpb->fst2[2] == 'T')) {
+        /*
+        && !(bpb->fst2[0] == 'F' && bpb->fst2[1] == 'A' && bpb->fst2[2] == 'T')
+        */
+       ) {
       printk("ERROR: Unknown file system type\n");
       return 0;
     }
@@ -92,23 +90,20 @@ int fat_getpartition(void)
   return 0;
 }
 
-/**
- * List root directory entries in a FAT file system
- */
 void fat_listdirectory(void)
 {
   bpb_t *bpb = (bpb_t *) &__end;
   fatdir_t *dir = (fatdir_t *) &__end;
   unsigned int root_sec, s;
   /* find the root directory's LBA */
-  root_sec = ((bpb->spf16 ? bpb->spf16 : bpb->spf32) * bpb->nf) + bpb->rsc;
+  root_sec = ((bpb->spf16 ? bpb->spf16 : bpb->lspf32) * bpb->nf) + bpb->rlsc;
   s = (bpb->nr0 + (bpb->nr1 << 8));
   printk("FAT number of root diretory entries: 0x%x", s);
   s *= sizeof(fatdir_t);
 
   if (bpb->spf16 == 0) {
     /* adjust for FAT32 */
-    root_sec += (bpb->rc - 2) * bpb->spc;
+    root_sec += (bpb->rc - 2) * bpb->lspc;
   }
 
   /* add partition LBA */
@@ -154,12 +149,12 @@ unsigned int fat_getcluster(const char *fn)
   fatdir_t *dir = (fatdir_t *)(&__end + 512);
   unsigned int root_sec, s;
   /* find the root directory's LBA */
-  root_sec = ((bpb->spf16 ? bpb->spf16 : bpb->spf32) * bpb->nf) + bpb->rsc;
+  root_sec = ((bpb->spf16 ? bpb->spf16 : bpb->lspf32) * bpb->nf) + bpb->rlsc;
   s = (bpb->nr0 + (bpb->nr1 << 8)) * sizeof(fatdir_t);
 
   if (bpb->spf16 == 0) {
     /* adjust for FAT32 */
-    root_sec += (bpb->rc - 2) * bpb->spc;
+    root_sec += (bpb->rc - 2) * bpb->lspc;
   }
 
   /* add partition LBA */
@@ -201,13 +196,13 @@ char *fat_readfile(unsigned int cluster)
   /* BIOS Parameter Block */
   bpb_t *bpb = (bpb_t *) &__end;
   /* File allocation tables. We choose between FAT16 and FAT32 dynamically */
-  unsigned int *fat32 = (unsigned int *)(&__end + bpb->rsc * 512);
+  unsigned int *fat32 = (unsigned int *)(&__end + bpb->rlsc * 512);
   unsigned short *fat16 = (unsigned short *) fat32;
   /* Data pointers */
   unsigned int data_sec, s;
   unsigned char *data, *ptr;
   /* find the LBA of the first data sector */
-  data_sec = ((bpb->spf16 ? bpb->spf16 : bpb->spf32) * bpb->nf) + bpb->rsc;
+  data_sec = ((bpb->spf16 ? bpb->spf16 : bpb->lspf32) * bpb->nf) + bpb->rlsc;
   s = (bpb->nr0 + (bpb->nr1 << 8)) * sizeof(fatdir_t);
 
   if (bpb->spf16 > 0) {
@@ -219,23 +214,23 @@ char *fat_readfile(unsigned int cluster)
   data_sec += partitionlba;
   /* dump important properties */
   printk("FAT Bytes per Sector: 0x%x\n", bpb->bps0 + (bpb->bps1 << 8));
-  printk("FAT Sectors per Cluster: 0x%x\n", bpb->spc);
+  printk("FAT Sectors per Cluster: 0x%x\n", bpb->lspc);
   printk("FAT Number of FAT: 0x%x\n", bpb->nf);
-  printk("FAT Sectors per FAT: 0x%x\n", bpb->spf16 ? bpb->spf16 : bpb->spf32);
-  printk("FAT Reserved Sectors Count: 0x%x\n", bpb->rsc);
+  printk("FAT Sectors per FAT: 0x%x\n", bpb->spf16 ? bpb->spf16 : bpb->lspf32);
+  printk("FAT Reserved Sectors Count: 0x%x\n", bpb->rlsc);
   printk("FAT First data sector: 0x%x\n", data_sec);
   /* load FAT table */
   s = sd_readblock(partitionlba + 1, (unsigned char *) &__end + 512,
-                   (bpb->spf16 ? bpb->spf16 : bpb->spf32) + bpb->rsc);
+                   (bpb->spf16 ? bpb->spf16 : bpb->lspf32) + bpb->rlsc);
   /* end of FAT in memory */
   data = ptr = &__end + 512 + s;
 
   /* iterate on cluster chain */
   while (cluster > 1 && cluster < 0xfff8) {
     /* load all sectors in a cluster */
-    sd_readblock((cluster - 2) * bpb->spc + data_sec, ptr, bpb->spc);
+    sd_readblock((cluster - 2) * bpb->lspc + data_sec, ptr, bpb->lspc);
     /* move pointer, sector per cluster * bytes per sector */
-    ptr += bpb-> spc * (bpb->bps0 + (bpb->bps1 << 8));
+    ptr += bpb->lspc * (bpb->bps0 + (bpb->bps1 << 8));
     /* get the next cluster in chain */
     cluster = bpb->spf16 > 0 ? fat16[cluster] : fat32[cluster];
   }

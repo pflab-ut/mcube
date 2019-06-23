@@ -585,7 +585,7 @@ static inline void end_budget(struct thread_struct *th)
  */
 #define INIT_THAS {                                         \
     [0 ... NR_THREADS - 1] = {                              \
-      .type = PERIODIC_TH | IMPRECISE_TH | HARD_REAL_TIME,  \
+      .type = PERIODIC_TH | HARD_REAL_TIME,                 \
       .period = 100,                                        \
       .wcet = 5,                                            \
       .relative_deadline  = 100,                            \

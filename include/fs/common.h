@@ -25,11 +25,34 @@
  * @brief File information.
  */
 struct file_struct {
-  uint64_t inum;    /* Inode# of the open()-ed file */
-  int flags;    /* Flags passed  to open() call */
-  spinlock_t lock;  /* ONLY FOR offset and refcount */
-  uint64_t offset;  /* MAIN FIELD: File byte offset */
-  int refcount;    /* Reference count; fork,dup,.. */
+  /**
+   * Inode# of the open()-ed file.
+   */
+  uint64_t inum;
+
+  /**
+   * Flags passed  to open() call.
+   */
+  int flags;
+
+  /**
+   * ONLY FOR offset and refcount.
+   */
+  spinlock_t lock;
+
+  /**
+   * MAIN FIELD: File byte offset.
+   */
+  uint64_t offset;
+
+  /**
+   * Reference count; fork,dup,..
+   */
+  int refcount;
+
+  /**
+   * Pathname.
+   */
   char pathname[FILE_LENGTH];
 };
 
