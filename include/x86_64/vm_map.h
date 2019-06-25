@@ -36,6 +36,7 @@ void *vm_kmap(uintptr_t pstart, uint64_t len);
  * @brief Is virtual address mapped?
  *
  * @param vaddr Virtual address.
+ * @return True if virtual address is mapped.
  */
 bool vaddr_is_mapped(void *vaddr);
 

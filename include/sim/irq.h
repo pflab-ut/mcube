@@ -17,9 +17,9 @@ static inline void disable_local_irq(void)
 {
 }
 
-static inline int is_irq_enabled(__unused unsigned long flags)
+static inline bool is_irq_enabled(__unused unsigned long flags)
 {
-  return 1;
+  return true;
 }
 
 static inline void save_local_irq(__unused union rflags *flags)

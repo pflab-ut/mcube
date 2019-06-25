@@ -49,7 +49,7 @@ static inline void disable_local_irq(void)
   asm volatile("msr daifset, %0\n\t" :: "i"(AARCH64_DAIF_IRQ));
 }
 
-static inline int is_irq_enabled(unsigned long flags)
+static inline bool is_irq_enabled(unsigned long flags)
 {
   return !(flags & PSR_I_BIT);
 }

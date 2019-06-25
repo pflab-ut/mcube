@@ -12,35 +12,104 @@
  */
 
 
-
-#define SMPBOOT_START    0x10000  /* Trampoline start; 4k-aligned */
+/**
+ * @def SMPBOOT_START
+ * @brief Trampoline start; 4k-aligned.
+ */
+#define SMPBOOT_START 0x10000
 
 /*
  * AP cores parameters base and their offsets. To be used
  * in trampoline assembly code.
  */
 
-#define SMPBOOT_PARAMS    0x20000  /* AP parameters base */
+/**
+ * @def SMPBOOT_PARAMS
+ * @brief AP parameters base.
+ */
+#define SMPBOOT_PARAMS 0x20000
 
-#define SMPBOOT_CR3    (0)
-#define SMPBOOT_IDTR    (SMPBOOT_CR3 + 8)
-#define SMPBOOT_IDTR_LIMIT  (SMPBOOT_IDTR)
-#define SMPBOOT_IDTR_BASE  (SMPBOOT_IDTR_LIMIT + 2)
-#define SMPBOOT_GDTR    (SMPBOOT_IDTR + 10)
-#define SMPBOOT_GDTR_LIMIT  (SMPBOOT_GDTR)
-#define SMPBOOT_GDTR_BASE  (SMPBOOT_GDTR_LIMIT + 2)
-#define SMPBOOT_STACK_PTR  (SMPBOOT_GDTR + 10)
-#define SMPBOOT_PERCPU_PTR  (SMPBOOT_STACK_PTR + 8)
+/**
+ * @def SMPBOOT_CR3
+ * @brief SMP boot CR3.
+ */
+#define SMPBOOT_CR3 (0)
 
-#define SMPBOOT_PARAMS_END  (SMPBOOT_PARAMS + SMPBOOT_PERCPU_PTR + 8)
-#define SMPBOOT_PARAMS_SIZE  (SMPBOOT_PARAMS_END - SMPBOOT_PARAMS)
+/**
+ * @def SMPBOOT_IDTR
+ * @brief SMP boot IDTR.
+ */
+#define SMPBOOT_IDTR (SMPBOOT_CR3 + 8)
+
+/**
+ * @def SMPBOOT_IDTR_LIMIT
+ * @brief SMP boot IDTR limit.
+ */
+#define SMPBOOT_IDTR_LIMIT (SMPBOOT_IDTR)
+
+/**
+ * @def SMPBOOT_IDTR_BASE
+ * @brief SMP boot IDTR base.
+ */
+#define SMPBOOT_IDTR_BASE (SMPBOOT_IDTR_LIMIT + 2)
+
+/**
+ * @def SMPBOOT_GDTR
+ * @brief SMP boot GDTR.
+ */
+#define SMPBOOT_GDTR (SMPBOOT_IDTR + 10)
+
+/**
+ * @def SMPBOOT_GDTR_LIMIT
+ * @brief SMP boot GDTR limit.
+ */
+#define SMPBOOT_GDTR_LIMIT (SMPBOOT_GDTR)
+
+/**
+ * @def SMPBOOT_GDTR_BASE
+ * @brief SMP boot GDTR base.
+ */
+#define SMPBOOT_GDTR_BASE (SMPBOOT_GDTR_LIMIT + 2)
+
+/**
+ * @def SMPBOOT_STACK_PTR
+ * @brief SMP boot stack pointer.
+ */
+#define SMPBOOT_STACK_PTR (SMPBOOT_GDTR + 10)
+
+/**
+ * @def SMPBOOT_PERCPU_PTR
+ * @brief SMP boot per CPU pointer.
+ */
+#define SMPBOOT_PERCPU_PTR (SMPBOOT_STACK_PTR + 8)
+
+/**
+ * @def SMPBOOT_PARAMS_END
+ * @brief SMP boot parameters end.
+ */
+#define SMPBOOT_PARAMS_END (SMPBOOT_PARAMS + SMPBOOT_PERCPU_PTR + 8)
+
+/**
+ * @def SMPBOOT_PARAMS_SIZE
+ * @brief SMP boot parameters size.
+ */
+#define SMPBOOT_PARAMS_SIZE (SMPBOOT_PARAMS_END - SMPBOOT_PARAMS)
 
 #ifndef __ASSEMBLY__
 
 /*
  * Assembly trampoline code start and end pointers
  */
+/**
+ * @var trampoline[]
+ * @brief Trampoline.
+ */
 extern const char trampoline[];
+
+/**
+ * @var trampoline_end[]
+ * @brief Trampoline end.
+ */
 extern const char trampoline_end[];
 
 /**

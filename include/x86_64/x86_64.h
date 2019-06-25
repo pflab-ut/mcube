@@ -12,20 +12,63 @@
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
  */
 
-#define MSR_FS_BASE  0xc0000100
-#define MSR_GS_BASE  0xc0000101
+/**
+ * @def MSR_FS_BASE
+ * @brief MSR FS base.
+ */
+#define MSR_FS_BASE 0xc0000100
+
+/**
+ * @def MSR_GS_BASE
+ * @brief MSR GS base.
+ */
+#define MSR_GS_BASE 0xc0000101
 
 /* Machine-specific registers (MSRs) */
-#define MSR_APIC_BASE           0x1b
-#define MSR_PLATFORM_INFO       0xce
-#define MSR_IA32_EFER           0xc0000080
-#define MSR_IA32_STAR           0xc0000081
-#define MSR_IA32_LSTAR          0xc0000082
-#define MSR_IA32_FMASK          0xc0000084
+/**
+ * @def MSR_APIC_BASE
+ * @brief MSR APIC base.
+ */
+#define MSR_APIC_BASE 0x1b
+
+/**
+ * @def MSR_PLATFORM_INFO
+ * @brief MSR platform information.
+ */
+#define MSR_PLATFORM_INFO 0xce
+
+/**
+ * @def MSR_IA32_EFER
+ * @brief MSR IA32 efer.
+ */
+#define MSR_IA32_EFER 0xc0000080
+
+/**
+ * @def MSR_IA32_STAR
+ * @brief MSR IA32 star.
+ */
+#define MSR_IA32_STAR 0xc0000081
+
+/**
+ * @def MSR_IA32_LSTAR
+ * @brief MSR IA32 lstar.
+ */
+#define MSR_IA32_LSTAR 0xc0000082
+
+/**
+ * @def MSR_IA32_FMASK
+ * @brief MSR IA32 fmask.
+ */
+#define MSR_IA32_FMASK 0xc0000084
 
 #ifndef __ASSEMBLY__
 
-
+/**
+ * @fn static inline union rflags get_rflags(void)
+ * @brief get rflags.
+ *
+ * @return Rflags.
+ */
 static inline union rflags get_rflags(void)
 {
   union rflags flags;
@@ -38,11 +81,14 @@ static inline union rflags get_rflags(void)
   return flags;
 }
 
-/*
- * Setting %rflags may enable interrupts, but we often want to
+/**
+ * @fn static inline void set_rflags(union rflags flags)
+ * @brief Setting %rflags may enable interrupts, but we often want to
  * do so in the _exact_ location specified: e.g. spin_unlock()
  * should be compiled to mark the lock as available (lock->val
  * = 1) before enabling interrupts, but never after.
+ *
+ * @param rflags Rflags.
  */
 static inline void set_rflags(union rflags flags)
 {
@@ -53,10 +99,13 @@ static inline void set_rflags(union rflags flags)
                :"cc", "memory");
 }
 
-/*
- * Default rflags: set it to rflags of new threads, etc
+/**
+ * @fn static inline union rflags default_rflags(void)
+ * @brief Default rflags: set it to rflags of new threads, etc
  * This is same as the CPU rflags value following #RESET or
  * INIT SIPI, with the difference of having IRQs enabled.
+ *
+ * @return Default rflags.
  */
 static inline union rflags default_rflags(void)
 {
@@ -74,16 +123,32 @@ static inline union rflags default_rflags(void)
  * form or a general-protection (#GP) exception will occur.
  */
 
+/**
+ * @fn static inline void set_fs(uint64_t val)
+ * @brief set FS.
+ *
+ * @param val Value.
+ */
 static inline void set_fs(uint64_t val)
 {
   wrmsr(MSR_FS_BASE, val);
 }
 
+/**
+ * @fn static inline void set_gs(uint64_t val)
+ * @brief set GS.
+ *
+ * @param val Value.
+ */
 static inline void set_gs(uint64_t val)
 {
   wrmsr(MSR_GS_BASE, val);
 }
 
+/**
+ * @fn static inline uint64_t get_gs(void)
+ * @brief get GS.
+ */
 static inline uint64_t get_gs(void)
 {
   return rdmsr(MSR_GS_BASE);

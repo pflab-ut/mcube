@@ -18,7 +18,6 @@
 #include <x86_64/apic.h>
 #include <x86_64/cpu.h>
 #include <x86_64/e820.h>
-#include <x86_64/errno.h>
 #include <x86_64/fcntl.h>
 #include <x86_64/ioapic.h>
 #include <x86_64/irq.h>
@@ -27,7 +26,6 @@
 #include <x86_64/mptables.h>
 #include <x86_64/page_alloc.h>
 #include <x86_64/percpu.h>
-#include <x86_64/pic.h>
 #include <x86_64/pit.h>
 #include <x86_64/process.h>
 #include <x86_64/ramdisk.h>

@@ -106,30 +106,65 @@ enum zone_id {
  * It's essential to save space in this struct since there's
  * one for each available page frame in the system.
  *
- * Additionally, a smaller pfd means a _much_ smaller pfdta-
- * ble, lessening this table's probability of hitting a res-
- * erved memory area like the legacy ISA and PCI holes.
+ * Additionally, a smaller pfd means a _much_ smaller pfdtable,
+ * lessening this table's probability of hitting a reserved memory area
+ * like the legacy ISA and PCI holes.
  */
 struct page {
-uint64_t pfn:
-  (64 - PAGE_SHIFT),  /* Phys addr = pfn << PAGE_SHIFT */
-  free: 1,     /* Not allocated? */
-  in_bucket: 1,   /* Used by the bucket-allocator? */
-  zone_id: 2;   /* The zone we're assigned to */
+  /**
+   * Page information.
+   */
+  uint64_t
+/** Phys addr = pfn << PAGE_SHIFT */ pfn:
+  (64 - PAGE_SHIFT),
+  /** Not allocated? */
+  free: 1,
+  /** Used by the bucket-allocator? */
+  in_bucket: 1,
+  /** The zone we're assigned to. */
+  zone_id: 2;
 
   union {
-    struct page *next;  /* If in pfdfree_head, next free page */
-    uint8_t bucket_idx;  /* If allocated for the bucket allocator,
-             bucket index in the kmembuckets table */
+    /**
+     * If in pfdfree_head, next free page.
+     */
+    struct page *next;
+
+    /**
+     * If allocated for the bucket allocator,
+     * bucket index in the kmembuckets table.
+     */
+    uint8_t bucket_idx;
   };
 };
 
 
+/**
+ * @var pfdtable
+ * @brief Page frame descriptor table.
+ */
 extern struct page *pfdtable;
+
+/**
+ * @var pfdtable_top
+ * @brief Page frame descriptor table top.
+ */
 extern struct page *pfdtable_top;
+
+/**
+ * @var pfdtable_end
+ * @brief Page frame descriptor table end.
+ */
 extern struct page *pfdtable_end;
 
 
+/**
+ * @fn static inline void page_init(struct page *page, uintptr_t phys_addr)
+ * @brief initialize page.
+ *
+ * @param page Page.
+ * @param phys_addr Physical address.
+ */
 static inline void page_init(struct page *page, uintptr_t phys_addr)
 {
   page->pfn = phys_addr >> PAGE_SHIFT;
@@ -139,34 +174,44 @@ static inline void page_init(struct page *page, uintptr_t phys_addr)
   page->next = NULL;
 }
 
-/*
- * Return virtual address of given page
- *
- * In the function name, we didn't add a 'virt' prefix to
+/**
+ * @fn static inline void *page_address(struct page *page)
+ * @brief  In the function name, we didn't add a 'virt' prefix to
  * the 'address' part cause dealing with virtual addresses
  * is the default action throughout the kernel's C part.
+ *
+ * @param page Page.
+ * @return Virtual address of given page.
  */
 static inline void *page_address(struct page *page)
 {
   return VIRTUAL((uintptr_t)page->pfn << PAGE_SHIFT);
 }
 
-/*
- * Return physical address of given page
- *
+/**
+ * @fn static inline uintptr_t page_phys_addr(struct page *page)
+ * @brief Physical addresses are to be ONLY used at early boot
+ * setup and while filling paging tables entries.
  * The return type is intentionally set to int instead of a
  * pointer; we don't want to have invalid pointers dangling
  * around.
  *
- * Physical addresses are to be ONLY used at early boot
- * setup and while filling paging tables entries.
+ * @param page Page.
+ * @return Physical address of given page
  */
 static inline uintptr_t page_phys_addr(struct page *page)
 {
-  return (uintptr_t)page->pfn << PAGE_SHIFT;
+  return (uintptr_t) page->pfn << PAGE_SHIFT;
 }
 
-static inline int page_is_free(struct page *page)
+/**
+ * @fn static inline bool page_is_free(struct page *page)
+ * @brief Is page free?
+ *
+ * @param page Page
+ * @return True if page is free.
+ */
+static inline bool page_is_free(struct page *page)
 {
   return page->free;
 }

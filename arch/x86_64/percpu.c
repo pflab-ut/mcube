@@ -16,9 +16,9 @@
 /*
  * Initialize the calling CPU's per-CPU area.
  */
-void percpu_area_init(enum cpu_type t)
+void percpu_area_init(enum cpu_type type)
 {
-  if (t == BOOTSTRAP) {
+  if (type == BOOTSTRAP) {
     set_gs(BOOTSTRAP_PERCPU_AREA);
   }
 

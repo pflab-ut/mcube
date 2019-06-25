@@ -233,7 +233,7 @@ void keyboard_init(void)
   uint8_t vector;
 
   vector = KEYBOARD_IRQ_VECTOR;
-  set_intr_gate(vector, kb_handler);
+  set_idt_gate(vector, kb_handler);
   ioapic_setup_isairq(1, vector, IRQ_BOOTSTRAP);
 
   /*

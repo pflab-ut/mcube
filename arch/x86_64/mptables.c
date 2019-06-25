@@ -47,7 +47,6 @@ struct percpu cpus[CPUS_MAX] = {
 int mp_isa_busid = -1;
 
 int nr_mpcirqs;
-#define MAX_IRQS  (0xff - 0x1f)
 struct mpc_irq mp_irqs[MAX_IRQS];
 
 /*

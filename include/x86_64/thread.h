@@ -13,12 +13,31 @@
  * @brief CPU context information.
  */
 struct cpu_context {
-  unsigned long eax;
-  unsigned long ebx;
-  unsigned long ecx;
-  unsigned long edx;
+  /**
+   * RAX.
+   */
+  unsigned long rax;
+
+  /**
+   * RBX.
+   */
+  unsigned long rbx;
+
+  /**
+   * RCX.
+   */
+  unsigned long rcx;
+
+  /**
+   * RDX.
+   */
+  unsigned long rdx;
 };
 
+/**
+ * @def INIT_CPU_CONTEXT
+ * @brief initialize CPU context.
+ */
 #define INIT_CPU_CONTEXT (struct cpu_context) {0}
 
 #endif /* __ASSEMBLY__ */

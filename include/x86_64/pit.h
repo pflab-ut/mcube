@@ -9,7 +9,12 @@
 #ifndef __ASSEMBLY__
 
 
-#define PIT_CLOCK_RATE  1193182ul  /* Hz (ticks per second) */
+/**
+ * @def PIT_CLOCK_RATE
+ * @brief Hz (ticks per second).
+ */
+#define PIT_CLOCK_RATE 1193182UL
+
 
 /*
  * Extract a PIT-related bit from port 0x61
@@ -34,16 +39,22 @@ enum {
 
 /**
  * @union pit_cmd
- * Control word format.
+ * @brief Control word format.
  */
 union pit_cmd {
+  /**
+   * Raw.
+   */
   uint8_t raw;
   struct {
+    /**
+     * Control word.
+     */
     uint8_t bcd: 1,   /* BCD format for counter divisor? */
             mode: 3,   /* Counter modes 0 to 5 */
             rw: 2,   /* Read/Write latch, LSB, MSB, or 16-bit */
             timer: 2; /* Which timer of the three (0-2) */
-  } __packed;
+  } __packed /** packed. */;
 };
 
 /*
@@ -66,18 +77,66 @@ enum {
   MODE_3 =  0x3,    /* Square-wave mode */
 };
 
-
+/**
+ * @var pit_ticks_count
+ * @brief PIT ticks count.
+ */
 extern volatile int pit_ticks_count;
 
+/**
+ * @fn void pit_udelay(uint64_t us)
+ * @brief PIT microsecond delay.
+ *
+ * @param us Microsecond.
+ */
 void pit_udelay(uint64_t us);
+
+/**
+ * @fn void pit_oneshot(uint64_t us)
+ * @brief PIT oneshot timer.
+ *
+ * @param us Microsecond.
+ */
 void pit_oneshot(uint64_t us);
+
+/**
+ * @fn void pit_monotonic(uint64_t us)
+ * @brief PIT monotonic timer.
+ *
+ * @param us Microsecond.
+ */
 void pit_monotonic(uint64_t us);
 
+/**
+ * @fn void __pit_periodic_handler(void)
+ * @brief PIT periodic handler in C.
+ */
 void __pit_periodic_handler(void);
+
+/**
+ * @fn void pit_periodic_handler(void)
+ * @brief PIT periodic handler in assembler.
+ */
 void pit_periodic_handler(void);
 
+/**
+ * @fn void init_pit_timer(unsigned long tick_us)
+ * @brief initialize PIT timer.
+ *
+ * @param tick_us Tick [us].
+ */
 void init_pit_timer(unsigned long tick_us);
+
+/**
+ * @fn void start_pit_timer(void)
+ * @brief start PIT timer.
+ */
 void start_pit_timer(void);
+
+/**
+ * @fn void stop_pit_timer(void)
+ * @brief stop PIT timer.
+ */
 void stop_pit_timer(void);
 
 

@@ -17,8 +17,17 @@
 
 extern unsigned long current_cpu;
 
+/**
+ * @fn static inline unsigned long get_cpu_id(void)
+ * @brief get CPU ID.
+ *
+ * @return CPU ID.
+ */
+static inline unsigned long get_cpu_id(void)
+{
+  return current_cpu;
+}
 
-#define get_cpu_id() current_cpu
 
 #endif /* !__ASSEMBLY__ */
 

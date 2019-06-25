@@ -8,10 +8,10 @@
 static void setup_idt(void)
 {
   for (int i = 0; i < EXCEPTION_GATES; i ++) {
-    set_intr_gate(i, (void *) &idt_exception_stubs[i]);
+    set_idt_gate(i, (void *) &idt_exception_stubs[i]);
   }
 
-  set_intr_gate(HALT_CPU_IPI_VECTOR, halt_cpu_ipi_handler);
+  set_idt_gate(HALT_CPU_IPI_VECTOR, halt_cpu_ipi_handler);
 
   load_idt(&idtdesc);
 }
@@ -105,8 +105,6 @@ void init_arch(void)
    */
 
   setup_idt();
-  //  gdt_init();
-  //  gdt_load();
 
   schedulify_this_code_path(BOOTSTRAP);
 

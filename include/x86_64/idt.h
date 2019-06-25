@@ -12,11 +12,29 @@
  * Copyright (C) 2009 Ahmed S. Darwish <darwish.07@gmail.com>
  */
 
-#define IDT_GATES  (0xff + 1)
+/**
+ * @def IDT_GATES
+ * @brief IDT gates.
+ */
+#define IDT_GATES (0xff + 1)
+
+/**
+ * @def EXCEPTION_GATES
+ * @brief Exception gates.
+ */
 #define EXCEPTION_GATES (0x1f + 1)
 
-#define GATE_INTERRUPT  0xe
-#define GATE_TRAP  0xf
+/**
+ * @def GATE_INTERRUPT
+ * @brief Gate interrupt.
+ */
+#define GATE_INTERRUPT 0xe
+
+/**
+ * @def GATE_TRAP
+ * @brief Gate trap.
+ */
+#define GATE_TRAP 0xf
 
 #ifndef __ASSEMBLY__
 
@@ -25,27 +43,61 @@
  * @brief IDT gate information.
  */
 struct idt_gate {
+  /**
+   * Offset low.
+   */
   uint16_t offset_low;
+
+  /**
+   * Selector.
+   */
   uint16_t selector;
-  uint16_t ist: 3,
-           reserved0: 5,
-           type: 4,
-           reserved0_1: 1,
-           dpl: 2,
-           p: 1;
+
+  uint16_t
+  /** IST etc. */
+  ist: 3,
+       /** Reserved. */
+       reserved0: 5,
+       /** Type. */
+       type: 4,
+       /** Reserved. */
+       reserved0_1: 1,
+       /** DPL. */
+       dpl: 2,
+       /** P. */
+       p: 1;
+
+  /**
+   * Offset middle.
+   */
   uint16_t offset_middle;
+
+  /**
+   * Offset high.
+   */
   uint32_t offset_high;
+
+  /**
+   * Reserved.
+   */
   uint32_t reserved0_2;
-} __packed;
+} __packed /** packed. */;
 
 /**
  * @struct idt_descriptor
  * @brief IDT descriptor information.
  */
 struct idt_descriptor {
+  /**
+   * Limit.
+   */
   uint16_t limit;
+
+  /**
+   * Base.
+   */
   uint64_t base;
-} __packed;
+} __packed /** packed. */;
 
 /*
  * Symbols from idt.S
@@ -62,16 +114,50 @@ struct idt_descriptor {
  *
  * @IDT_STUB_SIZE: exception stub _code_ size.
  */
+
+/**
+ * @var idtdesc
+ * @brief IDT descriptor.
+ */
 extern const struct idt_descriptor idtdesc;
+
+/**
+ * @var idt[IDT_GATES]
+ * @brief Array of IDT.
+ */
 extern struct idt_gate idt[IDT_GATES];
+
+/**
+ * @def IDT_STUB_SIZE
+ * @brief IDT stub size.
+ */
 #define IDT_STUB_SIZE 12
+
+/**
+ * @var idt_exception_stubs[EXCEPTION_GATES][IDT_STUB_SIZE]
+ * @brief IDT exception stubs.
+ */
 extern const char idt_exception_stubs[EXCEPTION_GATES][IDT_STUB_SIZE];
+
+/**
+ * @fn void default_irq_handler(void)
+ * @brief default IRQ handler.
+ */
 void default_irq_handler(void);
 
+/**
+ * @fn static inline void pack_idt_gate(struct idt_gate *gate, uint8_t type,
+ *                                      void *addr)
+ * @brief pack IDT gate.
+ *
+ * @param gate Gate.
+ * @param type Type.
+ * @param addr Address.
+ */
 static inline void pack_idt_gate(struct idt_gate *gate, uint8_t type,
                                  void *addr)
 {
-  gate->offset_low = (uintptr_t)addr & 0xffff;
+  gate->offset_low = (uintptr_t) addr & 0xffff;
   gate->selector = KERNEL_CS;
   gate->ist = 0;
   gate->reserved0 = 0;
@@ -79,11 +165,20 @@ static inline void pack_idt_gate(struct idt_gate *gate, uint8_t type,
   gate->reserved0_1 = 0;
   gate->dpl = 0;
   gate->p = 1;
-  gate->offset_middle = ((uintptr_t)addr >> 16) & 0xffff;
-  gate->offset_high = (uintptr_t)addr >> 32;
+  gate->offset_middle = ((uintptr_t) addr >> 16) & 0xffff;
+  gate->offset_high = (uintptr_t) addr >> 32;
   gate->reserved0_2 = 0;
 }
 
+/**
+ * @fn static inline void write_idt_gate(struct idt_gate *gate, struct idt_gate *idt,
+ *                                       unsigned offset)
+ * @brief write IDT gate.
+ *
+ * @param gate Gate.
+ * @param idt IDT.
+ * @param offset Offset.
+ */
 static inline void write_idt_gate(struct idt_gate *gate, struct idt_gate *idt,
                                   unsigned offset)
 {
@@ -104,13 +199,26 @@ static inline void write_idt_gate(struct idt_gate *gate, struct idt_gate *idt,
  * in the saved contents.
  */
 
-static inline void set_intr_gate(unsigned int n, void *addr)
+/**
+ * @fn static inline void set_idt_gate(unsigned int n, void *addr)
+ * @brief set IDT gate.
+ *
+ * @param n Number.
+ * @param addr Address.
+ */
+static inline void set_idt_gate(unsigned int n, void *addr)
 {
   struct idt_gate gate;
   pack_idt_gate(&gate, GATE_INTERRUPT, addr);
   write_idt_gate(&gate, idt, n);
 }
 
+/**
+ * @fn static inline void load_idt(const struct idt_descriptor *idt_desc)
+ * @brief load IDT.
+ *
+ * @param idt_desc IDT descriptor.
+ */
 static inline void load_idt(const struct idt_descriptor *idt_desc)
 {
   asm volatile("lidt %0"
@@ -118,6 +226,12 @@ static inline void load_idt(const struct idt_descriptor *idt_desc)
                :"m"(*idt_desc));
 }
 
+/**
+ * @fn static inline struct idt_descriptor get_idt(void)
+ * @brief get IDT.
+ *
+ * @return IDT.
+ */
 static inline struct idt_descriptor get_idt(void)
 {
   struct idt_descriptor idt_desc;

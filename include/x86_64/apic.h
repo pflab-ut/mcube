@@ -106,11 +106,12 @@ static inline void msr_apicbase_enable(void)
  */
 union apic_id {
   struct {
-    /**
-     * APIC ID.
-     */
-    uint32_t reserved: 24, id: 8;
-  } __packed;
+    uint32_t
+    /** Reserved. */
+    reserved: 24,
+              /** APIC ID. */
+              id: 8;
+  } __packed /** packed. */;
   /**
    * Raw.
    */
@@ -138,7 +139,13 @@ union apic_tpr {
     /**
      * APIC task priority register.
      */
-    uint32_t subclass: 4, priority: 4, reserved: 24;
+    uint32_t
+    /** Subclass. */
+    subclass: 4,
+              /** Priority. */
+              priority: 4,
+              /** Reserved. */
+              reserved: 24;
   } __packed;
   /**
    * Value.
@@ -207,8 +214,16 @@ union apic_ldr {
  */
 union apic_dfr {
   struct {
-    uint32_t reserved: 28, apic_model: 4;
-  } __packed;
+    uint32_t
+    /** Reserved. */
+    reserved: 28,
+              /** APIC model. */
+              apic_model: 4;
+  } __packed /** packed. */;
+
+  /**
+   * Value.
+   */
   uint32_t value;
 };
 
@@ -448,10 +463,10 @@ union apic_lvt_error {
  */
 union apic_dcr {
   struct {
-    /**
-     * Divisor.
-     */
-    uint32_t divisor: 4, /* NOTE! bit-2 MUST be zero */
+    uint32_t
+    /** Divisor. */
+    divisor: 4, /* NOTE! bit-2 MUST be zero */
+             /** Reserved. */
              reserved0: 28;
   } __packed /* packed. */;
 

@@ -13,13 +13,21 @@
  * @brief Full registers.
  */
 struct full_regs {
-  /** General purpose registers in AARCH64. */
+  /**
+   * General purpose registers in AARCH64.
+   */
   uint64_t gpr[32];
-  /** Exception link register */
+
+  /**
+   * Exception link register.
+   */
   uint64_t elr;
-  /** Saved program status register */
+
+  /**
+   * Saved program status register.
+   */
   uint64_t spsr;
-} __packed;
+} __packed /** packed. */;
 
 
 #endif /* !__ASSEMBLY__ */

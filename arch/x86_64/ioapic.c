@@ -96,13 +96,6 @@ static struct ioapic_pin ioapic_isa_pin(int isa_irq, enum mp_irqtype type)
   return pin;
 }
 
-/*
- * Setup the I/O APIC routing entry representing given
- * ISA @irq, pointing it to @dst CPUs IDT @vector.
- *
- * NOTE! You need to install a @vector handler before
- * setting up its respective I/O APIC entry.
- */
 void ioapic_setup_isairq(uint8_t irq, uint8_t vector, enum irq_dst dst)
 {
   struct ioapic_pin pin;

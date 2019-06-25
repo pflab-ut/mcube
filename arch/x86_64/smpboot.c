@@ -169,12 +169,6 @@ __noreturn void secondary_start(void)
 
   /* Quickly tell the parent we're alive */
   ++nr_alive_cpus;
-#if 0
-  spin_lock(&gdt_lock);
-  gdt_init();
-  gdt_load();
-  spin_unlock(&gdt_lock);
-#endif
 
   schedulify_this_code_path(SECONDARY);
   apic_local_regs_init();

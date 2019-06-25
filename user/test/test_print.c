@@ -118,7 +118,7 @@ static void print_test_colors(void)
   putchar_colored('A', color | VGA_GREEN);
   putchar_colored('A', color | VGA_CYAN);
   putchar_colored('A', color | VGA_RED);
-  putchar_colored('A', color | VGA_MAGNETA);
+  putchar_colored('A', color | VGA_MAGENTA);
   putchar_colored('A', color | VGA_BROWN);
   putchar_colored('A', color | VGA_LIGHT_GRAY);
   putchar_colored('A', color | VGA_GRAY);
@@ -126,7 +126,7 @@ static void print_test_colors(void)
   putchar_colored('A', color | VGA_LIGHT_GREEN);
   putchar_colored('A', color | VGA_LIGHT_CYAN);
   putchar_colored('A', color | VGA_LIGHT_RED);
-  putchar_colored('A', color | VGA_LIGHT_MAGNETA);
+  putchar_colored('A', color | VGA_LIGHT_MAGENTA);
   putchar_colored('A', color | VGA_YELLOW);
   putchar_colored('A', color | VGA_WHITE);
 #else

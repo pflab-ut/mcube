@@ -181,13 +181,6 @@ static void build_memory_setup(void)
   memory_setup.phys_addr_end = phys_end;
 }
 
-/*
- * Modify given e820-available range to meet our standards:
- * - we work with memory in units of pages: page-align
- *   given range if possible, or bailout.
- * - treat ranges inside our kernel mem area as reserved.
- * @kmem_end: kernel memory area end
- */
 int e820_sanitize_range(struct e820_range *range, uint64_t kmem_end)
 {
   uint64_t start, end;
@@ -220,11 +213,6 @@ int e820_sanitize_range(struct e820_range *range, uint64_t kmem_end)
   return 0;
 }
 
-/*
- * The page allocator need to know its own length (which
- * depends on available physical memory) before filling
- * its entries. Thus, we provide it this method ..
- */
 struct e820_setup *e820_get_memory_setup(void)
 {
   assert(memory_setup.valid == 1);

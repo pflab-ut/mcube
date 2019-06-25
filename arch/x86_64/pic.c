@@ -35,8 +35,8 @@ static inline void outb_pic(uint8_t val, uint16_t port)
  */
 static inline void i8259_mask(void)
 {
-  outb_pic(0xff, PIC_MASTER_DATA);   /* IMR, OCW1 master */
-  outb_pic(0xff, PIC_SLAVE_DATA);    /* IMR, OCW1 slave */
+  outb_pic(0xff, PIC_PORT_DATA_MASTER);   /* IMR, OCW1 master */
+  outb_pic(0xff, PIC_PORT_DATA_SLAVE);    /* IMR, OCW1 slave */
 }
 
 /*
@@ -61,14 +61,14 @@ void pic_init(void)
   /* Init command 1, cascade mode (D1 = 0), init mode
    * (D4 = 1), requires init command 4 (D0 = 1), other
    * bits useless in AT 80x86 mode */
-  outb_pic(0x11, PIC_MASTER_CMD);
-  outb_pic(0x11, PIC_SLAVE_CMD);
+  outb_pic(0x11, PIC_PORT_CMD_MASTER);
+  outb_pic(0x11, PIC_PORT_CMD_SLAVE);
 
   /* Init command 2, set the most significant five bits
    * of the vectoring byte. The PIC sets the least three
    * bits accoding to the interrupt level */
-  outb_pic(PIC_IRQ0_VECTOR, PIC_MASTER_DATA);
-  outb_pic(PIC_IRQ8_VECTOR, PIC_SLAVE_DATA);
+  outb_pic(PIC_IRQ0_VECTOR, PIC_PORT_DATA_MASTER);
+  outb_pic(PIC_IRQ8_VECTOR, PIC_PORT_DATA_SLAVE);
 
   /* Init command 3, in master mode, a "1" is set for each
    * slave in the system. Through the cascade lines, the
@@ -79,13 +79,13 @@ void pic_init(void)
    * compares its cascade input with those bits, and if
    * they're equal, it releases the vectoring data to the
    * data bus */
-  outb_pic(1 << PIC_CASCADE_IRQ, PIC_MASTER_DATA);
-  outb_pic(PIC_CASCADE_IRQ, PIC_SLAVE_DATA);
+  outb_pic(1 << SLAVE_IRQ, PIC_PORT_DATA_MASTER);
+  outb_pic(SLAVE_IRQ, PIC_PORT_DATA_SLAVE);
 
   /* Init command 4, 80x86 mode (D0 = 1), Automatic EOI
    * (D1 = 1), nonbuffered (D3 = 0) */
-  outb_pic(0x3, PIC_MASTER_DATA);
-  outb_pic(0x3, PIC_SLAVE_DATA);
+  outb_pic(0x3, PIC_PORT_DATA_MASTER);
+  outb_pic(0x3, PIC_PORT_DATA_SLAVE);
 
   /* FIXME: wait for the chip to initialize */
 
@@ -95,10 +95,10 @@ void pic_init(void)
    * by the PIC, despite of its masked status, get ignored */
 
   for (int i = PIC_IRQ0_VECTOR; i <= PIC_IRQ7_VECTOR; i++) {
-    set_intr_gate(i, PIC_handler);
+    set_idt_gate(i, PIC_handler);
   }
 
   for (int i = PIC_IRQ8_VECTOR; i <= PIC_IRQ15_VECTOR; i++) {
-    set_intr_gate(i, PIC_handler);
+    set_idt_gate(i, PIC_handler);
   }
 }

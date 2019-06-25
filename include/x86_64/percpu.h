@@ -81,14 +81,20 @@
 #ifndef __ASSEMBLY__
 
 
-#define CPUS_MAX    64  /* Arbitrary */
+/**
+ * @def CPUS_MAX
+ * @brief Maximum number of CPUs.
+ */
+#define CPUS_MAX 64  /* Arbitrary */
 
-/*
+/**
+ * @def CACHE_LINE_SIZE
+ * @brief Cache line size.
  * "Beware of false sharing within a cache line (64 bytes on Intel Pentium
  * 4, Intel Xeon, Pentium M, Intel Core Duo processors), and within a
  * sector (128 bytes on Pentium 4 and Intel Xeon processors)." --Intel
  */
-#define CACHE_LINE_SIZE    128
+#define CACHE_LINE_SIZE 128
 
 /**
  * @struct percpu
@@ -113,24 +119,73 @@
  * NOTE-2! '__current' is hardcoded to ALWAYS be the first element.
  */
 struct percpu {
-  struct process *__current;    /* Descriptor of the ON_CPU thread */
-  int apic_id;      /* Local APIC ID */
-  uintptr_t self;      /* Address of this per-CPU area */
+  /**
+   * Descriptor of the ON_CPU thread.
+   */
+  struct process *__current;
+
+  /**
+   * Local APIC ID.
+   */
+  int apic_id;
+
+  /**
+   * Address of this per-CPU area.
+   */
+  uintptr_t self;
+
+  /**
+   * Scheduling.
+   */
   struct percpu_sched sched;
-  uint64_t x64;      /* A 64-bit value (testing) */
-  uint32_t x32;      /* A 32-bit value (testing) */
-  uint16_t x16;      /* A 16-bit value (testing) */
-  uint8_t x8;      /* An 8-bit value (testing) */
-  uintptr_t dumper;    /* How are the testing messages printed */
-  bool halt_thread_at_end;  /* We're running SMP version of tests? */
-} __aligned(CACHE_LINE_SIZE);
+
+  /**
+   * A 64-bit value (testing).
+   */
+  uint64_t x64;
+
+  /**
+   * A 32-bit value (testing).
+   */
+  uint32_t x32;
+
+  /**
+   * A 16-bit value (testing).
+   */
+  uint16_t x16;
+
+  /**
+   * An 8-bit value (testing).
+   */
+  uint8_t x8;
+
+  /**
+   * How are the testing messages printed?
+   */
+  uintptr_t dumper;
+
+  /**
+   * We're running SMP version of tests?
+   */
+  bool halt_thread_at_end;
+} __aligned(CACHE_LINE_SIZE) /** aligned. */;
 
 /*
  * To make '__current' available to early boot code, it's statically
  * allocated in the first slot. Thus, slot 0 is reserved for the BSC.
  */
+
+/**
+ * @var cpus[CPUS_MAX]
+ * @brief Array of CPUs.
+ */
 extern struct percpu cpus[CPUS_MAX];
-#define BOOTSTRAP_PERCPU_AREA  ((uintptr_t) &cpus[0])
+
+/**
+ * @def BOOTSTRAP_PERCPU_AREA
+ * @brief Bootstrap percpu area.
+ */
+#define BOOTSTRAP_PERCPU_AREA ((uintptr_t) &cpus[0])
 
 /*
  * Per-CPU data accessors
@@ -221,11 +276,44 @@ extern struct percpu cpus[CPUS_MAX];
  * NOTE-3! Know what you're really doing if you fsck with any of this.
  */
 
-#define __percpu(var)    (((struct percpu *) NULL)->var)
-#define __percpu_offset(var)  (uint64_t)(&__percpu(var))
-#define __percpu_type(var)  typeof(__percpu(var))
-#define __percpu_marker(var)  ((volatile __percpu_type(var) *)&__percpu(var))
+/**
+ * @def __percpu(var)
+ * @brief Per CPU.
+ *
+ * @param var Variable.
+ */
+#define __percpu(var) (((struct percpu *) NULL)->var)
 
+/**
+ * @def __percpu_offset(var)
+ * @brief Offset of per CPU.
+ *
+ * @param var Variable.
+ */
+#define __percpu_offset(var) (uint64_t)(&__percpu(var))
+
+/**
+ * @def __percpu_type(var)
+ * @brief Type of per CPU.
+ *
+ * @param var Variable.
+ */
+#define __percpu_type(var) typeof(__percpu(var))
+
+/**
+ * @def __percpu_marker(var)
+ * @brief Marker of per CPU.
+ *
+ * @param var Variable.
+ */
+#define __percpu_marker(var) ((volatile __percpu_type(var) *) &__percpu(var))
+
+/**
+ * @def percpu_get(var)
+ * @brief get per CPU.
+ *
+ * @param var Variable.
+ */
 #define percpu_get(var)                         \
   ({                                            \
     __percpu_type(var) res;                     \
@@ -249,6 +337,14 @@ extern struct percpu cpus[CPUS_MAX];
  * FIXME: "ir" constraint can't be used for setting 64bit-wide values.
  */
 
+/**
+ * @def __percpu_set(suffix, var, val)
+ * @brief set per CPU with suffix.
+ *
+ * @param suffix Suffix.
+ * @param var Variable.
+ * @param val Value.
+ */
 #define __percpu_set(suffix, var, val)          \
   ({                                            \
     asm ("mov" suffix " %1, %%gs:%0"            \
@@ -256,6 +352,13 @@ extern struct percpu cpus[CPUS_MAX];
          : "ir" (val));                         \
   })
 
+/**
+ * @def percpu_set(var, val)
+ * @brief set per CPU.
+ *
+ * @param var Variable.
+ * @param val Value.
+ */
 #define percpu_set(var, val)                    \
   ({                                            \
     switch (sizeof(__percpu_type(var))) {       \
@@ -267,6 +370,13 @@ extern struct percpu cpus[CPUS_MAX];
     }                                           \
   })
 
+
+/**
+ * @def percpu_addr(var)
+ * @brief Address of per CPPU.
+ *
+ * @param var Variable.
+ */
 #define percpu_addr(var)                        \
   ({                                            \
     uintptr_t res;                              \
@@ -277,8 +387,9 @@ extern struct percpu cpus[CPUS_MAX];
 
 #define PS  percpu_addr(sched)
 
-/*
- * A thread descriptor address does not change for the lifetime of that
+/**
+ * @fn static __always_inline __pure_const struct process *get_current_process(void)
+ * @brief A thread descriptor address does not change for the lifetime of that
  * thread, even if it moved to another CPU. Thus, inform GCC to _cache_
  * below result in registers as much as possible!
  */
@@ -292,12 +403,19 @@ static __always_inline __pure_const struct process *get_current_process(void)
 }
 
 
-void percpu_area_init(enum cpu_type);
+/**
+ * @fn void percpu_area_init(enum cpu_type type)
+ */
+void percpu_area_init(enum cpu_type type);
 
 
 #else
 
-#define get_current_process()    %gs:0x0
+/**
+ * @def get_current_process()
+ * @brief get current process.
+ */
+#define get_current_process() %gs:0x0
 
 #endif /* !__ASSEMBLY__ */
 

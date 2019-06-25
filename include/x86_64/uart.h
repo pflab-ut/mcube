@@ -10,9 +10,11 @@
 #ifndef __ASSEMBLY__
 
 
-/*
- * A 'baud rate' is the number of bits transferred over the serial link
- * per second. To convert this to number of bytes sent per second, the
+/**
+ * @def MAX_BAUD
+ * @brief A 'baud rate' is the number of bits transferred over the serial link
+ * per second.
+ * To convert this to number of bytes sent per second, the
  * baud rate is divided by the number of bits in the 'serial frame'.
  *
  * One of the most common serial frames used include a start bit, 8-bits
@@ -26,7 +28,12 @@
  * Use max baud: this is only used in a virtual machine anyway.
  */
 #define MAX_BAUD  115200
-#define DESIRED_BAUD  MAX_BAUD
+
+/**
+ * @def DESIRED_BAUD
+ * @brief Alias to @c MAX_BAUD.
+ */
+#define DESIRED_BAUD MAX_BAUD
 
 /*
  * UART register numbers
@@ -41,45 +48,61 @@
  * base port is added to the UART 3-bit register number.
  */
 
-/*
- * When the Divisor Latch Access Bit (DLAB) is set to zero, an
+/**
+ * @def UART_TRANSMIT_BUF
+ * @brief When the Divisor Latch Access Bit (DLAB) is set to zero, an
  * output to this reg stores a byte into the UART's TX buffer.
  */
-#define UART_TRANSMIT_BUF  0
+#define UART_TRANSMIT_BUF 0
 
-/*
- * When DLAB=1, an output to these registers holds the least
+/**
+ * @def UART_DIVISOR_LATCH_LOW
+ * @brief UART divisor latch low.
+ */
+#define UART_DIVISOR_LATCH_LOW 0
+
+/**
+ * @def UART_DIVISOR_LATCH_HIGH
+ * @brief When DLAB=1, an output to these registers holds the least
  * and highest order bytes of the baud rate divisor latch.
  */
-#define UART_DIVISOR_LATCH_LOW  0
-#define UART_DIVISOR_LATCH_HIGH  1
+#define UART_DIVISOR_LATCH_HIGH 1
 
-/*
- * When DLAB=0, a serial port can be configured to operate on
+/**
+ * @def UART_INTERRUPT_ENABLE
+ * @brief When DLAB=0, a serial port can be configured to operate on
  * an interrupt basis using this reg. Nonetheless, we want to
  * use serial output in regions where interrupts are disabled,
  * thus the use of polling instead.
  */
-#define UART_INTERRUPT_ENABLE  1
+#define UART_INTERRUPT_ENABLE 1
 
-/*
- * When DLAB=0, this is used to provide a FIFO queueing
+/**
+ * @def UART_FIFO_CTRL
+ * @brief When DLAB=0, this is used to provide a FIFO queueing
  * discipline, buffering up to 16-bytes of received data.
  */
-#define UART_FIFO_CTRL    2
+#define UART_FIFO_CTRL 2
 
-/*
- * Line control register, controls DLAB and send mode
+/**
+ * @def UART_LINE_CTRL
+ * @brief Line control register, controls DLAB and send mode.
  */
-#define UART_LINE_CTRL    3
+#define UART_LINE_CTRL 3
 
 /**
  * @union line_control_reg
  * @brief Line control register.
  */
 union line_control_reg {
+  /**
+   * Raw.
+   */
   uint8_t raw;
   struct {
+    /**
+     * Flags.
+     */
     uint8_t data_len: 2, /* # data bits in frame */
             stop_bit: 1, /* # stop bits in frame */
             parity_on: 1, /* Enable parity bit? */
@@ -87,7 +110,7 @@ union line_control_reg {
             sticky_parity: 1, /* Unused */
             break_ctrl: 1, /* Unused */
             DLAB: 1;   /* the DLAB control bit (see above) */
-  } __packed;
+  } __packed /** packed. */;
 };
 
 enum {
@@ -102,41 +125,55 @@ enum {
   STOP_BIT_0 =  0x1,    /* 2 stop bits in serial frame */
 };
 
-/*
- * Modem control register: 'Data Terminal Ready' informs the
+/**
+ * @def UART_MODEM_CTRL
+ * @brief Modem control register: 'Data Terminal Ready' informs the
  * attached device that _we_ are active and ready for commun-
  * ication. 'Request to Send' tells attached device that _we_
  * want to send data.
  */
-#define UART_MODEM_CTRL    4
+#define UART_MODEM_CTRL 4
 
 /**
  * @union modem_control_reg
  * @brief Modem control register.
  */
 union modem_control_reg {
+  /**
+   * Raw.
+   */
   uint8_t raw;
   struct {
+    /**
+     * Flags.
+     */
     uint8_t dt_ready: 1, /* RS-232 Data Termainal Ready */
             req_send: 1, /* RS-232 Request To Send */
             unused0: 2, /* Unused */
             loopback: 1, /* Loopback between tx and rx */
             unused1: 3; /* Unused */
-  } __packed;
+  } __packed /** packed. */;
 };
 
-/*
- * Status and error info relating to rx and tx.
+/**
+ * @def UART_LINE_STATUS
+ * @brief Status and error info relating to rx and tx.
  */
-#define UART_LINE_STATUS  5
+#define UART_LINE_STATUS 5
 
 /**
  * @union line_status_reg
  * @brief Line status register.
  */
 union line_status_reg {
+  /**
+   * Raw.
+   */
   uint8_t raw;
   struct {
+    /**
+     * Flags.
+     */
     uint8_t rx_avail: 1, /* Received data available */
             err_overrun: 1, /* A byte was lost (busy CPU) */
             err_parity: 1, /* Parity mismatch */
@@ -145,37 +182,45 @@ union line_status_reg {
             tx_empty: 1, /* ALL tx buffers are empty */
             tx_has_byte: 1, /* holding reg or shift reg has a byte */
             unused: 1; /* Unused */
-  } __packed;
+  } __packed /** packed. */;
 };
 
-/*
- * Modem Status: 'Data Set Ready' indicates that the remote
+/**
+ * @def UART_MODEM_STATUS
+ * @brief Modem Status: 'Data Set Ready' indicates that the remote
  * device is powered up and ready. 'Clear to send' informs
  * us that the attached device is ready for receiving data.
  */
-#define UART_MODEM_STATUS  6
+#define UART_MODEM_STATUS 6
 
 /**
  * @union modem_status_reg
  * @brief Modem status register.
  */
 union modem_status_reg {
+  /**
+   * Raw.
+   */
   uint8_t raw;
   struct {
+    /**
+     * Flags.
+     */
     uint8_t unused0: 4, /* Unused */
             clr_to_send: 1, /* RS-232 Clear to Send */
             remote_ready: 1, /* RS-232 Data Set Ready */
             unused1: 2; /* Unused */
-  } __packed;
+  } __packed /** packed. */;
 };
 
 
-/*
- * Port #1 base I/O address, from BIOS Data Area.
+/**
+ * @def BDA_COM1_ENTRY
+ * @brief Port #1 base I/O address, from BIOS Data Area.
  * If the BDA returned a zero value, there's no active
  * serial port attached, and thus no data can be sent.
  */
-#define BDA_COM1_ENTRY  0x400
+#define BDA_COM1_ENTRY 0x400
 
 
 

@@ -68,7 +68,7 @@ static inline void disable_previous_irq(void)
   asm volatile("mts $0, %0" :: "r"(data));
 }
 
-static inline int is_irq_enabled(__unused unsigned long flags)
+static inline bool is_irq_enabled(__unused unsigned long flags)
 {
   unsigned long data;
   asm volatile("mfs %0, $0" : "=r"(data));
