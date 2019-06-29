@@ -953,7 +953,7 @@ static inline void disable_local_irq(void)
  * @fn static inline bool is_irq_enabled(unsigned long flags)
  * @brief Is IRQ enabled?
  *
- * @param flgs Flags.
+ * @param flags Flags.
  * @return True if IRQ enabled.
  */
 static inline bool is_irq_enabled(unsigned long flags)

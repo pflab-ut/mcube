@@ -9,6 +9,10 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @fn void init_dmac(void)
+ * @brief initialize DMAC.
+ */
 void init_dmac(void);
 
 #endif /* !__ASSEMBLY__ */

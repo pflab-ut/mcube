@@ -9,65 +9,107 @@
 #ifndef __ASSEMBLY__
 
 
+/**
+ * @fn static inline void svc(unsigned long id)
+ * @brief Wrapper function for (supervisor call) @c svc.
+ *
+ * @param id ID.
+ */
 static inline void svc(unsigned long id)
 {
   asm volatile("svc %0" :: "r"(id));
 }
 
-
+/**
+ * @fn static inline void wfi(void)
+ * @brief Wrapper function for (wait for interrupt) @c wfi.
+ */
 static inline void wfi(void)
 {
   asm volatile("wfi");
 }
 
+/**
+ * @fn static inline void wfe(void)
+ * @brief Wrapper function for (wait for event) @c wfe.
+ */
 static inline void wfe(void)
 {
   asm volatile("wfe");
 }
 
-static inline void pause(void)
-{
-}
-
+/**
+ * @fn static inline void nop(void)
+ * @brief Wrapper function for @c nop.
+ */
 static inline void nop(void)
 {
   asm volatile("nop");
 }
 
-/* instruction synchronization barrier */
+/**
+ * @fn static inline void isb(void)
+ * @brief Wrapper function for instruction synchronization barrier @c isb.
+ */
 static inline void isb(void)
 {
   asm volatile("isb");
 }
 
-/* debug */
+/**
+ * @fn static inline void dbg(void)
+ * @brief Wrapper function for debug @c dbg.
+ */
 static inline void dbg(void)
 {
   asm volatile("dbg");
 }
 
-/* data synchronization barrier */
+/**
+ * @fn static inline void dsb(void)
+ * @brief Wrapper function for data synchronization barrier @c dsb.
+ */
 static inline void dsb(void)
 {
   asm volatile("dsb");
 }
 
-/* data memory barrier */
+/**
+ * @fn static inline void dmb(void)
+ * @brief Wrapper function for data memory barrier @c dmb.
+ */
 static inline void dmb(void)
 {
   asm volatile("dmb");
 }
 
+/**
+ * @fn static inline void sev(void)
+ * @brief Wrapper function for send event @c sev.
+ */
 static inline void sev(void)
 {
   asm volatile("sev");
 }
 
-static inline void __attribute__((__noreturn__)) halt(void)
+/**
+ * @fn static inline void sevl(void)
+ * @brief Wrapper function for send event local @c sev.
+ */
+static inline void sevl(void)
 {
-  printk("halt\n");
-  inf_loop();
+  asm volatile("sevl");
 }
+
+/**
+ * @def halt()
+ * @brief Wrapper definition for infinite @c hlt.
+ */
+#define halt()                                  \
+  do {                                          \
+    printk("halt\n");                           \
+    inf_loop();                                 \
+  } while (0);
 
 
 #endif /* !__ASSEMBLY__ */

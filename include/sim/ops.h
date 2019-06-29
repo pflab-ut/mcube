@@ -9,6 +9,12 @@
 #ifndef __ASSEMBLY__
 
 
+/**
+ * @fn static inline uint64_t rdtsc(void)
+ * @brief read time stamp counter.
+ *
+ * @return Time stamp counter.
+ */
 static inline uint64_t rdtsc(void)
 {
   uint64_t x;
@@ -22,6 +28,12 @@ static inline uint64_t rdtsc(void)
   return x;
 }
 
+/**
+ * @fn static inline uint64_t rdtscp(void)
+ * @brief read time stamp counter and processor ID.
+ *
+ * @return Time stamp counter and processor ID.
+ */
 static inline uint64_t rdtscp(void)
 {
   uint32_t high, low;
@@ -29,21 +41,21 @@ static inline uint64_t rdtscp(void)
   return (uint64_t) low | ((uint64_t) high << 32);
 }
 
+/**
+ * @def halt()
+ * @brief Wrapper definition for infinite @c hlt.
+ */
+#define halt()                                  \
+  do {                                          \
+    printk("halt\n");                           \
+    inf_loop();                                 \
+  } while (0);
 
 
-
-static inline void trap(__unused uint32_t trap_code)
-{
-  /* do nothing */
-}
-
-
-__noreturn static inline void halt(void)
-{
-  printk("halt\n");
-  inf_loop();
-}
-
+/**
+ * @fn static inline void nop(void)
+ * @brief Wrapper function for @c nop.
+ */
 static inline void nop(void)
 {
   asm volatile("nop");

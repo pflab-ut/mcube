@@ -16,7 +16,7 @@
 
 /**
  * @def SCHED_STATS_RATE
- * @brief COM1: print stats (if enabled) each @SCHED_STATS_RATE ticks.
+ * @brief COM1: print stats (if enabled) each @c SCHED_STATS_RATE ticks.
  */
 #define SCHED_STATS_RATE HZ
 

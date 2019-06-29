@@ -12,7 +12,6 @@
 #include <sim/ops.h>
 #include <sim/regs.h>
 #include <sim/spinlock.h>
-#include <sim/system.h>
 #include <sim/thread.h>
 #include <sim/timer.h>
 

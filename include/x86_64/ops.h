@@ -99,7 +99,7 @@ typedef struct registers registers_t;
 
 /**
  * @fn static inline uint8_t inb(uint16_t port)
- * @brief wrapper function for @c inb.
+ * @brief Wrapper function for @c inb.
  *
  * @param port Port.
  * @return Value.
@@ -115,7 +115,7 @@ static inline uint8_t inb(uint16_t port)
 
 /**
  * @fn static inline uint16_t inw(uint16_t port)
- * @brief wrapper function for @c inw.
+ * @brief Wrapper function for @c inw.
  *
  * @param port Port.
  * @return Value.
@@ -131,7 +131,7 @@ static inline uint16_t inw(uint16_t port)
 
 /**
  * @fn static inline uint32_t inl(uint32_t port)
- * @brief wrapper function for @c inl.
+ * @brief Wrapper function for @c inl.
  *
  * @param port Port.
  * @return Value.
@@ -147,7 +147,7 @@ static inline uint32_t inl(uint32_t port)
 
 /**
  * @fn static inline uint64_t ind(uint64_t port)
- * @brief wrapper function for @c ind.
+ * @brief Wrapper function for @c ind.
  *
  * @param port Port.
  * @return Value.
@@ -222,7 +222,7 @@ static inline void io_delay(void)
 
 /**
  * @fn static inline void finit(void)
- * @brief wrapper function for @c finit.
+ * @brief Wrapper function for @c finit.
  */
 static inline void finit(void)
 {
@@ -231,7 +231,7 @@ static inline void finit(void)
 
 /**
  * @fn static inline void cli(void)
- * @brief wrapper function for @c cli.
+ * @brief Wrapper function for @c cli.
  */
 static inline void cli(void)
 {
@@ -242,7 +242,7 @@ static inline void cli(void)
 
 /**
  * @fn static inline void sti(void)
- * @brief wrapper function for @c sti.
+ * @brief Wrapper function for @c sti.
  */
 static inline void sti(void)
 {
@@ -253,7 +253,7 @@ static inline void sti(void)
 
 /**
  * @fn static inline void leave(void)
- * @brief wrapper function for @c leave.
+ * @brief Wrapper function for @c leave.
  */
 static inline void leave(void)
 {
@@ -262,7 +262,7 @@ static inline void leave(void)
 
 /**
  * @fn static inline void pause(void)
- * @brief wrapper function for @c pause.
+ * @brief Wrapper function for @c pause.
  */
 static inline void pause(void)
 {
@@ -271,7 +271,7 @@ static inline void pause(void)
 
 /**
  * @fn static inline void iret(void)
- * @brief wrapper function for @c iret.
+ * @brief Wrapper function for @c iret.
  */
 static inline void iret(void)
 {
@@ -280,7 +280,7 @@ static inline void iret(void)
 
 /**
  * @fn static inline void hlt(void)
- * @brief wrapper function for @c hlt.
+ * @brief Wrapper function for @c hlt.
  */
 static inline void hlt(void)
 {
@@ -289,7 +289,7 @@ static inline void hlt(void)
 
 /**
  * @def halt()
- * @brief wrapper definition for infinite @c hlt.
+ * @brief Wrapper definition for infinite @c hlt.
  */
 #define halt()                                  \
   do {                                          \
@@ -300,7 +300,7 @@ static inline void hlt(void)
 
 /**
  * @fn static inline void nop(void)
- * @brief wrapper function for @c nop.
+ * @brief Wrapper function for @c nop.
  */
 static inline void nop(void)
 {
@@ -309,7 +309,7 @@ static inline void nop(void)
 
 /**
  * @fn static inline void sfence(void)
- * @brief wrapper function for @c sfence.
+ * @brief Wrapper function for @c sfence.
  */
 static inline void sfence(void)
 {
@@ -318,7 +318,7 @@ static inline void sfence(void)
 
 /**
  * @fn static inline void lfence(void)
- * @brief wrapper function for @c lfence.
+ * @brief Wrapper function for @c lfence.
  */
 static inline void lfence(void)
 {
@@ -327,7 +327,7 @@ static inline void lfence(void)
 
 /**
  * @fn static inline void mfence(void)
- * @brief wrapper function for @c mfence.
+ * @brief Wrapper function for @c mfence.
  */
 static inline void mfence(void)
 {

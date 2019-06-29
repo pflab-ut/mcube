@@ -120,7 +120,7 @@ struct sockaddr_in {
    * Padding.
    */
   char sin_zero[8];
-} __packed;
+} __packed /** packed. */;
 
 /**
  * @typedef sockaddr_in

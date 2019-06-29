@@ -102,7 +102,7 @@ static inline void set_rflags(union rflags flags)
 /**
  * @fn static inline union rflags default_rflags(void)
  * @brief Default rflags: set it to rflags of new threads, etc
- * This is same as the CPU rflags value following #RESET or
+ * This is same as the CPU rflags value following RESET or
  * INIT SIPI, with the difference of having IRQs enabled.
  *
  * @return Default rflags.

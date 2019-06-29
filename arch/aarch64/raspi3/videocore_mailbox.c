@@ -239,13 +239,13 @@ void init_frame_buffer(struct frame_buffer *fb)
    */
   mbox[1] = VIDEOCORE_MAILBOX_REQUEST;
 
-  mbox[2] = VIDEOCORE_MAILBOX_TAG_SET_PHYSICAL_DISPLAY_WIDTH_HEIGHT;  //set phy wh
+  mbox[2] = VIDEOCORE_MAILBOX_TAG_SET_PHYSICAL_DISPLAY_WIDTH_AND_HEIGHT;  //set phy wh
   mbox[3] = 8;
   mbox[4] = 8;
   mbox[5] = fb->width;         //FrameBufferInfo.width
   mbox[6] = fb->height;          //FrameBufferInfo.height
 
-  mbox[7] = VIDEOCORE_MAILBOX_TAG_SET_VIRTUAL_BUFFER_WIDTH_HEIGHT;  //set virt wh
+  mbox[7] = VIDEOCORE_MAILBOX_TAG_SET_VIRTUAL_BUFFER_WIDTH_AND_HEIGHT;  //set virt wh
   mbox[8] = 8;
   mbox[9] = 8;
   mbox[10] = fb->virtual_width;        //FrameBufferInfo.virtual_width

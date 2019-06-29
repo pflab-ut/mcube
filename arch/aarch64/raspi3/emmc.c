@@ -33,9 +33,7 @@
 
 unsigned long sd_scr[2], sd_ocr, sd_rca, sd_err, sd_hv;
 
-/**
- * Wait for data or command ready
- */
+
 int sd_status(unsigned int mask)
 {
   int cnt = 500000;
@@ -50,9 +48,7 @@ int sd_status(unsigned int mask)
           || (mmio_in32(EMMC_INTERRUPT) & INT_ERROR_MASK)) ? SD_ERROR : SD_OK;
 }
 
-/**
- * Wait for interrupt
- */
+
 int sd_int(unsigned int mask)
 {
   unsigned int r, m = mask | INT_ERROR_MASK;
@@ -145,10 +141,6 @@ int sd_cmd(unsigned int code, unsigned int arg)
   return r & CMD_ERRORS_MASK;
 }
 
-/**
- * read a block from sd card and return the number of bytes read
- * returns 0 on error.
- */
 int sd_readblock(unsigned int lba, unsigned char *buffer, unsigned int num)
 {
   int r, d;
@@ -217,10 +209,6 @@ int sd_readblock(unsigned int lba, unsigned char *buffer, unsigned int num)
   return sd_err != SD_OK || c != num ? 0 : num * 512;
 }
 
-/**
- * write a block to the sd card and return the number of bytes written
- * returns 0 on error.
- */
 int sd_writeblock(unsigned char *buffer, unsigned int lba, unsigned int num)
 {
   int r, d;
@@ -296,9 +284,6 @@ int sd_writeblock(unsigned char *buffer, unsigned int lba, unsigned int num)
 }
 
 
-/**
- * set SD clock to frequency in Hz
- */
 int sd_clk(unsigned int f)
 {
   unsigned int d, c = 41666666 / f, x, s = 32, h = 0;
@@ -354,7 +339,7 @@ int sd_clk(unsigned int f)
     }
   }
 
-  if (sd_hv > HOST_SPEC_V2) {
+  if (sd_hv > SLOTISR_VER_SDVERSION_HOST_SPEC_V2) {
     d = c;
   } else {
     d = (1 << s);
@@ -367,7 +352,7 @@ int sd_clk(unsigned int f)
 
   printk("sd_clk divisor 0x%x, shift 0x%x\n", d, s);
 
-  if (sd_hv > HOST_SPEC_V2) {
+  if (sd_hv > SLOTISR_VER_SDVERSION_HOST_SPEC_V2) {
     h = (d & 0x300) >> 2;
   }
 
@@ -390,9 +375,6 @@ int sd_clk(unsigned int f)
   return SD_OK;
 }
 
-/**
- * initialize EMMC to read SDHC card
- */
 int init_sd(void)
 {
   long r, cnt, ccs = 0;
@@ -432,7 +414,8 @@ int init_sd(void)
   mmio_out32(GPPUD, 0);
   mmio_out32(GPPUDCLK1, 0);
 
-  sd_hv = (mmio_in32(EMMC_SLOTISR_VER) & HOST_SPEC_NUM) >> HOST_SPEC_NUM_SHIFT;
+  sd_hv = (mmio_in32(EMMC_SLOTISR_VER) & SLOTISR_VER_SDVERSION) >>
+          SLOTISR_VER_SDVERSION_SHIFT;
   printk("EMMC: GPIO set up\n");
   // Reset the card.
   mmio_out32(EMMC_CONTROL0, 0);
@@ -450,7 +433,7 @@ int init_sd(void)
 
   printk("EMMC: reset OK\n");
   mmio_out32(EMMC_CONTROL1,
-             mmio_in32(EMMC_CONTROL1) | C1_CLK_INTLEN | C1_TOUNIT_MAX);
+             mmio_in32(EMMC_CONTROL1) | C1_CLK_INTLEN | C1_DATA_TOUNIT_MAX);
   delay(10 * 1000);
 
   // Set clock to setup frequency.
@@ -569,7 +552,7 @@ int init_sd(void)
       return sd_err;
     }
 
-    mmio_out32(EMMC_CONTROL0, mmio_in32(EMMC_CONTROL0) | C0_HCTL_DWITDH);
+    mmio_out32(EMMC_CONTROL0, mmio_in32(EMMC_CONTROL0) | C0_HCTL_DWIDTH);
   }
 
   /* add software flag */

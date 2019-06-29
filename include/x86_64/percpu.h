@@ -392,6 +392,8 @@ extern struct percpu cpus[CPUS_MAX];
  * @brief A thread descriptor address does not change for the lifetime of that
  * thread, even if it moved to another CPU. Thus, inform GCC to _cache_
  * below result in registers as much as possible!
+ *
+ * @return Current process.
  */
 static __always_inline __pure_const struct process *get_current_process(void)
 {
@@ -405,6 +407,9 @@ static __always_inline __pure_const struct process *get_current_process(void)
 
 /**
  * @fn void percpu_area_init(enum cpu_type type)
+ * @brief initialize percpu area.
+ *
+ * @param type CPU type.
  */
 void percpu_area_init(enum cpu_type type);
 

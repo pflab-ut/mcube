@@ -8,6 +8,12 @@
 
 #ifndef __ASSEMBLY__
 
+/**
+ * @fn static inline int get_nr_cpu_cores(void)
+ * @brief get number of CPU cores.
+ *
+ * @return Number of CPU cores.
+ */
 static inline int get_nr_cpu_cores(void)
 {
   return 4;

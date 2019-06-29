@@ -14,22 +14,24 @@
  * @brief Context registers.
  */
 struct context_regs {
-  /** Dummy register in SIM. */
+  /**
+   * Dummy register in SIM.
+   */
   unsigned long r_dummy[0];
 };
 
-typedef struct context_regs context_regs;
 
 /**
  * @struct full_regs
  * @brief Full registers.
  */
 struct full_regs {
-  /** Dummy register in SIM. */
+  /**
+   * Dummy register in SIM.
+   */
   unsigned long r_dummy[0];
 };
 
-typedef struct full_regs full_regs;
 
 
 #endif /* !__ASSEMBLY__ */

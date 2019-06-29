@@ -6,12 +6,35 @@
 #ifndef __MCUBE_AARCH64_CPU_H__
 #define __MCUBE_AARCH64_CPU_H__
 
+
+/**
+ * @def USER_LEVEL
+ * @brief User level.
+ */
 #define USER_LEVEL 0
+
+/**
+ * @def KERNEL_LEVEL
+ * @brief Kernel level.
+ */
 #define KERNEL_LEVEL 1
+
+/**
+ * @def HYPERVISOR_LEVEL
+ * @brief Hypervisor level.
+ */
 #define HYPERVISOR_LEVEL 2
+
+/**
+ * @def TRUST_ZONE_LEVEL
+ * @brief Trust zone level.
+ */
 #define TRUST_ZONE_LEVEL 3
 
-
+/**
+ * @def REGISTER_LENGTH
+ * @brief Register length.
+ */
 #define REG_LENGTH 64
 
 #ifdef __ASSEMBLY__
@@ -31,6 +54,14 @@ ret
 .endm
 
 #else
+
+
+/**
+ * @fn static inline unsigned long get_cpu_id(void)
+ * @brief get CPU ID.
+ *
+ * @return CPU ID.
+ */
 static inline unsigned long get_cpu_id(void)
 {
   unsigned long reg;
@@ -39,7 +70,10 @@ static inline unsigned long get_cpu_id(void)
   return reg;
 }
 
-
+/**
+ * @fn static inline unsigned long get_el(void)
+ * @brief get Exception Level (EL).
+ */
 static inline unsigned long get_el(void)
 {
   unsigned long el;

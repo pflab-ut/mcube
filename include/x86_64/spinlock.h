@@ -65,7 +65,7 @@ static inline void spin_lock(spinlock_t *lock)
  * but I'll leave it as it is for code clarity at the cost of duplication.
  *
  * @param lock Lock.
- * @return True if @lock was acquired from the _first_ try.
+ * @return True if @a lock was acquired from the _first_ try.
  */
 static inline bool spin_trylock(spinlock_t *lock)
 {

@@ -146,7 +146,7 @@ union apic_tpr {
               priority: 4,
               /** Reserved. */
               reserved: 24;
-  } __packed;
+  } __packed /** packed. */;
   /**
    * Value.
    */
@@ -227,7 +227,11 @@ union apic_dfr {
   uint32_t value;
 };
 
-#define APIC_SPIV  0xf0  /* Spurious Interrupt Vector Register */
+/**
+ * @def APIC_SPIV
+ * @brief Spurious interrupt vector register.
+ */
+#define APIC_SPIV 0xf0
 
 /**
  * @union apic_spiv
@@ -318,16 +322,35 @@ union apic_icr {
  */
 union apic_lvt_timer {
   struct {
+    uint32_t
     /**
-     * Vector etc.
+     * Vector.
      */
-    uint32_t vector: 8,
-             reserved0: 4,
-             delivery_status: 1, /* read-only */
-             reserved1: 3,
-             mask: 1,
-             timer_mode: 1,
-             reserved2: 14;
+    vector: 8,
+            /**
+             * Reserved.
+             */
+            reserved0: 4,
+            /**
+             * Delivery status (read-only).
+             */
+            delivery_status: 1,
+            /**
+             * Reserved.
+             */
+            reserved1: 3,
+            /**
+             * Mask.
+             */
+            mask: 1,
+            /**
+             * Timer mode.
+             */
+            timer_mode: 1,
+            /**
+             * Reserved.
+             */
+            reserved2: 14;
   } __packed /** packed. */;
 
   /**
@@ -336,7 +359,11 @@ union apic_lvt_timer {
   uint32_t value;
 };
 
-#define APIC_LVTTHER  0x330   /* Thermal LVT Entry */
+/**
+ * @def APIC_LVTTHER
+ * @brief Thermal LVT entry.
+ */
+#define APIC_LVTTHER 0x330
 
 /**
  * @union apic_lvt_thermal
@@ -344,11 +371,35 @@ union apic_lvt_timer {
  */
 union apic_lvt_thermal {
   struct {
+    unsigned
     /**
-     * Vector etc.
+     * Vector.
      */
-    unsigned vector: 8, delivery_mode: 3, reserved0: 1,
-             delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
+    vector: 8,
+            /**
+             * Delivery mode.
+             */
+            delivery_mode: 3,
+            /**
+             * Reserved.
+             */
+            reserved0: 1,
+            /**
+             * Delivery status.
+             */
+            delivery_status: 1,
+            /**
+             * Reserved.
+             */
+            reserved1: 3,
+            /**
+             * Mask.
+             */
+            mask: 1,
+            /**
+             * Reserved.
+             */
+            reserved2: 15;
   } __packed /** packed. */;
 
   /**
@@ -369,11 +420,35 @@ union apic_lvt_thermal {
  */
 union apic_lvt_perfc {
   struct {
+    unsigned
     /**
-     * Vector etc.
+     * Vector.
      */
-    unsigned vector: 8, delivery_mode: 3, reserved0: 1,
-             delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
+    vector: 8,
+            /**
+             * Delivery mode.
+             */
+            delivery_mode: 3,
+            /**
+             * Reserved.
+             */
+            reserved0: 1,
+            /**
+             * Delivery status.
+             */
+            delivery_status: 1,
+            /**
+             * Reserved.
+             */
+            reserved1: 3,
+            /**
+             * Mask.
+             */
+            mask: 1,
+            /**
+             * Reserved.
+             */
+            reserved2: 15;
   } __packed /** packed. */;
 
   /**
@@ -400,12 +475,43 @@ union apic_lvt_perfc {
  */
 union apic_lvt_lint {
   struct {
+    unsigned
     /**
-     * Value etc.
+     * Vector.
      */
-    unsigned vector: 8, delivery_mode: 3, reserved0: 1,
-             delivery_status: 1, reserved1: 1, remote_irr: 1, trigger: 1,
-             mask: 1, reserved3: 15;
+    vector: 8,
+            /**
+             * Delivery mode.
+             */
+            delivery_mode: 3,
+            /**
+             * Reserved.
+             */
+            reserved0: 1,
+            /**
+             * Delivery status.
+             */
+            delivery_status: 1,
+            /**
+             * Reserved.
+             */
+            reserved1: 1,
+            /**
+             * Remote IRR.
+             */
+            remote_irr: 1,
+            /**
+             * Trigger.
+             */
+            trigger: 1,
+            /**
+             * Mask.
+             */
+            mask: 1,
+            /**
+             * Reserved.
+             */
+            reserved2: 15;
   } __packed /** packed. */;
 
   /**
@@ -426,11 +532,35 @@ union apic_lvt_lint {
  */
 union apic_lvt_error {
   struct {
+    unsigned
     /**
      * Vector etc.
      */
-    unsigned vector: 8, delivery_mode: 3, reserved0: 1,
-             delivery_status: 1, reserved1: 3, mask: 1, reserved3: 15;
+    vector: 8,
+            /**
+             * Delivery mode.
+             */
+            delivery_mode: 3,
+            /**
+             * Reserved.
+             */
+            reserved0: 1,
+            /**
+             * Delivery status.
+             */
+            delivery_status: 1,
+            /**
+             * Reserved.
+             */
+            reserved1: 3,
+            /**
+             * Mask.
+             */
+            mask: 1,
+            /**
+             * Reserved
+             */
+            reserved2: 15;
   } __packed /** packed. */;
 
   /**
@@ -464,9 +594,13 @@ union apic_lvt_error {
 union apic_dcr {
   struct {
     uint32_t
-    /** Divisor. */
+    /**
+     * Divisor.
+     */
     divisor: 4, /* NOTE! bit-2 MUST be zero */
-             /** Reserved. */
+             /**
+              *  Reserved.
+              */
              reserved0: 28;
   } __packed /* packed. */;
 

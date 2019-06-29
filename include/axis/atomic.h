@@ -8,9 +8,12 @@
 
 #ifndef __ASSEMBLY__
 
-/*
- * Atomically execute:
- *  return *val++;
+/**
+ * @fn static inline uint64_t atomic_inc(uint64_t *val)
+ * @brief atomic increment.
+ *
+ * @param val Pointer to value.
+ * @return Updated value.
  */
 static inline uint64_t atomic_inc(uint64_t *val)
 {
@@ -18,6 +21,13 @@ static inline uint64_t atomic_inc(uint64_t *val)
   return *val;
 }
 
+/**
+ * @fn static inline uint64_t atomic_dec(uint64_t *val)
+ * @brief atomic decrement.
+ *
+ * @param val Pointer to value.
+ * @return Updated value.
+ */
 static inline uint64_t atomic_dec(uint64_t *val)
 {
   (*val)--;

@@ -170,7 +170,7 @@ struct e820_range {
    * ACPI-defined range type.
    */
   uint32_t type;
-} __packed;
+} __packed /** packed. */;
 
 /*
  * ACPI memory range types
