@@ -5,16 +5,37 @@
  */
 #include <mcube/mcube.h>
 
+/**
+ * @var bh_nodes[NR_THREADS]
+ * @brief Binominap heap nodes.
+ */
+static struct bheap_node bh_nodes[NR_THREADS];
 
-struct bheap_node bh_nodes[NR_THREADS];
+/**
+ * @var thread_prio
+ * @brief Thread priority.
+ */
+static thread_prio_t thread_prio = thread_is_high_prio;
 
-thread_prio_t thread_prio = thread_is_high_prio;
-
+/**
+ * @fn bool empty_bheap(struct rt_runqueue *rq)
+ * @brief Is bheap empty?
+ *
+ * @param rq Runqueue.
+ * @return True if bheap is empty.
+ */
 bool empty_bheap(struct rt_runqueue *rq)
 {
   return !(rq->head) && !(rq->min);
 }
 
+/**
+ * @fn void link_bheap(struct bheap_node *root, struct bheap_node *child)
+ * @brief make child a subtree of root.
+ *
+ * @param root Root node.
+ * @param child Child node.
+ */
 void link_bheap(struct bheap_node *root, struct bheap_node *child)
 {
   child->parent = root;
@@ -24,6 +45,14 @@ void link_bheap(struct bheap_node *root, struct bheap_node *child)
 }
 
 
+/**
+ * @fn struct bheap_node *merge_bheap(struct bheap_node *p, struct bheap_node *q)
+ * @brief merge bheap nodes.
+ *
+ * @param p Node.
+ * @param q Node.
+ * @return Merged head node.
+ */
 struct bheap_node *merge_bheap(struct bheap_node *p,
                                struct bheap_node *q)
 {
@@ -51,6 +80,13 @@ struct bheap_node *merge_bheap(struct bheap_node *p,
   return head;
 }
 
+/**
+ * @fn struct bheap_node *reverse_bheap(struct bheap_node *h)
+ * @brief reverse a linked list of nodes. also clears parent pointer.
+ *
+ * @param h Node.
+ * @return Reversed header node.
+ */
 struct bheap_node *reverse_bheap(struct bheap_node *h)
 {
   struct bheap_node *tail = NULL;
@@ -74,6 +110,15 @@ struct bheap_node *reverse_bheap(struct bheap_node *h)
   return h;
 }
 
+/**
+ * @fn void min_bheap(struct rt_runqueue *rq, struct bheap_node **prev,
+ *                    struct bheap_node **node);
+ * @brief get minimum node.
+ *
+ * @param rq Runqueue.
+ * @param prev Previous node to minimum node.
+ * @param node Minimum Node.
+ */
 void min_bheap(struct rt_runqueue *rq, struct bheap_node **prev,
                struct bheap_node **node)
 {
@@ -106,6 +151,13 @@ void min_bheap(struct rt_runqueue *rq, struct bheap_node **prev,
 }
 
 
+/**
+ * @fn void union_bheap(struct rt_runqueue *rq, struct bheap_node *h2)
+ * @brief union bheap.
+ *
+ * @param rq Runqueue.
+ * @param h2 Node.
+ */
 void union_bheap(struct rt_runqueue *rq, struct bheap_node *h2)
 {
   struct bheap_node *h1;
@@ -159,6 +211,13 @@ void union_bheap(struct rt_runqueue *rq, struct bheap_node *h2)
   rq->head = h1;
 }
 
+/**
+ * @fn struct bheap_node *min_bheap_extract(struct rt_runqueue *rq)
+ * @brief get minimum node with extraction.
+ *
+ * @param rq Runqueue.
+ * @return Minimum node.
+ */
 struct bheap_node *min_bheap_extract(struct rt_runqueue *rq)
 {
   struct bheap_node *prev, *node;
@@ -178,6 +237,13 @@ struct bheap_node *min_bheap_extract(struct rt_runqueue *rq)
   return node;
 }
 
+/**
+ * @fn void insert_bheap(struct rt_runqueue *rq, struct bheap_node *node)
+ * @brief insert (and reinitialize) a node into the bheap.
+ *
+ * @param rq Runqueue.
+ * @param node Node.
+ */
 void insert_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 {
   struct bheap_node *min;
@@ -202,6 +268,10 @@ void insert_bheap(struct rt_runqueue *rq, struct bheap_node *node)
   }
 }
 
+/**
+ * @fn void min_bheap_uncache(struct rt_runqueue *rq)
+ * @brief get minimum node with uncache.
+ */
 void min_bheap_uncache(struct rt_runqueue *rq)
 {
   struct bheap_node *min;
@@ -214,6 +284,14 @@ void min_bheap_uncache(struct rt_runqueue *rq)
 }
 
 /* merge addition into target */
+/**
+ * @fn void union_bheap_uncache(struct rt_runqueue *target,
+ *                              struct rt_runqueue *addition)
+ * @brief merge @a addition into @a target.
+ *
+ * @param target Target runqueue.
+ * @param addition Addition runqueue.
+ */
 void union_bheap_uncache(struct rt_runqueue *target,
                          struct rt_runqueue *addition)
 {
@@ -226,6 +304,13 @@ void union_bheap_uncache(struct rt_runqueue *target,
 }
 
 
+/**
+ * @fn void decrease_bheap(struct rt_runqueue *rq, struct bheap_node *node)
+ * @brief decrease bheap.
+ *
+ * @param rq Runqueue.
+ * @param node Node.
+ */
 void decrease_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 {
   struct bheap_node *parent;
@@ -263,6 +348,13 @@ void decrease_bheap(struct rt_runqueue *rq, struct bheap_node *node)
   }
 }
 
+/**
+ * @fn void delete_bheap(struct rt_runqueue *rq, struct bheap_node *node)
+ * @brief delete bheap.
+ *
+ * @param rq Runqueue.
+ * @param node Node.
+ */
 void delete_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 {
   struct bheap_node *parent, *prev, *pos;
@@ -328,6 +420,13 @@ void delete_bheap(struct rt_runqueue *rq, struct bheap_node *node)
 }
 
 
+/**
+ * @fn void print_bheap(struct rt_runqueue *rq, struct bheap_node *th)
+ * @brief print bheap.
+ *
+ * @param rq Runqueue.
+ * @param th Thread.
+ */
 void print_bheap(struct rt_runqueue *rq, struct bheap_node *h)
 {
   static int nr_tabs = 0;
@@ -392,6 +491,13 @@ struct thread_struct *pick_next_thread(void)
   return th;
 }
 
+/**
+ * @fn void init_bheap_node(struct bheap_node *h, struct thread_struct *value)
+ * @brief initialize bheap node.
+ *
+ * @param h Node.
+ * @param value Thread.
+ */
 void init_bheap_node(struct bheap_node *h, struct thread_struct *value)
 {
   h->parent = NULL;

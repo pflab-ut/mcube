@@ -156,27 +156,6 @@ int move_to_user_level(void);
  */
 struct task_struct *do_create_task(struct th_attr *attr);
 
-/**
- * @fn int copy_process(unsigned long func, unsigned long arg)
- * @brief copy process.
- *
- * @param func Address of function.
- * @param arg Argument.
- * @return Zero if success.
- */
-int copy_process(unsigned long func, unsigned long arg);
-
-/**
- * @fn void copy_arch_process(struct task_struct *p, unsigned long func,
- *                            unsigned long arg)
- * @brief Copy architecture dependent values in process
- *
- * @param p Pointer to task.
- * @param func Pointer to function.
- * @param arg Argument.
- */
-void copy_arch_process(struct task_struct *p, unsigned long func,
-                       unsigned long arg);
 
 /**
  * @fn void ret_from_fork(void)

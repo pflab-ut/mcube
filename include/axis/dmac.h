@@ -13,7 +13,7 @@
 #define DMAC_CTRL (DMAC_BASE + 0x0)
 
 /**
- * @defDMAC_TRANSFER_SIZE
+ * @def DMAC_TRANSFER_SIZE
  * @brief DMAC transfer size.
  */
 #define DMAC_TRANSFER_SIZE (DMAC_BASE + 0x4)
@@ -104,7 +104,7 @@ static inline uint32_t get_dmac_transfer_size(void)
  * @fn static inline void set_dmac_transfer_size(volatile uint32_t data)
  * @brief set DMAC transfer size.
  *
- * @param size Size.
+ * @param data Data.
  */
 static inline void set_dmac_transfer_size(volatile uint32_t data)
 {

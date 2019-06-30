@@ -10,8 +10,13 @@
 struct file_struct files[NR_FILES] = {{0}};
 
 
-int link(__unused const char *oldpath, const char *newpath)
+int link(const char *oldpath, const char *newpath)
 {
+  if (oldpath) {
+    errno = EINVAL;
+    return -1;
+  }
+
   for (int i = 0; i < NR_FILES; i++) {
     if (strcmp(newpath, files[i].pathname) == 0) {
       /* file exists. */

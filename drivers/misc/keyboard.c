@@ -19,24 +19,54 @@ enum {
 };
 
 /**
- * Motherboard controller's status; (R) from port 0x64
+ * @union i8042_status
+ * @brief Motherboard controller's status; (R) from port 0x64.
  */
 union i8042_status {
+  /**
+   * Raw.
+   */
   uint8_t raw;
   struct {
-    uint8_t output_ready: 1, /* 1: a byte's waiting to be read */
-            input_busy: 1, /* 1: full input buffer (0x60|0x64) */
-            reset: 1, /* 1: self-test successful */
-            last: 1,   /* 0: data sent last. 1: command */
-            __unused0: 1,
-            tx_timeout: 1, /* 1: transmit to keyboard timeout */
-            rx_timeout: 1, /* 1: receive from keyboard timeout */
-            parity_error: 1; /* 1: parity error on serial link */
-  } __packed;
+    uint8_t
+    /**
+     * 1: a byte's waiting to be read.
+     */
+    output_ready: 1,
+                  /**
+                   * 1: full input buffer (0x60|0x64).
+                   */
+                  input_busy: 1,
+                  /**
+                   * 1: self-test successful.
+                   */
+                  reset: 1,
+                  /**
+                   * 0: data sent last. 1: command.
+                   */
+                  last: 1,
+                  /**
+                   * Unused.
+                   */
+                  __unused0: 1,
+                  /**
+                   * 1: transmit to keyboard timeout.
+                   */
+                  tx_timeout: 1,
+                  /**
+                   * 1: receive from keyboard timeout.
+                   */
+                  rx_timeout: 1,
+                  /**
+                   * 1: parity error on serial link.
+                   */
+                  parity_error: 1;
+  } __packed /** packed. */;
 };
 
 /**
- * Motherboard controller's commands; (W) to port 0x64
+ * @enum i8042_cmd
+ * @brief Motherboard controller's commands; (W) to port 0x64.
  */
 enum i8042_cmd {
   READ_CMD  = 0x20,    /* Read current command byte */
@@ -49,26 +79,56 @@ enum i8042_cmd {
 };
 
 /**
- * Motherboard controller's output port (P2) pins description.
+ * @union i8042_p2
+ * @brief Motherboard controller's output port (P2) pins description.
  * Such pins are connected to system lines like the on-keyboard
  * controller, IRQ1, system reboot, and the A20 multiplexer.
  */
 union i8042_p2 {
+  /**
+   * Raw.
+   */
   uint8_t raw;
   struct {
-    uint8_t reset: 1,       /* Write 0 to system reset */
-            a20: 1,   /* If 0, A20 line is zeroed */
-            __unused0: 1,
-            __unused1: 1,
-            irq1: 1,   /* Output Buffer Full (IRQ1 high) */
-            input: 1, /* Input buffer empty */
-            clock: 1, /* PS/2 keyboard clock line */
-            data: 1;   /* PS/2 keyboard data line */
-  } __packed;
+    uint8_t
+    /**
+     * Write 0 to system reset.
+     */
+    reset: 1,
+           /**
+            * If 0, A20 line is zeroed.
+            */
+           a20: 1,
+           /**
+            * Unused.
+            */
+           __unused0: 1,
+           /**
+            * Unused.
+            */
+           __unused1: 1,
+           /**
+            * Output Buffer Full (IRQ1 high).
+            */
+           irq1: 1,
+           /**
+            * Input buffer empty.
+            */
+           input: 1,
+           /**
+            * PS/2 keyboard clock line.
+            */
+           clock: 1,
+           /**
+            * PS/2 keyboard data line.
+            */
+           data: 1;
+  } __packed /** packed. */;
 };
 
 /**
- * On-keyboard controller commands; written to port 0x60.
+ * @enum keyboard_cmd
+ * @brief On-keyboard controller commands; written to port 0x60.
  *
  * If the i8042 is expecting data from a previous command, we
  * write it to 0x60. Otherwise, bytes written to 0x60 are sent
@@ -92,13 +152,17 @@ enum {
   KEY_NONE  = 0xff,    /* No key was pressed - NULL mark */
 };
 
-/*
- * Release code equals system scan code with bit 7 set
+/**
+ * @def RELEASE(code)
+ * Release code equals system scan code with bit 7 set.
+ *
+ * @brief code Release code.
  */
-#define RELEASE(code)  (code | 0x80)
+#define RELEASE(code) (code | 0x80)
 
-/*
- * AT+ (set 2) keyboard scan codes table
+/**
+ * @var scancodes[][2]
+ * @brief AT+ (set 2) keyboard scan codes table.
  */
 static uint8_t scancodes[][2] = {
   [0x01] = {  0,  0, },    /* escape (ESC) */
@@ -158,8 +222,9 @@ static uint8_t scancodes[][2] = {
   [0x39] = { ' ', ' ', },  /* Space */
 };
 
-/*
- * Get a pressed key from the keyboard buffer, if any
+/**
+ * @fn static uint8_t kbd_read_input(void)
+ * @brief get a pressed key from the keyboard buffer, if any.
  */
 static uint8_t kbd_read_input(void)
 {
@@ -174,9 +239,10 @@ static uint8_t kbd_read_input(void)
   return KEY_NONE;
 }
 
-/*
- * Hardware initialization: flush the keyboard buffer. Standard
- * buffer size is 16-bytes; bigger sizes are handled for safety.
+/**
+ * @fn static void kbd_flush_buffer(void)
+ * @brief Hardware initialization: flush the keyboard buffer.
+ * Standard buffer size is 16-bytes; bigger sizes are handled for safety.
  */
 static void kbd_flush_buffer(void)
 {
@@ -191,10 +257,12 @@ static void kbd_flush_buffer(void)
   }
 }
 
-/*
- * The real handler
+/**
+ * @var shifted
+ * @brief Shift keys pressed?
  */
-static int shifted;    /* Shift keys pressed? */
+static int shifted;
+
 void __kb_handler(void)
 {
   uint8_t code, ascii;

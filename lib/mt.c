@@ -9,27 +9,62 @@
   FILE GLOBAL VARIABLES
   internal state, index counter and flag
   --------------------------------------*/
-/** the 128-bit internal state array */
+/**
+ * @var sfmt[SFMT_ARRAY_SIZE]
+ * @brief The 128-bit internal state array;
+ */
 static w128_t sfmt[SFMT_ARRAY_SIZE];
-/** the 32bit integer pointer to the 128-bit internal state array */
+
+/**
+ * @var psfmt32
+ * @brief The 32bit integer pointer to the 128-bit internal state array.
+ */
 static uint32_t *psfmt32 = &sfmt[0].u[0];
-/** the 64bit integer pointer to the 128-bit internal state array */
+
+/**
+ * @var psfmt64
+ * @brief The 64bit integer pointer to the 128-bit internal state array.
+ */
 static uint64_t *psfmt64 = (uint64_t *) &sfmt[0].u[0];
-/** index counter to the 32-bit internal state array */
+
+/**
+ * @var idx.
+ * @brief Index counter to the 32-bit internal state array.
+ */
 static int idx;
-/** a flag: it is 0 if and only if the internal state is not yet
- * initialized. */
+
+/**
+ * @var initialized
+ * @brief a flag: it is 0 if and only if the internal state is not yet initialized.
+ */
 static int initialized = 0;
-/** a parity check vector which certificate the period of 2^{MEXP} */
+
+/**
+ * @var parity[4]
+ * @brief A parity check vector which certificate the period of 2^{MEXP}.
+ */
 static uint32_t parity[4] = {PARITY1, PARITY2, PARITY3, PARITY4};
 
 
-
+/**
+ * @fn static inline int idxof(int i)
+ * @brief Index of @a i.
+ *
+ * @return i;
+ */
 static inline int idxof(int i)
 {
   return i;
 }
 
+/**
+ * @fn static inline void rshift128(w128_t *out, w128_t const *in, int shift)
+ * @brief The 128bit right shift.
+ *
+ * @param out Out.
+ * @param in In.
+ * @param shift Shift.
+ */
 static inline void rshift128(w128_t *out, w128_t const *in, int shift)
 {
   uint64_t th, tl, oh, ol;
@@ -46,6 +81,14 @@ static inline void rshift128(w128_t *out, w128_t const *in, int shift)
   out->u[2] = (uint32_t) oh;
 }
 
+/**
+ * @fn static inline void lshift128(w128_t *out, w128_t const *in, int shift)
+ * @brief The 128bit left shift.
+ *
+ * @param out Out.
+ * @param in In.
+ * @param shift Shift.
+ */
 static inline void lshift128(w128_t *out, w128_t const *in, int shift)
 {
   uint64_t th, tl, oh, ol;
@@ -63,6 +106,18 @@ static inline void lshift128(w128_t *out, w128_t const *in, int shift)
 }
 
 #if (!defined(HAVE_ALTIVEC)) && (!defined(HAVE_SSE2))
+
+/**
+ * @fn static inline void do_recursion(w128_t *r, w128_t *a, w128_t *b, w128_t *c,
+ *                                     w128_t *d)
+ * @brief do recursion.
+ *
+ * @param r Value.
+ * @param a Value.
+ * @param b Value.
+ * @param c Value.
+ * @param d Value.
+ */
 static inline void do_recursion(w128_t *r, w128_t *a, w128_t *b, w128_t *c,
                                 w128_t *d)
 {
@@ -82,6 +137,10 @@ static inline void do_recursion(w128_t *r, w128_t *a, w128_t *b, w128_t *c,
 }
 #endif
 
+/**
+ * @fn static inline void gen_rand_all(void)
+ * @brief generate random number.
+ */
 static inline void gen_rand_all(void)
 {
   int i;
@@ -103,7 +162,10 @@ static inline void gen_rand_all(void)
   }
 }
 
-
+/**
+ * @fn static void period_certification(void)
+ * @brief Period certification.
+ */
 static void period_certification(void)
 {
   int inner = 0;

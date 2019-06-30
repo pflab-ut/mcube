@@ -5,7 +5,7 @@
  */
 #include <mcube/mcube.h>
 
-static spinlock_t putchar_lock = INIT_SPINLOCK;
+spinlock_t putchar_lock = INIT_SPINLOCK;
 
 int putchar(int c)
 {

@@ -73,11 +73,6 @@ extern struct buffer_dumper serial_null_dumper;
  */
 extern struct buffer_dumper null_null_dumper;
 
-/**
- * @fn int null_printer(const char *fmt, ...)
- * @brief Possible functions for the printer.
- */
-int null_printer(const char *fmt, ...);
 
 /**
  * @fn void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len)

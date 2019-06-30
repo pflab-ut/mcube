@@ -8,7 +8,7 @@
 void do_local_dmac(uint32_t dst,
                    uint32_t src,
                    size_t n,
-                   __unused unsigned int ch,
+                   unsigned int ch,
                    enum dmac policy)
 {
   if (policy >= DMAC_END) {
@@ -18,6 +18,11 @@ void do_local_dmac(uint32_t dst,
 
   if (n == 0) {
     printk("Error: transfer size is zero\n");
+    return;
+  }
+
+  if (ch != 0) {
+    printk("Error: channel must be zero\n");
     return;
   }
 

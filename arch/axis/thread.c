@@ -26,8 +26,9 @@ __noreturn void run_user_thread(void)
   inf_loop();
 }
 
-__noreturn void exit(__unused int status)
+void exit(int status)
 {
+  __uninitialized(status);
   disable_local_irq();
   stop_cpu(0);
   inf_loop();

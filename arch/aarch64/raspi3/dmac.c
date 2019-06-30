@@ -6,6 +6,13 @@
 #include <mcube/mcube.h>
 
 
+/**
+ * @var dinfo[NR_DMAC_CHS]
+ * @brief DMAC information.
+ */
+struct dmac_info dinfo[NR_DMAC_CHS];
+
+
 void init_dmac(void)
 {
   //  printk("init_dmac()\n");
@@ -13,8 +20,6 @@ void init_dmac(void)
   mmio_out32(DMAC_INT_STATUS, 0);
 
 }
-
-struct dmac_info dinfo[NR_DMAC_CHS];
 
 void do_local_dmac(uint32_t dst,
                    uint32_t src,

@@ -16,7 +16,7 @@
 #define PIT_CLOCK_RATE 1193182UL
 
 
-/*
+/**
  * Extract a PIT-related bit from port 0x61
  */
 enum {

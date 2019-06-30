@@ -113,7 +113,7 @@ static inline void print_task_bythid(int thid)
  *
  * @param thid Thread ID.
  */
-#define pdebug_task_by_thid(id)
+#define pdebug_task_by_thid(thid)
 #endif /* CONFIG_OPTION_DEBUG */
 
 #endif /* !__ASSEMBLY__ */

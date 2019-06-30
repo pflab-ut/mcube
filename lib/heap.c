@@ -6,8 +6,16 @@
 /* This code is from https://github.com/CCareaga/heap_allocator. */
 #include <mcube/mcube.h>
 
-
+/**
+ * @var overhead
+ * @brief Overhead.
+ */
 static uint overhead = sizeof(footer_t) + sizeof(heap_node_t);
+
+/**
+ * @var offset
+ * @brief Offset.
+ */
 uint offset = 8;
 
 void init_heap(heap_t *heap, long start)
@@ -162,13 +170,17 @@ void heap_free(heap_t *heap, void *p)
 }
 
 // these are left here to implement contraction / expansion
-uint expand(__unused heap_t *heap, __unused size_t size)
+uint expand(heap_t *heap, size_t size)
 {
+  __uninitialized(heap);
+  __uninitialized(size);
   return 0;
 }
 
-void contract(__unused heap_t *heap, __unused size_t size)
+void contract(heap_t *heap, size_t size)
 {
+  __uninitialized(heap);
+  __uninitialized(size);
   return;
 }
 

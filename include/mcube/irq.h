@@ -146,6 +146,40 @@ void register_callback_handler(callback_t func, unsigned long id);
  */
 extern callback_t Callback[NR_CALLBACKS];
 
+/**
+ * @fn int handle_uart_interrupt(void)
+ * @brief handle UART interrupt.
+ *
+ * @return @c IRQ_HANDLED if success.
+ */
+int handle_uart_interrupt(void);
+
+/**
+ * @fn int handle_dmac_interrupt(void)
+ * @brief handle DMAC interrupt.
+ *
+ * @return @c IRQ_HANDLED if success.
+ */
+int handle_dmac_interrupt(void);
+
+/**
+ * @fn int handle_timer_interrupt(void)
+ * @brief handle timer interrupt.
+ *
+ * @return @c IRQ_HANDLED if success.
+ */
+int handle_timer_interrupt(void);
+
+/**
+ * @fn int handle_software_interrupt(unsigned long id)
+ * @brief handle software interrupt.
+ *
+ * @param id ID.
+ * @return @c IRQ_HANDLED if success.
+ */
+int handle_software_interrupt(unsigned long id);
+
+
 #endif /* !__ASSEMBLY__ */
 
 #endif /* __MCUBE_MCUBE_IRQ_H__ */

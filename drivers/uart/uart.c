@@ -34,8 +34,9 @@ size_t uart_write(const char *data, size_t length, uint8_t ch)
   return num;
 }
 
-size_t uart_read(__unused size_t length, uint8_t ch)
+size_t uart_read(size_t length, uint8_t ch)
 {
+  __uninitialized(length);
   return uart_getc(ch);
 }
 

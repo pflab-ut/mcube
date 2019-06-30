@@ -6,16 +6,9 @@
 #include <mcube/mcube.h>
 
 /**
- * The wait_until_next_interrupt() function wait until next interrupt.
- * If next interrupt occurs, wi instruction is not issued after interrupt
- * and the following instructions are issued.
+ * @fn static void increment_wait_interrupt_program_counter(void)
+ * @brief increment wait interrupt program counter.
  */
-void wait_until_next_interrupt(void)
-{
-  asm volatile("__wait_until_next_interrupt:");
-  asm volatile("wi");
-}
-
 static void increment_wait_interrupt_program_counter(void)
 {
   extern unsigned long __wait_until_next_interrupt;
@@ -26,9 +19,13 @@ static void increment_wait_interrupt_program_counter(void)
   }
 }
 
-/**
- * The do_switch_thread() function switches threads.
- */
+
+void wait_until_next_interrupt(void)
+{
+  asm volatile("__wait_until_next_interrupt:");
+  asm volatile("wi");
+}
+
 void do_switch_thread(void)
 {
   unsigned long cpu = get_cpu_id();
@@ -67,7 +64,7 @@ void do_switch_thread(void)
   }
 }
 
-static void handle_timer_interrupt(void)
+int handle_timer_interrupt(void)
 {
   unsigned long cpu = get_cpu_id();
   PDEBUG("%s()\n", __func__);
@@ -108,14 +105,16 @@ static void handle_timer_interrupt(void)
   }
 
   increment_wait_interrupt_program_counter();
+  return 0;
 }
 
-static void handle_dmac_interrupt(void)
+int handle_dmac_interrupt(void)
 {
   PDEBUG("%s()\n", __func__);
   increment_wait_interrupt_program_counter();
   disable_dmac_interrupt();
   set_dmac_status_clear(1);
+  return 0;
 }
 
 void do_sched_by_software_interrupt(void)
@@ -138,7 +137,7 @@ void do_sched_by_software_interrupt(void)
   do_sched();
 }
 
-static void handle_software_interrupt(unsigned long id)
+int handle_software_interrupt(unsigned long id)
 {
   PDEBUG("%s(): id = %lu\n", __func__, id);
   set_common_interrupt_clear(id);
@@ -163,13 +162,11 @@ static void handle_software_interrupt(unsigned long id)
     printk("Error: unknown id %lu\n", id);
     break;
   }
+
+  return 0;
 }
 
-/**
- * The common_interrupt_handler() functions handles common interrupt
- * including timer, DMAC, and software interrupts.
- */
-asmlinkage int do_irq(__unused struct full_regs *regs)
+asmlinkage int do_irq(struct full_regs *regs)
 {
   unsigned long status;
   unsigned long id;
@@ -197,6 +194,7 @@ asmlinkage int do_irq(__unused struct full_regs *regs)
 
   if (id > NR_SOFTWARE_INTERRUPTS) {
     printk("Error: unknown id %lu\n", id);
+    dump_registers(regs);
   } else {
     handle_software_interrupt(id);
   }

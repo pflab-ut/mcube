@@ -385,7 +385,11 @@ extern struct percpu cpus[CPUS_MAX];
     ((__percpu_type(var) *)res);                \
   })
 
-#define PS  percpu_addr(sched)
+/**
+ * @def PS
+ * @brief Percpu address.
+ */
+#define PS percpu_addr(sched)
 
 /**
  * @fn static __always_inline __pure_const struct process *get_current_process(void)

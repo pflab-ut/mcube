@@ -150,7 +150,7 @@
 #define LP_CTRL_REG_TIMER_INCREMENT_BY_2 (0x1 << 9)
 
 /**
- * @def LP_CTRL_REG_TIMER_INCREMENT_BY_2
+ * @def LP_CTRL_REG_TIMER_INCREMENT_BY_1
  * @brief 0 = 64-bit Core timer increments by 1.
  */
 #define LP_CTRL_REG_TIMER_INCREMENT_BY_1 (0x0 << 8)
@@ -554,7 +554,7 @@
 
 /**
  * @def LP_CORE_IRQ_SRC_GPU_INTERRUPT
- * @brief 8: GPU Interrupt <Can be high in one core only>.
+ * @brief 8: GPU Interrupt can be high in one core only.
  */
 #define LP_CORE_IRQ_SRC_GPU_INTERRUPT (0x1 << 8)
 
@@ -616,7 +616,7 @@
 
 /**
  * @def LP_CORE_FIQ_SRC_GPU_INTERRUPT
- * @brief 8: GPU Fast Interrupt <Can be high in one core only>.
+ * @brief 8: GPU Fast Interrupt can be high in one core only.
  */
 #define LP_CORE_FIQ_SRC_GPU_INTERRUPT (0x1 << 8)
 
@@ -749,7 +749,7 @@ static inline void disable_mailbox_interrupt(void)
  * @fn void register_mailbox_callback_handler(callback_t func)
  * @brief register mailbox callback handler.
  *
- * @parma func Callback function.
+ * @param func Callback function.
  */
 void register_mailbox_callback_handler(callback_t func);
 

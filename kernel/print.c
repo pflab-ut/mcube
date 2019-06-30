@@ -11,13 +11,24 @@
 
 #include <mcube/mcube.h>
 
+/**
+ * @def PRINT_MAX_RADIX
+ * @brief print max radix.
+ */
+#define PRINT_MAX_RADIX 16
 
-#define PRINTK_MAX_RADIX 16
+/**
+ * @var digit[PRINT_MAX_RADIX + 1]
+ * @brief Digit.
+ */
+static char digit[PRINT_MAX_RADIX + 1] = "0123456789abcdef";
 
-static char digit[PRINTK_MAX_RADIX + 1] = "0123456789abcdef";
-
-
+/**
+ * @var pbuf[KBUF_SIZE]
+ * @brief print buffer.
+ */
 static char pbuf[KBUF_SIZE];
+
 
 #if CONFIG_ARCH_AXIS
 spinlock_t pbuf_lock;
@@ -25,11 +36,19 @@ spinlock_t pbuf_lock;
 spinlock_t pbuf_lock = INIT_SPINLOCK;
 #endif /* CONFIG_ARCH_AXIS */
 
+/**
+ * @def INT_BUFSIZE
+ * @brief Integer buffer size.
+ */
 #define INT_BUFSIZE 32
 
 
 #if CONFIG_ARCH_X86_64
 
+/**
+ * @var panic_lock
+ * @brief Panic lock.
+ */
 static spinlock_t panic_lock = INIT_SPINLOCK;
 
 /*
@@ -120,10 +139,16 @@ void __noreturn panic(const char *fmt, ...)
 
 
 
-/*
- * Convert given unsigned long integer (@num) to ascii using
- * desired radix. Return the number of ascii chars printed.
- * @size: output buffer size
+/**
+ * @fn static int luout(unsigned long num, char *buf, int size,
+ *                      struct format_argdesc *desc)
+ * @brief convert given unsigned long integer (@a num) to ascii using desired radix.
+ * Return the number of ascii chars printed.
+ *
+ * @param num Number.
+ * @param buf Buffer.
+ * @param size output buffer size.
+ * @param desc Descriptor.
  */
 static int luout(unsigned long num, char *buf, int size,
                  struct format_argdesc *desc)
@@ -131,7 +156,7 @@ static int luout(unsigned long num, char *buf, int size,
   int ret, digits;
   int i;
 
-  format_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
+  format_assert(desc->radix > 2 && desc->radix <= PRINT_MAX_RADIX);
 
   digits = 0;
 
@@ -181,15 +206,21 @@ static int luout(unsigned long num, char *buf, int size,
 }
 
 
-/*
- * Convert given signed long integer (@num) to ascii using
- * desired radix. Return the number of ascii chars printed.
- * @size: output buffer size
+/**
+ * @fn static int lout(signed long num, char *buf, int size,
+ *                     struct format_argdesc *desc)
+ * @brief convert given signed long integer (@a num) to ascii using desired radix.
+ * Return the number of ascii chars printed.
+ *
+ * @param num Number.
+ * @param buf Buffer.
+ * @param size output buffer size.
+ * @param desc Descriptor.
  */
 static int lout(signed long num, char *buf, int size,
                 struct format_argdesc *desc)
 {
-  format_assert(desc->radix > 2 && desc->radix <= PRINTK_MAX_RADIX);
+  format_assert(desc->radix > 2 && desc->radix <= PRINT_MAX_RADIX);
 
   if (num < 0) {
     /* Make room for the '-' */
@@ -207,6 +238,17 @@ static int lout(signed long num, char *buf, int size,
 
 #if defined(ENABLE_FPU)
 
+/**
+ * @fn static int lfout(double num, char *buf, int size,
+ *                      struct format_argdesc *desc)
+ * @brief convert given double number (@a num) to ascii using desired radix.
+ * Return the number of ascii chars printed.
+ *
+ * @param num Number.
+ * @param buf Buffer.
+ * @param size Size.
+ * @param desc Descriptor.
+ */
 static int lfout(double num, char *buf, int size,
                  struct format_argdesc *desc)
 {
@@ -406,19 +448,66 @@ int vsnprint(char *str, int size, const char *fmt, va_list args)
 
 #if CONFIG_ARCH_X86_64
 
-#define VGA_BASE    ((char *) VIRTUAL(0xb8000))
-#define VGA_MAXROWS    25
-#define VGA_MAXCOLS    80
-#define VGA_DEFAULT_COLOR  VGA_COLOR(VGA_BLACK, VGA_WHITE)
-#define VGA_AREA    (VGA_MAXROWS * VGA_MAXCOLS * 2)
+/**
+ * @def VGA_BASE
+ * @brief VGA base address.
+ */
+#define VGA_BASE ((char *) VIRTUAL(0xb8000))
 
+/**
+ * @def VGA_MAXROWS
+ * @brief VGA maximum rows.
+ */
+#define VGA_MAXROWS 25
+
+/**
+ * @def VGA_MAXCOLS
+ * @brief VGA maximum cols.
+ */
+#define VGA_MAXCOLS 80
+
+/**
+ * @def VGA_DEFAULT_COLOR
+ * @brief VGA default color.
+ */
+#define VGA_DEFAULT_COLOR VGA_COLOR(VGA_BLACK, VGA_WHITE)
+
+/**
+ * @def VGA_AREA
+ * @brief VGA area.
+ */
+#define VGA_AREA (VGA_MAXROWS * VGA_MAXCOLS * 2)
+
+/**
+ * @var vga_lock
+ * @brief VGA lock.
+ */
 static spinlock_t vga_lock = INIT_SPINLOCK;
-static int vga_xpos, vga_ypos;
+
+/**
+ * @var vga_xpos
+ * @brief VGA x-position.
+ */
+static int vga_xpos;
+
+/**
+ * @var vga_ypos
+ * @brief VGA y-position.
+ */
+static int vga_ypos;
+
+/**
+ * @var vga_buffer[VGA_AREA]
+ * @brief VGA buffer.
+ */
 static char vga_buffer[VGA_AREA];
 
-/*
- * Scroll the screen up by one row.
- * NOTE! only call while the vga lock is held
+/**
+ * @fn static void vga_scrollup(int color)
+ * @brief scroll the screen up by one row.
+ * NOTE! only call while the vga lock is held.
+ *
+ * @param color Color.
  */
 static void vga_scrollup(int color)
 {
@@ -443,9 +532,13 @@ static void vga_scrollup(int color)
   vga_ypos--;
 }
 
-/*
- * Write given buffer to VGA ram and scroll the screen
- * up as necessary.
+/**
+ * @fn static void vga_write(char *buf, int n, int color)
+ * @brief write given buffer to VGA ram and scroll the screen up as necessary.
+ *
+ * @param buf Buffer.
+ * @param n Number.
+ * @param color Color.
  */
 static void vga_write(char *buf, int n, int color)
 {

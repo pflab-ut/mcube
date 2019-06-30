@@ -116,13 +116,6 @@ void get_cluster_from_index(struct cluster *c, volatile int index,
 }
 
 
-
-void copy_arch_process(__unused struct task_struct *p,
-                       __unused unsigned long func,
-                       __unused unsigned long arg)
-{
-}
-
 void set_cpu_clock(void)
 {
   CPU_CLOCK_MHZ_PER_USEC = 333;

@@ -196,7 +196,7 @@ static inline bool is_irq_enabled(__unused unsigned long flags)
 
 /**
  * @fn static inline void save_local_irq(union rflags *flags)
- * @bref save local IRQ.
+ * @brief save local IRQ.
  *
  * @param flags Flags.
  */

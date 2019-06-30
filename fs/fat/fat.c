@@ -29,8 +29,16 @@
  *
  */
 
-
+/**
+ * @var partitionlba
+ * @brief Partition logical block address.
+ */
 static unsigned int partitionlba = 0;
+
+/**
+ * @var __end
+ * @brief End of BSS.
+ */
 extern unsigned char __end;
 
 

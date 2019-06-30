@@ -16,23 +16,24 @@
 
 #include <mcube/mcube.h>
 
-/*
- * BIOS-reported usable cores count
+/**
+ * @var nr_cpus
+ * @brief BIOS-reported usable cores count.
  *
  * The BIOS knows if a core is usable by checking its
  * Builtin-self-test (BIST) result in %rax after RESET#
  */
 int nr_cpus = 1;
 
-/*
- * CPU Descriptors Table
+/**
+ * @var cpus[CPUS_MAX]
+ * @brief CPU Descriptors Table.
  *
  * Data is gathered from MP or ACPI MADT tables.
  *
  * To make '__current' available to early boot code, it's statically
  * allocated in the first slot. Thus, slot 0 is reserved for the BSC.
  */
-extern struct process swapper;
 struct percpu cpus[CPUS_MAX] = {
   [0] = {
     .__current = &swapper,
@@ -49,10 +50,15 @@ int mp_isa_busid = -1;
 int nr_mpcirqs;
 struct mpc_irq mp_irqs[MAX_IRQS];
 
-/*
- * Checksum method for all MP structures: "All bytes
+/**
+ * @fn static uint8_t mpf_checksum(void *mp, uint32_t len)
+ * @brief Checksum method for all MP structures: "All bytes
  * specified by the length field, including the 'checksum'
  * field and reserved bytes, must add up to zero."
+ *
+ * @param mp MP
+ * @param len Length.
+ * @return Sum of MP.
  */
 static uint8_t mpf_checksum(void *mp, uint32_t len)
 {
@@ -66,6 +72,14 @@ static uint8_t mpf_checksum(void *mp, uint32_t len)
   return sum;
 }
 
+/**
+ * @fn static struct mpf_struct *search_for_mpf(void *base, uint32_t len)
+ * @brief search for MP floating pointer.
+ *
+ * @param base Base.
+ * @param len Length.
+ * @return MP pointer if found, and NULL if not found.
+ */
 static struct mpf_struct *search_for_mpf(void *base, uint32_t len)
 {
   struct mpf_struct *mpf = base;
@@ -103,14 +117,17 @@ static struct mpf_struct *search_for_mpf(void *base, uint32_t len)
   return NULL;
 }
 
-/*
- * Search for the MP floating pointer structure in:
+/**
+ * @fn static struct mpf_struct *get_mpf(void)
+ * @brief Search for the MP floating pointer structure in:
  * - first KB of the extended bios data area (EBDA)
  * - last KB of system base memory (639K-640K)
  * - BIOS ROM address space 0xf0000-0xfffff
  *
  * On AT+ systems, the real-mode segment of the EBDA is
  * stored in the BIOS data area at 0x40:0x0e
+ *
+ * @return MP floating pointer.
  */
 static struct mpf_struct *get_mpf(void)
 {
@@ -134,9 +151,12 @@ static struct mpf_struct *get_mpf(void)
   return NULL;
 }
 
-/*
- * Check given MP configuration table header integrity
- * Return -1 on error
+/**
+ * @fn static int mpc_check(struct mpc_table *mpc)
+ * @brief check given MP configuration table header integrity
+ *
+ * @param mpc MP configuration table.
+ * @return 1 if success, and 0 if failure.
  */
 static int mpc_check(struct mpc_table *mpc)
 {
@@ -195,12 +215,14 @@ void mpc_dump(struct mpc_table *mpc)
 }
 
 
-/*
- * MP base conf table entries parsers. Copy all the needed data
- * to system-wide structures now as we won't parse any of the
- * tables again.
+/**
+ * @fn static void parse_cpu(void *addr)
+ * @brief MP base conf table entries parsers.
+ * Copy all the needed data to system-wide structures now as
+ * we won't parse any of the tables again.
+ *
+ * @param addr Address.
  */
-
 static void parse_cpu(void *addr)
 {
   struct mpc_cpu *cpu = addr;
@@ -229,6 +251,12 @@ static void parse_cpu(void *addr)
   ++nr_cpus;
 }
 
+/**
+ * @fn static void parse_ioapic(void *addr)
+ * @brief parse I/O APIC.
+ *
+ * @param addr Address.
+ */
 static void parse_ioapic(void *addr)
 {
   struct mpc_ioapic *ioapic = addr;
@@ -249,6 +277,12 @@ static void parse_ioapic(void *addr)
   ++nr_ioapics;
 }
 
+/**
+ * @fn static void parse_irq(void *addr)
+ * @brief parse IRQ.
+ *
+ * @param addr Address.
+ */
 static void parse_irq(void *addr)
 {
   struct mpc_irq *irq = addr;
@@ -262,6 +296,10 @@ static void parse_irq(void *addr)
   ++nr_mpcirqs;
 }
 
+/**
+ * @fn static void parse_bus(void *addr)
+ * @brief parse bus.
+ */
 static void parse_bus(void *addr)
 {
   struct mpc_bus *bus = addr;
@@ -274,9 +312,13 @@ static void parse_bus(void *addr)
   return;
 }
 
-/*
- * Parse the MP configuration table, copying needed data
+/**
+ * @fn static int parse_mpc(struct mpc_table *mpc)
+ * @brief parse the MP configuration table, copying needed data
  * to our own system-wide mp_*[] tables.
+ *
+ * @param mpc MP configuration table.
+ * @return 1 if success, and 0 if failure.
  */
 static int parse_mpc(struct mpc_table *mpc)
 {

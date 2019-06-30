@@ -18,10 +18,14 @@
 #include <mcube/mcube.h>
 
 
-/*
+/**
+ * @fn static inline void outb_pic(uint8_t val, uint16_t port)
  * As said in a linux kernel comment, delay for access to PIC on
  * motherboard or in chipset must be at least one microsecnod.
  * FIXME: use a time-based delay function once it's ready.
+ *
+ * @param val Value.
+ * @param port Port.
  */
 static inline void outb_pic(uint8_t val, uint16_t port)
 {
@@ -29,8 +33,9 @@ static inline void outb_pic(uint8_t val, uint16_t port)
   io_delay();
 }
 
-/*
- * Mask the now-obsolete 8259A PICs by setting all the bits
+/**
+ * @fn static inline void i8259_mask(void)
+ * @brief mask the now-obsolete 8259A PICs by setting all the bits
  * of the Interrupt Mask Register.
  */
 static inline void i8259_mask(void)

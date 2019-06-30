@@ -749,7 +749,7 @@ struct frame_buffer {
    * Pitch.
    */
   unsigned int pitch;
-};
+} __aligned(64) /** aligned. */;
 
 
 

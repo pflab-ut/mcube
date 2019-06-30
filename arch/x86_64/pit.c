@@ -41,8 +41,9 @@
  * Test PIT's monotonic mode code
  */
 
-/*
- * Increase the counter for each periodic PIT tick.
+/**
+ * @var pit_ticks_count
+ * @brief increase the counter for each periodic PIT tick.
  */
 volatile int pit_ticks_count = 0;
 
@@ -51,8 +52,9 @@ void __pit_periodic_handler(void)
   pit_ticks_count++;
 }
 
-/*
- * Start counter 2: raise the GATE-2 pin.
+/**
+ * @fn static inline void timer2_start(void)
+ * @brief start counter 2: raise the GATE-2 pin.
  * Disable glue between OUT-2 and the speaker in the process
  */
 static inline void timer2_start(void)
@@ -63,8 +65,9 @@ static inline void timer2_start(void)
   outb(val, 0x61);
 }
 
-/*
- * Freeze counter 2: clear the GATE-2 pin.
+/**
+ * @fn static inline void timer2_stop(void)
+ * @brief freeze counter 2: clear the GATE-2 pin.
  */
 static inline void timer2_stop(void)
 {
@@ -74,16 +77,18 @@ static inline void timer2_stop(void)
   outb(val, 0x61);
 }
 
-/*
- * Set the given PIT counter with a count representing given
+/**
+ * @fn static void pit_set_counter(uint64_t us, int counter_reg)
+ * @brief set the given PIT counter with a count representing given
  * milliseconds value relative to the PIT clock rate.
- *
- * @counter_reg: PIT_COUNTER{0, 1, 2}
  *
  * Due to default oscillation frequency and the max counter
  * size of 16 bits, maximum delay is around 53 milliseconds.
  *
  * Countdown begins once counter is set and GATE-x is up.
+ *
+ * @param us Microsecond.
+ * @param counter_reg PIT_COUNTER{0, 1, 2}
  */
 static void pit_set_counter(uint64_t us, int counter_reg)
 {
@@ -108,8 +113,9 @@ static void pit_set_counter(uint64_t us, int counter_reg)
   outb(counter_high, counter_reg);
 }
 
-/*
- * Did we program PIT's counter0 to monotonic mode?
+/**
+ * @var timer0_monotonic
+ * @brief Did we program PIT's counter0 to monotonic mode?
  */
 static bool timer0_monotonic;
 

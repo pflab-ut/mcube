@@ -11,27 +11,27 @@
 
 
 /**
- * @fn static inline uint64_t tsc2usec(uint64_t tsc)
+ * @fn static inline unsigned long tsc2usec(unsigned long tsc)
  * @brief Time stamp counter to microsecond.
  *
  * @param tsc Time stamp counter.
  * @return Microsecond.
  */
-static inline uint64_t tsc2usec(uint64_t tsc)
+static inline unsigned long tsc2usec(unsigned long tsc)
 {
-  return ((uint64_t)((tsc) * CPU_USEC_PER_CLOCK_MHZ + 0.5));
+  return ((unsigned long)((tsc) * CPU_USEC_PER_CLOCK_MHZ + 0.5));
 }
 
 /**
- * @fn static inline uint64_t tsc2nsec(uint64_t tsc)
+ * @fn static inline unsigned long tsc2nsec(unsigned long tsc)
  * @brief Time stamp counter to nanosecond.
  *
  * @param tsc Time stamp counter.
  * @return Nanosecond.
  */
-static inline uint64_t tsc2nsec(uint64_t tsc)
+static inline unsigned long tsc2nsec(unsigned long tsc)
 {
-  return ((uint64_t)((tsc) * CPU_NSEC_PER_CLOCK_MHZ + 0.5));
+  return ((unsigned long)((tsc) * CPU_NSEC_PER_CLOCK_MHZ + 0.5));
 }
 
 /**

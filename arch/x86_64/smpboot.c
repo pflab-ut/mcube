@@ -12,8 +12,9 @@
 #include <mcube/mcube.h>
 
 
-/*
- * Number of active CPUs so far: BSC + SIPI-started AP
+/**
+ * @var nr_alive_cpus
+ * @brief Number of active CPUs so far: BSC + SIPI-started AP
  * cores that are now verifiably executing kernel code.
  */
 static int nr_alive_cpus = 1;
@@ -22,17 +23,24 @@ static int nr_alive_cpus = 1;
  * Common Inter-Processor Interrupts
  */
 
-/*
- * Zero INIT vector field for "future compatibility".
+/**
+ * @fn static inline void send_init_ipi(int apic_id)
+ * @brief Zero INIT vector field for "future compatibility".
+ *
+ * @param apic_id APIC ID.
  */
 static inline void send_init_ipi(int apic_id)
 {
   apic_send_ipi(apic_id, APIC_DELMOD_INIT, 0);
 }
 
-/*
- * ICR's vector field is 8-bits; For the value 0xVV,
+/**
+ * @fn static inline void send_startup_ipi(int apic_id, uint32_t start_vector)
+ * @brief ICR's vector field is 8-bits; For the value 0xVV,
  * SIPI target core will start from 0xVV000.
+ *
+ * @param apic_id APIC ID.
+ * @param start_vector Start vector.
  */
 static inline void send_startup_ipi(int apic_id, uint32_t start_vector)
 {
@@ -42,15 +50,18 @@ static inline void send_startup_ipi(int apic_id, uint32_t start_vector)
   apic_send_ipi(apic_id, APIC_DELMOD_START, start_vector >> 12);
 }
 
-/*
- * "It is up to the software to determine if the SIPI was
+/**
+ * @def MAX_SIPI_RETRY
+ * @brief "It is up to the software to determine if the SIPI was
  * not successfully delivered and to reissue the SIPI if
  * necessary." --Intel
  */
-#define MAX_SIPI_RETRY  3
+#define MAX_SIPI_RETRY 3
 
-/*
- * Do not broadcast Intel's INIT-SIPI-SIPI sequence as this
+/**
+ * @fn static int start_secondary_cpu(struct percpu *cpu,
+ *                                    struct smpboot_params *params)
+ * @brief Do not broadcast Intel's INIT-SIPI-SIPI sequence as this
  * may wake-up CPUs marked by the BIOS as faulty, or defeat
  * the user choice of disabing a certain core in BIOS setup.
  *
@@ -58,6 +69,10 @@ static inline void send_startup_ipi(int apic_id, uint32_t start_vector)
  *
  * FIXME: 200 micro-second delay between the SIPIs
  * FIXME: fine-grained timeouts using micro-seconds
+ *
+ * @param cpu CPU.
+ * @param params SMP boot parameters.
+ * @return Zero if success, and nonzero if failure.
  */
 static int start_secondary_cpu(struct percpu *cpu,
                                struct smpboot_params *params)
@@ -145,15 +160,20 @@ fail:
   return 1;
 }
 
-/*
- * @cpu: iterator of type ‘struct percpu *’.
+/**
+ * @def for_all_cpus(cpu)
+ * @param cpu iterator of type "struct percpu *".
  */
 #define for_all_cpus(cpu)      \
   for (cpu = &cpus[0]; cpu != &cpus[mptables_get_nr_cpus()]; cpu++)
-#define for_all_cpus_except_bootstrap(cpu)  \
+
+/**
+ * @def for_all_cpus_except_bootstrap(cpu)
+ * @param cpu iterator of type "struct percpu *".
+ */
+#define for_all_cpus_except_bootstrap(cpu)                          \
   for (cpu = &cpus[1]; cpu != &cpus[mptables_get_nr_cpus()]; cpu++)
 
-spinlock_t gdt_lock = INIT_SPINLOCK;
 
 /*
  * AP cores C code entry. We come here from the trampoline,

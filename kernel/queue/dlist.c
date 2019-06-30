@@ -5,7 +5,16 @@
  */
 #include <mcube/mcube.h>
 
-
+/**
+ * @fn static void enqueue_rq_dlist(struct rt_runqueue *rq,
+ *                                  struct thread_struct *th,
+ *                                  unsigned long offset)
+ * @brief enqueue runqueue dlist.
+ *
+ * @param rq Runqueue.
+ * @param th Thread.
+ * @param offset Offset.
+ */
 static void enqueue_rq_dlist(struct rt_runqueue *rq,
                              struct thread_struct *th,
                              unsigned long offset)

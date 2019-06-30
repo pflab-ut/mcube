@@ -29,9 +29,29 @@
  *
  */
 
+/**
+ * @var sd_scr[2]
+ * @brief SD SCR.
+ */
+static unsigned long sd_scr[2];
 
+/**
+ * @var sd_rca
+ * @brief SD RCA.
+ */
+static unsigned long sd_rca;
 
-unsigned long sd_scr[2], sd_ocr, sd_rca, sd_err, sd_hv;
+/**
+ * @var sd_err
+ * @brief SD error.
+ */
+static unsigned long sd_err;
+
+/**
+ * @var sd_hv
+ * @brief SD HV.
+ */
+static unsigned long sd_hv;
 
 
 int sd_status(unsigned int mask)

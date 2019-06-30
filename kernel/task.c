@@ -5,35 +5,15 @@
  */
 #include <mcube/mcube.h>
 
+/**
+ * @var init_task
+ * @brief Initialized task.
+ */
 static struct task_struct init_task = INIT_TASK;
+
 struct task_struct *current_task = &(init_task);
 struct task_struct *tasks[NR_TASKS] = {&init_task, };
 
-int copy_process(__unused unsigned long func, __unused unsigned long arg)
-{
-#if 0
-  struct task_struct *p;
-  int pid;
-
-  preempt_disable();
-
-  if (!(p = (struct task_struct *) get_free_page())) {
-    print("Error: cannot create task\n");
-    return 1;
-  }
-
-  p->priority = current_task->priority;
-  p->state = RUNNING;
-  p->counter = p->priority;
-  p->preempt_count = 1; //disable preemtion until schedule_tail
-
-  copy_arch_process(p, func, arg);
-  pid = nr_tasks++;
-  tasks[pid] = p;
-  preempt_enable();
-#endif
-  return 0;
-}
 
 /* add newly created to and release old thread from the task */
 void add_thread_to_task(struct thread_struct *th)
@@ -61,7 +41,12 @@ void delete_thread_from_task(struct thread_struct *th)
    * same memory block. */
 }
 
-
+/**
+ * @fn static inline int alloc_task_id(void)
+ * @brief allocate task ID.
+ *
+ * @return Task ID.
+ */
 static inline int alloc_task_id(void)
 {
   static unsigned int task_id = INIT_TASK_ID;

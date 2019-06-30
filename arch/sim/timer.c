@@ -5,8 +5,9 @@
  */
 #include <mcube/mcube.h>
 
-void init_timer(__unused unsigned long tick_us)
+void init_timer(unsigned long tick_us)
 {
+  __uninitialized(tick_us);
 }
 
 

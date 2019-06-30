@@ -5,6 +5,10 @@
  */
 #include <mcube/mcube.h>
 
+/**
+ * @fn static void setup_idt(void)
+ * @brief setup IDT.
+ */
 static void setup_idt(void)
 {
   for (int i = 0; i < EXCEPTION_GATES; i ++) {
@@ -16,12 +20,10 @@ static void setup_idt(void)
   load_idt(&idtdesc);
 }
 
-void clear_bss(void)
-{
-  memset(__bss_start, 0, __bss_end - __bss_start);
-}
-
-
+/**
+ * @fn static void print_memory_info(void)
+ * @brief print memory information.
+ */
 static void print_memory_info(void)
 {
   printk("Mcube Kernel\n\n");
@@ -39,6 +41,10 @@ static void print_memory_info(void)
   printk("BSS size   = %d bytes\n\n", __bss_end - __bss_start);
 }
 
+/**
+ * @fn static void print_vendor_id(void)
+ * @brief print vendor ID.
+ */
 static void print_vendor_id(void)
 {
   char vendor_id[VENDOR_ID_LENGTH + 1];
@@ -52,6 +58,10 @@ static void print_vendor_id(void)
   printk("Vendor ID: %s\n", vendor_id);
 }
 
+/**
+ * @fn static void print_simd_info(void)
+ * @brief print SIMD information.
+ */
 static void print_simd_info(void)
 {
   cpuid_info_t cinfo;
@@ -64,7 +74,10 @@ static void print_simd_info(void)
   printk("AVX2: %s\n", cinfo.rbx & 1 <<  5 ? "OK" : "NG");
 }
 
-
+/**
+ * @fn static void print_cpu_brand_info(void)
+ * @brief print CPU brand information.
+ */
 static void print_cpu_brand_info(void)
 {
   cpuid_info_t cinfo;
@@ -79,13 +92,21 @@ static void print_cpu_brand_info(void)
   printk("CPU Brand: %s\n", cpu_brand);
 }
 
-
+/**
+ * @fn static void print_info(void)
+ * @brief print information.
+ */
 static void print_info(void)
 {
   print_memory_info();
   print_vendor_id();
   print_simd_info();
   print_cpu_brand_info();
+}
+
+void clear_bss(void)
+{
+  memset(__bss_start, 0, __bss_end - __bss_start);
 }
 
 

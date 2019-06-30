@@ -37,8 +37,9 @@ void wait(unsigned long count)
 }
 
 
-__noreturn void exit(__unused int status)
+void exit(int status)
 {
+  __uninitialized(status);
   cli();
   hlt();
   inf_loop();

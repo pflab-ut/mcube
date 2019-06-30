@@ -26,7 +26,6 @@ unsigned long exec_jiffies = 0;
 unsigned long nr_tasks = 0;
 
 int bindex[NR_CPUS];
-int bidleindex;
 
 unsigned long sched_time;
 volatile bool sched_end = false;

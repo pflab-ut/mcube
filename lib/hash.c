@@ -39,9 +39,14 @@ void hash_free(struct hash *hash)
   kfree(hash);
 }
 
-/*
- * Find the element identified by @elem_id in the given hash
- * repository.  Return NULL in case of non-existence.
+/**
+ * @fn static void *hash_find_elem(struct hash *hash, uint elem_id)
+ * @brief find the element identified by @a elem_id in the given hash
+ * repository.
+ *
+ * @param hash Hash.
+ * @param elem_id Element ID.
+ * @return Elemnt if found, and NULL if not found.
  */
 static void *hash_find_elem(struct hash *hash, uint elem_id)
 {

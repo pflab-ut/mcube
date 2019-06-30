@@ -7,8 +7,12 @@
 
 struct thread_struct ths[NR_THREADS];
 
-/* idle should not be in the hash, becuase its const */
-static uint32_t th_id = FIRST_DYNAMIC_THREAD_ID;
+/**
+ * @var ThreadID
+ * @brief Thread ID.
+ * idle should not be in the hash, becuase its const.
+ */
+static uint32_t ThreadID = FIRST_DYNAMIC_THREAD_ID;
 
 unsigned char PAGE_ALIGNMENT kernel_stack[NR_CPUS][KERNEL_STACK_SIZE];
 unsigned char PAGE_ALIGNMENT user_stack[NR_THREADS][USER_STACK_SIZE];
@@ -29,12 +33,13 @@ int get_tq_util(struct thread_struct *head, unsigned long cpu)
 
 int alloc_thread_id(void)
 {
-  return th_id++;
+  return ThreadID++;
 }
 
 
-void thread_main(__unused struct thread_struct *th)
+void thread_main(struct thread_struct *th)
 {
+  __uninitialized(th);
 }
 
 

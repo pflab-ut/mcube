@@ -277,7 +277,7 @@ bool empty_bheap(struct rt_runqueue *rq);
  * @brief make child a subtree of root.
  *
  * @param root Root node.
- * @param chil Child node.
+ * @param child Child node.
  */
 void link_bheap(struct bheap_node *root, struct bheap_node *child);
 

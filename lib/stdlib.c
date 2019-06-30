@@ -142,6 +142,15 @@ long strtol(const char *nptr, char **endp, int base)
   return strtoul(nptr, endp, base);
 }
 
+/**
+ * @fn static void xtoa(unsigned long val, char *str, unsigned base, int negative)
+ * @brief x-base unsigned long to ascii.
+ *
+ * @param val Value.
+ * @param str String.
+ * @param base Base.
+ * @param negative Negative.
+ */
 static void xtoa(unsigned long val, char *str, unsigned base, int negative)
 {
   char *p;

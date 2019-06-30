@@ -10,7 +10,7 @@
 
 
 /**
- * @fn static inline uint64_t tsc2usec(uint64_t tsc)
+ * @fn static inline unsigned long tsc2usec(unsigned long tsc)
  * @brief Time stamp counter to microsecond.
  *
  * @param tsc Time stamp counter.
@@ -22,7 +22,7 @@ static inline unsigned long tsc2usec(unsigned long tsc)
 }
 
 /**
- * @fn static inline uint64_t tsc2nsec(uint64_t tsc)
+ * @fn static inline unsigned long tsc2nsec(unsigned long tsc)
  * @brief Time stamp counter to nanosecond.
  *
  * @param tsc Time stamp counter.

@@ -213,8 +213,13 @@ int socket(int domain, int type, int protocol)
   return ret;
 }
 
-int shutdown(int sockfd, __unused int how)
+int shutdown(int sockfd, int how)
 {
+  if (how != SHUT_RDWR) {
+    errno = EINVAL;
+    return -1;
+  }
+
   return close(sockfd);
 }
 

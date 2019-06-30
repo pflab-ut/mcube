@@ -7,10 +7,13 @@
 
 #if !CONFIG_ARCH_SIM
 
-int poll(__unused struct pollfd *fds, __unused nfds_t nfds,
-         __unused int timeout)
+int poll(struct pollfd *fds, nfds_t nfds,
+         int timeout)
 {
-
+  /* TODO: implement */
+  __uninitialized(fds);
+  __uninitialized(nfds);
+  __uninitialized(timeout);
   return 0;
 }
 

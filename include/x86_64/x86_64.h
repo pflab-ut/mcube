@@ -83,12 +83,12 @@ static inline union rflags get_rflags(void)
 
 /**
  * @fn static inline void set_rflags(union rflags flags)
- * @brief Setting %rflags may enable interrupts, but we often want to
+ * @brief Setting @a flags may enable interrupts, but we often want to
  * do so in the _exact_ location specified: e.g. spin_unlock()
  * should be compiled to mark the lock as available (lock->val
  * = 1) before enabling interrupts, but never after.
  *
- * @param rflags Rflags.
+ * @param flags Flags.
  */
 static inline void set_rflags(union rflags flags)
 {

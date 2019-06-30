@@ -16,21 +16,37 @@
  * base addresses is read from the MP tables; the rest is
  * read from the chip itself.
  */
+/**
+ * @var nr_ioapics
+ * @brief Number of I/O APICs.
+ */
 int nr_ioapics;
+
+/**
+ * @var ioapic_descs[IOAPICS_MAX]
+ * @brief I/O APIC descriptors.
+ */
 struct ioapic_desc ioapic_descs[IOAPICS_MAX];
 
+/**
+ * @var i8259_pin
+ * @brief i8259 pin.
+ */
 static struct ioapic_pin i8259_pin = {
   .apic = -1,
   .pin  = -1,
 };
 
-/*
- * Find where the 8259 INTR pin is connected to the ioapics
+/**
+ * @fn static struct ioapic_pin ioapic_get_8259A_pin(void)
+ * @brief find where the 8259 INTR pin is connected to the ioapics
  * by scanning all the IOAPICs for a BIOS set unmasked routing
  * entry with a delivery mode of ExtInt.
  *
  * NOTE! Use this after all the IOAPIC descriptors have been
  * fully initialized
+ *
+ * @return I/O APIC pin.
  */
 static struct ioapic_pin ioapic_get_8259A_pin(void)
 {
@@ -61,9 +77,15 @@ static struct ioapic_pin ioapic_get_8259A_pin(void)
   return pic;
 }
 
-/*
- * Through MP-tables IRQ entries, figure where given ISA
- * interrupt source is connected to the I/O APICs system
+/**
+ * @fn static struct ioapic_pin ioapic_isa_pin(int isa_irq, enum mp_irqtype type)
+ * @brief Through MP-tables IRQ entries, figure where given ISA
+ * interrupt source is connected to the I/O APICs system.
+ *
+ * @param isa_irq ISA IRQ.
+ * @param type Type.
+ *
+ * @return I/O APIC pin.
  */
 static struct ioapic_pin ioapic_isa_pin(int isa_irq, enum mp_irqtype type)
 {

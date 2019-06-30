@@ -6,7 +6,10 @@
 
 #include <mcube/mcube.h>
 
-
+/**
+ * @var sbuf[KBUF_SIZE]
+ * @brief Scan buffer.
+ */
 static char sbuf[KBUF_SIZE];
 
 #if CONFIG_ARCH_AXIS
@@ -15,7 +18,15 @@ spinlock_t sbuf_lock;
 spinlock_t sbuf_lock = INIT_SPINLOCK;
 #endif /* CONFIG_ARCH_AXIS */
 
-
+/**
+ * @fn static int get_val(char *dst, const char *src, int n)
+ * @brief get value.
+ *
+ * @param dst Destination.
+ * @param src Source string.
+ * @param n Number.
+ * @return Value.
+ */
 static int get_val(char *dst, const char *src, int n)
 {
   int i = 0;

@@ -19,8 +19,16 @@
 
 #include <mcube/mcube.h>
 
+/**
+ * @var port_base
+ * @brief Port base.
+ */
 static uint16_t port_base;
 
+/**
+ * @fn static void reset_port_set_8n1_mode(void)
+ * @brief reset port set 8 and 1 mode.
+ */
 static void reset_port_set_8n1_mode(void)
 {
   union line_control_reg reg;
@@ -31,6 +39,10 @@ static void reset_port_set_8n1_mode(void)
   outb(reg.raw, port_base + UART_LINE_CTRL);
 }
 
+/**
+ * @fn static void enable_DLAB(void)
+ * @brief enable DLAB.
+ */
 static void enable_DLAB(void)
 {
   union line_control_reg reg;
@@ -40,6 +52,10 @@ static void enable_DLAB(void)
   outb(reg.raw, port_base + UART_LINE_CTRL);
 }
 
+/**
+ * @fn static void disable_DLAB(void)
+ * @brief disable DLAB.
+ */
 static void disable_DLAB(void)
 {
   union line_control_reg reg;
@@ -77,6 +93,12 @@ void init_uart(void)
   outb(reg.raw, port_base + UART_MODEM_CTRL);
 }
 
+/**
+ * @fn static bool tx_buffer_empty(void)
+ * @brief Is transmission buffer empty?
+ *
+ * @return True if transmission buffer is empty.
+ */
 static bool tx_buffer_empty(void)
 {
   union line_status_reg reg;
@@ -86,6 +108,12 @@ static bool tx_buffer_empty(void)
   return reg.tx_empty;
 }
 
+/**
+ * @fn static bool remote_ready(void)
+ * @brief Is remote ready?
+ *
+ * @return True if remote is ready.
+ */
 static bool remote_ready(void)
 {
   union modem_status_reg reg;
@@ -97,9 +125,25 @@ static bool remote_ready(void)
   return reg.remote_ready && reg.clr_to_send;
 }
 
-static int port_is_broken;
+/**
+ * @var port_is_broken
+ * @brief Is port broken?
+ */
+static int port_is_broken = false;
+
+/**
+ * @var port_lock
+ * @brief Port lock.
+ */
 spinlock_t port_lock = INIT_SPINLOCK;
 
+/**
+ * @fn static int __putc(uint8_t byte)
+ * @brief putchar.
+ *
+ * @param byte Byte.
+ * @return Zero if remote is not ready or success, and nonzero if failure.
+ */
 static int __putc(uint8_t byte)
 {
   int timeout;
@@ -116,7 +160,7 @@ static int __putc(uint8_t byte)
   }
 
   if (__unlikely(timeout == -1)) {
-    port_is_broken = 1;
+    port_is_broken = true;
     return 1;
   }
 
@@ -124,11 +168,11 @@ static int __putc(uint8_t byte)
   return 0;
 }
 
-size_t uart_write(const char *data, size_t length, __unused uint8_t ch)
+size_t uart_write(const char *data, size_t length, uint8_t ch)
 {
   int ret = 0;
 
-  if (port_base == 0) {
+  if (ch != 0 || port_base == 0) {
     return 0;
   }
 
@@ -147,7 +191,7 @@ out:
   return ret;
 }
 
-void uart_putc(char c, __unused uint8_t ch)
+void uart_putc(char c, uint8_t ch)
 {
   uart_write(&c, 1, ch);
 }

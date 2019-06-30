@@ -297,7 +297,7 @@ struct mpc_irq {
   polarity: 2,
             /** Trigger mode. */
             trigger: 2,
-            /* Reserved. */
+            /** Reserved. */
             reserved: 12;
 
   /**
@@ -462,12 +462,12 @@ void mptables_init(void);
 __pure_const int mptables_get_nr_cpus(void);
 
 /**
- * @fn void mpc_dump(__unused struct mpc_table *mpc)
+ * @fn void mpc_dump(struct mpc_table *mpc)
  * @brief Dump tables in case of critical errors.
  *
  * @param mpc MP configuration.
  */
-void mpc_dump(__unused struct mpc_table *mpc);
+void mpc_dump(struct mpc_table *mpc);
 
 
 #endif /* !__ASSEMBLY__ */

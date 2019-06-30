@@ -26,8 +26,13 @@
 
 #include <mcube/mcube.h>
 
-/*
- * Allocate and initialize a new list node
+/**
+ * @fn static struct unrolled_node *__unode_new(uint node_num, uint array_len)
+ * @brief allocate and initialize a new list node.
+ *
+ * @param node_num Node number.
+ * @param array_len Array length.
+ * @return Node.
  */
 static struct unrolled_node *__unode_new(uint node_num, uint array_len)
 {
@@ -46,8 +51,11 @@ static struct unrolled_node *__unode_new(uint node_num, uint array_len)
   return node;
 }
 
-/*
- * Free all of a node's memory storage
+/**
+ * @fn static void __unode_free(struct unrolled_node *node)
+ * @brief free all of a node's memory storage.
+ *
+ * @param node Node.
  */
 static void __unode_free(struct unrolled_node *node)
 {
@@ -55,8 +63,12 @@ static void __unode_free(struct unrolled_node *node)
   kfree(node);
 }
 
-/*
- * Retun index of first free cell in given node's array
+/**
+ * @fn static uint __unode_array_find_free_idx(struct unrolled_node *node)
+ * @brief return index of first free cell in given node's array
+ *
+ * @param node Node.
+ * @return Index of first free cell.
  */
 static uint __unode_array_find_free_idx(struct unrolled_node *node)
 {
@@ -71,6 +83,16 @@ static uint __unode_array_find_free_idx(struct unrolled_node *node)
   assert(false);
 }
 
+/**
+ * @fn static void __unode_store_val_in_array(struct unrolled_node *node,
+ *                                            uint array_idx,
+ *                                            void *val)
+ * @brief store value in array.
+ *
+ * @param node Node.
+ * @param array_idx Array index.
+ * @param val Value.
+ */
 static void __unode_store_val_in_array(struct unrolled_node *node,
                                        uint array_idx,
                                        void *val)
@@ -83,6 +105,15 @@ static void __unode_store_val_in_array(struct unrolled_node *node,
   node->array[array_idx] = val;
 }
 
+/**
+ * @fn __unused static void __unode_update_val_in_array(struct unrolled_node *node,
+ *                                                      uint array_idx, void *val)
+ * @brief update value in array.
+ *
+ * @param node Node.
+ * @param array_idx Array index.
+ * @param val Value.
+ */
 __unused static void __unode_update_val_in_array(struct unrolled_node *node,
                                                  uint array_idx, void *val)
 {
@@ -93,10 +124,16 @@ __unused static void __unode_update_val_in_array(struct unrolled_node *node,
   node->array[array_idx] = val;
 }
 
-/*
- * Return the node holding given @key's value, and the index
- * within such node's array of data. Return NULL if the @key
- * was out of range.
+/**
+ * @fn static struct unrolled_node *__get_node(struct unrolled_head *head, uint key,
+ *                                             uint *array_idx)
+ * @brief get node.
+ *
+ * @param head Head.
+ * @param key Key.
+ * @param array_idx Array index.
+ * @return Node holding given @a key's value, and the index
+ * within such node's array of data, and NULL if the @a key was out of range.
  */
 static struct unrolled_node *__get_node(struct unrolled_head *head, uint key,
                                         uint *array_idx)

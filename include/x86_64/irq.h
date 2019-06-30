@@ -341,8 +341,8 @@ extern unsigned long idt_descriptor_size;
 #define PIC1_IRR 0x00a0
 
 /**
- * @def PIC0_ISR
- * @brief PIC 0 In-Service Register (ISR).
+ * @def PIC1_ISR
+ * @brief PIC 1 In-Service Register (ISR).
  */
 #define PIC1_ISR 0x00a0
 

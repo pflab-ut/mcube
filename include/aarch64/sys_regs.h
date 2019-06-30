@@ -23,7 +23,7 @@
 #define CNTV_CTL_EL0_ISTATUS_NOT_ASSERTED (0x0 << 2)
 
 /**
- * @def CNTV_CTL_EL0_ISTATUS_NOT_ASSERTED
+ * @def CNTV_CTL_EL0_ISTATUS_ASSERTED
  * @brief Interrupt asserted.
  */
 #define CNTV_CTL_EL0_ISTATUS_ASSERTED (0x1 << 2)
@@ -464,7 +464,7 @@
 #define SPSR_ELx_SERROR_INTERRUPT_MASK_BIT (0x1 << 8)
 
 /**
- * @def SPSR_ELx_SERROR_INTERRUPT_MASK_BIT
+ * @def SPSR_ELx_IRQ_MASK_BIT
  * @brief I, bit[7] IRQ mask bit.
  */
 #define SPSR_ELx_IRQ_MASK_BIT (0x1 << 7)
@@ -912,9 +912,9 @@
  ** 1x11xxxxxxxxxxxx
  *** Miscellaneous 16-bit instructions
  ** 1x100xxxxxxxxxxx
- *** ADD Rd, PC, #imm
+ *** ADD Rd, PC, @c imm
  ** 01001xxxxxxxxxxx
- *** LDR Rd, [PC, #imm]
+ *** LDR Rd, [PC, @c imm]
  ** 0100x1xxx1111xxx
  *** ADD(4),CMP(3), MOV, BX pc, BLX pc
  ** 010001xx1xxxx111

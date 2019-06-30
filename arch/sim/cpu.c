@@ -9,13 +9,6 @@
 unsigned long current_cpu = 0;
 
 
-void copy_arch_process(__unused struct task_struct *p,
-                       __unused unsigned long func,
-                       __unused unsigned long arg)
-{
-}
-
-
 void set_cpu_clock(void)
 {
   time_t base_time;

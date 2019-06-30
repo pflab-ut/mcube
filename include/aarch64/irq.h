@@ -32,7 +32,7 @@
 
 /**
  * @def S_FRAME_SIZE
- * @bref Size of all saved registers.
+ * @brief Size of all saved registers.
  */
 #define S_FRAME_SIZE 272
 
@@ -286,30 +286,6 @@ void init_vector(void);
 void show_invalid_entry_message(int type, unsigned long esr,
                                 unsigned long address, struct full_regs *regs);
 
-
-/**
- * @fn int handle_dmac_interrupt(void)
- * @brief handle DMAC interrupt.
- *
- * @return @c IRQ_HANDLED if success.
- */
-int handle_dmac_interrupt(void);
-
-/**
- * @fn int handle_uart_interrupt(void)
- * @brief handle UART interrupt.
- *
- * @return @c IRQ_HANDLED if success.
- */
-int handle_uart_interrupt(void);
-
-/**
- * @fn int handle_timer_interrupt(void)
- * @brief handle timer interrupt.
- *
- * @return @c IRQ_HANDLED if success.
- */
-int handle_timer_interrupt(void);
 
 
 #endif /* !__ASSEMBLY__ */

@@ -244,11 +244,18 @@ void dentry_dump(struct dir_entry *dentry)
   kfree(name);
 }
 
-/*
- * Given UNIX @path, put its leaf node in @child, and the dir
- * path leading to that leaf in @parent (Mini-stateful parser)
+/**
+ * @enum ext2_state
+ * @brief Given UNIX @a path, put its leaf node in @a child, and the dir
+ * path leading to that leaf in @a parent (Mini-stateful parser)
  */
-enum ext2_state { EXT2_S_NONE, EXT2_SLASH, EXT2_FILENAME, EXT2_EOL };
+enum ext2_state {
+  EXT2_S_NONE,
+  EXT2_SLASH,
+  EXT2_FILENAME,
+  EXT2_EOL
+};
+
 void path_get_parent(const char *path, char *parent, char *child)
 {
   enum ext2_state state, prev_state;
@@ -298,8 +305,12 @@ void ext2_debug_init(struct buffer_dumper *g_dumper)
 }
 
 
-/*
- * Return a pointer to the on-disk image of inode #inum.
+/**
+ * @fn static void *inode_diskimage(uint64_t inum)
+ * @brief return a pointer to the on-disk image of inode @a inum.
+ *
+ * @param inum Inode number.
+ * @return Pointer to the on-disk image of inode @a inum.
  */
 static void *inode_diskimage(uint64_t inum)
 {
@@ -403,6 +414,17 @@ void inode_put(struct inode *inode)
   spin_unlock(&imsb.inodes_hash_lock);
 }
 
+/**
+ * @fn static void __block_read_write(uint64_t block, char *buf, uint blk_offset,
+ *                                    uint len, enum block_op operation)
+ * @brief read/write block.
+ *
+ * @param block Block.
+ * @param buf Buffer.
+ * @param blk_offset Block offset.
+ * @param len Length.
+ * @param operation Operation.
+ */
 static void __block_read_write(uint64_t block, char *buf, uint blk_offset,
                                uint len, enum block_op operation)
 {
@@ -517,10 +539,13 @@ void inode_mark_delete(struct inode *inode)
   inode->delete_on_last_use = true;
 }
 
-/*
- * Inode Dealloc - Delete given inode from disk
+/**
+ * @fn static void __inode_dealloc(struct inode *inode)
+ * @brief delete given inode from disk.
  *
  * NOTE! Don't call this directly, use inode_mark_delete()
+ *
+ * @param inode Inode.
  */
 static void __inode_dealloc(struct inode *inode)
 {
@@ -762,10 +787,14 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
   return ret_len;
 }
 
-/*
- * Return minimum possible length of a directory entry given
+/**
+ * @fn static inline int dir_entry_min_len(int filename_len)
+ * @brief Return minimum possible length of a directory entry given
  * the length of filename it holds. Minimum record length is
  * 8 bytes; each entry offset must be 4-byte aligned.
+ *
+ * @param filename_len
+ * @return Filename length.
  */
 static inline int dir_entry_min_len(int filename_len)
 {
@@ -889,9 +918,14 @@ int64_t find_dir_entry(struct inode *dir, const char *name,
   assert(false);
 }
 
-/*
- * Search given directory for an entry with file @name: mark it on
- * disk as deleted.  Target inode links count will get decremented.
+/**
+ * @fn static int64_t remove_dir_entry(struct inode *dir, const char *name)
+ * @brief Search given directory for an entry with file @a name: mark it on disk as deleted.
+ * Target inode links count will get decremented.
+ *
+ * @param dir Directory.
+ * @param name Name.
+ * @return Zero if success, and nonzero if failure.
  */
 static int64_t remove_dir_entry(struct inode *dir, const char *name)
 {
@@ -1167,16 +1201,18 @@ dealloc_inode:
   return ret;
 }
 
-/*
- * Deallocate given indirect, double, or triple indirect data block, and
- * each of its mapped blocks. An indirect block entry maps a plain block,
+/**
+ * @fn static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
+ * @brief Deallocate given indirect, double, or triple indirect data block, and
+ * each of its mapped blocks.
+ * An indirect block entry maps a plain block,
  * a double indirect block entry maps an indirect block, and a triple
  * indirect block entry maps a double indirect block, thus the recursion.
  *
  * NOTE! This is a recursive depth-first block-tree traversal
  *
- * @block       : indirect, double, or triple indir block to deallocate
- * @level       : "Single", "Double", or "Triple" level of indirection
+ * @param block Indirect, double, or triple indir block to deallocate
+ * @param level "Single", "Double", or "Triple" level of indirection
  */
 static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
 {

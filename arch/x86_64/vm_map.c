@@ -19,17 +19,25 @@
 
 #include <mcube/mcube.h>
 
-/*
- * Kernel's address-space master page table.
+/**
+ * @var kernel_pml4_table
+ * @brief Kernel's address-space master page table.
  */
 static struct pml4e *kernel_pml4_table;
 
-/*
+/**
+ * @fn static void map_pml2_range(struct pml2e *pml2_base, uintptr_t vstart,
+ *                                uintptr_t vend, uintptr_t pstart)
  * Fill given PML2 table with entries mapping the virtual
- * range (@vstart - @vend) to physical @pstart upwards.
+ * range (@a vstart - @a vend) to physical @a pstart upwards.
  *
  * Note-1! pass a valid table; unused entries must be zero
- * Note-2! range edges, and @pstart must be 2-MBytes aligned
+ * Note-2! range edges, and @a pstart must be 2-MBytes aligned
+ *
+ * @param pml2_base PML2 base.
+ * @param vstart Virtual address start.
+ * @param vend Virtual address end.
+ * @param pstart Physical address start.
  */
 static void map_pml2_range(struct pml2e *pml2_base, uintptr_t vstart,
                            uintptr_t vend, uintptr_t pstart)
@@ -68,12 +76,19 @@ static void map_pml2_range(struct pml2e *pml2_base, uintptr_t vstart,
   }
 }
 
-/*
- * Fill given PML3 table with entries mapping the virtual
- * range (@vstart - @vend) to physical @pstart upwards.
+/**
+ * @fn static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
+ *                                uintptr_t vend, uintptr_t pstart)
+ * @brief fill given PML3 table with entries mapping the virtual
+ * range (@a vstart - @a vend) to physical @a pstart upwards.
  *
  * Note-1! pass a valid table; unused entries must be zero
- * Note-2! range edges, and @pstart must be 2-MBytes aligned
+ * Note-2! range edges, and @a pstart must be 2-MBytes aligned
+ *
+ * @param pml3_base PML3 base.
+ * @param vstart Virtual address start.
+ * @param vend Virtual address end.
+ * @param pstart Physical address start.
  */
 static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
                            uintptr_t vend, uintptr_t pstart)
@@ -122,12 +137,19 @@ static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
   }
 }
 
-/*
- * Fill given PML4 table with entries mapping the virtual
- * range (@vstart - @vend) to physical @pstart upwards.
+/**
+ * @fn static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
+ *                                uintptr_t vend, uintptr_t pstart)
+ * @brief fill given PML4 table with entries mapping the virtual
+ * range (@a vstart - @a vend) to physical @a pstart upwards.
  *
  * Note-1! pass a valid table; unused entries must be zero
- * Note-2! range edges, and @pstart must be 2-MBytes aligned
+ * Note-2! range edges, and @a pstart must be 2-MBytes aligned
+ *
+ * @param pml4_base PML4 base.
+ * @param vstart Virtual address start.
+ * @param vend Virtual address end.
+ * @param pstart Physical address start.
  */
 static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
                            uintptr_t vend, uintptr_t pstart)
@@ -176,14 +198,19 @@ static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
   }
 }
 
-/*
- * Map given kernel virtual region to physical @pstart upwards.
- * @vstart is region start, while @vlen is its length. All
+/**
+ * @fn static void map_kernel_range(uintptr_t vstart, uint64_t vlen, uintptr_t pstart)
+ * @brief Map given kernel virtual region to physical @a pstart upwards.
+ * @a vstart is region start, while @a vlen is its length. All
  * sanity checks are done in the map_pml{2,3,4}_range() code
  * where all the work is really done.
  *
  * Note-1! Given range, and its subranges, must be unmapped
- * Note-2! region edges, and @pstart must be 2-MBytes aligned
+ * Note-2! region edges, and @a pstart must be 2-MBytes aligned
+ *
+ * @param vstart Virtual address start.
+ * @param vlen Virtual address length.
+ * @param pstart Physical address start.
  */
 static void map_kernel_range(uintptr_t vstart, uint64_t vlen, uintptr_t pstart)
 {

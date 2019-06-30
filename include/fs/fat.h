@@ -156,6 +156,10 @@ struct bios_parameter_block {
   char fst[8];
 } __packed /** packed. */;
 
+/**
+ * @typedef bpb_t
+ * @brief Typedef of @struct bios_parameter_block.
+ */
 typedef struct bios_parameter_block bpb_t;
 
 

@@ -115,9 +115,10 @@ enum mode {
 
 /**
  * @typedef mode_t
- * @brief Typedef of @enum mode.
+ * @brief Typedef of @c enum mode.
  */
 typedef enum mode mode_t;
+
 
 /**
  * @def S_ISDIR(mode)

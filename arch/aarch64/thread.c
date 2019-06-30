@@ -27,8 +27,10 @@ __noreturn void run_user_thread(void)
   inf_loop();
 }
 
-__noreturn void exit(__unused int status)
+void exit(int status)
 {
+  __uninitialized(status);
+
   for (;;)
     ;
 }

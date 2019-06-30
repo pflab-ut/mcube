@@ -201,7 +201,7 @@ void do_irq_mailbox(unsigned int cpu, unsigned int mb)
 }
 
 
-asmlinkage int do_irq(__unused struct full_regs *regs)
+asmlinkage int do_irq(struct full_regs *regs)
 {
   unsigned int irq;
   unsigned long cpu = get_cpu_id();
@@ -245,7 +245,8 @@ asmlinkage int do_irq(__unused struct full_regs *regs)
   /* LP_CORE_IRQ_SRC_PERIPHERAL(x) not used */
   default:
     printk("Error: Unknown IRQ 0x%lx\n", irq);
-    return 2;
+    dump_registers(regs);
+    return 1;
     break;
   }
 

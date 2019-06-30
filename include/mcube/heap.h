@@ -145,6 +145,8 @@ struct heap {
   bin_t bins[BIN_COUNT][sizeof(bin_t)];
 };
 
+
+
 /**
  * @typedef heap_t
  * @brief Typedef of @struct heap.

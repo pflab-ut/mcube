@@ -19,13 +19,14 @@ uint64_t kthread_alloc_pid(void)
 }
 
 
-void kthread_create(void (* /* __noreturn */ func)(void *), void *arg,
-                    __unused struct th_attr *attr)
+void kthread_create(void (*func)(void *), void *arg, struct th_attr *attr)
 {
   struct process *process;
   struct irq_ctx *irq_ctx;
   char *stack;
   char *stack_start;
+
+  __uninitialized(attr);
 
   if (!(process = kmalloc(sizeof(struct process)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(struct process));

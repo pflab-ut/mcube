@@ -19,10 +19,15 @@
 
 #include <mcube/mcube.h>
 
+/**
+ * @var memory_setup
+ * @brief Memory setup.
+ */
 static struct e820_setup memory_setup;
 
-/*
- * E820h struct error to string map
+/**
+ * @var e820_errors[]
+ * @brief E820h struct error to string map.
  */
 static const char *e820_errors[] = {
   [E820_SUCCESS]    = "success",
@@ -33,6 +38,13 @@ static const char *e820_errors[] = {
   [E820_HUGE_ENTRY] = "huge returned e820 entry",
 };
 
+/**
+ * @fn static const char *e820_errstr(uint32_t error)
+ * @brief E820 error to string.
+ *
+ * @param error Error.
+ * @return String.
+ */
 static const char *e820_errstr(uint32_t error)
 {
   if (error > E820_HUGE_ENTRY) {
@@ -44,8 +56,9 @@ static const char *e820_errstr(uint32_t error)
   return e820_errors[error];
 }
 
-/*
- * ACPI memory type -> string.
+/**
+ * @var e820_types[]
+ * @brief ACPI memory type -> string.
  */
 static const char *e820_types[] = {
   [E820_AVAIL]    = "available",
@@ -56,8 +69,12 @@ static const char *e820_types[] = {
   [E820_DISABLED] = "disabled",
 };
 
-/*
- * Transform given ACPI type value to string.
+/**
+ * @fn static const char *e820_typestr(uint32_t type)
+ * @brief transform given ACPI type value to string.
+ *
+ * @param type Type.
+ * @return String.
  */
 static const char *e820_typestr(uint32_t type)
 {
@@ -73,8 +90,12 @@ static const char *e820_typestr(uint32_t type)
 }
 
 
-/*
- * Checksum the rmode-returned e820h struct
+/**
+ * @fn static uint32_t e820_checksum(void *base, int len)
+ * @brief checksum the rmode-returned e820h struct
+ *
+ * @param base Base.
+ * @param len Length.
  */
 static uint32_t e820_checksum(void *base, int len)
 {
@@ -91,9 +112,10 @@ static uint32_t e820_checksum(void *base, int len)
   return sum;
 }
 
-/*
- * Check if real-mode returned E820h-struct is correctly
- * formed. Valid formation cues include the start signa-
+/**
+ * @fn static void validate_e820h_struct(void)
+ * @brief check if real-mode returned E820h-struct is correctly formed.
+ * Valid formation cues include the start signa-
  * ture, number of table entries, and the checksum.
  * NOTE! We don't check struct _entries_ validity here.
  */
@@ -150,6 +172,10 @@ static void validate_e820h_struct(void)
   *entry = E820_VALID_SIG;
 }
 
+/**
+ * @fn static void build_memory_setup(void)
+ * @brief build memory setup.
+ */
 static void build_memory_setup(void)
 {
   uint64_t avail_len, avail_ranges, phys_end, end;

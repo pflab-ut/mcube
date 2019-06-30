@@ -368,6 +368,7 @@ static inline unsigned long tsc2nsec(unsigned long tsc);
  */
 extern int bindex[NR_CPUS];
 
+
 /**
  * @var nr_tasks
  * @brief Number of tasks.

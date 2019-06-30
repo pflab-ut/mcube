@@ -107,10 +107,18 @@ void sched_percpu_area_init(void)
  */
 struct process swapper;
 
-
+/**
+ * @fn static void __rq_add_process(struct runqueue *rq, struct process *process,
+ *                                  int prio, enum enqueue_type type)
+ * @brief add process.
+ *
+ * @param rq Runqueue.
+ * @param process Process.
+ * @param prio Priority.
+ * @param type Type.
+ */
 static void __rq_add_process(struct runqueue *rq, struct process *process,
-                             int prio,
-                             enum enqueue_type type)
+                             int prio, enum enqueue_type type)
 {
   assert(VALID_PRIO(prio));
 
@@ -132,12 +140,30 @@ static void __rq_add_process(struct runqueue *rq, struct process *process,
   }
 }
 
+/**
+ * @fn static void rq_add_process(struct runqueue *rq, struct process *process,
+ *                                int prio)
+ * @brief add process.
+ *
+ * @param rq Runqueue.
+ * @param process Process.
+ * @param prio Priority.
+ */
 static void rq_add_process(struct runqueue *rq, struct process *process,
                            int prio)
 {
   __rq_add_process(rq, process, prio, ENQ_NORMAL);
 }
 
+/**
+ * @fn static void rq_return_process(struct runqueue *rq, struct process *process,
+ *                                   int prio)
+ * @brief return process.
+ *
+ * @param rq Runqueue.
+ * @param process Process.
+ * @param prio Priority.
+ */
 static void rq_return_process(struct runqueue *rq, struct process *process,
                               int prio)
 {
@@ -165,12 +191,14 @@ void sched_enqueue(struct process *process)
   sched_dbg("@@ T%d added\n", process->pid);
 }
 
-/*
- * Dispatch the most suitable thread from the runqueues.
+/**
+ * @fn static struct process *dispatch_runnable_process(int *ret_prio)
+ * @brief dispatch the most suitable thread from the runqueues.
  * Alternate dispatching between the active runqueue and
  * the just_queued list.
  *
- * Return NULL if all relevant queues are empty.
+ * @param ret_prio Priority.
+ * @return dispatched process if success, and NULL if all relevant queues are empty.
  */
 static struct process *dispatch_runnable_process(int *ret_prio)
 {
@@ -219,9 +247,14 @@ static struct process *dispatch_runnable_process(int *ret_prio)
   return process;
 }
 
-/*
- * Preempt current thread using given new one.
+/**
+ * @fn static struct process *preempt(struct process *new_process, int new_prio)
+ * @brief Preempt current thread using given new one.
  * New thread should NOT be in ANY runqueue.
+ *
+ * @param new_process New process.
+ * @param new_prio New priority.
+ * @return New process.
  */
 static struct process *preempt(struct process *new_process, int new_prio)
 {
@@ -372,11 +405,16 @@ void sched_init(void)
  * @@@ Statistics: @@@
  */
 
-
+/**
+ * @var printstats_lock
+ * @brief printstats lock.
+ */
 spinlock_t printstats_lock = INIT_SPINLOCK;
 
-void print_process_stats(__unused struct process *process, __unused int prio)
+void print_process_stats(struct process *process, int prio)
 {
+  __uninitialized(process);
+  __uninitialized(prio);
 #if 0
   uint dispatch_count;
   clock_t rqwait_overall;
@@ -435,8 +473,9 @@ void print_sched_stats(void)
  * @@@ Tracing: @@@
  */
 
-void rq_dump(__unused struct runqueue *rq)
+void rq_dump(struct runqueue *rq)
 {
+  __uninitialized(rq);
 #if 0
   /* FIXME: not work well */
   struct process *process;

@@ -5,6 +5,10 @@
  */
 #include <mcube/mcube.h>
 
+/**
+ * @var entry_error_messages[]
+ * @brief Entry error messages.
+ */
 const char *entry_error_messages[] = {
   "SYNC_INVALID_EL1t",
   "IRQ_INVALID_EL1t",

@@ -93,20 +93,20 @@ void write_to_cluster(unsigned long local_cpu_id,
  *                                 volatile unsigned long *low_addr,
  *                                 unsigned long x,
  *                                 unsigned long y,
- *                                 unsigned long ofs)
+ *                                 unsigned long offset)
  * @brief encode cluster address.
  *
  * @param high_addr Higher 32-bit address.
  * @param low_addr Lower 32-bit address.
  * @param x X-axis.
  * @param y Y-axis.
- * @param ofs Offsets.
+ * @param offset Offset.
  */
 void encode_cluster_address(volatile unsigned long *high_addr,
                             volatile unsigned long *low_addr,
                             unsigned long x,
                             unsigned long y,
-                            unsigned long ofs);
+                            unsigned long offset);
 
 /**
  * @fn void set_cpu_id(struct cluster *c, unsigned long cpu_id)

@@ -12,6 +12,10 @@
 #include <mcube/mcube.h>
 
 
+/**
+ * @fn panic_prefix[]
+ * @brief Panix prefix.
+ */
 static char panic_prefix[] = "PANIC: ";
 
 

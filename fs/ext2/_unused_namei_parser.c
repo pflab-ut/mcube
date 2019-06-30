@@ -15,6 +15,10 @@
 
 #include <mcube/mcube.h>
 
+/**
+ * @enum state
+ * @brief Parser state.
+ */
 enum state {
   NONE,      /* .. Start State */
   SLASH,      /* The '/' path separator */
@@ -24,6 +28,15 @@ enum state {
   EOL,      /* .. End State */
 };
 
+/**
+ * @fn static uint64_t handle(char *buf, uint64_t *buf_len, uint64_t inum)
+ * @brief handler
+ *
+ * @param buf Buffer.
+ * @param buf_len Buffer length.
+ * @param inum Inode number.
+ * @return Inode number.
+ */
 static uint64_t handle(char *buf, uint64_t *buf_len, uint64_t inum)
 {
   struct dir_entry *dentry;

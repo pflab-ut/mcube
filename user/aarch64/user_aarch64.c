@@ -128,25 +128,6 @@ void user_process(void)
 
 int user_ap_main(__unused int argc, __unused char *argv[])
 {
-#if 1
-  int ret;
-  print("user_ap_main()\n");
-  ret = copy_process((unsigned long) &process, (unsigned long) "12345");
-
-  if (ret != 0) {
-    print("Error while starting process1\n");
-    return 1;
-  }
-
-  ret = copy_process((unsigned long) &process, (unsigned long) "abcde");
-
-  if (ret != 0) {
-    print("Error while starting process 2");
-    return 2;
-  }
-
-  return 0;
-#else
   unsigned long cpu = get_cpu_id();
   delay(100000 * cpu);
   printk("user_ap_main()\n");
@@ -155,7 +136,6 @@ int user_ap_main(__unused int argc, __unused char *argv[])
     ;
 
   return 0;
-#endif
 }
 
 

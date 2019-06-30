@@ -36,6 +36,7 @@ ASMS = \
 
 SRCS += \
  $(TOP_DIR)/arch/axis/irq.c \
+ $(TOP_DIR)/arch/axis/dump.c \
  $(TOP_DIR)/arch/axis/thread.c \
  $(TOP_DIR)/arch/axis/timer.c \
  $(TOP_DIR)/arch/axis/stdio.c \

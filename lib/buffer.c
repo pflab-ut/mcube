@@ -5,7 +5,12 @@
  */
 #include <mcube/mcube.h>
 
-
+/**
+ * @fn static void advance_pointer(cbuf_handle_t cbuf)
+ * @brief advance pointer.
+ *
+ * @param cbuf Cyclic buffer.
+ */
 static void advance_pointer(cbuf_handle_t cbuf)
 {
   if (cbuf->full) {
@@ -18,6 +23,12 @@ static void advance_pointer(cbuf_handle_t cbuf)
   cbuf->full = (cbuf->head == cbuf->tail);
 }
 
+/**
+ * @fn static void retreat_pointer(cbuf_handle_t cbuf)
+ * @brief retreat pointer.
+ *
+ * @param cbuf Cyclic buffer.
+ */
 static void retreat_pointer(cbuf_handle_t cbuf)
 {
   cbuf->full = false;

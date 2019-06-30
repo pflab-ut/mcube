@@ -20,6 +20,13 @@
  */
 #define SCHED_STATS_RATE HZ
 
+/**
+ * @var swapper
+ * @brief Process swapper.
+ */
+extern struct process swapper;
+
+
 struct runqueue;
 
 /**
@@ -28,7 +35,7 @@ struct runqueue;
  *
  * @param fmt Format.
  */
-#define  sched_dbg(fmt, ...) PDEBUG(fmt, ##__VA_ARGS__)
+#define sched_dbg(fmt, ...) PDEBUG(fmt, ##__VA_ARGS__)
 
 /**
  * @fn void rq_dump(struct runqueue *rq)

@@ -45,14 +45,15 @@ static inline void ert(void)
 }
 
 /**
- * @fn __noreturn static inline void halt(void)
- * @brief Wrapper function for @c halt.
+ * @def halt()
+ * @brief Wrapper definition for infinite @c hlt.
  */
-__noreturn static inline void halt(void)
-{
-  printk("halt\n");
-  inf_loop();
-}
+#define halt()                                  \
+  do {                                          \
+    printk("halt\n");                           \
+    inf_loop();                                 \
+  } while (0);
+
 
 #endif /* !__ASSEMBLY__ */
 

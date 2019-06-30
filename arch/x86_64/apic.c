@@ -11,19 +11,37 @@
 
 #include <mcube/mcube.h>
 
+/**
+ * @var bootstrap_apic_id
+ * @brief Bootstrap APIC ID.
+ */
 static union apic_id bootstrap_apic_id;
+
+/**
+ * @var bootstrap_apic_id_saved
+ * @brief Bootstrap APIC ID saved.
+ */
 static bool bootstrap_apic_id_saved;
 
 /*
  * Internal and external clock frequencies
- * @cpu_clock: CPU internal clock (speed)
- * @apic_clock: CPU external bus clock (APIC timer, ..)
+ */
+
+/**
+ * @var cpu_clock
+ * @brief CPU internal clock (speed).
  */
 static uint64_t cpu_clock;
+
+/**
+ * @var apic_clock
+ * @brief CPU external bus clock (APIC timer, ..)
+ */
 static uint64_t apic_clock;
 
-/*
- * Where the APIC registers are virtually mapped
+/**
+ * @var apic_virt_base
+ * @brief Where the APIC registers are virtually mapped.
  */
 static void *apic_virt_base;
 
@@ -46,9 +64,10 @@ void __apic_timer_handler(void)
  * Clock calibrations
  */
 
-/*
- * Calculate the processor clock using the PIT and the time-
- * stamp counter: it's increased by one for each clock cycle.
+/**
+ * @fn static uint64_t pit_calibrate_cpu(int repeat)
+ * @brief calculate the processor clock using the PIT and the time stamp counter:
+ * it's increased by one for each clock cycle.
  *
  * There's a possibility of being hit by a massive SMI, we
  * repeat the calibration to hope this wasn't the case. Some
@@ -57,7 +76,8 @@ void __apic_timer_handler(void)
  * FIXME: For Intel core2duo cpus and up, ask the architect-
  * ural event monitoring interface to calculate cpu clock.
  *
- * Return cpu clock ticks per second.
+ * @param repeat Number of repeats.
+ * @return CPU clock ticks per second.
  */
 static uint64_t pit_calibrate_cpu(int repeat)
 {
@@ -88,9 +108,12 @@ static uint64_t pit_calibrate_cpu(int repeat)
   return cpu_clock;
 }
 
-/*
- * Calibrate CPU external bus clock, which is the time
+/**
+ * @fn static uint64_t pit_calibrate_apic_timer(void)
+ * @brief calibrate CPU external bus clock, which is the time
  * base of the APIC timer.
+ *
+ * @return APIC clock.
  */
 static uint64_t pit_calibrate_apic_timer(void)
 {
@@ -262,9 +285,12 @@ void apic_init(void)
  * APIC Timer
  */
 
-/*
- * Set the APIC timer counter with a count representing
+/**
+ * @fn static void apic_set_counter_us(uint64_t us)
+ * @brief set the APIC timer counter with a count representing
  * given u-seconds value relative to the bus clock.
+ *
+ * @param us Microsecond.
  */
 static void apic_set_counter_us(uint64_t us)
 {
@@ -331,8 +357,17 @@ void apic_monotonic(uint64_t us, uint8_t vector)
  * Inter-Processor Interrupts
  */
 
-/* NOTE! This function is implicitly called by panic
- * code: it should not include any asserts or panics. */
+/**
+ * @fn static void __apic_send_ipi(int dst_apic_id, int delivery_mode,
+ *                                 int vector, enum irq_dst dst)
+ * @brief NOTE! This function is implicitly called by panic code:
+ * it should not include any asserts or panics.
+ *
+ * @param dst_apic_id Destination APIC ID.
+ * @param delivery_mode Delivery mode.
+ * @param vector Vector.
+ * @param dst Destination.
+ */
 static void __apic_send_ipi(int dst_apic_id, int delivery_mode,
                             int vector, enum irq_dst dst)
 {

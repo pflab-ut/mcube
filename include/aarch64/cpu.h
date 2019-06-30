@@ -32,7 +32,7 @@
 #define TRUST_ZONE_LEVEL 3
 
 /**
- * @def REGISTER_LENGTH
+ * @def REG_LENGTH
  * @brief Register length.
  */
 #define REG_LENGTH 64

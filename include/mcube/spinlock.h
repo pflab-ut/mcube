@@ -107,6 +107,19 @@ extern spinlock_t kmalloc_lock;
 extern spinlock_t socket_lock;
 
 /**
+ * @var putchar_lock
+ * @brief lock putchar.
+ */
+extern spinlock_t putchar_lock;
+
+/**
+ * @var sched_lock
+ * @brief lock sched.
+ */
+extern spinlock_t sched_lock;
+
+
+/**
  * @var init_spinlock
  * @brief initialize spinlock.
  */

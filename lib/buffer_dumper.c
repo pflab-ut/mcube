@@ -18,10 +18,6 @@
  * - Below null printer
  */
 
-int null_printer(__unused const char *fmt, ...)
-{
-  return 0;
-}
 
 /*
  * Possible functions for the buffer-dump formatter:

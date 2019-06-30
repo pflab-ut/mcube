@@ -70,7 +70,7 @@
 
 /**
  * @def RANDOM_NUMBER_GEN_BASE
- * @brife Random number generator base.
+ * @brief Random number generator base.
  */
 #define RANDOM_NUMBER_GEN_BASE 0x3f104000
 

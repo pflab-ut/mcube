@@ -6,10 +6,26 @@
 #include <mcube/mcube.h>
 
 #if CONFIG_ARCH_AXIS && CONFIG_COMPILER_CLANG
+
 /* NOTE: padding to separate banks of text and data. */
+/**
+ * @def PADDING_SIZE
+ * @brief Padding size.
+ */
 #define PADDING_SIZE 0x1000
+
+/**
+ * @def PADDING_DATA
+ * @brief Padding data.
+ */
 #define PADDING_DATA 0xff
+
+/**
+ * @var PADDING[PADDING_SIZE]
+ * @brief Padding.
+ */
 char PADDING[PADDING_SIZE] = {PADDING_DATA};
+
 #endif
 
 #if CONFIG_OPTION_DEBUG
@@ -26,6 +42,10 @@ double CPU_CLOCK_MHZ_PER_NSEC;
 double CPU_NSEC_PER_CLOCK_MHZ;
 #endif /* ENABLE_FPU */
 
+/**
+ * @var IsInitialized
+ * @brief Is processor initialized?
+ */
 static volatile bool IsInitialized = false;
 
 #if !CONFIG_ARCH_SIM

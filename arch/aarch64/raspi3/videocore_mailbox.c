@@ -218,8 +218,30 @@ void power_off(void)
  *
  */
 
-unsigned int fb_width, fb_height, fb_pitch;
+/**
+ * @var fb_width
+ * @brief Frame buffer width.
+ */
+unsigned int fb_width;
+
+/**
+ * @var fb_height
+ * @brief Frame buffer height.
+ */
+unsigned int fb_height;
+
+/**
+ * @var fb_pitch
+ * @brief Frame buffer pitch.
+ */
+unsigned int fb_pitch;
+
+/**
+ * @var fb_ptr
+ * @brief Pointer to frame buffer.
+ */
 unsigned char *fb_ptr;
+
 
 /**
  * Set screen resolution to 1024x768
@@ -295,6 +317,13 @@ void init_frame_buffer(struct frame_buffer *fb)
 
 /* Call this macro repeatedly.  After each use, the pixel data can be extracted  */
 
+/**
+ * @def HEADER_PIXEL(data, pixel)
+ * @brief Header pixel.
+ *
+ * @param data Data.
+ * @param pixel Pixel.
+ */
 #define HEADER_PIXEL(data, pixel) do {                                  \
     pixel[0] = (((data[0] - 33) << 2) | ((data[1] - 33) >> 4));         \
     pixel[1] = ((((data[1] - 33) & 0xf) << 4) | ((data[2] - 33) >> 2)); \
@@ -323,6 +352,10 @@ void fb_show_picture(char *data, int width, int height)
   }
 }
 
+/**
+ * @var _binary___lib_font_psf_start
+ * @brief Binary lib font psf start.
+ */
 extern volatile unsigned char _binary___lib_font_psf_start;
 
 

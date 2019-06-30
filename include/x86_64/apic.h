@@ -107,9 +107,13 @@ static inline void msr_apicbase_enable(void)
 union apic_id {
   struct {
     uint32_t
-    /** Reserved. */
+    /**
+     * Reserved.
+     */
     reserved: 24,
-              /** APIC ID. */
+              /**
+               * APIC ID.
+               */
               id: 8;
   } __packed /** packed. */;
   /**
@@ -140,11 +144,17 @@ union apic_tpr {
      * APIC task priority register.
      */
     uint32_t
-    /** Subclass. */
+    /**
+     * Subclass.
+     */
     subclass: 4,
-              /** Priority. */
+              /**
+               * Priority.
+               */
               priority: 4,
-              /** Reserved. */
+              /**
+               * Reserved.
+               */
               reserved: 24;
   } __packed /** packed. */;
   /**
@@ -189,10 +199,15 @@ union apic_tpr {
  */
 union apic_ldr {
   struct {
+    uint32_t
     /**
-     * Logical ID.
+     * Reserved.
      */
-    uint32_t reserved: 24, logical_id: 8;
+    reserved: 24,
+              /**
+               * Logical ID.
+               */
+              logical_id: 8;
   } __packed /** packed. */;
 
   /**
@@ -215,9 +230,13 @@ union apic_ldr {
 union apic_dfr {
   struct {
     uint32_t
-    /** Reserved. */
+    /**
+     * Reserved.
+     */
     reserved: 28,
-              /** APIC model. */
+              /**
+               * APIC model.
+               */
               apic_model: 4;
   } __packed /** packed. */;
 
@@ -239,10 +258,23 @@ union apic_dfr {
  */
 union apic_spiv {
   struct {
+    uint32_t
     /**
-     * Vector etc.
+     * Vector.
      */
-    uint32_t vector: 8, apic_enable: 1, focus: 1, reserved: 22;
+    vector: 8,
+            /**
+             * APIC enable.
+             */
+            apic_enable: 1,
+            /**
+             * Focus.
+             */
+            focus: 1,
+            /**
+             * Reserved.
+             */
+            reserved: 22;
   } __packed /** packed. */ ;
 
   /**
@@ -276,14 +308,57 @@ union apic_spiv {
  */
 union apic_icr {
   struct {
+    uint32_t
     /**
-     * Vector etc.
+     * Vector.
      */
-    uint32_t vector: 8, delivery_mode: 3, dst_mode: 1,
-             delivery_status: 1, reserved0: 1, level: 1,
-             trigger: 1, reserved1: 2, dst_shorthand: 2,
-             reserved2: 12;
-    uint32_t reserved3: 24, dst: 8;
+    vector: 8,
+            /**
+             * Delivery mode.
+             */
+            delivery_mode: 3,
+            /**
+             * Destination mode.
+             */
+            dst_mode: 1,
+            /**
+             * Delivery status.
+             */
+            delivery_status: 1,
+            /**
+             * Reserved.
+             */
+            reserved0: 1,
+            /**
+             * Level.
+             */
+            level: 1,
+            /**
+             * Trigger.
+             */
+            trigger: 1,
+            /**
+             * Reserved.
+             */
+            reserved1: 2,
+            /**
+             * Destination shorthand.
+             */
+            dst_shorthand: 2,
+            /**
+             * Reserved.
+             */
+            reserved2: 12;
+
+    uint32_t
+    /**
+     * Reserved.
+     */
+    reserved3: 24,
+               /**
+                * Destination.
+                */
+               dst: 8;
   } __packed /** packed. */ ;
 
   /* Writing the low word of the ICR causes the
@@ -602,7 +677,7 @@ union apic_dcr {
               *  Reserved.
               */
              reserved0: 28;
-  } __packed /* packed. */;
+  } __packed /** packed. */;
 
   /**
    * Value.
@@ -800,23 +875,23 @@ uint8_t apic_bootstrap_id(void);
 void apic_udelay(uint64_t us);
 
 /**
- * @fn void apic_monotonic(uint64_t ms, uint8_t vector)
+ * @fn void apic_monotonic(uint64_t us, uint8_t vector)
  * @brief APIC monotonic.
  *
- * @param ms Millisecond.
+ * @param us Microsecond.
  * @param vector Vector.
  */
-void apic_monotonic(uint64_t ms, uint8_t vector);
+void apic_monotonic(uint64_t us, uint8_t vector);
 
 /**
- * @fn void apic_send_ipi(int dst_id, int delivery_mode, int vector)
+ * @fn void apic_send_ipi(int dst_apic_id, int delivery_mode, int vector)
  * @brief send Inter-Processor Interrupt (IPI) in APIC.
  *
- * @param dst_id Destination ID.
+ * @param dst_apic_id Destination ID.
  * @param delivery_mode Delivery mode.
  * @param vector Vector.
  */
-void apic_send_ipi(int dst_id, int delivery_mode, int vector);
+void apic_send_ipi(int dst_apic_id, int delivery_mode, int vector);
 
 /**
  * @fn void apic_broadcast_ipi(int delivery_mode, int vector)

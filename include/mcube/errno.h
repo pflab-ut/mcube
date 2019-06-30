@@ -804,7 +804,8 @@
 #if !CONFIG_ARCH_SIM
 
 /**
- * Error number.
+ * @var errno
+ * @brief Error number.
  */
 extern int errno;
 
@@ -824,12 +825,16 @@ extern int errno;
  * In light of the above, we just copy the _values_ from Linux & BSD :-)
  */
 
-/*
- * Descriptions are copied  verbatim from the "Single Unix Specification,
+/**
+ * @fn static inline const char *errno_to_str(int err)
+ * @brief Descriptions are copied verbatim from the "Single Unix Specification,
  * Version 1", Namely the "X/Open CAE Specification": 'System Interfaces
  * and Headers, Issue 4, Version 2 (1994)'.
+ *
+ * @param err Error number.
+ * @return Error number description.
  */
-static inline const char *errno_description(int err)
+static inline const char *errno_to_str(int err)
 {
   switch (err) {
   case 0:
@@ -868,54 +873,6 @@ static inline const char *errno_description(int err)
   }
 }
 
-static inline const char *errno_to_str(int err)
-{
-  switch (err) {
-  case 0:
-    return "Success";
-
-  case -EPERM:
-    return "EPERM";
-
-  case -EINVAL:
-    return "EINVAL";
-
-  case -ENOENT:
-    return "ENOENT";
-
-  case -ENOTDIR:
-    return "ENOTDIR";
-
-  case -EISDIR:
-    return "EISDIR";
-
-  case -ENAMETOOLONG:
-    return "ENAMETOOLONG";
-
-  case -EBADF:
-    return "EBADF";
-
-  case -EEXIST:
-    return "EEXIST";
-
-  case -EFBIG:
-    return "EFBIG";
-
-  case -ENOSPC:
-    return "ENOSPC";
-
-  case -ESPIPE:
-    return "ESPIPE";
-
-  case -EOVERFLOW:
-    return "EOVERFLOW";
-
-  default:
-    return "Un-stringified";
-  }
-}
-
-#define errno(err) errno_to_str(err)
 
 #endif /* !CONFIG_ARCH_SIM */
 

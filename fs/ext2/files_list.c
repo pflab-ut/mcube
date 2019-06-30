@@ -13,13 +13,17 @@
 
 #include <mcube/mcube.h>
 
-
+/**
+ * @var ext2_files_list[]
+ * @brief Ext2 files list.
+ */
 struct path_translation ext2_files_list[] = {
   {.path = NULL, },    /* DO NOT REMOVE - End of List mark */
 };
 
-/*
- * All of these file paths should return EXT2_ROOT_INODE!
+/**
+ * @var ext2_root_list[]
+ * @brief All of these file paths should return EXT2_ROOT_INODE!
  */
 const char *ext2_root_list[] = {
   "/", "//", "///", "////", "/////", "//////", "///////",

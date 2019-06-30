@@ -12,53 +12,85 @@
  * code that loads the ramdisk!
  */
 
-/*
- * Arbitrary stack offset for kernel real-mode code and bootsector.
+/**
+ * @def STACK_OFFSET
+ * @brief Arbitrary stack offset for kernel real-mode code and bootsector.
  * It will hopefully be large enough for the called BIOS services.
  */
-#define STACK_OFFSET    0x3000
+#define STACK_OFFSET 0x3000
 
 /*
  * The low memory region [0x9000->0xe000] is reserved for passed
  * real-mode method and pmode->rmode->pmode switching code.
- *
- * @PMODE16_START: Where the 16-bit protected and real mode code
- *                 is going to be copied to and executed from.
- * @RCODE_STACK:   Stack top address, 12-KB in size
- * @RCODE_PARAMS_BASE: 4-KB area for passing parameters
- * @RCODE_PARAMS_END:  Parameters region end
  */
-#define PMODE16_START    0x9000
-#define RCODE_STACK    (PMODE16_START + STACK_OFFSET)
-#define RCODE_PARAMS_BASE  0xd000
-#define RCODE_PARAMS_END  0xe000
+
+/**
+ * @def PMODE16_START
+ * @brief Where the 16-bit protected and real mode code is going to be copied to
+ * and executed from.
+ */
+#define PMODE16_START 0x9000
+
+/**
+ * @def RCODE_STACK
+ * @brief Stack top address, 12-KB in size.
+ */
+#define RCODE_STACK (PMODE16_START + STACK_OFFSET)
+
+/**
+ * @def RCODE_PARAMS_BASE
+ * @brief 4-KB area for passing parameters.
+ */
+#define RCODE_PARAMS_BASE 0xd000
+
+/**
+ * @def RCODE_PARAMS_END
+ * @brief Parameters region end.
+ */
+#define RCODE_PARAMS_END 0xe000
 
 /*
  * Parameters sent to the real-mode functions:
- *
- * @RCODE_SECTOR_LBA: Disk logical block address to read from
- * @RCODE_FIRST_CALL: Mark the first call (to print a message)
- * @RCODE_DRIVE_NUMBER: The BIOS-passed EDD Drive Number
- * @RCODE_BUFFER: Temporary buffer to hold the just-read sector
  */
-#define RCODE_SECTOR_LBA  (RCODE_PARAMS_BASE)  /* long */
-#define RCODE_FIRST_CALL  (RCODE_PARAMS_BASE + 4)  /* long */
-#define RCODE_DRIVE_NUMBER  (RCODE_PARAMS_BASE + 8)  /* long */
-#define RCODE_BUFFER    (RCODE_PARAMS_BASE +12)  /* 512-bytes */
 
-/*
- * Check for Enhanced Disk Drive (EDD) BIOS support. Jump
- * to @fail_label if no such extension exist.
+/**
+ * @def RCODE_SECTOR_LBA
+ * @brief Disk logical block address to read from.
+ */
+#define RCODE_SECTOR_LBA (RCODE_PARAMS_BASE)  /* long */
+
+/**
+ * @def RCODE_FIRST_CALL
+ * @brief Mark the first call (to print a message).
+ */
+#define RCODE_FIRST_CALL (RCODE_PARAMS_BASE + 4)  /* long */
+
+/**
+ * @def RCODE_DRIVE_NUMBER
+ * @brief The BIOS-passed EDD drive number.
+ */
+#define RCODE_DRIVE_NUMBER (RCODE_PARAMS_BASE + 8)  /* long */
+
+/**
+ * @def RCODE_BUFFER
+ * @brief Temporary buffer to hold the just-read sector.
+ */
+#define RCODE_BUFFER (RCODE_PARAMS_BASE +12)  /* 512-bytes */
+
+/**
+ * @def EDD_CHECK_EXTENSIONS_PRESENT(driveno, fail_label)
+ * @brief Check for Enhanced Disk Drive (EDD) BIOS support.
+ * Jump to @a fail_label if no such extension exist.
  *
  * INT 0x13, function 0x41
- * input  %bx     - 0x55aa (defined by ebios standard)
- * input  %dl     - drive number (provided by bios in %dl)
+ * input  @c bx     - 0x55aa (defined by ebios standard)
+ * input  @c dl     - drive number (provided by bios in @c dl)
  * output success - carry = 0 && bx = 0xaa55 &&
  *                  cx bit 0 = 1 (enhanced drive access)
  * output failure - carry = 1 || bx != 0xaa55
  *
- * @driveno: Bios drive number
- * @fail_label: Jump there if no enhanced bios exist
+ * @param driveno Bios drive number.
+ * @param fail_label Jump there if no enhanced bios exist.
  */
 #define EDD_CHECK_EXTENSIONS_PRESENT(driveno, fail_label) \
   movb   (driveno), %dl;                                  \
@@ -71,13 +103,14 @@
   shrw   $1, %cx;                                         \
   jnc    fail_label;
 
-/*
- * Print methods
+/**
+ * @def PUT_PRINT_METHODS()
+ * @brief Print methods.
  *
  * INT 0x10, function 0x0e - write teletype to active page
- * input  %al    - character to write
- * input  %bh    - page number
- * input  %bl    - characters' attribute
+ * input  @c al    - character to write
+ * input  @c bh    - page number
+ * input  @c bl    - characters' attribute
  *
  * Character attribute is an 8 bit value, low 4 bits sets
  * foreground color, while the high 4 sets the background.

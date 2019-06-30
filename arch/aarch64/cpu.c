@@ -6,17 +6,11 @@
 #include <mcube/mcube.h>
 
 
-void copy_arch_process(struct task_struct *p, unsigned long func,
-                       unsigned long arg)
-{
-  unsigned long cpu = get_cpu_id();
-  current_th[cpu]->cpu_context.x19 = func;
-  current_th[cpu]->cpu_context.x20 = arg;
-  current_th[cpu]->cpu_context.pc = (unsigned long) ret_from_fork;
-  current_th[cpu]->cpu_context.sp = (unsigned long) p + THREAD_SIZE;
-}
 
-
+/**
+ * @fn static void enable_pmu(void)
+ * @brief enable PMU.
+ */
 static void enable_pmu(void)
 {
   unsigned long val = 0;

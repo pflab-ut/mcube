@@ -219,12 +219,15 @@ void pfdtable_add_range(struct e820_range *range)
 }
 
 
-/*
- * Page allocation and reclamation, in O(1)
+/**
+ * @fn static struct page *__get_free_page(enum zone_id zid)
+ * @brief page allocation and reclamation, in O(1).
  *
  * NOTE! do not call these in IRQ-context!
+ *
+ * @param zid Zone ID.
+ * @return Free page.
  */
-
 static struct page *__get_free_page(enum zone_id zid)
 {
   struct zone *zone;
