@@ -134,10 +134,6 @@ struct buffer_dumper serial_null_dumper = {
   .formatter = buf_null_dump,
 };
 
-struct buffer_dumper null_null_dumper = {
-  .pr = null_printer,
-  .formatter = buf_null_dump,
-};
 
 
 void superblock_dump(union super_block *sb)
@@ -1185,14 +1181,14 @@ remove_new_dir_dot_entry:
 
   if ((ret2 = remove_dir_entry(inode, ".")) <= 0) {
     panic("Removing just created directory inode #%lu dot "
-          "entry returned -%s", inode->inum, errno(ret2));
+          "entry returned -%s", inode->inum, errno_to_str(ret2));
   }
 
 remove_newly_created_entry:
 
   if ((ret2 = remove_dir_entry(dir, name)) <= 0) {
     panic("Removing just created directory inode #%lu entry for "
-          "file '%s' returned -%s", dir->inum, name, errno(ret2));
+          "file '%s' returned -%s", dir->inum, name, errno_to_str(ret2));
   }
 
 dealloc_inode:

@@ -67,11 +67,6 @@ extern struct buffer_dumper serial_hex_dumper;
  */
 extern struct buffer_dumper serial_null_dumper;
 
-/**
- * @var null_null_dumper
- * @brief NULL NULL dumper.
- */
-extern struct buffer_dumper null_null_dumper;
 
 
 /**

@@ -9,13 +9,13 @@
  * @var bh_nodes[NR_THREADS]
  * @brief Binominap heap nodes.
  */
-static struct bheap_node bh_nodes[NR_THREADS];
+struct bheap_node bh_nodes[NR_THREADS];
 
 /**
  * @var thread_prio
  * @brief Thread priority.
  */
-static thread_prio_t thread_prio = thread_is_high_prio;
+thread_prio_t thread_prio = thread_is_high_prio;
 
 /**
  * @fn bool empty_bheap(struct rt_runqueue *rq)

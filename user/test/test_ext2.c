@@ -346,8 +346,8 @@ __unused static void test_file_creation(void)
   int64_t inum;
   struct buffer_dumper *bd;
 
-  bd = (void *)percpu_get(dumper);
-  bd = &null_null_dumper;
+  bd = (void *) percpu_get(dumper);
+  bd = &serial_null_dumper;
 
   char prefix[64];
   __vsnprint(prefix, sizeof(prefix) - 1, "c%d_t%lu_",
@@ -500,7 +500,7 @@ static void test_ext2_up(void)
 
   sb = imsb.sb;
 
-  ext2_debug_init(&null_null_dumper);
+  ext2_debug_init(&serial_null_dumper);
   struct buffer_dumper *bd = (void *)percpu_get(dumper);
 
   /* Extract the modified ext2 volume out of the virtual machine: */
@@ -975,7 +975,7 @@ __noreturn static void smp_fuzz(__unused void *arg)
 static bool test_ext2_smp(void)
 {
   /* Avoid serialization - minimize serial port output */
-  ext2_debug_init(&null_null_dumper);
+  ext2_debug_init(&serial_null_dumper);
 
   /* Each function runs in a thread context, let them
    * halt at the end */
