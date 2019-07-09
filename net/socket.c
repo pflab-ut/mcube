@@ -16,8 +16,7 @@ spinlock_t socket_lock = INIT_SPINLOCK;
 #endif /* CONFIG_ARCH_AXIS */
 
 
-int accept(int sockfd, __unused struct sockaddr *addr,
-           __unused socklen_t *addrlen)
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
   int ret = -1;
 
@@ -53,6 +52,14 @@ int accept(int sockfd, __unused struct sockaddr *addr,
   }
 
   sockets[ret].connect_id = sockfd;
+
+  if (addr && *addrlen) {
+    if ((size_t) *addrlen > sizeof(sockets[ret].addr)) {
+      *addrlen = sizeof(sockets[ret].addr);
+    }
+
+    memcpy(&sockets[ret].addr, addr, *addrlen);
+  }
 
 out:
   spin_unlock(&socket_lock);
@@ -136,7 +143,7 @@ out:
   return ret;
 }
 
-int listen(int sockfd, __unused int backlog)
+int listen(int sockfd, int backlog)
 {
   int ret = -1;
   spin_lock(&socket_lock);
@@ -150,6 +157,11 @@ int listen(int sockfd, __unused int backlog)
   if (sockets[sockfd].passive_socket) {
     /* Another socket is already listening on the same port. */
     errno = EADDRINUSE;
+    goto out;
+  }
+
+  if (backlog <= 0) {
+    errno = EINVAL;
     goto out;
   }
 
