@@ -7,6 +7,15 @@
 #define __MCUBE_AXIS_IRQ_H__
 
 /**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+
+/**
  * @def DIVIDE_ERROR_IRQ
  * @brief Divide error IRQ.
  */
@@ -133,6 +142,8 @@
 
 #ifndef __ASSEMBLY__
 
+
+
 /**
  * @fn static inline void enable_local_irq(void)
  * @brief enable local IRQ.
@@ -246,6 +257,13 @@ void interrupt_vector(void);
 
 
 
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif /* __MCUBE_AXIS_IRQ_H__ */
 

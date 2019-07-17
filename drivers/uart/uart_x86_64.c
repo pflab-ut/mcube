@@ -131,11 +131,7 @@ static bool remote_ready(void)
  */
 static int port_is_broken = false;
 
-/**
- * @var port_lock
- * @brief Port lock.
- */
-spinlock_t port_lock = INIT_SPINLOCK;
+spinlock_t port_lock;
 
 /**
  * @fn static int __putc(uint8_t byte)

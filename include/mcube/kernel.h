@@ -6,6 +6,14 @@
 #ifndef __MCUBE_MCUBE_KERNEL_H__
 #define __MCUBE_MCUBE_KERNEL_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
 
 /**
  * @def SYMBOL_NAME(name)
@@ -164,6 +172,7 @@
  */
 extern bool Debug;
 
+
 /**
  * @fn int main(int argc, char *argv[])
  * @brief Main.
@@ -229,14 +238,21 @@ __noreturn void panic(const char *fmt, ...);
 
 #if !CONFIG_ARCH_SIM
 
+#undef NULL
 
-#ifndef NULL
+#ifdef __cplusplus
 /**
  * @def NULL
  * @brief NULL.
  */
-#define NULL  ((void *) 0)
-#endif /* !NULL */
+#define NULL nullptr
+#else
+/**
+ * @def NULL
+ * @brief NULL.
+ */
+#define NULL ((void *) 0)
+#endif /* __cplusplus */
 
 
 #ifndef EOF
@@ -336,7 +352,14 @@ __noreturn void kernel_start(void);
 #endif /* !CONFIG_ARCH_SIM */
 
 
-
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif /* __MCUBE_MCUBE_KERNEL_H__ */

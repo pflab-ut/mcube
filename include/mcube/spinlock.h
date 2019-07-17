@@ -10,13 +10,13 @@
  * @def SPIN_UNLOCKED
  * @brief Spin is unlocked.
  */
-#define SPIN_UNLOCKED 0x1
+#define SPIN_UNLOCKED 0x0
 
 /**
  * @def SPIN_LOCKED
  * @brief Spin is locked.
  */
-#define SPIN_LOCKED 0x0
+#define SPIN_LOCKED 0x1
 
 #ifndef __ASSEMBLY__
 
@@ -50,11 +50,6 @@ struct spinlock {
  */
 typedef struct spinlock spinlock_t;
 
-/**
- * @def INIT_SPINLOCK
- * @brief initialize spinlock.
- */
-#define INIT_SPINLOCK (spinlock_t) {.val = SPIN_UNLOCKED, .flags.raw = 0}
 
 
 /**
@@ -118,12 +113,49 @@ extern spinlock_t putchar_lock;
  */
 extern spinlock_t sched_lock;
 
+/**
+ * @var panic_lock
+ * @brief Panic lock.
+ */
+extern spinlock_t panic_lock;
 
 /**
- * @var init_spinlock
+ * @var vga_lock
+ * @brief VGA lock.
+ */
+extern spinlock_t vga_lock;
+
+/**
+ * @var printstats_lock
+ * @brief printstats lock.
+ */
+extern spinlock_t printstats_lock;
+
+/**
+ * @var port_lock
+ * @brief Port lock.
+ */
+extern spinlock_t port_lock;
+
+
+/**
+ * @fn void init_spinlock(void)
  * @brief initialize spinlock.
  */
 void init_spinlock(void);
+
+/**
+ * @fn void init_spin(spinlock_t *lock)
+ * @brief initialize spinlock.
+ *
+ * @param lock Lock.
+ */
+static inline void init_spin(spinlock_t *lock)
+{
+  lock->val = SPIN_UNLOCKED;
+  lock->flags.raw = 0;
+}
+
 
 
 #endif /* __ASSEMBLY__ */

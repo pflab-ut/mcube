@@ -31,8 +31,10 @@ void clear_bss(void)
 void init_arch(void)
 {
   clear_bss();
+  init_spinlock();
   init_cpu();
   init_uart();
+
   init_timer(TICK_USEC);
   init_dmac();
   init_kmalloc();

@@ -5,15 +5,11 @@
  */
 #include <mcube/mcube.h>
 
+
 #if !CONFIG_ARCH_SIM
 
 struct socket_struct sockets[SOMAXCONN];
-
-#if CONFIG_ARCH_AXIS
 spinlock_t socket_lock;
-#else
-spinlock_t socket_lock = INIT_SPINLOCK;
-#endif /* CONFIG_ARCH_AXIS */
 
 
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)

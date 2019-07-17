@@ -30,11 +30,8 @@ static char digit[PRINT_MAX_RADIX + 1] = "0123456789abcdef";
 static char pbuf[KBUF_SIZE];
 
 
-#if CONFIG_ARCH_AXIS
 spinlock_t pbuf_lock;
-#else
-spinlock_t pbuf_lock = INIT_SPINLOCK;
-#endif /* CONFIG_ARCH_AXIS */
+
 
 /**
  * @def INT_BUFSIZE
@@ -49,7 +46,7 @@ spinlock_t pbuf_lock = INIT_SPINLOCK;
  * @var panic_lock
  * @brief Panic lock.
  */
-static spinlock_t panic_lock = INIT_SPINLOCK;
+spinlock_t panic_lock;
 
 /*
  * Quickly disable system interrupts upon entrance! Now the
@@ -482,7 +479,7 @@ int vsnprint(char *str, int size, const char *fmt, va_list args)
  * @var vga_lock
  * @brief VGA lock.
  */
-static spinlock_t vga_lock = INIT_SPINLOCK;
+spinlock_t vga_lock;
 
 /**
  * @var vga_xpos

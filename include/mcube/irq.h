@@ -7,6 +7,14 @@
 #define __MCUBE_MCUBE_IRQ_H__
 
 /**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+/**
  * @def IRQ_HANDLED
  * @brief handle IRQ.
  */
@@ -69,7 +77,7 @@ union rflags {
              resume_flag: 1,   /* Debug exceptions related */
              virtual_8086: 1,   /* Enable/disable 8086 mode */
              alignment_check: 1, /* Enable alignment checking? */
-             virtual: 2,   /* Virtualization fields */
+             virtual_fields: 2,   /* Virtualization fields */
              id_flag: 1,   /* CPUID supported if writable */
              __reserved0_3: 10; /* Must be zero */
 
@@ -181,5 +189,13 @@ int handle_software_interrupt(unsigned long id);
 
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif /* __MCUBE_MCUBE_IRQ_H__ */

@@ -6,7 +6,6 @@
 #include <mcube/mcube.h>
 #include "user_axis.h"
 
-void test_jal_func(void);
 
 void test_jal_func(void)
 {

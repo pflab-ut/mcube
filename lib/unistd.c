@@ -90,7 +90,7 @@ ssize_t read(int fd, void *buf, size_t count)
 
 ssize_t write(int fd, const void *buf, size_t count)
 {
-  const uint8_t *p = buf;
+  const uint8_t *p = (uint8_t *) buf;
   printk("write() do\n");
 
   if (count == 0) {

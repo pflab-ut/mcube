@@ -11,7 +11,7 @@ bool test_ring_buf(void)
 {
   uint8_t *buffer;
 
-  if (!(buffer = kmalloc(EXAMPLE_BUFFER_SIZE * sizeof(uint8_t)))) {
+  if (!(buffer = (uint8_t *) kmalloc(EXAMPLE_BUFFER_SIZE * sizeof(uint8_t)))) {
     printk("Error: cannot allocate memory %lu\n",
            EXAMPLE_BUFFER_SIZE * sizeof(uint8_t));
     return false;

@@ -41,7 +41,7 @@ void set_cpu_clock(void)
   }
 
   cpu_clock = get_pmccntr_el0() - cpu_clock;
-  printk("CPU Clock = %lu\n", cpu_clock);
+  //  printk("CPU Clock = %lu\n", cpu_clock);
 
   CPU_CLOCK = cpu_clock;
   CPU_CLOCK_MHZ_PER_USEC = (CPU_CLOCK + 500 * 1000) / (1000 * 1000);

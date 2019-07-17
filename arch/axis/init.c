@@ -27,14 +27,6 @@ void exit_irq(void)
 }
 
 
-void init_spinlock(void)
-{
-  pbuf_lock = INIT_SPINLOCK;
-  sbuf_lock = INIT_SPINLOCK;
-  kmalloc_lock = INIT_SPINLOCK;
-  socket_lock = INIT_SPINLOCK;
-}
-
 void clear_bss(void)
 {
   extern unsigned long __bss_begin, __bss_end;

@@ -6,12 +6,40 @@
 #ifndef __MCUBE_MCUBE_COMPILER_H__
 #define __MCUBE_MCUBE_COMPILER_H__
 
-#ifndef __ASSEMBLY__
 
+#if defined(__cplusplus) && !defined(__ASSEMBLY__)
+
+/**
+ * begin extern "C".
+ */
+#define BEGIN_EXTERN_C extern "C" {
+
+/**
+ * end extern "C".
+ */
+#define END_EXTERN_C }
+
+#else
+
+
+/**
+ * begin extern "C".
+ */
+#define BEGIN_EXTERN_C
+
+/**
+ * end extern "C".
+ */
+#define END_EXTERN_C
+
+#endif /* __cplusplus && !__ASSEMBLY__ */
+
+#ifndef __ASSEMBLY__
 
 /*
  * Compiler extensions shorthands.
  */
+
 
 /**
  * @def __aligned(x)

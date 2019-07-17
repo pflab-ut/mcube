@@ -42,6 +42,7 @@ LIB_SRCS = \
  $(TOP_DIR)/lib/math.c \
  $(TOP_DIR)/lib/mm.c \
  $(TOP_DIR)/lib/mt.c \
+ $(TOP_DIR)/lib/spinlock.c \
  $(TOP_DIR)/lib/stdalgo.c \
  $(TOP_DIR)/lib/stdlib.c \
  $(TOP_DIR)/lib/string.c \
@@ -190,9 +191,9 @@ endif
 
 else ifeq ($(MACHINE_NAME), raspi3)
 # for UART011
-#	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
+	qemu-system-aarch64 -M raspi3 -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 # with dd file
-	qemu-system-aarch64 -M raspi3 -drive file=fat32.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
+#	qemu-system-aarch64 -M raspi3 -drive file=fat32.dd,if=sd,format=raw -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 # for MINI UART
 #	qemu-system-aarch64 -M raspi3 -serial null -serial mon:stdio -nographic -kernel $(TARGET) -m 1G | $(TEE) $(UART_FILE)
 else ifeq ($(ARCH_NAME), axis)

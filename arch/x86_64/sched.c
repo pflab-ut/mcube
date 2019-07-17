@@ -405,11 +405,7 @@ void sched_init(void)
  * @@@ Statistics: @@@
  */
 
-/**
- * @var printstats_lock
- * @brief printstats lock.
- */
-spinlock_t printstats_lock = INIT_SPINLOCK;
+spinlock_t printstats_lock;
 
 void print_process_stats(struct process *process, int prio)
 {

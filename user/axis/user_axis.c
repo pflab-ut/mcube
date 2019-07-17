@@ -15,6 +15,8 @@ void *user_func(void *arg)
     print("%lu", id);
     //  do_end_job(&ths[id]);
   }
+
+  return NULL;
 }
 
 int user_thread_main(void)

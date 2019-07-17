@@ -144,7 +144,7 @@ void unrolled_remove_key(struct unrolled_head *head, uint key);
        unrolled_node = unrolled_node->next)                             \
     for (uint __i = 0,                                                  \
            __unused *_____c =                                           \
-           ({                                                           \
+           (uint *) ({                                                        \
              val = NULL;                                                \
              while (__i < unrolled_node->array_len && !(val = unrolled_node->array[__i])) \
                __i++; val;                                              \

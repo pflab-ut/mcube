@@ -61,7 +61,8 @@ typedef ring_buf_t *cbuf_handle_t;
  * @param initialize ring buffer.
  */
 #define INIT_RING_BUF (ring_buf_t) {                                    \
-    .buffer = NULL, .head = 0, .tail = 0, .max = -1, .full = false, .lock = INIT_SPINLOCK \
+    .buffer = NULL, .head = 0, .tail = 0, .max = 0, .full = false,      \
+      .lock.val = SPIN_UNLOCKED, .lock.flags.raw = 0,                   \
       }
 
 /**

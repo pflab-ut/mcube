@@ -600,37 +600,39 @@ static inline void end_budget(struct thread_struct *th)
 
 
 /**
- * @def INIT_KERNEL_THREAD(cpu)
+ * @fn static inline void init_kernel_thread(struct thread_struct *th, unsigned long cpu)
  * @brief initialize kernel thread.
  *
+ * @param th Thread.
  * @param cpu CPU ID.
  */
-#define INIT_KERNEL_THREAD(cpu) {                             \
-    .cpu_context = INIT_CPU_CONTEXT,                          \
-    .prev = NULL,                                             \
-    .next = NULL,                                             \
-    .dprev = NULL,                                            \
-    .dnext = NULL,                                            \
-    .state = READY,                                           \
-    .type = APERIODIC_TH | NON_REAL_TIME,                     \
-    .thflags = 0,                                             \
-    .id = KERNEL_THREAD_ID,                                   \
-    .tk = NULL,                                               \
-    .line = NULL,                                             \
-    .sig_port = NULL,                                         \
-    .evmsg_port = NULL,                                       \
-    .nr_resources = 0,                                        \
-    .priority = ULONG_MAX,                                    \
-    .stack_top = (unsigned long) &kernel_stack[cpu][NR_CPUS], \
-    .sched = {                                                \
-      .relative_deadline = ULONG_MAX,                         \
-      .period = ULONG_MAX,                                    \
-      .wcet = ULONG_MAX,                                      \
-      .remaining = ULONG_MAX,                                 \
-      .deadline = ULONG_MAX,                                  \
-      .release = ULONG_MAX,                                   \
-    },                                                        \
-  }
+static inline void init_kernel_thread(struct thread_struct *th,
+                                      unsigned long cpu)
+{
+  th->cpu_context = INIT_CPU_CONTEXT;
+  th->prev = (struct thread_struct *) NULL;
+  th->next = (struct thread_struct *) NULL;
+  th->dprev = (struct thread_struct *) NULL;
+  th->dnext = (struct thread_struct *) NULL;
+  th->state = READY;
+  th->type = APERIODIC_TH | NON_REAL_TIME;
+  th->thflags = 0;
+  th->id = KERNEL_THREAD_ID;
+  th->tk = (struct task_struct *) NULL;
+  th->line = (struct thread_struct *) NULL;
+  th->sig_port = (struct signal_port *) NULL;
+  th->evmsg_port = (struct message_port *) NULL;
+  th->nr_resources = 0;
+  th->priority = ULONG_MAX;
+  th->stack_top = (unsigned long) &kernel_stack[cpu][NR_CPUS];
+
+  th->sched.relative_deadline = ULONG_MAX;
+  th->sched.period = ULONG_MAX;
+  th->sched.wcet = ULONG_MAX;
+  th->sched.remaining = ULONG_MAX;
+  th->sched.deadline = ULONG_MAX;
+  th->sched.release = ULONG_MAX;
+}
 
 
 /**

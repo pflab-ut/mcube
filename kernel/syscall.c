@@ -98,12 +98,12 @@ asmlinkage int sys_bad_syscall(int number)
 }
 
 void *syscall_table[] = {
-  sys_sched,
-  sys_end_job,
-  sys_get_exec_time,
-  sys_mcube_write,
-  sys_get_cpu_id,
-  sys_get_mode_level,
-  sys_move_to_kernel_level,
-  sys_bad_syscall
+  (void *) sys_sched,
+  (void *) sys_end_job,
+  (void *) sys_get_exec_time,
+  (void *) sys_mcube_write,
+  (void *) sys_get_cpu_id,
+  (void *) sys_get_mode_level,
+  (void *) sys_move_to_kernel_level,
+  (void *) sys_bad_syscall
 };

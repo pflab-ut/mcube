@@ -38,11 +38,14 @@ static struct unrolled_node *__unode_new(uint node_num, uint array_len)
 {
   struct unrolled_node *node;
 
-  if (!(node = kmalloc(sizeof(struct unrolled_node)))) {
+  if (!(node = (struct unrolled_node *) kmalloc(sizeof(struct unrolled_node)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(struct unrolled_node));
   }
 
-  node->array = kmalloc(array_len * sizeof(void *));
+  if (!(node->array = (void **) kmalloc(array_len * sizeof(void *)))) {
+    panic("Error: cannot allocate memory %lu\n", array_len * sizeof(void *));
+  }
+
   memset(node->array, 0, array_len * sizeof(void *));
   node->array_len = array_len;
   node->array_nrfree = array_len;

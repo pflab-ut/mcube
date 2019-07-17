@@ -6,7 +6,17 @@
 #ifndef __MCUBE_MCUBE_STRING_H__
 #define __MCUBE_MCUBE_STRING_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+
 #ifndef __ASSEMBLY__
+
 
 #if !CONFIG_ARCH_SIM
 
@@ -114,7 +124,7 @@ void *memcpy_forward(void *dst, const void *src, size_t n);
 void *memcpy_forward_nocheck(void *dst, const void *src, size_t n);
 
 /**
- * @fn void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t n)
+ * @fn void *memcpy_nocheck(void *dst, const void *src, size_t n)
  * @brief copy @a n bytes from memory area @a src to memory area @a dst without check.
  * We do tolerate overlapping regions here if @a src > @a dst. In
  * such case, (@a src - @a dst) must be bigger than movsq's block
@@ -125,7 +135,7 @@ void *memcpy_forward_nocheck(void *dst, const void *src, size_t n);
  * @param n is the number fo bytes copying @a src to @a dst.
  * @return Pointer to @a dst.
  */
-void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t n);
+void *memcpy_nocheck(void *dst, const void *src, size_t n);
 
 
 /**
@@ -274,5 +284,14 @@ char *strtok(char *str, const char *delim);
 #endif /* !CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
+
 
 #endif /* __MCUBE_MCUBE_STRING_H__ */

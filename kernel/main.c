@@ -24,7 +24,7 @@
  * @var PADDING[PADDING_SIZE]
  * @brief Padding.
  */
-char PADDING[PADDING_SIZE] = {PADDING_DATA};
+unsigned char PADDING[PADDING_SIZE] = {PADDING_DATA};
 
 #endif
 

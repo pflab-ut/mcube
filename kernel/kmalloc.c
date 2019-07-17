@@ -7,11 +7,7 @@
 #include <mcube/mcube.h>
 
 
-#if CONFIG_ARCH_AXIS
 spinlock_t kmalloc_lock;
-#else
-spinlock_t kmalloc_lock = INIT_SPINLOCK;
-#endif /* CONFIG_ARCH_AXIS */
 
 /**
  * @var heap

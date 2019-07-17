@@ -40,14 +40,14 @@ cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
 {
   cbuf_handle_t cbuf;
 
-  if (!(cbuf = kmalloc(sizeof(ring_buf_t)))) {
+  if (!(cbuf = (cbuf_handle_t) kmalloc(sizeof(ring_buf_t)))) {
     print("Error: cannot allocate memory %lu\n", sizeof(ring_buf_t));
     return NULL;
   }
 
   cbuf->buffer = buffer;
   cbuf->max = size;
-  cbuf->lock = INIT_SPINLOCK;
+  init_spin(&cbuf->lock);
   ring_buf_reset(cbuf);
 
   return cbuf;

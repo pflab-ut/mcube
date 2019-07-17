@@ -974,7 +974,7 @@ enum shutdown {
 
 
 /**
- * @fn int accept(int sockfd, __unused struct sockaddr *addr, __unused socklen_t *addrlen)
+ * @fn int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
  * @brief is used with connection-based socket types (SOCK_STREAM, SOCK_SEQPACKET).
  * It extracts the first connection request on the queue of pending connections for
  * the listening socket, sockfd, creates a new connected socket, and returns a new file
@@ -989,8 +989,7 @@ enum shutdown {
  * for the accepted socket.
  * On error, -1 is returned, and errno is set appropriately.
  */
-int accept(int sockfd, __unused struct sockaddr *addr,
-           __unused socklen_t *addrlen);
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 
 /**
  * @fn int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
@@ -1021,7 +1020,7 @@ int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 
 /**
- * @fn int listen(int sockfd, __unused int backlog)
+ * @fn int listen(int sockfd, int backlog)
  * @brief mark the socket referred to by @a sockfd as a passive socket, that is,
  * as a socket that will be used to accept incoming connection requests using accept().
  *
@@ -1030,7 +1029,7 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
  * @return On success, zero is returned.
  * On error, -1 is returned, and errno is set appropriately.
  */
-int listen(int sockfd, __unused int backlog);
+int listen(int sockfd, int backlog);
 
 /**
  * @fn int socket(int domain, int type, int protocol)

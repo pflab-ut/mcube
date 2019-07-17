@@ -34,9 +34,8 @@ static inline void spin_lock(spinlock_t *lock)
   asm volatile("sevl\n"
                "1:wfe\n"
                "2:ldaxr %w0, [%1]\n"
-               "cbz %w0, 1b\n"
+               "cbnz %w0, 1b\n"
                "stxr %w0, %w2, [%1]\n"
-               "cbnz %w0, 2b\n"
                : "=&r"(tmp)
                : "r"(lock), "r"(SPIN_LOCKED)
                : "memory");

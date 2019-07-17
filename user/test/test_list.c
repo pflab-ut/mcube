@@ -20,7 +20,7 @@ static void test_0_elements(void)
   struct test *t1, *t2, *t3, *spare;
   uint64_t x;
 
-  if (!(t1 = kmalloc(sizeof(struct test)))) {
+  if (!(t1 = (struct test *) kmalloc(sizeof(struct test)))) {
     printk("Error: cannot allocate memory %lu\n", sizeof(struct test));
     return;
   }
@@ -58,7 +58,7 @@ static void test_1_element(int type)
   list_init(&head);
   assert(list_empty(&head));
 
-  if (!(t1 = kmalloc(sizeof(struct test)))) {
+  if (!(t1 = (struct test *) kmalloc(sizeof(struct test)))) {
     printk("Error: cannot allocate memory %lu\n", sizeof(struct test));
     return;
   }
@@ -111,12 +111,12 @@ static void test_several_elements(int count, int type)
   list_init(&head);
   assert(list_empty(&head));
 
-  if (!(t = kmalloc(sizeof(struct test *) * count))) {
+  if (!(t = (struct test **) kmalloc(sizeof(struct test *) * count))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(struct test *) * count);
   }
 
   for (int i = 0; i < count; i++) {
-    if (!(t[i] = kmalloc(sizeof(struct test)))) {
+    if (!(t[i] = (struct test *) kmalloc(sizeof(struct test)))) {
       panic("Error: cannot allocate memory %lu\n", sizeof(struct test));
     }
 

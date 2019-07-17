@@ -7,12 +7,15 @@
 
 #if !CONFIG_ARCH_SIM
 
+
 int memcmp(const void *s1, const void *s2, size_t n)
 {
   const unsigned char *su1, *su2;
   int res = 0;
 
-  for (su1 = s1, su2 = s2; 0 < n; ++su1, ++su2, n--) {
+  for (su1 = (unsigned char *) s1, su2 = (unsigned char *) s2;
+       0 < n;
+       ++su1, ++su2, n--) {
     if ((res = *su1 - *su2) != 0) {
       break;
     }
@@ -28,16 +31,16 @@ void *memmove(void *dst, const void *src, size_t n)
   const char *s;
 
   if (dst <= src) {
-    tmp = dst;
-    s = src;
+    tmp = (char *) dst;
+    s = (char *) src;
 
     while (n--) {
       *tmp++ = *s++;
     }
   } else {
-    tmp = dst;
+    tmp = (char *) dst;
     tmp += n;
-    s = src;
+    s = (char *) src;
     s += n;
 
     while (n--) {
@@ -261,9 +264,9 @@ void *memset(void *s, int c, size_t n)
 {
   /* NOTE: volatile is required for -O3 option of GCC. */
 #if CONFIG_COMPILER_GCC
-  volatile uint8_t *xs = s;
+  volatile uint8_t *xs = (uint8_t *) s;
 #elif CONFIG_COMPILER_CLANG
-  uint8_t *xs = s;
+  uint8_t *xs = (uint8_t *) s;
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
@@ -283,9 +286,9 @@ void *memset32(void *s, uint32_t c, size_t n)
 {
   /* NOTE: volatile is required for -O3 option of GCC. */
 #if CONFIG_COMPILER_GCC
-  volatile uint32_t *xs = s;
+  volatile uint32_t *xs = (uint32_t *) s;
 #elif CONFIG_COMPILER_CLANG
-  uint32_t *xs = s;
+  uint32_t *xs = (uint32_t *) s;
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
@@ -305,9 +308,9 @@ void *memset64(void *s, uint64_t c, size_t n)
 {
   /* NOTE: volatile is required for -O3 option of GCC. */
 #if CONFIG_COMPILER_GCC
-  volatile uint64_t *xs = s;
+  volatile uint64_t *xs = (uint64_t *) s;
 #elif CONFIG_COMPILER_CLANG
-  uint64_t *xs = s;
+  uint64_t *xs = (uint64_t *) s;
 #else
 #error "Unknown Compiler"
 #endif /* CONFIG_COMPILER_GCC */
@@ -387,7 +390,7 @@ void *memcpy_forward(void *dst, const void *src, size_t len)
 /*
  * C99-compliant, with extra sanity checks.
  */
-void *memcpy(void *restrict dst, const void *restrict src, size_t len)
+void *memcpy(void *dst, const void *src, size_t len)
 {
   uintptr_t udst, usrc;
   bool overlap;
@@ -411,7 +414,7 @@ void *memcpy_forward_nocheck(void *dst, const void *src, size_t len)
   return __memcpy_forward(dst, src, len);
 }
 
-void *memcpy_nocheck(void *restrict dst, const void *restrict src, size_t len)
+void *memcpy_nocheck(void *dst, const void *src, size_t len)
 {
   return __memcpy_forward(dst, src, len);
 }
@@ -437,8 +440,8 @@ void *memcpy(void *dst, const void *src, size_t n)
 
 char *strtok(char *str, const char *delim)
 {
-  register char *spanp;
-  register int c, sc;
+  char *spanp;
+  int c, sc;
   char *tok;
   static char *last;
 
@@ -491,3 +494,4 @@ cont:
 }
 
 #endif /* !CONFIG_ARCH_SIM */
+

@@ -8,6 +8,7 @@
 ifeq ($(CC), clang)
   CFLAGS += -target maxis
   CROSS_PREFIX = llvm-
+		CC = clang
   LD = ld.lld
   AS = $(CROSS_PREFIX)as
   OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex

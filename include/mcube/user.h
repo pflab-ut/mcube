@@ -6,6 +6,15 @@
 #ifndef __MCUBE_MCUBE_USER_H__
 #define __MCUBE_MCUBE_USER_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+
 #ifndef __ASSEMBLY__
 
 __noreturn void loop_print(char ch, int color);
@@ -40,9 +49,19 @@ bool test_percpu(void);
 bool test_pit(void);
 #endif /* CONFIG_ARCH_X86_64 */
 
-
+#if CONFIG_ARCH_AXIS
+void test_jal_func(void);
+#endif /* CONFIG_ARCH_AXIS */
 
 #endif /* __ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif /* __MCUBE_MCUBE_USER_H__ */
 

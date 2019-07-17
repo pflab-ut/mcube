@@ -31,9 +31,10 @@ static void _test_N_elements(struct unrolled_head *head, uint len)
 
   uint i = 0;
   unrolled_for_each(head, val) {
-    if ((ret = (uintptr_t)unrolled_lookup(head, i)) != i + 5)
+    if ((ret = (uintptr_t) unrolled_lookup(head, i)) != i + 5) {
       panic("_UNROLLED: Value for key %u got corrupted; "
             "returned = %u, actual = %u", i, ret, val);
+    }
 
     i++;
   }
@@ -67,9 +68,10 @@ static void _test_generated_keys(struct unrolled_head *head)
 
   uint i = 0;
   unrolled_for_each(head, val) {
-    if ((uintptr_t) val != i + 5)
+    if ((uintptr_t) val != i + 5) {
       panic("_UNROLLED: Value for key %u got corrupted; returned = %u, actual = %u",
             i, val, i + 5);
+    }
 
     i++;
   }

@@ -32,7 +32,7 @@
 void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
 {
   unsigned int bytes_perline = 16, n = 0;
-  uint8_t *buf = given_buf;
+  uint8_t *buf = (uint8_t *) given_buf;
 
   for (uint i = 0; i < len; i++) {
     dumper->pr(" ");
@@ -57,7 +57,7 @@ void buf_hex_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
  */
 void buf_char_dump(struct buffer_dumper *dumper, void *given_buf, uint len)
 {
-  char *buf = given_buf;
+  char *buf = (char *) given_buf;
 
   for (uint i = 0; i < len; i++) {
     dumper->pr("%c", buf[i]);

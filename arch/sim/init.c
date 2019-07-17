@@ -8,6 +8,7 @@
 
 void init_arch(void)
 {
+  init_spinlock();
   init_cpu();
   init_kmalloc();
 }

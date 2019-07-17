@@ -23,7 +23,7 @@ bool test_bitmap(void)
   buflen_bytes = 4096;
   buflen_bits = buflen_bytes * 8;
 
-  if (!(buf = kmalloc(buflen_bytes))) {
+  if (!(buf = (char *) kmalloc(buflen_bytes))) {
     panic("Error: cannot allocate memory %lu\n", buflen_bytes);
   }
 

@@ -118,6 +118,7 @@ void init_arch(void)
    * with zero. Kernel assembly code also assumes a zeroed BSS
    * space */
   clear_bss();
+  init_spinlock();
   init_uart();
 
   /*

@@ -8,11 +8,7 @@
 struct thread_struct *current_th[NR_CPUS];
 struct thread_struct *prev_th[NR_CPUS];
 
-#if CONFIG_ARCH_AXIS
 spinlock_t sched_lock;
-#else
-spinlock_t sched_lock = INIT_SPINLOCK;
-#endif
 
 struct thread_struct kernel_th[NR_CPUS];
 
@@ -232,7 +228,7 @@ void init_sched(void)
   sys_jiffies = 0;
 
   for (i = 0; i < NR_CPUS; i++) {
-    kernel_th[i] = (struct thread_struct) INIT_KERNEL_THREAD(cpu);
+    init_kernel_thread(&kernel_th[i], i);
     kernel_th[i].thflags = THFLAGS_START_TH;
     run_tq[i].util = 0;
     run_tq[i].nr_threads = 0;

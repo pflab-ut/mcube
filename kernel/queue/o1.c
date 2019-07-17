@@ -40,7 +40,7 @@ void dequeue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 struct thread_struct *pick_next_thread(void)
 {
   unsigned long cpu = get_cpu_id();
-  struct thread_struct *th = NULL;
+  struct thread_struct *th = (struct thread_struct *) NULL;
   bindex[cpu] = find_first_bit32(run_tq[cpu].bitmap, NR_PRIORITY_BITMAPS);
 
   //  PDEBUG("bindex[%d] = %d\n", cpu, bindex);
@@ -67,7 +67,8 @@ void init_rq(void)
     }
 
     for (j = 0; j < NR_PRIORITIES; j++) {
-      run_tq[i].array[j] = (struct thread_struct) INIT_KERNEL_THREAD(i);
+      //      run_tq[i].array[j] = (struct thread_struct) INIT_KERNEL_THREAD(i);
+      init_kernel_thread(&run_tq[i].array[j], i);
       run_tq[i].array[j].prev = run_tq[i].array[j].next = &run_tq[i].array[j];
     }
   }

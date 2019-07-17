@@ -220,6 +220,7 @@ void syscall_setup(void *table, uint64_t nr_syscalls);
  */
 extern void *syscall_table[NR_SYSCALLS + 1];
 
+
 #endif /* !CONFIG_ARCH_SIM */
 
 

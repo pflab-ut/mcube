@@ -118,35 +118,36 @@ static inline bool list_empty(const struct list_node *node)
 }
 
 /**
- * @fn static inline void list_add(struct list_node *node, struct list_node *new)
- * @brief insert @a new right after @a node.
+ * @fn static inline void list_add(struct list_node *node, struct list_node *new_node)
+ * @brief insert @a new right after @a new_node.
  *
  * @param node Node.
- * @param new New node inserted after @a node.
+ * @param new_node New node inserted after @a new_node.
  */
-static inline void list_add(struct list_node *node, struct list_node *new)
+static inline void list_add(struct list_node *node, struct list_node *new_node)
 {
-  new->next = node->next;
-  new->next->prev = new;
+  new_node->next = node->next;
+  new_node->next->prev = new_node;
 
-  node->next = new;
-  new->prev = node;
+  node->next = new_node;
+  new_node->prev = node;
 }
 
 /**
- * @fn static inline void list_add_tail(struct list_node *node, struct list_node *new)
- * @brief insert @a new right before @a node.
+ * @fn static inline void list_add_tail(struct list_node *node, struct list_node *new_node)
+ * @brief insert @a new_node right before @a node.
  *
  * @param node Node.
- * @param new New node inserted before @a node.
+ * @param new_node New node inserted before @a node.
  */
-static inline void list_add_tail(struct list_node *node, struct list_node *new)
+static inline void list_add_tail(struct list_node *node,
+                                 struct list_node *new_node)
 {
-  new->prev = node->prev;
-  new->prev->next = new;
+  new_node->prev = node->prev;
+  new_node->prev->next = new_node;
 
-  node->prev = new;
-  new->next = node;
+  node->prev = new_node;
+  new_node->next = node;
 }
 
 /**

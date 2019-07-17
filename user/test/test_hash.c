@@ -45,7 +45,7 @@ static void test_hash_op(int hash_size)
   count = 128;
   hash = hash_new(hash_size);
 
-  if (!(array = kmalloc(count * sizeof(*array)))) {
+  if (!(array = (struct test_struct *) kmalloc(count * sizeof(*array)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*array));
   }
 
@@ -57,7 +57,7 @@ static void test_hash_op(int hash_size)
   }
 
   for (int i = count - 1; i >= 0; i--) {
-    elem = hash_find(hash, i);
+    elem = (struct test_struct *) hash_find(hash, i);
 
     if (!elem) {
       panic("_Hash: Cannot find element #%u, although "
@@ -77,7 +77,7 @@ static void test_hash_op(int hash_size)
     }
   }
 
-  if ((elem = hash_find(hash, INT32_MAX))) {
+  if ((elem = (struct test_struct *) hash_find(hash, INT32_MAX))) {
     panic("_Hash: Returning non-existing element with id %d as "
           "found, with payload = %d", INT32_MAX, elem->payload);
   }
