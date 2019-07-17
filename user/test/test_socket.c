@@ -104,17 +104,25 @@ static int socket_server(__unused int argc, __unused char *argv[])
 
 end_accept:
 
+#if 0
+
   if (shutdown(clifd, SHUT_RDWR) == -1) {
     printk("Error: shutdown() for accept()\n");
   }
 
+#endif
 end_socket:
+
+#if 0
 
   if (shutdown(lsnfd, SHUT_RDWR) == -1) {
     printk("Error: shutdown() for socket()\n");
     return 2;
   }
 
+#endif
+
+  printk("socket_server() end");
   return 0;
 }
 

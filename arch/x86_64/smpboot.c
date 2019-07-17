@@ -202,7 +202,7 @@ __noreturn void secondary_start(void)
   enable_local_irq();
 
   user_ap_main(argc, argv);
-
+  printk("user_ap_main() end\n");
   halt();
 }
 

@@ -42,13 +42,11 @@ static inline uint8_t atomic_bit_test_and_set(uint32_t *val)
 {
   uint8_t ret;
 
-  asm volatile(//"LOCK bts $0, %0;"
-    "LOCK btr $0, %0;"
-    "     setc    %1;"
-    //"     setnc    %1;"
-    : "+m"(*val), "=qm"(ret)
-    :
-    : "cc", "memory");
+  asm volatile("LOCK bts $0, %0;"
+               "     setc    %1;"
+               : "+m"(*val), "=qm"(ret)
+               :
+               : "cc", "memory");
 
   return ret;
 }

@@ -18,7 +18,7 @@ void init_spinlock(void)
 #if !CONFIG_ARCH_SIM
   init_spin(&socket_lock);
 #endif /* !CONFIG_ARCH_SIM */
-  
+
 #if CONFIG_ARCH_X86_64
   init_spin(&panic_lock);
   init_spin(&vga_lock);

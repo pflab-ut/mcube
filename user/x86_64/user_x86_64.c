@@ -82,9 +82,12 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  start_timer();
   //  user_thread_main();
   //  test_pit();
+#if 1
   argc = 2;
   argv[1] = str;
   test_socket(argc, argv);
+#endif
+  //  test_kmalloc();
   //  test_percpu();
   //  test_apic();
   //  test_page_alloc();

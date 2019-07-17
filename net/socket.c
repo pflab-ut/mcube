@@ -47,6 +47,11 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
     goto out;
   }
 
+  sockets[sockfd].msg.max = MSG_BUFSIZE;
+  init_spin(&sockets[sockfd].msg.lock);
+  ring_buf_reset(&sockets[sockfd].msg);
+
+
   sockets[ret].connect_id = sockfd;
 
   if (addr && *addrlen) {
@@ -218,6 +223,7 @@ int socket(int domain, int type, int protocol)
   }
 
   spin_unlock(&socket_lock);
+  printk("socket(): ret = %d\n", ret);
   return ret;
 }
 

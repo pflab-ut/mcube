@@ -65,8 +65,10 @@ int main(int argc, char *argv[])
     IsInitialized = true;
     user_main(argc, argv);
     exit_arch();
-    print("main() end\n");
   } else {
+    /* Application Processors (APs) on ARM and AXIS.
+     * APs on x86_64 is arch/x86_64/smpboot.c.
+     */
     //    print("get_cpu_id() = %lu\n", get_cpu_id());
     init_arch_ap();
 

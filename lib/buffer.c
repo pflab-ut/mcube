@@ -93,6 +93,7 @@ size_t ring_buf_capacity(cbuf_handle_t cbuf)
 void ring_buf_put(cbuf_handle_t cbuf, uint8_t data)
 {
   spin_lock(&cbuf->lock);
+  printk("cbuf->buffer[cbuf->head] = 0x%lx\n", &cbuf->buffer[cbuf->head]);
   cbuf->buffer[cbuf->head] = data;
 
   advance_pointer(cbuf);

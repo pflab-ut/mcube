@@ -105,10 +105,12 @@ ssize_t write(int fd, const void *buf, size_t count)
     return -2;
   }
 
+  printk("count = %d\n", count);
   spin_lock(&socket_lock);
 
   for (size_t i = 0; i < count; i++) {
-#if 0
+    printk("i = %d\n", i);
+#if 1
     printk("&sockets[%d].msg.buffer = 0x%lx p[%d] = %d\n",
            fd, sockets[sockets[fd].connect_id].msg.buffer, i, p[i]);
 #endif
@@ -122,14 +124,18 @@ ssize_t write(int fd, const void *buf, size_t count)
 
 int close(int fd)
 {
+  spin_lock(&socket_lock);
+  printk("close(): fd = %d\n", fd);
   sockets[fd].used = false;
   sockets[fd].passive_socket = false;
   sockets[fd].connect_id = -1;
   sockets[fd].addr = (struct sockaddr_un) {
     .sun_family = AF_UNSPEC, .sun_path = ""
   };
-  kfree(sockets[fd].msg.buffer);
+  // XXX: exception in x86.
+  //  ring_buf_free(&sockets[sockets[fd].connect_id].msg);
   sockets[fd].msg = INIT_RING_BUF;
+  spin_unlock(&socket_lock);
 
   return 0;
 }
