@@ -7,6 +7,14 @@
 #define __MCUBE_AARCH64_IRQ_H__
 
 /**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+/**
  * @def AARCH64_DAIF_FIQ
  * @brief Aarch64 PSTATE {DAIF} Fast Interrupt reQeust (FIQ).
  */
@@ -289,6 +297,14 @@ void show_invalid_entry_message(int type, unsigned long esr,
 
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 
 #endif /* __MCUBE_AARCH64_IRQ_H__ */

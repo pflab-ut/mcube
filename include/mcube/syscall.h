@@ -6,6 +6,13 @@
 #ifndef __MCUBE_MCUBE_SYSCALL_H__
 #define __MCUBE_MCUBE_SYSCALL_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
 
 #if !CONFIG_ARCH_SIM
 
@@ -225,6 +232,14 @@ extern void *syscall_table[NR_SYSCALLS + 1];
 
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 
 #endif /* __MCUBE_MCUBE_SYSCALL_H__ */

@@ -6,6 +6,17 @@
 #ifndef __MCUBE_X86_64_PIT_H__
 #define __MCUBE_X86_64_PIT_H__
 
+
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+
+
 #ifndef __ASSEMBLY__
 
 
@@ -141,5 +152,13 @@ void stop_pit_timer(void);
 
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif /* __MCUBE_X86_64_PIT_H__ */

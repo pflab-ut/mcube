@@ -300,7 +300,7 @@ void free_page(struct page *page)
 {
   struct zone *zone;
 
-  zone = get_zone(page->zone_id);
+  zone = get_zone((zone_id) page->zone_id);
 
   spin_lock(&zone->freelist_lock);
 
@@ -393,7 +393,7 @@ void pagealloc_init(void)
   printk("Memory: Available physical memory = %d MB\n",
          ((avail_pages * PAGE_SIZE) / 1024) / 1024);
 
-  pfdtable = ramdisk_memory_area_end();
+  pfdtable = (page *) ramdisk_memory_area_end();
   pfdtable_top = pfdtable;
   pfdtable_end = pfdtable + avail_pages;
 

@@ -83,7 +83,7 @@ static void pit_test_periodic_irq(void)
 
   /* FIXME: We should have an IRQ model soon */
   vector = PIT_TESTS_VECTOR;
-  set_idt_gate(vector, pit_periodic_handler);
+  set_idt_gate(vector, (void *) pit_periodic_handler);
   ioapic_setup_isairq(0, vector, IRQ_BOOTSTRAP);
 
   /* Testing showed that big delay values catches

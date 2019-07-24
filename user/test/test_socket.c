@@ -122,7 +122,7 @@ end_socket:
 
 #endif
 
-  printk("socket_server() end");
+  printk("socket_server() end\n");
   return 0;
 }
 

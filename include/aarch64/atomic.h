@@ -9,32 +9,31 @@
 #ifndef __ASSEMBLY__
 
 /**
- * @fn static inline uint64_t compare_and_swap(volatile uint64_t *ptr, uint64_t new,
- *                                             uint64_t old)
+ * @fn static inline uint64_t compare_and_swap(volatile uint64_t *ptr, uint64_t new_val,
+ *                                             uint64_t old_val)
  * @brief compare and swap.
  *
  * @param ptr Pointer to data.
- * @param new New value.
- * @param old Old value.
+ * @param new_val New value.
+ * @param old_val Old value.
  */
-static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new,
-                                    uint64_t old)
+static inline void compare_and_swap(volatile uint64_t *ptr, uint64_t new_val,
+                                    uint64_t old_val)
 {
   uint64_t tmp;
-  //  printk("new = 0x%lx old = 0x%lx\n", new, old);
 #if 1
-  uint64_t oldval;
+  uint64_t tmp2;
   //  asm volatile("prfm    pstl1strm, %0" :: "r"(&v->counter));
-  asm volatile("1: ldaxr %x0, [%1]" : "=&r"(oldval) : "r"(ptr));
-  asm volatile("eor %x0, %x1, %x2" : "=r"(tmp) : "r"(oldval), "r"(old));
+  asm volatile("1: ldaxr %x0, [%1]" : "=&r"(tmp2) : "r"(ptr));
+  asm volatile("eor %x0, %x1, %x2" : "=r"(tmp) : "r"(tmp2), "r"(old_val));
   asm volatile("cbnz %x0, 2f" :: "r"(tmp));
-  asm volatile("stxr %w0, %x2, [%1]" : "=&r"(tmp) : "r"(ptr), "r"(new));
+  asm volatile("stxr %w0, %x2, [%1]" : "=&r"(tmp) : "r"(ptr), "r"(new_val));
   asm volatile("cbnz %x0, 1b" :: "r"(tmp));
   asm volatile("2:");
 #else
   /* Large System Extension (LSE) in ARMv8.1 */
-  asm volatile("mov %x0, %x1" : "=r"(tmp) : "r"(old));
-  asm volatile("cas %x0, %x1, [%2]" : "=r"(tmp), "=r"(new), "=r"(*ptr));
+  asm volatile("mov %x0, %x1" : "=r"(tmp) : "r"(old_val));
+  asm volatile("cas %x0, %x1, [%2]" : "=r"(tmp), "=r"(new_val), "=r"(*ptr));
 #endif
 }
 

@@ -11,6 +11,15 @@
  * Copyright (C) 2009-2010 Ahmed S. Darwish <darwish.07@gmail.com>
  */
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+
 
 /**
  * @def SMPBOOT_START
@@ -224,5 +233,14 @@ void smpboot_init(void);
 
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
+
 
 #endif /* __MCUBE_X86_64_SMPBOOT_H__ */

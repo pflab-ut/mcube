@@ -6,6 +6,16 @@
 #ifndef __MCUBE_X86_64_APIC_H__
 #define __MCUBE_X86_64_APIC_H__
 
+
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+
 /*
  * Local APIC definitions, 8259A PIC ports, ..
  *
@@ -969,6 +979,15 @@ extern volatile int apic_ticks_count;
 #define APIC_EOI 0xb0
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
+
 
 #endif /* __MCUBE_X86_64_APIC_H__ */
 

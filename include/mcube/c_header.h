@@ -10,7 +10,9 @@
  * @def _GNU_SOURCE
  * @brief Definition for GNU source.
  */
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif /* _GNU_SOURCE */
 
 #ifndef __ASSEMBLY__
 

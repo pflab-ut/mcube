@@ -100,10 +100,10 @@ void pic_init(void)
    * by the PIC, despite of its masked status, get ignored */
 
   for (int i = PIC_IRQ0_VECTOR; i <= PIC_IRQ7_VECTOR; i++) {
-    set_idt_gate(i, PIC_handler);
+    set_idt_gate(i, (void *) PIC_handler);
   }
 
   for (int i = PIC_IRQ8_VECTOR; i <= PIC_IRQ15_VECTOR; i++) {
-    set_idt_gate(i, PIC_handler);
+    set_idt_gate(i, (void *) PIC_handler);
   }
 }

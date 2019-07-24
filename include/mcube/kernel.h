@@ -340,7 +340,7 @@ __unused void __undefined_method(void);
 #define ARRAY_SIZE(arr)                                       \
   ({                                                          \
     compiler_assert(__arr_size(arr) <= (uint64_t) INT32_MAX); \
-    (int32_t)__arr_size(arr);                                 \
+    (uint32_t)__arr_size(arr);                                \
   })
 
 /**

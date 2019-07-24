@@ -99,7 +99,7 @@ static void apic_test_periodic_mode(void)
 
   /* FIXME: We should have an IRQ model soon */
   vector = APIC_TESTS_VECTOR;
-  set_idt_gate(vector, apic_timer_handler);
+  set_idt_gate(vector, (void *) apic_timer_handler);
 
   /* Testing showed that big delay values catches
    * more periodic timer accuracy errors .. */

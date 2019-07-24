@@ -36,21 +36,13 @@ static void retreat_pointer(cbuf_handle_t cbuf)
 }
 
 
-cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
+void ring_buf_init(cbuf_handle_t cbuf, uint8_t *buffer, size_t size)
 {
-  cbuf_handle_t cbuf;
-
-  if (!(cbuf = (cbuf_handle_t) kmalloc(sizeof(ring_buf_t)))) {
-    print("Error: cannot allocate memory %lu\n", sizeof(ring_buf_t));
-    return NULL;
-  }
 
   cbuf->buffer = buffer;
   cbuf->max = size;
   init_spin(&cbuf->lock);
   ring_buf_reset(cbuf);
-
-  return cbuf;
 }
 
 void ring_buf_free(cbuf_handle_t cbuf)
@@ -93,7 +85,7 @@ size_t ring_buf_capacity(cbuf_handle_t cbuf)
 void ring_buf_put(cbuf_handle_t cbuf, uint8_t data)
 {
   spin_lock(&cbuf->lock);
-  printk("cbuf->buffer[cbuf->head] = 0x%lx\n", &cbuf->buffer[cbuf->head]);
+  //  printk("cbuf->buffer[cbuf->head] = 0x%lx\n", &cbuf->buffer[cbuf->head]);
   cbuf->buffer[cbuf->head] = data;
 
   advance_pointer(cbuf);

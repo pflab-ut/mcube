@@ -184,7 +184,10 @@ ifeq ($(ARCH_NAME), sim)
 	$(TARGET) $(ARGS)
 else ifeq ($(ARCH_NAME), x86_64)
 ifeq ($(OUTPUT_NAME), console)
-	qemu-system-x86_64 build/mcube-hd.img -nographic -ncurses -m 1G -smp 4
+# QEMU version 2.x
+#	qemu-system-x86_64 build/mcube-hd.img -nographic -curses -m 1G -smp 4
+# QEMU version 3.0 or later
+	qemu-system-x86_64 build/mcube-hd.img -nographic -display curses -m 1G -smp 4
 else
 	qemu-system-x86_64 build/mcube-hd.img -nographic -serial mon:stdio -m 1G -smp 4 | $(TEE) $(UART_FILE)
 endif

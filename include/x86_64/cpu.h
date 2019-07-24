@@ -7,6 +7,14 @@
 #define	__MCUBE_X86_64_CPU_H__
 
 /**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+/**
  * @def USER_LEVEL
  * @brief User level.
  */
@@ -248,5 +256,13 @@ void change_ring0_to_ring3(uint64_t selector);
 
 #endif /* __ASSEMBLY__ */
 
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif	/* __MCUBE_X86_64_CPU_H__ */

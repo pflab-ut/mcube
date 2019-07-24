@@ -63,7 +63,7 @@ struct mpc_irq mp_irqs[MAX_IRQS];
 static uint8_t mpf_checksum(void *mp, uint32_t len)
 {
   uint8_t sum = 0;
-  uint8_t *buf = mp;
+  uint8_t *buf = (uint8_t *) mp;
 
   while (len--) {
     sum += *buf++;
@@ -82,7 +82,7 @@ static uint8_t mpf_checksum(void *mp, uint32_t len)
  */
 static struct mpf_struct *search_for_mpf(void *base, uint32_t len)
 {
-  struct mpf_struct *mpf = base;
+  struct mpf_struct *mpf = (struct mpf_struct *) base;
   uint8_t checksum;
 
   for (; len > 0; mpf += 1, len -= sizeof(*mpf)) {
@@ -225,7 +225,7 @@ void mpc_dump(struct mpc_table *mpc)
  */
 static void parse_cpu(void *addr)
 {
-  struct mpc_cpu *cpu = addr;
+  struct mpc_cpu *cpu = (struct mpc_cpu *) addr;
   static bool bsc_entry_filled;
 
   if (!cpu->enabled) {
@@ -259,7 +259,7 @@ static void parse_cpu(void *addr)
  */
 static void parse_ioapic(void *addr)
 {
-  struct mpc_ioapic *ioapic = addr;
+  struct mpc_ioapic *ioapic = (struct mpc_ioapic *) addr;
 
   if (!ioapic->enabled) {
     return;
@@ -285,7 +285,7 @@ static void parse_ioapic(void *addr)
  */
 static void parse_irq(void *addr)
 {
-  struct mpc_irq *irq = addr;
+  struct mpc_irq *irq = (struct mpc_irq *) addr;
 
   if (nr_mpcirqs >= MAX_IRQS) {
     panic("Only %d IRQ sources supported", MAX_IRQS);
@@ -302,7 +302,7 @@ static void parse_irq(void *addr)
  */
 static void parse_bus(void *addr)
 {
-  struct mpc_bus *bus = addr;
+  struct mpc_bus *bus = (struct mpc_bus *) addr;
 
   /* Only the ISA bus is needed for now */
   if (memcmp("ISA", bus->type, sizeof("ISA") - 1) == 0) {
@@ -327,7 +327,7 @@ static int parse_mpc(struct mpc_table *mpc)
   entry = (uint8_t *)(mpc + 1);  /* WARN: possibly un-mapped! */
 
   for (int i = 0; i < mpc->entries; i++) {
-    entry = vm_kmap(PHYS(entry), MPC_ENTRY_MAX_LEN);
+    entry = (uint8_t *) vm_kmap(PHYS(entry), MPC_ENTRY_MAX_LEN);
 
     switch (*entry) {
     case MP_PROCESSOR:
@@ -391,7 +391,7 @@ void mptables_init(void)
     panic("MP: Spec configuration table does not exist");
   }
 
-  mpc = vm_kmap(mpf->conf_physaddr, sizeof(*mpc));
+  mpc = (struct mpc_table *) vm_kmap(mpf->conf_physaddr, sizeof(*mpc));
 
   if (!mpc_check(mpc)) {
     mpc_dump(mpc);

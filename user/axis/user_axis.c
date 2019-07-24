@@ -24,7 +24,8 @@ int user_thread_main(void)
   int i;
   int nr_threads = 3;
   uint32_t ids[NR_THREADS];
-  struct th_attr thas[NR_THREADS] = INIT_THAS;
+  struct th_attr thas[NR_THREADS];
+  init_thas(thas);
   sched_time = 5;
   print("user_thread_main()\n");
 

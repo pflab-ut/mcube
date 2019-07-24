@@ -27,7 +27,7 @@ $prefix git samba make doxygen sendmail git
 #$prefix dvi2ps-fontdesc-morisawa5
 
 # QEMU
-$prefix qemu qemu-system
+$prefix qemu qemu-system libncurses5-dev libncursesw5-dev
 
 
 echo "\n"

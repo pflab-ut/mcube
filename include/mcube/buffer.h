@@ -56,23 +56,16 @@ typedef struct ring_buf ring_buf_t;
  */
 typedef ring_buf_t *cbuf_handle_t;
 
-/**
- * @def INIT_RING_BUF
- * @param initialize ring buffer.
- */
-#define INIT_RING_BUF (ring_buf_t) {                                    \
-    .buffer = NULL, .head = 0, .tail = 0, .max = 0, .full = false,      \
-      .lock.val = SPIN_UNLOCKED, .lock.flags.raw = 0,                   \
-      }
 
 /**
- * @fn cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size)
+ * @fn void ring_buf_init(cbuf_handle_t cbuf, uint8_t *buffer, size_t size)
  * @brief initialize buffer.
+ * @param cbuf Handled buffer.
  * @param buffer Buffer.
  * @param size Buffer size.
- * @return Handled buffer.
+ * @return Zero if success, and nonzero if failure.
  */
-cbuf_handle_t ring_buf_init(uint8_t *buffer, size_t size);
+void ring_buf_init(cbuf_handle_t cbuf, uint8_t *buffer, size_t size);
 
 /**
  * @fn void ring_buf_free(cbuf_handle_t cbuf)

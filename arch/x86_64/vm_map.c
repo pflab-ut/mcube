@@ -121,7 +121,7 @@ static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
       pml3e->pml2_base = page_phys_addr(page) >> PAGE_SHIFT;
     }
 
-    pml2_base = VIRTUAL((uintptr_t)pml3e->pml2_base << PAGE_SHIFT);
+    pml2_base = (struct pml2e *) VIRTUAL((uintptr_t) pml3e->pml2_base << PAGE_SHIFT);
 
     if (pml3e == pml3_base + pml3_index(vend - 1)) {
       /* Last entry */
@@ -182,7 +182,7 @@ static void map_pml4_range(struct pml4e *pml4_base, uintptr_t vstart,
       pml4e->pml3_base = page_phys_addr(page) >> PAGE_SHIFT;
     }
 
-    pml3_base = VIRTUAL((uintptr_t)pml4e->pml3_base << PAGE_SHIFT);
+    pml3_base = (struct pml3e *) VIRTUAL((uintptr_t)pml4e->pml3_base << PAGE_SHIFT);
 
     if (pml4e == pml4_base + pml4_index(vend - 1)) {
       /* Last entry */
@@ -242,15 +242,15 @@ bool vaddr_is_mapped(void *vaddr)
     return false;
   }
 
-  pml3e = pml3_base(pml4e);
-  pml3e += pml3_index(vaddr);
+  pml3e = (struct pml3e *) pml3_base(pml4e);
+  pml3e += (uintptr_t) pml3_index(vaddr);
 
   if (!pml3e->present) {
     return false;
   }
 
-  pml2e = pml2_base(pml3e);
-  pml2e += pml2_index(vaddr);
+  pml2e = (struct pml2e *) pml2_base(pml3e);
+  pml2e += (uintptr_t) pml2_index(vaddr);
 
   if (!pml2e->present) {
     return false;
@@ -308,7 +308,7 @@ void vm_init(void)
   uint64_t phys_end;
 
   pml4_page = get_zeroed_page(ZONE_1GB);
-  kernel_pml4_table = page_address(pml4_page);
+  kernel_pml4_table = (struct pml4e *) page_address(pml4_page);
 
   /* Map 512-MByte kernel text area */
   map_kernel_range(KTEXT_PAGE_OFFSET, KTEXT_AREA_SIZE, KTEXT_PHYS_OFFSET);

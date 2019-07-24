@@ -309,7 +309,7 @@ void init_frame_buffer(struct frame_buffer *fb)
     fb_width = mbox[5];
     fb_height = mbox[6];
     fb_pitch = mbox[33];
-    fb_ptr = (void *)((unsigned long) mbox[28]);
+    fb_ptr = (unsigned char *)((unsigned long) mbox[28]);
   } else {
     printk("Unable to set screen resolution to 1024x768x32\n");
   }

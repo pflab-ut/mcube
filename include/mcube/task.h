@@ -6,6 +6,14 @@
 #ifndef __MCUBE_MCUBE_TASK_H__
 #define __MCUBE_MCUBE_TASK_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
 /*
  * Task means process, which separates the address space each other.
  * In contrast, all threads in each task shares the address space.
@@ -164,6 +172,14 @@ struct task_struct *do_create_task(struct th_attr *attr);
 void ret_from_fork(void);
 
 
-
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
+
 #endif /* __MCUBE_MCUBE_TASK_H__ */

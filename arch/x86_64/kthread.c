@@ -28,7 +28,7 @@ void kthread_create(void (*func)(void *), void *arg, struct th_attr *attr)
 
   __uninitialized(attr);
 
-  if (!(process = kmalloc(sizeof(struct process)))) {
+  if (!(process = (struct process *) kmalloc(sizeof(struct process)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(struct process));
   }
 

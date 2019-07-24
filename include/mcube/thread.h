@@ -586,17 +586,18 @@ static inline void end_budget(struct thread_struct *th)
 
 
 /**
- * @def INIT_THAS
+ * @fn static inline void init_thas(struct th_attr thas[]);
  * @brief initialize thread attributes.
  */
-#define INIT_THAS {                                         \
-    [0 ... NR_THREADS - 1] = {                              \
-      .type = PERIODIC_TH | HARD_REAL_TIME,                 \
-      .period = 100,                                        \
-      .wcet = 5,                                            \
-      .relative_deadline  = 100,                            \
-    },                                                      \
+static inline void init_thas(struct th_attr thas[])
+{
+  for (int i = 0; i < NR_THREADS; i++) {
+    thas[i].type = PERIODIC_TH | HARD_REAL_TIME;
+    thas[i].period = 100;
+    thas[i].wcet = 5;
+    thas[i].relative_deadline = 100;
   }
+}
 
 
 /**

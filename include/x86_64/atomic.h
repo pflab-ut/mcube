@@ -10,23 +10,23 @@
 
 
 /**
- * @fn static inline uint64_t compare_and_swap(uint64_t *ptr, uint64_t new,
- *                                             uint64_t old)
+ * @fn static inline uint64_t compare_and_swap(uint64_t *ptr, uint64_t new_val,
+ *                                             uint64_t old_val)
  * @brief compare and swap.
  *
  * @param ptr Pointer to data.
- * @param new New value.
- * @param old Old value.
+ * @param new_val New value.
+ * @param old_val Old value.
  */
-static inline uint64_t compare_and_swap(uint64_t *ptr, uint64_t new,
-                                        uint64_t old)
+static inline uint64_t compare_and_swap(uint64_t *ptr, uint64_t new_val,
+                                        uint64_t old_val)
 {
   uint64_t out;
 
   // newline after `lock' for the work around of apple's gas(?) bug.
   asm volatile("lock cmpxchgq %2,%1"
                : "=a"(out), "+m"(*ptr)
-               : "q"(new), "0"(old)
+               : "q"(new_val), "0"(old_val)
                : "cc");
 
   return out;

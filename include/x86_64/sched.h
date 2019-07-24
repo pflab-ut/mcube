@@ -6,6 +6,14 @@
 #ifndef __MCUBE_X86_64_SCHED_H__
 #define __MCUBE_X86_64_SCHED_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
 #ifndef __ASSEMBLY__
 
 /*
@@ -67,5 +75,13 @@ void print_sched_stats(void);
 void ticks_handler(void);
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif /* __MCUBE_X86_64_SCHED_H__ */

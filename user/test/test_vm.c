@@ -93,7 +93,7 @@ static void vm_check_kmap2(void)
     assert(!vaddr_is_mapped((void *) ROUND_UP((uintptr_t) VIRTUAL(paddr),
                                               PAGE_SIZE_2MB)));
 
-    vaddr = vm_kmap(paddr, len);
+    vaddr = (uintptr_t *) vm_kmap(paddr, len);
     assert(vaddr == VIRTUAL(paddr));
 
     for (int i = 0; i < len; i++) {

@@ -6,6 +6,15 @@
 #ifndef __MCUBE_MCUBE_STDIO_H__
 #define __MCUBE_MCUBE_STDIO_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+
 #ifndef __ASSEMBLY__
 
 /**
@@ -281,5 +290,13 @@ void putchar_colored(char c, int color);
 #endif /* !CONFIG_ARCH_SIM */
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif /* __MCUBE_MCUBE_STDIO_H__ */

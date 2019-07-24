@@ -8,6 +8,7 @@
 ifeq ($(CC), clang)
   CROSS_PREFIX = llvm-
   CC	= $(CCACHE) clang
+#  CC	= $(CCACHE) clang++
   LD = ld.bfd
   OBJDUMP = objdump -D -M intel
   OBJCOPY = $(CROSS_PREFIX)objcopy
@@ -15,6 +16,7 @@ ifeq ($(CC), clang)
 else
   CROSS_PREFIX = 
   CC = $(CCACHE) $(CROSS_PREFIX)gcc
+#  CC = $(CCACHE) $(CROSS_PREFIX)g++
   LD = ld
   ASFLAGS = -f elf64
   OBJDUMP = $(CROSS_PREFIX)objdump -D

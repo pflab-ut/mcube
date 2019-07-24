@@ -49,7 +49,22 @@ CFLAGS += -Iinclude -Wall
 #CFLAGS += -O2
 #CFLAGS += -O0
 
-CFLAGS += -std=gnu11
+#CFLAGS += -std=gnu11
+
+ifeq ($(findstring clang++, $(CC)), clang++)
+	CFLAGS += -std=gnu++11
+else
+ifeq ($(findstring g++, $(CC)), g++)
+	CFLAGS += -std=gnu++11
+else
+	CFLAGS += -std=gnu11
+	CFLAGS += -Wstrict-prototypes \
+  -Wmissing-prototypes
+endif
+endif
+
+
+
 CFLAGS += -fno-strict-aliasing
 CFLAGS += -fPIC
 
@@ -128,8 +143,6 @@ CWARN_FLAGS += -Wextra	\
   -Wpointer-arith \
   -Wwrite-strings \
   -Waddress \
-  -Wstrict-prototypes \
-  -Wmissing-prototypes \
   -Wmissing-declarations \
   -Wredundant-decls \
   -Wdisabled-optimization \

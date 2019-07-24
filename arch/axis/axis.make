@@ -9,6 +9,7 @@ ifeq ($(CC), clang)
   CFLAGS += -target maxis
   CROSS_PREFIX = llvm-
 		CC = clang
+#		CC = clang++
   LD = ld.lld
   AS = $(CROSS_PREFIX)as
   OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
@@ -19,6 +20,7 @@ else
 #  CFLAGS += -falign-functions=8
   CROSS_PREFIX = dom-elf-
   CC = $(CCACHE) $(CROSS_PREFIX)gcc
+#  CC = $(CCACHE) $(CROSS_PREFIX)g++
   LD = $(CROSS_PREFIX)ld
   AS = $(CROSS_PREFIX)as
   OBJDUMP = $(CROSS_PREFIX)objdump -D

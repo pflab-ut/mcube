@@ -386,7 +386,7 @@ void sched_init(void)
    * register and get serviced once interrupts are enabled.
    */
   vector = TICKS_IRQ_VECTOR;
-  set_idt_gate(vector, ticks_handler);
+  set_idt_gate(vector, (void *) ticks_handler);
   ioapic_setup_isairq(0, vector, IRQ_BROADCAST);
 
   /*

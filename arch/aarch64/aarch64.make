@@ -11,6 +11,7 @@ ifeq ($(CC), clang)
   CFLAGS += -target aarch64
   CROSS_PREFIX = llvm-
   CC	= $(CCACHE) clang
+#  CC	= $(CCACHE) clang++
   LD = ld.lld
   AS = $(CROSS_PREFIX)as
 #  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
@@ -21,6 +22,7 @@ ifeq ($(CC), clang)
 else
   CROSS_PREFIX = aarch64-linux-gnu-
   CC = $(CCACHE) $(CROSS_PREFIX)gcc
+#  CC = $(CCACHE) $(CROSS_PREFIX)g++
   LD = $(CROSS_PREFIX)ld
   AS = $(CROSS_PREFIX)as
   OBJDUMP = $(CROSS_PREFIX)objdump -D

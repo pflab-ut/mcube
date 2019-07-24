@@ -274,10 +274,9 @@ void init_socket(void)
     sockets[i].domain = -1;
     sockets[i].type = -1;
     sockets[i].protocol = -1;
-    sockets[i].addr = (struct sockaddr_un) {
-      .sun_family = AF_UNSPEC, .sun_path = ""
-    };
-    sockets[i].msg = INIT_RING_BUF;
+    sockets[i].addr.sun_family = AF_UNSPEC;
+    memset(sockets[i].addr.sun_path, 0, sizeof(sockets[i].addr.sun_path));
+    ring_buf_init(&sockets[i].msg, NULL, 0);
   }
 
   //  pdebug_sockets();

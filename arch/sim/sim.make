@@ -15,12 +15,15 @@ AS = $(CROSS_PREFIX)as
 
 ifeq ($(CC), clang)
   CROSS_PREFIX = llvm-
+  CC = $(CCACHE) clang
+#  CC = $(CCACHE) clang++
   OBJDUMP = $(CROSS_PREFIX)objdump -disassemble -print-imm-hex
 #  OBJDUMP = $(CROSS_PREFIX)objdump -disassemble-all -print-imm-hex
   OBJCOPY = $(CROSS_PREFIX)objcopy
 else
   CROSS_PREFIX = 
   CC = $(CCACHE) $(CROSS_PREFIX)gcc
+#  CC = $(CCACHE) $(CROSS_PREFIX)g++
   OBJDUMP = $(CROSS_PREFIX)objdump -D
   OBJCOPY = $(CROSS_PREFIX)objcopy
 endif

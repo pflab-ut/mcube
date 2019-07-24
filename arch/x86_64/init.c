@@ -15,7 +15,7 @@ static void setup_idt(void)
     set_idt_gate(i, (void *) &idt_exception_stubs[i]);
   }
 
-  set_idt_gate(HALT_CPU_IPI_VECTOR, halt_cpu_ipi_handler);
+  set_idt_gate(HALT_CPU_IPI_VECTOR, (void *) halt_cpu_ipi_handler);
 
   load_idt(&idtdesc);
 }

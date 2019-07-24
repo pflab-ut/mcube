@@ -6,6 +6,14 @@
 #ifndef __MCUBE_X86_64_IRQ_H__
 #define __MCUBE_X86_64_IRQ_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
 #ifndef __ASSEMBLY__
 
 /*
@@ -1034,5 +1042,13 @@ void pic_init(void);
 
 
 #endif /* !__ASSEMBLY__ */
+
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 #endif /* __MCUBE_X86_64_IRQ_H__ */

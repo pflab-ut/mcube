@@ -6,6 +6,15 @@
 #ifndef __MCUBE_MCUBE_SCHED_H__
 #define __MCUBE_MCUBE_SCHED_H__
 
+/**
+ * @cond
+ */
+BEGIN_EXTERN_C
+/**
+ * @endcond
+ */
+
+
 #ifndef __ASSEMBLY__
 
 /*
@@ -582,6 +591,13 @@ typedef struct sched_info sched_info;
 
 #endif /* !__ASSEMBLY__ */
 
+/**
+ * @cond
+ */
+END_EXTERN_C
+/**
+ * @endcond
+ */
 
 
 #endif /* __MCUBE_MCUBE_SCHED_H__ */
