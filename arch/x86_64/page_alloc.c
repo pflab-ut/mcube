@@ -393,7 +393,7 @@ void pagealloc_init(void)
   printk("Memory: Available physical memory = %d MB\n",
          ((avail_pages * PAGE_SIZE) / 1024) / 1024);
 
-  pfdtable = (page *) ramdisk_memory_area_end();
+  pfdtable = (struct page *) ramdisk_memory_area_end();
   pfdtable_top = pfdtable;
   pfdtable_end = pfdtable + avail_pages;
 
