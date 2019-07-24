@@ -138,7 +138,7 @@ struct buffer_dumper serial_null_dumper = {
 
 void superblock_dump(union super_block *sb)
 {
-  struct buffer_dumper *bd = (void *) percpu_get(dumper);
+  struct buffer_dumper *bd = (struct buffer_dumper *) percpu_get(dumper);
   sb->volume_label[EXT2_LABEL_LEN - 1] = '\0';
   sb->last_mounted[EXT2_LAST_MNT_LEN - 1] = '\0';
   bd->pr("Dumping Superblock contents:\n");
@@ -181,7 +181,7 @@ void superblock_dump(union super_block *sb)
 void blockgroup_dump(int bg_idx, struct group_descriptor *bgd,
                      uint32_t firstb, uint32_t lastb, uint64_t inodetbl_blocks)
 {
-  struct buffer_dumper *bd = (void *) percpu_get(dumper);
+  struct buffer_dumper *bd = (struct buffer_dumper *) percpu_get(dumper);
   bd->pr("Group #%d: (Blocks %u-%u)\n", bg_idx, firstb, lastb);
   bd->pr(".. Block bitmap at %u\n", bgd->block_bitmap);
   bd->pr(".. Inode bitmap at %u\n", bgd->inode_bitmap);
@@ -195,7 +195,7 @@ void blockgroup_dump(int bg_idx, struct group_descriptor *bgd,
 
 void inode_dump(struct inode *inode, const char *path)
 {
-  struct buffer_dumper *bd = (void *) percpu_get(dumper);
+  struct buffer_dumper *bd = (struct buffer_dumper *) percpu_get(dumper);
   bd->pr("Dumping inode contents, #%d, for '%s':\n", inode->inum, path);
   bd->pr(".. Mode = 0x%x, Flags = 0x%x\n", inode->mode, inode->flags);
   bd->pr(".. UID = %d, GID = %d\n", inode->uid, inode->gid_low);
@@ -222,14 +222,14 @@ void dentry_dump(struct dir_entry *dentry)
   assert(dentry->filename_len != 0);
   assert(dentry->filename_len <= EXT2_FILENAME_LEN);
 
-  if (!(name = kmalloc(dentry->filename_len + 1))) {
+  if (!(name = (char *) kmalloc(dentry->filename_len + 1))) {
     panic("Error: cannot allocate memory %lu\n", dentry->filename_len + 1);
   }
 
   memcpy(name, dentry->filename, dentry->filename_len);
   name[dentry->filename_len] = '\0';
 
-  struct buffer_dumper *bd = (void *) percpu_get(dumper);
+  struct buffer_dumper *bd = (struct buffer_dumper *) percpu_get(dumper);
   bd->pr("Dumping Directory Entry contents:\n");
   bd->pr(".. Inode number = %u\n", dentry->inode_num);
   bd->pr(".. Record len = %d bytes\n", dentry->record_len);
@@ -278,7 +278,7 @@ void path_get_parent(const char *path, char *parent, char *child)
         continue;
       }
     } else {
-      state = FILENAME;
+      state = (enum ext2_state) FILENAME;
 
       if (i - sub_idx > EXT2_FILENAME_LEN) {
         panic("File name in path '%s' too long", path);
@@ -342,10 +342,10 @@ struct inode *inode_get(uint64_t inum)
   struct inode *inode;
 
   spin_lock(&imsb.inodes_hash_lock);
-  inode = hash_find(imsb.inodes_hash, inum);
+  inode = (struct inode *) hash_find(imsb.inodes_hash, inum);
 
   if (!inode) {
-    if (!(inode = kmalloc(sizeof(*inode)))) {
+    if (!(inode = (struct inode *) kmalloc(sizeof(*inode)))) {
       panic("Error: cannot allocate memory %lu\n", sizeof(*inode));
     }
 
@@ -471,7 +471,7 @@ struct inode *inode_alloc(enum file_type type)
 
   bgd = imsb.bgd;
 
-  if (!(buf = kmalloc(imsb.block_size))) {
+  if (!(buf = (char *) kmalloc(imsb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
@@ -559,7 +559,7 @@ static void __inode_dealloc(struct inode *inode)
   groupi = (inode->inum - 1) % imsb.sb->inodes_per_group;
   bgd = &imsb.bgd[group];
 
-  if (!(buf = kmalloc(imsb.block_size))) {
+  if (!(buf = (char *) kmalloc(imsb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
@@ -592,7 +592,7 @@ uint64_t block_alloc(void)
   sb = imsb.sb;
   bgd = imsb.bgd;
 
-  if (!(buf = kmalloc(imsb.block_size))) {
+  if (!(buf = (char *) kmalloc(imsb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
@@ -650,7 +650,7 @@ void block_dealloc(uint block)
   groupi = (block - sb->first_data_block) % sb->blocks_per_group;
   bgd = &imsb.bgd[group];
 
-  if (!(buf = kmalloc(imsb.block_size))) {
+  if (!(buf = (char *) kmalloc(imsb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
@@ -720,7 +720,7 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
                    uint64_t len)
 {
   uint64_t supported_area, blk_offset, last_offset;
-  uint64_t write_len, ret_len, block, new;
+  uint64_t write_len, ret_len, block, new_block;
 
   if (!S_ISREG(inode->mode) && !S_ISDIR(inode->mode)) {
     return -EBADF;
@@ -752,11 +752,11 @@ int64_t file_write(struct inode *inode, char *buf, uint64_t offset,
     assert(block < EXT2_INO_NR_DIRECT_BLKS);
 
     if (inode->blocks[block] == 0) {
-      if ((new = block_alloc()) == 0) {
+      if ((new_block = block_alloc()) == 0) {
         return -ENOSPC;
       }
 
-      inode->blocks[block] = new;
+      inode->blocks[block] = new_block;
       inode->dirty = true;
     }
 
@@ -872,7 +872,7 @@ int64_t find_dir_entry(struct inode *dir, const char *name,
   assert(S_ISDIR(dir->mode));
   dentry_len = sizeof(struct dir_entry);
 
-  if (!(dentry = *entry = kmalloc(dentry_len))) {
+  if (!(dentry = *entry = (struct dir_entry *) kmalloc(dentry_len))) {
     panic("Error: cannot allocate memory %lu\n", dentry_len);
   }
 
@@ -1020,7 +1020,7 @@ int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
    * empty, with no entries at all!
    */
 
-  if (!(lastentry = kmalloc(sizeof(*lastentry)))) {
+  if (!(lastentry = (struct dir_entry *) kmalloc(sizeof(*lastentry)))) {
     panic("Error: cannot allocate memory %lu\n", lastentry);
   }
 
@@ -1039,7 +1039,7 @@ int64_t ext2_new_dir_entry(struct inode *dir, struct inode *entry_ino,
     }
   }
 
-  dir->flags &= !EXT2_INO_DIR_INDEX_FL;
+  dir->flags &= ~EXT2_INO_DIR_INDEX_FL;
   dir->dirty = true;
 
   /*
@@ -1098,13 +1098,13 @@ no_lastentry:
    * dir entries traversal from parsing uninitialized data.
    */
 
-  if (!(zeroes = kmalloc(imsb.block_size))) {
+  if (!(zeroes = (char *) kmalloc(imsb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
   memset(zeroes, 0, imsb.block_size);
 
-  if (!(newentry = kmalloc(sizeof(*newentry)))) {
+  if (!(newentry = (struct dir_entry *) kmalloc(sizeof(*newentry)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*newentry));
   }
 
@@ -1228,16 +1228,16 @@ static void indirect_block_dealloc(uint64_t block, enum indirection_level level)
     return;
   }
 
-  if (!(buf = kmalloc(imsb.block_size))) {
+  if (!(buf = (char *) kmalloc(imsb.block_size))) {
     panic("Error: cannot allocate memory %lu\n", imsb.block_size);
   }
 
   entries_count = imsb.block_size / sizeof(*entry);
   block_read(block, buf, 0, imsb.block_size);
 
-  for (entry = (uint32_t *)buf; entries_count--; entry++) {
+  for (entry = (uint32_t *) buf; entries_count--; entry++) {
     if (*entry != 0) {
-      indirect_block_dealloc(*entry, level - 1);
+      indirect_block_dealloc(*entry, (enum indirection_level)(level - 1));
     }
   }
 
@@ -1367,11 +1367,11 @@ void init_ext2(void)
 
   /* In-Memory Super Block init */
   imsb.buf = ramdisk_get_buf();
-  imsb.sb  = (void *)&imsb.buf[EXT2_SUPERBLOCK_OFFSET];
+  imsb.sb = (union super_block *) &imsb.buf[EXT2_SUPERBLOCK_OFFSET];
   imsb.block_size = 1024U << imsb.sb->log_block_size;
-  imsb.frag_size  = 1024U << imsb.sb->log_fragment_size;
+  imsb.frag_size = 1024U << imsb.sb->log_fragment_size;
   bgd_start = CEIL(EXT2_SUPERBLOCK_OFFSET + sizeof(*sb), imsb.block_size);
-  imsb.bgd = (void *)&imsb.buf[bgd_start * imsb.block_size];
+  imsb.bgd = (struct group_descriptor *) &imsb.buf[bgd_start * imsb.block_size];
 
   sb = imsb.sb;
   bgd = imsb.bgd;

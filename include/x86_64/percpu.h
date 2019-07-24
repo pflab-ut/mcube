@@ -361,7 +361,7 @@ extern struct percpu cpus[CPUS_MAX];
  */
 #define percpu_set(var, val)                    \
   ({                                            \
-    switch (sizeof(__percpu_type(var))) {       \
+    switch (sizeof(__percpu_type(var))) {  \
     case 1: __percpu_set("b", var, val); break; \
     case 2: __percpu_set("w", var, val); break; \
     case 4: __percpu_set("l", var, val); break; \

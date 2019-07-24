@@ -300,7 +300,7 @@ void free_page(struct page *page)
 {
   struct zone *zone;
 
-  zone = get_zone((zone_id) page->zone_id);
+  zone = get_zone((enum zone_id) page->zone_id);
 
   spin_lock(&zone->freelist_lock);
 

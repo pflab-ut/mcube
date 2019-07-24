@@ -56,15 +56,15 @@ __unused static void list_files(uint64_t dir_inum)
   struct dir_entry *dentry;
   uint64_t offset, len;
   char *name;
-  struct buffer_dumper *bd = (void *) percpu_get(dumper);
+  struct buffer_dumper *bd = (struct buffer_dumper *) percpu_get(dumper);
 
   dir = inode_get(dir_inum);
 
-  if (!(dentry = kmalloc(sizeof(*dentry)))) {
+  if (!(dentry = (struct dir_entry *) kmalloc(sizeof(*dentry)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*dentry));
   }
 
-  if (!(name = kmalloc(EXT2_FILENAME_LEN + 1))) {
+  if (!(name = (char *) kmalloc(EXT2_FILENAME_LEN + 1))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
   }
 
@@ -127,7 +127,8 @@ __unused static void test_path_conversion(void)
 {
   int64_t inum;
   struct path_translation *file;
-  struct buffer_dumper *bd = (void *)percpu_get(dumper);
+  struct buffer_dumper *bd = (struct buffer_dumper *) percpu_get(dumper);
+  char *path;
 
   /* Different forms of EXT2_ROOT_INODE */
   for (uint i = 0; ext2_root_list[i]; i++) {
@@ -150,9 +151,8 @@ __unused static void test_path_conversion(void)
   }
 
   /* Path file name length tests */
-  char *path;
 
-  if (!(path = kmalloc(EXT2_FILENAME_LEN + 4))) {
+  if (!(path = (char *) kmalloc(EXT2_FILENAME_LEN + 4))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 4);
   }
 
@@ -190,12 +190,12 @@ __unused static void test_file_reads(__unused void *arg)
   struct inode *inode;
   char *buf;
   int len;
-  struct buffer_dumper *bd = (void *)percpu_get(dumper);
+  struct buffer_dumper *bd = (struct buffer_dumper *) percpu_get(dumper);
 
   assert(bd);
   printk("c%d t%lu fr start\n", percpu_get(apic_id), get_current_process()->pid);
 
-  if (!(buf = kmalloc(BUF_LEN))) {
+  if (!(buf = (char *) kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
@@ -242,9 +242,9 @@ __unused static void test_block_reads(void)
   char *buf;
   struct buffer_dumper *bd;
 
-  bd = (void *)percpu_get(dumper);
+  bd = (struct buffer_dumper *) percpu_get(dumper);
 
-  if (!(buf = kmalloc(BUF_LEN))) {
+  if (!(buf = (char *) kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
@@ -286,15 +286,15 @@ __unused static void test_file_existence(void)
   int64_t parent_inum, inum;
   struct buffer_dumper *bd;
 
-  bd = (void *)percpu_get(dumper);
+  bd = (struct buffer_dumper *) percpu_get(dumper);
 
   printk("c%d t%ld ex start\n", percpu_get(apic_id), get_current_process()->pid);
 
-  if (!(parent = kmalloc(4096))) {
+  if (!(parent = (char *) kmalloc(4096))) {
     panic("Error: cannot allocate memory %lu\n", 4096);
   }
 
-  if (!(child = kmalloc(EXT2_FILENAME_LEN + 1))) {
+  if (!(child = (char *) kmalloc(EXT2_FILENAME_LEN + 1))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
   }
 
@@ -346,7 +346,7 @@ __unused static void test_file_creation(void)
   int64_t inum;
   struct buffer_dumper *bd;
 
-  bd = (void *) percpu_get(dumper);
+  bd = (struct buffer_dumper *) percpu_get(dumper);
   bd = &serial_null_dumper;
 
   char prefix[64];
@@ -490,18 +490,18 @@ static void test_ext2_up(void)
   __unused int64_t ilen, inum, count, parent_inum;
   __unused char *buf, *buf2, *parent, *child;
 
-  if (!(buf = kmalloc(BUF_LEN))) {
+  if (!(buf = (char *) kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
-  if (!(buf2 = kmalloc(BUF_LEN))) {
+  if (!(buf2 = (char *) kmalloc(BUF_LEN))) {
     panic("Error: cannot allocate memory %lu\n", BUF_LEN);
   }
 
   sb = imsb.sb;
 
   ext2_debug_init(&serial_null_dumper);
-  struct buffer_dumper *bd = (void *)percpu_get(dumper);
+  struct buffer_dumper *bd = (struct buffer_dumper *) percpu_get(dumper);
 
   /* Extract the modified ext2 volume out of the virtual machine: */
   printk("Ramdisk start at: 0x%lx, with len = %ld\n", imsb.buf,
@@ -514,7 +514,7 @@ static void test_ext2_up(void)
 #if TEST_DIR_ENTRIES
 
   /* Most of these fields are invalid, on purpose */
-  if (!(dentry = kmalloc(sizeof(*dentry)))) {
+  if (!(dentry = (struct dir_entry *) kmalloc(sizeof(*dentry)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(*dentry));
   }
 
@@ -585,7 +585,7 @@ again:
 
   /* Deallocate half of the allocated inodes */
   for (uint i = 0; i < nfree / 2; i++) {
-    inode = unrolled_lookup(&head, i);
+    inode = (struct inode *) unrolled_lookup((struct unrolled_head *) &head, i);
     assert(inode);
 
     bd->pr("Deallocating inode #%ld\n", inode->inum);
@@ -602,7 +602,7 @@ again:
   }
 
   unrolled_for_each(&head, void_ino) {
-    inode_put(void_ino);
+    inode_put((struct inode *) void_ino);
   }
   nfree /= 2;
   unrolled_free(&head);
@@ -694,7 +694,7 @@ bagain:
 
   /* Deallocate all of the allocated blocks */
   for (uint i = 0; i < nfree; i++) {
-    block = (uint64_t) unrolled_lookup(&head, i);
+    block = (uint64_t) unrolled_lookup((struct unrolled_head *) &head, i);
     assert(block != 0);
 
     bd->pr("Deallocating block %ld\n", block);
@@ -857,11 +857,11 @@ out1:
 
 #if TEST_FILE_DELETION
 
-  if (!(parent = kmalloc(4096))) {
+  if (!(parent = (char *) kmalloc(4096))) {
     panic("Error: cannot allocate memory %lu\n", 4096);
   }
 
-  if (!(child = kmalloc(EXT2_FILENAME_LEN + 1))) {
+  if (!(child = (char *) kmalloc(EXT2_FILENAME_LEN + 1))) {
     panic("Error: cannot allocate memory %lu\n", EXT2_FILENAME_LEN + 1);
   }
 
@@ -948,8 +948,8 @@ __noreturn static void test_alloc_dealloc(__unused void *arg)
   }
 
   unrolled_for_each(&head, inode_ptr) {
-    inode_mark_delete(inode_ptr);
-    inode_put(inode_ptr);
+    inode_mark_delete((struct inode *) inode_ptr);
+    inode_put((struct inode *) inode_ptr);
   }
   printk("c%d t%lu a %s\n", percpu_get(apic_id), get_current_process()->pid,
          (complete) ? "end!" : "no ino!");

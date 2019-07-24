@@ -193,18 +193,18 @@ enum {
  *
  * Prerequisite: E820h-struct previously validated.
  *
- * @param range       the iterator, 'struct e820_range *'
+ * @param range Iterator, 'struct e820_range *'
  */
-#define e820_for_each(range)                            \
-  for (uint32_t *entry = (uint32_t *) E820_BASE + 1,    \
-         entry_len = *entry++,                          \
-         __unused *_____b = (uint32_t *)                \
-         ({range  = (struct e820_range *) entry;});     \
-                                                        \
-       *(entry - 1) != E820_END;                          \
-                                                          \
-       entry = (uint32_t *)((char *) entry + entry_len),  \
-         entry_len = *entry++,                            \
+#define e820_for_each(range)                                     \
+  for (__unused uint32_t *entry = (uint32_t *) E820_BASE + 1,    \
+         entry_len = *entry++,                                   \
+         __unused *_____b = (uint32_t *)                         \
+         ({range  = (struct e820_range *) entry;});              \
+                                                                 \
+       *(entry - 1) != E820_END;                                 \
+                                                                 \
+       entry = (uint32_t *)((char *) entry + entry_len),         \
+         entry_len = *entry++,                                   \
          range = (struct e820_range *)entry)
 
 

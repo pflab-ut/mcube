@@ -333,13 +333,13 @@ void decrease_bheap(struct rt_runqueue *rq, struct bheap_node *node)
       parent->value = node->value;
       parent->node_id = node->node_id;
 
-      node->value = tmp;
+      node->value = (struct thread_struct *) tmp;
       node->node_id = node_id;
 
       /* swap value->node */
       tmp = node->value->node;
       node->value->node = parent->value->node;
-      parent->value->node = tmp;
+      parent->value->node = (struct bheap_node *) tmp;
 
       /* step up */
       node = parent;
@@ -380,13 +380,13 @@ void delete_bheap(struct rt_runqueue *rq, struct bheap_node *node)
       parent->value = node->value;
       parent->node_id = node->node_id;
 
-      node->value = tmp;
+      node->value = (struct thread_struct *) tmp;
       node->node_id = node_id;
 
       /* swap value->node */
       tmp = node->value->node;
       node->value->node = parent->value->node;
-      parent->value->node = tmp;
+      parent->value->node = (struct bheap_node *) tmp;
 
       /* step up */
       node = parent;
