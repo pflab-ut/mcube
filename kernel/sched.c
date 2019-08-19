@@ -29,10 +29,18 @@ volatile bool sched_end = false;
 #if defined(SCHED_FP)
 void set_priority(struct thread_struct *th)
 {
-  /* the priority of idle thread is ULONG_MAX */
-  /* smaller value, higher priority */
-  /* priority 0 is the highest priority for US or ZL. */
+  /* The priority of idle thread is ULONG_MAX.
+   * Smaller value, higher priority.
+   */
+  /*
+   * If shorter periods always have higher priority in all tasks,
+   * this task set is Rate Monotonic (RM) scheduling.
+   *
+   * C. L. Liu and J.W. Layland. Scheduling Algorithms for Multiprogramming in a Hard
+   * Real-Time Environment. Journal of the ACM, Vol. 20, No. 1, pp. 46--61, 1973.
+   */
   th->priority = th->id;
+
   /* NOTE: assume that period is an integer multiple of 100. */
   /* period range should be within [100,3200] */
   //              th->priority = th->sched.period / 100;
@@ -43,10 +51,17 @@ void set_priority(struct thread_struct *th)
 
 void set_priority(struct thread_struct *th)
 {
+  /*
+   * If shorter periods always have higher priority in all tasks,
+   * this task set is Earlist Deadline First (EDF) scheduling.
+   *
+   * C. L. Liu and J.W. Layland. Scheduling Algorithms for Multiprogramming in a Hard
+   * Real-Time Environment. Journal of the ACM, Vol. 20, No. 1, pp. 46--61, 1973.
+   */
   th->priority = th->sched.deadline;
 }
 #else
-#error "Error: unknown priority"
+#error "Error: Unknown Priority"
 #endif
 
 
