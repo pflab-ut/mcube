@@ -6,6 +6,12 @@
 #include <mcube/mcube.h>
 
 
+/*
+ * O(1) scheduler inspired by Linux.
+ * https://en.wikipedia.org/wiki/O(1)_scheduler
+ * http://lkml.iu.edu/hypermail/linux/kernel/0705.1/3017.html
+ */
+
 
 void enqueue_rq_queue(struct rt_runqueue *rq, struct thread_struct *th)
 {

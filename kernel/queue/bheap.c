@@ -5,9 +5,14 @@
  */
 #include <mcube/mcube.h>
 
+/*
+ * Binominal heap inspired by LITMUS^RT.
+ * https://www.litmus-rt.org/
+ */
+
 /**
  * @var bh_nodes[NR_THREADS]
- * @brief Binominap heap nodes.
+ * @brief Binominal heap nodes.
  */
 struct bheap_node bh_nodes[NR_THREADS];
 
