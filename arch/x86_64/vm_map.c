@@ -121,7 +121,8 @@ static void map_pml3_range(struct pml3e *pml3_base, uintptr_t vstart,
       pml3e->pml2_base = page_phys_addr(page) >> PAGE_SHIFT;
     }
 
-    pml2_base = (struct pml2e *) VIRTUAL((uintptr_t) pml3e->pml2_base << PAGE_SHIFT);
+    pml2_base = (struct pml2e *) VIRTUAL((uintptr_t) pml3e->pml2_base <<
+                                         PAGE_SHIFT);
 
     if (pml3e == pml3_base + pml3_index(vend - 1)) {
       /* Last entry */

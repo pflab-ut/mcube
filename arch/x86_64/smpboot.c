@@ -221,7 +221,8 @@ void smpboot_init(void)
 
   smpboot_params_validate_offsets();
 
-  if (!(params = (struct smpboot_params *) kmalloc(sizeof(struct smpboot_params)))) {
+  if (!(params = (struct smpboot_params *) kmalloc(sizeof(
+                                                     struct smpboot_params)))) {
     panic("Error: cannot allocate memory %lu\n", sizeof(struct smpboot_params));
   }
 

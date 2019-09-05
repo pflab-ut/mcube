@@ -30,7 +30,7 @@ static struct e820_setup memory_setup;
  * @brief E820h struct error to string map.
  */
 static const char *e820_errors[] = {
-  "success", /* [E820_SUCCESS]  */ 
+  "success", /* [E820_SUCCESS]  */
   "no BIOS support", /* [E820_NOT_SUPP] */
   "custom buffer full", /* [E820_BUF_FULL] */
   "general error (carry set)", /* [E820_ERROR] */

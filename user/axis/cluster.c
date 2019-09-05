@@ -98,19 +98,19 @@ static void do_mul(volatile unsigned long dst[MAT_SIZE][MAT_SIZE],
 
 static void wait_until_loop_completion(void)
 {
-  int loop;
+  bool loop;
   int i;
 
   do {
-    loop = 0;
+    loop = false;
 
     for (i = 0; i < PARALLEL_NUM; i++) {
       if (array[i][MAT_SIZE - 1][MAT_SIZE - 1] == INIT_VAL(i, MAT_SIZE - 1,
                                                            MAT_SIZE - 1)) {
-        loop = 1;
+        loop = true;
       }
     }
-  } while (loop == 1);
+  } while (loop);
 }
 
 
@@ -118,7 +118,7 @@ static void wait_until_loop_completion(void)
 //#define PULL_FROM_MASTER_CLUSTER
 
 
-
+/* do_sequential() executes the computation processing on one core. */
 static void do_sequential(void)
 {
   int i;
@@ -221,16 +221,17 @@ static void do_callback(volatile int index)
 #endif
 }
 
-static int is_cluster_active(struct cluster *c)
+static bool is_cluster_active(struct cluster *c)
 {
   if (c->cluster_id < CLUSTER_NUM) {
-    return 1;
+    return true;
   }
 
-  return 0;
+  return false;
 }
 
 
+/* do_parallel() executes the computation processing on one or multiple cores. */
 static void do_parallel(void)
 {
   unsigned long cpu_id;

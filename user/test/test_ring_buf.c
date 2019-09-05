@@ -20,12 +20,14 @@ bool test_ring_buf(void)
   printk("\n=== C Ring Buffer Check ===\n");
 
   cbuf_handle_t cbuf;
+
   if (!(cbuf = (cbuf_handle_t) kmalloc(sizeof(ring_buf_t)))) {
     print("Error: cannot allocate memory %lu\n", sizeof(ring_buf_t));
     return false;
   }
+
   ring_buf_init(cbuf, buffer, EXAMPLE_BUFFER_SIZE);
-  
+
   printk("Buffer initialized. Full: %d, empty: %d, size: %zu\n",
          ring_buf_full(cbuf),
          ring_buf_empty(cbuf),
