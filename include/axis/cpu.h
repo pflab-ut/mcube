@@ -18,6 +18,18 @@
  */
 #define KERNEL_LEVEL 1
 
+/**
+ * @def UNKNOWN_X_AXIS
+ * @brief Unknown X-axis.
+ */
+#define UNKNOWN_X_AXIS 0xffffffff
+
+/**
+ * @def UNKNOWN_Y_AXIS
+ * @brief Unknown Y-axis.
+ */
+#define UNKNOWN_Y_AXIS 0xffffffff
+
 
 #ifndef __ASSEMBLY__
 

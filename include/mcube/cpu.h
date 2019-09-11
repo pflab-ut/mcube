@@ -13,6 +13,12 @@
 #define NR_CPUS 4
 
 /**
+ * @def UNKNOWN_CPU_ID
+ * @brief Unknown CPU ID.
+ */
+#define UNKNOWN_CPU_ID 0xffffffff
+
+/**
  * @def CPU_CLOCK_TO_SEC(clock)
  * @brief CPU clock to second.
  *

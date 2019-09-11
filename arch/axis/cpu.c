@@ -15,7 +15,7 @@ void read_from_cluster(unsigned long local_cpu_id,
   volatile unsigned long sys_base = SYS_CH_BASE(local_cpu_id & 0x7);
   volatile unsigned long offset   = NET_BASE | low_addr;
   *((unsigned long *)(sys_base + 0x10)) = high_addr;
-  *((unsigned long *)(sys_base + 0x14)) = (low_addr & 0x80000000) + qos;
+  *((unsigned long *)(sys_base + 0x14)) = (low_addr & NET_BASE) + qos;
   *((volatile unsigned long *) data) = *((volatile unsigned long *) offset);
 }
 
@@ -29,7 +29,7 @@ void write_to_cluster(unsigned long local_cpu_id,
   volatile unsigned long sys_base = SYS_CH_BASE(local_cpu_id & 0x7);
   volatile unsigned long offset   = NET_BASE | low_addr;
   *((volatile unsigned long *)(sys_base + 0x10)) = high_addr;
-  *((volatile unsigned long *)(sys_base + 0x14)) = (low_addr & 0x80000000) + qos;
+  *((volatile unsigned long *)(sys_base + 0x14)) = (low_addr & NET_BASE) + qos;
   *((volatile unsigned long *) offset) = *((volatile unsigned long *) data);
 }
 
@@ -46,6 +46,16 @@ void encode_cluster_address(volatile unsigned long *high_addr,
   *low_addr |= offset & 0xffffff;
 }
 
+/*
+ * 3x3 Cluster.
+ * Each cluster (x, y) has CPU but cluster (1, 1) does not have CPU and has gateway.
+ *
+ * (0, 0) - (0, 1) - (0, 2)
+ *   |        |        |
+ * (1, 0) - (1, 1) - (1, 2)
+ *   |        |        |
+ * (2, 0) - (2, 1) - (2, 2)
+ */
 void set_cpu_id(struct cluster *c, unsigned long cpu_id)
 {
   c->x = (cpu_id >> 24) & 0xff;
@@ -72,7 +82,7 @@ void set_cpu_id(struct cluster *c, unsigned long cpu_id)
     c->cluster_id = 7;
   } else {
     printk("Error: unknown (x, y) = (%lu, %lu)\n", c->x, c->y);
-    c->cluster_id = 0xffffffff;
+    c->cluster_id = UNKNOWN_CPU_ID;
   }
 }
 
@@ -106,8 +116,8 @@ void get_cluster_from_index(struct cluster *c, volatile int index,
     c->x = 2;
     c->y = 2;
   } else {
-    c->x = -1;
-    c->y = -1;
+    c->x = UNKNOWN_X_AXIS;
+    c->y = UNKNOWN_Y_AXIS;
   }
 
   c->cluster_id = index;
@@ -118,6 +128,7 @@ void get_cluster_from_index(struct cluster *c, volatile int index,
 
 void set_cpu_clock(void)
 {
+  /* CPU clock is 333MHz. */
   CPU_CLOCK_MHZ_PER_USEC = 333;
   CPU_CLOCK = CPU_CLOCK_MHZ_PER_USEC * 1000 * 1000;
 }
