@@ -104,7 +104,7 @@ ifeq ($(ARCH_NAME), x86_64)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
 	$(CAT) $(BOOTSECT_BIN) $(BIN) > $(TARGET).img
 	$(PYTHON) scripts/misc/build_hdimage.py
-#	$(TOP_DIR)/scripts/misc/vmdk.py $(BIN) $(TARGET)-flat.vmdk $(TARGET).vmdk
+	qemu-img convert -f raw -O vmdk $(TARGET)-hd.img $(TARGET).vmdk
 else ifeq ($(ARCH_NAME), axis)
 	$(OBJCOPY) -O binary $(TARGET) $(BIN)
 	$(DUMP) $(BIN) $(DUMPARG) $(ROM_FILE)
