@@ -76,6 +76,7 @@
 #include <debug/sched_queue_debug.h>
 #include <debug/socket_debug.h>
 #include <debug/task_debug.h>
+#include <debug/tensor_debug.h>
 #include <debug/thread_debug.h>
 #include <debug/jiffies_debug.h>
 

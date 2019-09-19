@@ -39,12 +39,14 @@ void clear_bss(void)
  */
 void init_arch(void)
 {
-  clear_bss();
+  //  clear_bss();
   init_spinlock();
   init_irq();
   init_cpu();
-  init_kmalloc();
-  init_socket();
+
+  // NOTE: if needed
+  //  init_kmalloc();
+  //  init_socket();
 }
 
 void init_arch_ap(void)

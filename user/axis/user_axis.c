@@ -160,13 +160,14 @@ int user_ap_main(__unused int argc, __unused char *argv[])
 
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
+  printk("user_arch_main()\n");
   //  user_thread_main();
   //  timer_main();
   //  dmac_main();
-  test_main();
+  //  test_main();
   //  callback_main();
   //  multi_cpus_main();
   //  tsc_main();
-  //  cluster_main();
+  cluster_main();
   return 0;
 }

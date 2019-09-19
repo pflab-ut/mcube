@@ -28,19 +28,6 @@ volatile unsigned long array[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 volatile unsigned long src[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 volatile unsigned long src2[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 
-static void print_mat(void)
-{
-  int i, j, k;
-
-  for (i = 0; i < PARALLEL_NUM; i++) {
-    for (j = 0; j < MAT_SIZE; j++) {
-      for (k = 0; k < MAT_SIZE; k++) {
-        print("print_mat() array[%d][%d][%d] = %lu\n", i, j, k, array[i][j][k]);
-      }
-    }
-  }
-}
-
 
 
 #define INIT_NUM 10
@@ -139,7 +126,7 @@ static void do_sequential(void)
 
     end = get_time_stamp_counter();
     print("begin = %lu end = %lu end - begin = %lu\n", begin, end, end - begin);
-    print_mat();
+    pdebug_3d_tensor((unsigned long *) array, PARALLEL_NUM, MAT_SIZE, MAT_SIZE);
   }
 }
 
