@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Foundry>
 <VM>
-<VMId type="string">52 84 b8 c2 53 f4 a1 35-8f 27 73 b8 20 7c 96 68</VMId>
+<VMId type="string">52 dc 65 d8 f4 42 26 b1-55 03 1d f6 68 25 00 78</VMId>
 <ClientMetaData>
 <clientMetaDataAttributes/>
 <HistoryEventList/></ClientMetaData>
-<vmxPathName type="string">est.vmx</vmxPathName></VM></Foundry>
+<vmxPathName type="string">mcube.vmx</vmxPathName></VM></Foundry>
