@@ -92,6 +92,7 @@ $ make grun ARGS="arg1 arg2 arg3"
 * [System](docs/System.md)
 * [User](docs/User.md)
 * [Misc](docs/Misc.md)
+* [Contributing](CONTRIBUTING.md)
 * [Acknowledgments](docs/Acknowledgments.md)
 
 
