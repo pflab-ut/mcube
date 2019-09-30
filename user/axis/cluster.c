@@ -32,7 +32,7 @@ volatile unsigned long src2[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 
 #define INIT_NUM 10
 
-#define INIT_VAL(i, j, k) (unsigned long) (INIT_NUM * (i) + ((j) * INIT_NUM / 10) + k)
+#define INIT_VAL(i, j, k) (unsigned long) (INIT_NUM * (i) + ((j) * INIT_NUM / 10) + (k))
 
 
 static void init_array(void)

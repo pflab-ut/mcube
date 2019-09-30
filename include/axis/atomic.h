@@ -17,6 +17,7 @@
  */
 static inline uint64_t atomic_inc(uint64_t *val)
 {
+  /* TODO: use atomic instruction. */
   (*val)++;
   return *val;
 }
@@ -30,6 +31,7 @@ static inline uint64_t atomic_inc(uint64_t *val)
  */
 static inline uint64_t atomic_dec(uint64_t *val)
 {
+  /* TODO: use atomic instruction. */
   (*val)--;
   return *val;
 }
