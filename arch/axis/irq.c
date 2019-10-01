@@ -15,6 +15,7 @@ static void increment_wait_interrupt_program_counter(void)
 
   if (get_interrupt_program_counter()
       == (unsigned long) &__wait_until_next_interrupt) {
+    /* add instruction length to interrupt program counter. */
     set_interrupt_program_counter((unsigned long) &__wait_until_next_interrupt + 4);
   }
 }
@@ -32,7 +33,7 @@ void do_switch_thread(void)
   PDEBUG("%s()\n", __func__);
 
   if (current_th[cpu] != prev_th[cpu]) {
-    /* save program counter */
+    /* save program counter. */
     prev_th[cpu]->interrupt_program_counter = get_interrupt_program_counter();
     /* save $fp for Clang/GCC. */
     asm volatile("move %0, $fp" : "=r"(prev_th[cpu]->current_fp));
@@ -43,7 +44,7 @@ void do_switch_thread(void)
     prev_th[cpu] = current_th[cpu];
 
     if (!(current_th[cpu]->thflags & THFLAGS_START_TH)) {
-      /* start thread */
+      /* start thread. */
       current_th[cpu]->thflags |= THFLAGS_START_TH;
       PDEBUG("get_context_top(current_th[%lu])) = 0x%lx\n",
              cpu, (unsigned long) get_context_top(current_th[cpu]));
@@ -54,7 +55,7 @@ void do_switch_thread(void)
       asm volatile("ert");
     }
 
-    /* resume program counter and frame/stack pointer */
+    /* resume program counter and frame/stack pointer. */
     set_interrupt_program_counter(current_th[cpu]->interrupt_program_counter);
     printk("cpu = %lu current_th: id = %lu current_fp = 0x%lx current_sp = 0x%lx\n",
            cpu, current_th[cpu]->id, current_th[cpu]->current_fp,
@@ -78,8 +79,10 @@ int handle_timer_interrupt(void)
     PDEBUG("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
 #if 1
+    /* set remaining to forcelly zero for debug. */
     current_th[cpu]->sched.remaining = 0;
 #else
+    /* subtract elapsed time from remaining. */
     current_th[cpu]->sched.remaining -= CPU_CLOCK_TO_USEC(get_timer_period()
                                                           - current_th[cpu]->sched.begin_cpu_time);
 #endif

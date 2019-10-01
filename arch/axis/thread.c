@@ -13,7 +13,6 @@ __noreturn void run_user_thread(void)
   unsigned long cpu = get_cpu_id();
   void *ret = NULL;
 
-  //  printk("begin_user_thread()\n");
   if (current_th[cpu]->run_user_func) {
     ret = (*current_th[cpu]->run_user_func)(current_th[cpu]->arg);
   }

@@ -58,7 +58,6 @@ void sem_up(struct sem_struct *sem)
     }
 
     th->sched.deadline = th->sched.release + th->sched.relative_deadline;
-    //    chk_nattr(th);
 
     th->state = NON_INT_SLEEP;
     sleep_tq[cpu] = enqueue_thread(sleep_tq[cpu],
