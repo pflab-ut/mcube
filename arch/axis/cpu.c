@@ -12,10 +12,10 @@ void read_from_cluster(unsigned long local_cpu_id,
                        volatile unsigned long *data,
                        unsigned long qos)
 {
-  volatile unsigned long sys_base = SYS_CH_BASE(local_cpu_id & 0x7);
+  unsigned long id = local_cpu_id & 0x7;
   volatile unsigned long offset   = NET_BASE | low_addr;
-  *((unsigned long *)(sys_base + 0x10)) = high_addr;
-  *((unsigned long *)(sys_base + 0x14)) = (low_addr & NET_BASE) + qos;
+  *((unsigned long *)(SYS_NET_BASE(id))) = high_addr;
+  *((unsigned long *)(SYS_NET_CTRL(id))) = (low_addr & NET_BASE) + qos;
   *((volatile unsigned long *) data) = *((volatile unsigned long *) offset);
 }
 
@@ -26,10 +26,10 @@ void write_to_cluster(unsigned long local_cpu_id,
                       volatile unsigned long *data,
                       unsigned long qos)
 {
-  volatile unsigned long sys_base = SYS_CH_BASE(local_cpu_id & 0x7);
+  unsigned long id = local_cpu_id & 0x7;
   volatile unsigned long offset   = NET_BASE | low_addr;
-  *((volatile unsigned long *)(sys_base + 0x10)) = high_addr;
-  *((volatile unsigned long *)(sys_base + 0x14)) = (low_addr & NET_BASE) + qos;
+  *((unsigned long *)(SYS_NET_BASE(id))) = high_addr;
+  *((unsigned long *)(SYS_NET_CTRL(id))) = (low_addr & NET_BASE) + qos;
   *((volatile unsigned long *) offset) = *((volatile unsigned long *) data);
 }
 
