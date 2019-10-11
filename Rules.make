@@ -113,7 +113,7 @@ endif
 # Note-2! Shouldn't we disable strict aliasing?
 #
 COPT_FLAGS =	\
-	-O3	\
+	-O2	\
  -pipe
 
 #

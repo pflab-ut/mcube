@@ -129,7 +129,7 @@ void multi_cpus_main(void)
 
   while (true) {
     i++;
-    print("i = %d\n", i);
+    //    print("i = %d\n", i);
   }
 }
 
@@ -150,10 +150,8 @@ void tsc_main(void)
 int user_ap_main(__unused int argc, __unused char *argv[])
 {
   unsigned long cpu = get_cpu_id();
-  putchar(cpu + '0');
-  print("user_ap_main()\n");
-  print("get_cpu_id() = %lu\n", get_cpu_id());
-  //  print("ap_main()\n");
+  //  putchar(cpu + '0');
+  print("get_cpu_id() = %lu\n", cpu);
   //  cpu_ids[cpu] = cpu;
   return 0;
 }
@@ -164,10 +162,10 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   printk("user_arch_main()\n");
   //  user_thread_main();
   //  timer_main();
-  dmac_main();
+  //  dmac_main();
   //  test_main();
   //  callback_main();
-  //  multi_cpus_main();
+  multi_cpus_main();
   //  tsc_main();
   //  cluster_main();
   return 0;
