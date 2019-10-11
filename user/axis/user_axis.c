@@ -29,6 +29,7 @@ int user_thread_main(void)
   sched_time = 5;
   print("user_thread_main()\n");
 
+  /* setup parameters for threads. */
   for (i = 0; i < nr_threads; i++) {
     ids[i] = i + 1;
     thas[i].type = PERIODIC_TH | HARD_REAL_TIME;
@@ -67,13 +68,14 @@ int dmac_main(void)
   uint32_t dst[DST_BUFSIZE];
   //  uint32_t dst = 0x10;
   uint32_t src = 0;
-  uint32_t n = 16;
+  size_t n = 64;
   uint32_t i;
 
-  //  do_local_dmac(dst, src, n, 0, DMAC_POLLING);
-  //  do_local_dmac(dst, src, n, 0, DMAC_SYNC_INTERRUPT);
-  do_local_dmac((uint32_t) dst, src, n, 0, DMAC_ASYNC_INTERRUPT);
+  do_local_dmac((uint32_t) dst, src, n, 0, DMAC_POLLING);
+  //  do_local_dmac((uint32_t) dst, src, n, 0, DMAC_SYNC_INTERRUPT);
+  //  do_local_dmac((uint32_t) dst, src, n, 0, DMAC_ASYNC_INTERRUPT);
 
+  /* print data in src and destination addresses. */
   for (i = 0; i < n; i += 4) {
     print("src 0x%x\n", mmio_in32(i));
     print("dst 0x%x\n", mmio_in32(dst + i));
@@ -81,7 +83,6 @@ int dmac_main(void)
 
   while (true) {
     sync();
-    //print("hoge\n");
   }
 
   return 0;
@@ -163,11 +164,11 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   printk("user_arch_main()\n");
   //  user_thread_main();
   //  timer_main();
-  //  dmac_main();
+  dmac_main();
   //  test_main();
   //  callback_main();
   //  multi_cpus_main();
   //  tsc_main();
-  cluster_main();
+  //  cluster_main();
   return 0;
 }
