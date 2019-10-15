@@ -77,8 +77,8 @@ int dmac_main(void)
 
   /* print data in src and destination addresses. */
   for (i = 0; i < n; i += 4) {
-    print("src 0x%x\n", mmio_in32(i));
-    print("dst 0x%x\n", mmio_in32(dst + i));
+    printk("src 0x%x\n", mmio_in32(i));
+    printk("dst 0x%x\n", mmio_in32((uint32_t) dst + i));
   }
 
   while (true) {
@@ -113,7 +113,7 @@ void callback_main(void)
 }
 
 
-void multi_cpus_main(void)
+void multi_cpus_main(__unused int argc, __unused char *argv[])
 {
   print("get_cpu_id() = %lu\n", get_cpu_id());
 
@@ -124,6 +124,12 @@ void multi_cpus_main(void)
   // NOTE: work well if CPU2 is implemented.
   // set_program_counter(2, 0);
   // start_cpu(2);
+#if 0
+  char str[] = "server";
+  argc = 2;
+  argv[1] = str;
+  test_socket(argc, argv);
+#endif
 
   volatile int i = 0;
 
@@ -150,8 +156,13 @@ void tsc_main(void)
 int user_ap_main(__unused int argc, __unused char *argv[])
 {
   unsigned long cpu = get_cpu_id();
-  //  putchar(cpu + '0');
   print("get_cpu_id() = %lu\n", cpu);
+#if 0
+  char str[] = "client";
+  argc = 2;
+  argv[1] = str;
+  test_socket(argc, argv);
+#endif
   //  cpu_ids[cpu] = cpu;
   return 0;
 }
@@ -162,10 +173,10 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   printk("user_arch_main()\n");
   //  user_thread_main();
   //  timer_main();
-  //  dmac_main();
+  dmac_main();
   //  test_main();
   //  callback_main();
-  multi_cpus_main();
+  //  multi_cpus_main(argc, argv);
   //  tsc_main();
   //  cluster_main();
   return 0;

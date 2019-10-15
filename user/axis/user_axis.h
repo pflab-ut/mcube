@@ -18,7 +18,7 @@ int dmac_main(void);
 int test_main(void);
 void callback_func(void);
 void callback_main(void);
-void multi_cpus_main(void);
+void multi_cpus_main(__unused int argc, __unused char *argv[]);
 void tsc_main(void);
 
 
