@@ -421,7 +421,7 @@ void thread_main(struct thread_struct *th);
 extern struct th_attr thas[NR_THREADS];
 
 /**
- * @fn ths[NR_THREADS]
+ * @var ths[NR_THREADS]
  * @brief Threads.
  */
 extern struct thread_struct ths[NR_THREADS];

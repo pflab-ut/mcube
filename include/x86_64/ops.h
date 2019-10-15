@@ -459,6 +459,15 @@ static inline void invalidate_page(void *vaddr)
   asm volatile("invlpg %0\n" :: "m"(vaddr) : "memory");
 }
 
+/**
+ * @fn static inline void sync(void)
+ * @brief Wrapper function for @c sync.
+ */
+static inline void sync(void)
+{
+  mfence();
+}
+
 
 #endif /* !__ASSEMBLY__ */
 

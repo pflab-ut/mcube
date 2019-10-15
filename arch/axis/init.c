@@ -39,10 +39,13 @@ void clear_bss(void)
  */
 void init_arch(void)
 {
+  unsigned long cpu = get_cpu_id();
   //  clear_bss();
   init_spinlock();
   init_irq();
   init_cpu();
+  init_sched();
+  current_th[cpu]->id = cpu;
 
   // NOTE: if needed
   //  init_kmalloc();
@@ -51,6 +54,8 @@ void init_arch(void)
 
 void init_arch_ap(void)
 {
+  unsigned long cpu = get_cpu_id();
+  current_th[cpu]->id = cpu;
 }
 
 /**

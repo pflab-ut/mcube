@@ -11,10 +11,10 @@
 
 #include <axis/atomic.h>
 #include <axis/cpu.h>
-#include <axis/spinlock.h>
 #include <axis/irq.h>
 #include <axis/ops.h>
 #include <axis/dmac.h>
+#include <axis/spinlock.h>
 #include <axis/sys_regs.h>
 #include <axis/thread.h>
 #include <axis/timer.h>

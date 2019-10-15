@@ -61,6 +61,8 @@ static inline void nop(void)
   asm volatile("nop");
 }
 
+
+
 #endif /* !__ASSEMBLY__ */
 
 #endif /* __MCUBE_SIM_OPS_H__ */

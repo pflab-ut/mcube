@@ -23,6 +23,7 @@
 #include <mcube/seqlock.h>
 
 /* alphabetical order */
+#include <mcube/bakery.h>
 #include <mcube/bitops.h>
 #include <mcube/buffer.h>
 #include <mcube/buffer_dumper.h>

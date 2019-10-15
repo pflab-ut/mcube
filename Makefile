@@ -30,6 +30,7 @@ KERNEL_SRCS = \
  $(TOP_DIR)/kernel/irq.c \
 
 IPC_SRCS = \
+ $(TOP_DIR)/ipc/bakery.c \
  $(TOP_DIR)/ipc/semaphore.c \
 
 LIB_SRCS = \

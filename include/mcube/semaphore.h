@@ -70,7 +70,7 @@ typedef struct sem_struct sem_struct;
 
 /**
  * @fn static inline bool sem_is_down(struct sem_struct *sem)
- * @brief  reading the counter directly in user land will fail due to the data cache.
+ * @brief reading the counter directly in user land will fail due to the data cache.
  *
  * @param sem Semaphore.
  * @return True if semaphore is down, and false if semaphore is still up.

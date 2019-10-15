@@ -80,7 +80,7 @@ static inline void dsb(void)
  */
 static inline void dmb(void)
 {
-  asm volatile("dmb");
+  asm volatile("dmb 0");
 }
 
 /**
@@ -111,6 +111,17 @@ static inline void sevl(void)
     inf_loop();                                 \
   } while (0);
 
+
+
+
+/**
+ * @fn static inline void sync(void)
+ * @brief Wrapper function for @c sync.
+ */
+static inline void sync(void)
+{
+  dmb();
+}
 
 #endif /* !__ASSEMBLY__ */
 

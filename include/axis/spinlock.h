@@ -10,6 +10,32 @@
 
 
 /**
+ * @fn void arch_spin_lock(__unused spinlock_t *lock)
+ * @brief Architecture-specific spin_lock function.
+ *
+ * @param lock Lock.
+ */
+void arch_spin_lock(__unused spinlock_t *lock);
+
+/**
+ * @fn bool arch_spin_trylock(__unused spinlock_t *lock)
+ * @brief Architecture-specific spin_trylock function.
+ *
+ * @param lock Lock.
+ * @return True if @a lock was acquired from the _first_ try.
+ */
+bool arch_spin_trylock(__unused spinlock_t *lock);
+
+/**
+ * @fn bool arch_spin_unlock(__unused spinlock_t *lock)
+ * @brief Architecture-specific spin_unlock function.
+ *
+ * @param lock Lock.
+ */
+void arch_spin_unlock(__unused spinlock_t *lock);
+
+
+/**
  * @fn static inline void spin_lock(__unused spinlock_t *lock)
  * @brief Always try to acquire the lock while LOCK# is asserted.
  * Should the lock be already acquired, busy loop till that lock is marked
@@ -30,7 +56,7 @@
  */
 static inline void spin_lock(__unused spinlock_t *lock)
 {
-  /* TODO: implement */
+  arch_spin_lock(lock);
 }
 
 /**
@@ -44,7 +70,7 @@ static inline void spin_lock(__unused spinlock_t *lock)
  */
 static inline bool spin_trylock(__unused spinlock_t *lock)
 {
-  /* TODO: implement */
+  arch_spin_trylock(lock);
   return 0;
 }
 
@@ -56,7 +82,7 @@ static inline bool spin_trylock(__unused spinlock_t *lock)
  */
 static inline void spin_unlock(__unused spinlock_t *lock)
 {
-  /* TODO: implement */
+  arch_spin_unlock(lock);
 }
 
 
