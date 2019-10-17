@@ -22,7 +22,7 @@ void *user_func(void *arg)
 int user_thread_main(void)
 {
   int i;
-  int nr_threads = 3;
+  int nr_threads = 2;
   uint32_t ids[NR_THREADS];
   struct th_attr thas[NR_THREADS];
   init_thas(thas);
@@ -37,7 +37,11 @@ int user_thread_main(void)
     thas[i].period = 100;
     thas[i].wcet = 10;
     thas[i].relative_deadline = thas[i].period;
-    do_create_thread(user_func, &ids[i], &thas[i]);
+
+    if (do_create_thread(user_func, &ids[i], &thas[i]) == NULL) {
+      printk("Error: cannot create thread %d.\n", ids[i]);
+      return -1;
+    }
   }
 
   set_timer_period(USEC_TO_CPU_CLOCK(100));

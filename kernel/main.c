@@ -60,7 +60,6 @@ int main(int argc, char *argv[])
   if (cpu == 0) {
     init_arch();
     print("main()\n");
-    printk("current_th[%d]->id = %lu\n", cpu, current_th[cpu]->id);
 #if !CONFIG_ARCH_AXIS
     /* Due to small memory, AXIS does not call the following functions. */
     init_rq();

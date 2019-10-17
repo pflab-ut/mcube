@@ -14,7 +14,7 @@ void test_jal_func(void)
 
 static void test_jal(void)
 {
-  /* different from MIPS I's JAL. */
+  /* NOTE: different from MIPS I's JAL. */
   //  unsigned int target = ((unsigned int) test_jal_func) >> 2;
   print("test_jal()\n");
   asm volatile("jal test_jal_func");
@@ -66,8 +66,6 @@ static void test_bne(void)
 
 static void test_blt(void)
 {
-  //  int rx = 12;
-  //  int ry = 12;
   print("test_blt()\n");
   asm volatile("blt $5, $6, label_blt");
   asm volatile("sync");
@@ -86,7 +84,7 @@ static void test_blt(void)
 static void test_bltu(void)
 {
   //  unsigned int rx = 12;
-  //  unsigned int ry = 12;
+  //  unsigned int ry = 34;
   print("test_bltu()\n");
   //  asm volatile("bltu %0, %1, %2" :: "r"(rx), "r"(ry), "i"(4));
   asm volatile("bltu $15, $16, label_bltu");
@@ -99,7 +97,7 @@ static void test_bltu(void)
 static void test_bge(void)
 {
   int rx = 12;
-  int ry = 12;
+  int ry = 34;
   print("test_bge()\n");
   asm volatile("bge %0, %1, label_bge" :: "r"(rx), "r"(ry));
   asm volatile("label_bge:");
@@ -118,7 +116,7 @@ static void test_bge(void)
 static void test_bgeu(void)
 {
   //  unsigned int rx = 12;
-  //  unsigned int ry = 12;
+  //  unsigned int ry = 34;
   print("test_bgeu()\n");
   //  asm volatile("bgeu %0, %1, %2" :: "r"(rx), "r"(ry), "i"(4));
   asm volatile("bgeu $17, $18, label_bgeu");

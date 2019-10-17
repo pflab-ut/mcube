@@ -110,7 +110,7 @@ void do_sched(void)
 
   spin_lock(&sched_lock);
 
-  /* assign the highest priority task to cpu */
+  /* assign the highest priority task to cpu. */
   th = pick_next_thread();
 
   if (th) {
@@ -122,7 +122,7 @@ void do_sched(void)
   printk("current_th[%lu]->id = %lu\n", cpu, current_th[cpu]->id);
 
   if (prev_th[cpu] != &kernel_th[cpu] && is_preempted(prev_th[cpu])) {
-    /* preemption occurs */
+    /* preemption occurs. */
     prev_th[cpu]->state = READY;
     end_budget(prev_th[cpu]);
   }

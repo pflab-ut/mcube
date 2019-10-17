@@ -36,7 +36,11 @@ int user_thread_main(void)
     thas[i].period = 100;
     thas[i].wcet = 10;
     thas[i].relative_deadline = thas[i].period;
-    do_create_thread(user_func, &ids[i], &thas[i]);
+
+    if (do_create_thread(user_func, &ids[i], &thas[i]) == NULL) {
+      printk("Error: cannot create thread %d.\n", ids[i]);
+      return -1;
+    }
   }
 
   init_timer(TICK_USEC);
