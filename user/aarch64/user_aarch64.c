@@ -61,7 +61,7 @@ void *user_func(void *arg)
 int user_thread_main(void)
 {
   int i;
-  int nr_threads = 1;
+  int nr_threads = 3;
   uint32_t ids[NR_THREADS];
   struct th_attr thas[NR_THREADS];
   init_thas(thas);
@@ -79,7 +79,7 @@ int user_thread_main(void)
   }
 
   init_timer(TICK_USEC);
-  //  set_timer_period(USEC_TO_CPU_CLOCK(100));
+  // set_timer_period(USEC_TO_CPU_CLOCK(100));
   run(nr_threads);
   return 0;
 }
@@ -144,7 +144,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
 {
   //  char str[128];
   //  print("user_arch_main()\n");
-  //  user_thread_main();
+  user_thread_main();
   //  test_scan();
   // user_ap_main();
   // user_dmac_main();
@@ -152,7 +152,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  sprintf(str, "abc");
   //  printk("str = %s\n", str);
   //  perror("perror()");
-  barrier();
+  //  barrier();
   //  test_ring_buf();
 #if CONFIG_ARCH_AARCH64_RASPI3
   user_raspi3_main();

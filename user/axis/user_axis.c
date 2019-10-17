@@ -53,8 +53,9 @@ void timer_main(void)
   print("USEC_TO_CPU_CLOCK(100) = %lu\n", USEC_TO_CPU_CLOCK(100));
   enable_timer_interrupt();
   enable_timer();
+  sched_time = 5;
 
-  while (true) {
+  while (sched_end == false) {
     print("get_timer_count() = %lu\n", get_timer_count());
     //    wi();
     //    wait_until_next_interrupt();
@@ -66,11 +67,11 @@ void timer_main(void)
 int dmac_main(void)
 {
   uint32_t dst[DST_BUFSIZE];
-  //  uint32_t dst = 0x10;
   uint32_t src = 0;
   size_t n = 64;
   uint32_t i;
 
+  /* do DMAC. */
   do_local_dmac((uint32_t) dst, src, n, 0, DMAC_POLLING);
   //  do_local_dmac((uint32_t) dst, src, n, 0, DMAC_SYNC_INTERRUPT);
   //  do_local_dmac((uint32_t) dst, src, n, 0, DMAC_ASYNC_INTERRUPT);
@@ -171,13 +172,13 @@ int user_ap_main(__unused int argc, __unused char *argv[])
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
   printk("user_arch_main()\n");
-  //  user_thread_main();
+  user_thread_main();
   //  timer_main();
-  dmac_main();
+  //  dmac_main();
   //  test_main();
   //  callback_main();
   //  multi_cpus_main(argc, argv);
-  //  tsc_main();
+  // tsc_main();
   //  cluster_main();
   return 0;
 }

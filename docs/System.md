@@ -5,7 +5,7 @@ kernels.
 Mcube kernel can standardize OS for autonomous edge devices, in order
 to reduce development cost and specialize the performance to guarantee
 resource constraints.
-Mcube kernel becomes a de facto standard OS for autonomous edge
+The goal of Mcube kernel is to become a de facto standard OS for autonomous edge
 devices and contributes to practical realization of autonomous
 systems.
 
@@ -14,7 +14,7 @@ systems.
 * SIM
 * x86_64
 * ARM Raspberry Pi3 (AARCH64)
-* AXIS
+* AXell Instruction Set (AXIS)
 
 # Compilers
 

@@ -183,6 +183,7 @@ int run(unsigned long nr_threads)
   sys_jiffies = 0;
   sched_end = false;
 
+#if 1
 
   for (i = 0; i < NR_CPUS; i++) {
     current_th[i] = prev_th[i] = &kernel_th[i];
@@ -197,6 +198,7 @@ int run(unsigned long nr_threads)
   //syscall0(SYS_sched);
 
   do_release();
+#endif
   start_timer();
 
 
@@ -205,7 +207,7 @@ int run(unsigned long nr_threads)
   /* idle thread start */
   while (sched_end == false) {
     //print("");
-    // print("get_timer_count() = %lu\n", get_timer_count());
+    //    print("get_timer_count() = %lu\n", get_timer_count());
     // printk("CNTV_TVAL: %lu\n", get_cntvct_el0());
     //    print("0");
     //    halt();

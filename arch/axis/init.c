@@ -45,6 +45,8 @@ void init_arch(void)
   init_irq();
   init_cpu();
   init_sched();
+
+  /* One-core one-thread execution model (cpu ID == thread ID). */
   current_th[cpu]->id = cpu;
 
   // NOTE: if needed
@@ -55,6 +57,7 @@ void init_arch(void)
 void init_arch_ap(void)
 {
   unsigned long cpu = get_cpu_id();
+  /* One-core one-thread execution model (cpu ID == thread ID). */
   current_th[cpu]->id = cpu;
 }
 
