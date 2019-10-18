@@ -9,6 +9,13 @@
 #ifndef __ASSEMBLY__
 
 /**
+ * @var atomic_lock
+ * @brief Lock for atomic operations.
+ */
+extern spinlock_t atomic_lock;
+
+
+/**
  * @fn static inline uint64_t atomic_inc(uint64_t *val)
  * @brief atomic increment.
  *
@@ -17,8 +24,9 @@
  */
 static inline uint64_t atomic_inc(uint64_t *val)
 {
-  /* TODO: use atomic instruction. */
+  spin_lock(&atomic_lock);
   (*val)++;
+  spin_unlock(&atomic_lock);
   return *val;
 }
 
@@ -31,8 +39,9 @@ static inline uint64_t atomic_inc(uint64_t *val)
  */
 static inline uint64_t atomic_dec(uint64_t *val)
 {
-  /* TODO: use atomic instruction. */
+  spin_lock(&atomic_lock);
   (*val)--;
+  spin_unlock(&atomic_lock);
   return *val;
 }
 

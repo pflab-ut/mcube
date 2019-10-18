@@ -26,12 +26,13 @@ static volatile bool entering[NR_THREADS] = {false};
 
 void bakery_lock(int thid)
 {
+  int max_ticket = 0;
+  int ticket;
   entering[thid] = true;
   sync();
-  int max_ticket = 0;
 
   for (int i = 0; i < NR_THREADS; i++) {
-    int ticket = tickets[i];
+    ticket = tickets[i];
     max_ticket = MAX(ticket, max_ticket);
   }
 

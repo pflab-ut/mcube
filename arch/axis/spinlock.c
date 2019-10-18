@@ -5,6 +5,9 @@
  */
 #include <mcube/mcube.h>
 
+
+spinlock_t atomic_lock;
+
 /*
  * NOTE: system call is not implemented in AXIS architecture because it has only kernel level.
  * This implementation exists for compatability for other architectures.

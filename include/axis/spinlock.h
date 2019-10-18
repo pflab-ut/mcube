@@ -8,7 +8,6 @@
 
 #ifndef __ASSEMBLY__
 
-
 /**
  * @fn void arch_spin_lock(__unused spinlock_t *lock)
  * @brief Architecture-specific spin_lock function.
