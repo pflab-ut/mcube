@@ -44,7 +44,7 @@ static inline void spin_lock(__unused spinlock_t *lock)
  */
 static inline bool spin_trylock(__unused spinlock_t *lock)
 {
-  return true;
+  return false;
 }
 
 /**

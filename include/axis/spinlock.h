@@ -69,8 +69,7 @@ static inline void spin_lock(__unused spinlock_t *lock)
  */
 static inline bool spin_trylock(__unused spinlock_t *lock)
 {
-  arch_spin_trylock(lock);
-  return 0;
+  return arch_spin_trylock(lock);
 }
 
 /**

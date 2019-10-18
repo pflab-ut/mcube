@@ -22,7 +22,7 @@ void arch_spin_lock(__unused spinlock_t *lock)
 bool arch_spin_trylock(__unused spinlock_t *lock)
 {
   /* TODO: implement */
-  return 0;
+  return false;
 }
 
 void arch_spin_unlock(__unused spinlock_t *lock)
