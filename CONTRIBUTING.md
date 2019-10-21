@@ -30,5 +30,6 @@ $ export EMAIL_TO_ADDRESS=YOUR_EMAIL_TO_ADDRESS
 $ make testconfig
 ```
 
-If warning/errors occur, please revise your codes.
+After testing all configurations, the report will be sent to your e-mail address.
+If warning/errors occur, the results are in testconfig/.
 Otherwise, please send a pull request.
