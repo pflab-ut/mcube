@@ -12,17 +12,17 @@ void do_local_dmac(uint32_t dst,
                    enum dmac policy)
 {
   if (policy >= DMAC_END) {
-    printk("Error: unknown DMAC transfer policy %d.\n", policy);
+    printk("Error: Unknown DMAC transfer policy %d.\n", policy);
     return;
   }
 
   if (n == 0) {
-    printk("Error: transfer size is zero.\n");
+    printk("Error: Transfer size is zero.\n");
     return;
   }
 
   if (ch != 0) {
-    printk("Error: channel must be zero.\n");
+    printk("Error: Channel must be zero.\n");
     return;
   }
 

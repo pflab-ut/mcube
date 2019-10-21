@@ -263,7 +263,7 @@ void init_socket(void)
 {
   /* stdin, stdout, and stderr are used. */
   for (int i = 0; i < SOMAXCONN; i++) {
-    printk("i = %d\n", i);
+    //    printk("i = %d\n", i);
 
     if (i < NR_STDS) {
       sockets[i].used = true;

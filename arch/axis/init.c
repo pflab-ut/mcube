@@ -51,7 +51,7 @@ void init_arch(void)
 
   // NOTE: if needed
   //  init_kmalloc();
-  //  init_socket();
+  init_socket();
 }
 
 void init_arch_ap(void)

@@ -81,7 +81,7 @@ void set_cpu_id(struct cluster *c, unsigned long cpu_id)
   } else if (c->x == 2 && c->y == 2) {
     c->cluster_id = 7;
   } else {
-    printk("Error: unknown (x, y) = (%lu, %lu)\n", c->x, c->y);
+    printk("Error: Unknown (x, y) = (%lu, %lu)\n", c->x, c->y);
     c->cluster_id = UNKNOWN_CPU_ID;
   }
 }

@@ -162,7 +162,7 @@ int handle_software_interrupt(unsigned long id)
     break;
 
   default:
-    printk("Error: unknown id %lu\n", id);
+    printk("Error: Unknown id %lu\n", id);
     break;
   }
 
@@ -196,7 +196,7 @@ asmlinkage int do_irq(struct full_regs *regs)
   id = ffb32(status);
 
   if (id > NR_SOFTWARE_INTERRUPTS) {
-    printk("Error: unknown id %lu\n", id);
+    printk("Error: Unknown id %lu\n", id);
     dump_registers(regs);
   } else {
     handle_software_interrupt(id);

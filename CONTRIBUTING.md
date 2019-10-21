@@ -17,11 +17,12 @@ $ make astyle
 $ make doxygen
 ```
 
-3. do build tests for all configurations.
+3. do build tests for all configurations. If warning/errors occur, the results are in `testconfig/`.
 
 ```
 $ make testconfig
 ```
+
 
 If warning/errors occur, please revise your codes.
 Otherwise, please send a pull request.

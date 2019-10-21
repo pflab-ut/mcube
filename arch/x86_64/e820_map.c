@@ -79,7 +79,7 @@ static const char *e820_types[] = {
 static const char *e820_typestr(uint32_t type)
 {
   if (type < E820_AVAIL || type > E820_DISABLED) {
-    return "unknown type - reserved";
+    return "Unknown type - reserved";
   }
 
   /* Don't put this on top of above return; we

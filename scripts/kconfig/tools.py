@@ -542,7 +542,7 @@ def scan_all_configures(filename):
     elif cif.get_type() == "none":
       cif.set_num(pow(2, len(cif.get_configure())))
     else:
-      sys.exit("Error: unknown type " + cif.get_type() + "\n")
+      sys.exit("Error: Unknown type " + cif.get_type() + "\n")
     print(cif.get_num())
     num *= cif.get_num()
 
@@ -566,7 +566,7 @@ def write_menu(filename, cinfo, index):
       else:
         filename.write(cinfo.get_configure()[i] + "=n\n")
   else:
-    sys.exit("Unknown type " + cinfo.get_type() + "\n")
+    sys.exit("Error: Unknown type " + cinfo.get_type() + "\n")
 
 def write_configure(filename, cinfo, vals):
   "write configure"
