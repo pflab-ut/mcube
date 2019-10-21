@@ -45,3 +45,4 @@ $ make testconfig
 ```
 
 After testing all configurations, the report will be sent to your e-mail address.
+If warning/errors occur, the results are in testconfig/.
