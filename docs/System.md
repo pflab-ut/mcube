@@ -11,7 +11,7 @@ systems.
 
 # Architectures
 
-* SIM
+* SIM (SIMulation architecture in user-level execution environment)
 * x86_64
 * ARM Raspberry Pi3 (AARCH64)
 * AXell Instruction Set (AXIS)
