@@ -88,9 +88,15 @@ int handle_timer_interrupt(void)
   if (current_th[cpu] != &kernel_th[cpu]) {
     printk("current_th: id = %lu sched.remaining = %ld\n",
            current_th[cpu]->id, current_th[cpu]->sched.remaining);
+#if 1
+    /* subtract execution time from remaining. */
     current_th[cpu]->sched.remaining
     -= CPU_CLOCK_TO_USEC(get_current_cpu_time()
                          - current_th[cpu]->sched.begin_cpu_time);
+#else
+    /* set remaining as 0 (for debug). */
+    current_th[cpu]->sched.remaining = 0;
+#endif
     printk("current_th[%lu]->sched.remaining = %ld\n",
            cpu, current_th[cpu]->sched.remaining);
 

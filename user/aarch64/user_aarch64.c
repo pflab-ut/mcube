@@ -51,8 +51,8 @@ void *user_func(void *arg)
   unsigned long id = *(int *) arg;
 
   while (true) {
-    print("%lu\n", id);
-    //    delay(1000);
+    print("%lu", id);
+    delay(1000);
   }
 
   return NULL;
