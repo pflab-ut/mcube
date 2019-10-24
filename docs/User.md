@@ -45,4 +45,5 @@ $ make testconfig
 ```
 
 After testing all configurations, the report will be sent to your e-mail address.
-If warning/errors occur, the results are in testconfig/.
+If warning/errors occur, the results are in `testconfig/` and `message.log`.
+Otherwise, please send a pull request.
