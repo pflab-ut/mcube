@@ -38,43 +38,43 @@ devices and contributes to practical realization of autonomous systems.
 # Directories
 
 * `arch/`: Architecture-dependent codes.
-** `aarch64/`: AARCH64 codes.
-** `axis/`: AXIS codes.
-** `sim/`: SIM codes.
-** `x86_64`: x86_64 codes.
+  - `aarch64/`: AARCH64 codes.
+  - `axis/`: AXIS codes.
+  - `sim/`: SIM codes.
+  - `x86_64`: x86_64 codes.
 * `docs/`: Documentations and sample configuration files.
-** `config/`: Configuration files.
-** `fig/`: Figures.
+  - `config/`: Configuration files.
+  - `fig/`: Figures.
 * `drivers/`: Device driver codes.
-** `misc/`: Miscellaneous codes.
-**`uart/`: UART codes.
+  - `misc/`: Miscellaneous codes.
+  - `uart/`: UART codes.
 * `fs/`: File systems.
-** `ext2/`: Ext2 file systems.
-** `fat/`: FAT file systems.
+  - `ext2/`: Ext2 file systems.
+  - `fat/`: FAT file systems.
 * `include/`: Header codes.
-** `aarch64/`: AARCH64 header codes.
-** `axis/`: AXIS header codes.
-** `debug/`: Debug header codes.
-** `fs/`: File systems header codes.
-** `mcube/`: Main header codes.
-** `net/`: Network header codes.
-** `sim/`: SIM header codes.
-** `x86_64/`: x86_64 header codes.
+  - `aarch64/`: AARCH64 header codes.
+  - `axis/`: AXIS header codes.
+  - `debug/`: Debug header codes.
+  - `fs/`: File systems header codes.
+  - `mcube/`: Main header codes.
+  - `net/`: Network header codes.
+  - `sim/`: SIM header codes.
+  - `x86_64/`: x86_64 header codes.
 * `ipc/`: Inter-Process Communication codes.
 * `kernel/`: Kernel codes.
-** `queue/:` Queue codes.
+  - `queue/:` Queue codes.
 * `lib/`: Library codes.
 * `scripts/`: Script codes.
-** `docker/:` Docker script codes.
-** `kconfig/:` Kernel configuration script codes.
-** `linker/:` Linker script codes.
-** `misc/:` Miscellaneous script codes.
+  - `docker/:` Docker script codes.
+  - `kconfig/:` Kernel configuration script codes.
+  - `linker/:` Linker script codes.
+  - `misc/:` Miscellaneous script codes.
 * `user/`: User-implemented codes.
-** `aarch64/:` AARCH64 user codes.
-** `axis/:` AXIS user codes.
-** `sim/:` SIM user codes.
-** `test/:` Test user codes.
-** `x86_64/:` x86_64 user codes.
+  - `aarch64/:` AARCH64 user codes.
+  - `axis/:` AXIS user codes.
+  - `sim/:` SIM user codes.
+  - `test/:` Test user codes.
+  - `x86_64/:` x86_64 user codes.
 * `vmdk/`: VMware-related files.
 
 # Files in Top Directory
