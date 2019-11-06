@@ -176,6 +176,7 @@ int user_ap_main(__unused int argc, __unused char *argv[])
 
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
+  /* NOTE: uncomment selected functions for applications. */
   printk("user_arch_main()\n");
   //  user_thread_main();
   //  timer_main();

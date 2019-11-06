@@ -6,8 +6,9 @@
 #include <mcube/mcube.h>
 
 /*
- * NOTE: system call is not implemented in AXIS architecture because it has only kernel level.
+ * NOTE: system calls are not implemented in AXIS architecture because it has only kernel level.
  * This implementation exists for compatability for other architectures.
+ * In the future, system calls may be implemented.
  */
 
 int call_sys_get_mode_level(void)

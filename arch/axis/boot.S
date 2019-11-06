@@ -13,7 +13,7 @@ __begin:
 ENTRY(_start)
   .set   noreorder
   la    $gp, _gp
-  /* get cluster and cpu ids */
+  /* get cluster and cpu ids. */
   mfs $t0, $1
   /* get CPU ID. */
   and $t0, $t0, 0x7

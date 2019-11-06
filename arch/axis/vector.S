@@ -41,6 +41,7 @@ ENTRY(interrupt_vector)
   sw $v0, 8($sp)
   sw $at, 4($sp)
   .set at
+  /* jump to do_irq function. */
   jal do_irq
   /* restore general purpose registers. */
   .set noat
@@ -77,5 +78,6 @@ ENTRY(interrupt_vector)
   lw $ra, 124($sp)
   addi   $sp, $sp, STACK_FRAME_SIZE
   .set at
+  /* return from exception. */
   ert
   

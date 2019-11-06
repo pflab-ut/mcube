@@ -8,11 +8,6 @@
 
 spinlock_t atomic_lock;
 
-/*
- * NOTE: system call is not implemented in AXIS architecture because it has only kernel level.
- * This implementation exists for compatability for other architectures.
- */
-
 void arch_spin_lock(__unused spinlock_t *lock)
 {
   unsigned long cpu = get_cpu_id();
