@@ -9,6 +9,7 @@
 int putchar(int c)
 {
   union rflags flags;
+
   save_local_irq(&flags);
   spin_lock(&putchar_lock);
   uart_putc(c, 0);

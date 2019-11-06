@@ -5,9 +5,6 @@
  */
 #include <mcube/mcube.h>
 
-/**
- * The run_user_thread() function runs user thread.
- */
 __noreturn void run_user_thread(void)
 {
   unsigned long cpu = get_cpu_id();
