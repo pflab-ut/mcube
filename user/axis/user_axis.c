@@ -96,13 +96,13 @@ int dmac_main(void)
 
 int test_main(void)
 {
-#if CONFIG_ARCH_AXIS
   print("test_main()\n");
+
   test_integer_instructions();
   test_transfer_instructions();
   test_control_instructions();
   test_special_instructions();
-#endif /* CONFIG_ARCH_AXIS */
+
   return 0;
 }
 

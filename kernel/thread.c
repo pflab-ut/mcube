@@ -7,6 +7,9 @@
 
 struct thread_struct ths[NR_THREADS];
 
+unsigned char PAGE_ALIGNMENT kernel_stack[NR_CPUS][KERNEL_STACK_SIZE];
+unsigned char PAGE_ALIGNMENT user_stack[NR_THREADS][USER_STACK_SIZE];
+
 /**
  * @var ThreadID
  * @brief Thread ID.
@@ -14,8 +17,6 @@ struct thread_struct ths[NR_THREADS];
  */
 static uint32_t ThreadID = FIRST_DYNAMIC_THREAD_ID;
 
-unsigned char PAGE_ALIGNMENT kernel_stack[NR_CPUS][KERNEL_STACK_SIZE];
-unsigned char PAGE_ALIGNMENT user_stack[NR_THREADS][USER_STACK_SIZE];
 
 int get_tq_util(struct thread_struct *head, unsigned long cpu)
 {
