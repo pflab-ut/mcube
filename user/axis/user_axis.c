@@ -25,6 +25,7 @@ int user_thread_main(void)
   int nr_threads = 2;
   uint32_t ids[NR_THREADS];
   struct th_attr thas[NR_THREADS];
+
   init_thas(thas);
   sched_time = 5;
   print("user_thread_main()\n");
@@ -184,7 +185,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  test_main();
   //  callback_main();
   multi_cpus_main(argc, argv);
-  // tsc_main();
+  //  tsc_main();
   //  cluster_main();
   return 0;
 }

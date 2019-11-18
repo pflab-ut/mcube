@@ -241,13 +241,13 @@ static void do_parallel(void)
       unsigned long high_addr;
       unsigned long low_addr;
       struct cluster dst;
-      int j, k;
+
       print("%d / %d = %d\n", i, LOOP_PER_CLUSTER, i / LOOP_PER_CLUSTER);
       get_cluster_from_index(&dst, i / LOOP_PER_CLUSTER, 0);
       print("do_parallel(): dst.x = %lu dst.y = %lu\n", dst.x, dst.y);
 
-      for (j = 0; j < MAT_SIZE; j++) {
-        for (k = 0; k < MAT_SIZE; k++) {
+      for (int j = 0; j < MAT_SIZE; j++) {
+        for (int k = 0; k < MAT_SIZE; k++) {
           print("do_parallel(): array[%d][%d][%d] = %lu\n", i, j, k, array[i][j][k]);
           encode_cluster_address(&high_addr, &low_addr,
                                  dst.x, dst.y, (unsigned long) &array[i][j][k]);
