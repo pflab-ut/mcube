@@ -11,6 +11,7 @@ spinlock_t atomic_lock;
 void arch_spin_lock(__unused spinlock_t *lock)
 {
   unsigned long cpu = get_cpu_id();
+
   bakery_lock(current_th[cpu]->id);
 }
 
@@ -23,5 +24,6 @@ bool arch_spin_trylock(__unused spinlock_t *lock)
 void arch_spin_unlock(__unused spinlock_t *lock)
 {
   unsigned long cpu = get_cpu_id();
+
   bakery_unlock(current_th[cpu]->id);
 }

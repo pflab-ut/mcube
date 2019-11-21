@@ -45,4 +45,5 @@ ENTRY(arch_switch_to)
   lw $fp, 48($t1)
   lw $ra, 52($t1)
   move $sp, $t2
+  /* jump to return address. */
   jr $ra

@@ -21,6 +21,8 @@ void *user_func(void *arg)
 
 int user_thread_main(void)
 {
+  /* execute multiple threads. */
+
   int i;
   int nr_threads = 2;
   uint32_t ids[NR_THREADS];
@@ -71,8 +73,11 @@ void timer_main(void)
 
 int dmac_main(void)
 {
+  /* Destination address */
   uint32_t dst[DST_BUFSIZE];
+  /* Source address */
   uint32_t src = 0;
+  /* DMAC transfer size */
   size_t n = 64;
   uint32_t i;
 
