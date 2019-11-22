@@ -37,6 +37,7 @@ volatile unsigned long src2[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 
 static void init_array(void)
 {
+  /* initialize all arrays. */
   int i, j, k;
 
   for (i = 0; i < PARALLEL_NUM; i++) {
@@ -57,6 +58,7 @@ static void init_src_array(void)
   for (i = 0; i < PARALLEL_NUM; i++) {
     for (j = 0; j < MAT_SIZE; j++) {
       for (k = 0; k < MAT_SIZE; k++) {
+        /* array is set as 0 unlike init_array(). */
         array[i][j][k] = 0;
         src[i][j][k] = INIT_VAL(i, j, k);
         src2[i][j][k] = INIT_VAL(i, j, k);
@@ -71,6 +73,7 @@ static void do_mul(volatile unsigned long dst[MAT_SIZE][MAT_SIZE],
                    volatile unsigned long a[MAT_SIZE][MAT_SIZE],
                    volatile unsigned long b[MAT_SIZE][MAT_SIZE])
 {
+  /* do multiplication. */
   int i, j, k;
 
   for (i = 0; i < MAT_SIZE; i++) {
@@ -85,6 +88,7 @@ static void do_mul(volatile unsigned long dst[MAT_SIZE][MAT_SIZE],
 
 static void wait_until_loop_completion(void)
 {
+  /* wait until all values in array are equal to INIT_VAL. */
   bool loop;
   int i;
 
@@ -288,6 +292,10 @@ static void do_parallel(void)
 
 void cluster_main(void)
 {
+  /*
+   * NOTE: users can choose which function should be called.
+   * The other function should be commented.
+   */
   do_sequential();
   do_parallel();
 }
