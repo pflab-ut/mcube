@@ -44,20 +44,22 @@ void init_arch(void)
   init_spinlock();
   init_irq();
   init_cpu();
-  init_sched();
 
-  /* One-core one-thread execution model (cpu ID == thread ID). */
-  current_th[cpu]->id = cpu;
+  // NOTE: init_sched() is too long in RTL simulation.
+  //  init_sched();
+
+  /* One-core one-thread execution model (serialized cluster + cpu ID == thread ID). */
+  current_th[cpu]->id = get_cpu_id();
 
   // NOTE: if needed
   //  init_kmalloc();
-  init_socket();
+  //  init_socket();
 }
 
 void init_arch_ap(void)
 {
   unsigned long cpu = get_cpu_id();
-  /* One-core one-thread execution model (cpu ID == thread ID). */
+  /* One-core one-thread execution model (serialized cluster + cpu ID == thread ID). */
   current_th[cpu]->id = cpu;
 }
 

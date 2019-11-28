@@ -10,7 +10,11 @@
  * @def NR_CPUS
  * @brief Number of CPUs.
  */
+#if CONFIG_ARCH_AXIS
+#define NR_CPUS 64
+#else
 #define NR_CPUS 4
+#endif /* CONFIG_ARCH_AXIS */
 
 /**
  * @def UNKNOWN_CPU_ID

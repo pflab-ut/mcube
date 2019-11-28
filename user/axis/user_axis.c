@@ -189,8 +189,8 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  dmac_main();
   //  test_main();
   //  callback_main();
-  multi_cpus_main(argc, argv);
+  //  multi_cpus_main(argc, argv);
   //  tsc_main();
-  //  cluster_main();
+  cluster_main();
   return 0;
 }

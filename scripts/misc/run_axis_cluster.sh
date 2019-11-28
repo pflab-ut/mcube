@@ -18,7 +18,6 @@ $irun \
     +access+r \
     +ncnowarn+NONPRT \
     +ncnowarn+WARIPR \
-    +define+PRINT_ALL \
     +incdir+$topdir/include \
     $topdir/*.sv \
     $topdir/*.svp

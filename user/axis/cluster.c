@@ -110,7 +110,7 @@ static void wait_until_loop_completion(void)
 
 
 /* do_sequential() executes the computation processing on one core. */
-static void do_sequential(void)
+void do_sequential(void)
 {
   int i;
   unsigned long cpu_id;
@@ -223,7 +223,7 @@ static bool is_cluster_active(struct cluster *c)
 
 
 /* do_parallel() executes the computation processing on one or multiple cores. */
-static void do_parallel(void)
+void do_parallel(void)
 {
   unsigned long cpu_id;
   int i;
@@ -296,7 +296,7 @@ void cluster_main(void)
    * NOTE: users can choose which function should be called.
    * The other function should be commented.
    */
-  do_sequential();
+  //  do_sequential();
   do_parallel();
 }
 
