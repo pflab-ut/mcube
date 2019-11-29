@@ -60,6 +60,13 @@ struct cluster {
 };
 
 /**
+ * @def NR_CLUSTERS
+ * @brief Number of clusters.
+ */
+#define NR_CLUSTERS 8
+
+
+/**
  * @fn void read_from_cluster(unsigned long local_cpu_id,
  *                            unsigned long high_addr,
  *                            unsigned long low_addr,

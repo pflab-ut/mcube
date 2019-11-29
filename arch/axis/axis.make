@@ -51,6 +51,7 @@ SRCS += \
 
 SRCS += \
  $(TOP_DIR)/user/axis/cluster.c \
+ $(TOP_DIR)/user/axis/pubsub.c \
 	$(TOP_DIR)/user/axis/test_integer_instructions.c \
  $(TOP_DIR)/user/axis/test_transfer_instructions.c \
  $(TOP_DIR)/user/axis/test_control_instructions.c \

@@ -57,18 +57,24 @@ int main(int argc, char *argv[])
 {
   unsigned long cpu = get_cpu_id();
 
-  if (cpu == 0) {
+  if (cpu == 0
+#if CONFIG_ARCH_AXIS
+      || (cpu & 0x7) == 0
+#endif /* CONFIG_ARCH_AXIS */
+      ) {
     init_arch();
-    print("main()\n");
+    //    print("main()\n");
 #if !CONFIG_ARCH_AXIS
     /* Due to small memory, AXIS does not call the following functions. */
     init_rq();
+    /* NOTE: init_sched() is too long in RTL simulation of AXIS. */
     init_sched();
 #endif /* !CONFIG_ARCH_AXIS */
     IsInitialized = true;
     user_main(argc, argv);
     exit_arch();
   } else {
+    
     /* Application Processors (APs) on ARM and AXIS.
      * APs on x86_64 is arch/x86_64/smpboot.c.
      */
@@ -78,7 +84,6 @@ int main(int argc, char *argv[])
     /* wait until init_arch() is finished. */
     while (IsInitialized == false) {
     }
-
     /* execute the specific code of application processors (except bootstrap processor). */
     user_ap_main(argc, argv);
     exit_arch_ap();

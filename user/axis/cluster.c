@@ -1,5 +1,5 @@
 /**
- * @file user/axis/user_axis.c
+ * @file user/axis/cluster.c
  *
  * @author Hiroyuki Chishiro
  */
@@ -21,7 +21,7 @@
 //#define MAT_SIZE 4
 //#define MAT_SIZE 8
 
-struct cluster own;
+static struct cluster own;
 
 volatile unsigned long array[PARALLEL_NUM][MAT_SIZE][MAT_SIZE];
 

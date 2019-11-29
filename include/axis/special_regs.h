@@ -22,7 +22,7 @@
 
 /**
  * @fn static inline unsigned long get_cpu_id(void)
- * @brief get CPU ID.
+ * @brief get CPU ID (including serialized cluster ID).
  *
  * @return CPU ID.
  */

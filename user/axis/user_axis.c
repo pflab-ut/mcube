@@ -147,7 +147,7 @@ void multi_cpus_main(__unused int argc, __unused char *argv[])
   while (true) {
     /* NOTE: this code avoids finishing RTL simulation by infinite loop without operations. */
     i++;
-    //    print("i = %d\n", i);
+    print("i = %d\n", i);
   }
 }
 
@@ -183,7 +183,7 @@ int user_ap_main(__unused int argc, __unused char *argv[])
 int user_arch_main(__unused int argc, __unused char *argv[])
 {
   /* NOTE: uncomment selected functions for applications. */
-  printk("user_arch_main()\n");
+  //  printk("user_arch_main()\n");
   //  user_thread_main();
   //  timer_main();
   //  dmac_main();
@@ -191,6 +191,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  callback_main();
   //  multi_cpus_main(argc, argv);
   //  tsc_main();
-  cluster_main();
+  //  cluster_main();
+  pubsub_main();
   return 0;
 }

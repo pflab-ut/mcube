@@ -45,11 +45,10 @@ void init_arch(void)
   init_irq();
   init_cpu();
 
-  // NOTE: init_sched() is too long in RTL simulation.
-  //  init_sched();
 
   /* One-core one-thread execution model (serialized cluster + cpu ID == thread ID). */
-  current_th[cpu]->id = get_cpu_id();
+  current_th[cpu] = &kernel_th[cpu];
+  current_th[cpu]->id = cpu;
 
   // NOTE: if needed
   //  init_kmalloc();
