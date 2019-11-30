@@ -26,7 +26,7 @@ static volatile bool entering[NR_THREADS] = {false};
 
 void bakery_lock(int thid)
 {
-  /* TODO: support distributed shared memory. */
+  /* TODO: support distributed shared memory in AXIS. */
   int max_ticket = 0;
   int ticket;
   entering[thid] = true;
