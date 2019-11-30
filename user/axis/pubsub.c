@@ -79,11 +79,12 @@ void pubsub_main(void)
     if (own.cluster_id == 1) {
       /* publisher node. */
       /* send buf data to master node. */
-      printk("slave node 1: send buf data to master node\n");
       psnode.buf[0] = 'a';
       psnode.buf[1] = 'b';
       psnode.buf[2] = 'c';
       psnode.buf[3] = 'd';
+      printk("slave node 1: send '%c%c%c%c' to master node\n",
+             psnode.buf[0], psnode.buf[1], psnode.buf[2], psnode.buf[3]);
       get_cluster_from_index(&dst, 0, 0);
       encode_cluster_address(&high_addr, &low_addr, dst.x, dst.y,
                              (unsigned long) psnode.buf);
@@ -96,7 +97,8 @@ void pubsub_main(void)
       /* subscriber nodes. */
       while (true) {
         if (flag != psnode.buf[3]) {
-          printk("slave %u subscribes data\n", own.cluster_id);
+          printk("slave %u subscribes data '%c%c%c%c'\n", own.cluster_id,
+                 psnode.buf[0], psnode.buf[1], psnode.buf[2], psnode.buf[3]);
         }
 
         flag = psnode.buf[3];
