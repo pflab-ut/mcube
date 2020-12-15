@@ -2,6 +2,7 @@
  * @file include/axis/dmac.h
  *
  * @author Hiroyuki Chishiro
+ *         Akihiro Sakurai
  */
 #ifndef __MCUBE_AXIS_DMAC_H__
 #define __MCUBE_AXIS_DMAC_H__
@@ -226,6 +227,78 @@ static inline void set_dmac_net_ctrl(volatile uint32_t data)
 {
   mmio_out32(DMAC_NET_CTRL, data);
 }
+
+/**
+ * @fn void do_local_dmac(uint32_t dst,
+ *                        uint32_t src,
+ *                        size_t n,
+ *                        unsigned int ch,
+ *                        enum dmac policy)
+ * @brief do local DMA.
+ *
+ * @param dst Dist address.
+ * @param src Src address.
+ * @param size Size.
+ * @param ch Channel
+ * @param policy Transfer policy.
+ */
+void do_local_dmac(uint32_t dst,
+                   uint32_t src,
+                   size_t n,
+                   unsigned int ch,
+                   enum dmac policy)
+
+/**
+ * @fn void dmac_read_from_cluster(uint32_t dst,
+ *                                 uint32_t high_addr,
+ *                                 uint32_t low_addr,
+ *                                 size_t n,
+ *                                 uint32_t qos,
+ *                                 unsigned int ch,
+ *                                 enum dmac policy)
+ * @brief read data from cluster using dmac.
+ *
+ * @param local_cpu_id Local CPU ID.
+ * @param high_addr Higher 32-bit address.
+ * @param low_addr Lower 32-bit address.
+ * @param size Size.
+ * @param qos Quality of Service (QoS).
+ * @param ch Channel.
+ * @param policy Transfer policy.
+ */
+void dmac_read_from_cluster(uint32_t dst,
+                            uint32_t high_addr,
+                            uint32_t low_addr,
+                            size_t n,
+                            uint32_t qos,
+                            unsigned int ch,
+                            enum dmac policy)
+/**
+ * @fn void dmac_write_to_cluster(uint32_t src,
+ *                                uint32_t high_addr,
+ *                                uint32_t low_addr,
+ *                                size_t n,
+ *                                uint32_t qos,
+ *                                unsigned int ch,
+ *                                enum dmac policy)
+ * @brief write data to cluster using dmac.
+ *
+ * @param local_cpu_id Local CPU ID.
+ * @param high_addr Higher 32-bit address.
+ * @param low_addr Lower 32-bit address.
+ * @param size Size.
+ * @param qos Quality of Service (QoS).
+ * @param ch Channel.
+ * @param policy Transfer policy.
+ */
+void dmac_write_to_cluster(uint32_t src,
+                           uint32_t high_addr,
+                           uint32_t low_addr,
+                           size_t n,
+                           uint32_t qos,
+                           unsigned int ch,
+                           enum dmac policy)
+
 
 
 #endif /* !__ASSEMBLY__ */

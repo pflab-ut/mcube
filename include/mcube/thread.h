@@ -2,6 +2,7 @@
  * @file include/mcube/thread.h
  *
  * @author Hiroyuki Chishiro
+ *         Akihiro Sakurai
  */
 #ifndef __MCUBE_MCUBE_THREAD_H__
 #define __MCUBE_MCUBE_THREAD_H__
@@ -315,6 +316,21 @@ struct th_attr {
    * Relative deadline.
    */
   unsigned long relative_deadline;
+
+  /**
+   * core_id.
+   */
+  //unsigned long core_id;
+
+  /**
+   * stack size.
+   */
+  //unsigned long stack_size;
+
+  /**
+   * address of stack top
+   */
+  //unsigned long stack_addr;
 };
 
 /**
@@ -322,6 +338,24 @@ struct th_attr {
  * @brief Typedef of @struct th_attr.
  */
 typedef struct th_attr th_attr;
+
+/**
+ * @fn int thread_attr_init(struct th_attr *attr)
+ * @brief initialize thread attribute.
+ *
+ * @param attr Attribute
+ * @return 1 if success, errn if fail.
+ */
+//int thread_attr_init(struct th_attr *attr)
+
+/**
+ * @fn int thread_attr_set_core_id(struct th_attr *attr)
+ * @brief initialize core_id of thread attribute.
+ *
+ * @param attr Attribute
+ * @return 1 if success, errn if fail.
+ */
+//int thread_attr_set_core_id(struct th_attr *attr, unsigned long core_id);
 
 /**
  * @fn void init_sched_info(struct thread_struct *th, struct th_attr *attr)
@@ -672,6 +706,14 @@ void arch_switch_to(struct thread_struct *prev, struct thread_struct *next);
 #define get_context_top(th)                                           \
   ((struct full_regs *)((th)->stack_top - sizeof(struct full_regs)))
 
+/**
+ * @fn int get_thread_id((struct thread_struct *th)
+ * @brief get thread id.
+ *
+ * @param th Thread.
+ * @return thread id.
+ */
+int get_thread_id(struct thread_struct *th);
 
 #endif /* __ASSEMBLY__ */
 #endif /* __MCUBE_MCUBE_THREAD_H__ */
