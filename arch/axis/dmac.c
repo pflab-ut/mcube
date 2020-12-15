@@ -97,7 +97,7 @@ void dmac_read_from_cluster(uint32_t dst,
 
 }
 
-void dmac_write_to_cluster(uint32_t dst,
+void dmac_write_to_cluster(uint32_t src,
                            uint32_t high_addr,
                            uint32_t low_addr,
                            size_t n,
