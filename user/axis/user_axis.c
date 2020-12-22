@@ -2,6 +2,7 @@
  * @file user/axis/user_axis.c
  *
  * @author Hiroyuki Chishiro
+ *         Akihiro Sakurai
  */
 #include <mcube/mcube.h>
 #include "user_axis.h"
@@ -192,6 +193,7 @@ int user_arch_main(__unused int argc, __unused char *argv[])
   //  multi_cpus_main(argc, argv);
   //  tsc_main();
   //  cluster_main();
-  pubsub_main();
+  //  pubsub_main();
+  //  dmac_pubsub_main();
   return 0;
 }

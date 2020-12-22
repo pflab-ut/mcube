@@ -21,6 +21,7 @@ void callback_main(void);
 void multi_cpus_main(__unused int argc, __unused char *argv[]);
 void tsc_main(void);
 void pubsub_main(void);
+void dmac_pubsub_main(void);
 
 void do_sequential(void);
 void do_parallel(void);

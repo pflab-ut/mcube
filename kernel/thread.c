@@ -2,6 +2,7 @@
  * @file kernel/thread.c
  *
  * @author Hiroyuki Chishiro
+ *         Akihiro Sakurai
  */
 #include <mcube/mcube.h>
 
@@ -37,6 +38,11 @@ int alloc_thread_id(void)
   return ThreadID++;
 }
 
+int get_thread_id(struct thread_struct *th)
+{
+  return th->id;
+}
+
 
 void thread_main(struct thread_struct *th)
 {
@@ -48,6 +54,8 @@ struct thread_struct *do_create_thread(void *(*func)(void *),
                                        void *arg,
                                        struct th_attr *attr)
 {
+
+  //TODO set id to attr->core_id, set stack size to attr->stack_size
   unsigned long id;
   unsigned long index;
   id = alloc_thread_id();
