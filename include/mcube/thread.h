@@ -277,6 +277,14 @@ struct thread_struct {
    * Function pointer to running user thread function.
    */
   void *(*run_user_func)(void *);
+
+
+#if CONFIG_ARCH_AXIS
+  /**
+   * Message buffer ID
+   */
+  //unsigned long mbuf_id;
+#endif /*CONFIG_ARCH_AXIS*/
 };
 
 /**
@@ -317,6 +325,8 @@ struct th_attr {
    */
   unsigned long relative_deadline;
 
+
+#if CONFIG_ARCH_AXIS
   /**
    * core_id.
    */
@@ -325,12 +335,13 @@ struct th_attr {
   /**
    * stack size.
    */
-  //unsigned long stack_size;
+  //size_t stack_size;
 
   /**
    * address of stack top
    */
   //unsigned long stack_addr;
+#endif /* CONFIG_ARCH_AXIS */
 };
 
 /**
